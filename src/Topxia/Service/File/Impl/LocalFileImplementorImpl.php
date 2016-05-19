@@ -15,7 +15,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function getFileFromLeaf($file) {
+    public function getFullFile($file) {
         return $this->getFile($file);
     }
 

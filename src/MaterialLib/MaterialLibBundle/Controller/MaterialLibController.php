@@ -400,7 +400,7 @@ class MaterialLibController extends BaseController
 
     public function editAction(Request $request, $fileId)
     {
-        $this->tryManageFile($fileId);
+        $this->tryAccessFile($fileId);
 
         $fields = $request->request->all();
 

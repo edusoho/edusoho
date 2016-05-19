@@ -23,7 +23,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function getFileFromLeaf($file)
+    public function getFullFile($file)
     {
         $api       = CloudAPIFactory::create('leaf');
         $cloudFile = $api->get("/resources/{$file['globalId']}");
