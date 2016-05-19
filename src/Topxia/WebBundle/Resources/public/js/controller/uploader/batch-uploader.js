@@ -308,7 +308,9 @@ define(function(require, exports, module) {
             uploader.on('upload.finish', function (file) {
                 delete  this.totalSpeedQueue[file.id];
                 delete  this.leftTotalSizeQueue[file.id];
-                if ($.isEmptyObject(this.leftTotalSizeQueue)) {
+                var uploadStates = uploader.getStats();
+
+                if ($.isEmptyObject(this.leftTotalSizeQueue) && uploadStates.cancelNum == 0) {
                     $('.upload-finish').removeClass('hidden').text('上传已完成');
                     $('.ballon-uploader-display-footer').addClass('hidden');
                 }
@@ -551,9 +553,10 @@ define(function(require, exports, module) {
             for (var index in this.uploader.leftTotalSizeQueue) {
                 leftsize += parseFloat(this.uploader.leftTotalSizeQueue[index]);
             }
+            var uploadStats = this.uploader.getStats();
             $('.js-speed').text(totalspeed.toFixed(2));
 
-            if (resumeFileCount == this.uploader.getFiles().length) {
+            if (resumeFileCount == (this.uploader.getFiles().length-uploadStats.successNum)) {
                 $('.js-left-time').text('');
             } else {
                 var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
