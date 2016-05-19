@@ -300,6 +300,56 @@ define(function(require, exports, module) {
             },
             _initSelect2: function()
             {
+                $('#tags').select2({
+                    ajax: {
+                        url: $('#tags').data('url') + '#',
+                        dataType: 'json',
+                        quietMillis: 100,
+                        data: function(term, page) {
+                            return {
+                                q: term,
+                                page_limit: 10
+                            };
+                        },
+                        results: function(data) {
+                            var results = [];
+                            $.each(data, function(index, item) {
+                                results.push({
+                                    id: item.name,
+                                    name: item.name
+                                });
+                            });
+                            return {
+                                results: results
+                            };
+                        }
+                    },
+                    initSelection: function(element, callback) {
+                        var data = [];
+                        $(element.val().split(",")).each(function() {
+                            data.push({
+                                id: this,
+                                name: this
+                            });
+                        });
+                        callback(data);
+                    },
+                    formatSelection: function(item) {
+                        return item.name;
+                    },
+                    formatResult: function(item) {
+                        return item.name;
+                    },
+                    width: 400,
+                    multiple: true,
+                    placeholder: "请输入标签",
+                    multiple: true,
+                    createSearchChoice: function() {
+                        return null;
+                    },
+                    maximumSelectionSize: 20
+                });
+
                 $("#js-course-search").select2({
                     placeholder: "选择课程",
                     minimumInputLength: 1,
