@@ -37,7 +37,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
+        return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
     public function getUploadFileInit($id)
@@ -53,7 +53,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
+        return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
     public function findFilesByIds(array $ids, $showCloud = 0)
@@ -682,7 +682,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
+        return $this->getFileImplementor($file['storage'])->getFullFile($file);
     }
 
     public function findMySharingContacts($targetUserId)

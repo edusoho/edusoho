@@ -75,7 +75,7 @@ class UploadFileServiceTest extends BaseTestCase
         $name = 'File.CloudFileImplementor';
         $params = array(
            array(
-             'functionName' => 'getFileFromLeaf',
+             'functionName' => 'getFullFile',
              'runTimes' => 1,
              'withParams' => array(
               'id' => 1,
@@ -154,7 +154,7 @@ class UploadFileServiceTest extends BaseTestCase
         $name = 'File.CloudFileImplementor';
         $params = array(
             array(
-             'functionName' => 'getFileFromLeaf',
+             'functionName' => 'getFullFile',
              'runTimes' => 1,
              'withParams' => array(),
              'returnValue' =>array(
