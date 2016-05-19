@@ -407,7 +407,7 @@ define(function(require, exports, module) {
                             file.uploaderWidget.set('uploadMode', uploadMode);
 
                             var $li = $('#' + file.id);
-                            if(uploadMode !== undefined/* && uploadMode !== 'local'*/){
+                            if(uploadMode !== undefined && uploadMode !== 'local'){
                                 $li.find('.js-file-pause').removeClass('hidden');
                                 file.uploaderWidget._showHiddenButton();
                             }
