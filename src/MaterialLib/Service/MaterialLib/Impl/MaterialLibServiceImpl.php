@@ -65,25 +65,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                         'fileId' => $fileId,
                         'tagId'  => $tag['id']
                     ));
-                    $result = $this->getUploadFileTagService()->findByFileId($fileId);
-
-                    $tagIds       = ArrayToolkit::column($result, 'tagId');
-                    $tags         = $this->getTagService()->findTagsByIds($tagIds);
-                    $editTagNames = ArrayToolkit::column($tags, 'name');
-
-                    $conditions         = array();
-                    $conditions['tags'] = implode(',', $editTagNames);
-
-                    $this->getUploadFileService()->update($fileId, $conditions);
                 }
             }
+
+            $result = $this->getUploadFileTagService()->findByFileId($fileId);
+
+            $tagIds       = ArrayToolkit::column($result, 'tagId');
+            $tags         = $this->getTagService()->findTagsByIds($tagIds);
+            $editTagNames = ArrayToolkit::column($tags, 'name');
+
+            $conditions         = array();
+            $conditions['tags'] = implode(',', $editTagNames);
+
+            $this->getUploadFileService()->update($fileId, $conditions);
         }
     }
 
     public function batchShare($ids)
     {
         foreach ($ids as $key => $id) {
-            //$this->checkPermission(Permission::EDIT, array('globalId' => $value));
             $fields = array('isPublic' => '1');
 
             $this->getUploadFileService()->update($id, $fields);

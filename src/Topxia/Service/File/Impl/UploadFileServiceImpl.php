@@ -25,23 +25,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFile($file);
     }
 
-    //合并getfile
-    /*public function getCloudFile($id)
-    {
-        $file = $this->getUploadFileDao()->getFile($id);
-
-        if (empty($file)) {
-            return null;
-        }
-
-        if ($file['globalId'] && $file['storage'] == 'cloud') {
-            return $this->getFileImplementor('cloud')->getFileFromLeaf($file);
-        } else {
-            return $this->getFileImplementor($file['storage'])->getFile($file);
-        }
-    }*/
-
-    //2
     public function getFullFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
@@ -57,42 +40,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
     }
 
-    //2
     public function getUploadFileInit($id)
     {
         return $this->getUploadFileInitDao()->getFile($id);
     }
-
-    //合并getFile
-/*    public function getThinFile($id)
-    {
-        $file = $this->getUploadFileDao()->getFile($id);
-
-        if (empty($file)) {
-            return null;
-        }
-
-        return ArrayToolkit::parts($file, array('id', 'hashId', 'globalId', 'isPublic', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
-    }*/
-
-    //合并getFileByGlobalId
-    /*public function getThinFileByGlobalId($globalId)
-    {
-        return $this->getUploadFileDao()->getFileByGlobalId($globalId);
-    }*/
-
-    //合并getFIleByGlobalId
-    /*public function getFileByGlobalId2($globalId)
-    {
-        $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
-
-        if (empty($file)) {
-            return null;
-        }
-
-        //return $this->createFileImplementor($file['storage'])->getFile($file);
-        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
-    }*/
 
     public function getFileByGlobalId($globalId)
     {
@@ -105,39 +56,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
     }
 
-    //2
-    /*public function findCloudFilesByIds($fileIds)
-    {
-        $files = $this->getUploadFileDao()->findCloudFilesByIds($fileIds);
-
-        if (empty($files)) {
-            return array();
-        }
-
-        //$cloudFiles = $this->createFileImplementor('cloud')->findFiles($files, array());
-        $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, array());
-
-        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
-
-        foreach ($files as $key => $file) {
-            $files[$key] = $cloudFiles[$file['id']];
-        }
-
-        return $files;
-    }*/
-
-    //合并findFilesByIds
-    /*public function findThinFilesByIds(array $ids)
-    {
-        return $this->getUploadFileDao()->findFilesByIds($ids);
-    }*/
-
-    /*public function findFilesByIds(array $ids)
-    {
-        return $this->getUploadFileDao()->findFilesByIds($ids);
-    }*/
-
-    //合并findFileByIds
     public function findFilesByIds(array $ids, $showCloud = 0)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
@@ -153,15 +71,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $files;
     }
 
-    //2
     public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds)
     {
         return $this->getUploadFileDao()->findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
     }
 
-    
-
-    //2
     public function update($fileId, $fields)
     {
         $file = $this->getUploadFileDao()->getFile($fileId);
@@ -173,7 +87,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'thumbNo'));
 
                 if (!empty($cloudFields)) {
-                    //$this->createFileImplementor('cloud')->updateFile($file['globalId'], $cloudFields);
                     $this->getFileImplementor('cloud')->updateFile($file['globalId'], $cloudFields);
                 }
             }
@@ -193,7 +106,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return false;
     }
 
-    //2
     public function getDownloadMetas($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
@@ -202,11 +114,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array('error' => 'not_found', 'message' => '文件不存在，不能下载！');
         }
 
-        //return $this->createFileImplementor($file['storage'])->getDownloadFile($file);
         return $this->getFileImplementor($file['storage'])->getDownloadFile($file);
     }
 
-    //2
     public function getUploadAuth($params)
     {
         $user = $this->getCurrentUser();
@@ -218,14 +128,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
-        //$implementor = $this->createFileImplementor($params['storage']);
         $implementor = $this->getFileImplementor($params['storage']);
 
         $auth = $implementor->getUploadAuth($params);
         return $auth;
     }
 
-    //2
     public function initUpload($params)
     {
         $user = $this->getCurrentUser();
@@ -254,7 +162,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
-        //$implementor       = $this->createFileImplementor($params['storage']);
         $implementor       = $this->getFileImplementor($params['storage']);
 
         if (isset($params['id'])) {
@@ -286,7 +193,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $initParams;
     }
 
-    //2
     public function finishedUpload($params)
     {
         $connection = $this->getKernel()->getConnection();
@@ -300,7 +206,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $params['length'] = 0;
             }
 
-            //$implementor = $this->createFileImplementor($params['storage']);
             $implementor = $this->getFileImplementor($params['storage']);
 
             $fields = array(
@@ -344,14 +249,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    //2
     public function moveFile($targetType, $targetId, $originalFile = null, $data)
     {
-        //return $this->createFileImplementor('local')->moveFile($targetType, $targetId, $originalFile, $data);
         return $this->getFileImplementor('local')->moveFile($targetType, $targetId, $originalFile, $data);
     }
 
-    //2
     public function setFileProcessed($params)
     {
         try {
@@ -367,7 +269,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
     
-    //2
     public function deleteByGlobalId($globalId)
     {
         $result = $this->getUploadFileDao()->deleteByGlobalId($globalId);
@@ -632,11 +533,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             return $cloudFiles['count'];
         }
-
         
-        $localCount = $this->getUploadFileDao()->searchFileCount($conditions);
-
-        return $localCount;
+        return $this->getUploadFileDao()->searchFileCount($conditions);
     }
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
@@ -770,8 +668,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
-
-    
 
     public function getMediaInfo($key, $type)
     {
