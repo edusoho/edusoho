@@ -944,12 +944,13 @@ class FileToolkit
     public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
     {
         $image = $rawImage->copy();
+
         $image->crop(new Point($x, $y), new Box($width, $height));
         if ($resizeWidth > 0 && $resizeHeight > 0) {
             $image->resize(new Box($resizeWidth, $resizeHeight));
         }
 
-        $image->save($targetPath, array('quality' => 100));
+        $image->save($targetPath);
 
         return $image;
     }
@@ -957,7 +958,7 @@ class FileToolkit
     public static function resize($image, $targetPath, $resizeWidth = 0, $resizeHeight = 0)
     {
         $image->resize(new Box($resizeWidth, $resizeHeight));
-        $image->save($targetPath, array('quality' => 100));
+        $image->save($targetPath);
         return $image;
     }
 

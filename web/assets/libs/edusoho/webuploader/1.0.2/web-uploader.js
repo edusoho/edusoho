@@ -67,9 +67,6 @@ define(function(require, exports, module) {
 		    	}
 		    });
 		    this.set("uploader", uploader);
-
-		    $('.webuploader-pick').parent().removeClass('btn btn-default');
-		    $('.webuploader-pick').addClass('btn btn-default');
 		},
 
 		onClick: function(){
