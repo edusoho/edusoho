@@ -84,8 +84,13 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function searchFiles($conditions, $orderBy = array('id', 'DESC'), $start, $limit)
     {
+        if($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
+            return array();   
+        }
         $this->filterStartLimit($start, $limit);
         $orderBy = $this->checkOrderBy($orderBy, array('id','updatedTime','createdTime','ext','filename','fileSize'));
+        
+
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -97,6 +102,9 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function searchFileCount($conditions)
     {
+        if($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
+            return 0;   
+        }
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
