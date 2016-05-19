@@ -233,10 +233,6 @@ class PlayerController extends BaseController
                 $file = $this->getUploadFileService()->getFullFile($file['id']);
             }
 
-            if ($file['convertStatus'] != 'success') {
-                return '';
-            }
-
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $context['hideBeginning'] = $this->haveHeadLeader();
