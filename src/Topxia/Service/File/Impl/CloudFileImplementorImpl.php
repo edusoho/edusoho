@@ -454,7 +454,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $apiResult;
     }
 
-    public function resumeUpload($hash, $params)
+    public function resumeUpload($file, $initParams)
     {
         $params = array(
             'bucket' => $initParams['bucket'],
@@ -475,6 +475,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $result['globalId'] = $file['globalId'];
         $result['outerId']  = $file['id'];
+        $result['hashId'] = $file['hashId'];
         $result['resumed']  = $apiResult['resumed'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
