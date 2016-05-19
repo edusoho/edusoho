@@ -110,12 +110,12 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    // TODO 权限
     public function playerAction(Request $request, $fileId)
     {
         $file = $this->tryAccessFile($fileId);
+
         if($file['storage'] == 'cloud'){
-          return $this->forward('TopxiaAdminBundle:CloudFile:player', array(
+          return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
               'request'  => $request,
               'globalId' => $file['globalId']
           ));
@@ -134,7 +134,7 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function detailAction($fileId)
+    public function detailAction(Request $request, $fileId)
     {
         $currentUser = $this->getCurrentUser();
         $file        = $this->tryAccessFile($fileId);
@@ -148,9 +148,24 @@ class MaterialLibController extends BaseController
                 'thumbnails' => "",
                 'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
             ));
+        } else {
+            try {
+                if ($file['type'] == 'video') {
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                }
+            } catch (\RuntimeException $e) {
+                $thumbnails = array();
+            }
+
+            return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
+                'material'   => $file,
+                'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
+                'params'     => $request->query->all(),
+                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
+            ));
         }
 
-        return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
+        //return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
     public function showShareFormAction(Request $request)
@@ -606,5 +621,10 @@ class MaterialLibController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
     }
 }
