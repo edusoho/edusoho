@@ -20,7 +20,7 @@ define(function(require, exports, module) {
             hookRegisted: false
         },
 
-        uploadStop: function (event) {
+        _onUploadStop: function (event) {
             var self = this;
 
             //过滤出未完成的文件并做处理
@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             });
         },
 
-        uploadResume: function (event) {
+        _onUploadResume: function (event) {
             var self = this;
             //过滤出未完成的文件并做处理
             this.element.find('li').filter(function () {
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
             this.uploader.upload();
         },
         
-        fileUploadResume: function (event) {
+        _onFileUploadResume: function (event) {
             var fileId = $(event.target).parents('li.file-item').attr('id');
             var file = this.uploader.getFile(fileId);
             $(event.target).addClass('hidden');
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
             this.uploader.upload(fileId);
         },
         
-        fileUploadStop: function (event) {
+        _onFileUploadStop: function (event) {
             var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
             var file = this.uploader.getFile(fileId);
@@ -76,7 +76,7 @@ define(function(require, exports, module) {
             }
         },
 
-        fileUploadRemove: function (event) {
+        _onFileUploadRemove: function (event) {
             // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
             var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
@@ -130,11 +130,11 @@ define(function(require, exports, module) {
                 $(self.element).find('.pause-btn').prop('disabled',false);
             });
 
-            $(this.element).on('click', '.js-upload-pause', this.uploadStop.bind(this));
-            $(this.element).on('click', '.js-upload-resume', this.uploadResume.bind(this));
-            $(this.element).on('click', '.js-file-resume', this.fileUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-pause', this.fileUploadStop.bind(this));
-            $(this.element).on('click', '.js-file-cancel', this.fileUploadRemove.bind(this));
+            $(this.element).on('click', '.js-upload-pause', this._onUploadStop.bind(this));
+            $(this.element).on('click', '.js-upload-resume', this._onUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-resume', this._onFileUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-pause', this._onFileUploadStop.bind(this));
+            $(this.element).on('click', '.js-file-cancel', this._onFileUploadRemove.bind(this));
         },
 
         destroy: function() {
