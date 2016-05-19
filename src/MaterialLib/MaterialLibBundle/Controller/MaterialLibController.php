@@ -44,8 +44,6 @@ class MaterialLibController extends BaseController
 
     public function showMyMaterialLibFormAction(Request $request)
     {
-        //$synData = $this->getMaterialLibService()->synData();
-
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
@@ -165,7 +163,6 @@ class MaterialLibController extends BaseController
             ));
         }
 
-        //return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
     public function showShareFormAction(Request $request)
