@@ -793,6 +793,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
                 if ($myFriends) {
                     $conditions['createdUserIds'] = ArrayToolkit::column($myFriends, "sourceUserId");
+                } else {
+                    $conditions['createdUserIds'] = array();
                 }
                 
             } elseif ($conditions['source'] == 'public') {
@@ -802,6 +804,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
                 if (!empty($collections)) {
                     $conditions['ids'] = ArrayToolkit::column($collections, 'fileId');
+                } else {
+                    $conditions['ids'] = array();
                 }
             }
         }
