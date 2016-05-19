@@ -230,11 +230,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function (file) {
-                var $li = $('#' + file.id);
-                if(self.get('uploadMode') !== undefined && self.get('uploadMode') !== 'local'){
-                    $li.find('.js-file-pause').removeClass('hidden');
-                }
-
                 this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
                 self.trigger('file.uploadStart');
             });
@@ -374,6 +369,7 @@ define(function(require, exports, module) {
                     file.uploaderWidget.trigger('preupload', file);
                     file.uploaderWidget._makeFileHash(file).done(function(hash) {
 
+
                         file.hash = hash;
                         var params = {
                             fileName: file.name,
@@ -407,6 +403,12 @@ define(function(require, exports, module) {
                             }
                             var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
                             file.uploaderWidget.set('uploadMode', uploadMode);
+
+                            var $li = $('#' + file.id);
+                            if(uploadMode !== undefined && uploadMode !== 'local'){
+                                $li.find('.js-file-pause').removeClass('hidden');
+                            }
+
                             require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
