@@ -540,13 +540,14 @@ define(function(require, exports, module) {
 
             for (var index in this.uploader.totalSpeedQueue) {
                 var file = this.uploader.getFile(index);
+
                 if (file.getStatus() == 'progress' || file.getStatus() == 'queued') {
                     totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
                 } else {
                     resumeFileCount++;
                 }
             }
-            
+
             for (var index in this.uploader.leftTotalSizeQueue) {
                 leftsize += parseFloat(this.uploader.leftTotalSizeQueue[index]);
             }
@@ -555,7 +556,7 @@ define(function(require, exports, module) {
             if (resumeFileCount == this.uploader.getFiles().length) {
                 $('.js-left-time').text('');
             } else {
-                var time = this._secondToDate((leftsize / totalspeed));
+                var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
 
                 $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
             }  
