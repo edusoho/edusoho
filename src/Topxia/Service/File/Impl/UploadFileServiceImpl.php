@@ -786,11 +786,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (isset($conditions['source']) && !empty($conditions['source'])) {
-            if ($conditions['source'] == 'shared') {
+            if($conditions['source'] == 'upload') {
+                $conditions['createdUserId'] = $conditions['currentUserId'];
+            } elseif ($conditions['source'] == 'shared') {
                 $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
 
                 if ($myFriends) {
                     $conditions['createdUserIds'] = ArrayToolkit::column($myFriends, "sourceUserId");
+                } else {
+                    $conditions['createdUserIds'] = array();
                 }
                 
             } elseif ($conditions['source'] == 'public') {
@@ -800,11 +804,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
                 if (!empty($collections)) {
                     $conditions['ids'] = ArrayToolkit::column($collections, 'fileId');
+                } else {
+                    $conditions['ids'] = array();
                 }
             }
         }
-
-        $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
             $conditions['createdUserIds'] = array($conditions['currentUserId']);

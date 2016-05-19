@@ -208,6 +208,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->andWhere('usedCount >= :startCount')
             ->andWhere('usedCount < :endCount')
             ->andWhere('createdUserId IN ( :createdUserIds )')
+            ->andWhere('createdUserId = :createdUserId')
             ->orWhere('id IN ( :idsOr )');
 
         return $builder;
