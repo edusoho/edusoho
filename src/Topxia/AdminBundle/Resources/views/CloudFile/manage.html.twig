@@ -3,15 +3,20 @@
 {% set menu = 'admin_cloud_file' %}
 {% do load_script('cloudfile/manage') %}
 
-{% block main %}
-<style>
-.batch-item {
-    position: absolute;
-    left: 6px;
-    top: 3px;
-    z-index: 101;
-}
+{% block stylesheets %}
+  {{parent()}}
+  <style>
+  .batch-item {
+      position: absolute;
+      left: 6px;
+      top: 3px;
+      z-index: 101;
+  }
 </style>
+{% endblock %}
+
+{% block main %}
+
 <div class="eduyun-main">
   <div class="page-header clearfix">
     <h1 class="pull-left">云资源</h1>
