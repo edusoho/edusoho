@@ -233,7 +233,9 @@ define(function(require, exports, module) {
 
             uploader.on('uploadStart', function (file) {
                 var $li = $('#' + file.id);
-                $li.find('.js-file-pause').removeClass('hidden');
+                if(self.get('uploadMode') !== undefined && self.get('uploadMode') !== 'local'){
+                    $li.find('.js-file-pause').removeClass('hidden');
+                }
             });
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
