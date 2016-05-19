@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         },
         
         fileUploadResume: function (event) {
-            var fileId = $(event.target).parent().parent().attr('id');
+            var fileId = $(event.target).parents('li.file-item').attr('id');
             var file = this.uploader.getFile(fileId);
             $(event.target).addClass('hidden');
             $(event.target).siblings('.js-file-pause').removeClass('hidden');
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
         },
         
         fileUploadStop: function (event) {
-            var $li = $(event.target).parent().parent();
+            var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
             var file = this.uploader.getFile(fileId);
             $(event.target).addClass('hidden');
@@ -73,14 +73,12 @@ define(function(require, exports, module) {
                 $(event.target).siblings('.js-file-resume').removeClass('hidden');
                 $li.find('.file-status').html('暂停中');
                 this.uploader.cancelFile(fileId);
-            }else {
-                $(event.target).prop('disabled', true);
             }
         },
 
         fileUploadRemove: function (event) {
             // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
-            var $li = $(event.target).parent().parent();
+            var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
             this.uploader.removeFile(fileId, true);
             $li.remove();
@@ -169,8 +167,8 @@ define(function(require, exports, module) {
             html += '      <span class="js-left-time"></span>';
             html += '    </span>';
             html += '  </div>';
-            html += '  <button class="pause-btn js-upload-pause btn btn-default hidden" disabled>全部暂停</button>';
-            html += '  <button class="pause-btn js-upload-resume btn btn-default hidden" disabled>全部继续</button>';
+            html += '  <div class="pause-btn js-upload-pause btn btn-default hidden">全部暂停</div>';
+            html += '  <div class="pause-btn js-upload-resume btn btn-default hidden">全部继续</div>';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
@@ -194,14 +192,14 @@ define(function(require, exports, module) {
                 var $list =$uploader.find('.balloon-filelist ul');
 
                 $list.append(
-                    '<li id="' + file.id + '">' +
+                    '<li id="' + file.id + '" class="file-item">' +
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
                     '  <div class="file-manage">' +
-                    '    <button class="js-file-resume btn btn-default btn-xs hidden">继续</button>' +
-                    '    <button class="js-file-pause btn btn-default btn-xs hidden">暂停</button>' +
-                    '    <button class="js-file-cancel btn btn-default btn-xs">取消</button>' +
+                    '    <i class="js-file-resume btn btn-xs glyphicon glyphicon-play hidden"></i>' +
+                    '    <i class="glyphicon glyphicon-pause js-file-pause btn btn-xs hidden"></i>' +
+                    '    <i class="glyphicon glyphicon-remove js-file-cancel btn btn-xs"></i>' +
                     '  </div>' +
                     '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
@@ -236,6 +234,9 @@ define(function(require, exports, module) {
                 if(self.get('uploadMode') !== undefined && self.get('uploadMode') !== 'local'){
                     $li.find('.js-file-pause').removeClass('hidden');
                 }
+
+                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
+                self.trigger('file.uploadStart');
             });
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
@@ -268,9 +269,9 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
-                $li.find('.js-file-resume').prop('disabled',true).addClass('hidden');
-                $li.find('.js-file-pause').prop('disabled',true).addClass('hidden');
-                $li.find('.js-file-cancel').prop('disabled',true).addClass('hidden');
+                $li.find('.js-file-resume').addClass('hidden');
+                $li.find('.js-file-pause').addClass('hidden');
+                $li.find('.js-file-cancel').addClass('hidden');
                 var key = 'file_' + file.hash;
                 store.remove(key);
             });
@@ -290,11 +291,6 @@ define(function(require, exports, module) {
 
                 var strategy = self.get('strategy');
                 strategy.uploadAccept(object, ret);
-            });
-
-            uploader.on('uploadStart', function(file) {
-                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
-                self.trigger('file.uploadStart');
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
