@@ -5,13 +5,14 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-   var SelectZtree = require('edusoho.selectztree');
+    var SelectTree = require('edusoho.selecttree');
     exports.run = function() {
-        var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
         require('./header').run();
 
         $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data) {

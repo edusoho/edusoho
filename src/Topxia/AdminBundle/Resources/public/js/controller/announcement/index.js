@@ -1,19 +1,18 @@
 define(function(require, exports, module) {
+    var SelectTree = require('edusoho.selecttree');
 
     exports.run = function() {
-       var SelectZtree = require('edusoho.selectztree');
-        var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
+        var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'orgCode'
         });
-        $('#announcement-table').on('click','.delete-btn',function(){
+        $('#announcement-table').on('click', '.delete-btn', function() {
 
             if (!confirm('确定删除此公告吗？')) {
-                return ;
+                return;
             }
 
-            $.post($(this).data('url'),function(){
+            $.post($(this).data('url'), function() {
 
                 window.location.reload();
 

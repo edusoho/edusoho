@@ -1,8 +1,11 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
-	var ztree = require('edusoho.ztree');
+	var SelectTree = require('edusoho.selecttree');
 	exports.run = function(options) {
-		ztree('#orgZtree', "#orgName", "#orgCode");
+		var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'likeOrgCode'
+        });
 		var $table = $('#course-recommend-table');
 
 		$table.on('click', '.cancel-recommend-course', function() {
