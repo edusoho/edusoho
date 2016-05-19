@@ -200,10 +200,10 @@ abstract class BaseDao
         return $orderBy;
     }
 
-    protected function hasEmptyInCondition($conditions)
+    protected function hasEmptyInCondition($conditions, $fields)
     {
         foreach ($conditions as $key => $condition) {
-            if(empty($condition)) {
+            if(in_array($key, $fields) && empty($condition)) {
                 return true;
             }
         }
