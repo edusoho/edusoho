@@ -406,12 +406,13 @@ define(function(require, exports, module) {
                             var $li = $('#' + file.id);
                             if(uploadMode !== undefined && uploadMode !== 'local'){
                                 $li.find('.js-file-pause').removeClass('hidden');
+                                file.uploaderWidget._showHiddenButton();
                             }
 
                             require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
-                                file.uploaderWidget.get('uploadMode') !== 'local' && file.uploaderWidget._showHiddenButton();
+
                                 deferred.resolve();
                             });
                         }, 'json');
