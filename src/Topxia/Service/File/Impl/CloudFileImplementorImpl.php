@@ -652,7 +652,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $cloudFile['fileSize']      = $cloudFile['size'];
         $cloudFile['convertStatus'] = $this->getConvertStatus($cloudFile['processStatus']);
 
-        $cloudFile = $this->getFileOtherInfo($cloudFile, $localFile);
+        $cloudFile = $this->getFileOtherInfo($localFile, $cloudFile);
 
         return $cloudFile;
     }
@@ -762,6 +762,15 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function getFileOtherInfo($file, $cloudFile)
     {
+        $statusMap             = array(
+            'none'       => 'none',
+            'waiting'    => 'waiting',
+            'processing' => 'doing',
+            'ok'         => 'success',
+            'error'      => 'error'
+        );
+        $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
+
         $file['convertParams'] = array();
         $file['metas2']        = array();
 
