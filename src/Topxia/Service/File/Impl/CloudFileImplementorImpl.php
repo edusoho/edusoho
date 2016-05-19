@@ -651,7 +651,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $cloudFile['fileSize']      = $cloudFile['size'];
         $cloudFile['convertStatus'] = $this->getConvertStatus($cloudFile['processStatus']);
 
-        $cloudFile = $this->getFileOtherInfo($localFile, $cloudFile);
+        $cloudFile = array_merge($this->getFileOtherInfo($localFile, $cloudFile), $cloudFile);
 
         return $cloudFile;
     }
