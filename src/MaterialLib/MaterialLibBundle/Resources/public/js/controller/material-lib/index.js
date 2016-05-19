@@ -347,6 +347,7 @@ define(function(require, exports, module) {
                     if(mode == 'edit' && attribute == 'mine'){
                       $('#material-lib-batch-bar').show();
                       $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+                      $("[data-role=batch-select]").attr("checked",false);
                     } else if(mode == 'normal'){
                       $('#material-lib-batch-bar').hide();
                       $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
