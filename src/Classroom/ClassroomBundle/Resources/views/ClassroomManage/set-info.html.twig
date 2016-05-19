@@ -92,11 +92,12 @@
         <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
         <div class="col-md-8 controls">
           {% set org = data('Org',{orgCode:classroom.orgCode})%}
-          <input  class="form-control width-input width-input-large" name="orgName" id ="orgName"  value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"  >
-          <input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ classroom.orgCode }}" >
-          <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute; z-index: 10000;">
-            <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
-          </div>
+          <input id="orgSelectTree" 
+            value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
+            class="form-control width-input width-input-large"
+            data-url ="{{ path('org_tree') }}" 
+            data-code ="{{org.orgCode}}"
+          />
         </div>
       </div>
 

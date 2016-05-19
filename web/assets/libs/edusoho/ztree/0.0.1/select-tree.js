@@ -5,8 +5,9 @@ define(function(require, exports, module) {
     var Widget = require('widget');
 
     var SelectTree = Widget.extend({
-        attr: {
-            displayBlock: 'ztreeContent',
+        attrs: {
+            displayBlockEl: 'ztreeContent',
+            treeRootEl: 'orgZtree'
         },
 
         events: {
@@ -14,43 +15,63 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            this.treeRoot = this.get('ztreeDom');
-            this.clickDom = this.get('clickDom');
-            this.valueDom = this.get('valueDom');
-            this.menuContent = this.get('displayBlock')|| 'ztreeContent';
+            this.valueDom = this.get('name');
+            this.menuContent = this.get('displayBlockEl');
+            this.treeRoot = this.get('treeRootEl');
+            if (this.get('modal')) {
+                this.valueDom = 'modal-' + this.valueDom;
+                this.menuContent = 'modal-' + this.menuContent;
+                this.treeRoot = 'modal-' + this.treeRoot;
+            }
+
             this.lastValue = this.oldValue = this.nodeList = null;
+            this.initDom();
             this.initSelectTree();
             this.zTree = this.getSelectTree();
             this.initTreeEvent();
-           console.log(this.menuContent)
-
         },
 
         getSelectTree: function() {
-            var treeRoot = this.get('ztreeDom');
-            return $.fn.zTree.getZTreeObj($(treeRoot).attr('id'));
+            return $.fn.zTree.getZTreeObj(this.treeRoot);
+        },
+
+        initDom: function() {
+            var sourceUrl = $(this.element).data('url');
+            var width = $(this.element).outerWidth(true);
+            var name = $(this.element).data('name');
+            var value = $(this.element).data('code');
+            //ztree 初始化的容器
+            var selectDom = "<div id='" + this.menuContent + "' class='ztreeContent' style='display:none; position: absolute; z-index: 10000;'>" +
+                "<ul id='" + this.treeRoot + "' class='ztree' style='margin-top:0; width:" + width + "px;z-index: 10000' data-source=" + sourceUrl + "></ul>" +
+                "</div>";
+
+            var selectOrgCodeDom = ' <input  type ="hidden" name="' + this.get('name') + '" id ="' + this.valueDom + '" value="' + $(this.element).data('code') + '" >';
+
+            $(this.element).parents('.controls').append(selectOrgCodeDom);
+            $(this.element).parents('.controls').append(selectDom);
+
         },
 
         initTreeEvent: function() {
             var self = this;
 
-            $(this.clickDom).bind("focus", this.focusKey.bind(self)).bind("blur", this.blurKey.bind(self)).bind('click input propertychange', function() {
+            $(this.element).bind("focus", this.focusKey.bind(self)).bind("blur", this.blurKey.bind(self)).bind('click input propertychange', function() {
                 self.zTree.expandAll(false);
                 self.showMenu();
-                self.lastValue = $(self.clickDom).val();
-                if ($(self.clickDom).val() == "") return;
+                self.lastValue = $(self.element).val();
+                if ($(self.element).val() == "") return;
                 self.updateNodes(false);
-                self.nodeList = self.zTree.getNodesByParamFuzzy('name', $(self.clickDom).val());
+                self.nodeList = self.zTree.getNodesByParamFuzzy('name', $(self.element).val());
                 self.checkAllParents(self.nodeList[0]);
-                console.log(1)
                 self.updateNodes(true)
             });
         },
 
         zTreeOnClick: function(event, treeId, treeNode) {
             this.zTree.expandNode(treeNode, true, true, false); //展开当前选择的第一个节点（包括其全部子节点）
-            $(this.clickDom).val(treeNode.name);
-            $(this.valueDom).val(treeNode.orgCode);
+            $(this.element).val(treeNode.name);
+            $('#' + this.valueDom).val(treeNode.orgCode);
+
             this.lastValue = treeNode.name;
             this.hideMenu.bind(this)();
         },
@@ -59,7 +80,6 @@ define(function(require, exports, module) {
             if (!this.nodeList) {
                 return;
             }
-
             for (var i = 0, l = this.nodeList.length; i < l; i++) {
                 this.nodeList[i].highlight = highlight;
                 this.zTree.updateNode(this.nodeList[i]);
@@ -85,19 +105,19 @@ define(function(require, exports, module) {
         },
 
         focusKey: function(e) {
-            oldValue = $(this.get('clickDom')).val();
-            $(this.get('clickDom')).val('');
+            oldValue = $(this.element).val();
+            $(this.element).val('');
         },
 
         blurKey: function(e) {
-            if ($(this.get('clickDom')).val() === "") {
-                $(this.get('clickDom')).val(oldValue);
+            if ($(this.element).val() === "") {
+                $(this.element).val(oldValue);
             }
         },
 
         showMenu: function() {
             var self = this;
-            var cityOffset = $(this.get('clickDom')).offset();
+            var cityOffset = $(this.element).offset();
             $("#" + this.menuContent).slideDown("fast");
             $("body").bind("mousedown", self.onBodyDown.bind(self));
         },
@@ -109,7 +129,8 @@ define(function(require, exports, module) {
 
         onBodyDown: function(event) {
             var self = this;
-            if (!(event.target.id == "menuBtn" || event.target.id == self.menuContent || $(event.target).parents("#" + self.menuContent).length > 0)) {
+            if (!(event.target.id == self.menuContent || $(event.target).parents("#" + self.menuContent).length > 0)) {
+
                 self.hideMenu.bind(self)();
             }
         },
@@ -137,12 +158,12 @@ define(function(require, exports, module) {
                 }
             };
             var treeRoot = this.treeRoot;
-            $.ajax($(treeRoot).data('source'), {
+            $.ajax($('#' + treeRoot).data('source'), {
                 type: 'GET',
                 async: false,
                 dataType: "json"
             }).then(function(treeData) {
-                $.fn.zTree.init($(treeRoot), setting, treeData);
+                $.fn.zTree.init($('#' + treeRoot), setting, treeData);
             });
         }
     });

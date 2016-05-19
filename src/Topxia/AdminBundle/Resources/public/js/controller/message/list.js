@@ -1,15 +1,13 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-   	require("jquery.bootstrap-datetimepicker");
-	require("$");
+    var SelectTree = require('edusoho.selecttree');
+    require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-       var SelectZtree = require('edusoho.selectztree');
-        var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
+        var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'orgCode'
         });
         var $container = $('#message-table-container');
         var $table = $("#message-table");
@@ -17,7 +15,9 @@ define(function(require, exports, module) {
         require('../../util/batch-select')($container);
         require('../../util/batch-delete')($container);
         require('../../util/item-delete')($container);
-		$("#startDate, #endDate").datetimepicker();		
+        $("#startDate, #endDate").datetimepicker({
+            autoclose:true
+        });
 
     };
 

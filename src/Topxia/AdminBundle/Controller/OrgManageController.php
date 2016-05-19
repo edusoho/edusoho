@@ -23,7 +23,7 @@ class OrgManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $org = $request->request->all();
             $this->getOrgService()->createOrg($org);
-            return $this->createJsonResponse(true);
+            return $this->redirect($this->generateUrl('admin_org'));
         }
 
         $org = array(
@@ -45,7 +45,7 @@ class OrgManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $org = $request->request->all();
             $this->getOrgService()->updateOrg($id, $org);
-            return $this->createJsonResponse(true);
+            return $this->redirect($this->generateUrl('admin_org'));
         }
 
         $org = $this->getOrgService()->getOrg($id);

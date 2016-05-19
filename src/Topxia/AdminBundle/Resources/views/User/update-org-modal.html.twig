@@ -11,11 +11,13 @@
       <label for="orgCode">组织机构</label>
     </div>
     <div class="col-md-7 controls">
-      <input  class="form-control" name="orgName" id ="modal-orgName"  value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"  >
-      <input  type ="hidden" class="form-control" name="orgCode" id ="modal-orgCode" value="{{ org.orgCode }}" >
-      <div id="modal-ztreeContent" class="modal-ztreeContent" style="display:none; position: absolute; z-index: 10000;">
-        <ul id="modal-orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
-      </div>
+       {% set org = data('Org',{orgCode:org.orgCode|default(app.user.orgCode)})%}
+        <input id="modalOrgSelectTree" 
+          value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
+          class="form-control"
+          data-url ="{{ path('org_tree') }}" 
+          data-code ="{{ org.orgCode }}"
+        />
     </div>
   </div>
 

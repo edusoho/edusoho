@@ -1,23 +1,15 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-
-    require('common/validator-rules').inject(Validator);
+    var SelectTree = require('edusoho.selecttree');
     var Notify = require('common/bootstrap-notify');
+    require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
-   var SelectZtree = require('edusoho.selectztree');
-
     exports.run = function() {
-        var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
+        var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'orgCode'
         });
-        /*        var editor_classroom = CKEDITOR.replace('description', {
-                    toolbar: 'Detail',
-                    filebrowserImageUploadUrl: $('#description').data('imageUploadUrl'),
-                    filebrowserFlashUploadUrl: $('#description').data('flashUploadUrl')
-                });*/
 
         var editor_classroom_about = CKEDITOR.replace('about', {
             allowedContent: true,

@@ -1,10 +1,9 @@
 define(function(require, exports, module) {
-   var SelectZtree = require('edusoho.selectztree');
+   var SelectTree = require('edusoho.selecttree');
     exports.run = function(options) {
-        var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
+         var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'likeOrgCode'
         });
     }
 });
