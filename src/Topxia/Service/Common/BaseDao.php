@@ -199,4 +199,14 @@ abstract class BaseDao
 
         return $orderBy;
     }
+
+    protected function hasEmptyInCondition($conditions)
+    {
+        foreach ($conditions as $key => $condition) {
+            if(empty($condition)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
