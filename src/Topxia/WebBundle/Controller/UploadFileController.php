@@ -397,6 +397,7 @@ class UploadFileController extends BaseController
     protected function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
+            $file['updatedTime'] = $file['updatedTime'] ? $file['updatedTime'] : $file['createdTime'];
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
             $file['fileSize']    = FileToolkit::formatFileSize($file['fileSize']);
 
