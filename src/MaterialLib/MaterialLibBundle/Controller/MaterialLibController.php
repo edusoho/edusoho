@@ -404,12 +404,8 @@ class MaterialLibController extends BaseController
 
         $fields = $request->request->all();
 
-        $result = $this->getUploadFileService()->edit($fileId, $fields);
+        $result = $this->getUploadFileService()->update($fileId, $fields);
         return $this->createJsonResponse($result);
-        /*return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
-            'globalId' => $globalId,
-            'fields'   => $fields
-        ));*/
     }
 
     public function downloadAction(Request $request, $fileId)
