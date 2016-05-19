@@ -554,7 +554,9 @@ define(function(require, exports, module) {
         },
 
         _showHiddenButton: function () {
-            this.element.find('.pause-btn').removeClass('hidden');
+            if(this.get('multi')){
+                this.element.find('.pause-btn').removeClass('hidden');
+            }
         }
     });
 
