@@ -369,7 +369,6 @@ define(function(require, exports, module) {
                     file.uploaderWidget.trigger('preupload', file);
                     file.uploaderWidget._makeFileHash(file).done(function(hash) {
 
-
                         file.hash = hash;
                         var params = {
                             fileName: file.name,
