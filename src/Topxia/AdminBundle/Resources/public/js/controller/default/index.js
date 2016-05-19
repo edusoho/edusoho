@@ -44,13 +44,11 @@ define(function(require, exports, module) {
                     data: postData,
                     type: 'post'
                 }).done(function(data) {
-                    $btn.attr('disabled');
-                    $btn.html('升级受理中');
+                    $('.upgrade-status').html('<span class="label label-warning">升级受理中</span>');
                 }).fail(function(xhr, textStatus) {
                     Notify.danger(xhr.responseJSON.error.message);
-                    $btn.button('reset');
                 }).always(function(xhr, textStatus) {
-                    
+                    $btn.button('reset');
                 });
             })
 
