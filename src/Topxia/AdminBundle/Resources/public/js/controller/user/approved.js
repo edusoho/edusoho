@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var validator = require('bootstrap.validator');
     var SelectTree = require('edusoho.selecttree');
-
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {

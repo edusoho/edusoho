@@ -11,6 +11,7 @@ define(function(require, exports, module) {
             element: "#modalOrgSelectTree",
             name: 'orgCode',
             modal: true
+
         });
         var $modal = $('#announcement-create-form').parents('.modal');
 

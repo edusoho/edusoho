@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
-
     exports.run = function() {
         var selectTree = new SelectTree({
             element: "#orgSelectTree",

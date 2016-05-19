@@ -71,6 +71,7 @@ define(function(require, exports, module) {
             this.zTree.expandNode(treeNode, true, true, false); //展开当前选择的第一个节点（包括其全部子节点）
             $(this.element).val(treeNode.name);
             $('#' + this.valueDom).val(treeNode.orgCode);
+
             this.lastValue = treeNode.name;
             this.hideMenu.bind(this)();
         },
@@ -81,8 +82,7 @@ define(function(require, exports, module) {
             }
             for (var i = 0, l = this.nodeList.length; i < l; i++) {
                 this.nodeList[i].highlight = highlight;
-                this.zTree.updateNode(this.nodeList[i])
-                ;
+                this.zTree.updateNode(this.nodeList[i]):
             }
         },
 
@@ -130,6 +130,7 @@ define(function(require, exports, module) {
         onBodyDown: function(event) {
             var self = this;
             if (!(event.target.id == self.menuContent || $(event.target).parents("#" + self.menuContent).length > 0)) {
+
                 self.hideMenu.bind(self)();
             }
         },

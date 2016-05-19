@@ -2,10 +2,10 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-
     require('jquery.select2-css');
     require('jquery.select2');
     var SelectTree = require('edusoho.selecttree');
+    
     exports.run = function() {
         if ($("#orgSelectTree").val()) {
             var selectTree = new SelectTree({
