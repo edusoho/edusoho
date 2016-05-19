@@ -82,7 +82,7 @@ define(function(require, exports, module) {
             }
             for (var i = 0, l = this.nodeList.length; i < l; i++) {
                 this.nodeList[i].highlight = highlight;
-                this.zTree.updateNode(this.nodeList[i]):
+                this.zTree.updateNode(this.nodeList[i]);
             }
         },
 
