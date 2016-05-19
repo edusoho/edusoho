@@ -600,31 +600,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result;
     }
 
-    public function mergeCloudFile2($localFile, $cloudFile)
-    {
-        $cloudFile['hashId']        = $cloudFile['reskey'];
-        $cloudFile['fileSize']      = $cloudFile['size'];
-        $cloudFile['filename']      = $cloudFile['name'];
-        $cloudFile['convertStatus'] = $this->getConvertStatus($cloudFile['processStatus']);
-
-        if ($localFile) {
-            $cloudFile['id']            = $localFile['id'];
-            $cloudFile['targetType']    = $localFile['targetType'];
-            $cloudFile['targetId']      = $localFile['targetId'];
-            $cloudFile['createdUserId'] = $localFile['createdUserId'];
-            $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
-            $cloudFile['isPublic']      = $localFile['isPublic'];
-            $cloudFile['usedCount']     = $localFile['usedCount'];
-            $cloudFile['ext']           = $localFile['ext'];
-            $cloudFile['storage']       = $localFile['storage'];
-        } else {
-            //没有本地文件
-            $cloudFile['id'] = 0;
-        }
-
-        return $cloudFile;
-    }
-
     private function mergeCloudFile($localFile, $cloudFile)
     {
         if(empty($localFile)){
@@ -641,7 +616,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $file = array_merge($localFile, $cloudFile);
         $file['convertStatus'] = $this->getConvertStatus($file['processStatus']);
-        return $this->mergeConvertParamsAndMetas($file);
+        $file = $this->mergeConvertParamsAndMetas($file);
+
+        $file['storage'] = 'cloud';
+        return $file;
     }
 
     public function synData($conditions)
@@ -749,15 +727,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function mergeConvertParamsAndMetas($file)
     {
-        $statusMap = array(
-            'none'       => 'none',
-            'waiting'    => 'waiting',
-            'processing' => 'doing',
-            'ok'         => 'success',
-            'error'      => 'error'
-        );
-        $file['convertStatus'] = $statusMap[$file['processStatus']];
-
         $file['convertParams'] = array();
         $file['metas2']        = array();
 
