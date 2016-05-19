@@ -233,7 +233,7 @@ class PlayerController extends BaseController
                 $file = $this->getUploadFileService()->getFullFile($file['id']);
             }
 
-            if ($file['status'] != 'ok') {
+            if ($file['convertStatus'] != 'ok') {
                 return '';
             }
 
