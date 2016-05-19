@@ -59,7 +59,6 @@ seajs.config({
         'ckeditor': 'ckeditor/4.6.7/ckeditor',
         'es-ckeditor': 'common/es-ckeditor',
         'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
-        'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',

@@ -35,7 +35,7 @@ class CourseFileManageController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -67,7 +67,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
+        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -98,7 +98,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -132,7 +132,7 @@ class CourseFileManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService2()->deleteFiles($ids);
+        $this->getUploadFileService()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -145,11 +145,6 @@ class CourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getUploadFileService2()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getSettingService()

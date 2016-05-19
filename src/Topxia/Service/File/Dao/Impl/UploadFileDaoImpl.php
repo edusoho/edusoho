@@ -50,12 +50,6 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findFilesByTargetTypeAndTargetId($targetType, $targetId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        return $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ?: array();
-    }
-
     public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds)
     {
         if (empty($targetIds)) {
@@ -91,6 +85,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     public function searchFiles($conditions, $orderBy = array('id', 'DESC'), $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('id','updatedTime','createdTime','ext','filename','fileSize'));
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])

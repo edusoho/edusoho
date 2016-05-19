@@ -167,6 +167,6 @@ class UploaderController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
