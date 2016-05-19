@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             process: 'none',
             uploadToken: null,
             multi: true,
-            hookRegisted: false
+            hookRegisted: false,
         },
 
         _onUploadStop: function (event) {
@@ -122,6 +122,7 @@ define(function(require, exports, module) {
                 throw new Error( 'WebUploader does not support the browser you are using.' );
             }
             var uploader = this.uploader = WebUploader.create(defaults);
+
             this._registerUploaderEvent(uploader);
 
             var self = this;
@@ -129,6 +130,7 @@ define(function(require, exports, module) {
                 uploader.upload();
                 $(self.element).find('.pause-btn').prop('disabled',false);
             });
+
 
             $(this.element).on('click', '.js-upload-pause', this._onUploadStop.bind(this));
             $(this.element).on('click', '.js-upload-resume', this._onUploadResume.bind(this));
@@ -142,6 +144,7 @@ define(function(require, exports, module) {
                 this.uploader.stop();
                 this.uploader.destroy();
             }
+            this.element.undelegate();
             BatchUploader.superclass.destroy.call(this);
         },
 
@@ -404,7 +407,7 @@ define(function(require, exports, module) {
                             file.uploaderWidget.set('uploadMode', uploadMode);
 
                             var $li = $('#' + file.id);
-                            if(uploadMode !== undefined && uploadMode !== 'local'){
+                            if(uploadMode !== undefined/* && uploadMode !== 'local'*/){
                                 $li.find('.js-file-pause').removeClass('hidden');
                                 file.uploaderWidget._showHiddenButton();
                             }
