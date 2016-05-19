@@ -62,6 +62,7 @@ define(function(require, exports, module) {
             $(event.target).siblings('.js-file-pause').removeClass('hidden');
             file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
+            this._displaySpeed();
         },
         
         _onFileUploadStop: function (event) {
@@ -74,6 +75,7 @@ define(function(require, exports, module) {
                 $li.find('.file-status').html('暂停中');
                 this.uploader.cancelFile(fileId);
             }
+            this._displaySpeed();
         },
 
         _onFileUploadRemove: function (event) {
@@ -82,6 +84,13 @@ define(function(require, exports, module) {
             var fileId = $li.attr('id');
             this.uploader.removeFile(fileId, true);
             $li.remove();
+
+            delete  this.uploader.totalSpeedQueue[fileId];
+            delete  this.uploader.leftTotalSizeQueue[fileId];
+            
+            if (jQuery.isEmptyObject(this.uploader.leftTotalSizeQueue)) {
+                $('.ballon-uploader-display-footer').addClass('hidden');
+            }
         },
 
         setup: function() {
@@ -527,17 +536,29 @@ define(function(require, exports, module) {
         _displaySpeed: function () {
             var totalspeed = 0;
             var leftsize = 0;
+            var resumeFileCount =  0;
+
             for (var index in this.uploader.totalSpeedQueue) {
-                totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
+                var file = this.uploader.getFile(index);
+                if (file.getStatus() == 'progress' || file.getStatus() == 'queued') {
+                    totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
+                } else {
+                    resumeFileCount++;
+                }
             }
+            
             for (var index in this.uploader.leftTotalSizeQueue) {
                 leftsize += parseFloat(this.uploader.leftTotalSizeQueue[index]);
             }
             $('.js-speed').text(totalspeed.toFixed(2));
 
-            var time = this._secondToDate((leftsize / totalspeed));
+            if (resumeFileCount == this.uploader.getFiles().length) {
+                $('.js-left-time').text('');
+            } else {
+                var time = this._secondToDate((leftsize / totalspeed));
 
-            $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
+                $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
+            }  
         },
 
         getStrategyModel: function(mode){
