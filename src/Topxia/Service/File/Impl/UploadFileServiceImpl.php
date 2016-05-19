@@ -789,10 +789,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             if($conditions['source'] == 'upload') {
                 $conditions['createdUserId'] = $conditions['currentUserId'];
             } elseif ($conditions['source'] == 'shared') {
-                $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
+                $sharedToMe = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
 
-                if ($myFriends) {
-                    $conditions['createdUserIds'] = ArrayToolkit::column($myFriends, "sourceUserId");
+                if ($sharedToMe) {
+                    $conditions['createdUserIds'] = ArrayToolkit::column($sharedToMe, "sourceUserId");
                 } else {
                     $conditions['createdUserIds'] = array();
                 }
