@@ -310,10 +310,10 @@ define(function(require, exports, module) {
                 delete  this.leftTotalSizeQueue[file.id];
                 var uploadStates = uploader.getStats();
 
-                if ($.isEmptyObject(this.leftTotalSizeQueue) && uploadStates.cancelNum == 0) {
+                /*if ($.isEmptyObject(this.leftTotalSizeQueue) && uploadStates.cancelNum == 0) {
                     $('.upload-finish').removeClass('hidden').text('上传已完成');
                     $('.ballon-uploader-display-footer').addClass('hidden');
-                }
+                }*/
             });
         },
 
