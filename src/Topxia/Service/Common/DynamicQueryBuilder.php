@@ -31,6 +31,9 @@ class DynamicQueryBuilder extends QueryBuilder
 
         if ($this->isInCondition($where)) {
             $where = $this->whereIn($where);
+            if(!$where) {
+                return $this;
+            }
         }
 
         return parent::andWhere($where);
@@ -44,6 +47,9 @@ class DynamicQueryBuilder extends QueryBuilder
 
         if ($this->isInCondition($where)) {
             $where = $this->whereIn($where);
+            if(!$where) {
+                return $this;
+            }
         }
 
         return parent::orWhere($where);
@@ -59,7 +65,7 @@ class DynamicQueryBuilder extends QueryBuilder
         $conditionName = $this->getConditionName($where);
 
         if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
-            return $this;
+            return false;
         }
 
         $this->conditions[$conditionName] = array_unique($this->conditions[$conditionName]);
