@@ -4,7 +4,7 @@ body {
   padding-bottom: 40px;
 }
 
-table td {
+.table td {
   word-wrap: break-word;
   word-break: break-all;
 }

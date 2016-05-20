@@ -252,7 +252,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime', 'DESC'),
             0,
             100
         );

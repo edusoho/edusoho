@@ -112,9 +112,15 @@ class EduCloudController extends BaseController
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
-        if (isset($overview['service']['storage']['startMonth']) && isset($overview['service']['storage']['endMonth']) && $overview['service']['storage']['startMonth'] && $overview['service']['storage']['endMonth']) {
-            $overview['service']['storage']['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
-            $overview['service']['storage']['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
+        if (isset($overview['service']['storage']['startMonth']) 
+            && isset($overview['service']['storage']['endMonth']) 
+            && $overview['service']['storage']['startMonth'] 
+            && $overview['service']['storage']['endMonth']) {
+
+            $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
+
+            $endMonthFormated = $this->dateFormat($videoInfo['endMonth']);
+            $overview['service']['storage']['endMonth']   = strtotime($endMonthFormated.'-'.$this->monthDays($endMonthFormated));
         }
 
         $notices = $eduSohoOpenClient->getNotices();
@@ -691,6 +697,16 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    protected function dateFormat($time) 
+    {
+        return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));
+    }
+
+    protected function monthDays($time)
+    {
+        return date('t', strtotime("{$time}-1"));
+    }
+
     /**
      * 默认的短信策略
      * @var [type]
@@ -988,7 +1004,7 @@ class EduCloudController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     private function getWebExtension()

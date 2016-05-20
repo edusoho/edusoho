@@ -19,7 +19,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $createdUserIds = array();
 
             foreach ($result['data'] as &$cloudFile) {
-                $file = $this->getUploadFileService()->getThinFileByGlobalId($cloudFile['no']);
+                $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
 
                 if (!empty($file)) {
                     $createdUserIds[]           = $file['createdUserId'];
@@ -170,7 +170,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->edit($file['id'], $fields);
+            $result = $this->getUploadFileService()->update($file['id'], $fields);
             return array('success' => true);
         }
 
@@ -194,9 +194,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->deleteFile(array('globalId' => $globalId));
     }
 
+    public function batchDelete($globalIds)
+    {
+        if (empty($globalIds)) {
+            return false;
+        }
+
+        foreach ($globalIds as $globalId) {
+            $this->delete($globalId);
+        }
+    }
+
     public function getByGlobalId($globalId)
     {
-        return $this->getCloudFileImplementor()->get($globalId);
+        return $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
     }
 
     public function player($globalId)
@@ -243,7 +254,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService2');
+        return $this->createService('File.UploadFileService');
     }
 
     protected function getUploadFileTagService()
@@ -263,7 +274,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getCloudFileImplementor()
     {
-        return $this->createService('File.CloudFileImplementor2');
+        return $this->createService('File.CloudFileImplementor');
     }
 
     protected function getMaterialService()

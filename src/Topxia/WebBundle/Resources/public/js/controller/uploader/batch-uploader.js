@@ -17,52 +17,79 @@ define(function(require, exports, module) {
             process: 'none',
             uploadToken: null,
             multi: true,
-            hookRegisted: false
+            hookRegisted: false,
         },
 
-        uploadStop: function (event) {
-            this.uploader.stop(true);
+        _onUploadStop: function (event) {
             var self = this;
+
+            //过滤出未完成的文件并做处理
             this.element.find('li').filter(function () {
                 var $li = $(this);
                 var fileId = $li.attr('id');
                 var fileStatus = self.uploader.getFile(fileId).getStatus();
-                return ['queued', 'complete'].indexOf(fileStatus) === -1;
-            }).map(function () {
-                return $(this).find('.js-file-resume');
+                return 'complete' !== fileStatus;
             }).each(function () {
-                $(this).prop('disabled', false);
+                var file = self.uploader.getFile($(this).attr('id'));
+                self.uploader.cancelFile(file.id);
+                $(this).find('.file-status').html('暂停中');
+                $(this).find('.js-file-resume').removeClass('hidden');
+                $(this).find('.js-file-pause').addClass('hidden');
             });
-
-
         },
 
-        uploadResume: function (event) {
+        _onUploadResume: function (event) {
             var self = this;
-            this.element.find('li').each(function () {
+            //过滤出未完成的文件并做处理
+            this.element.find('li').filter(function () {
+                var $li = $(this);
+                var fileId = $li.attr('id');
+                var fileStatus = self.uploader.getFile(fileId).getStatus();
+                return 'complete' !== fileStatus;
+            }).each(function () {
                 var file = self.uploader.getFile($(this).attr('id'));
+                $(this).find('.file-status').html('待上传');
+                $(this).find('.js-file-resume').addClass('hidden');
                 file.getStatus() === 'cancelled' && file.setStatus('queued');
             });
             this.uploader.upload();
-            this.element.find('.js-file-resume').prop('disabled', true);
         },
         
-        fileUploadResume: function (event) {
-            var fileId = $(event.target).parent().parent().attr('id');
+        _onFileUploadResume: function (event) {
+            var fileId = $(event.target).parents('li.file-item').attr('id');
             var file = this.uploader.getFile(fileId);
+            $(event.target).addClass('hidden');
+            $(event.target).siblings('.js-file-pause').removeClass('hidden');
             file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
-            $(event.target).prop('disabled',true);
+            //this._displaySpeed();
         },
         
-        fileUploadStop: function (event) {
-            var fileId = $(event.target).parent().parent().attr('id');
+        _onFileUploadStop: function (event) {
+            var $li = $(event.target).parents('li.file-item');
+            var fileId = $li.attr('id');
             var file = this.uploader.getFile(fileId);
+            $(event.target).addClass('hidden');
             if(file.getStatus() !== 'complete' && file.getStatus() !== 'error'){
-                $(event.target).siblings('.js-file-resume').prop('disabled', false);
-                this.uploader.removeFile(fileId);
-            }else {
-                $(event.target).prop('disabled', true);
+                $(event.target).siblings('.js-file-resume').removeClass('hidden');
+                $li.find('.file-status').html('暂停中');
+                this.uploader.cancelFile(fileId);
+            }
+            //this._displaySpeed();
+        },
+
+        _onFileUploadRemove: function (event) {
+            // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
+            var $li = $(event.target).parents('li.file-item');
+            var fileId = $li.attr('id');
+            this.uploader.removeFile(fileId, true);
+            $li.remove();
+
+            delete  this.uploader.totalSpeedQueue[fileId];
+            delete  this.uploader.leftTotalSizeQueue[fileId];
+            
+            if (jQuery.isEmptyObject(this.uploader.leftTotalSizeQueue)) {
+                $('.ballon-uploader-display-footer').addClass('hidden');
             }
         },
 
@@ -104,6 +131,7 @@ define(function(require, exports, module) {
                 throw new Error( 'WebUploader does not support the browser you are using.' );
             }
             var uploader = this.uploader = WebUploader.create(defaults);
+
             this._registerUploaderEvent(uploader);
 
             var self = this;
@@ -112,10 +140,12 @@ define(function(require, exports, module) {
                 $(self.element).find('.pause-btn').prop('disabled',false);
             });
 
-            $(this.element).on('click', '.js-upload-pause', this.uploadStop.bind(this));
-            $(this.element).on('click', '.js-upload-resume', this.uploadResume.bind(this));
-            $(this.element).on('click', '.js-file-resume', this.fileUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-pause', this.fileUploadStop.bind(this));
+
+            $(this.element).on('click', '.js-upload-pause', this._onUploadStop.bind(this));
+            $(this.element).on('click', '.js-upload-resume', this._onUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-resume', this._onFileUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-pause', this._onFileUploadStop.bind(this));
+            $(this.element).on('click', '.js-file-cancel', this._onFileUploadRemove.bind(this));
         },
 
         destroy: function() {
@@ -123,6 +153,7 @@ define(function(require, exports, module) {
                 this.uploader.stop();
                 this.uploader.destroy();
             }
+            this.element.undelegate();
             BatchUploader.superclass.destroy.call(this);
         },
 
@@ -148,8 +179,8 @@ define(function(require, exports, module) {
             html += '      <span class="js-left-time"></span>';
             html += '    </span>';
             html += '  </div>';
-            html += '  <button class="pause-btn js-upload-pause btn btn-default hidden" disabled>全部暂停</button>';
-            html += '  <button class="pause-btn js-upload-resume btn btn-default hidden" disabled>全部继续</button>';
+            html += '  <div class="pause-btn js-upload-pause btn btn-default hidden">全部暂停</div>';
+            html += '  <div class="pause-btn js-upload-resume btn btn-default hidden">全部继续</div>';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
@@ -173,11 +204,15 @@ define(function(require, exports, module) {
                 var $list =$uploader.find('.balloon-filelist ul');
 
                 $list.append(
-                    '<li id="' + file.id + '">' +
+                    '<li id="' + file.id + '" class="file-item">' +
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
-                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs hidden" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs hidden">暂停</button></div>' +
+                    '  <div class="file-manage">' +
+                    '    <i class="js-file-resume btn btn-xs glyphicon glyphicon-play hidden"></i>' +
+                    '    <i class="glyphicon glyphicon-pause js-file-pause btn btn-xs hidden"></i>' +
+                    '    <i class="glyphicon glyphicon-remove js-file-cancel btn btn-xs"></i>' +
+                    '  </div>' +
                     '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
@@ -193,19 +228,23 @@ define(function(require, exports, module) {
             uploader.on('beforeFileQueued', function (file) {
                 file.uploaderWidget = self;
 
-                if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
+                /*if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
                     $('.upload-finish').text('');
                     $('.js-left-time').text('');
                     $('.js-speed').text(0);
                     $('.ballon-uploader-display-footer').removeClass('hidden');
                     $('.upload-finish').addClass('hidden');
-                }
+                }*/
                 this.uploadQueue = this.uploadQueue || {}; //存储队列中文件开始上传的信息
                 this.totalSpeedQueue = this.totalSpeedQueue || {}; //当前上传的总数的 |单位 MB/s
                 this.leftTotalSizeQueue = this.leftTotalSizeQueue || {}; //上传剩余的总文件大小 |单位 MB
                 this.updateDisplayIndex = 0; //自带的进度条更新的太快了,速度也刷新的有点快, 所以计时器增加到5,然后刷新一下,同时重置为0
             });
 
+            uploader.on('uploadStart', function (file) {
+                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
+                self.trigger('file.uploadStart');
+            });
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
 
@@ -219,7 +258,7 @@ define(function(require, exports, module) {
                 this.updateDisplayIndex++;
                 if (this.updateDisplayIndex == 1 || this.updateDisplayIndex >= 60 || file.size <= 262144) { //256KB
                     this.updateDisplayIndex = 0;
-                    file.uploaderWidget._displaySpeed()
+                    //file.uploaderWidget._displaySpeed()
                 }
 
                 var $li = $('#' + file.id);
@@ -237,8 +276,9 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
-                $li.find('.js-file-resume').prop('disabled',true);
-                $li.find('.js-file-pause').prop('disabled',true);
+                $li.find('.js-file-resume').addClass('hidden');
+                $li.find('.js-file-pause').addClass('hidden');
+                $li.find('.js-file-cancel').addClass('hidden');
                 var key = 'file_' + file.hash;
                 store.remove(key);
             });
@@ -260,11 +300,6 @@ define(function(require, exports, module) {
                 strategy.uploadAccept(object, ret);
             });
 
-            uploader.on('uploadStart', function(file) {
-                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
-                self.trigger('file.uploadStart');
-            });
-
             uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
                 var strategy = self.get('strategy');
                 strategy.uploadBeforeSend(object, data, headers, tr);
@@ -273,10 +308,12 @@ define(function(require, exports, module) {
             uploader.on('upload.finish', function (file) {
                 delete  this.totalSpeedQueue[file.id];
                 delete  this.leftTotalSizeQueue[file.id];
-                if ($.isEmptyObject(this.leftTotalSizeQueue)) {
+                var uploadStates = uploader.getStats();
+
+                /*if ($.isEmptyObject(this.leftTotalSizeQueue) && uploadStates.cancelNum == 0) {
                     $('.upload-finish').removeClass('hidden').text('上传已完成');
                     $('.ballon-uploader-display-footer').addClass('hidden');
-                }
+                }*/
             });
         },
 
@@ -379,10 +416,17 @@ define(function(require, exports, module) {
                             }
                             var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
                             file.uploaderWidget.set('uploadMode', uploadMode);
+
+                            var $li = $('#' + file.id);
+                            if(uploadMode !== undefined && uploadMode !== 'local'){
+                                $li.find('.js-file-pause').removeClass('hidden');
+                                file.uploaderWidget._showHiddenButton();
+                            }
+
                             require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
-                                file.uploaderWidget.get('uploadMode') !== 'local' && file.uploaderWidget._showHiddenButton();
+
                                 deferred.resolve();
                             });
                         }, 'json');
@@ -494,17 +538,31 @@ define(function(require, exports, module) {
         _displaySpeed: function () {
             var totalspeed = 0;
             var leftsize = 0;
+            var resumeFileCount =  0;
+
             for (var index in this.uploader.totalSpeedQueue) {
-                totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
+                var file = this.uploader.getFile(index);
+
+                if (file.getStatus() == 'progress' || file.getStatus() == 'queued') {
+                    totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
+                } else {
+                    resumeFileCount++;
+                }
             }
+
             for (var index in this.uploader.leftTotalSizeQueue) {
                 leftsize += parseFloat(this.uploader.leftTotalSizeQueue[index]);
             }
+            var uploadStats = this.uploader.getStats();
             $('.js-speed').text(totalspeed.toFixed(2));
 
-            var time = this._secondToDate((leftsize / totalspeed));
+            if (resumeFileCount == (this.uploader.getFiles().length-uploadStats.successNum)) {
+                $('.js-left-time').text('');
+            } else {
+                var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
 
-            $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
+                $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
+            }  
         },
 
         getStrategyModel: function(mode){
@@ -519,14 +577,15 @@ define(function(require, exports, module) {
         },
 
         isIE: function(ver){
-            var b = document.createElement('b')
-            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
+            var b = document.createElement('b');
+            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
             return b.getElementsByTagName('i').length === 1
         },
 
         _showHiddenButton: function () {
-            this.element.find('.pause-btn').removeClass('hidden');
-            this.element.find('li').find('button').removeClass('hidden');
+            if(this.get('multi')){
+                this.element.find('.pause-btn').removeClass('hidden');
+            }
         }
     });
 

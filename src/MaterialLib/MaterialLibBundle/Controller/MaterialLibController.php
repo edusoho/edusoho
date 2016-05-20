@@ -5,7 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
@@ -44,8 +44,6 @@ class MaterialLibController extends BaseController
 
     public function showMyMaterialLibFormAction(Request $request)
     {
-        //$synData = $this->getMaterialLibService()->synData();
-
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
@@ -66,7 +64,7 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFilesCount($conditions),
+            $this->getUploadFileService()->searchFileCount($conditions),
             20
         );
         $files = $this->getUploadFileService()->searchFiles(
@@ -98,21 +96,29 @@ class MaterialLibController extends BaseController
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->tryAccessFile($fileId);
-        return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
-            'request'  => $request,
-            'globalId' => $file['globalId']
+        if($file['storage'] == 'cloud'){
+          return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+              'request'  => $request,
+              'globalId' => $file['globalId']
+          ));
+        }
+        
+        return $this->render('MaterialLibBundle:Web:preview.html.twig',array(
+          'file' => $file
         ));
     }
 
-    // TODO 权限
-    public function playerAction(Request $request, $globalId)
+    public function playerAction(Request $request, $fileId)
     {
-        //$file = $this->tryAccessFile($fileId);
+        $file = $this->tryAccessFile($fileId);
 
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'request'  => $request,
-            'globalId' => $globalId
-        ));
+        if($file['storage'] == 'cloud'){
+          return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+              'request'  => $request,
+              'globalId' => $file['globalId']
+          ));
+        }
+        return $this->render('MaterialLibBundle:Web:local-player.html.twig', array());
     }
 
     public function reconvertAction($globalId)
@@ -126,23 +132,37 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function detailAction($fileId)
+    public function detailAction(Request $request, $fileId)
     {
         $currentUser = $this->getCurrentUser();
         $file        = $this->tryAccessFile($fileId);
 
         if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
+            $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
+            $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags,'tagId'));
+            $file['tags'] = ArrayToolkit::column($tags,'name');
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $file,
-                'thumbnails' => ""
+                'thumbnails' => "",
+                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
+            ));
+        } else {
+            try {
+                if ($file['type'] == 'video') {
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                }
+            } catch (\RuntimeException $e) {
+                $thumbnails = array();
+            }
+
+            return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
+                'material'   => $file,
+                'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
+                'params'     => $request->query->all(),
+                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
             ));
         }
 
-        if ($file['type'] == 'video') {
-            $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
-        }
-
-        return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
     public function showShareFormAction(Request $request)
@@ -390,16 +410,14 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function editAction(Request $request, $globalId)
+    public function editAction(Request $request, $fileId)
     {
-        $this->tryManageGlobalFile($globalId);
+        $this->tryAccessFile($fileId);
 
         $fields = $request->request->all();
 
-        return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
-            'globalId' => $globalId,
-            'fields'   => $fields
-        ));
+        $result = $this->getUploadFileService()->update($fileId, $fields);
+        return $this->createJsonResponse($result);
     }
 
     public function downloadAction(Request $request, $fileId)
@@ -450,6 +468,13 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function unshareAction(Request $request, $fileId)
+    {
+        $this->tryManageFile($fileId);
+        $result = $this->getMaterialLibService()->unShare($fileId);
+        return $this->createJsonResponse($result);
+    }
+
     public function batchTagShowAction(Request $request)
     {
         $data    = $request->request->all();
@@ -476,7 +501,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -520,7 +545,7 @@ class MaterialLibController extends BaseController
 
     protected function tryAccessFile($fileId)
     {
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -532,8 +557,8 @@ class MaterialLibController extends BaseController
             return $file;
         }
 
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+        if ($user->isTeacher()) {
+            return $file;
         }
 
         if ($file['isPublic'] == 1) {
@@ -562,7 +587,7 @@ class MaterialLibController extends BaseController
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 
     protected function getSettingService()
@@ -577,7 +602,7 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getUploadFileTagService()
@@ -593,5 +618,10 @@ class MaterialLibController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
     }
 }
