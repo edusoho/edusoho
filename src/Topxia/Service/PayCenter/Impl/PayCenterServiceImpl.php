@@ -25,6 +25,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     public function pay($payData)
     {
+        $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 进入支付处理流程");
+
         if ($payData['status'] != 'success') {
             $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 的订单状态为：{$payData['status']}，不能进入支付成功流程");
             return array(false, array());
