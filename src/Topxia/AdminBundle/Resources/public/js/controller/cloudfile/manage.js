@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     require('jquery.select2');
     var DetailWidget = require('./detail');
     var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
 
     exports.run = function() {
 
@@ -36,6 +37,20 @@ define(function(require, exports, module) {
                 this.renderTable();
                 this._initHeader();
                 this._initSelect2();
+                this.initTagForm();
+            },
+            initTagForm: function(event)
+            {
+                var $form = $("#tag-form");
+                var validator = new Validator({
+                    element: $form
+                });
+
+                validator.addItem({
+                    element: '#tags',
+                    required: true,
+                    display: '标签'
+                });
             },
             onClickNav: function(event)
             {

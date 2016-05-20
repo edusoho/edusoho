@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     require('jquery.select2');
     require('jquery.colorbox');
     var DetailWidget = require('topxiaadminbundle/controller/cloudfile/detail');
+    var Validator = require('bootstrap.validator');
 
 
     exports.run = function() {
@@ -45,6 +46,7 @@ define(function(require, exports, module) {
                 this.renderTable();
                 this._initHeader();
                 this._initSelect2();
+                this.initTagForm();
             },
             onClickNav: function(event)
             {
@@ -328,6 +330,19 @@ define(function(require, exports, module) {
             {
                 this.renderTable();
                 event.preventDefault();
+            },
+            initTagForm: function(event)
+            {
+                var $form = $("#tag-form");
+                var validator = new Validator({
+                    element: $form
+                });
+
+                validator.addItem({
+                    element: '#tags',
+                    required: true,
+                    display: '标签'
+                });
             },
             renderTable: function(isPaginator)
             {
