@@ -69,7 +69,8 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'echarts': 'echarts/3.1.2/echarts.min.js'
+        'echarts': 'echarts/3.1.2/echarts.min.js',
+        'edusoho.mimetypes': 'edusoho/mimetypes/0.0.1/mime-types'
     },
 
     // 预加载项
