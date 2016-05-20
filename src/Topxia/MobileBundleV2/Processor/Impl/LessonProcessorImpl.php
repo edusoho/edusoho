@@ -260,8 +260,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $uploadFiles = array();
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2']        = json_decode($file['metas2'], true) ?: array();
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
+            if(!empty($file['metas2'])) {
+                $files[$key]['metas2']        = json_decode($file['metas2'], true) ?: array();
+            }
+
+            if(!empty($file['convertParams'])) {
+                $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
+            }
 
             unset($file["metas"]);
             unset($file["metas2"]);
