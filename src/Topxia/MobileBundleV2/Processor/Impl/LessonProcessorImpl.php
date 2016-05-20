@@ -410,7 +410,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($mediaSource == 'self') {
-            $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
