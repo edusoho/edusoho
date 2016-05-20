@@ -688,7 +688,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $metas = array();
         }
 
-        if (is_array($metas)) {
+        if (!is_array($metas)) {
             return $metas;
         }
 
