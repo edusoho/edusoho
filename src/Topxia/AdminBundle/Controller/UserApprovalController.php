@@ -3,6 +3,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\DateToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ImgConverToData;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,11 +45,11 @@ class UserApprovalController extends BaseController
         );
 
         if (!empty($conditions['startDateTime'])) {
-           $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
         }
 
         if (!empty($conditions['endDateTime'])) {
-           $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
+            $userConditions['endApprovalTime'] = DateToolkit::strtotimeAppendSecond($conditions['endDateTime']);
         }
 
         $userApprovalcount = 0;
