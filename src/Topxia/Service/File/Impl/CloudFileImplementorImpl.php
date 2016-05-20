@@ -616,7 +616,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $file = array_merge($localFile, $cloudFile);
         $file['convertStatus'] = $this->getConvertStatus($file['processStatus']);
-        $file = $this->mergeConvertParamsAndMetas($file);
+        $file = $this->convertParamsAndMetas($file);
 
         $file['storage'] = 'cloud';
         return $file;
@@ -725,7 +725,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $statusMap[$processStatus];
     }
 
-    protected function mergeConvertParamsAndMetas($file)
+    protected function convertParamsAndMetas($file)
     {
         $file['convertParams'] = array();
         $file['metas2']        = array();
