@@ -539,7 +539,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getPPTLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_ppt', '获取ppt课时失败!');
