@@ -86,13 +86,13 @@ abstract class BaseService
         return new NotFoundException($message, $code);
     }
 
-    protected function getLogger()
+    protected function getLogger($name)
     {
         if($this->logger) {
             return $this->logger;
         }
 
-        $this->logger = new Logger('service');
+        $this->logger = new Logger($name);
         $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
 
         return $this->logger;
