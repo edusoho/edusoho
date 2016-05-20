@@ -458,10 +458,12 @@ class LiveCourseController extends BaseController
     {
         $course      = $this->getCourseService()->tryManageCourse($id);
         $courseItems = $this->getCourseService()->getCourseItems($course['id']);
+        $client      = new EdusohoLiveClient();
 
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
+                $item["canRecord"] = $client->isAvailableRecord($item['mediaId']);
                 $courseItems[$key] = $item;
             }
         }
