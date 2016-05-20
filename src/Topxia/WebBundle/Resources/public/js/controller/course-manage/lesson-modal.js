@@ -377,7 +377,7 @@ define(function(require, exports, module) {
                 }
             }
             for(var i=0; i<$choosers.length; i++){
-                $choosers[i]._destoryUploader();
+                $choosers[i].destroy();
             }
         });
 

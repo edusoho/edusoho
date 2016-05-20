@@ -93,7 +93,7 @@ class MobileController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
- 
+
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
@@ -152,11 +152,6 @@ class MobileController extends BaseController
    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getAppService()

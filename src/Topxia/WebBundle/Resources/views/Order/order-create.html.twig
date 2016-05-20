@@ -46,11 +46,10 @@
         {% if targetType in ['course','vip','classroom'] %}
           <div class="order-detail-bg">
 
-            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') %}
-              {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}
-                {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
-              
-              {% endif %}
+            {% if (is_plugin_installed("Coupon") and setting('coupon.enabled')) 
+                or setting('invite.invite_code_setting')|default(false) 
+            %}
+              {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}

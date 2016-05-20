@@ -28,7 +28,11 @@
     {% if not hasPayPassword %}
     <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
         {{'为了保障账户资金安全，请先'|trans}}
-      <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">{{'设置支付密码'|trans}}</a>
+        {% if hasPassword %}
+        <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">{{'设置支付密码'|trans}}</a>
+        {% else %}
+        <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_password')}}">{{'设置登录密码'|trans}}</a>
+        {% endif %}
     </div>
     {% else %}
     <div role="password-input" style="display:none">

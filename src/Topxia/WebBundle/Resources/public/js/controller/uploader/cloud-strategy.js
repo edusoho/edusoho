@@ -66,6 +66,16 @@ define(function(require, exports, module) {
 
         uploadAccept: function(object, ret){
             
+        },
+
+        /**
+         *
+         * @param lastPercentage    上一次进度
+         * @param currentPercentage 当前进度
+         * @returns {boolean}
+         */
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

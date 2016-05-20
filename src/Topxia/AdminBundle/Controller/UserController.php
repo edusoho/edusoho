@@ -46,7 +46,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //根据mobile查询user_profile获得userIds
+//根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
@@ -146,8 +146,8 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData         = $request->request->all();
             $formData['type'] = 'import';
-
-            $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
+            $registration     = $this->getRegisterData($formData, $request->getClientIp());
+            $user             = $this->getAuthService()->register($registration);
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
@@ -168,14 +168,10 @@ class UserController extends BaseController
     {
         if (isset($formData['email'])) {
             $userData['email'] = $formData['email'];
-            //$userData['emailVerified'] = 1;
         }
 
         if (isset($formData['emailOrMobile'])) {
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
-            /*if (SimpleValidator::email($formData['emailOrMobile'])) {
-        $userData['emailVerified'] = 1;
-        }*/
         }
 
         if (isset($formData['mobile'])) {

@@ -1131,6 +1131,10 @@ settings_set_pay_password:
     pattern:  /settings/set_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
 
+settings_set_password:
+    pattern:  /settings/set_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setPassword }
+
 settings_pay_password:
     pattern:  /settings/pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
