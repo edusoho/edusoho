@@ -607,7 +607,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
