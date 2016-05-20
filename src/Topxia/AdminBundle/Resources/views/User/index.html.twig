@@ -11,10 +11,14 @@
 
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
-    <input  class="form-control" name="orgName" id ="orgName"  value="{{ app.request.get('orgName', app.user.orgName|default("--选择组织机构--"|trans) ) }}" autocomplete="off"  >
-    <input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ app.request.get('orgCode', app.user.orgCode) }}" >
-    <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
-      <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
+     <div class="form-group controls">
+       {% set org = data('Org',{orgCode:app.request.get('orgCode', app.user.orgCode)})%}
+        <input id="orgSelectTree" 
+            value="{{  org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
+            class="form-control"
+            data-url ="{{ path('org_tree') }}" 
+            data-code ="{{ org.orgCode }}"
+        />
     </div>
 
     <select class="form-control" name="datePicker" id="datePicker">

@@ -63,7 +63,7 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
-        'edusoho.selectztree': 'edusoho/ztree/0.0.1/select-tree.js',
+        'edusoho.selecttree': 'edusoho/ztree/0.0.1/select-tree.js',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',

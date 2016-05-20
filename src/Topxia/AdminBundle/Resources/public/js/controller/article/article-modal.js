@@ -1,20 +1,18 @@
 define(function(require, exports, module) {
 
-    require('es-ckeditor');
-
+    var SelectTree = require('edusoho.selecttree');
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
-
     require('jquery.select2-css');
     require('jquery.select2');
-    var Notify = require('common/bootstrap-notify');
+    require('es-ckeditor');
+    
     exports.run = function() {
-       var SelectZtree = require('edusoho.selectztree');
-       var selectTree = new SelectZtree({
-            ztreeDom: '#orgZtree',
-            clickDom: "#orgName",
-            valueDom: "#orgCode"
+        var selectTree = new SelectTree({
+            element: "#orgSelectTree",
+            name: 'orgCode'
         });
 
         var $form = $("#article-form");
@@ -100,17 +98,17 @@ define(function(require, exports, module) {
             filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
             height: 300
         });
-        
-        $("#article_thumb_remove").on('click', function(){
+
+        $("#article_thumb_remove").on('click', function() {
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
-            $.post($btn.data('url'), function(){
+            $.post($btn.data('url'), function() {
                 $("#article-thumb-container").html('');
                 $form.find('[name=thumb]').val('');
                 $form.find('[name=originalThumb]').val('');
                 $btn.hide();
                 Notify.success('删除成功！');
-            }).error(function(){
+            }).error(function() {
                 Notify.danger('删除失败！');
             });
         });
@@ -143,7 +141,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=categoryId]',
             required: true
-        });   
+        });
 
         validator.addItem({
             element: '[name=sourceUrl]',

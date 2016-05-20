@@ -57,11 +57,12 @@
       <div class="form-group">
         <label for="article-orgName" class="control-label">所属组织机构</label>
         <div class="controls">
-          <input  class="form-control" name="orgName" id ="orgName"  value="{{ app.user.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"  >
-          <input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ app.user.orgCode }}" >
-          <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
-            <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
-          </div>
+           <input id="orgSelectTree" 
+            value="{{app.user.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"
+            class="form-control"
+            data-url ="{{ path('org_tree') }}" 
+            data-code ="{{app.user.orgCode}}"
+          />
         </div>
       </div>
 

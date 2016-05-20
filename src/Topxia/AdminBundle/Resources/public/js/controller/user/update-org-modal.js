@@ -1,16 +1,15 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     "use strict";
 
     var Notify = require('common/bootstrap-notify');
+    var SelectTree = require('edusoho.selecttree');
 
-    exports.run = function () {
-       var SelectZtree = require('edusoho.selectztree');
-
-        var selectTree = new SelectZtree({
-            ztreeDom: '#modal-orgZtree',
-            clickDom: "#modal-orgName",
-            valueDom: "#modal-orgCode",
-            displayBlock:"modal-ztreeContent"
+    exports.run = function() {
+       
+        var selectTree = new SelectTree({
+            element: "#modalOrgSelectTree",
+            name: 'orgCode',
+            modal: true
         });
 
         var Validator = require('bootstrap.validator');
@@ -29,7 +28,7 @@ define(function (require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function() {
                     Notify.success('修改用户所属机构成功');
                     window.location.reload();
-                }).error(function(){
+                }).error(function() {
                     Notify.danger('操作失败');
                 });
             }
