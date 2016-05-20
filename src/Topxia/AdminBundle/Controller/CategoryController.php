@@ -106,9 +106,4 @@ class CategoryController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
 }

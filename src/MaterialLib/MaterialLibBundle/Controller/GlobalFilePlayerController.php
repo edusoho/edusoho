@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\WebBundle\Controller\BaseController;
 
 class GlobalFilePlayerController extends BaseController
 {
@@ -270,7 +271,7 @@ class GlobalFilePlayerController extends BaseController
 
     protected function getCloudFileService()
     {
-        return $this->createService('CloudFile.CloudFileService');
+        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
     }
 
     protected function getTokenService()

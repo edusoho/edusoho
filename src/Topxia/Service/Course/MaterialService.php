@@ -24,4 +24,8 @@ interface MaterialService
 	public function getMaterialCount($courseId);
 
 	public function getMaterialCountByFileId($fileId);
+
+	public function searchMaterials($conditions, $orderBy, $start, $limit);
+
+    public function searchMaterialCount($conditions);
 }

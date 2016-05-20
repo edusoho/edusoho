@@ -39,7 +39,7 @@
     <span class="pull-left">{{'完成课时：'|trans}} {{ learnProgress.number }}/{{ learnProgress.total }}</span>
     {% if nextLearnLesson %}
       <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{'继续学习'|trans}}</a>
-      <span class="next-class hidden-xs">{{'下一课时：'|trans}}<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
+      <span class="next-class hidden-xs">{{'下一课时：'|trans}}<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title|raw }}</a></span>
     {% endif %}
   </div>
 
