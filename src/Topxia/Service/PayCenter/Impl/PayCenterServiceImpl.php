@@ -26,6 +26,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     public function pay($payData)
     {
         if ($payData['status'] != 'success') {
+            $this->getLogger()->info("订单号：{$payData['sn']} 的订单状态为：{$payData['status']}，不能进入支付成功流程");
             return array(false, array());
         }
 
@@ -37,6 +38,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
             if ($order["status"] == "paid") {
                 $connection->rollback();
+                $this->getLogger()->info("订单号：{$order["sn"]} 的订单状态为已支付，不能进入支付成功流程");
                 return array(true, $order);
             }
 
@@ -44,11 +46,14 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
                 $outflow = $this->proccessCashFlow($order);
 
                 if ($outflow) {
+                    $this->getLogger()->info("订单号：{$order["sn"]} 进入扣款流程");
                     $this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
+                    $this->getLogger()->info("订单号：{$order["sn"]} 扣款成功，处理订单");
                     list($success, $order) = $this->processOrder($payData, false);
                 } else {
                     $order   = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
                     $success = false;
+                    $this->getLogger()->info("订单号：{$order["sn"]} 余额不足扣款不成功");
                 }
             } else {
                 $success = false;
@@ -78,23 +83,25 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             if ($lock) {
                 $connection->beginTransaction();
             }
-
+            $this->getLogger()->info("订单号：{$payData["sn"]} 更改订单状态为已经支付");
             list($success, $order) = $this->getOrderService()->payOrder($payData);
 
             if ($order["coupon"]) {
+                $this->getLogger()->info("订单号：{$order["sn"]} 标识优惠码为使用状态");
                 $this->useCoupon($order);
             }
 
             $processor = OrderProcessorFactory::create($order["targetType"]);
 
             if ($order['status'] == 'paid' && $processor) {
+                $this->getLogger()->info("订单号：{$order["sn"]} 把下单者加入学习");
                 $processor->doPaySuccess($success, $order);
             }
 
             if ($lock) {
                 $connection->commit();
             }
-
+            $this->getLogger()->info("订单号：{$order["sn"]} 订单处理成功");
             return array($success, $order);
         } catch (\Exception $e) {
             if ($lock) {
@@ -276,4 +283,5 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     {
         return $this->createService('Coupon.CouponService');
     }
+
 }
