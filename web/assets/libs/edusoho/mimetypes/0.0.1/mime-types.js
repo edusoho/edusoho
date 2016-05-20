@@ -1,6 +1,10 @@
 define(function (require, exports, module) {
     "use strict";
 
+    /**
+     * @url https://gist.github.com/bj4rtmar/3fc949de5fe73ed59ca5
+     * @type {{string: string[]}}
+     */
     var mapper = {
         "123": [
             "application/vnd.lotus-1-2-3"
@@ -3863,9 +3867,9 @@ define(function (require, exports, module) {
     };
 
     /**
-     *
+     * @url https://gist.github.com/bj4rtmar/3fc949de5fe73ed59ca5
      * @param ext
-     * @returns {Array}
+     * @returns {*[]}
      */
     module.exports = function (ext) {
         return mapper[ext];
