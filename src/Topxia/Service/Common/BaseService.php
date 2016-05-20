@@ -12,6 +12,7 @@ use Monolog\Handler\StreamHandler;
 
 abstract class BaseService
 {
+    private $logger = null;
 
     protected function createService($name)
     {
