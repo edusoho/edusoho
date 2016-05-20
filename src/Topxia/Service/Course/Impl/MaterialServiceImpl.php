@@ -26,6 +26,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
             'description'  => empty($material['description']) ? '' : $material['description'],
             'userId' => $this->getCurrentUser()->id,
+            'source' => isset($material['targetType']) ? $material['targetType'] : '',
             'createdTime' => time(),
         );
 

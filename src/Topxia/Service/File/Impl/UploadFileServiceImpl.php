@@ -220,7 +220,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
-
+            if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
+                $this->getMaterialService()->uploadMaterial($file);
+            }
+            
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
@@ -967,6 +970,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 
     protected function getUploadFileTagDao()
