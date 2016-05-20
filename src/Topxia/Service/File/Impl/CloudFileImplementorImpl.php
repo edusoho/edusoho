@@ -621,9 +621,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $file['storage'] = 'cloud';
 
-        $file['convertParams'] = $this->decodeMetas($file['convertParams']);
-        $file['metas']         = $this->decodeMetas($file['metas']);
-        $file['metas2']        = $this->decodeMetas($file['metas2']);
+        $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+        $file['metas']         = $this->encodeMetas($file['metas']);
+        $file['metas2']        = $this->encodeMetas($file['metas2']);
         
         return $file;
     }
