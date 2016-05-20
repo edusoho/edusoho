@@ -36,7 +36,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $api       = CloudAPIFactory::create('root');
         $cloudFile = $api->get("/resources/".$globalId);
         $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
-
         return $this->mergeCloudFile($localFile, $cloudFile);
     }
 
@@ -614,11 +613,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             );
         }
 
+        unset($cloudFile['id']);
+
         $file = array_merge($localFile, $cloudFile);
-        $file['convertStatus'] = $this->getConvertStatus($file['processStatus']);
-        $file = $this->convertParamsAndMetas($file);
+        $file = $this->proccessConvertStatus($file);
+        $file = $this->proccessConvertParamsAndMetas($file);
 
         $file['storage'] = 'cloud';
+        
         return $file;
     }
 
@@ -712,7 +714,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->cloudClient;
     }
 
-    protected function getConvertStatus($processStatus)
+    protected function proccessConvertStatus($file)
     {
         $statusMap = array(
             'none'       => 'none',
@@ -722,10 +724,12 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'error'      => 'error'
         );
 
-        return $statusMap[$processStatus];
+        $file['convertStatus'] = $statusMap[$file['processStatus']];
+
+        return $file;
     }
 
-    protected function convertParamsAndMetas($file)
+    protected function proccessConvertParamsAndMetas($file)
     {
         $file['convertParams'] = array();
         $file['metas2']        = array();
