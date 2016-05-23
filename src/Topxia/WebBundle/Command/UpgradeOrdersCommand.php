@@ -15,50 +15,72 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class UpgradeOrdersCommand extends BaseCommand
 {
+
+    private $host = '';
+
     protected function configure()
     {
         $this->setName('util:upgrade-orders')
-        	->addArgument('startTime', InputArgument::REQUIRED, '订单创建的起始时间')
-			->addArgument('endTime', InputArgument::REQUIRED, '订单创建的截止时间')
+            ->addArgument('host', InputArgument::REQUIRED, '域名')
+        	->addArgument('filePath', InputArgument::REQUIRED, '文件地址')
 			->setDescription('用于命令行中执行模拟回调');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
     	$this->initServiceKernel();
+    	$this->host = $input->getArgument('host');
+        $filePath = $input->getArgument('filePath');
 
-    	$startTime = $input->getArgument('startTime');
-		$endTime = $input->getArgument('endTime');
+        $file = file($filePath);
+        foreach($file as &$sn) {
+            echo $sn;
+            $order = $this->getOrderService()->getOrderBySn(trim($sn));
+            $this->processOrder($order);
+        }
 
-		$conditions = array();
+    }
 
-		$total = $this->getOrderService()->searchOrderCount($conditions);
-		$maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
-		$perPageNum = 20;
+    protected function processOrder($order)
+    {
+		if(in_array($order['payment'], array('wxpay'))) {
 
+            if($order['status'] == 'paid') {
+                echo $order['status'];
+                return;
+            }
 
-		for ($page=0; $page < $maxPage; $page++) { 
-			$start = $page*$perPageNum;
-			$orders = $this->getOrderService()->searchOrders($conditions, 'latest', $start, $perPageNum);
-			$this->processOrders($orders);
+			$options = $this->getPaymentOptions($order['payment']);
 
+			$payment = Payment::createTradeQueryRequest($order['payment'], $options);
+			$payment->setParams($order);
+
+			$result = $payment->tradeQuery();
+			echo $result;
+
+            $this->getOrderService()->updateOrder($order['id'], array('status'=>'created'));
+
+            $this->postData($order['payment'], $result);
 		}
     }
 
-    protected function processOrders($orders)
+    private function postData($name, $data)
     {
-    	foreach ($orders as $key => $order) {
-    		if(in_array($order['payment'], array('wxpay'))) {
+        $url = "http://{$this->host}/pay/center/pay/{$name}/notify";
 
-    			$options = $this->getPaymentOptions($order['payment']);
+        $header = array();
+        $header[] = "Content-type: text/xml"; 
 
-    			$payment = Payment::createTradeQueryRequest($order['payment'], $options);
-    			$payment->setParams($order);
-
-    			$result = $payment->tradeQuery();
-    			var_dump($result);
-    		}
-    	}
+        $ch = curl_init(); 
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);  
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $response = curl_exec($ch);
+        echo $response;
+        curl_close($ch);
     }
 
     private function initServiceKernel()
