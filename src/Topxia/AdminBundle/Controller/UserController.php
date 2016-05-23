@@ -276,12 +276,10 @@ class UserController extends BaseController
                     $role = $rolesByIndexCode[$roleCode];
                     if(in_array('web', $role['data'])){
                         $roles[] = 'ROLE_TEACHER';
-                        continue;
                     }
 
                     if(in_array('admin', $role['data'])){
                         $roles[] = 'ROLE_BACKEND';
-                        continue;
                     }
                 }
             }
