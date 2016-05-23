@@ -24,7 +24,7 @@ define(function (require, exports, module) {
             this._readAttrFromData();
             this._insertFilter();
             $(".modal").off('click.modal-pagination');
-            this.element.on('click.switch-page', '.js-switch-page', this._onSwitchPage.bind(this));
+            this.element.on('click.switch-page', '.js-switch-page', $.proxy(this._onSwitchPage, this));
         },
 
         show: function () {
@@ -41,7 +41,7 @@ define(function (require, exports, module) {
             var self = this;
 
             $.get(this.get('url'), function (response) {
-                self.refreshFileList(self, response.files, response.paginator);
+                self.refreshFileList.call(self, response.files, response.paginator);
             }, 'json');
 
             return this;
@@ -67,11 +67,12 @@ define(function (require, exports, module) {
             }
 
             $.get(url, function (response) {
-                self.refreshFileList(self, response.files, response.paginator);
+                self.refreshFileList.call(self, response.files, response.paginator);
             }, 'json');
         },
 
-        refreshFileList: function (self, files, paginator) {
+        refreshFileList: function (files, paginator) {
+            console.log(files);
             if (files.length > 0) {
                 var html = '<ul class="file-browser-list">';
                 $.each(files, function (i, file) {
@@ -108,12 +109,12 @@ define(function (require, exports, module) {
                     html += '</ul>';
                     html += '</nav>';
                 }
-                $(".file-browser-list-container", self.element).html(html);
-                self.set('files', files);
+                $(".file-browser-list-container", this.element).html(html);
+                this.set('files', files);
             } else {
-                var message = self.element.data('empty');
+                var message = this.element.data('empty');
                 if (message) {
-                    $(".file-browser-list-container", self.element).html('<div class="empty">' + message + '</div>');
+                    $(".file-browser-list-container", this.element).html('<div class="empty">' + message + '</div>');
                 }
             }
         },
@@ -163,15 +164,15 @@ define(function (require, exports, module) {
                 $(".file-filter-by-owner-container", this.element).show();
 
                 //Refresh the sharing teacher list
-                $.get(this.get('mySharingContactsUrl'), function (files) {
-                    self.refreshTeacherList(self, files);
+                $.get(this.get('mySharingContactsUrl'), function (teachers) {
+                    self.refreshTeacherList(self, teachers);
                 }, 'json');
             } else {
                 $(".file-filter-by-owner-container", this.element).hide();
             }
             //Refresh the file list panel
-            $.get(self.get('baseUrl'), {source: $source}, function (files) {
-                self.refreshFileList(self, files);
+            $.get(self.get('baseUrl'), {source: $source}, function (response) {
+                self.refreshFileList.call(self, response.files, response.paginator);
             }, 'json');
         },
 
