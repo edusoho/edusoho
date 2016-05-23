@@ -106,7 +106,7 @@ class OrderController extends BaseController
         $conditions = $request->query->all();
         $start      = $request->query->get('start', 0);
 
-        $limit = 1;
+        $limit = 100;
 
         if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
