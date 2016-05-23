@@ -82,6 +82,8 @@ define(function(require, exports, module) {
             // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
             var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
+            var file = this.uploader.getFile(fileId);
+            this.trigger('file.remove', file);
             this.uploader.removeFile(fileId, true);
             $li.remove();
 

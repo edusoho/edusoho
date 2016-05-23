@@ -196,6 +196,10 @@ define(function(require, exports, module) {
                 }
             });
 
+            uploader.on('file.remove', function (file) {
+                self._isUploading = false;
+            });
+
             this.uploader = uploader;
         },
 
