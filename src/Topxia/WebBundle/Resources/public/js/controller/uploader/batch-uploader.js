@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var store = require('store');
     var filesize = require('filesize');
     var Widget = require('widget');
-
+    var _ = require('underscore');
     var BatchUploader = Widget.extend({
 
         uploader: null,
@@ -141,11 +141,11 @@ define(function(require, exports, module) {
             });
 
             //解决IE8下JS解释器不支持Function类型的bind方法;
-            $(this.element).on('click', '.js-upload-pause', $.proxy(this._onUploadStop, this));
-            $(this.element).on('click', '.js-upload-resume', $.proxy(this._onUploadResume, this));
-            $(this.element).on('click', '.js-file-resume', $.proxy(this._onFileUploadResume, this));
-            $(this.element).on('click', '.js-file-pause', $.proxy(this._onFileUploadStop, this));
-            $(this.element).on('click', '.js-file-cancel', $.proxy(this._onFileUploadRemove, this));
+            $(this.element).on('click', '.js-upload-pause', _.bind(this._onUploadStop, this));
+            $(this.element).on('click', '.js-upload-resume', _.bind(this._onUploadResume, this));
+            $(this.element).on('click', '.js-file-resume', _.bind(this._onFileUploadResume, this));
+            $(this.element).on('click', '.js-file-pause', _.bind(this._onFileUploadStop, this));
+            $(this.element).on('click', '.js-file-cancel', _.bind(this._onFileUploadRemove, this));
 
         },
 
@@ -243,7 +243,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function (file) {
-                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
+                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: _.now()};
                 self.trigger('file.uploadStart');
             });
             // 文件上传过程中创建进度条实时显示。
