@@ -106,7 +106,7 @@ class OrderController extends BaseController
         $conditions = $request->query->all();
         $start      = $request->query->get('start', 0);
 
-        $limit = 100;
+        $limit = 1;
 
         if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
@@ -211,18 +211,17 @@ class OrderController extends BaseController
         ++$loop;
         $offset = $loop * $limit;
 
-        $file = $this->genereateExportCsvFileName($targetType);
+        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
 
         if ($offset < $orderCount) {
             $content = implode("\r\n", $results);
             file_put_contents($file, $content."\r\n", FILE_APPEND);
-            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $offset)));
+            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $offset, 'fileName' => $file)));
         } else {
             if ($start) {
                 $content = file_get_contents($file);
                 $str .= $content;
-                $str .= implode("\r\n", $results);
-                unlink($file);
+                $this->removefile($file);
             }
         }
 
@@ -242,12 +241,18 @@ class OrderController extends BaseController
     private function genereateExportCsvFileName($targetType)
     {
         $user = $this->getCurrentUser();
-        return $this->getWebRootDirectory()."export_content".$targetType.$user['id'].date('Y-m-d-h').".txt";
+        return "export_content".$targetType.$user['id'].time().".txt";
     }
 
-    protected function getWebRootDirectory()
+    private function getWebRootDirectory()
     {
         return dirname($this->getServiceKernel()->getParameter('kernel.root_dir')).'/web/';
+    }
+
+    private function removefile($file)
+    {
+        $fullPath = $this->getWebRootDirectory().$file;
+        unlink($fullPath);
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
