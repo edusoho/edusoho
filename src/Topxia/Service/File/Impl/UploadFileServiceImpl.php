@@ -221,6 +221,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileDao()->addFile($file);
             if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
+                $file['courseId'] = $file['targetId'];
+                $file['fileId']   = $file['id'];
                 $this->getMaterialService()->uploadMaterial($file);
             }
             
