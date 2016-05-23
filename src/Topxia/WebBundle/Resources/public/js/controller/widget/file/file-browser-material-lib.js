@@ -93,7 +93,8 @@ define(function (require, exports, module) {
                         html += '<li><a class="es-icon es-icon-chevronleft js-switch-page" data-url="' + paginator.previousPageUrl + '"></a></li>';
                     }
 
-                    $.each(paginator.pageUrls, function (index, url) {
+
+                    paginator.pageUrls.length > 1 && $.each(paginator.pageUrls, function (index, url) {
                         var page = index + 1;
                         if (page == paginator.currentPage) {
                             html += '<li class="active"><a href="javascript:;" class="js-switch-page" data-url="' + url + '">' +  page + '</a></li>';
