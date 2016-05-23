@@ -140,12 +140,20 @@ define(function(require, exports, module) {
                 $(self.element).find('.pause-btn').prop('disabled',false);
             });
 
+            //解决IE8下JS解释器不支持Function类型的bind方法;
+            $(this.element).on('click', '.js-upload-pause', this._makeEventCallback(this._onUploadStop));
+            $(this.element).on('click', '.js-upload-resume', this._makeEventCallback(this._onUploadResume));
+            $(this.element).on('click', '.js-file-resume', this._makeEventCallback(this._onFileUploadResume));
+            $(this.element).on('click', '.js-file-pause', this._makeEventCallback(this._onFileUploadStop));
+            $(this.element).on('click', '.js-file-cancel', this._makeEventCallback(this._onFileUploadRemove));
 
-            $(this.element).on('click', '.js-upload-pause', this._onUploadStop.bind(this));
-            $(this.element).on('click', '.js-upload-resume', this._onUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-resume', this._onFileUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-pause', this._onFileUploadStop.bind(this));
-            $(this.element).on('click', '.js-file-cancel', this._onFileUploadRemove.bind(this));
+        },
+
+        _makeEventCallback: function(func) {
+            var self = this;
+            return function (event) {
+                func.call(self, event);
+            };
         },
 
         destroy: function() {
