@@ -26,7 +26,11 @@
 
           {% elseif data.type == 'delete' %}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>有回复被管理员删除.
+            您的话题<strong class="color-primary">“{{data.title}}”</strong>被删除.
+
+          {% elseif data.type == 'delete-post' %}
+
+            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>有回复被删除。
 
           {% elseif data.type == 'modify'%}
 

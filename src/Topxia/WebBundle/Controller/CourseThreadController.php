@@ -539,8 +539,9 @@ class CourseThreadController extends CourseBaseController
                 'userName' => $user['nickname'],
                 'courseId' => $courseId,
                 'id'       => $threadId,
+                'postId'   => $post['id'],
                 'title'    => $thread['title'],
-                'type'     => 'delete'
+                'type'     => 'delete-post'
             );
 
             $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
