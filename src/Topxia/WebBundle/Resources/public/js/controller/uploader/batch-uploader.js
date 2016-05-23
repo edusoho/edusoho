@@ -141,19 +141,12 @@ define(function(require, exports, module) {
             });
 
             //解决IE8下JS解释器不支持Function类型的bind方法;
-            $(this.element).on('click', '.js-upload-pause', this._makeEventCallback(this._onUploadStop));
-            $(this.element).on('click', '.js-upload-resume', this._makeEventCallback(this._onUploadResume));
-            $(this.element).on('click', '.js-file-resume', this._makeEventCallback(this._onFileUploadResume));
-            $(this.element).on('click', '.js-file-pause', this._makeEventCallback(this._onFileUploadStop));
-            $(this.element).on('click', '.js-file-cancel', this._makeEventCallback(this._onFileUploadRemove));
+            $(this.element).on('click', '.js-upload-pause', $.proxy(this._onUploadStop, this));
+            $(this.element).on('click', '.js-upload-resume', $.proxy(this._onUploadResume, this));
+            $(this.element).on('click', '.js-file-resume', $.proxy(this._onFileUploadResume, this));
+            $(this.element).on('click', '.js-file-pause', $.proxy(this._onFileUploadStop, this));
+            $(this.element).on('click', '.js-file-cancel', $.proxy(this._onFileUploadRemove, this));
 
-        },
-
-        _makeEventCallback: function(func) {
-            var self = this;
-            return function (event) {
-                func.call(self, event);
-            };
         },
 
         destroy: function() {
