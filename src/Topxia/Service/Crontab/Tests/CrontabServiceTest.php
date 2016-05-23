@@ -73,6 +73,11 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testScheduleJobs()
     {
+        $job = $this->createJob();
+        //测试执行周期为一次的job
+        $this->getCrontabService()->scheduleJobs();
+        $getJob = $this->getCrontabService()->getJob($job['id']);
+        $this->assertNull($getJob);
     }
 
     public function testGetNextExcutedTime()
