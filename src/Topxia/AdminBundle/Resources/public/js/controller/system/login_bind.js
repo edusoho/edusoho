@@ -19,6 +19,13 @@ define(function(require, exports, module) {
             rule: 'integer'
         });
 
+        validator.addItem({
+            element: '[name=verify_code]',
+            rule: 'htmlTag'
+        });
+
+        Validator.addRule('htmlTag', /^<meta\s.*? \/>$/, "{{display}}应该为HTML meta标签");
+
         var hideOrShowTimeAndMinutes = function (){
           if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1 ){
             $('#times_and_minutes').show();

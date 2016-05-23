@@ -29,7 +29,10 @@
           data-url="{{path('admin_setting_default_course_picture_crop')}}"
           data-goto-url="{{path('admin_setting_course_avatar')}}"
           id="upload-course-picture-btn" >保存</a>
-          <a href="javascript:;" class="go-back btn btn-link">重新选择图片</a>
+          <a id="default-course-picture-btn"
+            data-upload-token="{{ upload_token('system', 'image') }}"
+            data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
+            class="btn btn-default btn-sm">重新选择图片</a>
         </div>
       </div>
 

@@ -2,6 +2,7 @@
   <tr>
     <td>
         <div class="materials-table-img">
+          <input class="batch-item" value="{{ cloudFile.no }}" type="checkbox" data-role="batch-item" data-file-id="{{ cloudFile.id }}" data-link-count="{{ cloudFile.usedCount }}" data-file-name="{{ cloudFile.filename }}" style="display:none;" />
           <div class="mask">
             {% if (cloudFile.type in ['video','document','ppt'] and cloudFile.processStatus == 'ok') or cloudFile.type in ['audio','flash','image'] %}
               <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">资料预览</a>

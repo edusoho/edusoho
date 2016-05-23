@@ -48,8 +48,7 @@
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
       <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
     {% endif %}
-    {{ lesson.title }}
-
+    {{ lesson.title|raw }}
     {% if lesson.type in ['video', 'audio'] %}
       <span class="text-muted">{{ lesson.length|duration }}</span>
     {% endif %}

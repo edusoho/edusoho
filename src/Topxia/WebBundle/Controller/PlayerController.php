@@ -12,7 +12,7 @@ class PlayerController extends BaseController
     public function showAction(Request $request, $id, $context = array())
     {
         try {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFileFromLeaf($id);
+            $file = $this->getUploadFileService()->getFullFile($id);
 
             if (empty($file)) {
                 throw $this->createNotFoundException();
@@ -230,11 +230,7 @@ class PlayerController extends BaseController
 
         if ($file['storage'] == 'cloud') {
             if (!empty($file['globalId'])) {
-                $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFileFromLeaf($file['id']);
-            }
-
-            if ($file['status'] != 'ok') {
-                return '';
+                $file = $this->getUploadFileService()->getFullFile($file['id']);
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {

@@ -3,8 +3,9 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class CloudFileController extends BaseController
 {
@@ -65,6 +66,7 @@ class CloudFileController extends BaseController
     public function previewAction(Request $reqeust, $globalId)
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
+
         return $this->render('TopxiaAdminBundle:CloudFile:preview-modal.html.twig', array(
             'file' => $file
         ));
@@ -93,7 +95,8 @@ class CloudFileController extends BaseController
         return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
             'material'   => $cloudFile,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
-            'params'     => $reqeust->query->all()
+            'params'     => $reqeust->query->all(),
+            'editUrl'    => $this->generateUrl('admin_cloud_file_edit',array('globalId'=>$globalId))
         ));
     }
 
@@ -103,13 +106,6 @@ class CloudFileController extends BaseController
 
         $result = $this->getCloudFileService()->edit($globalId, $fields);
         return $this->createJsonResponse($result);
-    }
-
-    public function playerAction(Request $request, $globalId)
-    {
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'globalId' => $globalId
-        ));
     }
 
     public function reconvertAction(Request $request, $globalId)
@@ -140,6 +136,28 @@ class CloudFileController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function batchDeleteAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        if (isset($data['ids']) && !empty($data['ids'])) {
+
+            $this->getCloudFileService()->batchDelete($data['ids']);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function batchTagShowAction(Request $request)
+    {
+        $data    = $request->request->all();
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
+        return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
+    }
+
     protected function createService($service)
     {
         return $this->getServiceKernel()->createService($service);
@@ -147,7 +165,7 @@ class CloudFileController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->createService('System.SettingService');
     }
 
     protected function getTagService()
@@ -158,5 +176,15 @@ class CloudFileController extends BaseController
     protected function getCloudFileService()
     {
         return $this->createService('CloudFile.CloudFileService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }
