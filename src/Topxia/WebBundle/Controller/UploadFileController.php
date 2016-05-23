@@ -93,7 +93,10 @@ class UploadFileController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['currentUserId'] = $user['id'];
-
+        if(isset($conditions['keyword'])){
+            $conditions['filename'] = $conditions['keyword'];
+            unset($conditions['keyword']);
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUploadFileService()->searchFileCount($conditions),

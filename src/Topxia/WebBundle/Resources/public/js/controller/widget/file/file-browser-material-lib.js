@@ -141,17 +141,11 @@ define(function (require, exports, module) {
         },
 
         onFilterByName: function (e) {
-            $key = $(".file-filter-by-name", this.element).val();
-
-            $("li.file-browser-item").each(function (index) {
-                //Show the file entry when the keyword is empty or it's matching.
-                if (!$key || $("span.filename", this).text().indexOf($key) >= 0) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
+            var $key = $(".file-filter-by-name", this.element).val();
+            var self = this;
+            $.get(this.get('url') + '&keyword=' + $key, function (response) {
+                self.refreshFileList.call(self, response.files, response.paginator);
             });
-
         },
 
         onFilterBySource: function (e) {
