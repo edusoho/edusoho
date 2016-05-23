@@ -104,6 +104,9 @@ class OrderController extends BaseController
     public function exportCsvAction(Request $request, $targetType)
     {
         $conditions = $request->query->all();
+        $start      = $request->query->get('start', 0);
+
+        $limit = 100;
 
         if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
@@ -111,10 +114,11 @@ class OrderController extends BaseController
         }
 
         $conditions['targetType'] = $targetType;
-        $status                   = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
-        $payment                  = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
-        $orders                   = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
+        $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $payment        = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
+        $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
+        $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -203,9 +207,27 @@ class OrderController extends BaseController
             }
         }
 
-        $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $loop = $request->query->get('loop', 0);
+        ++$loop;
+        $offset = $loop * $limit;
 
+        $file = $this->genereateExportCsvFileName($targetType);
+
+        if ($offset < $orderCount) {
+            $content = implode("\r\n", $results);
+            file_put_contents($file, $content."\r\n", FILE_APPEND);
+            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $offset)));
+        } else {
+            if ($start) {
+                $content = file_get_contents($file);
+                $str .= $content;
+                $str .= implode("\r\n", $results);
+                unlink($file);
+            }
+        }
+
+        $str .= implode("\r\n", $results);
+        $str      = chr(239).chr(187).chr(191).$str;
         $filename = sprintf("%s-order-(%s).csv", $targetType, date('Y-n-d'));
 
         $response = new Response();
@@ -215,6 +237,17 @@ class OrderController extends BaseController
         $response->setContent($str);
 
         return $response;
+    }
+
+    private function genereateExportCsvFileName($targetType)
+    {
+        $user = $this->getCurrentUser();
+        return $this->getWebRootDirectory()."export_content".$targetType.$user['id'].date('Y-m-d-h').".txt";
+    }
+
+    protected function getWebRootDirectory()
+    {
+        return dirname($this->getServiceKernel()->getParameter('kernel.root_dir')).'/web/';
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
