@@ -620,7 +620,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $file = $this->proccessConvertParamsAndMetas($file);
 
         $file['storage'] = 'cloud';
-        
+
         return $file;
     }
 
