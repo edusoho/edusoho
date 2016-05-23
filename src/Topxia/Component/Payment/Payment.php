@@ -33,7 +33,7 @@ class Payment
         $class = __NAMESPACE__."\\{$name}\\{$name}AuthBankRequest";
 
         if (!class_exists($class)) {
-            throw new \Exception("Payment close trade request {$name} is not exist!");
+            throw new \Exception("Payment Auth Bank request {$name} is not exist!");
         }
 
         return new $class($options);
@@ -45,7 +45,7 @@ class Payment
         $class = __NAMESPACE__."\\{$name}\\{$name}UnbindAuthRequest";
 
         if (!class_exists($class)) {
-            throw new \Exception("Payment close trade request {$name} is not exist!");
+            throw new \Exception("Payment Unbind Auth request {$name} is not exist!");
         }
 
         return new $class($options);
@@ -58,6 +58,18 @@ class Payment
 
         if (!class_exists($class)) {
             throw new \Exception("Payment response {$name} is not exist!");
+        }
+
+        return new $class($options);
+    }
+
+    public static function createTradeQueryRequest($name, $options = array())
+    {
+        $name  = ucfirst(strtolower($name));
+        $class = __NAMESPACE__."\\{$name}\\{$name}TradeQueryRequest";
+
+        if (!class_exists($class)) {
+            throw new \Exception("Payment Trade Query request {$name} is not exist!");
         }
 
         return new $class($options);
