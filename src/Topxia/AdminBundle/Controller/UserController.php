@@ -289,13 +289,7 @@ class UserController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {
-                for ($i = 0; $i < count($roles); $i++) {
-                    $roleName .= $roles[$i]['name'];
-
-                    if ($i < count($roles) - 1) {
-                        $roleName .= "、";
-                    }
-                }
+                $roleName = implode(',', $roles);
 
                 $message = array(
                     'userId'   => $currentUser['id'],

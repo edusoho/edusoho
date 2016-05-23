@@ -833,7 +833,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
 
-        $this->dispatchEvent('user.role.change', new ServiceEvent($user));
+        $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
     }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
