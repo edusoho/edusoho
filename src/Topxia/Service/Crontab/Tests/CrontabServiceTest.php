@@ -7,18 +7,7 @@ class CrontabServiceTest extends BaseTestCase
 {
     public function testCreateJob()
     {
-        $job = array(
-            'name'        => "TestJob",
-            'cycle'       => 'once',
-            'time'        => time() + 24 * 60 * 60,
-            'jobClass'    => 'Topxia\\Service\\Test\\Test\\Test',
-            'targetType'  => 'test',
-            'targetId'    => 1,
-            'creatorId'   => 1,
-            'createdTime' => time(),
-            'jobParams'   => ''
-        );
-        $newJob = $this->getCrontabService()->createJob($job);
+        $newJob = $this->createJob();
         $this->assertEquals('TestJob', $newJob['name']);
     }
 
@@ -27,7 +16,7 @@ class CrontabServiceTest extends BaseTestCase
         $newJob = $this->createJob();
         $jobGet = $this->getCrontabService()->getJob($newJob['id']);
         $this->assertEquals('once', $jobGet['cycle']);
-        $this->assertEquals('测试定时任务', $jobGet['name']);
+        $this->assertEquals('TestJob', $jobGet['name']);
         $this->assertEquals('test', $jobGet['targetType']);
         $this->assertEquals('1', $jobGet['targetId']);
     }
@@ -56,6 +45,23 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testExecuteJob()
     {
+        $job = $this->createJob();
+        //测试执行周期为一次的job
+        $this->getCrontabService()->executeJob($job['id']);
+        $getJob = $this->getCrontabService()->getJob($job['id']);
+        $this->assertNull($getJob);
+
+        //每小时执行一次
+        $job = $this->createJob('everyhour');
+        $this->getCrontabService()->executeJob($job['id']);
+        $JobCount = $this->getCrontabService()->searchJobsCount(array('nextExcutedStartTime' => time())); //执行时间大于当前时间
+        $this->assertEquals(1, $JobCount);
+
+        $job = $this->createJob('everyhour');
+        $this->getCrontabService()->executeJob($job['id']);
+        $JobCount = $this->getCrontabService()->searchJobsCount(array('nextExcutedTime' => time())); //执行时间大于当前时间
+        $this->assertEquals(0, $JobCount);
+
     }
 
     public function testDeleteJob()
@@ -105,18 +111,18 @@ class CrontabServiceTest extends BaseTestCase
         $this->assertEquals($newJob['id'], $updateJob['id']);
     }
 
-    private function createJob()
+    private function createJob($cycle = 'once')
     {
         $job = array(
-            'name'        => '测试定时任务',
-            'cycle'       => 'once',
-            'time'        => time() + 24 * 60 * 60,
-            'jobClass'    => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
-            'targetType'  => 'test',
-            'targetId'    => 1,
-            'creatorId'   => 1,
-            'createdTime' => time(),
-            'jobParams'   => ''
+            'name'            => "TestJob",
+            'cycle'           => $cycle,
+            'nextExcutedTime' => time(), //方便执行的时候,可以处理当前的job
+            'jobClass'        => 'Topxia\\Service\\Crontab\\Tests\\TestJob',
+            'targetType'      => 'test',
+            'targetId'        => 1,
+            'creatorId'       => 1,
+            'createdTime'     => time(),
+            'jobParams'       => ''
         );
         $job = $this->getCrontabService()->createJob($job);
         return $job;
