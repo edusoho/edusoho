@@ -251,7 +251,7 @@ define(function(require, exports, module) {
 
                 var queuefile = this.uploadQueue[file.id]; //获取文件开始上传时的信息
 
-                var speed = (((queuefile.size * percentage) / 1024 / 1024) / ((Date.now() - queuefile.starttime) / 1000)).toFixed(2); //MB/s
+                var speed = (((queuefile.size * percentage) / 1024 / 1024) / ((_.now() - queuefile.starttime) / 1000)).toFixed(2); //MB/s
 
                 this.totalSpeedQueue[file.id] = speed; //纪录每个文件的的上传速度
                 this.leftTotalSizeQueue[file.id] = (file.size * (1 - percentage) / 1024 / 1024).toFixed(2); //更新每个文件的剩余大小
