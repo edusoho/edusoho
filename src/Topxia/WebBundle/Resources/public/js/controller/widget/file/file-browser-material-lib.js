@@ -15,7 +15,7 @@ define(function (require, exports, module) {
 
         events: {
             'click .file-browser-item': 'onSelectFile',
-            'input .file-filter-by-name': 'onFilterByName',
+            'click .js-browser-search': 'onFilterByName',
             'change input:radio': 'onFilterBySource',
             'change .file-filter-by-owner': 'onFilterByOwner'
         },
@@ -89,7 +89,7 @@ define(function (require, exports, module) {
                     html += '<nav class="text-center">';
                     html += '<ul class="pagination">';
                     if (paginator.currentPage != paginator.firstPage) {
-                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.homepageUrl + '">首页</a></li>'
+                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.firstPageUrl + '">首页</a></li>'
                         html += '<li><a class="es-icon es-icon-chevronleft js-switch-page" data-url="' + paginator.previousPageUrl + '"></a></li>';
                     }
 
@@ -198,7 +198,7 @@ define(function (require, exports, module) {
 			      	<span class='input-group'> \
 				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder='输入视频标题关键字'  /> \
 				    <span class='input-group-btn'> \
-				      <button type='button' class='btn btn-default' data-loading-text='正在加载，请稍等'>搜索</button> \
+				      <button type='button' class='btn btn-default js-browser-search' data-loading-text='正在加载，请稍等'>搜索</button> \
 				    </span> \
 				  </span> \
         			</div> \
