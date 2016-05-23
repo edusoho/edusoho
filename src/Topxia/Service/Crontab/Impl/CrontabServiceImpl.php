@@ -46,9 +46,8 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $user = $this->getCurrentUser();
 
-        if ($job['cycle'] == 'once') {
-            $job['nextExcutedTime'] = $job['time'];
-            unset($job['time']);
+        if (!ArrayToolKit::requireds($job, array('nextExcutedTime'))) {
+            throw $this->createServiceException('缺少 nextExcutedTime 字段,创建job失败');
         }
 
         $job['creatorId']   = $user['id'];
@@ -82,7 +81,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
             $jobInstance = new $job['jobClass']();
-
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];
             }
