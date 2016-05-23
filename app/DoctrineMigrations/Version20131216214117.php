@@ -37,7 +37,7 @@ class Version20131216214117 extends AbstractMigration
 				  `cardLength` int(8) NOT NULL,
 				  `number` int(11) NOT NULL,
 				  `rechargedNumber` int(11) NOT NULL,
-				  `deadline` varchar(19) CHARACTER SET latin1 NOT NULL,
+				  `deadline` varchar(19) CHARACTER NOT NULL,
 				  `money` int(8) NOT NULL,
 				  `userId` int(11) NOT NULL,
 				  `createdTime` int(11) NOT NULL,
