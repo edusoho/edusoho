@@ -19,7 +19,13 @@
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>
-    <span class="text-muted text-sm">{{ uploadFile.updatedTime|date('Y-n-d H:i')}}</span>
+    <span class="text-muted text-sm">
+      {% if not uploadFile.updatedTime %}
+        {{ uploadFile.createdTime|date('Y-n-d H:i')}}
+      {% else %}
+        {{ uploadFile.updatedTime|date('Y-n-d H:i')}}
+      {% endif %}
+    </span>
   </td>
 
 </tr>

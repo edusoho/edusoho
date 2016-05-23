@@ -66,7 +66,6 @@ define(function(require, exports, module) {
 			    		break;
 		    	}
 		    });
-
 		    this.set("uploader", uploader);
 		},
 

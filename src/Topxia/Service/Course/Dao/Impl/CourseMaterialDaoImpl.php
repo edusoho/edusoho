@@ -77,17 +77,59 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     }
 
 
-     public function getLessonMaterialCount($courseId,$lessonId)
-     {
+    public function getLessonMaterialCount($courseId,$lessonId)
+    {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
         return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
-     } 
+    } 
 
-      public function getMaterialCountByFileId($fileId)
-     {
+    public function getMaterialCountByFileId($fileId)
+    {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($fileId)); 
-     } 
+    } 
 
+    public function searchMaterials($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
 
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchMaterialCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+
+            ->from($this->table, $this->table)
+            ->andWhere('id = :id')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
+            ->andWhere('type = :type')
+            ->andWhere('userId = :userId')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('copyId = :copyId')
+            ->andWhere('fileId = :fileId')
+            ->andWhere('courseId IN (:courseIds)');
+
+        return $builder;
+    }
 }

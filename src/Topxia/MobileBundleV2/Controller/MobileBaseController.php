@@ -520,7 +520,7 @@ class MobileBaseController extends BaseController
 
     public function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     public function getMemberDao()
