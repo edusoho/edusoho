@@ -77,6 +77,12 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testGetNextExcutedTime()
     {
+        $job = $this->createJob('everyhour');
+        $this->getCrontabService()->executeJob($job['id']);
+        $job             = $this->getCrontabService()->getJob($job['id']); //执行时间大于当前时间
+        $nextExcutedTime = $this->getCrontabService()->getNextExcutedTime();
+
+        $this->assertEquals($job['nextExcutedTime'], $nextExcutedTime);
     }
 
     public function testSetNextExcutedTime()

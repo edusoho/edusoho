@@ -178,6 +178,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         $fileContent = file_get_contents($filePath);
         $config      = $yaml->parse($fileContent);
+
         return $config['crontab_next_executed_time'];
     }
 
