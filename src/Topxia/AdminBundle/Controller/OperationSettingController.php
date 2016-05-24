@@ -50,16 +50,23 @@ class OperationSettingController extends BaseController
             'invite_code_setting'       => 0,
             'promoted_user_value'       => '',
             'promote_user_value'        => '',
+            'get_coupon_setting'        => 1,
             'deadline'                  => 90,
             'inviteInfomation_template' => '{{registerUrl}}'
         );
 
         if ($request->getMethod() == 'POST') {
             $inviteSetting = $request->request->all();
+            if(isset($inviteSetting['get_coupon_setting'])){
+                $inviteSetting['get_coupon_setting'] = 1;
+            }else{
+                $inviteSetting['get_coupon_setting'] = 0;
+            }
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
                 'invite_code_setting',
                 'promoted_user_value',
                 'promote_user_value',
+                'get_coupon_setting',
                 'deadline',
                 'inviteInfomation_template'
             ));
@@ -84,11 +91,6 @@ class OperationSettingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getAppService()

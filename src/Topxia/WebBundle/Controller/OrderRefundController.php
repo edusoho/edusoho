@@ -38,25 +38,20 @@ class OrderRefundController extends BaseController
             $data   = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
-            if (isset($data["applyRefund"]) && $data["applyRefund"]) {
-                $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-            } else {
-                $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-                // $processor->removeStudent($order['targetId'], $user['id']);
-            }
+
+            $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
             return $this->createJsonResponse(true);
         }
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-
         return $this->render('TopxiaWebBundle:OrderRefund:refund-modal.html.twig', array(
             'target'        => $target,
             'targetType'    => $targetType,
             'order'         => $order,
             'maxRefundDays' => $maxRefundDays,
-            'refundOverdue' => $refundOverdue
+            'refundOverdue' => $refundOverdue,
         ));
     }
 
@@ -97,4 +92,5 @@ class OrderRefundController extends BaseController
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
+
 }

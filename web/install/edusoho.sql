@@ -252,6 +252,7 @@ CREATE TABLE `course` (
   `buyable` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否开放购买',
   `tryLookable` TINYINT NOT NULL DEFAULT '0',
   `tryLookTime` INT NOT NULL DEFAULT '0',
+  `conversationId` varchar(255) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
@@ -525,6 +526,7 @@ CREATE TABLE `file` (
   `size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '文件状态',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件上传时间',
+  `uploadFileId` INT(10) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -775,6 +777,7 @@ CREATE TABLE `order_refund` (
   `reasonNote` varchar(1024) NOT NULL DEFAULT '' COMMENT '退款理由',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单退款记录最后更新时间',
   `createdTime` int(10) unsigned NOT NULL COMMENT '订单退款记录创建时间',
+  `operator` int(11) NOT NULL COMMENT '操作人',
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -991,15 +994,18 @@ CREATE TABLE `upgrade_logs` (
 
 DROP TABLE IF EXISTS `upload_files`;
 CREATE TABLE `upload_files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '上传文件ID',
+  `id` int(10) unsigned NOT NULL COMMENT '上传文件ID',
+  `globalId` VARCHAR(32) NOT NULL DEFAULT '0' COMMENT '云文件ID',
+  `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
   `filename` varchar(1024) NOT NULL DEFAULT '' COMMENT '文件名',
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
-  `size` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
+  `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `etag` varchar(256) NOT NULL DEFAULT '' COMMENT 'ETAG',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '长度（音视频则为时长，PPT/文档为页数）',
+  `description` text,
   `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `convertParams` text COMMENT '文件转换参数',
@@ -1017,6 +1023,34 @@ CREATE TABLE `upload_files` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `convertHash` (`convertHash`(64)),
   UNIQUE KEY `hashId` (`hashId`(120))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `upload_file_inits`;
+CREATE TABLE `upload_file_inits` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `globalId` varchar(32) NOT NULL DEFAULT '0' COMMENT '云文件ID',
+  `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
+  `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
+  `targetId` int(11) NOT NULL COMMENT '所存目标id',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
+  `filename` varchar(1024) NOT NULL DEFAULT '',
+  `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+  `fileSize` bigint(20) NOT NULL DEFAULT '0',
+  `etag` VARCHAR( 256 ) NOT NULL DEFAULT  '',
+  `length` INT UNSIGNED NOT NULL DEFAULT  '0',
+  `convertHash` varchar(256) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
+  `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none',
+  `metas` text,
+  `metas2` TEXT NULL DEFAULT NULL,
+  `type` ENUM(  'document',  'video',  'audio',  'image',  'ppt',  'flash', 'other' ) NOT NULL DEFAULT 'other',
+  `storage` enum('local','cloud') NOT NULL,
+  `convertParams` TEXT NULL COMMENT  '文件转换参数',
+  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
+  `updatedTime` int(10) unsigned DEFAULT '0',
+  `createdUserId` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hashId` (`hashId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user`;
@@ -1137,6 +1171,9 @@ CREATE TABLE `user_profile` (
   `class` varchar(255) NOT NULL DEFAULT '' COMMENT '班级',
   `weibo` varchar(255) NOT NULL DEFAULT '' COMMENT '微博',
   `weixin` varchar(255) NOT NULL DEFAULT '' COMMENT '微信',
+  `isQQPublic` INT NOT NULL DEFAULT '0' COMMENT 'QQ号是否公开',
+  `isWeixinPublic` INT NOT NULL DEFAULT '0' COMMENT '微信是否公开',
+  `isWeiboPublic` INT NOT NULL DEFAULT '0' COMMENT '微博是否公开',
   `site` varchar(255) NOT NULL DEFAULT '' COMMENT '网站',
   `intField1` int(11) DEFAULT NULL,
   `intField2` int(11) DEFAULT NULL,
@@ -1418,7 +1455,7 @@ CREATE TABLE `crontab_job` (
   `cycle` ENUM('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
   `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间',
   `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
-  `jobParams` text NOT NULL COMMENT '任务参数',
+  `jobParams` text NULL COMMENT '任务参数',
   `targetType` VARCHAR( 64 ) NOT NULL DEFAULT  '',
   `targetId` INT UNSIGNED NOT NULL DEFAULT  '0',
   `executing` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行状态',
@@ -1477,6 +1514,7 @@ CREATE TABLE `classroom` (
   `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示',
   `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
+  `conversationId` varchar(255) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1741,5 +1779,63 @@ CREATE TABLE `discovery_column` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '发现页栏目';
 
+DROP TABLE IF EXISTS `upload_files_collection`;
+CREATE TABLE `upload_files_collection` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fileId` int(10) unsigned NOT NULL COMMENT '文件Id',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏者',
+  `createdTime` int(10) unsigned NOT NULL,
+  `updatedTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='文件收藏表';
 
+DROP TABLE IF EXISTS `upload_files_tag`;
+CREATE TABLE `upload_files_tag` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
+  `fileId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件ID',
+  `tagId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '标签ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件与标签的关联表';
+
+DROP TABLE IF EXISTS `upload_files_share_history`;
+CREATE TABLE `upload_files_share_history` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
+ `sourceUserId` int(10) NOT NULL COMMENT '分享用户的ID',
+ `targetUserId` int(10) NOT NULL COMMENT '被分享的用户的ID',
+ `isActive` tinyint(4) NOT NULL DEFAULT '0' COMMENT '',
+ `createdTime` int(10) DEFAULT '0' COMMENT '创建时间',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `cloud_data`;
+CREATE TABLE `cloud_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `timestamp` int(10) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  `updatedTime` int(10) unsigned NOT NULL,
+  `createdUserId` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `dictionary_item`;
+CREATE TABLE `dictionary_item` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `type` varchar(255) NOT NULL COMMENT '字典类型',
+ `code` varchar(64) DEFAULT NULL COMMENT '编码',
+ `name` varchar(255) NOT NULL COMMENT '字典内容名称',
+ `weight` int(11) NOT NULL DEFAULT '0' COMMENT '权重',
+ `createdTime` int(10) unsigned NOT NULL,
+ `updateTime` int(10) unsigned DEFAULT '0',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `dictionary`;
+CREATE TABLE `dictionary` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `name` varchar(255) NOT NULL COMMENT '字典名称',
+ `type` varchar(255) NOT NULL COMMENT '字典类型',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

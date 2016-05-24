@@ -47,15 +47,29 @@
 		    {% endif %}
 		  </td>
 		  <td>{{ classroom.studentNum }}</td>
-		  <td class="text-danger">{{ classroom.price }}</td>
+		  <td class="text-danger">
+		   	{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            	{% if classroom.price > 0 %}
+                    {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                {% else %}
+                     免费
+                {% endif %}
+            {% else %}
+                {% if classroom.price > 0 %}
+                 	{{ classroom.price }}元
+                {% else %}
+                    免费
+                {% endif %}
+            {% endif %}
+		  </td>
 		  <td>{{ dict_text('courseStatus:html', classroom.status) }}</td>
 		  
 		  <td>
-		 	<button type="button" class="btn btn-primary btn-sm choose-course" data-target="{{ classroom.id }}" data-name="{{ classroom.title}}">选择</button>
+		 	<button type="button" class="btn btn-primary btn-sm choose-classroom" data-target="{{ classroom.id }}" data-name="{{ classroom.title}}">选择</button>
 		  </td>
 		</tr>
 	  {% else %}
-	    <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
+	    <tr><td colspan="20"><div class="empty">暂无{{setting('classroom.name','班级')}}记录</div></td></tr>
 	  {% endfor %}
 	</tbody>
 </table>

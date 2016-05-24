@@ -82,7 +82,7 @@ class CloudController extends BaseController
         );
         $count = $this->getUploadFileService()->searchFileCount($conditions);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestCreated', 0, $count);
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime','DESC'), 0, $count);
 
         foreach ($files as &$file) {
             $file['metas'] = empty($file['metas']) ?  array() : json_decode($file['metas'], true);

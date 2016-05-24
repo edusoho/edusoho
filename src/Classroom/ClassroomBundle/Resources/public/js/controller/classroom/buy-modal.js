@@ -56,7 +56,7 @@ define(function(require, exports, module) {
             }
         })
 
-        $('#join-classroom-btn').on('click', function(){
+        $('#join-course-btn').on('click', function(){
             $(this).button('loading');
         });
 

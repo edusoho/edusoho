@@ -11,31 +11,30 @@
   </style>
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      {% if type == 'courselesson' %}
-        <button class="btn btn-info btn-sm pull-right"
-        data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
-        data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
-        data-storage="{{storageSetting.upload_mode}}"
+      {% if app.request.get('type') == 'courselesson' %}
+        <a class="btn btn-info btn-sm pull-right"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
-        </button>
-      {% elseif type == 'coursematerial' %}
-        <button class="btn btn-info btn-sm pull-right"
-        data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
-        data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
-        data-storage="{{storageSetting.upload_mode}}"
+        </a>
+      {% elseif app.request.get('type') == 'coursematerial' %}
+        <a class="btn btn-info btn-sm pull-right"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传备用资料文件'|trans}}
-        </button>
+        </a>
       {% endif %}
       {{'文件管理'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
       <ul class="nav nav-tabs mbm">
-        <li {% if type == 'courselesson' %} class="active" {% endif %}>
+        <li {% if app.request.get('type') == 'courselesson' %} class="active" {% endif %}>
         <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
-        <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
+        <li {% if app.request.get('type') == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
       </ul>
+
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
           <tr>
@@ -47,19 +46,20 @@
           </tr>
         </thead>
         <tbody>
-          {% if type == 'courselesson' %}
-            {% for uploadFile in courseLessons %}
+          {% if app.request.get('type') == 'courselesson' %}
+            {% for uploadFile in files %}
               {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
             {% else %}
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
             {% endfor %}
-          {% elseif type == 'coursematerial' %}
-            {% for uploadFile in courseLessons %}
+          {% elseif app.request.get('type') == 'coursematerial' %}
+            {% for uploadFile in files %}
               {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr-coursematerial.html.twig' %}
             {% else %}
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
             {% endfor %}
           {% endif %}
+          
         </tbody>
       </table>
 
@@ -74,7 +74,8 @@
       <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
       </nav>
-      {% if type == 'coursematerial' %}
+
+      {% if app.request.get('type') == 'coursematerial' %}
         <div class="alert alert-info">
           <ul>
             <li>{{'上传备用资料文件成功后，在添加课时资料时可直接选取。'|trans}}</li>

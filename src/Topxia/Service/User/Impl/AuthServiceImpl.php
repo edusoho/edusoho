@@ -11,6 +11,15 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
+        if (isset($registration['nickname']) && !empty($registration['nickname'])
+            && $this->getSensitiveService()->scanText($registration['nickname'])) {
+            throw $this->createServiceException('用户名中含有敏感词！');
+        }
+
+        if ($this->registerLimitValidator($registration)) {
+            throw $this->createServiceException('由于您注册次数过多，请稍候尝试');
+        }
+
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
@@ -37,6 +46,58 @@ class AuthServiceImpl extends BaseService implements AuthService
         } catch (\Exception $e) {
             $this->getKernel()->getConnection()->rollBack();
             return array();
+        }
+    }
+
+    protected function registerLimitValidator($registration)
+    {
+        $authSettings = $this->getSettingService()->get('auth', array());
+        $user         = $this->getCurrentUser();
+
+        if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
+            $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
+
+            if (!$status) {
+                return true;
+            }
+        }
+    }
+
+    protected function protectiveRule($type, $ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition = array(
+                    'startTime' => time() - 24 * 3600,
+                    'createdIp' => $ip);
+                $registerCount = $this->getUserService()->searchUserCount($condition);
+
+                if ($registerCount > 30) {
+                    return false;
+                }
+
+                return true;
+            case 'high':
+                $condition = array(
+                    'startTime' => time() - 24 * 3600,
+                    'createdIp' => $ip);
+                $registerCount = $this->getUserService()->searchUserCount($condition);
+
+                if ($registerCount > 10) {
+                    return false;
+                }
+
+                $registerCount = $this->getUserService()->searchUserCount(array(
+                    'startTime' => time() - 3600,
+                    'createdIp' => $ip));
+
+                if ($registerCount >= 1) {
+                    return false;
+                }
+
+                return true;
+            default:
+                return true;
         }
     }
 
@@ -313,6 +374,11 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         return $this->partner;
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function getUserService()

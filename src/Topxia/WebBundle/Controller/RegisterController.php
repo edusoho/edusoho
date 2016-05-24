@@ -16,81 +16,76 @@ class RegisterController extends BaseController
         $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
         $registerEnable = $this->getAuthService()->isRegisterEnabled();
 
         if (!$registerEnable) {
-            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->getTargetPath($request));
         }
 
         if ($request->getMethod() == 'POST') {
-            $registration = $request->request->all();
-            // $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+            try{
 
-            if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
-                $registration['verifiedMobile'] = $registration['emailOrMobile'];
-            }
+                $registration = $request->request->all();
 
-            if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-                return $this->createMessageResponse('error', '用户名中含有敏感词！');
-            }
-
-            $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
-            $registration['createdIp'] = $request->getClientIp();
-            $authSettings              = $this->getSettingService()->get('auth', array());
-
-            //验证码校验
-            $this->captchaEnabledValidator($authSettings, $registration, $request);
-
-            //手机校验码
-
-            if ($this->smsCodeValidator($authSettings, $registration, $request)) {
-                $registration['verifiedMobile'] = '';
-                $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
-
-                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
-
-                if ($result) {
-                    $registration['verifiedMobile'] = $sessionField['to'];
-                } else {
-                    return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
+                    $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
-            }
 
-            //ip次数限制
+                $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+                $registration['createdIp'] = $request->getClientIp();
+                $authSettings              = $this->getSettingService()->get('auth', array());
 
-            if ($this->registerLimitValidator($registration, $authSettings, $request)) {
-                return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
-            }
+                //验证码校验
+                $this->captchaEnabledValidator($authSettings, $registration, $request);
 
-            $user = $this->getAuthService()->register($registration);
+                //手机校验码
+                if ($this->smsCodeValidator($authSettings, $registration)) {
+                    $registration['verifiedMobile'] = '';
+                    $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
 
-            if (($authSettings
-                && isset($authSettings['email_enabled'])
-                && $authSettings['email_enabled'] == 'closed')
-                || !$this->isEmptyVeryfyMobile($user)) {
-                $this->authenticateUser($user);
-            }
+                    list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
 
-            $goto = $this->generateUrl('register_submited', array(
-                'id'   => $user['id'],
-                'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request)
-            ));
+                    if ($result) {
+                        $registration['verifiedMobile'] = $sessionField['to'];
+                    } else {
+                        return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                    }
+                }
 
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                $currentUser = $this->getCurrentUser();
+                $registration['createdIp'] = $request->getClientIp();
 
-                if (!$currentUser->isLogin()) {
+                $user = $this->getAuthService()->register($registration);
+
+                if (($authSettings
+                    && isset($authSettings['email_enabled'])
+                    && $authSettings['email_enabled'] == 'closed')
+                    || !$this->isEmptyVeryfyMobile($user)) {
                     $this->authenticateUser($user);
                 }
 
-                $goto = $this->generateUrl('partner_login', array('goto' => $goto));
-            }
+                $goto = $this->generateUrl('register_submited', array(
+                    'id'   => $user['id'],
+                    'hash' => $this->makeHash($user),
+                    'goto' => $this->getTargetPath($request)
+                ));
 
-            return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                if ($this->getAuthService()->hasPartnerAuth()) {
+                    $currentUser = $this->getCurrentUser();
+
+                    if (!$currentUser->isLogin()) {
+                        $this->authenticateUser($user);
+                    }
+
+                    $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+                }
+
+                return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage());
+            }
         }
 
         $inviteCode = '';
@@ -146,44 +141,6 @@ class RegisterController extends BaseController
         }
 
         return true;
-    }
-
-    protected function protectiveRule($type, $ip)
-    {
-        switch ($type) {
-            case 'middle':
-                $condition = array(
-                    'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
-                $registerCount = $this->getUserService()->searchUserCount($condition);
-
-                if ($registerCount > 30) {
-                    return false;
-                }
-
-                return true;
-            case 'high':
-                $condition = array(
-                    'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
-                $registerCount = $this->getUserService()->searchUserCount($condition);
-
-                if ($registerCount > 10) {
-                    return false;
-                }
-
-                $registerCount = $this->getUserService()->searchUserCount(array(
-                    'startTime' => time() - 3600,
-                    'createdIp' => $ip));
-
-                if ($registerCount >= 1) {
-                    return false;
-                }
-
-                return true;
-            default:
-                return true;
-        }
     }
 
     public function userTermsAction(Request $request)
@@ -536,8 +493,7 @@ class RegisterController extends BaseController
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
         }
     }
-
-    protected function smsCodeValidator($authSettings, $registration, $request)
+    protected function smsCodeValidator($authSettings, $registration)
     {
         if (
             in_array($authSettings['register_mode'], array('mobile', 'email_or_mobile'))
@@ -548,21 +504,6 @@ class RegisterController extends BaseController
         }
     }
 
-    protected function getSensitiveService()
-    {
-        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
-    }
 
-    protected function registerLimitValidator($registration, $authSettings, $request)
-    {
-        $registration['createdIp'] = $request->getClientIp();
-
-        if (isset($authSettings['register_protective'])) {
-            $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
-
-            if (!$status) {
-                return true;
-            }
-        }
-    }
+    
 }

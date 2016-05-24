@@ -1,9 +1,18 @@
 <div class="class-item">
-  <div class="class-bg-layer"></div>
-  <div class="class-item-bg">
+  <div class="class-img-wrap">
     <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
       {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
     </a>
-    <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+    <div class="mask">
+      {% set classroomMember = data('ClassroomMember', {classroomId:classroom.id, userId: app.user.id|default(0)}) %}
+
+      {% if classroomMember|default(false) %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">继续学习</a>
+      {% else %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">立即加入</a>
+      {% endif %}
+    </div>
   </div>
+  <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  <div class="metas">共有<span>{{classroom.courseNum}}</span>门课程</div>
 </div>

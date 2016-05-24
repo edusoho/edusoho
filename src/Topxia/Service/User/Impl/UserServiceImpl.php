@@ -3,12 +3,14 @@ namespace Topxia\Service\User\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\User\UserService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\HttpFoundation\File\File;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -139,8 +141,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('昵称已存在！');
         }
 
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
+        $this->dispatchEvent('user.change_nickname', new ServiceEvent($updatedUser));
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
-        $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 
     public function changeEmail($userId, $email)
@@ -155,7 +158,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email({$email})已经存在，Email变更失败。');
         }
 
-        $this->getUserDao()->updateUser($userId, array('email' => $email));
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
+        $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
     }
 
     public function changeAvatar($userId, $data)
@@ -193,6 +197,61 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->updateUser($userId, $fields);
         return UserSerialize::unserialize($user);
+    }
+
+    public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
+    {
+        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
+        $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
+        
+        $file   = new File($filePath);
+
+        $groupCode = "tmp";
+        $imgs      = array(
+            'large'  => array("200", "200"),
+            'medium' => array("120", "120"),
+            'small'  => array("48", "48")
+        );
+        $options = array_merge($options, array(
+            'x'      => "0",
+            'y'      => "0",
+            'x2'     => "200",
+            'y2'     => "200",
+            'w'      => "200",
+            'h'      => "200",
+            'width'  => "200",
+            'height' => "200",
+            'imgs'   => $imgs
+        ));
+
+        if (empty($options['group'])) {
+            $options['group'] = "default";
+        }
+
+        $record    = $this->getFileService()->uploadFile($groupCode, $file);
+        $parsed    = $this->getFileService()->parseFileUri($record['uri']);
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
+
+        $fields = array();
+
+        foreach ($filePaths as $key => $value) {
+            $file     = $this->getFileService()->uploadFile($options["group"], new File($value));
+            $fields[] = array(
+                "type" => $key,
+                "id"   => $file['id']
+            );
+        }
+
+        if (isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id"   => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
+
+        return $this->changeAvatar($userId, $fields);
     }
 
     public function isNicknameAvaliable($nickname)
@@ -296,12 +355,10 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->updateUser($id, $fields);
-
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
         $this->dispatchEvent('mobile.change', new ServiceEvent($user));
-
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
@@ -423,11 +480,15 @@ class UserServiceImpl extends BaseService implements UserService
         return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
+    protected function validateNickname($nickname) {
+        if (!SimpleValidator::nickname($nickname)) {
+            throw $this->createServiceException('Invalid nickname: ' . $nickname);
+        }
+    }
+
     public function register($registration, $type = 'default')
     {
-        if (!SimpleValidator::nickname($registration['nickname'])) {
-            throw $this->createServiceException('nickname error!');
-        }
+        $this->validateNickname($registration['nickname']);
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
             throw $this->createServiceException('昵称已存在');
@@ -483,12 +544,17 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($inviteUser)) {
             $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
-            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
+            $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
 
-            if (!empty($inviteCoupon)) {
-                $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
+            if (!empty($invitedCoupon)) {
+                $card = $this->getCardService()->getCardByCardId($invitedCoupon['id']);
                 $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
             }
+
+            $this->dispatchEvent(
+                'user.register',
+                new ServiceEvent(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+            );
         }
 
         if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
@@ -594,8 +660,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
         }
 
-        $this->getUserDao()->updateUser($userId, array('setup' => 1));
-
+        $user = $this->getUserDao()->updateUser($userId, array('setup' => 1));
         return $this->getUser($userId);
     }
 
@@ -626,6 +691,9 @@ class UserServiceImpl extends BaseService implements UserService
             'weibo'          => '',
             'weixin'         => '',
             'site'           => '',
+            'isWeiboPublic'  => '',
+            'isWeixinPublic' => '',
+            'isQQPublic'     => '',
             'intField1'      => null,
             'intField2'      => null,
             'intField3'      => null,
@@ -694,6 +762,23 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
 
+        if (empty($fields['isWeiboPublic'])) {
+            $fields['isWeiboPublic'] = 0;
+        } else {
+            $fields['isWeiboPublic'] = 1;
+        }
+
+        if (empty($fields['isWeixinPublic'])) {
+            $fields['isWeixinPublic'] = 0;
+        } else {
+            $fields['isWeixinPublic'] = 1;
+        }
+
+        if (empty($fields['isQQPublic'])) {
+            $fields['isQQPublic'] = 0;
+        } else {
+            $fields['isQQPublic'] = 1;
+        }
         $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
 
         $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
@@ -867,7 +952,7 @@ class UserServiceImpl extends BaseService implements UserService
             $type = 'weixin';
         }
 
-        return $this->getUserBindDao()->addBind(array(
+        $this->getUserBindDao()->addBind(array(
             'type'        => $type,
             'fromId'      => $fromId,
             'toId'        => $toId,
@@ -997,6 +1082,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
+        $this->dispatchEvent("user.lock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1013,6 +1099,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
+        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
+
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
         return true;
@@ -1027,7 +1115,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
-
         $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
         return $user;
     }
@@ -1257,7 +1344,6 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $this->getUserApprovalDao()->addApproval($approval);
-
         return true;
     }
 
@@ -1291,8 +1377,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !");
-
-        $this->dispatchEvent('realname.approval', new ServiceEvent($user));
 
         $message = array(
             'note' => $note ? $note : '',
@@ -1417,6 +1501,7 @@ class UserServiceImpl extends BaseService implements UserService
         $code       = array(
             'inviteCode' => $inviteCode
         );
+
         return $this->getUserDao()->updateUser($userId, $code);
     }
 

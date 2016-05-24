@@ -262,12 +262,6 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
-        if ($request->getMethod() == 'GET') {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->query->all());
-        } else {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        }
-
         if ($name == 'wxpay') {
             $returnXml   = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
@@ -276,6 +270,8 @@ class PayCenterController extends BaseController
         } else {
             $returnArray = $request->request->all();
         }
+
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
 
         $response = $this->createPaymentResponse($name, $returnArray);
 

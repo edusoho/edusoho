@@ -177,7 +177,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function recordAction(Request $request, $id)
+    public function refundRecordAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -190,7 +190,10 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom'));
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'classroom';
+        $condition['status'] = 'success';
+
         
         $paginator = new Paginator(
             $request,
@@ -205,14 +208,22 @@ class ClassroomManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $userIds = ArrayToolkit::column($refunds,'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, "id");
+
+        $orderIds = ArrayToolkit::column($refunds,'orderId');
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, "id");
+
         foreach ($refunds as $key => $refund) {
-            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-            $refunds[$key]['student'] = $this->getClassroomService()->searchMembers(
-                array('orderId'=>$refund['orderId']),
-                array('createdTime', 'DESC'),
-                0,
-                1
-            );
+            if(isset($users[$refund['userId']])) {
+                $refunds[$key]['user'] = $users[$refund['userId']];
+            }
+
+            if(isset($orders[$refund['orderId']])) {
+                $refunds[$key]['order'] = $orders[$refund['orderId']];
+            }
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
@@ -267,8 +278,24 @@ class ClassroomManageController extends BaseController
 
         $user = $this->getCurrentUser();
 
+        $condition = array(
+            'targetType' => 'classroom',
+            'targetId' => $classroomId,
+            'userId' => $userId,
+            'status' => 'paid'
+            );
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        foreach ($orders as $key => $value) {
+            $order = $value;
+        }
+
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
+        $reason = array(
+            'type' => 'other',
+            'note' => '手动移除'
+            );
+        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],

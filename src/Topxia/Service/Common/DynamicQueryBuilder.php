@@ -30,10 +30,29 @@ class DynamicQueryBuilder extends QueryBuilder
         }
 
         if ($this->isInCondition($where)) {
-            return $this->addWhereIn($where);
+            $where = $this->whereIn($where);
+            if(!$where) {
+                return $this;
+            }
         }
 
         return parent::andWhere($where);
+    }
+
+    public function orWhere($where)
+    {
+        if (!$this->isWhereInConditions($where)) {
+            return $this;
+        }
+
+        if ($this->isInCondition($where)) {
+            $where = $this->whereIn($where);
+            if(!$where) {
+                return $this;
+            }
+        }
+
+        return parent::orWhere($where);
     }
 
     public function andStaticWhere($where)
@@ -41,12 +60,12 @@ class DynamicQueryBuilder extends QueryBuilder
         return parent::andWhere($where);
     }
 
-    protected function addWhereIn($where)
+    protected function whereIn($where)
     {
         $conditionName = $this->getConditionName($where);
 
         if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
-            return $this;
+            return false;
         }
 
         $this->conditions[$conditionName] = array_unique($this->conditions[$conditionName]);
@@ -60,7 +79,7 @@ class DynamicQueryBuilder extends QueryBuilder
 
         $where = str_replace(":{$conditionName}", join(',', $marks), $where);
 
-        return parent::andWhere($where);
+        return $where;
     }
 
     public function execute()

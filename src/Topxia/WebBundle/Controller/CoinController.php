@@ -84,7 +84,7 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
 
-        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+// $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
             'account'       => $account,
@@ -282,6 +282,7 @@ class CoinController extends BaseController
                         if (!empty($inviteCoupon)) {
                             $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
                             $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+                            $this->sendInviteUserCard($promoteUser['id'], $user['id']);
                         }
                     }
                 } else {
@@ -355,6 +356,19 @@ class CoinController extends BaseController
             'content'     => $content,
             'coinSetting' => $coinSetting
         ));
+    }
+
+    private function sendInviteUserCard($inviteUserId, $invitedUserId)
+    {
+        $inviteSetting = $this->setting('invite');
+
+        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 0) {
+            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
+
+            if (!empty($inviteCoupon)) {
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($invitedUserId, array('inviteUserCardId' => $inviteCoupon['id']));
+            }
+        }
     }
 
     protected function caculate($amount, $canChange, $data)

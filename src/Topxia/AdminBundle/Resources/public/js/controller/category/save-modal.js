@@ -3,42 +3,11 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
-    require('webuploader');
     
 	exports.run = function() {
         var $form = $('#category-form');
 		var $modal = $form.parents('.modal');
         var $table = $('#category-table');
-
-        var uploader = WebUploader.create({
-            swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-            server: $('#category-creater-widget').data('uploadUrl'),
-            pick: '#category-icon-uploader',
-            formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: {
-                title: 'Images',
-                extensions: 'gif,jpg,jpeg,png',
-                mimeTypes: 'image/*'
-            }
-
-        });
-
-        uploader.on( 'fileQueued', function( file ) {
-            Notify.info('正在上传，请稍等！', 0);
-            uploader.upload();
-        });
-
-        uploader.on( 'uploadSuccess', function( file, response ) {
-            Notify.success('上传成功！', 1);
-            $('#category-icon-field').html('<img src="' + response.hashId + '">');
-            $('#category-icon-field').addClass('mbm');
-            $form.find('[name=icon]').val(response.hashId);
-            $("#category-icon-delete").show();
-        });
-
-        uploader.on( 'uploadError', function( file, response ) {
-            Notify.danger('上传失败，请重试！');
-        });
 
         $("#category-icon-delete").on('click', function(){
             if (!confirm('确认要删除图标吗？')) return false;

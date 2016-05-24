@@ -9,7 +9,7 @@
 {% set _target_path = path('homepage') %}
 
 {% set currentTheme = current_theme() %}
-{% set themeConfig = currentTheme.confirmConfig %}
+{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
 {% set allConfig = currentTheme.allConfig %}
 
 {% set isIndex = true %}
@@ -26,9 +26,13 @@
             {% set code = 'recommend-course' %}
         {% endif %}
 
-    	{% set category = config.categoryId|default(0) ? data('category', {categoryId: config.categoryId})  : null %}
-		{% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
-
+    	{% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
+    	{% if code == 'friend-link' %}
+    	   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
+    	{% elseif code == 'footer-link' %}
+        {% else %}
+		   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
+		{% endif %}
     {% endfor %}
-    
+
 {% endblock %}

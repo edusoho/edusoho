@@ -2,8 +2,10 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseFileManageController extends BaseController
 {
@@ -19,12 +21,13 @@ class CourseFileManageController extends BaseController
             'targetId'   => $course['id']
         );
 
-        if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
-            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+        if ($course['parentId'] > 0 && $course['locked'] == 1) {
+            $conditions['targetId'] = $course['parentId'];
+        }
 
-            if ($course['parentId'] > 0 && $course['locked'] == 1) {
-                $conditions['targetId'] = $course['parentId'];
-            }
+        $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+        if ($courseMaterials) {
+            $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
         }
 
         $paginator = new Paginator(
@@ -35,39 +38,39 @@ class CourseFileManageController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        foreach ($files as $key => $file) {
-            $files[$key]['metas2'] = json_decode($file['metas2'], true) ?: array();
-
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
-            $useNum = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-
-            $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
-
-            if ($files[$key]['targetType'] == 'coursematerial') {
-                $files[$key]['useNum'] = $manageFilesUseNum;
-            } else {
-                $files[$key]['useNum'] = $useNum;
-            }
-        }
-
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'           => $type,
-            'course'         => $course,
-            'courseLessons'  => $files,
-            'users'          => ArrayToolkit::index($users, 'id'),
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'storageSetting' => $storageSetting
+            'course'    => $course,
+            'files'     => $files,
+            'users'     => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now'       => time()
         ));
+    }
+
+    public function fileStatusAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = $request->request->get('ids');
+
+        if (empty($fileIds)) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = explode(',', $fileIds);
+
+        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -98,10 +101,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile(
-            $file['id'],
-            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-        );
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -124,30 +124,6 @@ class CourseFileManageController extends BaseController
             'storageSetting' => $storageSetting,
             'targetType'     => $targetType,
             'targetId'       => $id
-        ));
-    }
-
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        if ("materiallib" != $targetType) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
-
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $fileExts       = "";
-
-        if ("courselesson" == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
-        }
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course'         => $course,
-            'storageSetting' => $storageSetting,
-            'targetType'     => $targetType,
-            'targetId'       => $id,
-            'fileExts'       => $fileExts
         ));
     }
 
@@ -182,5 +158,28 @@ class CourseFileManageController extends BaseController
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
+    protected function createPrivateFileDownloadResponse(Request $request, $file)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = str_replace('+', '%20', $file['filename']);
+
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
     }
 }

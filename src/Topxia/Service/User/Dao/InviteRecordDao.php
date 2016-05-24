@@ -10,4 +10,8 @@ interface InviteRecordDao
     public function getRecordByInvitedUserId($invitedUserId);
 
     public function updateInviteRecord($invitedUserId, $fields);
+
+    public function searchRecordCount($conditions);
+
+    public function searchRecords($conditions, $orderBy, $start, $limit);
 }

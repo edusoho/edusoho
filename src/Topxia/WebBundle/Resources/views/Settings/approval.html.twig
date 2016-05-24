@@ -30,7 +30,7 @@
                                     </div>
                                 {% elseif app.user.approvalStatus == 'approve_fail' %}
                                     <p class="text-danger" >
-                                        {{'实名认证审核尚未通过，请参照通知中的信息，修改后重新'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'认证。'|trans}}</a></strong>
+                                        {{'实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。'|trans}}
                                     </p>
                                 {% endif %}
                             </div>
