@@ -187,17 +187,7 @@ class PermissionBuilder
             $rootNode['parent'] = null;
             $tree[] = $rootNode;
 
-            foreach ($menus as $key => &$menu) {
-                if($menu['parent'] == $root) {
-                    $id++;
-                    $menu['id'] = $id;
-                    $menu['pId'] = $rootNode['id'];
-                    $menu['code'] = $key;
-                    $tree[] = $menu;
-
-                    $this->getSubTree($tree, $id, $menu, $menus);
-                }
-            }
+            $this->getSubTree($tree, $id, $rootNode, $menus);
         }
 
         return $tree;
