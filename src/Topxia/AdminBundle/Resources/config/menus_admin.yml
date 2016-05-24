@@ -341,13 +341,17 @@ admin:
                                     name: '新增公告'
                                     mode: modal
                                     group: 2
-                admin_org:
+                admin_org_manage:
                     name: 组织机构管理
+                    group: 2
                     children:
-                        admin_org_create:
-                            name: 添加组织机构
-                            mode: modal
-                            group: 2
+                        admin_org:
+                            name: 组织机构
+                            children:
+                                admin_org_create:
+                                    name: 添加组织机构
+                                    mode: modal
+                                    group: topBtn
         admin_order:
             name: 订单
             children:
