@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
+use Topxia\Common\Paginator;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,9 +68,9 @@ class UploadFileController extends BaseController
         $file['filename'] = urlencode($file['filename']);
 
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="' . $file['filename'] . '"');
         } else {
-            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "'.$file['filename'].'"');
+            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "' . $file['filename'] . '"');
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
@@ -92,10 +93,24 @@ class UploadFileController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['currentUserId'] = $user['id'];
+        if(isset($conditions['keyword'])){
+            $conditions['filename'] = $conditions['keyword'];
+            unset($conditions['keyword']);
+        }
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 10000);
+        $files = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        return $this->createFilesJsonResponse($files);
+        return $this->createFilesJsonResponse($files, $paginator);
     }
 
     public function browsersAction(Request $request)
@@ -213,7 +228,9 @@ class UploadFileController extends BaseController
         $result = $request->getContent();
         $result = preg_replace_callback(
             "(\\\\x([0-9a-f]{2}))i",
-            function ($a) {return chr(hexdec($a[1]));},
+            function ($a) {
+                return chr(hexdec($a[1]));
+            },
             $result
         );
 
@@ -257,7 +274,9 @@ class UploadFileController extends BaseController
 
         $result = preg_replace_callback(
             "(\\\\x([0-9a-f]{2}))i",
-            function ($a) {return chr(hexdec($a[1]));},
+            function ($a) {
+                return chr(hexdec($a[1]));
+            },
             $result
         );
 
@@ -394,7 +413,7 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    protected function createFilesJsonResponse($files)
+    protected function createFilesJsonResponse($files, $paginator = null)
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = $file['updatedTime'] ? $file['updatedTime'] : $file['createdTime'];
@@ -409,7 +428,15 @@ class UploadFileController extends BaseController
 
             unset($file);
         }
-
-        return $this->createJsonResponse($files);
+        
+        if(!empty($paginator)){
+            $paginator = Paginator::toArray($paginator);
+            return $this->createJsonResponse(array(
+                'files'     => $files,
+                'paginator' => $paginator
+            ));
+        }else{
+            return $this->createJsonResponse($files);
+        }
     }
 }

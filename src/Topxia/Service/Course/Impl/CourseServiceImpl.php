@@ -2002,7 +2002,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        if ($sort = 'latest') {
+        if(is_array($sort)){
+            $orderBy = $sort;
+        }else{
             $orderBy = array('createdTime', 'DESC');
         }
 
