@@ -991,7 +991,10 @@ admin_category_delete:
     pattern:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
-
+admin_category_sort:
+    pattern:  /category/sort
+    defaults: { _controller: TopxiaAdminBundle:Category:sort }
+    methods: [POST]
 
 admin_file:
     pattern:  /file
