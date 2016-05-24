@@ -91,9 +91,7 @@ class CourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
-        if ($id != 0) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -112,11 +110,7 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
@@ -129,9 +123,7 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $ids = $request->request->get('ids', array());
 
