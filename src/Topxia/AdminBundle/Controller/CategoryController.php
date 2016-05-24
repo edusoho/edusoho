@@ -14,7 +14,8 @@ class CategoryController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+        $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
+        
         return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
             'group'      => $group,
             'categories' => $categories,
