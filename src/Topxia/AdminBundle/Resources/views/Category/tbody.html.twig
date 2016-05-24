@@ -1,18 +1,20 @@
 <li id="category-table-body">
     {% if categories is not empty %}
-        {{ _self.showCategoryTree(categories, group, true) }}
+        {{ _self.showCategoryTree(categories, group, false) }}
     {% else %}
         <div class="row empty">暂无分类记录</div>
     {% endif %}
 </li>
 
+{% do load_script('category/tbody') %}
+
 {% macro showCategoryTree(categories, group, isCollapseChildren) %}
-    <ul class="list-table">
+    <ul class="list-table sortable-list" data-group-id="{{ categories[0]['parentId'] }}">
         {% for category in categories %}
             {% set isParent = category.children|default(null) is not empty %}
             {% set isRoot = category.depth == 1 %}
-            <li class="tr" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
-                <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}" data-id="{{ category.id }}" data-parent-id="{{ category.parentId }}">
+            <li id="{{ category.id }}" class="tr" data-name="{{ category.name }}" data-id="{{ category.id }}" data-parent-id="{{ category.parentId }}" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
+                <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
                     <div class="td col-md-5 first" style="padding-left: {{ 48 * (category.depth - 1 ) }}px">
                         {% if isParent %}
                             <i class="glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>

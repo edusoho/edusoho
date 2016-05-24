@@ -96,7 +96,7 @@ class CategoryController extends BaseController
     protected function renderTbody($groupId)
     {
         $group      = $this->getCategoryService()->getGroup($groupId);
-        $categories = $this->getCategoryService()->getCategoryTree($groupId);
+        $categories = $this->getCategoryService()->getCategoryStructureTree($groupId);
         return $this->render('TopxiaAdminBundle:Category:tbody.html.twig', array(
             'categories' => $categories,
             'group'      => $group
