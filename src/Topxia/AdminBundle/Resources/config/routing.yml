@@ -99,78 +99,63 @@ admin_content_alias_check:
 admin_block:
     pattern:  /block/list-{category}
     defaults: { _controller: TopxiaAdminBundle:Block:index }
-    permissions: [admin_block_manage]
 
 admin_block_match:
     pattern:  /block/list/quikSearch
     defaults: { _controller: TopxiaAdminBundle:Block:blockMatch }
-    permissions: [admin_block_manage]
 
 admin_block_create:
     pattern:  /block/create
     defaults: { _controller: TopxiaAdminBundle:Block:create }
-    permissions: [admin_block_manage]
 
 admin_block_delete:
     pattern:  /block/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Block:delete }
     methods:  [POST]
-    permissions: [admin_block_manage]
 
 admin_block_code_check_forcreate:
     pattern:  /block/code/check/forcreate
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForCreate }
-    permissions: [admin_block_manage]
 
 admin_block_code_check_foredit:
     pattern:  /block/code/{id}/check/foredit
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
-    permissions: [admin_block_manage]
 
 admin_block_update:
     pattern:  /block/{block}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
-    permissions: [admin_block_manage]
 
 admin_block_edit:
     pattern:  /block/{block}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
-    permissions: [admin_block_manage]
 
 admin_block_visual_edit:
     pattern:  /block/{blockId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
-    permissions: [admin_block_manage]
 
 admin_block_visual_view_data:
     pattern:  /block/{blockId}/data/view
     defaults: { _controller: TopxiaAdminBundle:Block:dataView }
-    permissions: [admin_block_manage]
 
 admin_block_visual_edit_history:
     pattern:  /block/{blockId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
-    permissions: [admin_block_manage]
 
 admin_block_recovery:
     pattern:  /block/{blockId}/history/{historyId}/recovery
     defaults: { _controller: TopxiaAdminBundle:Block:recovery }
-    permissions: [admin_block_manage]
 
 admin_block_picture_upload:
     pattern:  /block/{blockId}/picture/upload
     defaults: { _controller: TopxiaAdminBundle:Block:upload }
-    permissions: [admin_block_manage]
 
 admin_block_picture_preview:
     pattern:  /block/{blockId}/picture/preview
     defaults: { _controller: TopxiaAdminBundle:Block:picPreview }
-    permissions: [admin_block_manage]
 
 admin_blockhistory_preview:
     pattern:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }
-    permissions: [admin_block_manage]
 
 admin_tag:
     pattern:  /tag
