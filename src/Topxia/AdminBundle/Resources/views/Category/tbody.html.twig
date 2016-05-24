@@ -9,11 +9,11 @@
 {% macro showCategoryTree(categories, group, isCollapseChildren) %}
     <ul class="list-table">
         {% for category in categories %}
-            {% set isParent = (category.children|default(null) is not empty) %}
-            {% set isChild = ((not isParent) and category.depth != 1) %}
-            <li class="tr{{ isChild ? ' child' : '' }}" style="display: {{ (isChild and isCollapseChildren) ? 'none' : 'block' }}">
+            {% set isParent = category.children|default(null) is not empty %}
+            {% set isRoot = category.depth == 1 %}
+            <li class="tr" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
                 <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}" data-id="{{ category.id }}" data-parent-id="{{ category.parentId }}">
-                    <div class="td col-md-5 first" {% if isChild %}style="padding-left: {{ 48 * (category.depth - 1 ) }}px"{% endif %}>
+                    <div class="td col-md-5 first" style="padding-left: {{ 48 * (category.depth - 1 ) }}px">
                         {% if isParent %}
                             <i class="glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
                         {% endif %}
