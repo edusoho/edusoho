@@ -8,20 +8,42 @@ define(function(require, exports, module) {
 
         $("#startDate").datetimepicker({
             autoclose: true
-        }).on('changeDate',function(){
-            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+        }).on('changeDate', function() {
+            $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
         });
 
-        $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+        $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
 
         $("#endDate").datetimepicker({
             autoclose: true
-        }).on('changeDate',function(){
+        }).on('changeDate', function() {
 
-            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+            $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
         });
 
-        $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+        $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
+
+
+        $(".btn-export-csv").on('click', function() {
+            var $btn = $(this);
+            $btn.addClass('disabled');
+            var url = $btn.data('url');
+            var checkUrl = $btn.data('checkUrl');
+
+            $.get(checkUrl, function(result) {
+                if (result.status == 'error') {
+                    Notify.warning("导出结果已经超过最大允许值20w条(已选择" + result.count + ")条,请调整筛选范围");
+                } else if (result.count == 0) {
+                    Notify.warning("没有可导出的数据");
+                } else {
+                    Notify.warning("正在导出数据，请稍候...");
+                    window.location.href = url;
+                }
+                setTimeout(function() {
+                    $btn.removeClass('disabled');
+                }, 3000);
+            });
+        })
 
     };
 

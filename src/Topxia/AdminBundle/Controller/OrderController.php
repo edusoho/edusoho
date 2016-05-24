@@ -103,17 +103,12 @@ class OrderController extends BaseController
      */
     public function exportCsvAction(Request $request, $targetType)
     {
-        $conditions = $request->query->all();
-        $start      = $request->query->get('start', 0);
+        $start = $request->query->get('start', 0);
 
-        $limit = 100;
+        $magic = $this->setting('magic');
+        $limit = $magic['export_limit'];
 
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime']   = strtotime($conditions['endTime']);
-        }
-
-        $conditions['targetType'] = $targetType;
+        $conditions = $this->buildExportCondition($request, $targetType);
 
         $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
         $payment        = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
@@ -236,6 +231,37 @@ class OrderController extends BaseController
         $response->setContent($str);
 
         return $response;
+    }
+
+    public function exportCsvCheckAction(Request $request, $targetType)
+    {
+        $conditions = $this->buildExportCondition($request, $targetType);
+
+        $orderCount = $this->getOrderService()->searchOrderCount($conditions);
+
+        $magic         = $this->setting('magic');
+        $maxAllowCount = $magic['export_max_allow_count'];
+
+        $response = array(
+            'count'         => $orderCount,
+            'status'        => ($orderCount > $maxAllowCount) ? 'error' : 'success',
+            'maxAllowCount' => $maxAllowCount
+        );
+
+        return $this->createJsonResponse($response);
+    }
+
+    private function buildExportCondition($request, $targetType)
+    {
+        $conditions = $request->query->all();
+
+        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startTime']);
+            $conditions['endTime']   = strtotime($conditions['endTime']);
+        }
+
+        $conditions['targetType'] = $targetType;
+        return $conditions;
     }
 
     private function genereateExportCsvFileName($targetType)

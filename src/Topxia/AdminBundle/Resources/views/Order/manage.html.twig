@@ -50,7 +50,17 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-    <a class="btn btn-primary" href="{{ path('admin_order_manage_export_csv',
+    <a class="btn btn-primary btn-export-csv" 
+    data-check-url="{{ path('admin_order_manage_export_csv_check',{
+      targetType:targetType,
+      startTime:request.get('startDateTime'),
+      endTime:request.get('endDateTime'),
+      status:request.get('status'),
+      payment:request.get('payment'),
+      keywordType:request.get('keywordType'),
+      keyword:request.get('keyword')
+    })}}"
+    data-url="{{ path('admin_order_manage_export_csv',
     {targetType:targetType,
     startTime:request.get('startDateTime'),
     endTime:request.get('endDateTime'),
