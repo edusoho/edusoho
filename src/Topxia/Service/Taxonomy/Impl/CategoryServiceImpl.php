@@ -64,6 +64,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $categories;
     }
 
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->updateCategory($id, array('weight' => $index + 1));
+        }
+    }
+
     protected function makeCategoryStructureTree($data, $parentId)
     {
         $tree = $this->filterCategoriesByParentId($data, $parentId);
@@ -243,7 +250,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createNoteFoundException("分类(#{$id})不存在，更新分类失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('description','name', 'code', 'weight', 'parentId', 'icon'));
+        $fields = ArrayToolkit::parts($fields, array('description', 'name', 'code', 'weight', 'parentId', 'icon'));
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新分类失败！');
         }
@@ -253,9 +260,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($fields, $category);
 
-        $this->getLogService()->info('category', 'update', "编辑分类 {$fields['name']}(#{$id})", $fields);
+        $category = $this->getCategoryDao()->updateCategory($id, $fields);
 
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+        $this->getLogService()->info('category', 'update', "编辑分类 {$category['name']}(#{$id})", $fields);
+
+        return $category;
     }
 
     public function deleteCategory($id)

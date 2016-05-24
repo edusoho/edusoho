@@ -1,4 +1,4 @@
-<li id="category-table-body">
+<li id="category-table-body" data-sort-url="{{ path('admin_category_sort') }}">
     {% if categories is not empty %}
         {{ _self.showCategoryTree(categories, group, false) }}
     {% else %}
@@ -15,15 +15,15 @@
             {% set isRoot = category.depth == 1 %}
             <li id="{{ category.id }}" class="tr" data-name="{{ category.name }}" data-id="{{ category.id }}" data-parent-id="{{ category.parentId }}" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
                 <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
-                    <div class="td col-md-5 first" style="padding-left: {{ 48 * (category.depth - 1 ) }}px">
+                    <div class="td col-md-5 name" style="padding-left: {{ 48 * (category.depth - 1 ) }}px">
                         {% if isParent %}
                             <i class="glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
                         {% endif %}
                         {{ category.name }}
                     </div>
-                    <div class="td col-md-2">{{ category.code }}</div>
-                    <div class="td col-md-2">{{ category.weight }}</div>
-                    <div class="td col-md-3">
+                    <div class="td col-md-2 code">{{ category.code }}</div>
+                    <div class="td col-md-2 weight">{{ category.weight }}</div>
+                    <div class="td col-md-3 operation">
                         <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal">
                             <i class="glyphicon glyphicon-edit"></i> 编辑
                         </a>

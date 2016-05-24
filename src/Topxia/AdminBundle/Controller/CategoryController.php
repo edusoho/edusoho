@@ -15,7 +15,7 @@ class CategoryController extends BaseController
         }
 
         $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
-        
+
         return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
             'group'      => $group,
             'categories' => $categories,
@@ -75,6 +75,17 @@ class CategoryController extends BaseController
         $this->getCategoryService()->deleteCategory($id);
 
         return $this->renderTbody($category['groupId']);
+    }
+
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+
+        if (!empty($ids)) {
+            $this->getCategoryService()->sortCategories($ids);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     public function checkCodeAction(Request $request)

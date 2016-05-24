@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
 
-    var Cookie = require('cookie');
+    // var Cookie = require('cookie');
 
     require('jquery.sortable.v0.9.13');
 
     exports.run = function() {
 
-        $('.list-table .td.first>i').click(function() {
+        $('.list-table .td.name>i').click(function() {
             var $parentNode = $(this).closest('.row');
             if ($parentNode.hasClass('row-collapse')) {
                 $parentNode.removeClass('row-collapse').addClass('row-expand');
@@ -17,9 +17,10 @@ define(function(require, exports, module) {
                 $(this).removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
                 $parentNode.next('ul.list-table').find('>li').slideUp();
             }
+            
         });
 
-        var group = $('#category-table-body>ul').sortable({
+        $('#category-table-body>ul').sortable({
             distance: 20,
             isValidTarget: function ($item, container) {
                 if (container.items.length > 0) {
@@ -30,9 +31,26 @@ define(function(require, exports, module) {
                 return false;
             },
             onDrop: function($item, container, _super) {
-                console.log(group.sortable("serialize").get());
+                var sortedItems = container.el.find('>li');
+                var ids = [];
+                sortedItems.each(function(i) {
+                    var $item = $(sortedItems.get(i));
+                    ids.push($item.data('id'));
+                    $item.find('>.row>.weight').text(i+1);
+                });
+
+                $.post($('#category-table-body').data('sortUrl'), {ids:ids}, function(response){
+                    
+                });
                 _super($item, container);
-            }
+            }//,
+            // serialize: function(parent, children, isContainer) {
+            //     console.log('parent',parent);
+            //     console.log('children',children);
+            //     console.log('isContainer',isContainer);
+            //     console.log('--->');
+            //     return isContainer ? children.join() : parent.text();
+            // }
         });
 
     };
