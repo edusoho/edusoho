@@ -279,7 +279,6 @@ admin:
                             children:
                                 admin_discovery_column_create:
                                     name: '添加栏目'
-                                    router_params_context: 1
                                     group: 2
                                     mode: modal
                 admin_operation_invite:
@@ -291,20 +290,18 @@ admin:
                         admin_operation_invite_coupon:
                             name: 奖励查询
                             router_name: admin_invite_coupon
-                admin_operation_block:
+                admin_block_manage:
                     name: 编辑区管理
-                    group: 2
                     children:
-                        admin_block_visual_edit:
-                            name: 编辑
-                            router_params:
-                                blockId: block.id
-                            router_params_context: 1
-                        admin_block_visual_edit_history:
-                            name: 历史记录
-                            router_name: admin_block
+                        admin_block:
+                            name: 编辑区管理
                             router_params:
                                 category: all
+                            children:
+                                admin_block_visual_edit:
+                                    name: 编辑
+                                    router_params:
+                                        blockId: (block.id)
                 admin_operation_content:
                     name: 自定义页面管理
                     children:
@@ -414,12 +411,12 @@ admin:
                         admin_edu_cloud_sms_setting:
                             name: 云短信设置
                             router_name: admin_edu_cloud_sms
-                admin_edu_cloud_email:
-                    name: 云邮件设置
-                    children:
-                        admin_edu_cloud_email_seeting:
-                            name: 云邮件设置
-                            router_name: admin_edu_cloud_email
+                # admin_edu_cloud_email:
+                #     name: 云邮件设置
+                #     children:
+                #         admin_edu_cloud_email_seeting:
+                #             name: 云邮件设置
+                #             router_name: admin_edu_cloud_email
                 admin_edu_cloud_search_setting:
                     name: 云搜索设置
                     children:
@@ -445,14 +442,14 @@ admin:
                             class: app-upgrade
                         admin_app_logs:
                             name: 更新日志
+                admin_cloud_file:
+                    name: 云资源
                 admin_setting_cloud:
                     name: 授权信息
                     children:
                         admin_setting_my_cloud:
                             name: 授权信息
                             router_name: admin_setting_cloud
-                admin_cloud_file:
-                    name: 云资源
         admin_system:
             name: 系统
             router_name: admin_setting_site
