@@ -6,7 +6,6 @@ seajs.config({
         '$-debug': 'jquery/1.11.2/jquery',
         "jquery.form": "jquery-plugin/form/3.44.0/form",
         "jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
-        "jquery.sortable.v0.9.13": "jquery-plugin/sortable/0.9.13/jquery-sortable.js",
         "jquery.raty": "jquery-plugin/raty/2.5.2/raty",
         "jquery.cycle2": "jquery.cycle2/2.1.6/index",
         "jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar",

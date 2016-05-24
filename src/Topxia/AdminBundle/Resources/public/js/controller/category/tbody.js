@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     // var Cookie = require('cookie');
 
-    require('jquery.sortable.v0.9.13');
+    require('jquery.sortable');
 
     exports.run = function() {
 
