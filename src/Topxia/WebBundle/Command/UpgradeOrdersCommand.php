@@ -38,7 +38,6 @@ class UpgradeOrdersCommand extends BaseCommand
             $order = $this->getOrderService()->getOrderBySn(trim($sn));
             $this->processOrder($order);
         }
-
     }
 
     protected function processOrder($order)
