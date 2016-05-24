@@ -25,6 +25,8 @@ interface CourseMaterialDao
 
     public function deleteMaterialsByCourseId($courseId);
 
+    public function deleteMaterialsByFileId($fileId);
+
     public function getLessonMaterialCount($courseId,$lessonId);
 
     public function getMaterialCountByFileId($fileId);

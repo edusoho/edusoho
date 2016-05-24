@@ -21,7 +21,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
             'description'  => empty($material['description']) ? '' : $material['description'],
             'userId' => $this->getCurrentUser()->id,
-            'source' => isset($material['targetType']) ? $material['targetType'] : '',
+            'source' => isset($material['source']) ? $material['source'] : 'coursematerial',
             'createdTime' => time(),
         );
 
@@ -47,19 +47,20 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         }
 
         if (!empty($fields['fileId'])) {
-            $courseMaterials = $this->searchMaterials(
+            /*$courseMaterials = $this->searchMaterials(
                 array(
                     'courseId' => $fields['courseId'], 
                     'fileId'   => $fields['fileId'],
-                    'lessonId' => 0
+                    'lessonId' => 0,
+                    'source'   => $fields['source']
                 ), 
                 array('createdTime','DESC'), 0, PHP_INT_MAX
             );
             if ($courseMaterials) {
                 $material = $this->updateMaterial($courseMaterials[0]['id'], array('lessonId'=>$fields['lessonId']));
-            }
-        } else {
-        	$material =  $this->getMaterialDao()->addMaterial($fields);
+            } else {*/
+	        	$material =  $this->getMaterialDao()->addMaterial($fields);
+	        //}
         }
 
 		// Increase the linked file usage count, if there's a linked file used by this material.
@@ -67,7 +68,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',1);
 		}
 
-		if ($fields['lessonId']) {
+		if ($fields['lessonId'] && $fields['source'] == 'coursematerial') {
 			$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
 		}
 
@@ -93,8 +94,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
 		}
 
-		if($material['lessonId']){
-		   $count = $this->getMaterialDao()->getLessonMaterialCount($courseId,$material['lessonId']);
+		if($material['lessonId'] && $material['source'] == 'coursematerial'){
+			$count = $this->searchMaterialCount(array(
+					'courseId' => $material['courseId'],
+					'lessonId' => $material['lessonId'],
+					'source'   => 'coursematerial'
+				)
+			);
 		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
 		}
 
@@ -144,6 +150,29 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
 	}
 
+	public function deleteMaterialsByFileId($fileId)
+	{
+		return $this->getMaterialDao()->deleteMaterialsByFileId($fileId);
+	}
+
+	public function deleteMaterials($courseId, $fileIds)
+	{
+		$materials = $this->searchMaterials(
+			array('courseId' => $courseId, 'fileIds' => $fileIds),
+			array('createdTime','DESC'), 0, PHP_INT_MAX
+		);
+
+		if (!$materials) {
+			return false;
+		}
+
+		foreach ($materials as $key => $material) {
+			$this->deleteMaterial($courseId, $material['id']);
+		}
+
+		return true;
+	}
+
 	public function getMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
@@ -181,6 +210,22 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function searchMaterialCount($conditions)
     {
     	return $this->getMaterialDao()->searchMaterialCount($conditions);
+    }
+
+    public function findCourseMaterialsQuotes($courseId, $fileIds)
+    {
+    	$materials = $this->searchMaterials(
+            array('courseId' => $courseId, 'fileIds' => $fileIds),
+            array('createdTime','DESC'), 0, PHP_INT_MAX 
+        );
+        $materials = ArrayToolkit::group($materials, 'fileId');
+        $files     = array();
+
+        foreach ($materials as $fileId => $material) {
+        	$files[$fileId] = ArrayToolkit::column($material, 'source');
+        }
+
+        return $files;
     }
 
     protected function getMaterialDao()

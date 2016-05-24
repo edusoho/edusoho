@@ -95,7 +95,7 @@ class MaterialLibController extends BaseController
 
     public function previewAction(Request $request, $fileId)
     {
-        $file = $this->tryAccessFile($fileId);
+        $file = $this->getUploadFileService()->tryAccessFile($fileId);
         if($file['storage'] == 'cloud'){
           return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
               'request'  => $request,
@@ -110,7 +110,7 @@ class MaterialLibController extends BaseController
 
     public function playerAction(Request $request, $fileId)
     {
-        $file = $this->tryAccessFile($fileId);
+        $file = $this->$this->getUploadFileService()->tryAccessFile($fileId);
 
         if($file['storage'] == 'cloud'){
           return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
@@ -123,7 +123,7 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction($globalId)
     {
-        $this->tryManageGlobalFile($globalId);
+        $this->getUploadFileService()->tryManageGlobalFile($globalId);
 
         $uploadFile = $this->getMaterialLibService()->reconvert($globalId);
 
@@ -135,7 +135,7 @@ class MaterialLibController extends BaseController
     public function detailAction(Request $request, $fileId)
     {
         $currentUser = $this->getCurrentUser();
-        $file        = $this->tryAccessFile($fileId);
+        $file        = $this->getUploadFileService()->tryAccessFile($fileId);
 
         if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
             $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
@@ -412,7 +412,7 @@ class MaterialLibController extends BaseController
 
     public function editAction(Request $request, $fileId)
     {
-        $this->tryAccessFile($fileId);
+        $this->getUploadFileService()->tryAccessFile($fileId);
 
         $fields = $request->request->all();
 
@@ -422,7 +422,7 @@ class MaterialLibController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
-        $this->tryAccessFile($fileId);
+        $this->getUploadFileService()->tryAccessFile($fileId);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $fileId
@@ -431,7 +431,7 @@ class MaterialLibController extends BaseController
 
     public function deleteAction(Request $request, $fileId)
     {
-        $this->tryManageFile($fileId);
+        $this->getUploadFileService()->tryManageFile($fileId);
         $result = $this->getMaterialLibService()->delete($fileId);
         return $this->createJsonResponse($result);
     }
@@ -442,7 +442,7 @@ class MaterialLibController extends BaseController
 
         if (isset($data['ids']) && $data['ids'] != "") {
             foreach ($data['ids'] as $fileId) {
-                $this->tryManageFile($fileId);
+                $this->getUploadFileService()->tryManageFile($fileId);
             }
 
             $this->getMaterialLibService()->batchDelete($data['ids']);
@@ -458,7 +458,7 @@ class MaterialLibController extends BaseController
 
         if (isset($data['ids']) && $data['ids'] != "") {
             foreach ($data['ids'] as $fileId) {
-                $this->tryManageFile($fileId);
+                $this->getUploadFileService()->tryManageFile($fileId);
             }
 
             $result = $this->getMaterialLibService()->batchShare($data['ids']);
@@ -470,7 +470,7 @@ class MaterialLibController extends BaseController
 
     public function unshareAction(Request $request, $fileId)
     {
-        $this->tryManageFile($fileId);
+        $this->getUploadFileService()->tryManageFile($fileId);
         $result = $this->getMaterialLibService()->unShare($fileId);
         return $this->createJsonResponse($result);
     }
@@ -486,98 +486,11 @@ class MaterialLibController extends BaseController
 
     public function generateThumbnailAction(Request $request, $globalId)
     {
-        $this->tryManageGlobalFile($globalId);
+        $this->getUploadFileService()->tryManageGlobalFile($globalId);
 
         $second = $request->query->get('second');
 
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
-    }
-
-    protected function tryManageFile($fileId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
-        }
-
-        $file = $this->getUploadFileService()->getFullFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($user->isAdmin()) {
-            return $file;
-        }
-
-        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
-        }
-
-        return $file;
-    }
-
-    protected function tryManageGlobalFile($globalFileId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
-        }
-
-        $file = $this->getMaterialLibService()->getByGlobalId($globalFileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($user->isAdmin()) {
-            return $file;
-        }
-
-        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
-        }
-
-        return $file;
-    }
-
-    protected function tryAccessFile($fileId)
-    {
-        $file = $this->getUploadFileService()->getFullFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        $user = $this->getCurrentUser();
-
-        if ($user->isAdmin()) {
-            return $file;
-        }
-
-        if ($user->isTeacher()) {
-            return $file;
-        }
-
-        if ($file['isPublic'] == 1) {
-            return $file;
-        }
-
-        if ($file['createdUserId'] == $user['id']) {
-            return $file;
-        }
-
-        $shares = $this->getUploadFileService()->findShareHistory($file['createdUserId']);
-
-        foreach ($shares as $share) {
-            if ($share['targetUserId'] == $user['id']) {
-                return $file;
-            }
-        }
-
-        throw $this->createAccessDeniedException('您无权访问此文件！');
     }
 
     protected function getUserService()

@@ -261,6 +261,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onMaterialDelete(ServiceEvent $event)
     {
         $context   = $event->getSubject();
+        if ($context['source'] == 'courselesson') {
+            $lesson = $this->getCourseService()->getLesson($context['lessonId']);
+            if ($lesson) {
+                $this->getCourseService()->updateLesson($lesson['courseId'], $lesson['id'], array('mediaId'=>0));
+                $this->getUploadFileService()->waveUploadFile($context['fileId'],'usedCount',-1);
+            }
+        }
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
 
         if ($courseIds) {

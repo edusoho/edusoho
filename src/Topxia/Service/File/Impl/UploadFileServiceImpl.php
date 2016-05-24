@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Topxia\Service\Common\AccessDeniedException;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
@@ -220,11 +221,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
-            if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
+            /*if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
                 $file['courseId'] = $file['targetId'];
                 $file['fileId']   = $file['id'];
                 $this->getMaterialService()->uploadMaterial($file);
-            }
+            }*/
             
             $result = $implementor->finishedUpload($file, $params);
 
@@ -573,15 +574,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $file = $this->getFile($id);
 
-        if (empty($file)) {
+        /*if (empty($file)) {
             throw $this->createServiceException("文件(#{$id})不存在，删除失败");
-        }
+        }*/
 
         $result = $this->getFileImplementor($file['storage'])->deleteFile($file);
 
         if (isset($result['success']) && $result['success']) {
             $result = $this->getUploadFileDao()->deleteFile($id);
         }
+
+        $this->dispatchEvent("upload.file.delete",$file);
 
         return $result;
     }
@@ -700,6 +703,113 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         return $this->getFileImplementor($file['storage'])->getFullFile($file);
+    }
+
+    public function tryManageFile($fileId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        $file = $this->getFullFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        return $file;
+    }
+
+    public function tryManageGlobalFile($globalFileId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        $file = $this->getFileByGlobalId($globalFileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        return $file;
+    }
+
+    public function tryAccessFile($fileId)
+    {
+        $file = $this->getFullFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if ($user->isTeacher()) {
+            return $file;
+        }
+
+        if ($file['isPublic'] == 1) {
+            return $file;
+        }
+
+        if ($file['createdUserId'] == $user['id']) {
+            return $file;
+        }
+
+        $shares = $this->findShareHistory($file['createdUserId']);
+
+        foreach ($shares as $share) {
+            if ($share['targetUserId'] == $user['id']) {
+                return $file;
+            }
+        }
+
+        throw $this->createAccessDeniedException('您无权访问此文件！');
+    }
+
+    public function canManageFile($fileId)
+    {
+        $user = $this->getCurrentUser();
+        $file = $this->getFullFile($fileId);
+
+        if (!$user->isTeacher()) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
+            return false;
+        }
+
+        return true;
     }
 
     public function findMySharingContacts($targetUserId)

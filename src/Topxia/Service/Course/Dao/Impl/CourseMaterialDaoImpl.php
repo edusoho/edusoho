@@ -82,6 +82,10 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
 
+    public function deleteMaterialsByFileId($fileId)
+    {
+        return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
+    }
 
     public function getLessonMaterialCount($courseId,$lessonId)
     {
@@ -134,6 +138,8 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('copyId = :copyId')
             ->andWhere('fileId = :fileId')
+            ->andWhere('fileId IN (:fileIds)')
+            ->andWhere('source = :source')
             ->andWhere('courseId IN (:courseIds)');
 
         return $builder;
