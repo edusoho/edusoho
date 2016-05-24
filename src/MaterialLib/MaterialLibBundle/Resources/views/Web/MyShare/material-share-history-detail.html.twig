@@ -1,0 +1,45 @@
+<div class="history-detail">
+<tr>
+    <th width="50%" class="text-center">时间</th>
+    <th width="50%" class="text-center">描述</th>
+</tr>
+
+
+{% for history in shareHistories %}
+
+<tr>
+    <td class="text-center">{{ history['createdTime']|date('Y-n-d H:i') }}</td>
+    <td class="text-center">
+        {% if history['isActive'] %}
+            分享给{{ (targetUsers[history['targetUserId']])['nickname'] }}
+        {% else %}
+            取消与{{ (targetUsers[history['targetUserId']])['nickname'] }}的分享
+        {% endif %}
+    </td>
+</tr>
+{% else %}
+<tr class="empty"><td colspan="3">无资料分享记录</td></tr>
+{% endfor %}
+</div>
+<input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+
+{% if paginator.lastPage > 1 %}
+<nav class=" {{ class|default('text-center') }}">
+  <ul class="pagination" data-url="{{ path('material_lib_my_sharing_detail') }}">
+    {% if paginator.currentPage != paginator.firstPage %}
+      <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
+      <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+    {% endif %}
+    {% for page in paginator.pages %}
+      <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if paginator.currentPage != paginator.lastPage %}
+      <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">尾页</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+

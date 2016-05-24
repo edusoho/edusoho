@@ -221,8 +221,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function generateOrderSn($order)
     {
-        $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
-        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
+        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
+        return $prefix . date('YmdHis', time()) . mt_rand(10000, 99999);
     }
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array())
@@ -267,9 +267,10 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payment = $this->getSettingService()->get("payment");
 
-        if (isset($payment["enable"]) && $payment["enable"] == 1
-            && isset($payment[$order["payment"]."_enable"]) && $payment[$order["payment"]."_enable"] == 1
-            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1) {
+        if (isset($payment["enabled"]) && $payment["enabled"] == 1
+            && isset($payment[$order["payment"] . "_enabled"]) && $payment[$order["payment"] . "_enabled"] == 1
+            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
+        ) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 
@@ -388,7 +389,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             'reasonType'     => empty($reason['type']) ? 'other' : $reason['type'],
             'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
             'updatedTime'    => time(),
-            'createdTime'    => time()
+            'createdTime'    => time(),
+            'operator'       => 0
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
@@ -399,7 +401,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($refund['status'] == 'success') {
             $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
         } else {
-            $this->_createLog($order['id'], 'refund_apply', '订单申请退款'.(is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
+            $this->_createLog($order['id'], 'refund_apply', '订单申请退款' . (is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
         }
 
         return $refund;
@@ -438,10 +440,11 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $actualAmount = 0;
             }
 
-            $actualAmount = number_format((float) $actualAmount, 2, '.', '');
+            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
+                'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
@@ -454,6 +457,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'      => 'failed',
+                'operator'    => $user->id,
                 'updatedTime' => time()
             ));
 
@@ -499,6 +503,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $this->getOrderRefundDao()->updateRefund($refund['id'], array(
             'status'      => 'cancelled',
+            'operator'    => $user->id,
             'updatedTime' => time()
         ));
 

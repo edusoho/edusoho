@@ -1,0 +1,46 @@
+.course-grids{
+  &:hover{
+     border-color: #e57259;
+  }
+  @media (max-width: 767px) {
+    margin:0  -5px;
+  }
+  .course-grid{
+    @media (max-width: 767px) {
+      width: 50%;
+      float: left;
+      margin: 0 0 10px 0;
+      padding: 0 5px;
+      border:none;
+      .grid-body{
+        width: 100%;
+        border: 1px solid #e1e1e1;
+      }
+    }
+    .title{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+      @media(max-width:767px){
+        min-height: auto;
+        height: 30px;
+        font-weight: normal;
+      }
+    }
+  }
+  .student-col,.review-col{
+    @media (max-width: 767px) {
+      display: none!important;
+    } 
+  }
+  .metas{
+    @media (max-width: 767px) {
+      border-top: none;
+      padding: 0;
+      .price{
+        font-size: 12px;
+      }
+    }
+  }
+}

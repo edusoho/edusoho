@@ -54,19 +54,13 @@
           </div>
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
-              承<br>诺<br>服<br>务
+              承诺服务
             </div>
             {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
           </div>
         </div>
         <div class="class-operation">
-          <ul class='class-data clearfix 
-          {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
-          three-col
-          {% else %}
-          two-col
-          {% endif %}
-          '>
+          <ul class='class-data clearfix two-col'>
             <li>
               <p><i class="es-icon es-icon-person"></i></p>
               <p>学员({{classroom.studentNum + classroom.auditorNum }})</p>
@@ -80,25 +74,6 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-            {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
-
-            {% if 'headTeacher' not in member.role %}  
-              <li>
-                <a type="button" 
-                {% if  'student' in member.role and member.orderId > 0 %}
-                href="#modal" 
-                data-toggle="modal" 
-                data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
-                {% else %}
-                href="{{path('classroom_exit', {id:classroom.id})}}" id ="quit" 
-                {% endif %}
-                >
-                 <p><i class="es-icon es-icon-exit"></i></p>
-                 <p>退出</p>
-                </a>
-              </li>
-            {% endif %}
-            {% endif %}
           </ul>
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
@@ -121,6 +96,23 @@
         <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
+      {% endif %}
+      {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
+        {% if 'headTeacher' not in member.role %}  
+          <a type="button" 
+            {% if  'student' in member.role and member.orderId > 0 %}
+            class="btn btn-default setting hidden-xs hidden-sm"
+            href="#modal" 
+            data-toggle="modal" 
+            data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
+            {% else %}
+            class="btn btn-default setting hidden-xs hidden-sm"
+            href="{{path('classroom_exit', {id:classroom.id})}}" id ="quit" 
+            {% endif %}
+            >
+            <i class="es-icon es-icon-exit"></i>
+          </a>
+        {% endif %}
       {% endif %}
       </div>
     </div>

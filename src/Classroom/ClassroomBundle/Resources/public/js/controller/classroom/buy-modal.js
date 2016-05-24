@@ -56,6 +56,10 @@ define(function(require, exports, module) {
             }
         })
 
+        $('#join-course-btn').on('click', function(){
+            $(this).button('loading');
+        });
+
         $('.btn-use-coupon').on('click', function(){
 
             coupon_code = $('[name=coupon]').val();

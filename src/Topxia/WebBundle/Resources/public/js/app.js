@@ -25,7 +25,7 @@ define(function(require, exports, module) {
         for(var index in scripts) {
             exports.load(scripts[index]);
         }
-        
+
     }
 
     window.app.load = exports.load;
@@ -83,7 +83,7 @@ define(function(require, exports, module) {
     if (app.scheduleCrontab) {
         $.post(app.scheduleCrontab);
     }
-    
+
     $("i.hover-spin").mouseenter(function() {
         $(this).addClass("md-spin");
     }).mouseleave(function() {
@@ -119,11 +119,11 @@ define(function(require, exports, module) {
 	    }).mouseleave(function(event) {
 	        $(this).removeClass("open");
 	    });
-	    
+
 	} else {
         $("li.nav-hover >a").attr("data-toggle","dropdown");
 	}
-	
+
     if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
         $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
     }
