@@ -51,6 +51,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $magic['enable_org']         = 0;
 
         $this->getSettingService()->set('magic', $magic);
+
+
+        if (!$this->isFieldExist('course_material', 'source')) {
+            $this->getConnection()->exec("ALTER TABLE `course_material` ADD `source` varchar(50) NOT NULL DEFAULT 'coursematerial' AFTER `fileSize`;");
+        }
     }
 
     protected function isFieldExist($table, $filedName)
