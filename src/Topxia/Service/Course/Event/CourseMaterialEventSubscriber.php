@@ -15,7 +15,8 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             'course.lesson.create' => array('onCourseLessonCreate', 0),
             'course.lesson.delete' => array('onCourseLessonDelete', 0),
             'course.lesson.update' => 'onCourseLessonUpdate',
-            'upload.file.delete'   => 'onUploadFileDelete'
+            'upload.file.delete'   => 'onUploadFileDelete',
+            'material.delete'      => 'onMaterialDelete',
         );
     }
 
@@ -102,6 +103,26 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     {
         $file = $event->getSubject();
         $this->getMaterialService()->deleteMaterialsByFileId($file['id']);
+    }
+
+    public function onMaterialDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+
+        $file = $this->getUploadFileService()->getFile($context['fileId']);
+
+        if (!$file) {
+            return false;
+        }
+
+        if (!$this->getUploadFileService()->canManageFile()) {
+            return false;
+        }
+        
+        if ($file['targetId'] == $context['courseId']) {
+            $this->getUploadFileService()->update($context['fileId'], array('targetId' => 0));
+        }
+        
     }
 
     protected function getCourseService()

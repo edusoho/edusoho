@@ -100,7 +100,7 @@ define(function(require, exports, module) {
             var accept = {};
             accept.title = '文件';
             accept.extensions = this.get('accept')['extensions'].join(',');
-            accept.mimeTypes = Array.prototype.concat.apply([],this.get('accept')['extensions'].map(mimeTypes));// 二维数组降维到一维数组
+            accept.mimeTypes = Array.prototype.concat.apply([], _.map(this.get('accept')['extensions'], mimeTypes));// 二维数组降维到一维数组
             return accept;
         },
 
