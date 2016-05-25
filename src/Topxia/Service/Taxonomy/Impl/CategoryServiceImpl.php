@@ -51,7 +51,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
             return $prepared;
         };
-
+        $data       = $this->findCategories($groupId);
         $categories = $prepare($this->findCategories($groupId));
 
         $tree = array();
@@ -68,7 +68,15 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createServiceException("分类Group #{$groupId}，不存在");
         }
 
-        return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
+        $magic = $this->getSettingService()->get('magic');
+
+        if (isset($magic['enable_org']) && $magic['enable_org']) {
+            $user       = $this->getCurrentUser();
+            $currentOrg = $user['org'];
+            return $this->getCategoryDao()->findCategoriesByGroupIdAndOrgId($group['id'], $currentOrg['id']);
+        } else {
+            return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
+        }
     }
 
     public function findAllCategoriesByParentId($parentId)
@@ -226,12 +234,22 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     protected function setOrg($category)
     {
+        $magic = $this->getSettingService()->get('magic');
+
+        if (empty($magic['enable_org'])) {
+            return $category;
+        }
+
         $user       = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
         if (empty($category['parentId'])) {
             $category['orgId']   = $currentOrg['id'];
             $category['orgCode'] = $currentOrg['orgCode'];
+        } else {
+            $parentOrg           = $this->getCategory($category['parentId']);
+            $category['orgId']   = $parentOrg['orgId'];
+            $category['orgCode'] = $parentOrg['orgCode'];
         }
 
         return $category;
@@ -402,5 +420,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 }
