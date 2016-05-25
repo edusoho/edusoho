@@ -42,7 +42,6 @@
             <th>{{'文件名'|trans}}</th>
             <th>{{'类型'|trans}}</th>
             <th>{{'大小'|trans}}</th>
-            {#<th>{{'使用'|trans}}</th>#}
             <th>{{'最后更新'|trans}}</th>
           </tr>
         </thead>
@@ -60,15 +59,16 @@
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
             {% endfor %}
           {% endif %}
+          
         </tbody>
       </table>
 
       <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
 
       <div class="btn-group mbm">
-        <a href="javascript:;" class="btn btn-danger btn-sm" data-role="batch-delete" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id}) }}" data-name="{{'文件记录'|trans}}">
+        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
         <i class="glyphicon glyphicon-trash"></i>
-        {{'移除'|trans}}</a>
+        {{'删除'|trans}}</button>
       </div>
 
       <nav class="text-center">

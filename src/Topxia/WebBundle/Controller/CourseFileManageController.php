@@ -127,28 +127,15 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        if ($request->getMethod() == 'POST') {
-
-            $formData = $request->request->all();
-
-            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                foreach ($formData['ids'] as $key => $fileId) {
-                    if ($this->getUploadFileService()->canManageFile($fileId)) {
-                        $this->getUploadFileService()->deleteFile($fileId);
-                    }
-                }
-            } 
-            
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
-
-            return $this->createJsonResponse(true);
+        if (!empty($id)) {
+            $course = $this->getCourseService()->tryManageCourse($id);
         }
-        
-        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
-            'course' => $course,
-        ));
+
+        $ids = $request->request->get('ids', array());
+
+        $this->getUploadFileService()->deleteFiles($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getCourseService()
