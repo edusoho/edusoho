@@ -5,7 +5,7 @@ namespace Topxia\Common;
 class DateToolkit
 {
     /**
-     * 如果时间筛选开始和结束的日期一直，则因为忽略了单位秒导致无法筛选到数据
+     * 如果时间筛选开始和结束的日期一致，则因为忽略了单位秒导致无法筛选到数据
      * 2016-05-20 00:00:39 ->2016-05-20 00:00
      * @param [strtotime] $endDateTime
      */
