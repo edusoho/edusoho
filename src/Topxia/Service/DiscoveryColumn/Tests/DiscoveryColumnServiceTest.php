@@ -1,6 +1,5 @@
 <?php
-
-namespace Topxia\Service\Course\Tests;
+namespace Topxia\Service\DiscovieryColumn\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 

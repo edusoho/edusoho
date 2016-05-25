@@ -9,7 +9,11 @@ class CourseMaterialManageController extends BaseController
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId);
         $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $materials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
+        
+        $materials = $this->getMaterialService()->searchMaterials(
+            array('lessonId' => $lesson['id'], 'source' => 'coursematerial'),
+            array('createdTime','DESC'), 0, 100
+        );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
             'course'         => $course,
             'lesson'         => $lesson,

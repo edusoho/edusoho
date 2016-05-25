@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {
@@ -149,7 +150,26 @@ class MobileController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-   protected function getCourseService()
+    public function customizationUpgradeAction(Request $request)
+    {
+        $currentVersion = $request->request->get('currentVersion');
+        $targetVersion = $request->request->get('targetVersion');
+
+        if (empty($currentVersion) || empty($targetVersion)) {
+            throw new \RuntimeException("参数不正确");
+        }
+
+        $api = CloudAPIFactory::create('root');
+
+        $resp = $api->post('/customization/mobile/apply', array(
+            'currentVersion' => $currentVersion,
+            'targetVersion' => $targetVersion,
+        ));
+
+        return $this->createJsonResponse($resp);
+    }
+
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

@@ -46,6 +46,7 @@ seajs.config({
         'json': 'gallery/json/1.0.3/json',
         "handlebars": "gallery/handlebars/1.0.2/handlebars",
         "backbone": "gallery/backbone/1.0.0/backbone",
+        "underscore": "gallery/underscore/1.8.3/underscore",
         "swfobject": "gallery/swfobject/2.2.0/swfobject.js",
         'moment': 'gallery/moment/2.5.1/moment',
         'morris': 'gallery/morris/0.5.0/morris',
@@ -62,6 +63,7 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
+        'edusoho.mimetypes': 'edusoho/mimetypes/0.0.1/mime-types',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
@@ -69,7 +71,9 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'echarts': 'echarts/3.1.2/echarts.min.js'
+        'echarts': 'echarts/3.1.2/echarts.min.js',
+        'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
     },
 
     // 预加载项
