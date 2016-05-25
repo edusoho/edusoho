@@ -38,21 +38,21 @@ class Notes extends BaseResource
 
         $lesson = $this->getCourseService()->getLesson($fields['lessonId']);
         if (empty($lesson)) {
-            throw new \Exception("课时#{$lessonId}不存在");
+            throw new \Exception("课时#{$fields['lessonId']}不存在");
         }
 
         if ($courseId != $lesson['courseId']) {
-            throw new \Exception("课时#{$lessonId}不属于课程#{$courseId}");
+            throw new \Exception("课时#{$fields['lessonId']}不属于课程#{$courseId}");
         }
 
         $note = array(
             'courseId' => $courseId,
             'lessonId' => $fields['lessonId'],
             'status' => !empty($fields['status']) ? 1 : 0,
-            'content' => $fields['content'],
+            'content' => $fields['content']
         );
         $note = $this->getCourseNoteService()->saveNote($note);
-        return $this->filter($note);
+        return $this->callFilter('Course/Note', $note);
     }
 
     public function filter($res)
@@ -63,5 +63,10 @@ class Notes extends BaseResource
     protected function getCourseNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
