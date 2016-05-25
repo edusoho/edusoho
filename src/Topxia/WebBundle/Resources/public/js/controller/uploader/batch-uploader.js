@@ -543,7 +543,6 @@ define(function(require, exports, module) {
 
             for (var index in this.uploader.totalSpeedQueue) {
                 var file = this.uploader.getFile(index);
-
                 if (file.getStatus() == 'progress' || file.getStatus() == 'queued') {
                     totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
                 } else {
