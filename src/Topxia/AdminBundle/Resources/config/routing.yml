@@ -1361,10 +1361,6 @@ admin_order_manage_export_csv:
     pattern: /order/manage/export/{targetType}
     defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
 
-admin_order_manage_export_csv_check:
-    pattern: /order/manage/export/{targetType}/check
-    defaults: { _controller: TopxiaAdminBundle:Order:exportCsvCheck }
-
 admin_order_manage_export_coin_csv:
     pattern: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }

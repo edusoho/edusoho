@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,8 +11,7 @@ class OrderController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
-        ));
+        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array());
     }
 
     public function manageAction(Request $request, $targetType)
@@ -135,89 +135,25 @@ class OrderController extends BaseController
         $results = array();
 
         if ($targetType == 'vip') {
-            foreach ($orders as $key => $orders) {
-                $member = "";
-                $member .= $orders['sn'].",";
-                $member .= $status[$orders['status']].",";
-                $member .= $orders['title'].",";
-                $member .= $users[$orders['userId']]['nickname'].",";
-                $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-                $member .= $orders['amount'].",";
-                $member .= $payment[$orders['payment']].",";
-                $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-
-                if ($orders['paidTime'] != 0) {
-                    $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
-                } else {
-                    $member .= "-".",";
-                }
-
-                $results[] = $member;
-            }
+            $results = $this->generateVipExportData($orders, $status, $users, $profiles, $payment, $results);
         } else {
-            foreach ($orders as $key => $orders) {
-                if ($targetType == 'course') {
-                    $result = $this->getCourseService()->getCourse($orders['targetId']);
-                } else {
-                    $result = $this->getClassroomService()->getClassroom($orders['targetId']);
-                }
-
-                $member = "";
-                $member .= $orders['sn'].",";
-                $member .= $status[$orders['status']].",";
-                $member .= $orders['title'].",";
-                $member .= "《".$result['title']."》".",";
-
-                $member .= $orders['totalPrice'].",";
-
-                if (!empty($orders['coupon'])) {
-                    $member .= $orders['coupon'].",";
-                } else {
-                    $member .= "无".",";
-                }
-
-                $member .= $orders['couponDiscount'].",";
-                $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
-                $member .= $orders['amount'].",";
-                $member .= $payment[$orders['payment']].",";
-
-                $member .= $users[$orders['userId']]['nickname'].",";
-                $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-
-                if (preg_match('/管理员添加/', $orders['title'])) {
-                    $member .= '管理员添加,';
-                } else {
-                    $member .= "-,";
-                }
-
-                $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-
-                if ($orders['paidTime'] != 0) {
-                    $member .= date('Y-n-d H:i:s', $orders['paidTime']);
-                } else {
-                    $member .= "-";
-                }
-
-                $results[] = $member;
-            }
+            $results = $this->generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results);
         }
 
         $loop = $request->query->get('loop', 0);
         ++$loop;
-        $offset = $loop * $limit;
 
-        $file = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
+        $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
+        $readTempDate   = $start;
+        $file           = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
 
-        if ($offset < $orderCount) {
+        if ($enableRedirect) {
             $content = implode("\r\n", $results);
             file_put_contents($file, $content."\r\n", FILE_APPEND);
-            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $offset, 'fileName' => $file)));
-        } else {
-            if ($start) {
-                $content = file_get_contents($file);
-                $str .= $content;
-                $this->removefile($file);
-            }
+            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)));
+        } elseif ($readTempDate) {
+            $str .= file_get_contents($file);
+            FileToolkit::safeRemove($file);
         }
 
         $str .= implode("\r\n", $results);
@@ -231,46 +167,6 @@ class OrderController extends BaseController
         $response->setContent($str);
 
         return $response;
-    }
-
-    public function exportCsvCheckAction(Request $request, $targetType)
-    {
-        $conditions = $this->buildExportCondition($request, $targetType);
-
-        $orderCount = $this->getOrderService()->searchOrderCount($conditions);
-
-        $magic         = $this->setting('magic');
-        $maxAllowCount = $magic['export_max_allow_count'];
-
-        $response = array(
-            'count'         => $this->countFilter($orderCount),
-            'status'        => ($orderCount > $maxAllowCount) ? 'error' : 'success',
-            'maxAllowCount' => $this->countFilter($maxAllowCount)
-        );
-
-        return $this->createJsonResponse($response);
-    }
-
-    private function countFilter($count)
-    {
-        if ($count <= 1000) {
-            return $count;
-        }
-
-        $currentValue = $currentUnit = null;
-        $unitExps     = array('千' => 3, '万' => 4);
-
-        foreach ($unitExps as $unit => $exp) {
-            $divisor      = pow(10, $exp);
-            $currentUnit  = $unit;
-            $currentValue = $count / $divisor;
-
-            if ($currentValue < 10) {
-                break;
-            }
-        }
-
-        return sprintf('%.0f', $currentValue).$currentUnit;
     }
 
     private function buildExportCondition($request, $targetType)
@@ -288,19 +184,9 @@ class OrderController extends BaseController
 
     private function genereateExportCsvFileName($targetType)
     {
-        $user = $this->getCurrentUser();
-        return "export_content".$targetType.$user['id'].time().".txt";
-    }
-
-    private function getWebRootDirectory()
-    {
-        return dirname($this->getServiceKernel()->getParameter('kernel.root_dir')).'/web/';
-    }
-
-    private function removefile($file)
-    {
-        $fullPath = $this->getWebRootDirectory().$file;
-        unlink($fullPath);
+        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
+        $user     = $this->getCurrentUser();
+        return $rootPath."/export_content".$targetType.$user['id'].time().".txt";
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
@@ -337,6 +223,101 @@ class OrderController extends BaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    /**
+     * @param  $orders
+     * @param  $status
+     * @param  $users
+     * @param  $profiles
+     * @param  $payment
+     * @param  $results
+     * @return array
+     */
+    public function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
+    {
+        foreach ($orders as $key => $orders) {
+            $member = "";
+            $member .= $orders['sn'].",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['title'].",";
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $member .= $orders['amount'].",";
+            $member .= $payment[$orders['payment']].",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+
+            if ($orders['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            } else {
+                $member .= "-".",";
+            }
+
+            $results[] = $member;
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param  $targetType
+     * @param  $orders
+     * @param  $status
+     * @param  $payment
+     * @param  $users
+     * @param  $profiles
+     * @param  $results
+     * @return array
+     */
+    public function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
+    {
+        foreach ($orders as $key => $orders) {
+            if ($targetType == 'course') {
+                $result = $this->getCourseService()->getCourse($orders['targetId']);
+            } else {
+                $result = $this->getClassroomService()->getClassroom($orders['targetId']);
+            }
+
+            $member = "";
+            $member .= $orders['sn'].",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['title'].",";
+            $member .= "《".$result['title']."》".",";
+
+            $member .= $orders['totalPrice'].",";
+
+            if (!empty($orders['coupon'])) {
+                $member .= $orders['coupon'].",";
+            } else {
+                $member .= "无".",";
+            }
+
+            $member .= $orders['couponDiscount'].",";
+            $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
+            $member .= $orders['amount'].",";
+            $member .= $payment[$orders['payment']].",";
+
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+
+            if (preg_match('/管理员添加/', $orders['title'])) {
+                $member .= '管理员添加,';
+            } else {
+                $member .= "-,";
+            }
+
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+
+            if ($orders['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']);
+            } else {
+                $member .= "-";
+            }
+
+            $results[] = $member;
+        }
+
+        return $results;
     }
 
     protected function getUserFieldService()

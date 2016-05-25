@@ -93,8 +93,8 @@ class InitCommand extends BaseCommand
     private function initMagicSetting($output)
     {
         $default = array(
-            'export_max_allow_count' => 100000,
-            'export_limit'           => 10000
+            'export_allow_count' => 100000,
+            'export_limit'       => 10000
         );
 
         $site = $this->getSettingService()->set('magic', $default);

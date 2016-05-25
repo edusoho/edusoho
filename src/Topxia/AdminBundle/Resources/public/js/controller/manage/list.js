@@ -17,7 +17,6 @@ define(function(require, exports, module) {
         $("#endDate").datetimepicker({
             autoclose: true
         }).on('changeDate', function() {
-
             $("#startDate").datetimepicker('setEndDate', $("#endDate").val().substring(0, 16));
         });
 
@@ -26,23 +25,25 @@ define(function(require, exports, module) {
 
         $(".btn-export-csv").on('click', function() {
             var $btn = $(this);
-            $btn.addClass('disabled');
             var url = $btn.data('url');
             var checkUrl = $btn.data('checkUrl');
+            var exportCount = $btn.data('exportCount');
+            var exportCountFormat = $btn.data('exportCountFormat');
+            var exportAllowCount = $btn.data('exportAllowCount');
+            var exportAllowCountFormat = $btn.data('exportAllowCountFormat');
 
-            $.get(checkUrl, function(result) {
-                if (result.status == 'error') {
-                    Notify.warning("您的导出结果数量（" + result.count + "条）已超出最大值（" + result.maxAllowCount + "条），请调整筛选范围后分批导出");
-                } else if (result.count == 0) {
-                    Notify.warning("没有可导出的数据");
-                } else {
-                    Notify.warning("正在导出数据，请稍候...");
-                    window.location.href = url;
-                }
-                setTimeout(function() {
-                    $btn.removeClass('disabled');
-                }, 3000);
-            });
+            if (exportCount > exportAllowCount) {
+                Notify.warning("您的导出结果数量（" + exportCountFormat + "条）已超出最大值（" + exportAllowCountFormat + "条），请调整筛选范围后分批导出");
+                return false;
+            }
+            if (exportCount == 0) {
+                Notify.warning("没有可导出的数据");
+                return false;
+            }
+            $btn.addClass('disabled');
+            Notify.warning("正在导出数据，请稍候...");
+            window.location.href = url;
+            $btn.removeClass('disabled');
         })
 
     };
