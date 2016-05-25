@@ -225,16 +225,7 @@ class OrderController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    /**
-     * @param  $orders
-     * @param  $status
-     * @param  $users
-     * @param  $profiles
-     * @param  $payment
-     * @param  $results
-     * @return array
-     */
-    public function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
+    private  function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
     {
         foreach ($orders as $key => $orders) {
             $member = "";
@@ -259,17 +250,7 @@ class OrderController extends BaseController
         return $results;
     }
 
-    /**
-     * @param  $targetType
-     * @param  $orders
-     * @param  $status
-     * @param  $payment
-     * @param  $users
-     * @param  $profiles
-     * @param  $results
-     * @return array
-     */
-    public function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
+    private function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
     {
         foreach ($orders as $key => $orders) {
             if ($targetType == 'course') {
