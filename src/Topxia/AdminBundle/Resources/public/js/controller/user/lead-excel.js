@@ -1,8 +1,15 @@
 define(function(require, exports, module) {
 
-    exports.run = function() {
+    var Importer = require('edusoho.importer');
 
-        $("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
+    exports.run = function() {
+        $id = $('#user-importer-app');
+        var importer = new Importer({
+            element: "#user-importer-app",
+            templateUrl: $id.data('templateUrl'),
+            type: 'User'
+        });
+        /*$("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
         $("input[type=file]").each(function(){
             if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("");}
         });
@@ -13,7 +20,7 @@ define(function(require, exports, module) {
 
         $('#start-import-btn').on("click",function(){
             $('#start-import-btn').button('submiting').addClass('disabled');
-        });
+        });*/
 
     };
 

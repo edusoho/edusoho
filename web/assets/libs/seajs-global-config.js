@@ -62,6 +62,7 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
+        'edusoho.importer': 'edusoho/importer/app.js',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
@@ -85,7 +86,9 @@ seajs.config({
 
     charset: 'utf-8',
 
-    debug: app.debug
+    debug: app.debug,
+
+    plugins: ['text']
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;
