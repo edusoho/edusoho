@@ -62,33 +62,43 @@ class UploaderExtension extends \Twig_Extension
         $availableAccepts = array(
             'video'          => array(
                 'extensions' => array('mp4', 'avi', 'flv', 'f4v', 'mpg', 'wmv', 'mov', 'vob', 'rmvb', 'mkv', 'm4v'),
+                'mimeTypes'  => array('video/*')
             ),
             'audio'          => array(
                 'extensions' => array('mp3'),
+                'mimeTypes'  => array('audio/*')
             ),
             'flash'          => array(
                 'extensions' => array('swf'),
+                'mimeTypes'  => array('application/x-shockwave-flash')
             ),
             'ppt'            => array(
                 'extensions' => array('ppt', 'pptx'),
+                'mimeTypes'  => array('application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation')
             ),
             'cloud_document' => array(
                 'extensions' => array('doc', 'docx', 'pdf'),
+                'mimeTypes'  => array('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf')
             ),
             'document'       => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'),
+                'mimeTypes'  => array('application/vnd.ms-*', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.*')
             ),
             'zip'            => array(
                 'extensions' => array('zip', 'rar', 'gz', 'tar', '7z'),
+                'mimeTypes'  => array('application/zip', 'application/x-rar*', 'application/x-tar', 'application/x-gz*', 'application/x-7z*')
             ),
             'image'          => array(
                 'extensions' => array('jpg', 'jpeg', 'png', 'gif', 'bmp'),
+                'mimeTypes'  => array('image/*')
             ),
             'text'           => array(
                 'extensions' => array('txt', 'html', 'js', 'css'),
+                'mimeTypes'  => array('text/*')
             ),
             'all'            => array(
                 'extensions' => array('*'),
+                'mimeTypes'  => array('*')
             )
         );
 
@@ -104,11 +114,12 @@ class UploaderExtension extends \Twig_Extension
             $types = array('all');
         }
 
-        $accept = array('extensions' => array());
+        $accept = array('extensions' => array(), 'mimeTypes' => array());
 
         foreach ($types as $type) {
             if (isset($availableAccepts[$type])) {
                 $accept['extensions'] = array_merge($accept['extensions'], $availableAccepts[$type]['extensions']);
+                $accept['mimeTypes']  = array_merge($accept['mimeTypes'], $availableAccepts[$type]['mimeTypes']);
             }
         }
 
