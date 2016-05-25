@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var DocumentChooser = require('../widget/media-chooser/document-chooser7');
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
+    var _ = require('underscore');
     require('jquery.sortable');
     require('es-ckeditor');
 
@@ -370,7 +371,7 @@ define(function(require, exports, module) {
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
             var choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
-            var isUploading = choosers.some(function (chooser) {
+            var isUploading = _.some(choosers, function (chooser) {
                 return chooser.isUploading();
             });
 
@@ -379,7 +380,7 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            choosers.forEach(function (chooser) {
+            _.each(choosers, function (chooser) {
                  chooser.destroy();
             });
         });

@@ -95,12 +95,18 @@ define(function(require, exports, module) {
             }
         },
 
-        setup: function() {
-            this._initUI();
+        _makeAccept: function () {
+            var mimeTypes = require('edusoho.mimetypes');
             var accept = {};
             accept.title = '文件';
             accept.extensions = this.get('accept')['extensions'].join(',');
-            accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
+            accept.mimeTypes = Array.prototype.concat.apply([],this.get('accept')['extensions'].map(mimeTypes));// 二维数组降维到一维数组
+            return accept;
+        },
+
+        setup: function() {
+            this._initUI();
+            var accept = this._makeAccept();
 
             var defaults = {
                 runtimeOrder: 'html5,flash',
