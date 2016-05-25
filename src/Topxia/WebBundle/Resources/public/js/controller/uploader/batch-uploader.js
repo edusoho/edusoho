@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             $(event.target).siblings('.js-file-pause').removeClass('hidden');
             file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
-            this._displaySpeed();
+            //this._displaySpeed();
         },
         
         _onFileUploadStop: function (event) {
