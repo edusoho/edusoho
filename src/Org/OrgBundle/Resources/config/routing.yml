@@ -1,0 +1,12 @@
+org_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: OrgBundle:Default:index }
+
+switch_org:
+    pattern: /swithOrg/{id}
+    defaults: { _controller: OrgBundle:Org:switchOrg }
+
+org_tree:
+    path: /org-tree.json
+    defaults: { _controller: OrgBundle:Org:orgTreeJson }
+    methods: [GET]

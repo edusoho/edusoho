@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:42
- */
-namespace Topxia\Service\Org\Impl;
 
+namespace Org\Service\Org\Impl;
+
+use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Org\OrgService;
 use Topxia\Service\Common\BaseService;
 
 class OrgServiceImpl extends BaseService implements OrgService
@@ -124,6 +119,6 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     protected function getOrgDao()
     {
-        return $this->createDao('Org.OrgDao');
+        return $this->createDao('Org:Org.OrgDao');
     }
 }

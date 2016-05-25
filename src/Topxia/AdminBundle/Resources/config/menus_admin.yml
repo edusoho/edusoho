@@ -31,15 +31,6 @@ admin_operation_article:
     name: 资讯管理
     parent: admin_operation
     router_name: admin_article
-admin_operation_org_manage:
-    name: 组织机构管理
-    parent: admin_operation
-    router_name: admin_org
-admin_org_create:
-    name: 添加组织机构
-    parent: admin_operation_org_manage
-    mode: modal
-    group: 2
 admin_operation_group:
     name: 小组管理
     parent: admin_operation

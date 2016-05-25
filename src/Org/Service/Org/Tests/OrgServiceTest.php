@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 22:47
- */
 
-namespace Topxia\Service\Org\Tests;
+namespace Org\Service\Org\Tests;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
@@ -131,7 +125,7 @@ class OrgServiceTest extends BaseTestCase
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 
     protected function getUserService()

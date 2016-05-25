@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:42
- */
-namespace Topxia\Service\Org;
+namespace Org\Service\Org;
 
 interface OrgService
 {

@@ -1,8 +1,9 @@
 <?php
-namespace Topxia\AdminBundle\Controller;
+namespace Org\OrgBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class OrgManageController extends BaseController
 {
@@ -78,6 +79,6 @@ class OrgManageController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

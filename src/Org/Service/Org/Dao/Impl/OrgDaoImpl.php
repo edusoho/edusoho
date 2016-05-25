@@ -1,15 +1,9 @@
 <?php
-namespace Topxia\Service\Org\Dao\Impl;
+namespace Org\Service\Org\Dao\Impl;
 
+use Org\Service\Org\Dao\OrgDao;
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Org\Dao\OrgDao;
 
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:54
- */
 class OrgDaoImpl extends BaseDao implements OrgDao
 {
     protected $table = 'org';
