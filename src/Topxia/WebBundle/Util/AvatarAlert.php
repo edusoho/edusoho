@@ -29,7 +29,7 @@ class AvatarAlert
             return false;
         }
 
-        if ($setting['avatar_alert'] == 'in_user_center' && $user['mediumAvatar'] == '') {
+        if ($setting['avatar_alert'] == 'open' && $user['mediumAvatar'] == '') {
             return true;
         }
 
