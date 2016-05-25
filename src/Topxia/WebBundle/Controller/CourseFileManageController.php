@@ -13,19 +13,22 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        $type = $request->query->get('type');
+        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
+
         $conditions = array(
-            'targetTypes' => array('courselesson', 'coursematerial'),
-            'targetId'    => $course['id']
+            'targetType' => $type,
+            'targetId'   => $course['id']
         );
 
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
             $conditions['targetId'] = $course['parentId'];
         }
 
-        $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+        /*$courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
         if ($courseMaterials) {
             $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-        }
+        }*/
 
         $paginator = new Paginator(
             $request,
@@ -40,8 +43,8 @@ class CourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $fileIds    = ArrayToolkit::column($files, 'id');
-        $filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
+        //$fileIds    = ArrayToolkit::column($files, 'id');
+        //$filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -51,7 +54,7 @@ class CourseFileManageController extends BaseController
             'users'      => ArrayToolkit::index($users, 'id'),
             'paginator'  => $paginator,
             'now'        => time(),
-            'filesQuote' => $filesQuote
+            //'filesQuote' => $filesQuote
         ));
     }
 
