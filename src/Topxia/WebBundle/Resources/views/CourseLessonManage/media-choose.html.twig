@@ -406,7 +406,7 @@
 
         <div class="tab-pane" id="ppt-chooser-course-file">
             <div id="file-browser-ppt" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+            data-url="{{ path('uploadfile_browsers', {targetTypes:'coursematerial', targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
         </div>
 
       </div>
@@ -474,7 +474,7 @@
 
         <div class="tab-pane" id="document-chooser-course-file">
             <div id="file-browser-document" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
+            data-url="{{ path('uploadfile_browser', {targetId:targetId, type:'document', targetTypes:'coursematerial'}) }}" data-empty="暂无文档，请先上传。"></div>
         </div>
 
       </div>
@@ -543,7 +543,7 @@
 
         <div class="tab-pane" id="flash-chooser-course-file">
             <div id="file-browser-flash" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
+            data-url="{{ path('uploadfile_browser', {targetTypes:'coursematerial', targetId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
         </div>
 
       </div>
