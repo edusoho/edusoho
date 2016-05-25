@@ -133,7 +133,7 @@ class Paginator {
          return array(
             'firstPage' => $paginator->getFirstPage(),
             'currentPage'=> $paginator->getCurrentPage(),
-            'homepageUrl' => $paginator->getPageUrl($paginator->getFirstPage()),
+            'firstPageUrl' => $paginator->getPageUrl($paginator->getFirstPage()),
             'previousPageUrl' => $paginator->getPageUrl($paginator->getPreviousPage()),
             'pages' => $paginator->getPages(),
             'pageUrls' => array_map(function ($page) use($paginator){ return $paginator->getPageUrl($page);}, $paginator->getPages()),

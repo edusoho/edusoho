@@ -716,6 +716,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function proccessConvertStatus($file)
     {
+        if(!isset($file['processStatus'])) {
+            return $file;
+        }
+        
         $statusMap = array(
             'none'       => 'none',
             'waiting'    => 'waiting',
