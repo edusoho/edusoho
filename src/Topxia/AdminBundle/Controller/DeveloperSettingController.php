@@ -94,6 +94,11 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $setting = $request->request->get('setting', '{}');
             $setting = json_decode($setting, true);
+
+            if (empty($setting)) {
+                $setting = array('export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0);
+            }
+
             $this->getSettingService()->set('magic', $setting);
             $this->getLogService()->info('system', 'update_settings', "更新Magic设置", $setting);
             $this->setFlashMessage('success', '设置已保存！');
