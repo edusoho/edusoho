@@ -35,14 +35,21 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
-        $userPartner                 = $this->getSettingService()->get('user_partner', array());
-        $userPartner['avatar_alert'] = 'close';
+        $userPartner = $this->getSettingService()->get('user_partner', array());
+
+        if ($userPartner['avatar_alert'] == 'when_join_course') {
+            $userPartner['avatar_alert'] = 'open';
+        } else {
+            $userPartner['avatar_alert'] = 'close';
+        }
+
+        $this->getSettingService()->set('avatar_alert', $userPartner);
 
         $magic                       = $this->getSettingService()->get('magic', array());
         $magic['export_allow_count'] = 100000;
         $magic['export_limit']       = 10000;
         $magic['enable_org']         = 0;
-        $this->getSettingService()->set('avatar_alert', $userPartner);
+
         $this->getSettingService()->set('magic', $magic);
     }
 
