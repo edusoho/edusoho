@@ -243,12 +243,34 @@ class OrderController extends BaseController
         $maxAllowCount = $magic['export_max_allow_count'];
 
         $response = array(
-            'count'         => $orderCount,
+            'count'         => $this->countFilter($orderCount),
             'status'        => ($orderCount > $maxAllowCount) ? 'error' : 'success',
-            'maxAllowCount' => $maxAllowCount
+            'maxAllowCount' => $this->countFilter($maxAllowCount)
         );
 
         return $this->createJsonResponse($response);
+    }
+
+    private function countFilter($count)
+    {
+        if ($count <= 1000) {
+            return $count;
+        }
+
+        $currentValue = $currentUnit = null;
+        $unitExps     = array('千' => 3, '万' => 4);
+
+        foreach ($unitExps as $unit => $exp) {
+            $divisor      = pow(10, $exp);
+            $currentUnit  = $unit;
+            $currentValue = $count / $divisor;
+
+            if ($currentValue < 10) {
+                break;
+            }
+        }
+
+        return sprintf('%.0f', $currentValue).$currentUnit;
     }
 
     private function buildExportCondition($request, $targetType)

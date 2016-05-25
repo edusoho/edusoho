@@ -32,7 +32,7 @@ define(function(require, exports, module) {
 
             $.get(checkUrl, function(result) {
                 if (result.status == 'error') {
-                    Notify.warning("导出结果已经超过最大允许值20w条(已选择" + result.count + ")条,请调整筛选范围");
+                    Notify.warning("您的导出结果数量（" + result.count + "条）已超出最大值（" + result.maxAllowCount + "条），请调整筛选范围后分批导出");
                 } else if (result.count == 0) {
                     Notify.warning("没有可导出的数据");
                 } else {
