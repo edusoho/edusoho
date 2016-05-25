@@ -5,11 +5,13 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-            module: true
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+                module: true
+            });
+        }
         var $modal = $('#user-create-form').parents('.modal');
 
         var validator = new Validator({

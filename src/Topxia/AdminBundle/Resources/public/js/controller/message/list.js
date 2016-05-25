@@ -5,10 +5,12 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
         var $container = $('#message-table-container');
         var $table = $("#message-table");
         require('../../util/short-long-text')($table);
@@ -16,9 +18,9 @@ define(function(require, exports, module) {
         require('../../util/batch-delete')($container);
         require('../../util/item-delete')($container);
 
-		$("#startDate, #endDate").datetimepicker({
-            autoclose:true
-        });		
+        $("#startDate, #endDate").datetimepicker({
+            autoclose: true
+        });
 
     };
 

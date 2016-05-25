@@ -6,13 +6,14 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#modalOrgSelectTree",
+                name: 'orgCode',
+                modal: true
 
-        var selectTree = new SelectTree({
-            element: "#modalOrgSelectTree",
-            name: 'orgCode',
-            modal: true
-
-        });
+            });
+        }
         var $modal = $('#announcement-create-form').parents('.modal');
 
         $form = $('#announcement-create-form');
