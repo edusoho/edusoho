@@ -71,7 +71,6 @@
   <table class="table table-striped table-hover" id="order-table">
     {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode:'admin'} %}
   </table>
-{{dump(paginator)}}
   <div class="paginator">
     {{ web_macro.paginator(paginator) }} 
   </div>
