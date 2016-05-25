@@ -43,7 +43,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $userPartner['avatar_alert'] = 'close';
         }
 
-        $this->getSettingService()->set('avatar_alert', $userPartner);
+        $this->getSettingService()->set('user_partner', $userPartner);
 
         $magic                       = $this->getSettingService()->get('magic', array());
         $magic['export_allow_count'] = 100000;
@@ -51,7 +51,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $magic['enable_org']         = 0;
 
         $this->getSettingService()->set('magic', $magic);
-
 
         if (!$this->isFieldExist('course_material', 'source')) {
             $this->getConnection()->exec("ALTER TABLE `course_material` ADD `source` varchar(50) NOT NULL DEFAULT 'coursematerial' AFTER `fileSize`;");
