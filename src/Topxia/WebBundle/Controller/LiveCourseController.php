@@ -93,8 +93,21 @@ class LiveCourseController extends BaseController
 
         $lessonsDate = $this->getCourseService()->findFutureLiveDates($courseIds, 4);
 
-        $currentLiveLessons = array();
-        $futureLiveLessons  = array();
+        $currentLiveLessons = $this->getCourseService()->searchLessons(array(
+            'startTimeLessThan'  => time(),
+            'endTimeGreaterThan' => time(),
+            'type'               => 'live',
+            'courseIds'          => $courseIds,
+            'status'             => 'published'
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
+
+        $futureLiveLessons = $this->getCourseService()->searchLessons(array(
+            'startTimeGreaterThan' => time(),
+            'endTimeLessThan'      => strtotime(date('Y-m-d').' 23:59:59'),
+            'type'                 => 'live',
+            'courseIds'            => $courseIds,
+            'status'               => 'published'
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
         $liveTabs['today']['current'] = $currentLiveLessons;
         $liveTabs['today']['future']  = $futureLiveLessons;
