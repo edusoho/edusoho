@@ -44,8 +44,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
                 return array(true, $order);
             }
 
-            if ($order["status"] == "created") {
-
+            if (in_array($order["status"], array('created', 'cancelled'))) {
                 $outflow = $this->proccessCashFlow($order);
                 $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 账单处理成功");
 

@@ -73,6 +73,14 @@ interface UploadFileService
 
     public function getFileByTargetType($targetType);
 
+    public function tryManageFile($fileId);
+
+    public function tryManageGlobalFile($globalFileId);
+
+    public function tryAccessFile($fileId);
+
+    public function canManageFile($fileId);
+
     public function findMySharingContacts($targetUserId);
 
     public function shareFiles($sourceUserId, $targetUserIds);

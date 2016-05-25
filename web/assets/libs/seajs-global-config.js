@@ -47,6 +47,7 @@ seajs.config({
         'json': 'gallery/json/1.0.3/json',
         "handlebars": "gallery/handlebars/1.0.2/handlebars",
         "backbone": "gallery/backbone/1.0.0/backbone",
+        "underscore": "gallery/underscore/1.8.3/underscore",
         "swfobject": "gallery/swfobject/2.2.0/swfobject.js",
         'moment': 'gallery/moment/2.5.1/moment',
         'morris': 'gallery/morris/0.5.0/morris',

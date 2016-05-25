@@ -13,7 +13,7 @@ parameters:
     #扩展参数
     #oauth2_clients: #oauth2客户端配置
     #    third_party_oauth:
-    #        name: 前台登陆显示名称
+    #        name: 前台登录显示名称
     #        admin_name: 后台显示名称
     #        class: AnywhereClient\Component\AnywhereOAuthClient #oauth客户端类
     #        icon_class: anywhere #图标的class

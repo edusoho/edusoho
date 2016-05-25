@@ -433,6 +433,11 @@ admin_operation_mobile_select:
     pattern:  /operation/mobile/select
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
 
+admin_operation_mobile_customization_upgrade:
+    pattern:  /operation/mobile/customization_upgrade
+    defaults: { _controller: TopxiaAdminBundle:Mobile:customizationUpgrade }
+    methods: [POST]
+
 admin_discovery_column_delete:
     pattern:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
