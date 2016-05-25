@@ -17,7 +17,6 @@ class LessonMaterialPluginController extends BaseController
             $file = null;
         }
 
-        //$lessonMaterials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
         $lessonMaterials = $this->getMaterialService()->searchMaterials(
             array('lessonId' => $lesson['id'], 'source' => 'coursematerial'),
             array('createdTime','DESC'), 0, 100
