@@ -51,7 +51,7 @@
 
     <button class="btn btn-primary">搜索</button>
     <a class="btn btn-primary btn-export-csv" 
-    data-url="{{ path('admin_order_manage_export_csv',
+    href="{{ path('admin_order_manage_export_csv',
     {targetType:targetType,
     startTime:request.get('startDateTime'),
     endTime:request.get('endDateTime'),
