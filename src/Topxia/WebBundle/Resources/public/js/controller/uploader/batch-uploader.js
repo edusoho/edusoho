@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var store = require('store');
     var filesize = require('filesize');
     var Widget = require('widget');
-
+    var _ = require('underscore');
     var BatchUploader = Widget.extend({
 
         uploader: null,
@@ -140,12 +140,13 @@ define(function(require, exports, module) {
                 $(self.element).find('.pause-btn').prop('disabled',false);
             });
 
+            //解决IE8下JS解释器不支持Function类型的bind方法;
+            $(this.element).on('click', '.js-upload-pause', _.bind(this._onUploadStop, this));
+            $(this.element).on('click', '.js-upload-resume', _.bind(this._onUploadResume, this));
+            $(this.element).on('click', '.js-file-resume', _.bind(this._onFileUploadResume, this));
+            $(this.element).on('click', '.js-file-pause', _.bind(this._onFileUploadStop, this));
+            $(this.element).on('click', '.js-file-cancel', _.bind(this._onFileUploadRemove, this));
 
-            $(this.element).on('click', '.js-upload-pause', this._onUploadStop.bind(this));
-            $(this.element).on('click', '.js-upload-resume', this._onUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-resume', this._onFileUploadResume.bind(this));
-            $(this.element).on('click', '.js-file-pause', this._onFileUploadStop.bind(this));
-            $(this.element).on('click', '.js-file-cancel', this._onFileUploadRemove.bind(this));
         },
 
         destroy: function() {
@@ -242,7 +243,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function (file) {
-                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
+                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: _.now()};
                 self.trigger('file.uploadStart');
             });
             // 文件上传过程中创建进度条实时显示。
@@ -250,7 +251,7 @@ define(function(require, exports, module) {
 
                 var queuefile = this.uploadQueue[file.id]; //获取文件开始上传时的信息
 
-                var speed = (((queuefile.size * percentage) / 1024 / 1024) / ((Date.now() - queuefile.starttime) / 1000)).toFixed(2); //MB/s
+                var speed = (((queuefile.size * percentage) / 1024 / 1024) / ((_.now() - queuefile.starttime) / 1000)).toFixed(2); //MB/s
 
                 this.totalSpeedQueue[file.id] = speed; //纪录每个文件的的上传速度
                 this.leftTotalSizeQueue[file.id] = (file.size * (1 - percentage) / 1024 / 1024).toFixed(2); //更新每个文件的剩余大小
