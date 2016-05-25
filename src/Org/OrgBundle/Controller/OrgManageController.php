@@ -13,7 +13,7 @@ class OrgManageController extends BaseController
         $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
         $createUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:OrgManage:index.html.twig', array(
+        return $this->render('OrgBundle:OrgManage:index.html.twig', array(
             'orgs'        => $orgs,
             'createUsers' => $createUsers
         ));
@@ -36,7 +36,7 @@ class OrgManageController extends BaseController
             'seq'         => 0
         );
 
-        return $this->render('TopxiaAdminBundle:OrgManage:modal.html.twig', array(
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array(
             'org' => $org
         ));
     }
@@ -50,7 +50,7 @@ class OrgManageController extends BaseController
         }
 
         $org = $this->getOrgService()->getOrg($id);
-        return $this->render('TopxiaAdminBundle:OrgManage:modal.html.twig', array(
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array(
             'org' => $org
         ));
     }
