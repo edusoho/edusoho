@@ -153,7 +153,7 @@ class OrderController extends BaseController
             return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)));
         } elseif ($readTempDate) {
             $str .= file_get_contents($file);
-            FileToolkit::safeRemove($file);
+            FileToolkit::remove($file);
         }
 
         $str .= implode("\r\n", $results);
@@ -225,7 +225,7 @@ class OrderController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    private  function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
+    private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
     {
         foreach ($orders as $key => $orders) {
             $member = "";
