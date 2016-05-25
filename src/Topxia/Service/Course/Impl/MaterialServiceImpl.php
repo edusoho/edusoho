@@ -47,20 +47,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         }
 
         if (!empty($fields['fileId'])) {
-            /*$courseMaterials = $this->searchMaterials(
-                array(
-                    'courseId' => $fields['courseId'], 
-                    'fileId'   => $fields['fileId'],
-                    'lessonId' => 0,
-                    'source'   => $fields['source']
-                ), 
-                array('createdTime','DESC'), 0, PHP_INT_MAX
-            );
-            if ($courseMaterials) {
-                $material = $this->updateMaterial($courseMaterials[0]['id'], array('lessonId'=>$fields['lessonId']));
-            } else {*/
-	        	$material =  $this->getMaterialDao()->addMaterial($fields);
-	        //}
+	        $material =  $this->getMaterialDao()->addMaterial($fields);
         }
 
 		// Increase the linked file usage count, if there's a linked file used by this material.
