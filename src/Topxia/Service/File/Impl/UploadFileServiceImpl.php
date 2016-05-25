@@ -221,11 +221,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
-            /*if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
-                $file['courseId'] = $file['targetId'];
-                $file['fileId']   = $file['id'];
-                $this->getMaterialService()->uploadMaterial($file);
-            }*/
             
             $result = $implementor->finishedUpload($file, $params);
 
@@ -583,9 +578,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $file = $this->getFile($id);
 
-        /*if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，删除失败");
-        }*/
+        if (empty($file)) {
+            return false;
+        }
 
         $result = $this->getFileImplementor($file['storage'])->deleteFile($file);
 

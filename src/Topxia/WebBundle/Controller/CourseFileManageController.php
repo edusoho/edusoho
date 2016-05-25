@@ -13,9 +13,6 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-/*        $type = $request->query->get('type');
-        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
-*/
         $conditions = array(
             'targetTypes' => array('courselesson', 'coursematerial'),
             'targetId'    => $course['id']
