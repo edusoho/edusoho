@@ -72,14 +72,20 @@ class LoginRecordController extends BaseController
     {
     	$user = $this->getUserService()->getUser($id);
 
+        $conditions = array(
+            'userId' => $user['id'],
+            'action' => 'login_success',
+            'module' => 'user'
+        );
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getLogService()->searchLogCount(array('userId' => $user['id'])),
+            $this->getLogService()->searchLogCount($conditions),
             8
         );
 
         $loginRecords = $this->getLogService()->searchLogs(
-            array('userId' => $user['id']),
+            $conditions,
             'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()

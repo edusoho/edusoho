@@ -3,6 +3,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\DateToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -89,7 +90,7 @@ class MessageController extends BaseController
         }
 
         if (isset($conditions['endDate'])) {
-            $conditions['endDate'] = strtotime($conditions['endDate']);
+            $conditions['endDate'] = DateToolkit::strtotimeAppendSecond($conditions['endDate']);
         }
 
         return $conditions;
