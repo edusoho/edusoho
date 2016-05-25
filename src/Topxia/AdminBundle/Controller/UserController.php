@@ -269,12 +269,11 @@ class UserController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {
-                $roleName = implode(',', $roles);
 
                 $message = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $roleName
+                    'role'     => $this->getRoleNames($roles, $rolesByIndexCode)
                 );
 
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
@@ -292,6 +291,35 @@ class UserController extends BaseController
             'user'    => $user,
             'default' => $default
         ));
+    }
+
+    protected function getRoleNames($roles, $roleSet)
+    {
+        $roleName = '';
+        $roles = array_unique($roles);
+
+        $userRoleDict = new UserRoleDict();
+        $userRoleDict = $userRoleDict->getDict();
+        $roleDictCodes = array_keys($userRoleDict);
+
+        $i = 0;
+        foreach ($roles as $key => $role) {
+            if(in_array($role, $roleDictCodes)) {
+                $roleName = $roleName.$userRoleDict[$role];
+            } else if ($role == 'ROLE_BACKEND') {
+                continue;
+            } else {
+                $role = $roleSet[$role];
+                $roleName = $roleName.$role['name'];
+            }
+            
+            $i ++;
+
+            if($i < count($roles)-1) {
+                $roleName = $roleName.'，';
+            }
+        }
+        return $roleName;
     }
 
     public function avatarAction(Request $request, $id)
