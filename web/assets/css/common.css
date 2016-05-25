@@ -1870,7 +1870,6 @@ ol.sortable-list li.placeholder,
   border: 1px dashed #ccc;
   list-style: none;
 }
-
 tr.placeholder {
   display: block;
   background: red;
@@ -1889,4 +1888,25 @@ tr.placeholder:before {
     margin-top: -5px;
     left: -5px;
     border-right: none;
+}
+.list-table {
+  padding: 0;
+}
+.list-table .row {
+  margin-left: 0px; 
+}
+.list-table>.th {
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+.list-table-striped>.tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+.list-table>.th, .list-table>.tr{
+  border-top: 1px solid #ddd;
+  margin: 0;
+}
+.list-table .td {
+  line-height: 45px;
+  height: 45px;
 }
