@@ -2628,10 +2628,16 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'test course 1'
         );
+        $course2 = array(
+            'title' => 'test course 2'
+        );
         $createCourse = $this->getCourseService()->createCourse($course);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $conditions   = array('unique' => true, 'role' => 'teacher');
         $result       = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, 10);
-        $this->assertEquals($result[0]['userId'], '2');
+
+        $this->assertEquals($result[0]['userId'], $this->getCurrentUser()->id);
+        $this->assertArrayEquals($result, array(array('userId' => $this->getCurrentUser()->id)));
     }
 
     public function testUpdateCourseMember()

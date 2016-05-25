@@ -7,8 +7,12 @@ use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\HTMLPurifierFactory;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 abstract class BaseService
 {
+    private $logger = null;
 
     protected function createService($name)
     {
@@ -80,6 +84,18 @@ abstract class BaseService
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
         return new NotFoundException($message, $code);
+    }
+
+    protected function getLogger($name)
+    {
+        if($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+
+        return $this->logger;
     }
 
 }

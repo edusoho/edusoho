@@ -7,98 +7,104 @@ class DiscoveryColumnServiceTest extends BaseTestCase
 {
     public function testGetDiscoveryColumn()
     {
-        $discovieryColumn = $this->addDiscoveryColumn();
-        $result           = $this->getDisCoveryColumnService()->getDiscoveryColumn($discovieryColumn['id']);
-        $this->assertEquals($result['id'], $discovieryColumn['id']);
+        $originDiscoveryColumn = $this->createDiscoveryColumn();
+        $result = $this->getDiscoveryColumnService()->getDiscoveryColumn(1);
+        $this->assertNull($this->getDiscoveryColumnService()->getDiscoveryColumn(2));
+        $this->assertEquals(1, $result['id']);
+        $this->assertEquals('test', $result['title']);
+        $this->assertEquals('course', $result['type']);
+        $this->assertEquals(2, $result['categoryId']);
+        $this->assertEquals('new', $result['orderType']);
+        $this->assertEquals(4, $result['showCount']);
+        $this->assertEquals(2, $result['seq']);
     }
 
     public function testUpdateDiscoveryColumn()
     {
-        $discovieryColumn = $this->addDiscoveryColumn();
-        $fileds           = array(
-            'title' => 'classroom'
-        );
-        $result = $this->getDisCoveryColumnService()->updateDiscoveryColumn($discovieryColumn['id'], $fileds);
-        $this->assertEquals($result['id'], $discovieryColumn['id']);
-        $this->assertEquals('classroom', $result['title']);
+        $origin = $this->createDiscoveryColumn();
+
+        $result = $this->getDiscoveryColumnService()->updateDiscoveryColumn($origin['id'], array('categoryId' => 1));
+
+        $origin['categoryId'] = 1;
+        $this->assertArrayEquals($origin, $result);
     }
 
     public function testAddDiscoveryColumn()
     {
-        $fileds = array(
-            'title'       => 'discovery',
-            'type'        => 'test',
-            'orderType'   => 'recommend',
-            'showCount'   => 100,
-            'createdTime' => time()
-        );
-
-        $result = $this->getDisCoveryColumnService()->addDiscoveryColumn($fileds);
-        $this->assertEquals('test', $result['type']);
-        $this->assertEquals('discovery', $result['title']);
-        $this->assertEquals('recommend', $result['orderType']);
-        $this->assertEquals(100, $result['showCount']);
+        $origin = $this->createDiscoveryColumn();
+        $this->assertEquals($origin['title'], 'test');
     }
 
     public function testDeleteDiscoveryColumn()
     {
-        $discovieryColumn = $this->addDiscoveryColumn();
-        $result           = $this->getDisCoveryColumnService()->deleteDiscoveryColumn($discovieryColumn['id']);
-
-        $this->assertEquals(1, $result);
-        $result = $this->getDisCoveryColumnService()->deleteDiscoveryColumn($discovieryColumn['id']);
-        $this->assertEquals(0, $result);
+        //$id
+        $id     = 2;
+        $fields = array(
+            'id'          => $id,
+            'title'       => 'test',
+            'type'        => 'course',
+            'categoryid'  => '2',
+            'ordertype'   => 'new',
+            'showCount'   => '4',
+            'seq'         => '2',
+            'createdTime' => time(),
+            'updateTime'  => time(),
+        );
+        $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
+        $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
+        $result = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+        $this->assertEquals($result, NULL);
 
     }
 
     public function testFindDiscoveryColumnByTitle()
     {
-        $discovieryColumn = $this->addDiscoveryColumn();
-        $result           = $this->getDisCoveryColumnService()->findDiscoveryColumnByTitle($discovieryColumn['title']);
 
-        $this->assertEquals($discovieryColumn, $result[0]);
+        $origin = $this->createDiscoveryColumn();
+        $resTitle = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle('test');
+        $this->assertArrayEquals($origin, $resTitle[0]);
     }
 
     public function testGetAllDiscoveryColumns()
     {
-        $discovieryColumn = $this->addDiscoveryColumn();
-        $result           = $this->getDisCoveryColumnService()->getAllDiscoveryColumns();
-        $this->assertEquals(1, count($result));
+        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+        $this->assertEquals(count($result), 0);
+
+        $origin = $this->createDiscoveryColumn();
+        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+        $this->assertArrayEquals(array($origin), $result);
     }
 
     public function testSortDiscoveryColumns()
     {
-        $fileds = array(
-            'title'       => 'discovery1',
-            'type'        => 'test',
-            'orderType'   => 'recommend',
-            'showCount'   => 100,
-            'createdTime' => time()
-        );
-        $createDiscovery = $this->getDisCoveryColumnService()->addDiscoveryColumn($fileds);
-
-        $this->getDisCoveryColumnService()->sortDiscoveryColumns(array($createDiscovery['id']));
-        $result = $this->getDisCoveryColumnService()->getDiscoveryColumn($createDiscovery['id']);
-
-        $this->assertEquals(1, $result['seq']);
-
+        $column1 = $this->createDiscoveryColumn();
+        $column2 = $this->createDiscoveryColumn();
+        $columnIds = array($column2['id'], $column1['id']);
+        $this->getDiscoveryColumnService()->sortDiscoveryColumns($columnIds);
+        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+        $sortedColumn1 = $this->getDiscoveryColumnService()->getDiscoveryColumn($column1['id']);
+        $sortedColumn2 = $this->getDiscoveryColumnService()->getDiscoveryColumn($column2['id']);
+        $this->assertArrayEquals($result, array($sortedColumn2, $sortedColumn1));
     }
 
-    protected function addDiscoveryColumn()
+    private function createDiscoveryColumn()
     {
-        $fileds = array(
-            'title'       => 'discovery',
-            'type'        => 'test',
-            'orderType'   => 'recommend',
-            'showCount'   => 100,
-            'createdTime' => time()
+        $createdTime = time();
+        $updateTime = time();
+        $fields = array(
+            'title'       => 'test',
+            'type'        => 'course',
+            'categoryId'  => 2,
+            'orderType'   => 'new',
+            'showCount'   => 4,
+            'seq'         => 2,
+            'createdTime' => $createdTime,
+            'updateTime'  => $updateTime,
         );
-
-        $discovieryColumn = $this->getDisCoveryColumnService()->addDiscoveryColumn($fileds);
-        return $discovieryColumn;
+        return $this->getDiscoveryColumnService()->addDiscoveryColumn($fields);
     }
 
-    protected function getDisCoveryColumnService()
+    protected function getDiscoveryColumnService()
     {
         return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
     }

@@ -51,4 +51,9 @@
       {% endblock %}
     </div>
   </div>
+
+     {% if is_plugin_installed('HowzhiPopAd') %}
+          {{ render(controller('HowzhiPopAdBundle:HowzhiPop:index')) }}
+     {% endif %} 
+
 {% endblock %}
