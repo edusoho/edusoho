@@ -13,9 +13,12 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        $type = $request->query->get('type');
+        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
+
         $conditions = array(
-            'targetTypes' => array('courselesson', 'coursematerial'),
-            'targetId'    => $course['id']
+            'targetType' => $type,
+            'targetId'   => $course['id']
         );
 
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
@@ -35,7 +38,7 @@ class CourseFileManageController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -67,7 +70,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
+        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -88,9 +91,7 @@ class CourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
-        if ($id != 0) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -98,7 +99,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -109,11 +110,7 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
@@ -126,13 +123,11 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService2()->deleteFiles($ids);
+        $this->getUploadFileService()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -145,11 +140,6 @@ class CourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getUploadFileService2()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getSettingService()

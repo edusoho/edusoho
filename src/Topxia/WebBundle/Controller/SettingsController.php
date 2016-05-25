@@ -851,7 +851,7 @@ class SettingsController extends BaseController
     {
         $user  = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-
+        $verifyurl   = $this->generateUrl('register_email_verify', array('token' => $token), true);
         try {
             $normalMail = array(
                 'to'    => $user['email'],
@@ -865,15 +865,10 @@ class SettingsController extends BaseController
             $cloudMail = array(
                 'to'        => $user['email'],
                 'template'  => 'email_reset_email',
-                'verifyurl' => $this->generateUrl('auth_email_confirm', array(
-                    'user'  => $user,
-                    'token' => $token
-                ), true),
+                'verifyurl' => $verifyurl,
                 'nickname'  => $user['nickname']
             );
-
             $mail = new Mail($normalMail, $cloudMail);
-
             $this->sendEmail($mail);
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {

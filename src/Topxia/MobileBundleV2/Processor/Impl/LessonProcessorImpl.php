@@ -252,7 +252,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime', 'DESC'),
             0,
             100
         );
@@ -260,9 +260,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $uploadFiles = array();
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2']        = json_decode($file['metas2'], true) ?: array();
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
             unset($file["metas"]);
             unset($file["metas2"]);
             unset($file["hashId"]);
@@ -413,7 +410,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($mediaSource == 'self') {
-            $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
@@ -542,7 +539,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getPPTLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_ppt', '获取ppt课时失败!');
@@ -610,7 +607,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
