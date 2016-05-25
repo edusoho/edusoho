@@ -97,10 +97,12 @@
               {% set newestVersion = mobileCustomization.newestVersion %}
               <span class="glyphicon glyphicon-ok-sign text-success"></span> 已定制
                (
-               {{'定制版本'|trans}}: {{ currentVersion }} 
-               {{'最新版本'|trans}}: {{ newestVersion }}
+               {{'当前版本'|trans}}: {{ currentVersion }}
+               {% if newestVersion > currentVersion %}
+                {{'最新版本'|trans}}: {{ newestVersion }}
+               {% endif %}
                )
-              {% if currentVersion != newestVersion %}
+              {% if newestVersion > currentVersion %}
                 <span class="upgrade-status">
                   {% set applyStatus = mobileCustomization.customization.applyStatus %}
                   {% if applyStatus in ['unsubmit', 'failed'] %}
