@@ -1879,15 +1879,18 @@ tr.placeholder {
   border: none;
 }
 tr.placeholder:before {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-left-color: red;
-    margin-top: -5px;
-    left: -5px;
-    border-right: none;
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-left-color: red;
+  margin-top: -5px;
+  left: -5px;
+  border-right: none;
+}
+.sortable-list .sort-handle{
+  cursor: move !important;
 }
 .list-table {
   padding: 0;
@@ -1909,4 +1912,7 @@ tr.placeholder:before {
 .list-table .td {
   line-height: 45px;
   height: 45px;
+}
+.treegrid-expander {
+  cursor: pointer !important;
 }

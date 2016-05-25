@@ -60,7 +60,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($group)) {
             throw $this->createServiceException("分类Group #{$groupId}，不存在");
         }
-        $categories = $this->makeCategoryStructureTree($this->getCategoryTree($groupId), 0, $group['depth']);
+        $categories = $this->makeCategoryStructureTree($this->getCategoryTree($groupId), 0);
         return $categories;
     }
 
@@ -229,9 +229,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('description','name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
+        $category = ArrayToolkit::parts($category, array('description','name', 'code', 'groupId', 'parentId', 'icon'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'groupId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
         }
 

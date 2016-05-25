@@ -1092,6 +1092,10 @@ admin_article_category_delete:
     pattern:  /article/category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
     methods: [POST]
+admin_article_category_sort:
+    pattern:  /article/category/sort
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:sort }
+    methods: [POST]
 
 admin_article_setting:
     pattern: /setting/article
