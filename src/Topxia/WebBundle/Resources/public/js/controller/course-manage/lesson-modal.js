@@ -369,16 +369,19 @@ define(function(require, exports, module) {
 
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
-            var $choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
-            for(var i=0; i<$choosers.length; i++){
-                if($choosers[i].isUploading()){
-                    Notify.danger('文件正在上传，等待上传完后再保存。');
-                    return false;
-                }
+            var choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
+            var isUploading = choosers.some(function (chooser) {
+                return chooser.isUploading();
+            });
+
+            if(isUploading){
+                Notify.danger('文件正在上传，等待上传完后再保存。');
+                return false;
             }
-            for(var i=0; i<$choosers.length; i++){
-                $choosers[i].destroy();
-            }
+
+            choosers.forEach(function (chooser) {
+                 chooser.destroy();
+            });
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
