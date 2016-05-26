@@ -5,6 +5,7 @@ use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Point;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -941,6 +942,33 @@ class FileToolkit
         return $file;
     }
 
+    public static function remove($filepath)
+    {
+        if (empty($filepath)) {
+            throw new \RuntimeException("filepath to be deleted is empty");
+        }
+
+        $isRemoved = false;
+
+        $prefixArr = array('data/private_files', 'data/udisk', 'web/files');
+        foreach ($prefixArr as $prefix) {
+            if (strpos($filepath, trim($prefix))) {
+                $fileSystem = new Filesystem();
+                if ($fileSystem->exists($filepath)) {
+                    $fileSystem->remove($filepath);
+                }
+
+                $isRemoved = true;
+                break;
+            }
+        }
+
+        if (!$isRemoved) {
+            $prefixString = join(' || ', $prefixArr);
+            throw new \RuntimeException("{$filepath} is not allowed to be deleted without prefix {$prefixString}");
+        }
+    }
+
     public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
     {
         $image = $rawImage->copy();
@@ -976,7 +1004,7 @@ class FileToolkit
         $options["y"] = $rate * $options["y"];
 
         $filePaths = array();
-        if (!empty($options["imgs"]) && count($options["imgs"])>0) {
+        if (!empty($options["imgs"]) && count($options["imgs"]) > 0) {
             foreach ($options["imgs"] as $key => $value) {
                 $savedFilePath   = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                 $image           = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
@@ -1009,7 +1037,7 @@ class FileToolkit
     public static function downloadImg($url, $savePath)
     {
         $curl = curl_init($url);
-        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $imageData = curl_exec($curl);
         curl_close($curl);
         $tp = @fopen($savePath, 'w');
