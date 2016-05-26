@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
         var $panel = $('#file-manage-panel');
 	    require('../../util/batch-select')($panel);
-	    //require('../../util/batch-delete')($panel);
+	    require('../../util/batch-delete')($panel);
         var Notify = require('common/bootstrap-notify'); 
 
         $panel.on('click', '.convert-file-btn', function(){
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
         asyncLoadFiles();
 
-        $('[data-role=batch-delete]').click(function(){
+        /*$('[data-role=batch-delete]').click(function(){
             var flag = false;
             $('[data-role=batch-item]').each(function(){
                 if($(this).is(":checked")) {
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
                 Notify.danger('未选中任何文件记录');
                 return ;
             }
-        })
+        })*/
     };
 
     function asyncLoadFiles()

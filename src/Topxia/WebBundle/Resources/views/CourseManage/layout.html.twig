@@ -65,9 +65,9 @@
           <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
             <a href="{% if course.locked|default(0) == 1 %}
             {{ path('course_manage_course_sync', {id:course.id,type:'files'}) }}{% else %}
-            {{ path('course_manage_files', {id:course.id}) }}
+            {{ path('course_manage_files', {id:course.id,type:'courselesson'}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程文件'|trans}}
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'文件管理'|trans}}
             </a>
           </li>
         </ul>

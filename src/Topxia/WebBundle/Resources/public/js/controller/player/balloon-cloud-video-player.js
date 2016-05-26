@@ -48,7 +48,8 @@ define(function(require, exports, module) {
                     plugins = $.extend(plugins, {
                         fingerprint: {
                             html: self.get('fingerprint'),
-                            duration: 100
+                            duration: 100,
+                            frequency: 10000
                         }
                     })
                 }
