@@ -1,8 +1,21 @@
-<div id="user-import-progress" class="package-update-progress" style="display:none;">
-    <div class="progress progress-striped active">
-        <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">导入</h4>
+        </div>
+        <div class="modal-body">
+            <div id="import-progress" class="package-update-progress">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+                </div>
+                <div class="text-success progress-text"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a data-loading-text="正在完成导入, 请稍等..." class="btn btn-primary hidden js-finish-import-btn" href="#index">完成导入</a>
+        </div>
     </div>
-    <div class="text-success progress-text"></div>
 </div>
 
-<button id="finish-import-btn" data-loading-text="正在完成导入, 请稍等..." class="btn btn-primary" style="display:none">完成导入</button>
+
+

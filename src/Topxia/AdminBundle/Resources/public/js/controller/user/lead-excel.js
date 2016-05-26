@@ -9,7 +9,8 @@ define(function(require, exports, module) {
             element: "#user-importer-app",
             templateUrl: $id.data('templateUrl'),
             registerMode: $id.data('registerMode'),
-            type: 'User'
+            courseId: 1,
+            type: 'user'
         });
         /*$("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
         $("input[type=file]").each(function(){

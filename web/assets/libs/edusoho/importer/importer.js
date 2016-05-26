@@ -8,7 +8,8 @@ define(function (require, exports, module) {
     var Step2SuccessView = require('./view/step2-success.js');
 
     var _ = require('underscore');
-    var App = Backbone.Router.extend({
+
+    module.exports = Backbone.Router.extend({
         routes: {
             "index": 'index',
             'error': 'error',
@@ -16,13 +17,9 @@ define(function (require, exports, module) {
         },
 
         index: function () {
-            var checker = new Checker({
-                type: this.options.type
-            });
+            var checker = new Checker(this.options);
             var ste1View = new Step1View({
-                'model': checker,
-                'templateUrl': this.options.templateUrl,
-                'registerMode': this.options.registerMode
+                'model': checker
             });
             this.$el.html(ste1View.el);
         },
@@ -75,6 +72,4 @@ define(function (require, exports, module) {
             });
         }
     });
-
-    module.exports = App;
 });

@@ -4,24 +4,26 @@ define(function (require, exports, module) {
 
     require("jquery.form");
     var Step1View = Backbone.View.extend({
-        template: _.template(require('./../template/step1.html')),
 
         events: {
             'change input[type=file]': 'onChangeExcelFile'
         },
 
-        initialize: function (options) {
-            var context = {
-                'templateUrl': options.templateUrl,
-                'registerMode': options.registerMode
-            };
+        initialize: function () {
+            var type = this.model.get('type').charAt(0).toLowerCase() + this.model.get('type').substr(1);
+            var self = this;
+            require.async('./../template/' + type + '-step1.html', function (template) {
+                self.render.call(self, _.template(template));
+            });
+        },
 
-            this.$el.html(this.template(context));
+        render: function (template) {
+            this.$el.html(template(this.model.toJSON()));
             var self = this;
             this.$el.find('form').attr('action', this.model.url + this.model.get('type')).ajaxForm({
                 success: function (res) {
                     var status = res.status;
-                    var eventListener = 'on' + status.charAt(0).toUpperCase() + status.substr(1);;
+                    var eventListener = 'on' + status.charAt(0).toUpperCase() + status.substr(1);
                     if (Step1View.prototype.hasOwnProperty(eventListener)) {
                         self[eventListener](res);
                     }else {
@@ -32,7 +34,6 @@ define(function (require, exports, module) {
                     console.log('error:', error);
                 }
             });
-
         },
 
         onChangeExcelFile: function (event) {

@@ -7,14 +7,15 @@ define(function (require, exports, module) {
     module.exports = Backbone.Model.extend({
         url: '/excel/importer',
         defaults: {
-            "checkType": "ignore",
-            "chunkSize": 100
+            'checkType': "ignore",
+            'chunkSize': 100,
+            '__progress': 0,
+            '__current': 0,
+            '__total': 0,
+            '__status': false
         },
 
         chunkUpload: function () {
-            if (_.isEmpty(this.get('importData'))) {
-                return;
-            }
 
             var self = this;
 
@@ -22,13 +23,30 @@ define(function (require, exports, module) {
                 return i % self.get('chunkSize')? [] : [self.get('importData').slice(i, i + self.get('chunkSize'))];
             }));
 
-            _.each(chunkData, function (data) {
-                var postData = _.extend(self.toJSON(), {importerData: data});
-                delete postData['importData'];
-                delete postData['chunkSize'];
-                delete postData['status'];
-                $.post(self.url, postData).done(function () {
+            this.set('__total', chunkData.length);
 
+            if(chunkData.length === 0){
+                this.set('__progress', 100);
+                this.set('__status', true);
+            }
+
+            var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress'];
+            var postData = self.toJSON();
+
+            _.each(privateAttr, function (attr) {
+                delete postData[attr];
+            });
+
+            _.each(chunkData, function (data) {
+                postData.importerData = data;
+                $.post(self.url, postData).done(function (response) {
+                    self.set('__current', self.get('__current') + 1);
+                    var current = self.get('__current');
+                    var total = self.get('__total');
+                    self.set('__progress', current / total * 100);
+                    if(current === total){
+                        self.set('__status', true);
+                    }
                 });
             });
 
