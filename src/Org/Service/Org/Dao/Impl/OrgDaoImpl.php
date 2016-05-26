@@ -10,6 +10,8 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function createOrg($org)
     {
+        $org['createdTime'] = time();
+
         $affected = $this->getConnection()->insert($this->getTable(), $org);
 
         if ($affected <= 0) {
@@ -21,6 +23,8 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function updateOrg($id, $fields)
     {
+        $fields['updateTime'] = time();
+
         $this->getConnection()->update($this->getTable(), $fields, array('id' => $id));
         return $this->getOrg($id);
     }

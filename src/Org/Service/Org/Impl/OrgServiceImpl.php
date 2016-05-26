@@ -19,7 +19,6 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
 
         $org['createdUserId'] = $user['id'];
-        $org['createdTime']   = time();
 
         $org = $this->getOrgDao()->createOrg($org);
 
@@ -47,8 +46,6 @@ class OrgServiceImpl extends BaseService implements OrgService
         if (!ArrayToolkit::requireds($fields, array('name', 'code', 'seq'))) {
             throw $this->createServiceException('缺少必要字段,添加失败');
         }
-
-        $fields['updateTime'] = time();
 
         $org = $this->getOrgDao()->updateOrg($id, $fields); //更新当前深度以及内部编码
         return $org;
