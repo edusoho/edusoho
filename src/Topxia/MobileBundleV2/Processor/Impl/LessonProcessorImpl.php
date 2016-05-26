@@ -205,7 +205,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $course  = $this->controller->getCourseService()->getCourse($courseId);
         $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
         $lessons = $this->controller->filterItems($lessons);
-
         if ($user->isLogin()) {
             $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
         } else {
