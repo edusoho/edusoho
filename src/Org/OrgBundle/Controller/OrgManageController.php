@@ -27,18 +27,7 @@ class OrgManageController extends BaseController
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
-        $org = array(
-            'id'          => 0,
-            'name'        => '',
-            'code'        => '',
-            'description' => '',
-            'parentId'    => (int) $request->query->get('parentId', 0),
-            'seq'         => 0
-        );
-
-        return $this->render('OrgBundle:OrgManage:modal.html.twig', array(
-            'org' => $org
-        ));
+        return $this->render('OrgBundle:OrgManage:modal.html.twig');
     }
 
     public function updateAction(Request $request, $id)
