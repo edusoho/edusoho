@@ -11,7 +11,7 @@ admin_org_update:
     defaults: { _controller: OrgBundle:OrgManage:update }
 
 admin_org_delete:
-     pattern: /org//{id}delete
+     pattern: /org/{id}/delete
      defaults: { _controller: OrgBundle:OrgManage:delete }
 
 admin_org_checkcode:
