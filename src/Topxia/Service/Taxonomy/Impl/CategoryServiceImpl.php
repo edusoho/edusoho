@@ -60,6 +60,49 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
+    public function getCategoryStructureTree($groupId)
+    {
+        $group = $this->getGroup($groupId);
+
+        if (empty($group)) {
+            throw $this->createServiceException("分类Group #{$groupId}，不存在");
+        }
+
+        $categories = $this->makeCategoryStructureTree($this->getCategoryTree($groupId), 0);
+        return $categories;
+    }
+
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->updateCategory($id, array('weight' => $index + 1));
+        }
+    }
+
+    protected function makeCategoryStructureTree($data, $parentId)
+    {
+        $tree = $this->filterCategoriesByParentId($data, $parentId);
+
+        foreach ($tree as $key => $value) {
+            $tree[$key]['children'] = $this->makeCategoryStructureTree($data, $value['id']);
+        }
+
+        return $tree;
+    }
+
+    protected function filterCategoriesByParentId(array $categories, $parentId)
+    {
+        $filtered = array();
+
+        foreach ($categories as $value) {
+            if ($value['parentId'] == $parentId) {
+                $filtered[] = $value;
+            }
+        }
+
+        return $filtered;
+    }
+
     public function findCategories($groupId)
     {
         $group = $this->getGroup($groupId);
@@ -216,9 +259,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('description', 'name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
+        $category = ArrayToolkit::parts($category, array('description', 'name', 'code', 'groupId', 'parentId', 'icon'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'groupId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
         }
 
@@ -274,9 +317,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($fields, $category);
 
-        $this->getLogService()->info('category', 'update', "编辑分类 {$fields['name']}(#{$id})", $fields);
+        $category = $this->getCategoryDao()->updateCategory($id, $fields);
 
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+        $this->getLogService()->info('category', 'update', "编辑分类 {$category['name']}(#{$id})", $fields);
+
+        return $category;
     }
 
     public function deleteCategory($id)

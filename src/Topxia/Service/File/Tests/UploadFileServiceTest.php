@@ -328,7 +328,7 @@ class UploadFileServiceTest extends BaseTestCase
       $name = 'File.UploadFileShareDao';
       $params = array(
         array(
-          'functionName' => 'findShareHistoryByUserId',
+          'functionName' => 'findSharesByTargetUserIdAndIsActive',
           'runTimes' => 1,
           'withParams' =>  array(1),
           'returnValue' => array(
@@ -366,7 +366,7 @@ class UploadFileServiceTest extends BaseTestCase
         $name   = 'File.UploadFileShareDao';
         $params = array(
             array(
-                'functionName' => 'findShareHistoryByUserId',
+                'functionName' => 'findSharesByTargetUserIdAndIsActive',
                 'runTimes' => 1,
                 'withParams' =>  array(1),
                 'returnValue' => array(

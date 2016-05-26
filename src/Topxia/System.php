@@ -4,6 +4,6 @@ namespace Topxia;
 
 class System
 {
-    const VERSION       = '6.17.5';
+    const VERSION       = '6.17.8';
     const RELEASE_NOTES = "http://www.edusoho.com/intro/13";
 }
