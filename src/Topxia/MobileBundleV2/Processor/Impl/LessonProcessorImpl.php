@@ -211,7 +211,9 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         } else {
             $learnStatuses = null;
         }
-        $files = $this->getUploadFiles($courseId);
+        // $files = $this->getUploadFiles($courseId);
+        $fileIds = ArrayToolkit::column($lessons, 'mediaId');
+        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
         $files = array_map(function ($file) {
             $file['convertParams'] = null; //过滤convertParams防止移动端报错
             return $file;
