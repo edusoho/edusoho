@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Taxonomy\Impl;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Taxonomy\CategoryService;
@@ -62,14 +63,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryStructureTree($groupId)
     {
-        $group = $this->getGroup($groupId);
-
-        if (empty($group)) {
-            throw $this->createServiceException("分类Group #{$groupId}，不存在");
-        }
-
-        $categories = $this->makeCategoryStructureTree($this->getCategoryTree($groupId), 0);
-        return $categories;
+        return TreeToolkit::makeTree($this->getCategoryTree($groupId), 0, 'weight');
     }
 
     public function sortCategories($ids)
@@ -77,30 +71,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach ($ids as $index => $id) {
             $this->updateCategory($id, array('weight' => $index + 1));
         }
-    }
-
-    protected function makeCategoryStructureTree($data, $parentId)
-    {
-        $tree = $this->filterCategoriesByParentId($data, $parentId);
-
-        foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = $this->makeCategoryStructureTree($data, $value['id']);
-        }
-
-        return $tree;
-    }
-
-    protected function filterCategoriesByParentId(array $categories, $parentId)
-    {
-        $filtered = array();
-
-        foreach ($categories as $value) {
-            if ($value['parentId'] == $parentId) {
-                $filtered[] = $value;
-            }
-        }
-
-        return $filtered;
     }
 
     public function findCategories($groupId)

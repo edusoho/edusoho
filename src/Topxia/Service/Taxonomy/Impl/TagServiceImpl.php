@@ -44,7 +44,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function searchTagCount($conditions)
     {
-        $conditions = $this->_prepareCourseConditions($conditions);
+        $conditions = $this->_prepareConditions($conditions);
         return $this->getTagDao()->searchTagCount($conditions);
     }
 
