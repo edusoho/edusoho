@@ -9,7 +9,7 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs        = $this->getOrgService()->findOrgsByOrgCode();
+        $orgs        = $this->getOrgService()->findOrgsStartByOrgCode();
         $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
         $createUsers = $this->getUserService()->findUsersByIds($userIds);
 

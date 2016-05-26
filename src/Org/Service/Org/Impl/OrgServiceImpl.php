@@ -88,11 +88,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->getOrg($id);
     }
 
-    public function findOrgsByOrgCode($orgCode = null)
+    public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
 
-        return $this->getOrgDao()->findOrgsByOrgCode($orgCode);
+        return $this->getOrgDao()->findOrgsStartByOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)

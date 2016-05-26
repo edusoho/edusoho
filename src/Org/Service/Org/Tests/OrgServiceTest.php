@@ -65,7 +65,7 @@ class OrgServiceTest extends BaseTestCase
         $this->assertNull($getOrg);
     }
 
-    public function testFindOrgsByOrgCode()
+    public function testfindOrgsStartByOrgCode()
     {
         $org = $this->mookOrg($name = "edusoho");
         $org = $this->getOrgService()->createOrg($org);
@@ -74,8 +74,8 @@ class OrgServiceTest extends BaseTestCase
         $childOrg['parentId'] = $org['id'];
         $childOrg             = $this->getOrgService()->createOrg($childOrg);
 
-        $orgs     = $this->getOrgService()->findOrgsByOrgCode($org['orgCode']);
-        $orgsless = $this->getOrgService()->findOrgsByOrgCode($childOrg['orgCode']);
+        $orgs     = $this->getOrgService()->findOrgsStartByOrgCode($org['orgCode']);
+        $orgsless = $this->getOrgService()->findOrgsStartByOrgCode($childOrg['orgCode']);
 
         $this->assertEquals(2, count($orgs));
         $this->assertEquals(1, count($orgsless));
