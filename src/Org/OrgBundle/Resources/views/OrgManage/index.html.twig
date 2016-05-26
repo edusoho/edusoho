@@ -19,7 +19,7 @@
     <tbody>
       {% for org in orgs%}
       <tr class="treegrid-{{org.id}} {% if org.parentId %}treegrid-parent-{{org.parentId}} {% endif %}">
-        {% set user = createUsers[org.createdUserId]%}
+        {% set user = createdUsers[org.createdUserId]%}
         <td>{{org.name}}</td>
         <td>{{org.childrenNum}}</td>
         <td>{{user.nickname}}</td>

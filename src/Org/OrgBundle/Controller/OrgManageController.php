@@ -9,13 +9,13 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs        = $this->getOrgService()->findOrgsStartByOrgCode();
-        $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
-        $createUsers = $this->getUserService()->findUsersByIds($userIds);
+        $orgs         = $this->getOrgService()->findOrgsStartByOrgCode();
+        $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
+        $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('OrgBundle:OrgManage:index.html.twig', array(
-            'orgs'        => $orgs,
-            'createUsers' => $createUsers
+            'orgs'         => $orgs,
+            'createdUsers' => $createdUsers
         ));
     }
 
