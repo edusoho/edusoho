@@ -1,0 +1,12 @@
+admin_org_manage:
+    name: 组织机构管理
+    parent: admin_system
+    group: 2
+    children:
+        admin_org:
+            name: 组织机构
+            children:
+                admin_org_create:
+                    name: 添加组织机构
+                    mode: modal
+                    group: topBtn

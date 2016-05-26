@@ -1,11 +1,11 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{% if org.id %}编辑组织机构{% else %}添加组织机构{% endif %}{% endblock %}
+{% block title %}{% if org.id|default(null) %}编辑组织机构{% else %}添加组织机构{% endif %}{% endblock %}
 
 {% block body %}
 <div id="org-creater-widget">
 
-	<form id="org-manage-form" class="form-horizontal" action="{% if org.id %}{{ path('admin_org_update', {id:org.id}) }}{% else %}{{ path('admin_org_create') }}{% endif %}" method="post">
+	<form id="org-manage-form" class="form-horizontal" action="{% if org.id|default(null) %}{{ path('admin_org_update', {id:org.id}) }}{% else %}{{ path('admin_org_create') }}{% endif %}" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="org-name-field">名称</label>
 			<div class="col-md-8 controls">
@@ -24,7 +24,7 @@
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="org-code-field">编码</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('')  }}" data-url="{{ path('admin_org_checkcode', {exclude:org.code}) }}" tabindex="3">
+				<input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('')  }}" data-url="{{ path('admin_org_checkcode', {exclude:org.code|default(null)}) }}" tabindex="3">
 				<div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
 			</div>
 		</div>

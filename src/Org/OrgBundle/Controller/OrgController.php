@@ -1,7 +1,8 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace Org\OrgBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\WebBundle\Controller\BaseController;
 
 class OrgController extends BaseController
 {
@@ -16,9 +17,9 @@ class OrgController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isSuperAdmin()) {
-            $orgs = $this->getOrgService()->findOrgsByOrgCode();
+            $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
         } else {
-            $orgs = $this->getOrgService()->findOrgsByOrgCode($user['orgCode']);
+            $orgs = $this->getOrgService()->findOrgsStartByOrgCode($user['orgCode']);
         }
 
         return $this->createJsonResponse($orgs);
@@ -26,6 +27,6 @@ class OrgController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

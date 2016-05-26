@@ -1,20 +1,21 @@
 <?php
-namespace Topxia\AdminBundle\Controller;
+namespace Org\OrgBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs        = $this->getOrgService()->findOrgsByOrgCode();
-        $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
-        $createUsers = $this->getUserService()->findUsersByIds($userIds);
+        $orgs         = $this->getOrgService()->findOrgsStartByOrgCode();
+        $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
+        $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('TopxiaAdminBundle:OrgManage:index.html.twig', array(
-            'orgs'        => $orgs,
-            'createUsers' => $createUsers
+        return $this->render('OrgBundle:OrgManage:index.html.twig', array(
+            'orgs'         => $orgs,
+            'createdUsers' => $createdUsers
         ));
     }
 
@@ -26,18 +27,7 @@ class OrgManageController extends BaseController
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
-        $org = array(
-            'id'          => 0,
-            'name'        => '',
-            'code'        => '',
-            'description' => '',
-            'parentId'    => (int) $request->query->get('parentId', 0),
-            'seq'         => 0
-        );
-
-        return $this->render('TopxiaAdminBundle:OrgManage:modal.html.twig', array(
-            'org' => $org
-        ));
+        return $this->render('OrgBundle:OrgManage:modal.html.twig');
     }
 
     public function updateAction(Request $request, $id)
@@ -49,7 +39,7 @@ class OrgManageController extends BaseController
         }
 
         $org = $this->getOrgService()->getOrg($id);
-        return $this->render('TopxiaAdminBundle:OrgManage:modal.html.twig', array(
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array(
             'org' => $org
         ));
     }
@@ -78,6 +68,6 @@ class OrgManageController extends BaseController
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

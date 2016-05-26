@@ -5,12 +5,13 @@ define(function(require, exports, module) {
     var SelectTree = require('edusoho.selecttree');
 
     exports.run = function() {
-       
-        var selectTree = new SelectTree({
-            element: "#modalOrgSelectTree",
-            name: 'orgCode',
-            modal: true
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#modalOrgSelectTree",
+                name: 'orgCode',
+                modal: true
+            });
+        }
 
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);

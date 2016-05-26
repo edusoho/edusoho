@@ -18,9 +18,11 @@ class TagDaoImpl extends BaseDao implements TagDao
     public function addTag(array $tag)
     {
         $affected = $this->getConnection()->insert($this->table, $tag);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert tag error.');
         }
+
         return $this->getTag($this->getConnection()->lastInsertId());
     }
 
@@ -37,21 +39,23 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function findTagsByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
     public function findTagsByNames(array $names)
     {
-        if(empty($names)){
+        if (empty($names)) {
             return array();
         }
-        $marks = str_repeat('?,', count($names) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE name IN ({$marks});";
+
+        $marks = str_repeat('?,', count($names) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE name IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $names);
     }
 
@@ -60,6 +64,24 @@ class TagDaoImpl extends BaseDao implements TagDao
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    public function searchTags($conditions, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchTagCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function getTagByName($name)
@@ -71,7 +93,7 @@ class TagDaoImpl extends BaseDao implements TagDao
     public function getTagByLikeName($name)
     {
         $name = "%{$name}%";
-        $sql = "SELECT * FROM {$this->table} WHERE name LIKE ?";
+        $sql  = "SELECT * FROM {$this->table} WHERE name LIKE ?";
         return $this->getConnection()->fetchAll($sql, array($name));
     }
 
@@ -81,4 +103,22 @@ class TagDaoImpl extends BaseDao implements TagDao
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (empty($conditions['orgId'])) {
+            unset($conditions['orgId']);
+        }
+
+        if (isset($conditions['likeOrgCode'])) {
+            unset($conditions['orgCode']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'org')
+            ->andWhere('name = :name')
+            ->andWhere('orgId = :orgId')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
+        return $builder;
+    }
 }

@@ -6,10 +6,12 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
         var $table = $('#user-table');
 
         $table.on('click', '.cancel-approval', function() {

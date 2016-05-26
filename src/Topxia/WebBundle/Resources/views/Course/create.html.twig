@@ -42,6 +42,8 @@
             </div>
           </div> 
 
+          {% set enableOrg = setting('magic.enable_org','0')%}
+          {% if enableOrg %}  
           <div class="form-group">
             <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
             <div class="col-md-8 controls">
@@ -54,6 +56,7 @@
               />
             </div>
           </div>
+         {% endif %}
 
       <div class="form-group">
         <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>

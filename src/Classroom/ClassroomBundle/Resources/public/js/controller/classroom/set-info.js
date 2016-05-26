@@ -6,10 +6,12 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
 
         var editor_classroom_about = CKEDITOR.replace('about', {
             allowedContent: true,

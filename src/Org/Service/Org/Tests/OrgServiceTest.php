@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 22:47
- */
 
-namespace Topxia\Service\Org\Tests;
+namespace Org\Service\Org\Tests;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
@@ -71,7 +65,7 @@ class OrgServiceTest extends BaseTestCase
         $this->assertNull($getOrg);
     }
 
-    public function testFindOrgsByOrgCode()
+    public function testfindOrgsStartByOrgCode()
     {
         $org = $this->mookOrg($name = "edusoho");
         $org = $this->getOrgService()->createOrg($org);
@@ -80,8 +74,8 @@ class OrgServiceTest extends BaseTestCase
         $childOrg['parentId'] = $org['id'];
         $childOrg             = $this->getOrgService()->createOrg($childOrg);
 
-        $orgs     = $this->getOrgService()->findOrgsByOrgCode($org['orgCode']);
-        $orgsless = $this->getOrgService()->findOrgsByOrgCode($childOrg['orgCode']);
+        $orgs     = $this->getOrgService()->findOrgsStartByOrgCode($org['orgCode']);
+        $orgsless = $this->getOrgService()->findOrgsStartByOrgCode($childOrg['orgCode']);
 
         $this->assertEquals(2, count($orgs));
         $this->assertEquals(1, count($orgsless));
@@ -131,7 +125,7 @@ class OrgServiceTest extends BaseTestCase
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 
     protected function getUserService()

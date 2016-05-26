@@ -12,6 +12,8 @@
        href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
   </div>
   <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+    {% set enableOrg = setting('magic.enable_org','0')%}
+    {% if enableOrg %}
     <div class="mbm">
       <div class="form-group controls">
         {% set org = data('Org',{orgCode: app.request.get('orgCode', app.user.orgCode)}) %}
@@ -23,7 +25,8 @@
         />
       </div>
     </div>
-
+  {% endif %}
+  
     <div class="form-group">
       <select class="form-control" name="keywordType">
         {{ select_options({'':'--查询条件--',nickname:'用户名',email:'邮箱',truename:'真实姓名',idcard:'身份证号码'}, app.request.get('keywordType')) }}

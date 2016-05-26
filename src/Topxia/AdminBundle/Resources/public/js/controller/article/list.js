@@ -2,10 +2,12 @@ define(function(require, exports, module) {
 	var SelectTree = require('edusoho.selecttree');
 
 	exports.run = function() {
-		var selectTree = new SelectTree({
-			element: "#orgSelectTree",
-			name: 'orgCode'
-		});
+		if ($("#orgSelectTree").val()) {
+			var selectTree = new SelectTree({
+				element: "#orgSelectTree",
+				name: 'orgCode'
+			});
+		}
 
 		$("#article-table").on('click', '[data-role=trash-item]', function() {
 			$.post($(this).data('url'), function() {

@@ -1765,27 +1765,3 @@ admin_report_status_ucenter:
 admin_report_status_email_send:
     pattern: /reports/status/email/send
     defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }
-    permissions: [admin_report_status_list]
-
-admin_org:
-    pattern: /org
-    defaults: { _controller: TopxiaAdminBundle:OrgManage:index }
-
-admin_org_create:
-    pattern: /org/create
-    defaults: { _controller: TopxiaAdminBundle:OrgManage:create }
-
-admin_org_update:
-    pattern: /org/update/{id}
-    defaults: { _controller: TopxiaAdminBundle:OrgManage:update }
-    permissions: [admin_org]
-
-admin_org_delete:
-     pattern: /org/delete/{id}
-     defaults: { _controller: TopxiaAdminBundle:OrgManage:delete }
-     permissions: [admin_org]
-
-admin_org_checkcode:
-    pattern: /org/checkcode
-    defaults: { _controller: TopxiaAdminBundle:OrgManage:checkCode }
-    permissions: [admin_org]

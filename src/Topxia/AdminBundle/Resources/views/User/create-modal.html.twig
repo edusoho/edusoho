@@ -45,9 +45,11 @@
       </div>
     </div>
 
+  {% set enableOrg = setting('magic.enable_org','0')%}
+  {% if enableOrg %}
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="orgCode">组织机2构</label>
+      <label for="orgCode">组织机构</label>
     </div>
     <div class="col-md-7 controls">
       <input id="modalOrgSelectTree" 
@@ -58,6 +60,7 @@
       />
     </div>
   </div>
+{% endif %}
 
   <div class="row form-group">
     <div class="col-md-2 control-label">

@@ -5,10 +5,12 @@ define(function(require, exports, module) {
     var validator = require('bootstrap.validator');
     var SelectTree = require('edusoho.selecttree');
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'likeOrgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'likeOrgCode'
+            });
+        }
         var now = new Date();
         $("#startDate").datetimepicker({
             autoclose: true

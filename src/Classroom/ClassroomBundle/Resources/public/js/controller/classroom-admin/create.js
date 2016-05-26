@@ -4,10 +4,12 @@ define(function(require, exports, module) {
     var SelectTree = require('edusoho.selecttree');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
         var validator = new Validator({
             element: '#classroom-create-form',
             onFormValidated: function(error) {

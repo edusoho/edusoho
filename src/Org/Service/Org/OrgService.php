@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:42
- */
-namespace Topxia\Service\Org;
+namespace Org\Service\Org;
 
 interface OrgService
 {
@@ -22,7 +16,7 @@ interface OrgService
      *  获取后台管理组织机构数据
      *  如果没有传orgcode, 默认获取所有
      */
-    public function findOrgsByOrgCode($orgCode = null);
+    public function findOrgsStartByOrgCode($orgCode = null);
 
     public function isCodeAvaliable($value, $exclude);
     /**
