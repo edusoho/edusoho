@@ -7,11 +7,11 @@ admin_org_create:
     defaults: { _controller: OrgBundle:OrgManage:create }
 
 admin_org_update:
-    pattern: /org/update/{id}
+    pattern: /org/{id}/update
     defaults: { _controller: OrgBundle:OrgManage:update }
 
 admin_org_delete:
-     pattern: /org/delete/{id}
+     pattern: /org//{id}delete
      defaults: { _controller: OrgBundle:OrgManage:delete }
 
 admin_org_checkcode:
