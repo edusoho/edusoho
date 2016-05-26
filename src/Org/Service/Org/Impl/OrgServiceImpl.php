@@ -22,19 +22,38 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         $org = $this->getOrgDao()->createOrg($org);
 
+        $parentOrg = $this->updateParentOrg($org);
+
+        $org = $this->updateOrgCodeAndDepth($org, $parentOrg);
+
+        return $org;
+    }
+
+    private function updateParentOrg($org)
+    {
+        $parentOrg = null;
+
         if (isset($org['parentId']) && $org['parentId'] > 0) {
             $parentOrg = $this->getOrgDao()->getOrg($org['parentId']);
             $this->getOrgDao()->wave($parentOrg['id'], array('childrenNum' => +1));
-            $org['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
-            $org['depth']   = $parentOrg['depth'] + 1;
-        } else {
-            $org['orgCode'] = $org['id'].'.';
-            $org['depth']   = 1;
         }
 
-        //更新当前深度以及内部编码
-        $org = $this->getOrgDao()->updateOrg($org['id'], array('orgCode' => $org['orgCode'], 'depth' => $org['depth']));
-        return $org;
+        return $parentOrg;
+    }
+
+    private function updateOrgCodeAndDepth($org, $parentOrg)
+    {
+        $fields = array();
+
+        if (empty($parentOrg)) {
+            $fields['orgCode'] = $org['id'].'.';
+            $fields['depth']   = 1;
+        } else {
+            $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
+            $fields['depth']   = $parentOrg['depth'] + 1;
+        }
+
+        return $this->getOrgDao()->updateOrg($org['id'], $fields);
     }
 
     public function updateOrg($id, $fields)
@@ -47,7 +66,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             throw $this->createServiceException('缺少必要字段,添加失败');
         }
 
-        $org = $this->getOrgDao()->updateOrg($id, $fields); //更新当前深度以及内部编码
+        $org = $this->getOrgDao()->updateOrg($id, $fields);
         return $org;
     }
 
