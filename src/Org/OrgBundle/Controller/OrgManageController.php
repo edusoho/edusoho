@@ -1,6 +1,7 @@
 <?php
 namespace Org\OrgBundle\Controller;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
@@ -9,12 +10,15 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs         = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+
+        $treeOrgs = TreeToolkit::makeTree($orgs, 0, 'seq');
+
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('OrgBundle:OrgManage:index.html.twig', array(
-            'orgs'         => $orgs,
+            'orgs'         => $treeOrgs,
             'createdUsers' => $createdUsers
         ));
     }
