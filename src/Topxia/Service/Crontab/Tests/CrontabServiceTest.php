@@ -25,19 +25,21 @@ class CrontabServiceTest extends BaseTestCase
     {
         $job1       = $this->createJob();
         $job2       = $this->createJob();
+        $user       = $this->getServiceKernel()->getCurrentUser();
         $conditions = array(
-            'creatorId' => 1
+            'creatorId' => $user['id']
         );
-        $result = $this->getCrontabService()->searchJobs($conditions, 'created', 0, 20);
-        $this->assertEquals(2, count($result));
+        $results = $this->getCrontabService()->searchJobs($conditions, 'created', 0, 20);
+        $this->assertEquals(2, count($results));
     }
 
     public function testSearchJobsCount()
     {
         $job1       = $this->createJob();
         $job2       = $this->createJob();
+        $user       = $this->getServiceKernel()->getCurrentUser();
         $conditions = array(
-            'creatorId' => 1
+            'creatorId' => $user['id']
         );
         $result = $this->getCrontabService()->searchJobsCount($conditions);
         $this->assertEquals(2, $result);

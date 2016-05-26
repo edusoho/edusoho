@@ -82,6 +82,8 @@ define(function(require, exports, module) {
             // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
             var $li = $(event.target).parents('li.file-item');
             var fileId = $li.attr('id');
+            var file = this.uploader.getFile(fileId);
+            this.trigger('file.remove', file);
             this.uploader.removeFile(fileId, true);
             $li.remove();
 
@@ -93,12 +95,18 @@ define(function(require, exports, module) {
             }
         },
 
-        setup: function() {
-            this._initUI();
+        _makeAccept: function () {
+            var mimeTypes = require('edusoho.mimetypes');
             var accept = {};
             accept.title = '文件';
             accept.extensions = this.get('accept')['extensions'].join(',');
-            accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
+            accept.mimeTypes = Array.prototype.concat.apply([], _.map(this.get('accept')['extensions'], mimeTypes));// 二维数组降维到一维数组
+            return accept;
+        },
+
+        setup: function() {
+            this._initUI();
+            var accept = this._makeAccept();
 
             var defaults = {
                 runtimeOrder: 'html5,flash',
@@ -543,7 +551,6 @@ define(function(require, exports, module) {
 
             for (var index in this.uploader.totalSpeedQueue) {
                 var file = this.uploader.getFile(index);
-
                 if (file.getStatus() == 'progress' || file.getStatus() == 'queued') {
                     totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
                 } else {

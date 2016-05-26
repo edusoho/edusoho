@@ -64,6 +64,7 @@ seajs.config({
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
         'edusoho.importer': 'edusoho/importer/app.js',
+        'edusoho.mimetypes': 'edusoho/mimetypes/0.0.1/mime-types',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
@@ -71,7 +72,9 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'echarts': 'echarts/3.1.2/echarts.min.js'
+        'echarts': 'echarts/3.1.2/echarts.min.js',
+        'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
     },
 
     // 预加载项

@@ -158,7 +158,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new \InvalidArgumentException();
         }
 
-        return in_array($order['status'], array('created'));
+        return in_array($order['status'], array('created', 'cancelled'));
     }
 
     public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status)

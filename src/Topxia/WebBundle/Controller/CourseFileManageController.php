@@ -25,10 +25,10 @@ class CourseFileManageController extends BaseController
             $conditions['targetId'] = $course['parentId'];
         }
 
-        $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+        /*$courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
         if ($courseMaterials) {
             $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-        }
+        }*/
 
         $paginator = new Paginator(
             $request,
@@ -43,14 +43,18 @@ class CourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        //$fileIds    = ArrayToolkit::column($files, 'id');
+        //$filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'course'    => $course,
-            'files'     => $files,
-            'users'     => ArrayToolkit::index($users, 'id'),
-            'paginator' => $paginator,
-            'now'       => time()
+            'course'     => $course,
+            'files'      => $files,
+            'users'      => ArrayToolkit::index($users, 'id'),
+            'paginator'  => $paginator,
+            'now'        => time(),
+            //'filesQuote' => $filesQuote
         ));
     }
 
@@ -91,9 +95,7 @@ class CourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
-        if ($id != 0) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -112,11 +114,7 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
@@ -127,7 +125,7 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function deleteCourseFilesAction(Request $request, $id, $type)
+    public function deleteCourseFilesAction(Request $request, $id)
     {
         if (!empty($id)) {
             $course = $this->getCourseService()->tryManageCourse($id);

@@ -8,12 +8,12 @@ class ArticleCategoryController extends BaseController
 {
 
     public function indexAction(Request $request)
-    {   
-        $categories = $this->getCategoryService()->getCategoryTree();
+    {
+        $categories = $this->getCategoryService()->getCategoryStructureTree();
         
         return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
             'categories' => $categories
-        ));       
+        ));
     }
 
     public function createAction(Request $request)
@@ -41,6 +41,17 @@ class ArticleCategoryController extends BaseController
             'category' => $category,
             'categoryTree'  => $categoryTree
         ));
+    }
+
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+
+        if (!empty($ids)) {
+            $this->getCategoryService()->sortCategories($ids);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     public function editAction(Request $request, $id)
@@ -106,7 +117,7 @@ class ArticleCategoryController extends BaseController
 
         $currentId = $request->query->get('currentId');
 
-        if($currentId == $selectedParentId && $selectedParentId != 0){
+        if ($currentId == $selectedParentId && $selectedParentId != 0) {
             $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
         } else {
             $response = array('success' => true, 'message' => '');
@@ -133,5 +144,4 @@ class ArticleCategoryController extends BaseController
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
-
 }

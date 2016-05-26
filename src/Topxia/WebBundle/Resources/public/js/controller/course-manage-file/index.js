@@ -6,6 +6,7 @@ define(function(require, exports, module) {
         var $panel = $('#file-manage-panel');
 	    require('../../util/batch-select')($panel);
 	    require('../../util/batch-delete')($panel);
+        var Notify = require('common/bootstrap-notify'); 
 
         $panel.on('click', '.convert-file-btn', function(){
             $.post($(this).data('url'), function(response) {
@@ -39,6 +40,23 @@ define(function(require, exports, module) {
         $("[rel='tooltip']").tooltip();
 
         asyncLoadFiles();
+
+        /*$('[data-role=batch-delete]').click(function(){
+            var flag = false;
+            $('[data-role=batch-item]').each(function(){
+                if($(this).is(":checked")) {
+                    flag = true;
+                }
+            })
+
+            if(flag) {
+                $('#modal').load($(this).data('url'));
+                $('#modal').modal('show');
+            } else {
+                Notify.danger('未选中任何文件记录');
+                return ;
+            }
+        })*/
     };
 
     function asyncLoadFiles()

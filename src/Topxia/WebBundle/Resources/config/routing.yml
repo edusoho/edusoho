@@ -670,9 +670,8 @@ course_manage_file_status:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
 
 course_manage_upload_course_delete_files:
-    pattern:  /course/{id}/delete/files/{type}
+    pattern:  /course/{id}/delete/materials
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
-    methods: [POST]
 
 course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
