@@ -71,9 +71,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            $user       = $this->getCurrentUser();
-            $currentOrg = $user['org'];
-            return $this->getCategoryDao()->findCategoriesByGroupIdAndOrgId($group['id'], $currentOrg['id']);
+            $user  = $this->getCurrentUser();
+            $orgId = isset($user['org']) ? $user['org']['id'] : null;
+            return $this->getCategoryDao()->findCategoriesByGroupIdAndOrgId($group['id'], $orgId);
         } else {
             return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
         }

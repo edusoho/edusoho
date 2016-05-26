@@ -38,7 +38,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function searchTags($conditions, $start, $limit)
     {
-        $conditions = $this->_prepareCourseConditions($conditions);
+        $conditions = $this->_prepareConditions($conditions);
         return $this->getTagDao()->searchTags($conditions, $start, $limit);
     }
 
@@ -48,14 +48,13 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagDao()->searchTagCount($conditions);
     }
 
-    private function _prepareCourseConditions($conditions)
+    private function _prepareConditions($conditions)
     {
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $currentOrg          = $user['org'];
-            $conditions['orgId'] = $currentOrg['id'];
+            $conditions['orgId'] = isset($user['org']) ? $user['org']['id'] : null;
         }
 
         return $conditions;
