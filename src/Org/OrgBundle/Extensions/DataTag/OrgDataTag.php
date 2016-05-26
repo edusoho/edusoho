@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace Org\OrgBundle\Extensions\DataTag;
 
+use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;
 
 class OrgDataTag extends BaseDataTag implements DataTag
@@ -23,6 +24,6 @@ class OrgDataTag extends BaseDataTag implements DataTag
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org.OrgService');
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

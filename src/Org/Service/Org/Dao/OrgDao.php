@@ -1,11 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:54
- */
-namespace Topxia\Service\Org\Dao;
+
+namespace Org\Service\Org\Dao;
 
 interface OrgDao
 {
@@ -19,5 +14,5 @@ interface OrgDao
 
     public function deleteOrgsByOrgCode($orgCode);
 
-    public function findOrgsByOrgCode($orgCode);
+    public function findOrgsStartByOrgCode($orgCode);
 }

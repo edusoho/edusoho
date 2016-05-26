@@ -1,21 +1,17 @@
 <?php
-namespace Topxia\Service\Org\Dao\Impl;
+namespace Org\Service\Org\Dao\Impl;
 
+use Org\Service\Org\Dao\OrgDao;
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Org\Dao\OrgDao;
 
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 5/9/16
- * Time: 19:54
- */
 class OrgDaoImpl extends BaseDao implements OrgDao
 {
     protected $table = 'org';
 
     public function createOrg($org)
     {
+        $org['createdTime'] = time();
+
         $affected = $this->getConnection()->insert($this->getTable(), $org);
 
         if ($affected <= 0) {
@@ -27,6 +23,8 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function updateOrg($id, $fields)
     {
+        $fields['updateTime'] = time();
+
         $this->getConnection()->update($this->getTable(), $fields, array('id' => $id));
         return $this->getOrg($id);
     }
@@ -50,7 +48,7 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         return $this->getConnection()->executeUpdate($sql, array($likeOrgCode));
     }
 
-    public function findOrgsByOrgCode($orgCode)
+    public function findOrgsStartByOrgCode($orgCode)
     {
         $sql   = "SELECT * FROM {$this->getTable()}";
         $query = array();

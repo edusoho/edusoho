@@ -4,11 +4,12 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-         var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
-
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
         $("#startDate").datetimepicker().on('changeDate', function() {
             $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
         });

@@ -1,0 +1,19 @@
+admin_org:
+    pattern: /org
+    defaults: { _controller: OrgBundle:OrgManage:index }
+
+admin_org_create:
+    pattern: /org/create
+    defaults: { _controller: OrgBundle:OrgManage:create }
+
+admin_org_update:
+    pattern: /org/{id}/update
+    defaults: { _controller: OrgBundle:OrgManage:update }
+
+admin_org_delete:
+     pattern: /org/{id}/delete
+     defaults: { _controller: OrgBundle:OrgManage:delete }
+
+admin_org_checkcode:
+    pattern: /org/checkcode
+    defaults: { _controller: OrgBundle:OrgManage:checkCode }

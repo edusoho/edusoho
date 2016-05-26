@@ -8,12 +8,14 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('es-ckeditor');
-    
+
     exports.run = function() {
-        var selectTree = new SelectTree({
-            element: "#orgSelectTree",
-            name: 'orgCode'
-        });
+        if ($("#orgSelectTree").val()) {
+            var selectTree = new SelectTree({
+                element: "#orgSelectTree",
+                name: 'orgCode'
+            });
+        }
 
         var $form = $("#article-form");
         $modal = $form.parents('.modal');

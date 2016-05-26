@@ -44,20 +44,23 @@
     </div>
   </div>
 
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="orgCode">组织机构</label>
+  {%set enableOrg = setting('magic.enable_org','0')%}
+  {% if enableOrg %}
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="orgCode">组织机构</label>
+      </div>
+      <div class="col-md-8 controls" style="z-index:2000;">
+        {% set org = data('Org',{orgCode:announcement.orgCode|default(app.user.orgCode)})%}
+        <input id="modalOrgSelectTree" 
+          value="{{ org.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"
+          class="form-control"
+          data-url ="{{ path('org_tree') }}" 
+          data-code ="{{org.orgCode}}"
+        />
+      </div>
     </div>
-    <div class="col-md-8 controls" style="z-index:2000;">
-      {% set org = data('Org',{orgCode:announcement.orgCode|default(app.user.orgCode)})%}
-      <input id="modalOrgSelectTree" 
-        value="{{ org.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"
-        class="form-control"
-        data-url ="{{ path('org_tree') }}" 
-        data-code ="{{org.orgCode}}"
-      />
-    </div>
-  </div>
+  {% endif %}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endblock %}

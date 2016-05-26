@@ -53,7 +53,9 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
-
+      
+      {% set enableOrg = setting('magic.enable_org','0')%}
+      {% if enableOrg %}
       <div class="form-group">
         <label for="article-orgName" class="control-label">所属组织机构</label>
         <div class="controls">
@@ -65,7 +67,8 @@
           />
         </div>
       </div>
-
+     {% endif %}
+     
       <div class="form-group">
         <label for="richeditor-body-field" class="control-label">正文</label>
         <div class="controls">

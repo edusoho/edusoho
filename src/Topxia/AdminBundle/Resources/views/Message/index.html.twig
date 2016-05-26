@@ -6,7 +6,8 @@
 {% block main %}
   <div class="well well-sm">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
-
+    {% set enableOrg = setting('magic.enable_org','0')%}
+    {% if enableOrg %}
       <div class="mbm">
         <div class="form-group controls">
           {% set org = data('Org',{orgCode:app.request.get('orgCode', app.user.orgCode)})%}
@@ -18,7 +19,8 @@
           />
         </div>
       </div>
-
+     {% endif %}
+     
       <div class="form-group">
         <input class="form-control" type="text" id="startDate" name="startDate"
                value="{{ app.request.query.get('startDate') }}" placeholder="起始时间">

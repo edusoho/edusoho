@@ -8,6 +8,8 @@
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 
+    {% set enableOrg = setting('magic.enable_org','0')%}
+    {% if enableOrg %}
 	<div class="mbm">
 		<div class="form-group controls">
         {% set org = data('Org',{orgCode:app.request.get('orgCode', app.user.orgCode)})%}
@@ -19,7 +21,8 @@
         />
       </div>
 	</div>
-
+    {% endif %}
+    
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
 		 <option value="">--所属栏目--</option>
