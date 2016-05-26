@@ -4,6 +4,13 @@ define(function (require, exports, module) {
     var Backbone = require('backbone');
     var _ = require('underscore');
 
+    var STATUS = {
+        WAIT: 'wait',
+        COMPLETE: 'complete',
+        ERROR: 'error',
+        PROGRESS: 'progress'
+    };
+
     module.exports = Backbone.Model.extend({
         url: '/excel/importer',
         defaults: {
@@ -12,7 +19,7 @@ define(function (require, exports, module) {
             '__progress': 0,
             '__current': 0,
             '__total': 0,
-            '__status': false
+            '__status': STATUS.WAIT
         },
 
         chunkUpload: function () {
@@ -27,7 +34,7 @@ define(function (require, exports, module) {
 
             if(chunkData.length === 0){
                 this.set('__progress', 100);
-                this.set('__status', true);
+                this.set('__status', STATUS.COMPLETE);
             }
 
             var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress'];
@@ -38,15 +45,19 @@ define(function (require, exports, module) {
             });
 
             _.each(chunkData, function (data) {
-                postData.importerData = data;
-                $.post(self.url, postData).done(function (response) {
+                postData.importData = data;
+                $.post(self.url, postData).then(function (response) {
                     self.set('__current', self.get('__current') + 1);
                     var current = self.get('__current');
                     var total = self.get('__total');
                     self.set('__progress', current / total * 100);
                     if(current === total){
-                        self.set('__status', true);
+                        self.set('__status', STATUS.COMPLETE);
+                    }else{
+                        self.set('__status', STATUS.PROGRESS);
                     }
+                }, function (error) {
+                    self.set('__status', STATUS.ERROR);
                 });
             });
 

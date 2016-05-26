@@ -3,29 +3,54 @@ define(function (require, exports, module) {
     var Backbone = require('backbone');
     var _ = require('underscore');
 
-    module.exports = Backbone.View.extend({
+    var ProgressView = Backbone.View.extend({
         template: _.template(require('./../template/progress.html')),
 
         events: {
-            "click .js-finish-import-btn": 'onFinishImport'
+            "click .js-finish-import-btn": '_onFinishImport'
         },
 
         initialize: function () {
             this.$el.html(this.template());
+            this.listenTo(this.model, 'change', this._onChange);
         },
 
-        onProgress: function (model) {
-            var progress = model.get('__progress') + '%';
-            this.$el.find('.progress-bar-success').css('width', progress);
-            if(model.get('__status')){
-                this.$el.find('a').removeClass('hidden');
-                this.$el.find('.progress-text').text('导入成功');
+        _capitalize: function (str) {
+            return str.charAt(0).toUpperCase() + str.substr(1);
+        },
+
+        _onChange: function (model) {
+            var on = "_on" + this._capitalize(model.get('__status'));
+            if(ProgressView.prototype.hasOwnProperty(on)){
+                this[on](model);
             }
         },
 
-        onFinishImport: function (event) {
+        _onProgress: function (model) {
+            var progress = model.get('__progress') + '%';
+            this.$el.find('.progress-bar-success').css('width', progress);
+        },
+
+        _onComplete: function (model) {
+            this.$el.find('.progress-bar').css('width', "100%");
+            this.$el.find('a').removeClass('hidden');
+            this.$el.find('.progress-text').text('导入成功');
+        },
+
+        _onError: function (model) {
+            this.$el.find('.progress-bar').css('width', "100%")
+                .removeClass('progress-bar-success')
+                .addClass('progress-bar-danger')
+            ;
+            this.$el.find('.progress-text').text('发生未知错误').removeClass('text-success').addClass('text-danger');
+            this.$el.find('a').removeClass('hidden').text('重新导入');
+        },
+
+        _onFinishImport: function (event) {
             $('#modal').modal('hide');
             this.remove();
         }
     });
+
+    module.exports = ProgressView;
 });

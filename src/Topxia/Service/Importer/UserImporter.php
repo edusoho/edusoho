@@ -8,7 +8,7 @@ class UserImporter extends Importer
 {
     public function import($postData)
     {
-        $importerData = $postData['importerData'];
+        $importerData = $postData['importData'];
         $checkType      = $postData["checkType"];
         $userByEmail    = array();
         $userByNickname = array();
@@ -36,7 +36,7 @@ class UserImporter extends Importer
 
                 if ($this->getUserImporterService()->isEmailOrMobileRegisterMode()) {
                     if ($this->getUserService()->getUserByVerifiedMobile($user["mobile"])) {
-//email,nickname,verifiedmobile只有一个能修改
+                        //email, nickname, verifiedmobile只有一个能修改
                         $userByMobile[] = $user;
                     }
                 } elseif ($this->getUserService()->getUserByNickname($user["nickname"])) {
