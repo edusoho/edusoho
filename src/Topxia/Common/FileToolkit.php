@@ -942,7 +942,7 @@ class FileToolkit
         return $file;
     }
 
-    public static function safeRemove($filepath)
+    public static function remove($filepath)
     {
         if (empty($filepath)) {
             throw new \RuntimeException("filepath to be deleted is empty");
