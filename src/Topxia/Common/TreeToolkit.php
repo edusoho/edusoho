@@ -11,39 +11,41 @@ class TreeToolkit
      * @return [array]  tree data
      */
 
-    public static function maketree(array $data, $parentId, $sort)
+    public static function maketree(array $data, $sort, $parentId = 0)
     {
-        $tree = self::makeRootTree($data, $parentId);
-        $tree = self::sortData($tree, $sort);
+        $tree = self::makeParentTree($data, $sort, $parentId);
 
         foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = self::maketree($data, $value['id'], $sort);
+            $tree[$key]['children'] = self::maketree($data, $sort, $value['id']);
         }
 
-        return array_values($tree);
-    }
-
-    private static function sortData($tree, $sort)
-    {
-        if (empty($sort)) {
-            return $tree;
-        }
-
-        $tree = ArrayToolkit::index($tree, $sort);
-        ksort($tree, SORT_NUMERIC);
         return $tree;
     }
 
-    private static function makeRootTree(array $categories, $parentId)
+    private static function makeParentTree(array $data, $sort, $parentId)
     {
         $filtered = array();
 
-        foreach ($categories as $value) {
+        if (empty($parentId)) {
+            $parentIds = self::generateParentId($data);
+        }
+
+        foreach ($data as $value) {
             if ($value['parentId'] == $parentId) {
                 $filtered[] = $value;
             }
         }
 
+        $sortArray = ArrayToolkit::column($filtered, $sort);
+
+        array_multisort($sortArray, $filtered);
         return $filtered;
+    }
+
+    private static function generateParentId($data)
+    {
+        $parentIds = ArrayToolkit::column($data, 'parentId');
+        sort($parentIds);
+        return array_shift($parentIds);
     }
 }
