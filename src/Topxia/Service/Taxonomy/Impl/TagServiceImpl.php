@@ -28,12 +28,12 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findAllTags($start, $limit)
     {
-        return $this->getTag()->findAllTags($start, $limit);
+        return $this->getTagDao()->findAllTags($start, $limit);
     }
 
     public function getAllTagCount()
     {
-        return $this->getTag()->getAllTagCount();
+        return $this->getTagDao()->findAllTagsCount();
     }
 
     public function searchTags($conditions, $start, $limit)

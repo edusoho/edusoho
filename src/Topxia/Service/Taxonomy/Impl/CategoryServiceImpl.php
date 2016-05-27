@@ -63,7 +63,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryStructureTree($groupId)
     {
-        return TreeToolkit::makeTree($this->getCategoryTree($groupId), 0, 'weight');
+        return TreeToolkit::makeTree($this->getCategoryTree($groupId), 'weight');
     }
 
     public function sortCategories($ids)
