@@ -25,4 +25,6 @@ interface OrgService
      * @return [type] [description]
      */
     public function switchOrg($id);
+
+    public function sortOrg($ids);
 }

@@ -1,6 +1,3 @@
-/**
- * Created by Simon on 5/9/16.
- */
 define(function (require, exports, module) {
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
@@ -16,7 +13,6 @@ define(function (require, exports, module) {
             if (error) {
                 return;
             }
-
             $('#org-create-btn').button('submiting').addClass('disabled');
 
             $.post($form.attr('action'), $form.serialize(), function (html) {
@@ -33,12 +29,6 @@ define(function (require, exports, module) {
         element: '#org-name-field',
         required: true,
         rule: 'maxlength{max:100}'
-    });
-
-    validator.addItem({
-        element: '#org-seq-field',
-        required: true,
-        rule: 'integer'
     });
 
     validator.addItem({

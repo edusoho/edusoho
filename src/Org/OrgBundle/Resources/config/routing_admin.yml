@@ -18,6 +18,6 @@ admin_org_checkcode:
     pattern: /org/checkcode
     defaults: { _controller: OrgBundle:OrgManage:checkCode }
 admin_org_sort:
-    pattern:  /category/sort
-    defaults: { _controller: TopxiaAdminBundle:Category:sort }
+    pattern:  /org/sort
+    defaults: { _controller: OrgBundle:OrgManage:sort }
     methods: [POST]

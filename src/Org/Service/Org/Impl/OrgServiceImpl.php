@@ -12,9 +12,9 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $user = $this->getCurrentUser();
 
-        $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'seq', 'description'));
+        $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'description'));
 
-        if (!ArrayToolkit::requireds($org, array('name', 'code', 'seq'))) {
+        if (!ArrayToolkit::requireds($org, array('name', 'code'))) {
             throw $this->createServiceException('缺少必要字段,添加失败');
         }
 
@@ -60,9 +60,9 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $org = $this->checkBeforProccess($id);
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'seq', 'description'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'description'));
 
-        if (!ArrayToolkit::requireds($fields, array('name', 'code', 'seq'))) {
+        if (!ArrayToolkit::requireds($fields, array('name', 'code'))) {
             throw $this->createServiceException('缺少必要字段,添加失败');
         }
 
@@ -131,6 +131,13 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
 
         return $org;
+    }
+
+    public function sortOrg($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->getOrgDao()->updateOrg($id, array('seq' => $index));
+        }
     }
 
     protected function getOrgDao()

@@ -12,8 +12,7 @@ class OrgManageController extends BaseController
     {
         $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
 
-        $treeOrgs = TreeToolkit::makeTree($orgs, 0, 'seq');
-
+        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq');
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
@@ -31,7 +30,9 @@ class OrgManageController extends BaseController
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
-        return $this->render('OrgBundle:OrgManage:modal.html.twig');
+        $parentId = $request->query->get('parentId', 0);
+
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array('parentId' => $parentId));
     }
 
     public function updateAction(Request $request, $id)
@@ -68,6 +69,13 @@ class OrgManageController extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+        $this->getOrgService()->sortOrg($ids);
+        return $this->createJsonResponse(true);
     }
 
     protected function getOrgService()
