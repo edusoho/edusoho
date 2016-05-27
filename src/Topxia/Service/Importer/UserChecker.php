@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Topxia\Service\Checker;
+namespace Topxia\Service\Importer;
 
 
 use Symfony\Component\HttpFoundation\Request;
@@ -357,46 +357,71 @@ class UserChecker extends Checker
                 break;
         }
 
-        if (!SimpleValidator::password($userData['password'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["password"] . " 列 的数据存在问题，请检查。";
-        }
+        $array = array(
+            array(
+                'key'      => 'password',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'password')
+            ),
+            array(
+                'key'      => 'nickname',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'nickname')
+            ),
+            array(
+                'key'      => 'truename',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'truename')
+            ),
+            array(
+                'key'      => 'idcard',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'idcard')
+            ),
+            array(
+                'key'      => 'gender',
+                'callback' => function ($data) use ($row, $fieldCol) {
+                    if (!in_array($data, array("男", "女"))) {
+                        return "第 " . $row . "行" . $fieldCol["gender"] . " 列 的数据存在问题，请检查。";
+                    }
+                }
+            ),
+            array(
+                'key'      => 'qq',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'qq')
+            ),
+            array(
+                'key'      => 'classroomId',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+            ),
+            array(
+                'key'      => 'courseId',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+            ),
+            array(
+                'key'      => 'site',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+            ),
+            array(
+                'key'      => 'weibo',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+            ),
+        );
 
-//昵称可选
-
-        if (isset($userData['nickname']) && !empty($userData['nickname']) && !SimpleValidator::nickname($userData['nickname'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["nickname"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['truename']) && $userData['truename'] != "" && !SimpleValidator::truename($userData['truename'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["truename"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['idcard']) && $userData['idcard'] != "" && !SimpleValidator::idcard($userData['idcard'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["idcard"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['gender']) && $userData['gender'] != "" && !in_array($userData['gender'], array("男", "女"))) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["gender"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['qq']) && $userData['qq'] != "" && !SimpleValidator::qq($userData['qq'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["qq"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['classroomId']) && $userData['classroomId'] != "" && !SimpleValidator::numbers($userData['classroomId'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["classroomId"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['courseId']) && $userData['courseId'] != "" && !SimpleValidator::numbers($userData['courseId'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["courseId"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['site']) && $userData['site'] != "" && !SimpleValidator::site($userData['site'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["site"] . " 列 的数据存在问题，请检查。";
-        }
-
-        if (isset($userData['weibo']) && $userData['weibo'] != "" && !SimpleValidator::site($userData['weibo'])) {
-            $errorInfo[] = "第 " . $row . "行" . $fieldCol["weibo"] . " 列 的数据存在问题，请检查。";
+        foreach ($array as $item) {
+            if (!empty($userData[$item['key']])) {
+                $key    = $item['key'];
+                $method = $item['callback'];
+                if (is_callable($method)) {
+                    $error = $method($userData[$key]);
+                } else {
+                    $callback = function ($data) use ($row, $fieldCol, $method, $key) {
+                        if (!forward_static_call_array($method, $data)) {
+                            return "第 " . $row . "行" . $fieldCol[$key] . " 列 的数据存在问题，请检查。";
+                        }
+                    };
+                    $error    = call_user_func($callback, $userData[$key]);
+                }
+                if (!empty($error) && is_string($error)) {
+                    $errorInfo[] = $error;
+                }
+            }
         }
 
         for ($i = 1; $i <= 5; $i++) {

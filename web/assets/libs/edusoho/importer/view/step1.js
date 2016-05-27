@@ -4,16 +4,22 @@ define(function (require, exports, module) {
 
     require("jquery.form");
     var Step1View = Backbone.View.extend({
-
+        defaultTemplate: './../template/step1.html',
         events: {
             'change input[type=file]': 'onChangeExcelFile'
         },
 
         initialize: function () {
-            var type = this.model.get('type').charAt(0).toLowerCase() + this.model.get('type').substr(1);
             var self = this;
-            require.async('./../template/' + type + '-step1.html', function (template) {
-                self.render.call(self, _.template(template));
+            $.get('/excel/template', {type: this.model.get('type')}).then(function (templatePath) {
+                if(_.isEmpty(templatePath)){
+                    templatePath = self.defaultTemplate;
+                }
+                require.async(templatePath, function (template) {
+                    self.render.call(self, _.template(template));
+                });
+            }, function (error) {
+                console.log('找不到模板');
             });
         },
 

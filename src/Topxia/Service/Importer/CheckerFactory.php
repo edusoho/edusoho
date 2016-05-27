@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Topxia\Service\Checker;
+namespace Topxia\Service\Importer;
 
 
 class CheckerFactory

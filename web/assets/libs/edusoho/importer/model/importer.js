@@ -37,7 +37,7 @@ define(function (require, exports, module) {
                 this.set('__status', STATUS.COMPLETE);
             }
 
-            var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress'];
+            var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress', '__status', 'checkInfo'];
             var postData = self.toJSON();
 
             _.each(privateAttr, function (attr) {

@@ -2047,6 +2047,11 @@ excel_importer:
     defaults: { _controller: TopxiaWebBundle:ImporterApi:import}
     methods: [POST]
 
+excel_importer_template:
+    path: /excel/template
+    defaults: { _controller: TopxiaWebBundle:ImporterApi:template}
+    methods: [GET]
+
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

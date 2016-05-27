@@ -38,6 +38,7 @@ define(function (require, exports, module) {
         },
 
         _onError: function (model) {
+            this.stopListening(this.model, "change");
             this.$el.find('.progress-bar').css('width', "100%")
                 .removeClass('progress-bar-success')
                 .addClass('progress-bar-danger')
