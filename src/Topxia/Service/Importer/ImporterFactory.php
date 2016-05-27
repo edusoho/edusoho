@@ -8,8 +8,10 @@ class ImporterFactory
 {
     public static function create($importerType)
     {
-        $class = __NAMESPACE__ . '\\' . ucfirst($importerType). 'Importer';
-
+        $map = array(
+            'user' => 'Topxia\\Service\\Importer\\UserImporter',
+        );
+        $class = $map[$importerType];
         return new $class();
     }
 }

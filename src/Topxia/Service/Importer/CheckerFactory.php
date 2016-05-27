@@ -8,8 +8,10 @@ class CheckerFactory
 {
     public static function create($checkerType)
     {
-        $class = __NAMESPACE__ . '\\' . ucfirst($checkerType). 'Checker';
-
+        $map = array(
+            'user' => 'Topxia\\Service\\Importer\\UserChecker',
+        );
+        $class = $map[$checkerType];
         return new $class();
     }
 }
