@@ -147,12 +147,13 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
+        $goto       = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form'          => $form->createView(),
             'user'          => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
-            'fromCourse'    => $fromCourse
+            'fromCourse'    => $fromCourse,
+            'goto'          => $goto
         ));
     }
 
@@ -168,11 +169,13 @@ class SettingsController extends BaseController
 
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-
+        $goto                                        = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize
+            'scaledSize'  => $scaledSize,
+            'goto'        => $goto
+
         ));
     }
 
@@ -849,9 +852,9 @@ class SettingsController extends BaseController
 
     public function emailVerifyAction()
     {
-        $user  = $this->getCurrentUser();
-        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-        $verifyurl   = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $user      = $this->getCurrentUser();
+        $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
         try {
             $normalMail = array(
                 'to'    => $user['email'],
