@@ -179,6 +179,29 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function avatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
+            $user   = $this->getUserService()->getUser($currentUser['id']);
+            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+            return $this->createJsonResponse(array(
+                'status' => 'success',
+                'avatar' => $avatar));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop-modal.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
+        ));
+    }
+
     public function avatarFetchPartnerAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -1087,6 +1110,11 @@ class SettingsController extends BaseController
     protected function getSensitiveService()
     {
         return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function downloadImg($url)
