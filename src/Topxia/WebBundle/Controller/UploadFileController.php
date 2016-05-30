@@ -99,12 +99,12 @@ class UploadFileController extends BaseController
             unset($conditions['keyword']);
         }
 
-        if (isset($conditions['targetTypes'])) {
+        /*if (isset($conditions['targetTypes'])) {
             $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
             if ($courseMaterials) {
                 $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
             }
-        }
+        }*/
 
         $paginator = new Paginator(
             $this->get('request'),

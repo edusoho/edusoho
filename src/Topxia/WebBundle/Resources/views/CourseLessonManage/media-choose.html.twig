@@ -255,7 +255,7 @@
 
         <div class="tab-pane" id="video-chooser-course-file">
             <div id="file-browser-video" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetTypes:'coursematerial', targetId:targetId, type:'video'}) }}"
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'video'}) }}"
             data-empty="暂无视频文件，请先上传。">
             </div>
         </div>
@@ -345,7 +345,7 @@
 
         <div class="tab-pane" id="audio-chooser-course-file">
           <div id="file-browser-audio" data-role="course-file-browser"
-          data-url="{{ path('uploadfile_browsers', {targetTypes:'coursematerial', targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+          data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
         </div>
 
       </div>
