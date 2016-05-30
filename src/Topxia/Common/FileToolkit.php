@@ -942,7 +942,7 @@ class FileToolkit
         return $file;
     }
 
-    public static function safeRemove($filepath)
+    public static function remove($filepath)
     {
         if (empty($filepath)) {
             throw new \RuntimeException("filepath to be deleted is empty");
@@ -1025,7 +1025,7 @@ class FileToolkit
             $imagine = new Imagine();
             $image   = $imagine->open($fullPath);
         } catch (\Exception $e) {
-            throw new Exception("该文件为非图片格式文件，请重新上传。");
+            throw new \Exception("该文件为非图片格式文件，请重新上传。");
         }
 
         $naturalSize = $image->getSize();
