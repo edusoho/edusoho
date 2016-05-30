@@ -28,8 +28,7 @@
 				<div class="help-block">非必填</div>
 			</div>
 		</div>
-
-		<input type="hidden" name="parentId" value="{{ org.parentId|default(parentId)  }}">
+		<input type="hidden" name="parentId" value="{{ org.parentId|default(0)  }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 </div>

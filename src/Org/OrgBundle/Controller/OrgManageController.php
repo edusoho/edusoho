@@ -31,8 +31,8 @@ class OrgManageController extends BaseController
         }
 
         $parentId = $request->query->get('parentId', 0);
-
-        return $this->render('OrgBundle:OrgManage:modal.html.twig', array('parentId' => $parentId));
+        $org      = array('parentId' => $parentId);
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array('org' => $org));
     }
 
     public function updateAction(Request $request, $id)
