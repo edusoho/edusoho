@@ -14,18 +14,14 @@ define(function(require, exports, module) {
             cropedHeight: 200
         });
 
-        imageCrop.on("afterCrop", function(response) {
+        imageCrop.on("afterCrop", function(response){
             var url = $("#upload-avatar-btn").data("url");
-            $.post(url, {
-                images: response
-            }, function() {
-                $("#modal").modal('hide');
-                Notify.success('新用户添加成功');
-                window.location.reload();
+            $.post(url, {images: response}, function(){
+                document.location.href=$("#upload-avatar-btn").data("gotoUrl");
             });
         });
 
-        $("#upload-avatar-btn").click(function(e) {
+        $("#upload-avatar-btn").click(function(e){
             e.stopPropagation();
 
             imageCrop.crop({
@@ -38,9 +34,9 @@ define(function(require, exports, module) {
 
         })
 
-        $('.go-back').click(function() {
+        $('.go-back').click(function(){
             history.go(-1);
         });
     };
-
+  
 });
