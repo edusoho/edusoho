@@ -23,8 +23,9 @@ define(function(require, exports, module) {
         $('#category-table-body>ul').sortable({
             distance: 20,
             isValidTarget: function ($item, container) {
-                if (container.items.length > 0) {
-                    if ($(container.items[0]).data('parentId') == $item.data('parentId')) {
+                var $targetContainerItems = $(container.items).not('.placeholder');
+                if ($targetContainerItems.length > 0) {
+                    if ($targetContainerItems.data('parentId') == $item.data('parentId')) {
                         return true;
                     }
                 }
