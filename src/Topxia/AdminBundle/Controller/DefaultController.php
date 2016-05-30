@@ -212,13 +212,17 @@ class DefaultController extends BaseController
         $api              = CloudAPIFactory::create('leaf');
         $liveCourseStatus = $api->get('/lives/account');
 
+        $rootApi = CloudAPIFactory::create('root');
+        $mobileCustomization = $rootApi->get('/customization/mobile/info');
+
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
             "apps"              => $apps,
             "error"             => $error,
             "mainAppUpgrade"    => $mainAppUpgrade,
             "app_count"         => $appCount,
             "unInstallAppCount" => $unInstallAppCount,
-            "liveCourseStatus"  => $liveCourseStatus
+            "liveCourseStatus"  => $liveCourseStatus,
+            "mobileCustomization" => $mobileCustomization,
         ));
     }
 

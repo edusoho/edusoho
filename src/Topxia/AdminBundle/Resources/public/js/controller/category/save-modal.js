@@ -33,13 +33,11 @@ define(function(require, exports, module) {
 
                 $('#category-create-btn').button('submiting').addClass('disabled');
 
-                $.post($form.attr('action'), $form.serialize(), function(html){
-                    // $modal.modal('hide');
-                    // $table.find('tbody').replaceWith(html);
+                $.post($form.attr('action'), $form.serialize()).done(function(html) {
+                    $modal.modal('hide');
                     Notify.success('保存分类成功！');
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 1);
+                    // $table.find('tbody').replaceWith(html);
+                    window.location.reload();
 				}).fail(function() {
                     Notify.danger("添加分类失败，请重试！");
                 });
@@ -71,8 +69,8 @@ define(function(require, exports, module) {
             }
 
             $.post($(this).data('url'), function(html) {
+                $modal.modal('hide');
                 window.location.reload();
-                // $modal.modal('hide');
                 // $table.find('tbody').replaceWith(html);
             });
 

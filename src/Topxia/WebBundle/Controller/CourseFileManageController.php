@@ -13,11 +13,13 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        /*$conditions = array(
-            'sources'  => array('courselesson', 'coursematerial'),
-            'courseId' => $course['id']
-        );*/
+        //$type = $request->query->get('type');
+        //$type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
 
+        /*$conditions = array(
+            'targetType' => $type,
+            'targetId'   => $course['id']
+        );*/
 
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
             $course['id'] = $course['parentId'];
@@ -34,7 +36,11 @@ class CourseFileManageController extends BaseController
             20
         );
 
-        $files = $this->getMaterialService()->findDistinctFileIdMaterials($course['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files = $this->getMaterialService()->findDistinctFileIdMaterials(
+            $course['id'], 
+            $paginator->getOffsetCount(), 
+            $paginator->getPerPageCount()
+        );
 
         /*$files = $this->getMaterialService()->searchMaterials(
             $conditions,
@@ -128,28 +134,15 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        if ($request->getMethod() == 'POST') {
-
-            $formData = $request->request->all();
-
-            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
-                foreach ($formData['ids'] as $key => $fileId) {
-                    if ($this->getUploadFileService()->canManageFile($fileId)) {
-                        $this->getUploadFileService()->deleteFile($fileId);
-                    }
-                }
-            } 
-            
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
-
-            return $this->createJsonResponse(true);
+        if (!empty($id)) {
+            $course = $this->getCourseService()->tryManageCourse($id);
         }
-        
-        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
-            'course' => $course,
-        ));
+
+        $ids = $request->request->get('ids', array());
+
+        $this->getUploadFileService()->deleteFiles($ids);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getCourseService()

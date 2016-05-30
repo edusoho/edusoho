@@ -34,7 +34,10 @@
             return this.each(function() {
                 var $this = $(this);
                 $this.treegrid('setTreeContainer', settings.getTreeGridContainer.apply(this));
-                $this.treegrid('getChildNodes').treegrid('initNode', settings);
+                if ($this.treegrid('getChildNodes').length > 0) {
+                    $this.treegrid('getChildNodes').treegrid('initNode', settings);
+                    $this.addClass('has-chlidNodes');
+                }
                 $this.treegrid('initExpander').treegrid('initIndent').treegrid('initEvents').treegrid('initState').treegrid('initChangeEvent').treegrid("initSettingsEvents");
             });
         },

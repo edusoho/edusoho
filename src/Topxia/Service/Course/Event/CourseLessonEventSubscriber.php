@@ -385,7 +385,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'jobParams'  => '',
             'targetType' => "lesson",
             'targetId'   => $lesson['id'],
-            'time'       => $lesson['testStartTime'] + $second
+            'nextExcutedTime'  => $lesson['testStartTime'] + $second
         );
 
         $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);

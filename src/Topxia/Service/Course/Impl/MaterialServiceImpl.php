@@ -87,6 +87,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 					'source'   => 'coursematerial'
 				)
 			);
+
 		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
 		}*/
 
@@ -134,29 +135,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		}*/
 
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
-	}
-
-	public function deleteMaterialsByFileId($fileId)
-	{
-		return $this->getMaterialDao()->deleteMaterialsByFileId($fileId);
-	}
-
-	public function deleteMaterials($courseId, $fileIds)
-	{
-		$materials = $this->searchMaterials(
-			array('courseId' => $courseId, 'fileIds' => $fileIds),
-			array('createdTime','DESC'), 0, PHP_INT_MAX
-		);
-
-		if (!$materials) {
-			return false;
-		}
-
-		foreach ($materials as $key => $material) {
-			$this->deleteMaterial($courseId, $material['id']);
-		}
-
-		return true;
 	}
 
 	public function getMaterial($courseId, $materialId)

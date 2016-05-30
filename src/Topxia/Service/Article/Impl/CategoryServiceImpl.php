@@ -44,6 +44,41 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
+    public function getCategoryStructureTree()
+    {
+        $categories = $this->makeCategoryStructureTree($this->getCategoryTree(), 0);
+        return $categories;
+    }
+
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->getCategoryDao()->updateCategory($id, array('weight' => $index + 1));
+        }
+    }
+
+    protected function makeCategoryStructureTree($data, $parentId)
+    {
+        $tree = $this->filterCategoriesByParentId($data, $parentId);
+
+        foreach ($tree as $key => $value) {
+            $tree[$key]['children'] = $this->makeCategoryStructureTree($data, $value['id']);
+        }
+
+        return $tree;
+    }
+
+    protected function filterCategoriesByParentId(array $categories, $parentId)
+    {
+        $filtered = array();
+        foreach ($categories as $value) {
+            if ($value['parentId'] == $parentId) {
+                $filtered[] = $value;
+            }
+        }
+        return $filtered;
+    }
+
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
@@ -161,9 +196,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
+        $category = ArrayToolkit::parts($category, array('name', 'code', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加栏目失败");
         }
 
@@ -194,9 +229,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->_filterCategoryFields($fields);
 
-        $this->getLogService()->info('category', 'update', "编辑栏目 {$fields['name']}(#{$id})", $fields);
+        $category = $this->getCategoryDao()->updateCategory($id, $fields);
 
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+        $this->getLogService()->info('category', 'update', "编辑栏目 {$category['name']}(#{$id})", $fields);
+
+        return $category;
     }
 
     public function deleteCategory($id)
