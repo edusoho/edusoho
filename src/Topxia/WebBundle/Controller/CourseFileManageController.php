@@ -13,34 +13,38 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $conditions = array(
-            'targetTypes' => array('courselesson', 'coursematerial'),
-            'targetId'    => $course['id']
-        );
+        /*$conditions = array(
+            'sources'  => array('courselesson', 'coursematerial'),
+            'courseId' => $course['id']
+        );*/
+
 
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
-            $conditions['targetId'] = $course['parentId'];
+            $course['id'] = $course['parentId'];
         }
 
-        $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+        /*$courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
         if ($courseMaterials) {
             $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-        }
+        }*/
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFileCount($conditions),
+            $this->getMaterialService()->findDistinctFileIdMaterialsCount($course['id']),
             20
         );
 
-        $files = $this->getUploadFileService()->searchFiles(
+        $files = $this->getMaterialService()->findDistinctFileIdMaterials($course['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        /*$files = $this->getMaterialService()->searchMaterials(
             $conditions,
             array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-        );
+        );*/
 
-        $fileIds    = ArrayToolkit::column($files, 'id');
+        $fileIds    = ArrayToolkit::column($files,'fileId');
+        $files      = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
         $filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));

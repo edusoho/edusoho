@@ -5,7 +5,9 @@ interface MaterialService
 {
 	public function uploadMaterial($material);
 
-	public function updateMaterial($id, $fields);
+	public function addMaterial($fields, $argument);
+
+	public function updateMaterial($id, $fields, $argument);
 
 	public function deleteMaterial($courseId, $materialId);
 
@@ -31,6 +33,10 @@ interface MaterialService
 
 	public function getMaterialCountByFileId($fileId);
 
+	public function findDistinctFileIdMaterials($courseId, $start, $limit);
+
+	public function findDistinctFileIdMaterialsCount($courseId);
+	
 	public function searchMaterials($conditions, $orderBy, $start, $limit);
 
     public function searchMaterialCount($conditions);

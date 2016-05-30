@@ -104,6 +104,8 @@ interface CourseService
 
     public function findLessonsByIds(array $ids);
 
+    public function findLessonsByCourseId($courseId);
+
     public function findLessonsByCopyIdAndLockedCourseIds($copyId, array $courseIds);
 
     public function getCourseLesson($courseId, $lessonId);
