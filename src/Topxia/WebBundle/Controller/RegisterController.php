@@ -7,6 +7,7 @@ use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\MailFactory;
 
 class RegisterController extends BaseController
 {
@@ -457,9 +458,8 @@ class RegisterController extends BaseController
                 'template'  => 'email_registration',
                 'nickname'  => $user['nickname']
             );
-            $mail = new Mail($normalMail, $cloudMail);
-
-            $this->sendEmail($mail);
+            $mail = MailFactory::create($normalMail, $cloudMail);
+            $mail->send();
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }

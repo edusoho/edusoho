@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Service\Common\Mail;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\MailFactory;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
 class SystemController extends BaseController
@@ -56,10 +57,9 @@ class SystemController extends BaseController
                         'title' => "【{$site['name']}】系统自检邮件",
                         'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
                     );
-                    $cloudMail = array();
-                    $mail      = new Mail($normalMail, $cloudMail);
 
-                    $this->sendEmail($mail);
+                    $mail = MailFactory::create($normalMail, $cloudMail);
+                    $mail->send();
 
                     return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
                 }

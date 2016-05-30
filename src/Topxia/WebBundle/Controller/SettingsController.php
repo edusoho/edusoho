@@ -8,6 +8,7 @@ use Topxia\Service\Common\Mail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Service\Common\MailFactory;
 
 class SettingsController extends BaseController
 {
@@ -828,8 +829,8 @@ class SettingsController extends BaseController
                         'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
                         'nickname'  => $user['nickname']
                     );
-                    $mail = new Mail($normalMail, $cloudMail);
-                    $this->sendEmail($mail);
+                    $mail = MailFactory::create($normalMail, $cloudMail);
+                    $mail->send();
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
@@ -868,8 +869,8 @@ class SettingsController extends BaseController
                 'verifyurl' => $verifyurl,
                 'nickname'  => $user['nickname']
             );
-            $mail = new Mail($normalMail, $cloudMail);
-            $this->sendEmail($mail);
+            $mail = MailFactory::create($normalMail, $cloudMail);
+            $mail->send();
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
             $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());

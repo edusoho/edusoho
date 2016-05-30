@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Service\Common\Mail;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\MailFactory;
 
 class PasswordResetController extends BaseController
 {
@@ -64,8 +65,8 @@ class PasswordResetController extends BaseController
                             'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
                             'nickname'  => $user['nickname']
                         );
-                        $mail = new Mail($normalMail, $cloudMail);
-                        $this->sendEmail($mail);
+                        $mail = MailFactory::create($normalMail, $cloudMail);
+                        $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
                         return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
