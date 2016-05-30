@@ -27,11 +27,14 @@ define(function(require, exports, module) {
 	            selectWidth = (cropedWidth) * (naturalWidth/scaledWidth),
 	            selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
 
+            $picture.css('height', scaledHeight);
+
 	        var img = $.Jcrop($picture, {
 	            trueSize: [naturalWidth, naturalHeight],
 	            setSelect: [0, 0, selectWidth, selectHeight],
 	            aspectRatio: ratio,
-	            onSelect: function(c) {
+                keySupport: false,
+                onSelect: function(c) {
 	                self.trigger("select", c);
 	            }
 	        });
