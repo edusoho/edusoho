@@ -168,8 +168,8 @@ class SettingsController extends BaseController
         }
 
         $fileId                                      = $request->getSession()->get("fileId");
-        $goto                                        = $request->query->get('goto');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        $goto                                        = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
