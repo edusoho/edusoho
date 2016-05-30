@@ -24,7 +24,6 @@ define(function(require, exports, module) {
             self.uploader.option('method', 'POST');
             self.uploader.option('chunked', true);
             self.uploader.option('chunkSize', 1024*1024*5);
-            self.uploader.option('chunkRetry', 2);
             self.uploader.option('sendAsBinary', true);
             self.uploader.option('threads', 5);
 

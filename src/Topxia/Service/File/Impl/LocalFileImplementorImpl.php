@@ -187,11 +187,20 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         $uploadParams = array();
 
         $uploadParams['uploadMode']          = 'local';
-        $uploadParams['url']                 = "/uploadfile/upload?targetId={$params['targetId']}&targetType={$params['targetType']}";
+        $uploadParams['url']                 = $this->getUploadUrl($params);
         $uploadParams['postParams']          = array();
         $uploadParams['postParams']['token'] = $this->getUserService()->makeToken('fileupload', $params['userId'], strtotime('+ 2 hours'), $params);
 
         return $uploadParams;
+    }
+
+    protected function getUploadUrl($params)
+    {
+        global $kernel;
+
+        $url = $kernel->getContainer()->get('router')->generate('uploadfile_upload', $params, true);
+
+        return $url;
     }
 
     protected function getFileFullPath($file)
