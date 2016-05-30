@@ -1,6 +1,7 @@
 <?php
 namespace Org\OrgBundle\Controller;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
@@ -9,12 +10,14 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs         = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+
+        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq');
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('OrgBundle:OrgManage:index.html.twig', array(
-            'orgs'         => $orgs,
+            'orgs'         => $treeOrgs,
             'createdUsers' => $createdUsers
         ));
     }
@@ -27,7 +30,9 @@ class OrgManageController extends BaseController
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
-        return $this->render('OrgBundle:OrgManage:modal.html.twig');
+        $parentId = $request->query->get('parentId', 0);
+        $org      = array('parentId' => $parentId);
+        return $this->render('OrgBundle:OrgManage:modal.html.twig', array('org' => $org));
     }
 
     public function updateAction(Request $request, $id)
@@ -64,6 +69,13 @@ class OrgManageController extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+        $this->getOrgService()->sortOrg($ids);
+        return $this->createJsonResponse(true);
     }
 
     protected function getOrgService()

@@ -14,14 +14,6 @@
 		</div>
 
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="org-seq-field">显示序号</label>
-			<div class="col-md-8 controls">
-				<input class="form-control" id="org-seq-field" type="text" name="seq" value="{{ org.seq|default('')  }}" tabindex="2">
-				<div class="help-block">显示序号需为整数，组织机构按序号的顺序从小到大排序。</div>
-			</div>
-		</div>
-
-		<div class="form-group">
 			<label class="col-md-2 control-label" for="org-code-field">编码</label>
 			<div class="col-md-8 controls">
 				<input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('')  }}" data-url="{{ path('admin_org_checkcode', {exclude:org.code|default(null)}) }}" tabindex="3">
@@ -36,12 +28,11 @@
 				<div class="help-block">非必填</div>
 			</div>
 		</div>
-
-		<input type="hidden" name="parentId" value="{{ org.parentId|default('')  }}">
+		<input type="hidden" name="parentId" value="{{ org.parentId|default(0)  }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 </div>
-<script type="text/javascript"> app.load('orgManage/save-modal') </script>
+<script type="text/javascript"> app.load('orgbundle/controller/orgManage/save-modal') </script>
 {% endblock %}
 
 {% block footer %}

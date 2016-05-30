@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Article\Impl;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Article\CategoryService;
@@ -46,8 +47,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function getCategoryStructureTree()
     {
-        $categories = $this->makeCategoryStructureTree($this->getCategoryTree(), 0);
-        return $categories;
+        return TreeToolkit::makeTree($this->getCategoryTree(), 'weight');
     }
 
     public function sortCategories($ids)
@@ -55,28 +55,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach ($ids as $index => $id) {
             $this->getCategoryDao()->updateCategory($id, array('weight' => $index + 1));
         }
-    }
-
-    protected function makeCategoryStructureTree($data, $parentId)
-    {
-        $tree = $this->filterCategoriesByParentId($data, $parentId);
-
-        foreach ($tree as $key => $value) {
-            $tree[$key]['children'] = $this->makeCategoryStructureTree($data, $value['id']);
-        }
-
-        return $tree;
-    }
-
-    protected function filterCategoriesByParentId(array $categories, $parentId)
-    {
-        $filtered = array();
-        foreach ($categories as $value) {
-            if ($value['parentId'] == $parentId) {
-                $filtered[] = $value;
-            }
-        }
-        return $filtered;
     }
 
     protected function makeCategoryTree(&$tree, &$categories, $parentId)

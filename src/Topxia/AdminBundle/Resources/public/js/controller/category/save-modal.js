@@ -57,12 +57,6 @@ define(function(require, exports, module) {
             rule: 'alphanumeric not_all_digital remote'
         });
 
-        validator.addItem({
-            element: '#category-weight-field',
-            required: false,
-            rule: 'integer'
-        });
-
         $modal.find('.delete-category').on('click', function() {
             if (!confirm('真的要删除该分类及其子分类吗？')) {
                 return ;
