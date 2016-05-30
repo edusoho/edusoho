@@ -15,7 +15,7 @@ define(function (require, exports, module) {
         url: '/excel/importer',
         defaults: {
             'checkType': "ignore",
-            'chunkSize': 100,
+            'chunkSize': 50,
             '__progress': 0,
             '__current': 0,
             '__total': 0,

@@ -203,7 +203,7 @@ class UserChecker extends Checker
                 'status'     => 'success',
                 'checkInfo'  => $checkInfo,
                 'importData' => $importData,
-                'checkType'  => $checkType
+                'checkType'  => $checkType,
             );
         } else {
             return array(

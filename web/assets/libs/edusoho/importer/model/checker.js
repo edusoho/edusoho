@@ -4,7 +4,7 @@ define(function (require, exports, module) {
     var Checker = Backbone.Model.extend({
         url: '/excel/checker/',
         defaults: {
-            "rule":  "ignore"
+            "rule":  "ignore",
         },
         initialize : function() {
 

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         $id = $('#user-importer-app');
         var importer = new Importer({
             element: "#user-importer-app",
-            templateUrl: $id.data('templateUrl'),
+            exampleUrl: $id.data('templateUrl'),
             registerMode: $id.data('registerMode'),
             type: 'user'
         });
