@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
-{% block title %}{{'文件管理'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'课程文件'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 {% set script_controller = 'course-manage-file/index' %}
@@ -11,29 +11,29 @@
   </style>
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      {% if app.request.get('type') == 'courselesson' %}
+      {#{% if app.request.get('type') == 'courselesson' %}#}
         <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课程文件'|trans}}
         </a>
-      {% elseif app.request.get('type') == 'coursematerial' %}
+      {#{% elseif app.request.get('type') == 'coursematerial' %}
         <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传备用资料文件'|trans}}
         </a>
-      {% endif %}
-      {{'文件管理'|trans}}
+      {% endif %}#}
+      {{'课程文件'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
-      <ul class="nav nav-tabs mbm">
+      {#<ul class="nav nav-tabs mbm">
         <li {% if app.request.get('type') == 'courselesson' %} class="active" {% endif %}>
         <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
         <li {% if app.request.get('type') == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
-      </ul>
+      </ul>#}
 
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
@@ -42,11 +42,12 @@
             <th>{{'文件名'|trans}}</th>
             <th>{{'类型'|trans}}</th>
             <th>{{'大小'|trans}}</th>
+            <th>{{'使用'|trans}}</th>
             <th>{{'最后更新'|trans}}</th>
           </tr>
         </thead>
         <tbody>
-          {% if app.request.get('type') == 'courselesson' %}
+          {#{% if app.request.get('type') == 'courselesson' %}
             {% for uploadFile in files %}
               {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
             {% else %}
@@ -58,7 +59,13 @@
             {% else %}
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
             {% endfor %}
-          {% endif %}
+          {% endif %}#}
+
+          {% for uploadFile in files if uploadFile %}
+            {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
+          {% else %}
+            <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
+          {% endfor %}
           
         </tbody>
       </table>

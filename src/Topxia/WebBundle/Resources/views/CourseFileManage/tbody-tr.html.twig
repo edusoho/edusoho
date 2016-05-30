@@ -26,7 +26,7 @@
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
   <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
-  {#<td>
+  <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
     {% if 'courselesson' in fileQuotes %}
       <span class="label label-success tip">{{'课时'|trans}}</span>
@@ -34,7 +34,7 @@
     {% if 'coursematerial' in fileQuotes %}
       <span class="label label-success tip">{{'资料'|trans}}</span>
     {% endif %}
-  </td>#}
+  </td>
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>
