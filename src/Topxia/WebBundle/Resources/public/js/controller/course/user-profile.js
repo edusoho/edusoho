@@ -45,7 +45,8 @@ define(function(require, exports, module) {
 
         userValidator.addItem({
             element: '[id="profile_title"]',
-            rule: 'chinese_limit{max:24}'
+            rule: 'chinese_limit{max:24}',
+            required: true
         });
 
         userValidator.addItem({
