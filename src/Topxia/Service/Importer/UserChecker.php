@@ -274,15 +274,14 @@ class UserChecker extends Checker
 
     private function arrayRepeat($array)
     {
-        $repeatArray      = array();
         $repeatArrayCount = array_count_values($array);
         $repeatRow        = "";
 
-        foreach ($repeatArrayCount as $key => $value) {
-            if ($value > 1) {
+        foreach ($repeatArrayCount as $key => $repeatCount) {
+            if ($repeatCount > 1) {
                 $repeatRow .= "重复:<br>";
 
-                for ($i = 1; $i <= $value; $i++) {
+                for ($i = 1; $i <= $repeatCount; $i++) {
                     $row = array_search($key, $array) + 3;
                     $repeatRow .= "第" . $row . "行" . "    " . $key . "<br>";
                     unset($array[$row - 3]);
@@ -414,6 +413,8 @@ class UserChecker extends Checker
                     $callback = function ($data) use ($row, $fieldCol, $method, $key) {
                         if (!forward_static_call_array($method, $data)) {
                             return "第 " . $row . "行" . $fieldCol[$key] . " 列 的数据存在问题，请检查。";
+                        } else {
+                            return "";
                         }
                     };
                     $error    = call_user_func($callback, $userData[$key]);
@@ -446,19 +447,19 @@ class UserChecker extends Checker
         switch ($type) {
             case 'nickname':
                 $defaultResult = $this->getUserService()->isNicknameAvaliable($field);
-                list($result, $message) = $this->getAuthService()->checkUsername($field);
+                list($result, $_) = $this->getAuthService()->checkUsername($field);
                 $authResult = $this->validateResult($result);
                 break;
 
             case 'email':
                 $defaultResult = $this->getUserService()->isEmailAvaliable($field);
-                list($result, $message) = $this->getAuthService()->checkEmail($field);
+                list($result, $_) = $this->getAuthService()->checkEmail($field);
                 $authResult = $this->validateResult($result);
                 break;
 
             case 'mobile':
                 $defaultResult = $this->getUserService()->isMobileAvaliable($field);
-                list($result, $message) = $this->getAuthService()->checkMobile($field);
+                list($result, $_) = $this->getAuthService()->checkMobile($field);
                 $authResult = $this->validateResult($result);
                 break;
 
@@ -562,21 +563,6 @@ class UserChecker extends Checker
         return $response;
     }
 
-    protected function getUserImporterService()
-    {
-        return $this->getServiceKernel()->createService('UserImporter:UserImporter.UserImporterService');
-    }
-
-    protected function getUserFieldService()
-    {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     private function trim($data)
     {
         $data = trim($data);
@@ -601,5 +587,20 @@ class UserChecker extends Checker
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getUserImporterService()
+    {
+        return $this->getServiceKernel()->createService('UserImporter:UserImporter.UserImporterService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
