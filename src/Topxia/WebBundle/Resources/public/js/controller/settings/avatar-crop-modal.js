@@ -18,10 +18,14 @@ define(function(require, exports, module) {
             var url = $("#upload-avatar-btn").data("url");
             $.post(url, {
                 images: response
-            }, function() {
-                $("#modal").modal('hide');
-                Notify.success('新用户添加成功');
-                window.location.reload();
+            }, function(response) {
+                if (response.status === 'success') {
+                    $("#settings-avatar-form img").attr('src', response.avatar)
+                    $("#modal").modal('hide');
+                    Notify.success('上传成功');
+                } else {
+                      Notify.success('上传失败,请重试');
+                }
             });
         });
 
@@ -37,10 +41,6 @@ define(function(require, exports, module) {
             });
 
         })
-
-        $('.go-back').click(function() {
-            history.go(-1);
-        });
     };
 
 });
