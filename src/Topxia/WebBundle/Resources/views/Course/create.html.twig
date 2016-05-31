@@ -11,7 +11,7 @@
       <div class="panel-heading"><h2>{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %}</h2></div>
 
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
-        {% include 'TopxiaWebBundle:Course:user-profile.html.twig'%}
+        {% include 'TopxiaWebBundle:Settings:user-profile.html.twig'%}
       {% else %}
         <form id="course-create-form" class="form-horizontal" method="post">
 

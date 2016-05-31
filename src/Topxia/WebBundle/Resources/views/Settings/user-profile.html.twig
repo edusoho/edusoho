@@ -1,4 +1,5 @@
-{% do load_script('course/user-profile')  %}
+{#课程创建前需要用户完成一下字段#}
+{% do load_script('settings/user-profile')  %}
 <div class="alert alert-info">
   <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
   <ol>
@@ -18,14 +19,14 @@
   </ol>
 </div>
 
-  <form id="settings-avatar-form" class="form-horizontal" method="post">
-
+<form id="user-profile-form" class="form-horizontal" method="post" action="{{path('settings')}}">
   {{ web_macro.flash_messages() }}
 
   <div class="form-group">
-    <div class="col-md-2 control-label"><b>{{'用户头像'|trans}}</b></div>
+    <label class="col-md-2 control-label" for="profile_avatar"><b>{{'用户头像'|trans}}</b></label>
     <div class="controls col-md-8 controls">
       <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+      <input id="profile_avatar" type="hidden"  value="{{ app.user.largeAvatar }}">
     </div>
   </div>
 
@@ -47,9 +48,7 @@
       >{{'上传新头像'|trans}}</a>
     </div>
   </div>
-</form>
 
-<form id="user-profile-form" class="form-horizontal" method="post" action="{{path('settings')}}">
   {% set user = data('UserandProfiles',{userId:app.user.id })%}
   <div class="form-group">
     <label class="col-md-2 control-label" for="profile_title">{{'头衔'|trans}}</label>
