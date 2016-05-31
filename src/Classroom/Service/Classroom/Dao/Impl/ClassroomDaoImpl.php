@@ -82,6 +82,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
+            unset($conditions['orgCode']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -100,6 +101,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
 
         return $builder;

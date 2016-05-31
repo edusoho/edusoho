@@ -10,19 +10,10 @@ class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
+        $conditions = $request->query->all();
 
-        $conditions = array(
-            'title' => ''
-        );
-
-        if (empty($conditions['likeOrgCode'])) {
-            $user                      = $this->getCurrentUser();
-            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
-        }
-
-        if (!empty($fields)) {
-            $conditions = $fields;
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
         }
 
         $paginator = new Paginator(
