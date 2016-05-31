@@ -42,15 +42,16 @@ define(function(require, exports, module) {
                 })
             }
         });
+        
+        validator.addItem({
+            element: '[id="profile_avatar"]',
+            required: true,
+            errormessageRequired: '请上传用户头像'
+        });
 
         validator.addItem({
             element: '[id="profile_title"]',
             rule: 'chinese_limit{max:24}',
-            required: true
-        });
-
-        validator.addItem({
-            element: '[id="profile_avatar"]',
             required: true
         });
 
