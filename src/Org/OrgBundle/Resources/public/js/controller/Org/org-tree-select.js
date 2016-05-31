@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     var SelectTree = require('edusoho.selecttree');
     exports.run = function() {
+        
         var initOrgOptions = function() {
             var option = {};
             if ($("#modalOrgSelectTree").length > 0) {
@@ -14,7 +15,7 @@ define(function(require, exports, module) {
         var option = initOrgOptions();
 
         if (option.element) {
-            var selectTree = new SelectTree(initOrgOptions());
+            var selectTree = new SelectTree(option);
         }
     };
 

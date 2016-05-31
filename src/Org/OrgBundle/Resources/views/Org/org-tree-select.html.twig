@@ -6,7 +6,7 @@
   {% set lablecolmd = lablecolmd|default(2)%}
   {% set nocolmd = nocolmd|default(false)%}
   {% set inputClass = inputClass|default('')%} 
-  {% do load_script('topxiawebbundle/controller/common/org') %}
+  {% do load_script('orgbundle/controller/org/org-tree-select') %}
     <div class="form-group  {% if modal|default(null) == 'list' %}controls {% endif %}">
       {% if modal|default(null) != 'list' %}
         <label class="{% if not nocolmd %} col-md-{{lablecolmd}}{% endif %} control-label">{{'组织机构'|trans}}</label>
