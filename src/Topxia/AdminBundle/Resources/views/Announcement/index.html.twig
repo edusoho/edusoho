@@ -6,7 +6,7 @@
 
 {% block main %}
   <form id="announcement-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    {% include 'TopxiaWebBundle:Common:org.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
     
     <button class="btn btn-primary">搜索</button>
   </form>

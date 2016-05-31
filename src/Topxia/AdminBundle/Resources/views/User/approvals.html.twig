@@ -12,7 +12,7 @@
        href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
   </div>
   <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
-   {% include 'TopxiaWebBundle:Common:org.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+   {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
   
     <div class="form-group">
       <select class="form-control" name="keywordType">
