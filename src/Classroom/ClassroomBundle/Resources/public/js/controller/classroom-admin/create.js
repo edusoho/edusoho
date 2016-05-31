@@ -1,15 +1,8 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    var SelectTree = require('edusoho.selecttree');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
         var validator = new Validator({
             element: '#classroom-create-form',
             onFormValidated: function(error) {

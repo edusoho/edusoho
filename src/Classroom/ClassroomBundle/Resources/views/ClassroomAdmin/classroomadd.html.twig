@@ -26,22 +26,8 @@
             </div>
           </div>
 
-          {%set enableOrg = setting('magic.enable_org','0')%}
-          {% if enableOrg %}
-          <div class="form-group">
-            <label class="col-md-3 control-label">{{'组织机构'|trans}}</label>
-            <div class="col-md-8 controls">
-              {% set org = data('Org',{orgCode:app.user.orgCode})%}
-              <input id="orgSelectTree" 
-                value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-                class="form-control"
-                data-url ="{{ path('org_tree') }}" 
-                data-code ="{{org.orgCode}}"
-              />
-            </div>
-          </div>
-        {% endif %}
-        
+        {% include 'TopxiaWebBundle:Common:org.html.twig' with {lablecolmd:3} %}
+
           <div class="form-group">
             <div class="col-md-3 control-label">
               <label >{{setting("classroom.name")|default("班级")}}展示</label>
