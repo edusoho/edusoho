@@ -1,19 +1,19 @@
 {% set enableOrg = setting('magic.enable_org','0')%}
 {% if enableOrg %}  
-{% set orgCode = orgCode|default(app.user.orgCode)%}
-{% set orgName = 'orgCode' %}
-{% do load_script('topxiawebbundle/controller/common/org') %}
-  <div class="form-group">
-    <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
-    <div class="col-md-8 controls">
-      {% set org = data('Org',{orgCode:orgCode})%}
-      <input id="orgSelectTree" 
-        value = "{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-        class = "form-control"
-        data-url = "{{ path('org_tree') }}" 
-        data-input-value = "{{org.orgCode}}"
-        data-input-name = "{{orgName}}"
-      />
+  {% set orgCode = orgCode|default(app.user.orgCode)%}
+  {% set orgName = 'orgCode' %}
+  {% do load_script('topxiawebbundle/controller/common/org') %}
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
+      <div class="col-md-8 controls">
+        {% set org = data('Org',{orgCode:orgCode})%}
+        <input id="{% if modal|default(false) %}modalOrgSelectTree{% else %}orgSelectTree{% endif %}" 
+          value = "{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
+          class = "form-control"
+          data-url = "{{ path('org_tree') }}" 
+          data-input-value = "{{org.orgCode}}"
+          data-input-name = "{{orgName}}"
+        />
+      </div>
     </div>
-  </div>
  {% endif %}
