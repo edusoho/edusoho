@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     require('es-ckeditor');
 
     exports.run = function() {
-        require('topxiawebbundle/controller/common/org').run();
+        require('orgbundle/controller/org/org-tree-select').run();
         
         var $form = $("#article-form");
         $modal = $form.parents('.modal');

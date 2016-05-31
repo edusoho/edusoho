@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        require('topxiawebbundle/controller/common/org').run();
+        require('orgbundle/controller/org/org-tree-select').run();
         var $modal = $('#announcement-create-form').parents('.modal');
 
         $form = $('#announcement-create-form');
