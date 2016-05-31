@@ -55,7 +55,11 @@ define(function (require, exports, module) {
             this.options = options;
             this.$el = $(options.element);
             this._initEvent();
-            Backbone.history.start();
+            if(!Backbone.History.started){
+                Backbone.history.start();
+            }else {
+                this.navigate('', {trigger: true});
+            }
             this.navigate('index', {trigger: true});
         },
 

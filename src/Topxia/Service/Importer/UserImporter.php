@@ -4,6 +4,10 @@
 namespace Topxia\Service\Importer;
 
 
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\FileToolkit;
+use Topxia\Common\SimpleValidator;
+
 class UserImporter extends Importer
 {
     public function import($postData)
@@ -137,24 +141,579 @@ class UserImporter extends Importer
         }
     }
 
+    public function check(Request $request)
+    {
+        $excelModel = $request->request->all();
+        $excel      = $request->files->get('excel');
+        $checkType  = $excelModel['rule'];
+        if (!is_object($excel)) {
+            return array(
+                'status'  => 'danger',
+                'message' => '请选择上传的文件'
+            );
+        }
+
+        if (FileToolkit::validateFileExtension($excel, 'xls xlsx')) {
+            return array(
+                'status'  => 'danger',
+                'message' => 'Excel格式不正确'
+            );
+        }
+
+        $objPHPExcel  = \PHPExcel_IOFactory::load($excel);
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $highestRow   = $objWorksheet->getHighestRow();
+
+        $highestColumn      = $objWorksheet->getHighestColumn();
+        $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+        if ($highestRow > 1000) {
+            return array(
+                'status'  => 'danger',
+                'message' => 'Excel超过1000行数据'
+            );
+        }
+
+        $fieldArray = $this->getFieldArray();
+
+        $strs = '';
+        for ($col = 0; $col < $highestColumnIndex; $col++) {
+            $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+            $strs[$col] = $fieldTitle . "";
+        }
+
+        $excelField = $strs;
+
+        if (!$this->checkNecessaryFields($excelField)) {
+            return array(
+                'status'  => 'danger',
+                'message' => '缺少必要的字段'
+            );
+        }
+
+        $errorInfo  = array();
+        $checkInfo  = array();
+        $userCount  = 0;
+        $importData = array();
+        //重复性校验
+        $fieldSort = $this->getFieldSort($excelField, $fieldArray);
+        unset($fieldArray, $excelField);
+        $repeatInfo = $this->checkRepeatData($row = 3, $fieldSort, $highestRow, $objWorksheet);
+
+        if ($repeatInfo) {
+            $errorInfo[] = $repeatInfo;
+            return array(
+                'status'    => 'error',
+                "errorInfo" => $errorInfo
+            );
+        }
+
+        for ($row = 3; $row <= $highestRow; $row++) {
+            $strs = array();
+
+            for ($col = 0; $col < $highestColumnIndex; $col++) {
+                $infoData   = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+                $strs[$col] = $infoData . "";
+                unset($infoData);
+            }
+
+            foreach ($fieldSort as $sort) {
+                $num = $sort['num'];
+                $key = $sort['fieldName'];
+
+                $userData[$key] = $strs[$num];
+                $fieldCol[$key] = $num + 1;
+            }
+
+            unset($strs);
+
+            if (!empty($userData['classroomId']) || $userData['classroomId'] == '0') {
+                $classroomIds = explode(",", $userData['classroomId']);
+
+                foreach ($classroomIds as $classroomId) {
+                    //判断班级是否存在
+                    $isClassroomExit = $this->getClassroomService()->getClassroom($classroomId);
+
+                    if ($isClassroomExit && $isClassroomExit['status'] != 'published') {
+                        $errorInfo[] = "第" . $row . "行班级号为的" . $classroomId . "的班级未发布，请检查。";
+                    } elseif (!$isClassroomExit) {
+                        $errorInfo[] = "第" . $row . "行班级号为的" . $classroomId . "的班级不存在，请检查。";
+                    }
+                }
+            }
+
+            if (!empty($userData['courseId']) || $userData['courseId'] == '0') {
+                $courseIds = explode(",", $userData['courseId']);
+
+                foreach ($courseIds as $courseId) {
+                    //判断课程是否存在
+                    $isCourseExit = $this->getCourseService()->getCourse($courseId);
+
+                    if ($isCourseExit && $isCourseExit['status'] != 'published') {
+                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程未发布，请检查。";
+                    } elseif ($isCourseExit && $isCourseExit['parentId'] != '0') {
+                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程课程属于班级课程,无法加入";
+                    } elseif (!$isCourseExit) {
+                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程不存在，请检查。";
+                    }
+                }
+            }
+
+            $emptyData = array_count_values($userData);
+
+            if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
+                $checkInfo[] = "第" . $row . "行为空行，已跳过";
+                continue;
+            }
+
+//字段正确性校验
+
+            if ($this->validFields($userData, $row, $fieldCol)) {
+                $errorInfo = array_merge($errorInfo, $this->validFields($userData, $row, $fieldCol));
+                continue;
+            }
+
+            //导入数据校验
+            $userData['createdIp'] = $request->getClientIp();
+
+            if (!empty($userData['nickname']) && !$this->checkFieldWithThirdPartyAuth($userData['nickname'], 'nickname')) {
+                if ($checkType == "ignore") {
+                    $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                    continue;
+                }
+
+                if ($checkType == "update") {
+                    $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                }
+
+                $userCount    = $userCount + 1;
+                $importData[] = $userData;
+                continue;
+            }
+
+            if (!empty($userData['email']) && !$this->checkFieldWithThirdPartyAuth($userData['email'], 'email')) {
+                if ($checkType == "ignore") {
+                    $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                    continue;
+                };
+
+                if ($checkType == "update") {
+                    $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                }
+
+                $userCount    = $userCount + 1;
+                $importData[] = $userData;
+                continue;
+            }
+
+            if (!empty($userData['mobile']) && !$this->checkFieldWithThirdPartyAuth($userData['mobile'], 'mobile')) {
+                if (!$this->getUserService()->isMobileAvaliable($userData['mobile'])) {
+                    if ($checkType == "ignore") {
+                        $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                        continue;
+                    };
+
+                    if ($checkType == "update") {
+                        $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                    }
+
+                    $userCount    = $userCount + 1;
+                    $importData[] = $userData;
+                    continue;
+                }
+            }
+
+            $userCount = $userCount + 1;
+
+            $importData[] = $userData;
+            unset($userData);
+        }
+
+        if (empty($errorInfo)) {
+            return array(
+                'status'     => 'success',
+                'checkInfo'  => $checkInfo,
+                'importData' => $importData,
+                'checkType'  => $checkType,
+            );
+        } else {
+            return array(
+                'status'    => 'error',
+                "errorInfo" => $errorInfo
+            );
+        }
+    }
+
+    public function getTemplate()
+    {
+        return "UserImporterBundle:UserImporter:userinfo.excel.html.twig";
+    }
+
+
+    private function checkRepeatData($row, $fieldSort, $highestRow, $objWorksheet)
+    {
+        $errorInfo    = array();
+        $emailData    = array();
+        $nicknameData = array();
+        $mobileData   = array();
+
+        foreach ($fieldSort as $key => $value) {
+            if ($value["fieldName"] == "nickname") {
+                $nickNameCol = $value["num"];
+            }
+
+            if ($value["fieldName"] == "email") {
+                $emailCol = $value["num"];
+            }
+
+            if ($value["fieldName"] == "mobile") {
+                $mobileCol = $value["num"];
+            }
+        }
+
+        for ($row; $row <= $highestRow; $row++) {
+            $emailColData = $objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue();
+
+            if ($emailColData . "" == "") {
+                continue;
+            }
+
+            $emailData[] = $emailColData . "";
+        }
+
+        $errorInfo = $this->arrayRepeat($emailData);
+
+        for ($row = 3; $row <= $highestRow; $row++) {
+            $nickNameColData = $objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
+
+            if ($nickNameColData . "" == "") {
+                continue;
+            }
+
+            $nicknameData[] = $nickNameColData . "";
+        }
+
+        $errorInfo .= $this->arrayRepeat($nicknameData);
+
+        for ($row = 3; $row <= $highestRow; $row++) {
+            $mobileColData = $objWorksheet->getCellByColumnAndRow($mobileCol, $row)->getValue();
+
+            if ($mobileColData . "" == "") {
+                continue;
+            }
+
+            $mobileData[] = $mobileColData . "";
+        }
+
+        $errorInfo .= $this->arrayRepeat($mobileData);
+        return $errorInfo;
+    }
+
+    private function arrayRepeat($array)
+    {
+        $repeatArrayCount = array_count_values($array);
+        $repeatRow        = "";
+
+        foreach ($repeatArrayCount as $key => $repeatCount) {
+            if ($repeatCount > 1) {
+                $repeatRow .= "重复:<br>";
+
+                for ($i = 1; $i <= $repeatCount; $i++) {
+                    $row = array_search($key, $array) + 3;
+                    $repeatRow .= "第" . $row . "行" . "    " . $key . "<br>";
+                    unset($array[$row - 3]);
+                }
+            }
+        }
+
+        return $repeatRow;
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getCourseMemberService()
+    private function validFields($userData, $row, $fieldCol)
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        $errorInfo = array();
+        $auth      = $this->getSettingService()->get('auth');
+
+//如果是手机注册模式
+
+        switch ($auth['register_mode']) {
+            case 'email_or_mobile':
+                if (isset($userData['email']) && !empty($userData['email'])) {
+                    if (!SimpleValidator::email($userData['email'])) {
+                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                    }
+                } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
+                    if (!SimpleValidator::mobile($userData['mobile'])) {
+                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                    }
+                } else {
+                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 或者" . $fieldCol["mobile"] . "列 的数据不能均为空，请检查。";
+                }
+
+                break;
+            case 'email':
+                if (isset($userData['email']) && !empty($userData['email'])) {
+                    if (!SimpleValidator::email($userData['email'])) {
+                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                    }
+                } else {
+                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据不能为空，请检查。";
+                }
+
+                break;
+            case 'mobile':
+                if (isset($userData['mobile']) && !empty($userData['mobile'])) {
+                    if (!SimpleValidator::mobile($userData['mobile'])) {
+                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                    }
+                } else {
+                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据不能为空，请检查。";
+                }
+
+                break;
+            default:
+
+                if (isset($userData['email']) && !empty($userData['email'])) {
+                    if (!SimpleValidator::email($userData['email'])) {
+                        $errorInfo[] = "第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                    }
+                } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
+                    if (!SimpleValidator::mobile($userData['mobile'])) {
+                        $errorInfo[] = "第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                    }
+                } else {
+                    $errorInfo[] = "第 " . $row . "行" . $fieldCol["email"] . " 或者" . $fieldCol["mobile"] . "列 的数据不能均为空，请检查。";
+                }
+
+                break;
+        }
+
+        $array = array(
+            array(
+                'key'      => 'password',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'password')
+            ),
+            array(
+                'key'      => 'nickname',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'nickname')
+            ),
+            array(
+                'key'      => 'truename',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'truename')
+            ),
+            array(
+                'key'      => 'idcard',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'idcard')
+            ),
+            array(
+                'key'      => 'gender',
+                'callback' => function ($data) use ($row, $fieldCol) {
+                    if (!in_array($data, array("男", "女"))) {
+                        return "第 " . $row . "行" . $fieldCol["gender"] . " 列 的数据存在问题，请检查。";
+                    }
+                }
+            ),
+            array(
+                'key'      => 'qq',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'qq')
+            ),
+            array(
+                'key'      => 'classroomId',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+            ),
+            array(
+                'key'      => 'courseId',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+            ),
+            array(
+                'key'      => 'site',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+            ),
+            array(
+                'key'      => 'weibo',
+                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+            ),
+        );
+
+        foreach ($array as $item) {
+            if (!empty($userData[$item['key']])) {
+                $key    = $item['key'];
+                $method = $item['callback'];
+                if (is_callable($method)) {
+                    $error = $method($userData[$key]);
+                } else {
+                    $callback = function ($data) use ($row, $fieldCol, $method, $key) {
+                        if (!forward_static_call_array($method, $data)) {
+                            return "第 " . $row . "行" . $fieldCol[$key] . " 列 的数据存在问题，请检查。";
+                        } else {
+                            return "";
+                        }
+                    };
+                    $error    = call_user_func($callback, $userData[$key]);
+                }
+                if (!empty($error) && is_string($error)) {
+                    $errorInfo[] = $error;
+                }
+            }
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            if (isset($userData['intField' . $i]) && $userData['intField' . $i] != "" && !SimpleValidator::integer($userData['intField' . $i])) {
+                $errorInfo[] = "第 " . $row . "行" . $fieldCol["intField" . $i] . " 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
+            }
+
+            if (isset($userData['floatField' . $i]) && $userData['floatField' . $i] != "" && !SimpleValidator::float($userData['floatField' . $i])) {
+                $errorInfo[] = "第 " . $row . "行" . $fieldCol["floatField" . $i] . " 列 的数据存在问题，请检查(只保留到两位小数)。";
+            }
+
+            if (isset($userData['dateField' . $i]) && $userData['dateField' . $i] != "" && !SimpleValidator::date($userData['dateField' . $i])) {
+                $errorInfo[] = "第 " . $row . "行" . $fieldCol["dateField" . $i] . " 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
+            }
+        }
+
+        return $errorInfo;
     }
 
-    protected function getUserService()
+    private function checkFieldWithThirdPartyAuth($field, $type)
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        switch ($type) {
+            case 'nickname':
+                $defaultResult = $this->getUserService()->isNicknameAvaliable($field);
+                list($result, $_) = $this->getAuthService()->checkUsername($field);
+                $authResult = $this->validateResult($result);
+                break;
+
+            case 'email':
+                $defaultResult = $this->getUserService()->isEmailAvaliable($field);
+                list($result, $_) = $this->getAuthService()->checkEmail($field);
+                $authResult = $this->validateResult($result);
+                break;
+
+            case 'mobile':
+                $defaultResult = $this->getUserService()->isMobileAvaliable($field);
+                list($result, $_) = $this->getAuthService()->checkMobile($field);
+                $authResult = $this->validateResult($result);
+                break;
+
+            default:
+                return false;
+        }
+
+        return $defaultResult && $authResult;
     }
 
-    private function getOrderService()
+    private function checkNecessaryFields($data)
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        $data = implode("", $data);
+        $data = $this->trim($data);
+
+        if ($this->getUserImporterService()->isEmailOrMobileRegisterMode()) {
+            $mobile_array = explode("手机号", $data);
+            $email_array  = explode("邮箱", $data);
+
+            if (count($mobile_array) <= 1 && count($email_array) <= 1) {
+                return false;
+            }
+        } else {
+            $tmparray = explode("邮箱", $data);
+
+            if (count($tmparray) <= 1) {
+                return false;
+            }
+        }
+
+        $tmparray = explode("密码", $data);
+
+        if (count($tmparray) <= 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getFieldSort($excelField, $fieldArray)
+    {
+        $fieldSort = array();
+
+        foreach ($excelField as $key => $value) {
+            $value = $this->trim($value);
+
+            if (in_array($value, $fieldArray)) {
+                foreach ($fieldArray as $fieldKey => $fieldValue) {
+                    if ($value == $fieldValue) {
+                        $fieldSort[] = array("num" => $key, "fieldName" => $fieldKey);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $fieldSort;
+    }
+
+    private function getFieldArray()
+    {
+        $userFieldArray = array();
+
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $fieldArray = array(
+            "nickname"    => '用户名',
+            "email"       => '邮箱',
+            "password"    => '密码',
+            "truename"    => '姓名',
+            "gender"      => '性别',
+            "idcard"      => '身份证号',
+            "mobile"      => '手机号',
+            "company"     => '公司',
+            "job"         => '职业',
+            "site"        => '个人主页',
+            "weibo"       => '微博',
+            "weixin"      => '微信',
+            "qq"          => 'QQ',
+            "classroomId" => '班级编号',
+            "courseId"    => '课程编号'
+        );
+
+        foreach ($userFields as $userField) {
+            $title = $userField['title'];
+
+            $userFieldArray[$userField['fieldName']] = $title;
+        }
+
+        $fieldArray = array_merge($fieldArray, $userFieldArray);
+        return $fieldArray;
+    }
+
+    protected function validateResult($result)
+    {
+        if ($result == 'success') {
+            $response = true;
+        } else {
+            $response = false;
+        }
+
+        return $response;
+    }
+
+    private function trim($data)
+    {
+        $data = trim($data);
+        $data = str_replace(" ", "", $data);
+        $data = str_replace('\n', '', $data);
+        $data = str_replace('\r', '', $data);
+        $data = str_replace('\t', '', $data);
+
+        return $data;
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
     protected function getClassroomService()
@@ -162,8 +721,33 @@ class UserImporter extends Importer
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
     protected function getUserImporterService()
     {
         return $this->getServiceKernel()->createService('UserImporter:UserImporter.UserImporterService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }

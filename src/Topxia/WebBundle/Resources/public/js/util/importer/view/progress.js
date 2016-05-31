@@ -48,8 +48,7 @@ define(function (require, exports, module) {
         },
 
         _onFinishImport: function (event) {
-            $('#modal').modal('hide');
-            this.remove();
+            window.location.reload();
         }
     });
 

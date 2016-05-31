@@ -2041,21 +2041,19 @@ live_course_manage_lesson_replay_title_update:
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
 
-excel_checker:
-    path: /excel/checker/{type}
+importer_check:
+    path: /importer/{type}/check
     defaults: { _controller: TopxiaWebBundle:ImporterApi:check}
     methods: [POST]
 
-excel_importer:
-    path: /excel/importer
+importer_import:
+    path: /importer/{type}/import
     defaults: { _controller: TopxiaWebBundle:ImporterApi:import}
     methods: [POST]
 
-excel_importer_template:
-    path: /excel/template
+importer_index:
+    path: /importer/{type}/index
     defaults: { _controller: TopxiaWebBundle:ImporterApi:template}
-    methods: [GET]
-
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

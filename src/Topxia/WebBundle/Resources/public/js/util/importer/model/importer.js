@@ -12,7 +12,7 @@ define(function (require, exports, module) {
     };
 
     module.exports = Backbone.Model.extend({
-        url: '/excel/importer',
+        url: '/importer/{type}/import',
         defaults: {
             'checkType': "ignore",
             'chunkSize': 50,
@@ -46,7 +46,7 @@ define(function (require, exports, module) {
 
             _.each(chunkData, function (data) {
                 postData.importData = data;
-                $.post(self.url, postData).then(function (response) {
+                $.post(self.url.replace(/\{type\}/, self.get('type')), postData).then(function (response) {
                     self.set('__current', self.get('__current') + 1);
                     var current = self.get('__current');
                     var total = self.get('__total');

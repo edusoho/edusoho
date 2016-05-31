@@ -4,39 +4,19 @@ define(function (require, exports, module) {
 
     require("jquery.form");
     var Step1View = Backbone.View.extend({
-        defaultTemplate: './../template/step1.html',
-        cache: {
-
-        },
         events: {
             'change input[type=file]': 'onChangeExcelFile'
         },
 
         initialize: function () {
-            var self = this;
-            if(this.cache.templatePath === undefined){
-                $.ajax('/excel/template',{
-                    data: {type: this.model.get('type')},
-                    success: function (templatePath) {
-                        if(_.isEmpty(templatePath)){
-                            templatePath = self.defaultTemplate;
-                        }
-
-                        self.cache.templatePath = templatePath;
-                    },
-                    dataType: 'json',
-                    async: false
-                });
-            }
-            require.async(this.cache.templatePath, function (template) {
-                self.render.call(self, _.template(template));
-            });
+            this.render()
         },
 
-        render: function (template) {
+        render: function () {
+            var template = _.template(this.model.get('template'));
             this.$el.html(template(this.model.toJSON()));
             var self = this;
-            this.$el.find('form').attr('action', this.model.url + this.model.get('type')).ajaxForm({
+            this.$el.find('form').attr('action', this.model.url.replace(/\{type\}/i, this.model.get('type'))).ajaxForm({
                 success: function (res) {
                     var status = res.status;
                     var eventListener = 'on' + status.charAt(0).toUpperCase() + status.substr(1);

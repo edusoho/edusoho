@@ -2,7 +2,7 @@ define(function (require, exports, module) {
     var Backbone = require('backbone');
 
     var Checker = Backbone.Model.extend({
-        url: '/excel/checker/',
+        url: '/importer/{type}/check',
         defaults: {
             "rule":  "ignore",
         },
