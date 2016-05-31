@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
-    require('topxiawebbundle/controller/common/org').run();
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        var Validator = require('bootstrap.validator');
-        require('common/validator-rules').inject(Validator);
+        require('topxiawebbundle/controller/common/org').run();
 
         var validator = new Validator({
             element: '#user-edit-form',
