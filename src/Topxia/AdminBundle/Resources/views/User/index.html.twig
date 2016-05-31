@@ -11,18 +11,7 @@
 
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
-     {% set enableOrg = setting('magic.enable_org','0')%}
-     {% if enableOrg %}
-     <div class="form-group controls">
-       {% set org = data('Org',{orgCode:app.request.get('orgCode', app.user.orgCode)})%}
-        <input id="orgSelectTree" 
-            value="{{  org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-            class="form-control"
-            data-url ="{{ path('org_tree') }}" 
-            data-code ="{{ org.orgCode }}"
-        />
-    </div>
-   {% endif %}
+    {% include 'TopxiaWebBundle:Common:org.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
    
     <select class="form-control" name="datePicker" id="datePicker">
       {{ select_options({longinDate:'登录时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
