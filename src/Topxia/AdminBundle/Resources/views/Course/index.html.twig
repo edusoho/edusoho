@@ -12,7 +12,7 @@
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
       <div class="form-group">
-        <select style="max-width:150px;" class="form-control" name="categoryId">
+        <select style="width:150px; visibility: hidden" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
         </select>
       </div>

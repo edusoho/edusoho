@@ -1,7 +1,13 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
+	require("jquery.select2");
+    require("jquery.select2-css");
+
 	exports.run = function(options) {
+
+		$('[name="categoryId"]').select2();
+
 		var $table = $('#course-table');
 
 		$table.on('click', '.cancel-recommend-course', function(){
