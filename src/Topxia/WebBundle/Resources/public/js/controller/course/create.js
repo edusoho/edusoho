@@ -2,7 +2,6 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     exports.run = function() {
         if ($("#course-create-form").length > 0) {
-
             var validator = new Validator({
                 element: '#course-create-form',
                 triggerType: 'change',

@@ -12,13 +12,15 @@ class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user   = $this->getCurrentUser();
         $fields = $request->query->all();
 
         $conditions = array(
             'roles'           => '',
             'keywordType'     => '',
             'keyword'         => '',
-            'keywordUserType' => ''
+            'keywordUserType' => '',
+            'orgCode'         => $user->getCurrentOrgCode()
         );
 
         if (empty($fields)) {
@@ -26,6 +28,10 @@ class UserController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+        }
 
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
@@ -220,6 +226,22 @@ class UserController extends BaseController
             'user'    => $user,
             'profile' => $profile,
             'fields'  => $fields
+        ));
+    }
+
+    public function orgUpdateAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        if ($request->isMethod('POST')) {
+            $orgCode = $request->request->get('orgCode', $user['orgCode']);
+            $this->getUserService()->changeOrgCode($user['id'], $orgCode);
+        }
+
+        $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+        return $this->render('TopxiaAdminBundle:User:update-org-modal.html.twig', array(
+            'user' => $user,
+            'org'  => $org
         ));
     }
 
@@ -545,5 +567,10 @@ class UserController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getOrgService()
+    {
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

@@ -9,7 +9,9 @@
 <div class="well well-sm">
   <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate> 
     
-    <div class="form-group">
+    {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    
+    <div class="form-group controls">
       <select id="keywordType" name="keywordType" class="form-control">
         {{ select_options(dict('userKeyWordTypes'), app.request.query.get('keywordType')) }}
       </select>

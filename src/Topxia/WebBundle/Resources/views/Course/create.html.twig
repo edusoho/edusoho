@@ -23,7 +23,9 @@
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
             </div>
-          </div>
+          </div> 
+
+          {% include 'OrgBundle:org:org-tree-select.html.twig' %}
 
       <div class="form-group">
         <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
