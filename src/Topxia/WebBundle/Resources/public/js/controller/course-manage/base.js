@@ -4,16 +4,9 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require('jquery.select2-css');
     require('jquery.select2');
-    var SelectTree = require('edusoho.selecttree');
-    
+    require('./header').run();
+
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
-        require('./header').run();
 
         $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data) {
             $("#maxStudentNum-field").data("liveCapacity", data.capacity);
