@@ -31,9 +31,9 @@ interface CourseMaterialDao
 
     public function getMaterialCountByFileId($fileId);
 
-    public function findDistinctFileIdMaterials($courseId, $start, $limit);
+    public function findMaterialsGroupByFileId($courseId, $start, $limit);
 
-    public function findDistinctFileIdMaterialsCount($courseId);
+    public function findMaterialCountGroupByFileId($courseId);
 
     public function searchMaterials($conditions, $orderBy, $start, $limit);
 

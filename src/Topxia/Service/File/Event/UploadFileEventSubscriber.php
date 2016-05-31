@@ -13,9 +13,9 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
             'course.delete'        => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
             'course.lesson.delete' => 'onCourseLessonDelete',
-            'material.create'      => 'onMaterialCreate',
-            'material.update'      => 'onMaterialUpdate',
-            'material.delete'      => 'onMaterialDelete'
+            'course.material.create'      => 'onMaterialCreate',
+            'course.material.update'      => 'onMaterialUpdate',
+            'course.material.delete'      => 'onMaterialDelete'
         );
     }
 
@@ -23,7 +23,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     {
         $course = $event->getSubject();
         
-        $lessons = $this->getCourseService()->findLessonsByCourseId($course['id']);
+        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
 
         if (!empty($lessons)) {
             $fileIds = ArrayToolkit::column($lessons, "mediaId");

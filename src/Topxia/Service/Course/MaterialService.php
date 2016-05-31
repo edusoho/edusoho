@@ -17,6 +17,10 @@ interface MaterialService
 
 	public function deleteMaterialsByCourseId($courseId);
 
+	public function deleteMaterials($courseId, $fileIds);
+
+	public function deleteMaterialsByFileId($fileId);
+
 	public function getMaterial($courseId, $materialId);
 
 	public function findCourseMaterials($courseId, $start, $limit);
@@ -29,11 +33,13 @@ interface MaterialService
 
 	public function getMaterialCountByFileId($fileId);
 
-	public function findDistinctFileIdMaterials($courseId, $start, $limit);
+	public function findMaterialsGroupByFileId($courseId, $start, $limit);
 
-	public function findDistinctFileIdMaterialsCount($courseId);
+    public function findMaterialCountGroupByFileId($courseId);
 	
 	public function searchMaterials($conditions, $orderBy, $start, $limit);
 
     public function searchMaterialCount($conditions);
+
+    public function findUsedCourseMaterials($courseId, $fileIds);
 }

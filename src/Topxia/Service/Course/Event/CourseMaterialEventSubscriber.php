@@ -17,7 +17,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             'course.lesson.delete' => array('onCourseLessonDelete', 0),
             'course.lesson.update' => 'onCourseLessonUpdate',
             'upload.file.delete'   => 'onUploadFileDelete',
-            'material.delete'      => 'onMaterialDelete',
+            'course.material.delete'      => 'onMaterialDelete',
         );
     }
 
