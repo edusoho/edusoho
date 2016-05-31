@@ -1,8 +1,8 @@
 <?php
 
-namespace Symfony\Component\HttpFoundation;
+namespace Topxia\Common;
 
-use Symfony\Component\HttpFoundation\BaseParameterBag;
+use Symfony\Component\HttpFoundation\ParameterBag as BaseParameterBag;
 
 
 class ParameterBag extends BaseParameterBag
@@ -16,8 +16,8 @@ class ParameterBag extends BaseParameterBag
         if (!is_array($parameters)) { 
             return $parameters;
         }
-     
-        while (list($key, $value) = each($parameters)){
+
+        foreach($parameters as $key => $value) {
             if (is_array($value)){
                 $parameters[$key] = $this->trimArray($value);
             } else {

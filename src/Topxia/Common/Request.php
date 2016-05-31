@@ -3,7 +3,6 @@
 namespace Topxia\Common;
 
 use Symfony\Component\HttpFoundation\Request as BaseRequest;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\ServerBag;
 use Symfony\Component\HttpFoundation\HeaderBag;
