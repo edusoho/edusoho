@@ -4,6 +4,7 @@ namespace Topxia\Service\Common;
 abstract class Mail
 {
     private $options;
+
     public function __construct($options)
     {
         $this->options = $options;
@@ -31,8 +32,9 @@ abstract class Mail
 
     protected function setting($name, $default)
     {
-        $setting = ServiceKernel::instance()->createService('System.SettingService');
-        return $setting->get($name, $default);
+        global $kernel;
+        $container = $kernel->getContainer();
+        return $container->get('topxia.twig.web_extension')->getSetting($name, $default);
     }
 
     public abstract function send();

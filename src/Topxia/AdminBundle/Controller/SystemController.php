@@ -52,13 +52,15 @@ class SystemController extends BaseController
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
                     return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
                 } else {
-                    $normalMail = array(
+                    $mailOptions = array(
                         'to'    => $user['email'],
-                        'title' => "【{$site['name']}】系统自检邮件",
-                        'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
+                        'template' => 'email_system_self_test',
+                        'params' => array(
+                            'sitename' => $site['name']
+                        )
                     );
 
-                    $mail = MailFactory::create($normalMail, $cloudMail);
+                    $mail = MailFactory::create($mailOptions);
                     $mail->send();
 
                     return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));

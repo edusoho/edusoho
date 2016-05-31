@@ -6,16 +6,16 @@ namespace Topxia\Service\Common;
 
 class MailFactory
 {
-    public static function create($normalOption, $cloudOptions)
+    public static function create($mailOptions)
     {
         $setting = ServiceKernel::instance()->createService('System.SettingService');
 
         $cloudConfig = $setting->get('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $mail = new CloudMail($cloudOptions);
+            $mail = new CloudMail($mailOptions);
         } else {
-            $mail = new NormalMail($normalOption);
+            $mail = new NormalMail($mailOptions);
         }
         return $mail;
     }

@@ -841,28 +841,24 @@ class SettingsController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $normalMail = array(
-                        'to'    => $data['email'],
-                        'title' => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
-                        'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
-                            'user'  => $user,
-                            'token' => $token
-                        ))
+                    $site = $this->setting('site', array());
+                    $mailOptions = array(
+                        'to'       => $data['email'],
+                        'template' => 'email_reset_email',
+                        'params'   => array(
+                            'sitename'  => $site['name'],
+                            'siteurl'   => $site['url'],
+                            'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                            'nickname'  => $user['nickname']
+                        )
                     );
-                    $cloudMail = array(
-                        'to'        => $data['email'],
-                        'template'  => 'email_reset_email',
-                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                        'nickname'  => $user['nickname']
-                    );
-                    $mail = MailFactory::create($normalMail, $cloudMail);
+                    $mail = MailFactory::create($mailOptions);
                     $mail->send();
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
                     $this->getLogService()->error('setting', 'email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
-
                 return $this->redirect($this->generateUrl('settings_email'));
             }
         }
@@ -879,23 +875,19 @@ class SettingsController extends BaseController
         $user      = $this->getCurrentUser();
         $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $site = $this->setting('site', array());
         try {
-            $normalMail = array(
-                'to'    => $user['email'],
-                'title' => "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
-                'body'  => $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
-                    'user'  => $user,
-                    'token' => $token
-                ))
-            );
-
-            $cloudMail = array(
+            $mailOptions = array(
                 'to'        => $user['email'],
-                'template'  => 'email_reset_email',
-                'verifyurl' => $verifyurl,
-                'nickname'  => $user['nickname']
+                'template'  => 'email_verify_email',
+                'params' => array(
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname'],
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
+                )
             );
-            $mail = MailFactory::create($normalMail, $cloudMail);
+            $mail = MailFactory::create($mailOptions);
             $mail->send();
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {

@@ -18,12 +18,7 @@ class CloudMail extends Mail
             $params = array(
                 'to'       => $this->to,
                 'template' => $this->template,
-                'params'   => array(
-                    'sitename'  => $site['name'],
-                    'nickname'  => $this->nickname,
-                    'verifyurl' => $this->verifyurl,
-                    'siteurl'   => $site['url']
-                )
+                'params'   => $this->params
             );
             $result = $api->post("/emails", $params);
             return true;
