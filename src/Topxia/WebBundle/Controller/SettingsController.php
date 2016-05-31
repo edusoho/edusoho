@@ -147,12 +147,13 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
+        $goto       = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form'          => $form->createView(),
             'user'          => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
-            'fromCourse'    => $fromCourse
+            'fromCourse'    => $fromCourse,
+            'goto'          => $goto
         ));
     }
 
@@ -168,8 +169,33 @@ class SettingsController extends BaseController
 
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-
+        $goto                                        = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize,
+            'goto'        => $goto
+
+        ));
+    }
+
+    public function avatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
+            $user   = $this->getUserService()->getUser($currentUser['id']);
+            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+            return $this->createJsonResponse(array(
+                'status' => 'success',
+                'avatar' => $avatar));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop-modal.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
@@ -849,9 +875,9 @@ class SettingsController extends BaseController
 
     public function emailVerifyAction()
     {
-        $user  = $this->getCurrentUser();
-        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-        $verifyurl   = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $user      = $this->getCurrentUser();
+        $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
         try {
             $normalMail = array(
                 'to'    => $user['email'],
@@ -1084,6 +1110,11 @@ class SettingsController extends BaseController
     protected function getSensitiveService()
     {
         return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function downloadImg($url)
