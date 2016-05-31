@@ -46,6 +46,7 @@ seajs.config({
         'json': 'gallery/json/1.0.3/json',
         "handlebars": "gallery/handlebars/1.0.2/handlebars",
         "backbone": "gallery/backbone/1.0.0/backbone",
+        "underscore": "gallery/underscore/1.8.3/underscore",
         "swfobject": "gallery/swfobject/2.2.0/swfobject.js",
         'moment': 'gallery/moment/2.5.1/moment',
         'morris': 'gallery/morris/0.5.0/morris',
@@ -63,6 +64,7 @@ seajs.config({
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
         'edusoho.selecttree': 'edusoho/ztree/0.0.1/select-tree.js',
+        'edusoho.mimetypes': 'edusoho/mimetypes/0.0.1/mime-types',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
@@ -77,7 +79,8 @@ seajs.config({
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
-        
+        'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
     },
 
     // 预加载项

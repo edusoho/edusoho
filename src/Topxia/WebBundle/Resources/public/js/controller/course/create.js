@@ -11,7 +11,6 @@ define(function(require, exports, module) {
         }
 
         if ($("#course-create-form").length > 0) {
-
             var validator = new Validator({
                 element: '#course-create-form',
                 triggerType: 'change',

@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Taxonomy\Impl;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Taxonomy\CategoryService;
@@ -58,6 +59,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->makeCategoryTree($tree, $categories, 0);
 
         return $tree;
+    }
+
+    public function getCategoryStructureTree($groupId)
+    {
+        return TreeToolkit::makeTree($this->getCategoryTree($groupId), 'weight');
+    }
+
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->updateCategory($id, array('weight' => $index + 1));
+        }
     }
 
     public function findCategories($groupId)
@@ -216,9 +229,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('description', 'name', 'code', 'weight', 'groupId', 'parentId', 'icon'));
+        $category = ArrayToolkit::parts($category, array('description', 'name', 'code', 'groupId', 'parentId', 'icon'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'groupId', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'groupId', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加分类失败");
         }
 
@@ -274,9 +287,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($fields, $category);
 
-        $this->getLogService()->info('category', 'update', "编辑分类 {$fields['name']}(#{$id})", $fields);
+        $category = $this->getCategoryDao()->updateCategory($id, $fields);
 
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+        $this->getLogService()->info('category', 'update', "编辑分类 {$category['name']}(#{$id})", $fields);
+
+        return $category;
     }
 
     public function deleteCategory($id)

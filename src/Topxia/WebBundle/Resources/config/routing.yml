@@ -670,9 +670,8 @@ course_manage_file_status:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
 
 course_manage_upload_course_delete_files:
-    pattern:  /course/{id}/delete/files/{type}
+    pattern:  /course/{id}/delete/materials
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
-    methods: [POST]
 
 course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
@@ -1117,6 +1116,10 @@ settings_avatar:
 settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+
+settings_avatar_crop_modal:
+    pattern:  /settings/avatar/crop/modal
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
 
 settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner

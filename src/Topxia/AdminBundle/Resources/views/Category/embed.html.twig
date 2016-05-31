@@ -4,15 +4,14 @@
 
 {% block main %}
 
-<table class="table table-hover" id="category-table">
-  <thead>
-    <tr>
-      <th width="50%">名称</th>
-      <th width="15%">编码</th>
-      <th width="15%">显示序号</th>
-      <th width="20%">操作</th>
-    </tr>
-  </thead>
-  {% include 'TopxiaAdminBundle:Category:tbody.html.twig' %}
-</table>
+<ul class="list-table" id="category-table" style="margin-bottom: 0">
+    <li class="th">
+        <div class="row">
+            <div class="td col-md-7">名称</div>
+            <div class="td col-md-2">编码</div>
+            <div class="td col-md-3">操作</div>
+        </div>
+    </li>
+    {% include 'TopxiaAdminBundle:Category:tbody.html.twig' %}
+</ul>
 {% endblock %}

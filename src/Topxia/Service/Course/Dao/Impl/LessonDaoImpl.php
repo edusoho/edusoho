@@ -121,6 +121,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function searchLessons($conditions, $orderBy, $start, $limit)
     {
+        if ($this->hasEmptyInCondition($conditions, array('courseIds'))) {
+            return array();
+        }
+
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -278,7 +282,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('createdTime <= :endTime')
             ->andWhere('copyId = :copyId')
             ->andWhere('courseId IN ( :courseIds )');
-            
+
         if (isset($conditions['notLearnedIds']) && !empty($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
         }

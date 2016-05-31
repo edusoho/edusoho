@@ -2,6 +2,7 @@
 
 namespace Org\Service\Org\Tests;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 
@@ -94,12 +95,29 @@ class OrgServiceTest extends BaseTestCase
         $this->assertEquals($org['orgCode'], $user->getSelectOrgCode());
     }
 
+    public function testSortOrg()
+    {
+        $org  = $this->mookOrg($name = "edusoho");
+        $org1 = $this->mookOrg($name = "edusoho1");
+        $org  = $this->getOrgService()->createOrg($org);
+        $org  = $this->getOrgService()->createOrg($org1);
+
+        $orgs   = $this->getOrgService()->findOrgsStartByOrgCode();
+        $seqs   = ArrayToolkit::column($orgs, 'seq');
+        $orgIds = ArrayToolkit::column($orgs, 'id');
+        $this->getOrgService()->sortOrg($orgIds);
+
+        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+
+        $sortSeqs = ArrayToolkit::column($orgs, 'seq');
+        $this->assertGreaterThan(array_sum($seqs), array_sum($sortSeqs));
+    }
+
     private function mookOrg($name)
     {
         $org         = array();
         $org['name'] = $name;
         $org['code'] = $name;
-        $org['seq']  = 0;
         return $org;
     }
 
@@ -109,6 +127,7 @@ class OrgServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
+
     }
 
     protected function createUser()

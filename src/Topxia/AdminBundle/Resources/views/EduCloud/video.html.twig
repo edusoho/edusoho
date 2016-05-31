@@ -72,6 +72,14 @@
 
 }
 
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
+}
+
 .balloon-filelist .file-name {
   margin-right: 250px;
   padding: 8px;
@@ -172,6 +180,7 @@
 }
 
 .balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
   background: rgba(59, 181, 33, 0.18);
   float: left;
   height: 100%;

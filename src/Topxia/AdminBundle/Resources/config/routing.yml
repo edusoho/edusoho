@@ -486,6 +486,11 @@ admin_operation_mobile_select:
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
     permissions: [admin_operation_mobile_select_manage]
 
+admin_operation_mobile_customization_upgrade:
+    pattern:  /operation/mobile/customization_upgrade
+    defaults: { _controller: TopxiaAdminBundle:Mobile:customizationUpgrade }
+    methods: [POST]
+
 admin_discovery_column_delete:
     pattern:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
@@ -1129,13 +1134,17 @@ admin_category_delete:
     pattern:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
-    permissions: [admin_course_category_manage]
 
 admin_category_upload:
     pattern: /category/uploadfile
     defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
     methods: [POST]
     permissions: [admin_course_category_manage]
+
+admin_category_sort:
+    pattern:  /category/sort
+    defaults: { _controller: TopxiaAdminBundle:Category:sort }
+    methods: [POST]
 
 # admin_file:
 #     pattern:  /file
@@ -1242,7 +1251,10 @@ admin_article_category_delete:
     pattern:  /article/category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
     methods: [POST]
-    permissions: [admin_operation_article_category]
+admin_article_category_sort:
+    pattern:  /article/category/sort
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:sort }
+    methods: [POST]
 
 admin_article_setting:
     pattern: /setting/article

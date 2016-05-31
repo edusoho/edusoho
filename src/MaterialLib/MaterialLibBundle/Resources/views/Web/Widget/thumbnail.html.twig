@@ -27,8 +27,7 @@
       {% if uploadFile.createdUserId == app.user.id %}
         <li>
           <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-            <i class="glyphicon glyphicon-pencil prm"></i>
-            编辑
+            <i class="glyphicon glyphicon-pencil prm"></i>编辑
           </a>
         </li>
       {% endif %}
@@ -36,8 +35,7 @@
       {% if uploadFile.storage == "cloud" and uploadFile.createdUserId != app.user.id %}
         <li>
           <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
-            <i class="glyphicon glyphicon-eye-open prm"></i>
-            查看
+            <i class="glyphicon glyphicon-eye-open prm"></i>查看
           </a>
         </li>
       {% endif %}
@@ -77,8 +75,7 @@
   <div class="btn-operation">
       <!-- 选择一种状态 -->
 
-      <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
-        资料预览
+      <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >资料预览
       </a>
 
       {% if uploadFile.convertStatus == 'error' %}
