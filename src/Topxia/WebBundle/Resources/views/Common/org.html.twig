@@ -3,17 +3,22 @@
   {% set orgCode = orgCode|default(app.user.orgCode)%}
   {% set orgName = 'orgCode' %}
   {% do load_script('topxiawebbundle/controller/common/org') %}
-    <div class="form-group">
-      <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
-      <div class="col-md-8 controls">
+    <div class="form-group controls">
+      {% if modal|default(null) != 'list' %}
+        <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
+        <div class="col-md-8 controls">
+      {% endif %}
         {% set org = data('Org',{orgCode:orgCode})%}
-        <input id="{% if modal|default(false) %}modalOrgSelectTree{% else %}orgSelectTree{% endif %}" 
+        <input id="{% if modal|default(null) == 'modal' %}modalOrgSelectTree{% else %}orgSelectTree{% endif %}" 
           value = "{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
           class = "form-control"
           data-url = "{{ path('org_tree') }}" 
           data-input-value = "{{org.orgCode}}"
           data-input-name = "{{orgName}}"
         />
-      </div>
+
+        {% if modal|default(null) != 'list' %}
+         </div>
+      {% endif %}
     </div>
  {% endif %}
