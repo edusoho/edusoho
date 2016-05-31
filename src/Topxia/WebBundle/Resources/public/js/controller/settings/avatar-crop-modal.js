@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             }, function(response) {
                 if (response.status === 'success') {
                     $("#profile_avatar").val(response.avatar);
-                    $("#settings-avatar-form img").attr('src', response.avatar);
+                    $("#user-profile-form img").attr('src', response.avatar);
                     $("#profile_avatar").blur();
                     $("#modal").modal('hide');
                     Notify.success('上传成功');
