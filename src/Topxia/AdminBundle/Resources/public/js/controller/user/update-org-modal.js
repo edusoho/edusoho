@@ -1,18 +1,7 @@
 define(function(require, exports, module) {
-    "use strict";
-
     var Notify = require('common/bootstrap-notify');
-    var SelectTree = require('edusoho.selecttree');
-
+    require('topxiawebbundle/controller/common/org').run();
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#modalOrgSelectTree",
-                name: 'orgCode',
-                modal: true
-            });
-        }
-
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
 

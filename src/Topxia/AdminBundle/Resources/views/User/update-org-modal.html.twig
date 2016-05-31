@@ -6,24 +6,7 @@
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_org_update', {id:user.id}) }}">
-  {% set enableOrg = setting('magic.enable_org','0')%}
-  {% if enableOrg %}
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="orgCode">组织机构</label>
-    </div>
-    <div class="col-md-7 controls">
-       {% set org = data('Org',{orgCode:org.orgCode|default(app.user.orgCode)})%}
-        <input id="modalOrgSelectTree" 
-          value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-          class="form-control"
-          data-url ="{{ path('org_tree') }}" 
-          data-code ="{{ org.orgCode }}"
-        />
-    </div>
-  </div>
-  {% endif %}
-  
+    {% include 'TopxiaWebBundle:Common:org.html.twig' with {orgCode: org.orgCode, modal: true} %}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endblock %}
