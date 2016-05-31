@@ -82,7 +82,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
-            unset($conditions['orgCode']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)

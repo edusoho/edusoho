@@ -19,9 +19,8 @@ class LiveCourseController extends BaseController
             'status' => 'published'
         );
 
-        if (empty($courseCondition['likeOrgCode'])) {
-            $user                           = $this->getCurrentUser();
-            $courseCondition['likeOrgCode'] = $user->getCurrentOrgCode();
+        if (isset($query['orgCode'])) {
+            $courseCondition['likeOrgCode'] = $query['orgCode'];
         }
 
         if (!empty($query['keywordType']) && !empty($query['keyword'])) {

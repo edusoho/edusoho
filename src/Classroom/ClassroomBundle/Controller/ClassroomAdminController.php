@@ -14,6 +14,7 @@ class ClassroomAdminController extends BaseController
 
         if (isset($conditions['orgCode'])) {
             $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
         }
 
         $paginator = new Paginator(
