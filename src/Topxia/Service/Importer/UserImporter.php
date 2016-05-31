@@ -7,11 +7,13 @@ namespace Topxia\Service\Importer;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Service\Common\AccessDeniedException;
 
 class UserImporter extends Importer
 {
-    public function import($postData)
+    public function import(Request $request)
     {
+        $postData = $request->request->all();
         $importerData = $postData['importData'];
         $checkType      = $postData["checkType"];
         $userByEmail    = array();
@@ -349,6 +351,13 @@ class UserImporter extends Importer
         return "UserImporterBundle:UserImporter:userinfo.excel.html.twig";
     }
 
+    public function tryImport(Request $request)
+    {
+        $user = $this->getServiceKernel()->getCurrentUser();
+        if(!$user->isAdmin()){
+            throw new AccessDeniedException('当前用户没有导入用户权限');
+        }
+    }
 
     private function checkRepeatData($row, $fieldSort, $highestRow, $objWorksheet)
     {

@@ -11,6 +11,7 @@ class ImporterApiController extends BaseController
     public function checkAction(Request $request, $type)
     {
         $importer = ImporterFactory::create($type);
+        $importer->tryImport($request);
         $checkResult = $importer->check($request);
         return $this->createJsonResponse($checkResult);
     }
@@ -18,7 +19,8 @@ class ImporterApiController extends BaseController
     public function importAction(Request $request, $type)
     {
         $importer = ImporterFactory::create($type);
-        $importerResult = $importer->import($request->request->all());
+        $importer->tryImport($request);
+        $importerResult = $importer->import($request);
         return $this->createJsonResponse($importerResult);
     }
 
@@ -26,6 +28,7 @@ class ImporterApiController extends BaseController
     {
         $params = $request->query->all();
         $importer = ImporterFactory::create($type);
+        $importer->tryImport($request);
         $template = $importer->getTemplate();
         return $this->render($template, $params);
     }

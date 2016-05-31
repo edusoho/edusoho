@@ -9,11 +9,13 @@ use Topxia\Service\Common\ServiceKernel;
 
 abstract class Importer
 {
-    public abstract function import($postData);
+    public abstract function import(Request $request);
 
     public abstract function check(Request $request);
 
     public abstract function getTemplate();
+
+    public abstract function tryImport(Request $request);
 
     public function getServiceKernel()
     {
