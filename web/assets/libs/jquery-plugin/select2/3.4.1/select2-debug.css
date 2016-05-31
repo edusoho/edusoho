@@ -387,6 +387,7 @@ Version: 3.4.1 Timestamp: Thu Jun 27 18:02:10 PDT 2013
 }
 
 .select2-results .select2-result-label {
+    display: inline-block;
     padding: 3px 7px 4px;
     margin: 0;
     cursor: pointer;
@@ -675,4 +676,7 @@ disabled look for disabled choices in the results dropdown
   .select2-search input {
       background-position: 100% -21px !important;
   }
+}
+.select2-tree-icon {
+    color: #333;
 }

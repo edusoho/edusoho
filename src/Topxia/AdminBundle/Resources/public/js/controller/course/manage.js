@@ -6,7 +6,11 @@ define(function(require, exports, module) {
 
 	exports.run = function(options) {
 
-		$('[name="categoryId"]').select2();
+		$('[name="categoryId"]').select2({
+			treeview: true,
+			// treeviewInitState: 'collapsed'
+			treeviewInitState: 'expanded'
+		});
 
 		var $table = $('#course-table');
 

@@ -331,7 +331,9 @@ the specific language governing permissions and limitations under the Apache Lic
             markup.push("<span class='select2-match'>");
             markup.push(escapeMarkup(text.substring(match, match + tl)));
             markup.push("</span>");
+            markup.push("<span class='select2-result-text'>");
             markup.push(escapeMarkup(text.substring(match + tl, text.length)));
+            markup.push("</span>");
         }
         function defaultEscapeMarkup(markup) {
             var replace_map = {
@@ -672,7 +674,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 search.on("blur", function() {
                     search.removeClass("select2-focused");
                 });
-                this.dropdown.on("mouseup", resultsSelector, this.bind(function(e) {
+                this.dropdown.on("mouseup", ".select2-result-text", this.bind(function(e) {
                     if ($(e.target).closest(".select2-result-selectable").length > 0) {
                         this.highlightUnderEvent(e);
                         this.selectHighlighted(e);
@@ -748,6 +750,28 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
             },
             // abstract
+            expandNode: function($node, isExpandAll) {
+                var self = this;
+                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                $children.slideDown();
+                $children.each2(function() {
+                    var $father = $(this).prevAll('[data-indent-count="' + ($(this).data('indent-count') - 1) + '"]').first();
+                    if ($father.hasClass('collapsed')) {
+                        if (isExpandAll) {
+                            $father.removeClass('collapsed').addClass('expanded');
+                            $father.find('.select2-tree-icon').addClass(self.opts.treeviewExpandedClass);
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            },
+            // abstract
+            collapseNode: function($node) {
+                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                $children.slideUp();
+            },
+            // abstract
             prepareOpts: function(opts) {
                 var element, select, idKey, ajaxUrl, self = this;
                 element = opts.element;
@@ -766,14 +790,18 @@ the specific language governing permissions and limitations under the Apache Lic
                     populateResults: function(container, results, query) {
                         var populate, data, result, children, id = this.opts.id;
                         populate = function(results, container, depth) {
-                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted;
+                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, indentCount;
                             results = opts.sortResults(results, container, query);
                             for (i = 0, l = results.length; i < l; i = i + 1) {
                                 result = results[i];
                                 disabled = result.disabled === true;
                                 selectable = !disabled && id(result) !== undefined;
                                 compound = result.children && result.children.length > 0;
+                                indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
+                                result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
                                 node = $("<li></li>");
+                                node.css({'padding-left': 14 * indentCount});
+                                node.attr("data-indent-count", indentCount);
                                 node.addClass("select2-results-dept-" + depth);
                                 node.addClass("select2-result");
                                 node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
@@ -802,6 +830,48 @@ the specific language governing permissions and limitations under the Apache Lic
                             }
                         };
                         populate(results, container, 0);
+
+                        //treeview
+                        if (opts.treeview) {
+                            // init tree state
+                            $('.select2-result').each2(function() {
+                                var thisIndentCount = $(this).data('indent-count');
+                                if ($(this).next().length > 0 && $(this).next().data('indentCount') > thisIndentCount) {
+                                    var $children = $(this).nextUntil('[data-indent-count="' + thisIndentCount + '"]');
+                                    if ($children.length > 0) {
+                                        $(this).addClass('select2-result-parent');
+                                        var $icon = $('<i class="select2-tree-icon"></i>');
+                                        if (opts.treeviewInitState == 'expanded') {
+                                            $(this).addClass('expanded');
+                                            $icon.addClass(opts.treeviewExpandedClass);
+                                        } else {
+                                            $(this).addClass('collapsed');
+                                            $children.hide();
+                                            $icon.addClass(opts.treeviewCollapsedClass);
+                                        }
+                                        $(this).find('.select2-result-label').prepend($icon);
+                                    }
+                                }
+                            });
+
+                            $('.select2-tree-icon').click(function() {
+                                var $that = $(this);
+                                var $node = $that.closest('li.select2-result');
+                                
+                                if ($node.hasClass('expanded')) {
+                                    $node.removeClass('expanded').addClass('collapsed');
+                                    $that.removeClass(opts.treeviewExpandedClass).addClass(opts.treeviewCollapsedClass);
+                                    //collapse
+                                    self.collapseNode($node);
+                                } else {
+                                    $node.removeClass('collapsed').addClass('expanded');
+                                    $that.removeClass(opts.treeviewCollapsedClass).addClass(opts.treeviewExpandedClass);
+                                    //expand
+                                    self.expandNode($node, false);
+                                }
+                                
+                            });
+                        }
                     }
                 }, $.fn.select2.defaults, opts);
                 if (typeof opts.id !== "function") {
@@ -2626,6 +2696,11 @@ the specific language governing permissions and limitations under the Apache Lic
         // plugin defaults, accessible to users
         $.fn.select2.defaults = {
             width: "copy",
+            indentChar: "　",
+            treeview: false,
+            treeviewInitState: "expanded",
+            treeviewExpandedClass: "glyphicon glyphicon-chevron-down",
+            treeviewCollapsedClass: "glyphicon glyphicon-chevron-right",
             loadMorePadding: 0,
             closeOnSelect: true,
             openOnEnter: true,
