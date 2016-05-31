@@ -8,21 +8,8 @@
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 
-    {% set enableOrg = setting('magic.enable_org','0')%}
-    {% if enableOrg %}
-	<div class="mbm">
-		<div class="form-group controls">
-        {% set org = data('Org',{orgCode:app.request.get('orgCode', app.user.orgCode)})%}
-        <input id="orgSelectTree" 
-          value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-          class="form-control"
-          data-url ="{{ path('org_tree') }}" 
-          data-code ="{{ org.orgCode }}"
-        />
-      </div>
-	</div>
-    {% endif %}
-    
+     {% include 'TopxiaWebBundle:Common:org.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+     
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
 		 <option value="">--所属栏目--</option>
