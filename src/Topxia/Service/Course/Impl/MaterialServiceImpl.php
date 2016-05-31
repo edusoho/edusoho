@@ -38,15 +38,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	        }
         }
 
-		// Increase the linked file usage count, if there's a linked file used by this material.
-		/*if(!empty($material['fileId'])){
-			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',1);
-		}*/
-
-		/*if ($fields['lessonId'] && $fields['source'] == 'coursematerial') {
-			$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
-		}*/
-
 		return $material;
 	}
 
@@ -74,22 +65,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		if (empty($material) || $material['courseId'] != $courseId) {
 			throw $this->createNotFoundException('课程资料不存在，删除失败。');
 		}
+
 		$this->getMaterialDao()->deleteMaterial($materialId);
-		// Decrease the linked file usage count, if there's a linked file used by this material.
-		/*if(!empty($material['fileId'])){
-			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
-		}*/
-
-		/*if($material['lessonId'] && $material['source'] == 'coursematerial'){
-			$count = $this->searchMaterialCount(array(
-					'courseId' => $material['courseId'],
-					'lessonId' => $material['lessonId'],
-					'source'   => 'coursematerial'
-				)
-			);
-
-		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
-		}*/
 
 		$this->dispatchEvent("material.delete",$material);
 	}
@@ -107,34 +84,35 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 	public function deleteMaterialsByLessonId($lessonId)
 	{
-		//$materials = $this->getMaterialDao()->findMaterialsByLessonId($lessonId, 0, 1000);
-
-		//$fileIds = ArrayToolkit::column($materials, "fileId");
-
-		// Decrease the linked matrial file usage count, if there are linked materials used by this lesson.
-		/*if(!empty($fileIds)){
-			foreach ($fileIds as $fileId) {
-				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
-			}
-		}*/
-
 		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
 	}
 
 	public function deleteMaterialsByCourseId($courseId)
 	{
-		//$materials = $this->getMaterialDao()->findMaterialsByCourseId($courseId, 0, 1000);
-
-		//$fileIds = ArrayToolkit::column($materials, "fileId");
-
-		// Decrease the linked material file usage count, if there are linked materials used by this course.
-		/*if(!empty($fileIds)){
-			foreach ($fileIds as $fileId) {
-				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
-			}
-		}*/
-
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
+	}
+
+	public function deleteMaterials($courseId, $fileIds)
+	{
+		$materials = $this->searchMaterials(
+			array('courseId' => $courseId, 'fileIds' => $fileIds),
+			array('createdTime','DESC'), 0, PHP_INT_MAX
+		);
+
+		if (!$materials) {
+			return false;
+		}
+
+		foreach ($materials as $key => $material) {
+			$this->deleteMaterial($courseId, $material['id']);
+		}
+
+		return true;
+	}
+
+	public function deleteMaterialsByFileId($fileId)
+	{
+		return $this->getMaterialDao()->deleteMaterialsByFileId($fileId);
 	}
 
 	public function getMaterial($courseId, $materialId)

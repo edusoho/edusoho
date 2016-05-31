@@ -140,13 +140,6 @@ class UploadFileController extends BaseController
             }
         }
 
-        if (isset($conditions['targetTypes'])) {
-            $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
-            if ($courseMaterials) {
-                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-            }
-        }
-
         $files = $this->getUploadFileService()->searchFiles($conditions, array('updatedTime', 'DESC'), 0, 10000);
 
         return $this->createFilesJsonResponse($files);

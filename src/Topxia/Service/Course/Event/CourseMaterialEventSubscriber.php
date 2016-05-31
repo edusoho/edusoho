@@ -66,8 +66,6 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $lesson   = $context['lesson'];
         $courseId = $context['courseId'];
 
-        //$this->getMaterialService()->deleteMaterialsByLessonId($lesson['id']);
-        
         $material = $this->getMaterialService()->searchMaterials(
             array(
                 'courseId' => $lesson['courseId'],
@@ -133,9 +131,9 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context = $event->getSubject();
+        $material = $event->getSubject();
 
-        $file = $this->getUploadFileService()->getFile($context['fileId']);
+        $file = $this->getUploadFileService()->getFile($material['fileId']);
 
         if (!$file) {
             return false;
@@ -145,8 +143,8 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             return false;
         }
         
-        if ($file['targetId'] == $context['courseId']) {
-            $this->getUploadFileService()->update($context['fileId'], array('targetId' => 0));
+        if ($file['targetId'] == $material['courseId']) {
+            $this->getUploadFileService()->update($material['fileId'], array('targetId' => 0));
         }
         
     }
