@@ -1,35 +1,35 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ConvertIpToolkit;
-use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\Request;
 
 class LoginRecordController extends BaseController
 {
-	public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-    	$conditions = $request->query->all();
-        $userConditions = array(
-            'likeOrgCode' => $user->getCurrentOrgCode()
-        );
+        $user           = $this->getCurrentUser();
+        $conditions     = $request->query->all();
+        $userConditions = array();
+
         if (isset($conditions['keywordType'])) {
-            $userConditions['keywordType'] =$conditions["keywordType"];
+            $userConditions['keywordType'] = $conditions["keywordType"];
         }
 
         if (isset($conditions['keyword'])) {
-            $userConditions['keyword'] =$conditions["keyword"];
+            $userConditions['keyword'] = $conditions["keyword"];
         }
 
-        if(isset($conditions['orgCode'])){
+        if (isset($conditions['orgCode'])) {
             $userConditions['likeOrgCode'] = $conditions["orgCode"];
         }
 
-        $users = $this->getUserService()->searchUsers($userConditions,array('createdTime', 'DESC'),0,2000);
+        $users   = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, 2000);
         $userIds = ArrayToolkit::column($users, 'id');
-        if($userIds){
+
+        if ($userIds) {
             $conditions['userIds'] = $userIds;
             unset($conditions['nickname']);
         } else {
@@ -40,12 +40,12 @@ class LoginRecordController extends BaseController
             );
             return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
                 'logRecords' => array(),
-                'users' => array(),
-                'paginator' => $paginator
+                'users'      => array(),
+                'paginator'  => $paginator
             ));
         }
 
-        $conditions['action'] ='login_success';
+        $conditions['action'] = 'login_success';
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -68,14 +68,14 @@ class LoginRecordController extends BaseController
 
         return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
             'logRecords' => $logRecords,
-            'users' => $users,
-            'paginator' => $paginator
+            'users'      => $users,
+            'paginator'  => $paginator
         ));
     }
 
-    public function showUserLoginRecordAction (Request $request, $id)
+    public function showUserLoginRecordAction(Request $request, $id)
     {
-    	$user = $this->getUserService()->getUser($id);
+        $user = $this->getUserService()->getUser($id);
 
         $conditions = array(
             'userId' => $user['id'],
@@ -98,15 +98,15 @@ class LoginRecordController extends BaseController
 
         $loginRecords = ConvertIpToolkit::ConvertIps($loginRecords);
 
-        return $this->render('TopxiaAdminBundle:LoginRecord:login-record-details.html.twig',array(
-            'user' => $user,
-            'loginRecords' => $loginRecords,
+        return $this->render('TopxiaAdminBundle:LoginRecord:login-record-details.html.twig', array(
+            'user'                 => $user,
+            'loginRecords'         => $loginRecords,
             'loginRecordPaginator' => $paginator
         ));
     }
 
     protected function getLogService()
     {
-    	return $this->getServiceKernel()->createService('System.LogService');
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 }

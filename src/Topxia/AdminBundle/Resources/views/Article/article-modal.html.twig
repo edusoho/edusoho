@@ -54,20 +54,7 @@
         </div>
       </div>
       
-      {% set enableOrg = setting('magic.enable_org','0')%}
-      {% if enableOrg %}
-      <div class="form-group">
-        <label for="article-orgName" class="control-label">所属组织机构</label>
-        <div class="controls">
-           <input id="orgSelectTree" 
-            value="{{app.user.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"
-            class="form-control"
-            data-url ="{{ path('org_tree') }}" 
-            data-code ="{{app.user.orgCode}}"
-          />
-        </div>
-      </div>
-     {% endif %}
+      {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true, falsemodal: 'modal'} %}
      
       <div class="form-group">
         <label for="richeditor-body-field" class="control-label">正文</label>

@@ -1,15 +1,8 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
-    var SelectTree = require('edusoho.selecttree');
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
         $("#startDate").datetimepicker().on('changeDate', function() {
             $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
         });

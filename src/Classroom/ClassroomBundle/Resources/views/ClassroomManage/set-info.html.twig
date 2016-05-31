@@ -33,19 +33,6 @@
         </div>
       </div>
 
-     {# 先隐藏了到时候再说
-      <div class="row form-group">
-        <div class="col-md-2 control-label">
-          <label >课程说明</label>
-        </div>
-        <div class="controls col-md-8">
-          <textarea name="description" rows="10" class="form-control" 
-          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
-          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
-          id="description">{{classroom.description}}</textarea>
-        </div>
-      </div> #}
-
       <div class="row form-group">
         <div class="col-md-2 control-label">
           <label >{{setting("classroom.name")|default("班级")}}展示</label>
@@ -87,22 +74,8 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
-    
-    {%set enableOrg = setting('magic.enable_org','0')%}
-    {% if enableOrg %}
-      <div class="form-group">
-        <label class="col-md-2 control-label">{{'组织机构'|trans}}</label>
-        <div class="col-md-8 controls">
-          {% set org = data('Org',{orgCode:classroom.orgCode})%}
-          <input id="orgSelectTree" 
-            value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-            class="form-control width-input width-input-large"
-            data-url ="{{ path('org_tree') }}" 
-            data-code ="{{org.orgCode}}"
-          />
-        </div>
-      </div>
-    {% endif %}
+
+     {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
     
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>

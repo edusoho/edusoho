@@ -11,18 +11,7 @@
   <br>
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
-      {% set enableOrg = setting('magic.enable_org','0')%}
-      {% if enableOrg %}
-      <div class="form-group controls">
-        {% set org = data('Org',{orgCode:app.request.get('likeOrgCode', app.user.orgCode)})%}
-        <input id="orgSelectTree" 
-          value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"
-          class="form-control"
-          data-url ="{{ path('org_tree') }}" 
-          data-code ="{{ org.orgCode }}"
-        />
-      </div>
-      {% endif %}
+      {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
       
       <div class="form-group">
         <select style="max-width:150px;" class="form-control" name="categoryId">

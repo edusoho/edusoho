@@ -15,11 +15,11 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            this.valueDom = this.get('name');
+            this.inputID = $(this.element).data('inputName');
             this.menuContent = this.get('displayBlockEl');
             this.treeRoot = this.get('treeRootEl');
             if (this.get('modal')) {
-                this.valueDom = 'modal-' + this.valueDom;
+                this.inputID = 'modal-' + this.inputID;
                 this.menuContent = 'modal-' + this.menuContent;
                 this.treeRoot = 'modal-' + this.treeRoot;
             }
@@ -38,14 +38,14 @@ define(function(require, exports, module) {
         initDom: function() {
             var sourceUrl = $(this.element).data('url');
             var width = $(this.element).outerWidth(true);
-            var name = $(this.element).data('name');
-            var value = $(this.element).data('code');
+            var inputName = $(this.element).data('inputName');
+            var inputValue = $(this.element).data('inputValue');
             //ztree 初始化的容器
             var selectDom = "<div id='" + this.menuContent + "' class='ztreeContent' style='display:none; position: absolute; z-index: 10000;'>" +
                 "<ul id='" + this.treeRoot + "' class='ztree' style='margin-top:0; width:" + width + "px;z-index: 10000' data-source=" + sourceUrl + "></ul>" +
                 "</div>";
 
-            var selectOrgCodeDom = ' <input  type ="hidden" name="' + this.get('name') + '" id ="' + this.valueDom + '" value="' + $(this.element).data('code') + '" >';
+            var selectOrgCodeDom = ' <input  type ="hidden" name="' + inputName + '" id ="' + this.inputID + '" value="' +inputValue+ '" >';
 
             $(this.element).parents('.controls').append(selectOrgCodeDom);
             $(this.element).parents('.controls').append(selectDom);
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
         zTreeOnClick: function(event, treeId, treeNode) {
             this.zTree.expandNode(treeNode, true, true, false); //展开当前选择的第一个节点（包括其全部子节点）
             $(this.element).val(treeNode.name);
-            $('#' + this.valueDom).val(treeNode.orgCode);
+            $('#' + this.inputID).val(treeNode.orgCode);
 
             this.lastValue = treeNode.name;
             this.hideMenu.bind(this)();

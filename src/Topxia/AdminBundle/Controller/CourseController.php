@@ -36,9 +36,9 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        if (empty($conditions['likeOrgCode'])) {
-            $user                      = $this->getCurrentUser();
-            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
         }
 
         $coinSetting = $this->getSettingService()->get("coin");
@@ -311,9 +311,9 @@ class CourseController extends BaseController
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
-        if (empty($conditions['likeOrgCode'])) {
-            $user                      = $this->getCurrentUser();
-            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
         }
 
         $paginator = new Paginator(
@@ -369,9 +369,9 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        if (empty($conditions['likeOrgCode'])) {
-            $user                      = $this->getCurrentUser();
-            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
         }
 
         $count     = $this->getCourseService()->searchCourseCount($conditions);
