@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Service\Common\Mail;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\MailFactory;
 
 class PasswordResetController extends BaseController
 {
@@ -49,23 +50,21 @@ class PasswordResetController extends BaseController
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
                     try {
-                        $normalMail = array(
+                        $site = $this->setting('site', array());
+                        $mailOptions = array(
                             'to'     => $user['email'],
-                            'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                            'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                                'user'  => $user,
-                                'token' => $token
-                            )),
-                            'format' => 'html'
+                            'template' => 'email_reset_password',
+                            'format' => 'html',
+                            'params' => array(
+                                'nickname' => $user['nickname'],
+                                'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                                'sitename' => $site['name'],
+                                'siteurl' => $site['url']
+                            )
                         );
-                        $cloudMail = array(
-                            'to'        => $user['email'],
-                            'template'  => 'email_reset_password',
-                            'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                            'nickname'  => $user['nickname']
-                        );
-                        $mail = new Mail($normalMail, $cloudMail);
-                        $this->sendEmail($mail);
+
+                        $mail = MailFactory::create($mailOptions);
+                        $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
                         return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
