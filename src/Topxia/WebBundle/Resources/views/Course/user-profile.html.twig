@@ -6,13 +6,13 @@
       {% if app.user.largeAvatar %}
         <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
       {% else %}
-        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}
+        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
       {% endif %}
     <li>{{'设置头衔 、自我介绍。'|trans}}
       {% if app.user.title and userProfile.about %}
         <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
       {% else %}
-        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}
+        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
       {% endif %}
     </li>
   </ol>
@@ -23,7 +23,7 @@
   {{ web_macro.flash_messages() }}
 
   <div class="form-group">
-    <div class="col-md-2 control-label"><b>{{'当前头像'|trans}}</b></div>
+    <div class="col-md-2 control-label"><b>{{'用户头像'|trans}}</b></div>
     <div class="controls col-md-8 controls">
       <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
     </div>
