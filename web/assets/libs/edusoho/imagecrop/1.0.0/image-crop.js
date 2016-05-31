@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-    var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     require("jquery.jcrop-css");
     require("jquery.jcrop");
@@ -34,6 +33,7 @@ define(function(require, exports, module) {
 	            setSelect: [0, 0, selectWidth, selectHeight],
 	            aspectRatio: ratio,
                 keySupport: false,
+                allowSelect: false,
                 onSelect: function(c) {
 	                self.trigger("select", c);
 	            }
@@ -43,14 +43,12 @@ define(function(require, exports, module) {
 
         crop: function(postData){
             var self = this;
-
         	var cropImgUrl = app.imgCropUrl;
         	if(!postData) {
         		postData = {};
         	}
 
         	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height(), group: self.get('group')});
-
             $.post(cropImgUrl, postData ,function(response){
                 self.trigger("afterCrop", response);
             })
