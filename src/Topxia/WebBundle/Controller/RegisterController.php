@@ -443,7 +443,7 @@ class RegisterController extends BaseController
             $verifyurl   = $this->generateUrl('register_email_verify', array('token' => $token), true);
             $mailOptions = array(
                 'to'       => $user['email'],
-                'template' => 'email_account_active',
+                'template' => 'email_registration',
                 'params'   => array(
                     'sitename'  => $site['name'],
                     'siteurl'   => $site['url'],
