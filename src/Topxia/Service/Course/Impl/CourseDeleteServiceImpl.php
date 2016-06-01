@@ -76,7 +76,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $testpaperLog = "删除课程《{$course['title']}》(#{$course['id']})的试卷";
-            $this->getLogService()->info('testpaper', 'delete', $testpaperLog);
+            $this->getLogService()->info('course', 'delete_testpaper', $testpaperLog);
         }
 
         return $count;
