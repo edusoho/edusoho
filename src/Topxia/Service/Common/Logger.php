@@ -37,11 +37,6 @@ class Logger
      */
     const MONEY_CARD = 'money_card';
     /**
-     * [$money_card_batch 批量操作学习卡] 重构
-     * @var string
-     */
-    const money_card_batch = 'money_card_batch';
-    /**
      * [$QUESTIONPLUS 题库增强版]
      * @var string
      */
