@@ -52,11 +52,6 @@ class Logger
      */
     const vip = 'vip';
     /**
-     * [$vipimporter 会员导出] 重构
-     * @var string
-     */
-    const vipimporter = 'vipimporter';
-    /**
      * [$SYSTEM 系统设置]
      * @var string
      */
