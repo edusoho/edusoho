@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$chapter 课时章/节] 重构
-     * @var string
-     */
-    const CHAPTER = 'chapter';
-    /**
      * [$DRAFT 课程草稿]重构
      * @var string
      */

@@ -120,7 +120,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $chapterLog = "删除课程《{$course['title']}》(#{$course['id']})的课时章/节";
-            $this->getLogService()->info('chapter', 'delete', $chapterLog);
+            $this->getLogService()->info('course', 'delete_chapter', $chapterLog);
         }
 
         return $count;
