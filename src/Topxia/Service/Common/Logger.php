@@ -102,11 +102,6 @@ class Logger
      */
     const ANNOUNCEMENT = 'announcement';
     /**
-     * [$member 课程学员]
-     * @var string
-     */
-    const member = 'member';
-    /**
      * [$CRONTAB 定时任务]
      * @var string
      */
