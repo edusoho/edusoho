@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
-
+	require('../widget/category-select').run('course');
 	exports.run = function(options) {
 		var $table = $('#course-recommend-table');
 

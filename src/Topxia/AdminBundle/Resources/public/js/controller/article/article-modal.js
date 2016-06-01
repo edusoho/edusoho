@@ -9,6 +9,9 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     var Notify = require('common/bootstrap-notify');
+
+    require('../widget/category-select').run('article');
+
     exports.run = function() {
 
         var $form = $("#article-form");

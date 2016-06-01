@@ -890,8 +890,12 @@ the specific language governing permissions and limitations under the Apache Lic
                                 //         $rootParent = $parent;
                                 //     }
                                 // }
-                                var $rootParent = $selectedNode.prevAll('[data-indent-count="0"]').filter('.select2-result-parent').first();
-                                self.expandNode($rootParent, true);
+                                
+                                if (selectedNodeIndentCount > 0) {
+                                    var $rootParent = $selectedNode.prevAll('[data-indent-count="0"]').filter('.select2-result-parent').first();
+                                    self.expandNode($rootParent, true);
+                                }
+                                
                             }
                         }
                     }
