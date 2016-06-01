@@ -117,11 +117,6 @@ class Logger
      */
     const MARKER = 'marker';
     /**
-     * [$course_order 订单]
-     * @var string
-     */
-    const COURSE_ORDER = 'course_order';
-    /**
      * [$SMS sms]
      * @var string
      */
