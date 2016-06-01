@@ -185,9 +185,7 @@ class Logger
      * [$UPLOADFILE 文件]
      * @var string
      */
-    const UPLOADFILE = 'upload_file';
-//重构
-    const uploadfile = 'uploadfile';
+    const UPLOADFILE = 'uploadFile';
     /**
      * [$Marker 驻点]
      * @var string
