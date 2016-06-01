@@ -190,13 +190,7 @@ class Logger
      * [$Marker 驻点]
      * @var string
      */
-    const MARKER = 'Marker';
-    /**
-     * [$questionMarker 驻点问题]
-     * @var string
-     */
-    const QUESTIONMARKER = 'questionMarker';
-
+    const MARKER = 'marker';
     /**
      * [$course_order 订单]
      * @var string
