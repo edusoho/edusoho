@@ -120,7 +120,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
-        $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
+        $this->getLogService()->info('article', 'update', "修改文章《({$article['title']})》({$article['id']})");
         $this->dispatchEvent('article.update', new ServiceEvent($article));
 
         return $article;
@@ -238,7 +238,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
         $this->dispatchEvent('article.trash', new ServiceEvent($checkArticle));
-        $this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
+        $this->getLogService()->info('article', 'trash', "文章#{$id}移动到回收站");
     }
 
     public function removeArticlethumb($id)
@@ -252,7 +252,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->updateArticle($id, $fields = array('thumb' => '', 'originalThumb' => ''));
         $this->getFileService()->deleteFileByUri($checkArticle["thumb"]);
         $this->getFileService()->deleteFileByUri($checkArticle["originalThumb"]);
-        $this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
+        $this->getLogService()->info('article', 'removeThumb', "文章#{$id}removeThumb");
     }
 
     public function deleteArticle($id)
@@ -265,7 +265,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $res = $this->getArticleDao()->deleteArticle($id);
         $this->dispatchEvent('article.delete', new ServiceEvent($checkArticle));
-        $this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
+        $this->getLogService()->info('article', 'delete', "文章#{$id}永久删除");
 
         return true;
     }
@@ -284,14 +284,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function publishArticle($id)
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
-        $this->getLogService()->info('Article', 'publish', "文章#{$id}发布");
+        $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
         $this->dispatchEvent('article.publish', $article);
     }
 
     public function unpublishArticle($id)
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'unpublished'));
-        $this->getLogService()->info('Article', 'unpublish', "文章#{$id}未发布");
+        $this->getLogService()->info('article', 'unpublish', "文章#{$id}未发布");
         $this->dispatchEvent('article.unpublish', $article);
     }
 
@@ -340,8 +340,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function filterArticleFields($fields, $mode = 'update')
     {
-        $article = array();
-        $user = $this->getCurrentUser();
+        $article            = array();
+        $user               = $this->getCurrentUser();
         $match              = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
         $article['picture'] = $match ? $matches[1] : "";
 
