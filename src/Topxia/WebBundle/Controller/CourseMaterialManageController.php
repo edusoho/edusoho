@@ -30,11 +30,6 @@ class CourseMaterialManageController extends BaseController
     public function uploadAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if (empty($lesson)) {
-            throw $this->createNotFoundException();
-        }
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
@@ -44,7 +39,7 @@ class CourseMaterialManageController extends BaseController
             }
 
             $fields['courseId'] = $course['id'];
-            $fields['lessonId'] = $lesson['id'];
+            $fields['lessonId'] = $lessonId;
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
@@ -92,6 +87,18 @@ class CourseMaterialManageController extends BaseController
         );
         
         return $this->createFilesJsonResponse($files);
+    }
+
+    public function createAction(Request $request, $courseId)
+    {
+        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        
+        return $this->render('TopxiaWebBundle:CourseMaterialManage:material-create-modal.html.twig', array(
+            'course'         => $course,
+            'storageSetting' => $this->setting('storage'),
+            'targetType'     => 'coursematerial',
+            'targetId'       => $course['id']
+        ));
     }
 
     protected function createFilesJsonResponse($files, $paginator = null)

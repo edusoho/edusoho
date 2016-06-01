@@ -29,8 +29,8 @@ class CourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $files      = $this->_materialsSort($files);
         $fileIds    = ArrayToolkit::column($files,'fileId');
-        $files      = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
         $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
@@ -136,6 +136,24 @@ class CourseFileManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
             'course' => $course,
         ));
+    }
+
+    private function _materialsSort($materials)
+    {
+        if (!$materials) {
+            return array();
+        }
+
+        $fileIds = ArrayToolkit::column($materials,'fileId');
+        $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
+
+        $files   = ArrayToolkit::index($files, 'id');
+        foreach ($materials as $key => $material) {
+            $file = array_merge($material, $files[$material['fileId']]);
+            $materials[$key] = $file;
+        }
+
+        return $materials;
     }
 
     protected function getCourseService()
