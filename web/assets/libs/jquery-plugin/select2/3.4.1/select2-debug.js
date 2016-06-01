@@ -750,9 +750,27 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
             },
             // abstract
+            getChildrenByIndent: function($node) {
+                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $nodesToNextRoot = $node.nextUntil('[data-indent-count="0"]');
+                /**
+                 * fix status blow
+                 * 0
+                 *  1
+                 *   2
+                 *    3
+                 *  1
+                 * when get level 2's children, last level 1 node was included
+                 */
+                if ($children.length > $nodesToNextRoot.length) {
+                    return $nodesToNextRoot;
+                }
+                return $children;
+            },
+            // abstract
             expandNode: function($node, isExpandAll) {
                 var self = this;
-                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $children = self.getChildrenByIndent($node);
                 $children.slideDown();
                 $children.each2(function() {
                     var $father = $(this).prevAll('[data-indent-count="' + ($(this).data('indent-count') - 1) + '"]').first();
@@ -768,7 +786,7 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             collapseNode: function($node) {
-                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $children = this.getChildrenByIndent($node);
                 $children.slideUp();
             },
             // abstract
@@ -790,17 +808,18 @@ the specific language governing permissions and limitations under the Apache Lic
                     populateResults: function(container, results, query) {
                         var populate, data, result, children, id = this.opts.id;
                         populate = function(results, container, depth) {
-                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, indentCount;
+                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, indentCount = 0;
                             results = opts.sortResults(results, container, query);
                             for (i = 0, l = results.length; i < l; i = i + 1) {
                                 result = results[i];
                                 disabled = result.disabled === true;
                                 selectable = !disabled && id(result) !== undefined;
                                 compound = result.children && result.children.length > 0;
-                                indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
-                                result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
+                                if (opts.treeview) {
+                                    indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
+                                    result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
+                                }
                                 node = $("<li></li>");
-                                node.css({'padding-left': 14 * indentCount});
                                 node.attr("id", "select2-result-" + result.id);
                                 node.attr("data-indent-count", indentCount);
                                 node.addClass("select2-results-dept-" + depth);
@@ -815,6 +834,7 @@ the specific language governing permissions and limitations under the Apache Lic
                                 node.addClass(self.opts.formatResultCssClass(result));
                                 label = $(document.createElement("div"));
                                 label.addClass("select2-result-label");
+                                label.css({'padding-left': 5 + 15 * indentCount});
                                 formatted = opts.formatResult(result, label, query, self.opts.escapeMarkup);
                                 if (formatted !== undefined) {
                                     label.html(formatted);
@@ -838,7 +858,7 @@ the specific language governing permissions and limitations under the Apache Lic
                             $('.select2-result').each2(function() {
                                 var thisIndentCount = $(this).data('indent-count');
                                 if ($(this).next().length > 0 && $(this).next().data('indentCount') > thisIndentCount) {
-                                    var $children = $(this).nextUntil('[data-indent-count="' + thisIndentCount + '"]');
+                                    var $children = self.getChildrenByIndent($(this));
                                     if ($children.length > 0) {
                                         $(this).addClass('select2-result-parent');
                                         var $icon = $('<i class="select2-tree-icon"></i>');
@@ -1115,13 +1135,22 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             positionDropdown: function() {
-                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = $dropdown.outerWidth(false), enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, resultsListNode;
+                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = $dropdown.outerWidth(false), enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, $resultsListNode, resultsList;
                 if (this.opts.dropdownAutoWidth) {
-                    resultsListNode = $(".select2-results", $dropdown)[0];
+                    $resultsListNode = $(".select2-result", $dropdown);
                     $dropdown.addClass("select2-drop-auto-width");
                     $dropdown.css("width", "");
-                    // Add scrollbar width to dropdown if vertical scrollbar is present
-                    dropWidth = $dropdown.outerWidth(false) + (resultsListNode.scrollHeight === resultsListNode.clientHeight ? 0 : scrollBarDimensions.width);
+                    // set dropdown width to longest node content's width
+                    if ($resultsListNode.length > 0) {
+                        dropWidth = 0;
+                        $resultsListNode.each2(function() {
+                            var thisWidth = $(this).find('.select2-result-text').text().length * 14;
+                            dropWidth = dropWidth > thisWidth ? dropWidth : thisWidth;
+                        });
+                        resultsList = $(".select2-results", $dropdown)[0];
+                        dropWidth += (resultsList.scrollHeight === resultsList.clientHeight ? 0 : scrollBarDimensions.width);
+                    }
+                    
                     dropWidth > width ? width = dropWidth : dropWidth = width;
                     enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
                 } else {
