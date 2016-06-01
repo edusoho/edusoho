@@ -808,15 +808,17 @@ the specific language governing permissions and limitations under the Apache Lic
                     populateResults: function(container, results, query) {
                         var populate, data, result, children, id = this.opts.id;
                         populate = function(results, container, depth) {
-                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, indentCount;
+                            var i, l, result, selectable, disabled, compound, node, label, innerContainer, formatted, indentCount = 0;
                             results = opts.sortResults(results, container, query);
                             for (i = 0, l = results.length; i < l; i = i + 1) {
                                 result = results[i];
                                 disabled = result.disabled === true;
                                 selectable = !disabled && id(result) !== undefined;
                                 compound = result.children && result.children.length > 0;
-                                indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
-                                result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
+                                if (opts.treeview) {
+                                    indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
+                                    result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
+                                }
                                 node = $("<li></li>");
                                 node.attr("id", "select2-result-" + result.id);
                                 node.attr("data-indent-count", indentCount);
