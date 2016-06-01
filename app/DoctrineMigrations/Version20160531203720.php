@@ -25,9 +25,10 @@ class Version20160531203720 extends AbstractMigration
                 $lessonId = $lesson['id'];
                 $fileId   = $lesson['mediaId'];
                 $copyId   = 0;
+                $userId   = $lesson['userId'];
                 $time     = time();
 
-                $this->addSql("insert into course_material (courseId,lessonId,title,fileId,source,copyId,createdTime) values({$courseId},{$lessonId},'',{$fileId},'courselesson',{$copyId},UNIX_TIMESTAMP());");
+                $this->addSql("insert into course_material (courseId,lessonId,title,fileId,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'',{$fileId},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
             }
         }
 
