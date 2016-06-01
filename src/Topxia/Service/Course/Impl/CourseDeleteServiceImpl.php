@@ -31,11 +31,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     public function deleteLessonResult($lessonId)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($lessonId);
-        $status = 'reviewing';
-        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'],$status);
+        $status    = 'reviewing';
+        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'], $status);
         return true;
     }
-    
+
     protected function deleteQuestions($course)
     {
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$course['id']}"));
@@ -51,7 +51,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $questionLog = "删除课程《{$course['title']}》(#{$course['id']})的问题";
-            $this->getLogService()->info('question', 'delete', $questionLog);
+            $this->getLogService()->info('course', 'delete_question', $questionLog);
         }
 
         return $count;
