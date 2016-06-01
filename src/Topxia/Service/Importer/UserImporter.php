@@ -11,6 +11,8 @@ use Topxia\Service\Common\AccessDeniedException;
 
 class UserImporter extends Importer
 {
+    protected $type = 'user';
+
     public function import(Request $request)
     {
         $postData = $request->request->all();
@@ -348,7 +350,9 @@ class UserImporter extends Importer
 
     public function getTemplate(Request $request)
     {
-        return $this->render("UserImporterBundle:UserImporter:userinfo.excel.html.twig");
+        return $this->render("UserImporterBundle:UserImporter:userinfo.excel.html.twig", array(
+            'importerType' => $this->type
+        ));
     }
 
     public function tryImport(Request $request)

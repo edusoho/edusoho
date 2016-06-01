@@ -9,7 +9,7 @@ define(function (require, exports, module) {
 
     var _ = require('underscore');
 
-    module.exports = Backbone.Router.extend({
+    var ImporterApp = Backbone.Router.extend({
         routes: {
             "index": 'index',
             'error': 'error',
@@ -26,54 +26,72 @@ define(function (require, exports, module) {
 
         error: function () {
 
-            if(_.isEmpty(this.errors)){
+            if(_.isEmpty(this.errorData)){
                 return;
             }
 
-            var errorView = new Step2ErrorView(this.errors);
+            var errorView = new Step2ErrorView(this.errorData);
             this.$el.html(errorView.el);
-            delete errors;
+
+            this.errorData = undefined;
         },
 
         success: function () {
-            if(_.isEmpty(this.success)){
+            if(this.successData === undefined){
                 return;
             }
 
-            var importer = new Importer(this.success);
+            var importer = new Importer(this.successData);
             importer.set('type', this.options.type);
+            importer.set('importUrl', this.options.importUrl);
             var successView = new Step2SuccessView({
                 model: importer
             });
-
             this.$el.html(successView.el);
+            this.successData = undefined;
+        },
 
-            delete this.success;
+        destroy: function () {
+            Backbone.off('step2-error');
+            Backbone.off('step2-success');
         },
 
         initialize: function(options) {
             this.options = options;
             this.$el = $(options.element);
             this._initEvent();
-            if(!Backbone.History.started){
-                Backbone.history.start();
-            }else {
-                this.navigate('', {trigger: true});
-            }
+            Backbone.history.start();
             this.navigate('index', {trigger: true});
         },
 
         _initEvent: function () {
             var self = this;
+
             Backbone.on('step2-error', function (data) {
-                self.errors = data.errorInfo;
+                self.errorData = data.errorInfo;
                 self.navigate('error', {trigger: true});
             });
 
             Backbone.on('step2-success', function (data) {
-                self.success = data;
+                self.successData = data;
                 self.navigate('success', {trigger: true});
             });
         }
     });
+
+    exports.run = function () {
+        var id = '#importer-app';
+        var importer = new ImporterApp({
+            element: "#importer-app",
+            type: $(id).data('type'),
+            checkUrl: $(id).data('checkUrl'),
+            importUrl: $(id).data('importUrl'),
+            template: $('#importer-template').html()
+        });
+
+        $('#modal').on('hide.bs.modal', function () {
+            Backbone.history.stop();
+            importer.destroy();
+        });
+    }
 });

@@ -12,10 +12,9 @@ define(function (require, exports, module) {
     };
 
     module.exports = Backbone.Model.extend({
-        url: '/importer/{type}/import',
         defaults: {
             'checkType': "ignore",
-            'chunkSize': 50,
+            'chunkSize': 8,
             '__progress': 0,
             '__current': 0,
             '__total': 0,
@@ -36,7 +35,7 @@ define(function (require, exports, module) {
                 this.set('__status', STATUS.COMPLETE);
             }
 
-            var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress', '__status', 'checkInfo'];
+            var privateAttr = ['__total', '__current', 'chunkSize', 'status', '__progress', '__status', 'checkInfo', 'checkUrl', 'importUrl'];
             var postData = self.toJSON();
 
             _.each(privateAttr, function (attr) {
@@ -45,7 +44,7 @@ define(function (require, exports, module) {
 
             _.each(chunkData, function (data) {
                 postData.importData = data;
-                $.post(self.url.replace(/\{type\}/, self.get('type')), postData).then(function (response) {
+                $.post(self.get('importUrl'), postData).then(function (response) {
                     self.set('__current', self.get('__current') + 1);
                     var current = self.get('__current');
                     var total = self.get('__total');

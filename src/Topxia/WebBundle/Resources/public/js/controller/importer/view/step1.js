@@ -16,7 +16,7 @@ define(function (require, exports, module) {
             var template = _.template(this.model.get('template'));
             this.$el.html(template(this.model.toJSON()));
             var self = this;
-            this.$el.find('form').attr('action', this.model.url.replace(/\{type\}/i, this.model.get('type'))).ajaxForm({
+            this.$el.find('form').attr('action', this.model.get('checkUrl')).ajaxForm({
                 success: function (res) {
                     var status = res.status;
                     var eventListener = 'on' + status.charAt(0).toUpperCase() + status.substr(1);

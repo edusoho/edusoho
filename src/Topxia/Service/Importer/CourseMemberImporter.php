@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 
-class CourseUserImporter extends Importer
+class CourseMemberImporter extends Importer
 {
     protected $necessaryFields  = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
     protected $objWorksheet;
@@ -19,6 +19,8 @@ class CourseUserImporter extends Importer
     protected $excelExample     = 'bundles/topxiaweb/example/coursemember_import_example.xls';
     protected $validateRouter   = 'course_manage_student_import';
     protected $importingRouter  = 'course_manage_student_to_base';
+
+    protected $type = 'course-member';
 
     public function import(Request $request)
     {
@@ -107,10 +109,7 @@ class CourseUserImporter extends Importer
 
         $repeatInfo = $this->checkRepeatData();
         if (!empty($repeatInfo)) {
-            return array(
-                'status'    => self::ERROR_STATUS,
-                "errorInfo" => $repeatInfo
-            );
+            return $this->createErrorResponse($repeatInfo);
         }
 
         $importData = $this->getUserData();
@@ -118,24 +117,18 @@ class CourseUserImporter extends Importer
         if (empty($importData['errorInfo'])) {
             $passedRepeatInfo = $this->checkPassedRepeatData();
             if ($passedRepeatInfo) {
-                return array(
-                    'status'    => self::ERROR_STATUS,
-                    "errorInfo" => $passedRepeatInfo
-                );
+                return $this->createErrorResponse($passedRepeatInfo);
             }
         }else{
-            return array(
-                'status'    => self::ERROR_STATUS,
-                "errorInfo" => $importData['errorInfo']
-            );
+            return $this->createErrorResponse($importData['errorInfo']);
         }
 
-        return array(
-            'status'     => self::SUCCESS_STATUS,
-            'checkInfo'  => $importData['checkInfo'],
-            'importData' => $importData['allUserData'],
-            'courseId'   => $courseId
-        );
+        return $this->createSuccessResponse(
+            $importData['allUserData'],
+            $importData['checkInfo'],
+            array(
+                'courseId' => $courseId
+            ));
     }
 
     protected function checkPassedRepeatData()
@@ -240,33 +233,21 @@ class CourseUserImporter extends Importer
     protected function validateExcelFile($file)
     {
         if (!is_object($file)) {
-            return array(
-                'status'  => self::DANGER_STATUS,
-                'message' => '请选择上传的文件'
-            );
+            return $this->createDangerResponse('请选择上传的文件');
         }
 
         if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
-            return array(
-                'status'  => self::DANGER_STATUS,
-                'message' => 'Excel格式不正确！'
-            );
+            return $this->createDangerResponse('Excel格式不正确！');
         }
 
         $this->excelAnalyse($file);
 
         if ($this->rowTotal > 1000) {
-            return array(
-                'status'  => self::DANGER_STATUS,
-                'message' => 'Excel超过1000行数据!'
-            );
+            return $this->createDangerResponse('Excel超过1000行数据!');
         }
 
         if (!$this->checkNecessaryFields($this->excelFields)) {
-            return array(
-                'status'  => self::DANGER_STATUS,
-                'message' => '缺少必要的字段'
-            );
+            return $this->createDangerResponse('缺少必要的字段');
         }
     }
 
@@ -417,7 +398,8 @@ class CourseUserImporter extends Importer
     {
         $courseId = $request->query->get('courseId');
         return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
+            'importerType' => $this->type
         ));
     }
 
@@ -428,7 +410,8 @@ class CourseUserImporter extends Importer
         if(empty($courseId)){
             $courseId = $request->request->get('courseId');
         }
-        return $this->getCourseService()->tryManageCourse($courseId);
+
+        $this->getCourseService()->tryManageCourse($courseId);
     }
 
     protected function getCourseService()

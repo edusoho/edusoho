@@ -1,7 +1,5 @@
 {% extends 'TopxiaWebBundle:Importer:importer-layout.html.twig' %}
 
-{% set importerType = 'course-user' %}
-
 {% block form_data %}
   <div class="form-group" id="teachers-form-group">
     <label class="col-md-3 col-md-offset-1">
@@ -24,6 +22,12 @@
 
 {% block stylesheet %}
 <style>
+  .page-header {
+    padding-bottom: 12px;
+    margin: 0 0 20px 0;
+    padding: 0;
+    border-bottom-width: 2px;
+  }
   .uploader {
     position: relative;
     display: inline-block;
