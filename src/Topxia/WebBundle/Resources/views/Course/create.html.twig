@@ -11,7 +11,7 @@
       <div class="panel-heading"><h2>{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %}</h2></div>
 
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
-        {% include 'TopxiaWebBundle:Course:user-profile.html.twig'%}
+        {% include 'TopxiaWebBundle:Settings:user-profile.html.twig'%}
       {% else %}
         <form id="course-create-form" class="form-horizontal" method="post">
 
@@ -23,7 +23,9 @@
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
             </div>
-          </div>
+          </div> 
+
+          {% include 'OrgBundle:Org:org-tree-select.html.twig' %}
 
       <div class="form-group">
         <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>

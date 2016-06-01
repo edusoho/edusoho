@@ -9,9 +9,11 @@ class TeacherController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user       = $this->getCurrentUser();
         $fields     = $request->query->all();
         $conditions = array(
-            'roles' => 'ROLE_TEACHER'
+            'roles'       => 'ROLE_TEACHER',
+            'likeOrgCode' => $user->getCurrentOrgCode()
         );
 
         if (empty($fields)) {
@@ -20,7 +22,11 @@ class TeacherController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'nickname'));
+        if(!empty($conditions['orgCode'])){
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+        }
+
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'nickname', 'likeOrgCode'));
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -68,10 +74,12 @@ class TeacherController extends BaseController
 
     public function promoteListAction(Request $request)
     {
+        $user = $this->getCurrentUser();
         $fields     = $request->query->all();
         $conditions = array(
             'roles'    => 'ROLE_TEACHER',
-            'promoted' => 1
+            'promoted' => 1,
+            'likeOrgCode' => $user->getCurrentOrgCode()
         );
 
         if (empty($fields)) {
@@ -80,7 +88,11 @@ class TeacherController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'nickname'));
+        if(!empty($conditions['orgCode'])){
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+        }
+
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'nickname', 'likeOrgCode'));
 
         $paginator = new Paginator(
             $this->get('request'),

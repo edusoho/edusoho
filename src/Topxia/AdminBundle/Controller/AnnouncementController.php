@@ -2,16 +2,23 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AnnouncementController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $user  = $this->getCurrentUser();
+        $query = $request->query->all();
+
         $conditions = array('targetType' => 'global');
+
+        if (isset($query['orgCode'])) {
+            $conditions['likeOrgCode'] = $query['orgCode'];
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -24,16 +31,16 @@ class AnnouncementController extends BaseController
             $paginator->getPerPageCount());
 
         $userIds = ArrayToolkit::column($announcements, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         $now = time();
 
         return $this->render('TopxiaAdminBundle:Announcement:index.html.twig', array(
-            'paginator' => $paginator,
+            'paginator'     => $paginator,
             'announcements' => $announcements,
-            'users' => $users,
-            'now' => $now,
-            ));
+            'users'         => $users,
+            'now'           => $now
+        ));
     }
 
     public function createAction(Request $request)
@@ -42,9 +49,9 @@ class AnnouncementController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $announcement['targetType'] = 'global';
-            $announcement['targetId'] = 0;
-            $announcement['startTime'] = strtotime($announcement['startTime']);
-            $announcement['endTime'] = strtotime($announcement['endTime']);
+            $announcement['targetId']   = 0;
+            $announcement['startTime']  = strtotime($announcement['startTime']);
+            $announcement['endTime']    = strtotime($announcement['endTime']);
 
             $this->getAnnouncementService()->createAnnouncement($announcement);
         }
@@ -57,15 +64,15 @@ class AnnouncementController extends BaseController
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
 
         if ($request->getMethod() == 'POST') {
-            $announcement = $request->request->all();
+            $announcement              = $request->request->all();
             $announcement['startTime'] = strtotime($announcement['startTime']);
-            $announcement['endTime'] = strtotime($announcement['endTime']);
+            $announcement['endTime']   = strtotime($announcement['endTime']);
 
             $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
         }
 
         return $this->render('TopxiaAdminBundle:Announcement:create.html.twig', array(
-            'announcement' => $announcement, ));
+            'announcement' => $announcement));
     }
 
     public function deleteAction($id)

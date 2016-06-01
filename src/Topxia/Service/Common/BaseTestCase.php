@@ -45,17 +45,6 @@ class BaseTestCase extends WebTestCase
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $connection = $kernel->getContainer()->get('database_connection');
         $serviceKernel->setConnection(new TestCaseConnection($connection));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 1,
-            'nickname'  => 'admin',
-            'email'     => 'admin@admin.com',
-            'password'  => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-
         static::$serviceKernel = $serviceKernel;
     }
 
@@ -83,13 +72,32 @@ class BaseTestCase extends WebTestCase
             $this->emptyAppDatabase(false);
         }
 
-        static::$serviceKernel->createService('User.UserService')->register(array(
+        $this->initCurrentUser();
+
+    }
+
+    protected function initCurrentUser()
+    {
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $userService = static::$serviceKernel->createService('User.UserService');
+
+        $user = $userService->register(array(
             'nickname' => 'admin',
             'email'    => 'admin@admin.com',
             'password' => 'admin',
-            'loginIp'  => '127.0.0.1',
-            'roles'    => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+            'createdIp'  => '127.0.0.1',
+            'orgCode'  => '1.'
         ));
+
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
+        $userService->changeUserRoles($user['id'], $roles);
+        $user = $userService->getUser($user['id']);
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
     }
 
     /**

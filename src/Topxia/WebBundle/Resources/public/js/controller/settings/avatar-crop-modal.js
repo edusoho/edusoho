@@ -20,7 +20,9 @@ define(function(require, exports, module) {
                 images: response
             }, function(response) {
                 if (response.status === 'success') {
-                    $("#settings-avatar-form img").attr('src', response.avatar)
+                    $("#profile_avatar").val(response.avatar);
+                    $("#user-profile-form img").attr('src', response.avatar);
+                    $("#profile_avatar").blur();
                     $("#modal").modal('hide');
                     Notify.success('上传成功');
                 } else {

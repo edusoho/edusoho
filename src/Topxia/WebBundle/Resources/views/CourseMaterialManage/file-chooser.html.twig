@@ -178,8 +178,8 @@
 
 </style>
 
-
-
+{% set showCourseMaterialPane = showCourseMaterialPane|default(1) %}
+{% set showLinkPane = showLinkPane|default(1) %}
 
 <div class="file-chooser">
   <div class="file-chooser-bar" style="display:none;">
@@ -191,8 +191,12 @@
     <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
       <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">{{'上传文件'|trans}}</a></li>
       <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'从资料库中选择'|trans}}</a></li>
-      <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'从课程文件中选择'|trans}}</a></li>
-      <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'网络链接'|trans}}</a></li>
+      {% if showCourseMaterialPane %}
+        <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'从课程文件中选择'|trans}}</a></li>
+      {% endif %}
+      {% if showLinkPane %}
+        <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'网络链接'|trans}}</a></li>
+      {% endif %}
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="file-chooser-upload-pane">
@@ -236,7 +240,7 @@
 
       <div class="tab-pane" id="file-chooser-course-pane">
           <div id="file-browser" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId}) }}"
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId}) }}"
             data-empty="{{'暂无文件，请先上传。'|trans}}">
           </div>
       </div>

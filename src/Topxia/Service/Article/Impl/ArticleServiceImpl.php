@@ -341,7 +341,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article = array();
-
+        $user = $this->getCurrentUser();
         $match              = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
         $article['picture'] = $match ? $matches[1] : "";
 
@@ -352,6 +352,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article['featured']      = empty($fields['featured']) ? 0 : 1;
         $article['promoted']      = empty($fields['promoted']) ? 0 : 1;
         $article['sticky']        = empty($fields['sticky']) ? 0 : 1;
+        $article['orgCode']       = empty($fields['orgCode']) ? $user->getCurrentOrgCode() : $fields['orgCode'];
         $article['categoryId']    = $fields['categoryId'];
         $article['source']        = $fields['source'];
         $article['sourceUrl']     = $fields['sourceUrl'];
@@ -368,7 +369,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         if ($mode == 'add') {
             $article['tagIds']      = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
             $article['status']      = 'published';
-            $article['userId']      = $this->getCurrentUser()->id;
+            $article['userId']      = $user->id;
             $article['createdTime'] = time();
         }
 

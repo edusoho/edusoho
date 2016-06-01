@@ -4,6 +4,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
     
+    require('../../widget/category-select').run('article');
+
 	exports.run = function() {
         var $form = $('#category-form');
 		var $modal = $form.parents('.modal');
