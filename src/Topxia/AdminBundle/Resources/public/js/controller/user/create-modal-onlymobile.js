@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-
+        require('orgbundle/controller/org/org-tree-select').run();
         var $modal = $('#user-create-form').parents('.modal');
-        
+
         var validator = new Validator({
             element: '#user-create-form',
             autoSubmit: false,
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     Notify.success('新用户添加成功');
                     window.location.reload();
-                }).error(function(){
+                }).error(function() {
                     Notify.danger('新用户添加失败');
                 });
 
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="mobile"]',
-            required: true, 
+            required: true,
             rule: 'mobile email_or_mobile_remote'
         });
 

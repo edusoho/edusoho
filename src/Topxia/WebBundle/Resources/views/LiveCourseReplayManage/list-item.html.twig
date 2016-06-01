@@ -36,7 +36,6 @@
 		{% endif %}
 
 	</div>
-
 	<div class="item-actions prs">
 		<a class="btn btn-link" title="{{'预览'|trans}}" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 
@@ -44,7 +43,7 @@
 			<a href="#modal" class="btn btn-link " title="{{'编辑'|trans}}" data-toggle="modal" data-url="{{ path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) }}" ><span class="glyphicon glyphicon-th-list"></span></a>
 		{% endif %}
 
-		{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}
+		{% if lesson.status == 'published'  and lesson.type == 'live' and lesson.isEnd  and  lesson.canRecord|default(false) %}
 			<button class="btn btn-link replay-lesson-btn"
 			{% if lesson.replayStatus == 'ungenerated' %}
 			title="{{'录制'|trans}}"

@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Common;
 
+use Mockery;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,17 +45,6 @@ class BaseTestCase extends WebTestCase
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $connection = $kernel->getContainer()->get('database_connection');
         $serviceKernel->setConnection(new TestCaseConnection($connection));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 1,
-            'nickname'  => 'admin',
-            'email'     => 'admin@admin.com',
-            'password'  => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-
         static::$serviceKernel = $serviceKernel;
     }
 
@@ -82,13 +72,63 @@ class BaseTestCase extends WebTestCase
             $this->emptyAppDatabase(false);
         }
 
-        static::$serviceKernel->createService('User.UserService')->register(array(
+        $this->initCurrentUser();
+
+    }
+
+    protected function initCurrentUser()
+    {
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $userService = static::$serviceKernel->createService('User.UserService');
+
+        $user = $userService->register(array(
             'nickname' => 'admin',
             'email'    => 'admin@admin.com',
             'password' => 'admin',
-            'loginIp'  => '127.0.0.1',
-            'roles'    => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+            'createdIp'  => '127.0.0.1',
+            'orgCode'  => '1.'
         ));
+
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
+        $userService->changeUserRoles($user['id'], $roles);
+        $user = $userService->getUser($user['id']);
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
+    }
+
+    /**
+     * mock对象
+     * @param $name mock的类名
+     * @param $params,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     */
+
+    protected function mock($objectName,$params = array())
+    {
+      $newService = explode('.',$objectName);
+      $mockObject = Mockery::mock($newService[1]);
+
+
+      foreach ($params as $key => $param) {
+        $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+      }
+
+      $pool = array();
+      $pool[$objectName] = $mockObject;
+      $this->setPool($pool);
+    }
+
+    protected function setPool($object)
+    {
+      $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+      $pool             = $reflectionObject->getProperty("pool");
+      $pool->setAccessible(true);
+      $value = $pool->getValue(static::$serviceKernel);
+      $objects = array_merge($value,$object);
+      $pool->setValue(static::$serviceKernel, $objects);
     }
 
     protected function flushPool()

@@ -11,24 +11,7 @@
       <div class="panel-heading"><h2>{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %}</h2></div>
 
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
-        <div class="alert alert-info">
-          <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
-          <ol>
-            <li>{{'设置头像。'|trans}}
-              {% if app.user.largeAvatar %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
-              {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}<a href="{{ path('settings_avatar', {fromCourse:true}) }}" class="alert-link">{{'去设置'|trans}}</a>
-              {% endif %}
-            <li>{{'设置头衔 、自我介绍。'|trans}}
-              {% if app.user.title and userProfile.about %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
-              {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}<a href="{{ path('settings', {fromCourse:true}) }}" class="alert-link">{{'去设置'|trans}}</a>
-              {% endif %}
-            </li>
-          </ol>
-        </div>
+        {% include 'TopxiaWebBundle:Settings:user-profile.html.twig'%}
       {% else %}
         <form id="course-create-form" class="form-horizontal" method="post">
 
@@ -40,7 +23,9 @@
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
             </div>
-          </div>
+          </div> 
+
+          {% include 'OrgBundle:Org:org-tree-select.html.twig' %}
 
       <div class="form-group">
         <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>

@@ -25,7 +25,7 @@ class Version20160331185209 extends AbstractMigration
                          `isActive` tinyint(4) NOT NULL DEFAULT '0' COMMENT '',
                          `createdTime` int(10) DEFAULT '0' COMMENT '创建时间',
                          PRIMARY KEY (`id`)
-                        ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ");
         }
     }

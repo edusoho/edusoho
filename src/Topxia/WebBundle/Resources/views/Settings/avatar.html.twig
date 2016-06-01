@@ -38,7 +38,7 @@
             <a id="upload-picture-btn"
             class="btn btn-primary"
             data-upload-token="{{ upload_token('tmp', 'image') }}"
-            data-goto-url="{{path('settings_avatar_crop')}}"
+            data-goto-url="{{path('settings_avatar_crop',{goto: goto})}}"
             >{{'上传新头像'|trans}}</a>
           </div>
         </div>

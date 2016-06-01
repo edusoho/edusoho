@@ -10,14 +10,11 @@ class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
+        $conditions = $request->query->all();
 
-        $conditions = array(
-            'title' => ''
-        );
-
-        if (!empty($fields)) {
-            $conditions = $fields;
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
         }
 
         $paginator = new Paginator(
@@ -121,7 +118,8 @@ class ClassroomAdminController extends BaseController
             $classroom = array(
                 'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable'  => $myClassroom['buyable']
+                'buyable'  => $myClassroom['buyable'],
+                'orgCode'  => $myClassroom['orgCode']
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);

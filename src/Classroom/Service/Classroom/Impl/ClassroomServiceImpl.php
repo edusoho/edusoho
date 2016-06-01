@@ -133,7 +133,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff = array_values(array_diff($courseIds, $sameCourseIds));
 
-            //if new copy it
+//if new copy it
 
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
@@ -184,7 +184,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId', 'orgCode'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
@@ -943,7 +943,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function _prepareClassroomConditions($conditions)
     {
-        $conditions = array_filter($conditions, function($value){
+        $conditions = array_filter($conditions, function ($value) {
             if ($value === 0 || !empty($value)) {
                 return true;
             } else {

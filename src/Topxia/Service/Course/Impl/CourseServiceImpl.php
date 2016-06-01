@@ -183,8 +183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (isset($conditions['categoryId'])) {
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            $conditions['categoryIds'] = array();
+
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+
             unset($conditions['categoryId']);
         }
 
@@ -397,7 +402,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
@@ -437,8 +442,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields = CourseSerialize::serialize($fields);
-
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
@@ -483,7 +487,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable'    => 0,
             'tryLookTime'    => 0,
             'buyable'        => 0,
-            'conversationId' => ''
+            'conversationId' => '',
+            'orgCode'        => '1.'
         ));
 
         if (!empty($fields['about'])) {
@@ -608,7 +613,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->tryAdminCourse($id);
 
         // Decrease the course lesson files usage counts, if there are files used by the course lessons.
-        $lessons = $this->getLessonDao()->findLessonsByCourseId($id);
+        /*$lessons = $this->getLessonDao()->findLessonsByCourseId($id);
 
         if (!empty($lessons)) {
             $fileIds = ArrayToolkit::column($lessons, "mediaId");
@@ -618,10 +623,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $this->getUploadFileService()->waveUploadFile($fileId, 'usedCount', -1);
                 }
             }
-        }
+        }*/
 
         // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        $this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
+        //$this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
 
         // Delete course related data
         $this->getMemberDao()->deleteMembersByCourseId($id);
@@ -635,7 +640,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent("course.delete",$course);
+        $this->dispatchEvent("course.delete", $course);
 
         return true;
     }
@@ -1266,7 +1271,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
 
-// Update link count of the course lesson file, if the lesson file is changed
+/*// Update link count of the course lesson file, if the lesson file is changed
 
         if (array_key_exists('mediaId', $fields)) {
             if ($fields['mediaId'] != $lesson['mediaId']) {
@@ -1282,7 +1287,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
                 }
             }
-        }
+        }*/
 
         $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
@@ -1339,12 +1344,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 // Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 
-        if (!empty($lesson['mediaId'])) {
+        /*if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-        }
+        }*/
 
         // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+        //$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
         $this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
         $this->dispatchEvent("course.lesson.delete", array(
@@ -1997,7 +2002,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        if ($sort = 'latest') {
+        if(is_array($sort)){
+            $orderBy = $sort;
+        }else{
             $orderBy = array('createdTime', 'DESC');
         }
 

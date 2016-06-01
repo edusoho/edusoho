@@ -31,7 +31,6 @@ define(function(require, exports, module) {
 
             file.uploaderWidget.uploader.option('chunked', true);
             file.uploaderWidget.uploader.option('chunkSize', cloud2UploadStatus.chunkSize);
-            file.uploaderWidget.uploader.option('chunkRetry', 2);
             file.uploaderWidget.uploader.option('sendAsBinary', true);
 
         },
@@ -148,6 +147,16 @@ define(function(require, exports, module) {
                 cloud2UploadStatus.ctxs.push(ret.ctx);
             }
             self.set('cloud2UploadStatus', cloud2UploadStatus);
+        },
+
+        /**
+         *
+         * @param lastPercentage    上一次进度
+         * @param currentPercentage 当前进度
+         * @returns {boolean}
+         */
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

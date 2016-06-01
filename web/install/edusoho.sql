@@ -777,6 +777,7 @@ CREATE TABLE `order_refund` (
   `reasonNote` varchar(1024) NOT NULL DEFAULT '' COMMENT '退款理由',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单退款记录最后更新时间',
   `createdTime` int(10) unsigned NOT NULL COMMENT '订单退款记录创建时间',
+  `operator` int(11) NOT NULL COMMENT '操作人',
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1004,6 +1005,7 @@ CREATE TABLE `upload_files` (
   `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `etag` varchar(256) NOT NULL DEFAULT '' COMMENT 'ETAG',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '长度（音视频则为时长，PPT/文档为页数）',
+  `description` text,
   `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `convertParams` text COMMENT '文件转换参数',
@@ -1453,7 +1455,7 @@ CREATE TABLE `crontab_job` (
   `cycle` ENUM('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
   `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间',
   `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
-  `jobParams` text NOT NULL COMMENT '任务参数',
+  `jobParams` text NULL COMMENT '任务参数',
   `targetType` VARCHAR( 64 ) NOT NULL DEFAULT  '',
   `targetId` INT UNSIGNED NOT NULL DEFAULT  '0',
   `executing` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行状态',

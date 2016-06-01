@@ -179,6 +179,7 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Org/OrgBundle/Resources/config/menus_{$position}.yml";
 
         $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
         $count         = $this->getAppService()->findAppCount();

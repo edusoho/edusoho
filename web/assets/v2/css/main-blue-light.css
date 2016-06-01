@@ -2998,6 +2998,10 @@ fieldset[disabled] a.btn {
   max-width: 100% !important;
   height: auto !important;
 }
+table td {
+  word-wrap: break-word;
+  word-break: break-all;
+}
 .section-gray {
   background-color: #f5f8fa !important;
 }

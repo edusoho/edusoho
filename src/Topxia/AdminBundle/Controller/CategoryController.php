@@ -14,7 +14,8 @@ class CategoryController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $categories = $this->getCategoryService()->getCategoryTree($group['id']);
+        $categories = $this->getCategoryService()->getCategoryStructureTree($group['id']);
+
         return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
             'group'      => $group,
             'categories' => $categories,
@@ -76,6 +77,17 @@ class CategoryController extends BaseController
         return $this->renderTbody($category['groupId']);
     }
 
+    public function sortAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+
+        if (!empty($ids)) {
+            $this->getCategoryService()->sortCategories($ids);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     public function checkCodeAction(Request $request)
     {
         $code    = $request->query->get('value');
@@ -95,7 +107,7 @@ class CategoryController extends BaseController
     protected function renderTbody($groupId)
     {
         $group      = $this->getCategoryService()->getGroup($groupId);
-        $categories = $this->getCategoryService()->getCategoryTree($groupId);
+        $categories = $this->getCategoryService()->getCategoryStructureTree($groupId);
         return $this->render('TopxiaAdminBundle:Category:tbody.html.twig', array(
             'categories' => $categories,
             'group'      => $group
@@ -105,10 +117,5 @@ class CategoryController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

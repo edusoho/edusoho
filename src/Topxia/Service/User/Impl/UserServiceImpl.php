@@ -1,16 +1,16 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\User\UserService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Symfony\Component\HttpFoundation\File\File;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -146,6 +146,19 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
+    public function changeOrgCode($userId, $orgCode)
+    {
+        $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
+
+        if (empty($org)) {
+            throw $this->createNotFoundException("org #{$orgCode} not found");
+        }
+
+        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode']));
+
+        return $user;
+    }
+
     public function changeEmail($userId, $email)
     {
         if (!SimpleValidator::email($email)) {
@@ -203,8 +216,8 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
-        
-        $file   = new File($filePath);
+
+        $file = new File($filePath);
 
         $groupCode = "tmp";
         $imgs      = array(
@@ -480,9 +493,10 @@ class UserServiceImpl extends BaseService implements UserService
         return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
-    protected function validateNickname($nickname) {
+    protected function validateNickname($nickname)
+    {
         if (!SimpleValidator::nickname($nickname)) {
-            throw $this->createServiceException('Invalid nickname: ' . $nickname);
+            throw $this->createServiceException('Invalid nickname: '.$nickname);
         }
     }
 
@@ -516,7 +530,12 @@ class UserServiceImpl extends BaseService implements UserService
         $user['roles']         = array('ROLE_USER');
         $user['type']          = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp']     = empty($registration['createdIp']) ? '' : $registration['createdIp'];
-        $user['createdTime']   = time();
+
+        if (!empty($registration['orgCode'])) {
+            $user['orgCode'] = $registration['orgCode'];
+        }
+
+        $user['createdTime'] = time();
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
 
@@ -779,6 +798,7 @@ class UserServiceImpl extends BaseService implements UserService
         } else {
             $fields['isQQPublic'] = 1;
         }
+
         $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
 
         $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
@@ -1660,12 +1680,17 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return $this->createService('User.InviteRecordService');
     }
+
+    protected function getOrgService()
+    {
+        return $this->createService('Org:Org.OrgService');
+    }
 }
 
 class UserSerialize
 {
-    public static function serialize(array $user)
-    {
+    public static function
+    serialize(array $user) {
         $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
         return $user;
     }

@@ -78,7 +78,48 @@
           </td>
         </tr>
 
-        <tr><td>移动客户端</td><td>{% if setting("mobile").enabled|default(null) %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
-      {% endif %}</td></tr>
+        <tr>
+          <td>移动客户端</td>
+            <td>
+            {% if setting("mobile").enabled|default(null) %}
+              <span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用
+            {% else %}
+              <span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right" href="{{path("admin_setting_mobile")}}">查看</a>
+            {% endif %}
+          </td>
+        </tr>
+
+        {% if mobileCustomization.status == 'ok' %}
+          <tr>
+            <td>移动端定制</td>
+            <td>
+              {% set currentVersion = mobileCustomization.customization.currentVersion %}
+              {% set newestVersion = mobileCustomization.newestVersion %}
+              <span class="glyphicon glyphicon-ok-sign text-success"></span> 已定制
+               (
+               {{'当前版本'|trans}}: {{ currentVersion }}
+               {% if newestVersion > currentVersion %}
+                {{'最新版本'|trans}}: {{ newestVersion }}
+               {% endif %}
+               )
+              {% if newestVersion > currentVersion %}
+                <span class="upgrade-status">
+                  {% set applyStatus = mobileCustomization.customization.applyStatus %}
+                  {% if applyStatus in ['unsubmit', 'failed'] %}
+                    {% if applyStatus == 'failed' %}
+                      <span class="label label-danger">升级失败</span>
+                    {% endif %}
+                    <a class="btn btn-info btn-xs mls" target="_blank" href="http://demo.edusoho.com/mobile/">体验</a>
+                    <a class="btn btn-info btn-xs mobile-customization-upgrade-btn" data-url="{{path("admin_operation_mobile_customization_upgrade")}}" data-loading-text="提交中..." data-data="{{ {'currentVersion': currentVersion, 'targetVersion': newestVersion}|json_encode }}">申请升级</a>
+                  {% elseif applyStatus == 'submitted' %}
+                    <span class="label label-warning">升级受理中</span>
+                  {% elseif applyStatus == 'accepted' %}
+                    <span class="label label-success">升级已受理</span>
+                  {% endif %}
+                </span>
+                <div class="mls help-block">(如有疑问，请联系客服人员 0571-86819929)</div>
+              {% endif %}
+            </td>
+        {% endif %}
 
 </table>

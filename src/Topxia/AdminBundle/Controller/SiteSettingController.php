@@ -191,11 +191,6 @@ class SiteSettingController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

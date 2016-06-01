@@ -2998,6 +2998,10 @@ fieldset[disabled] a.btn {
   max-width: 100% !important;
   height: auto !important;
 }
+table td {
+  word-wrap: break-word;
+  word-break: break-all;
+}
 .section-gray {
   background-color: #f5f8fa !important;
 }
@@ -3405,9 +3409,8 @@ Pagination Styles
   padding: 0;
   float: none;
 }
-.select2-drop-active {
-  border: 1px solid #46c37b !important;
-  border-bottom: none  !important;
+.select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active {
+  border-color: #46c37b !important;
 }
 .select2-results .select2-highlighted {
   background: #46c37b !important;

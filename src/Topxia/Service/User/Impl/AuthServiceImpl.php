@@ -11,15 +11,13 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
-
-        if (isset($registration['nickname']) && !empty($registration['nickname']) 
+        if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
-            throw  $this->createServiceException('用户名中含有敏感词！');
+            throw $this->createServiceException('用户名中含有敏感词！');
         }
 
-        //ip次数限制
         if ($this->registerLimitValidator($registration)) {
-            throw  $this->createServiceException('由于您注册次数过多，请稍候尝试');
+            throw $this->createServiceException('由于您注册次数过多，请稍候尝试');
         }
 
         $this->getKernel()->getConnection()->beginTransaction();
@@ -54,7 +52,9 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function registerLimitValidator($registration)
     {
         $authSettings = $this->getSettingService()->get('auth', array());
-        if (isset($authSettings['register_protective'])) {
+        $user         = $this->getCurrentUser();
+
+        if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
             $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
 
             if (!$status) {
@@ -201,7 +201,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function checkUsername($username, $randomName = '')
     {
 //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
-
         if (empty($randomName) || $username != $randomName) {
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
@@ -357,7 +356,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-
+            
             if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
@@ -375,7 +374,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
         return $this->partner;
     }
-
 
     protected function getSensitiveService()
     {
