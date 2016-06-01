@@ -818,7 +818,6 @@ the specific language governing permissions and limitations under the Apache Lic
                                 indentCount = result.text.lastIndexOf(opts.indentChar) + 1;
                                 result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
                                 node = $("<li></li>");
-                                node.css({'padding-left': 14 * indentCount});
                                 node.attr("id", "select2-result-" + result.id);
                                 node.attr("data-indent-count", indentCount);
                                 node.addClass("select2-results-dept-" + depth);
@@ -833,6 +832,7 @@ the specific language governing permissions and limitations under the Apache Lic
                                 node.addClass(self.opts.formatResultCssClass(result));
                                 label = $(document.createElement("div"));
                                 label.addClass("select2-result-label");
+                                label.css({'padding-left': 5 + 15 * indentCount});
                                 formatted = opts.formatResult(result, label, query, self.opts.escapeMarkup);
                                 if (formatted !== undefined) {
                                     label.html(formatted);
@@ -1133,13 +1133,22 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             positionDropdown: function() {
-                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = $dropdown.outerWidth(false), enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, resultsListNode;
+                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = $dropdown.outerWidth(false), enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, $resultsListNode, resultsList;
                 if (this.opts.dropdownAutoWidth) {
-                    resultsListNode = $(".select2-results", $dropdown)[0];
+                    $resultsListNode = $(".select2-result", $dropdown);
                     $dropdown.addClass("select2-drop-auto-width");
                     $dropdown.css("width", "");
-                    // Add scrollbar width to dropdown if vertical scrollbar is present
-                    dropWidth = $dropdown.outerWidth(false) + (resultsListNode.scrollHeight === resultsListNode.clientHeight ? 0 : scrollBarDimensions.width);
+                    // set dropdown width to longest node content's width
+                    if ($resultsListNode.length > 0) {
+                        dropWidth = 0;
+                        $resultsListNode.each2(function() {
+                            var thisWidth = $(this).find('.select2-result-text').text().length * 14;
+                            dropWidth = dropWidth > thisWidth ? dropWidth : thisWidth;
+                        });
+                        resultsList = $(".select2-results", $dropdown)[0];
+                        dropWidth += (resultsList.scrollHeight === resultsList.clientHeight ? 0 : scrollBarDimensions.width);
+                    }
+                    
                     dropWidth > width ? width = dropWidth : dropWidth = width;
                     enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
                 } else {
