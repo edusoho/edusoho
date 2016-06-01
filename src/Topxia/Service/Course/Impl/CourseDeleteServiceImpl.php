@@ -380,7 +380,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $reviewLog = "删除课程《{$course['title']}》(#{$course['id']})的评价";
-            $this->getLogService()->info('review', 'delete', $reviewLog);
+            $this->getLogService()->info('course', 'delete_review', $reviewLog);
         }
 
         return $count;

@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$review 课程评价]
-     * @var string
-     */
-    const REVIEW = 'review';
-    /**
      * [$announcement 课程公告]
      * @var string
      */
