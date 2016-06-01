@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$note 课程笔记]
-     * @var string
-     */
-    const NOTE = 'note';
-    /**
      * [$thread 课程话题]
      * @var string
      */

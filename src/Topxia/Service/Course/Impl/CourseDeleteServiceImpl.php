@@ -339,7 +339,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $noteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程笔记";
-            $this->getLogService()->info('note', 'delete', $noteLog);
+            $this->getLogService()->info('course', 'delete_note', $noteLog);
         }
 
         return $count;
