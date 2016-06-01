@@ -62,11 +62,6 @@ class Logger
      */
     const CLASSROOM = 'classroom';
     /**
-     * [$CLASSROOMREVIEW 班级评价]
-     * @var string
-     */
-    const CLASSROOMREVIEW = 'classroom_review';
-    /**
      * [$CASH 虚拟币]
      * @var string
      */
