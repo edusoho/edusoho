@@ -400,7 +400,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $announcementLog = "删除课程《{$course['title']}》(#{$course['id']})的公告";
-            $this->getLogService()->info('announcement', 'delete', $announcementLog);
+            $this->getLogService()->info('course', 'delete_announcement', $announcementLog);
         }
 
         return $count;

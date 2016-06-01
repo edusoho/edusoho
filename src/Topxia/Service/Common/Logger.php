@@ -105,11 +105,6 @@ class Logger
      */
     const CONTENT = 'content';
     /**
-     * [$announcement 课程公告]
-     * @var string
-     */
-    const ANNOUNCEMENT = 'announcement';
-    /**
      * [$CRONTAB 定时任务]
      * @var string
      */
@@ -172,8 +167,6 @@ class Logger
             'order'         => array(),
             'category'      => array('create'),
             'content'       => array(),
-            'announcement'  => array('delete'),
-            'member'        => array('delete'),
             'course'        => array('course'),
             'crontab'       => array('job_start', 'job_end'),
             'uploadFile'    => array('delete'),
