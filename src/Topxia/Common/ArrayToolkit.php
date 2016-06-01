@@ -135,4 +135,40 @@ class ArrayToolkit
 
         return $filtered;
     }
+
+    /**
+     * The every() method tests whether all elements in the array pass the test implemented by the provided function.
+     * @param      $array
+     * @param null $callback
+     * @return bool
+     */
+    public static function every($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && !$value){
+                return false;
+            }else if(is_callable($callback) && !$callback($value)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * The some() method tests whether some element in the array passes the test implemented by the provided function.
+     * @param      $array
+     * @param null $callback
+     * @return bool
+     */
+    public static function some($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && $value){
+                return true;
+            }else if(is_callable($callback) && $callback($value)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
