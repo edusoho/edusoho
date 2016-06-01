@@ -17,11 +17,11 @@ class Version20160530112820 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        if ($this->isTableExist('upload_file_inits')) {
+        if ($schema->hasTable('upload_file_inits')) {
             $sql    = "select max(id) as maxId from upload_files;";
             $uploadFileMaxId = $this->connection->fetchAssoc($sql);
 
-            $sql    = "SELECT auto_increment FROM information_schema.`TABLES` WHERE table_schema='".$this->getSchema()."' AND table_name = 'upload_file_inits';";
+            $sql    = "SELECT auto_increment FROM information_schema.`TABLES` WHERE table_schema='".$schema->getName()."' AND table_name = 'upload_file_inits';";
             $uploadFileInitMaxId = $this->connection->fetchAssoc($sql);
 
             if(empty($uploadFileMaxId['maxId'])) {
@@ -37,22 +37,6 @@ class Version20160530112820 extends AbstractMigration
         }
 
 
-    }
-
-
-    protected function isTableExist($table)
-    {
-        $sql    = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->connection->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    private function getSchema()
-    {
-        global $kernal;
-
-        $database = $kernal->getContainer()->getParameter('database_name');
-        return $database;
     }
 
     /**
