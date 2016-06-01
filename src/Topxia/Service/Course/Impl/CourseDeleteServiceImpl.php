@@ -100,7 +100,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $materialLog = "删除课程《{$course['title']}》(#{$course['id']})的课时资料";
-            $this->getLogService()->info('material', 'delete', $materialLog);
+            $this->getLogService()->info('course', 'delete_material', $materialLog);
         }
 
         return $count;

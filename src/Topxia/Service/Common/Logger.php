@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$MATERIAL 课程资料]
-     * @var string
-     */
-    const MATERIAL = 'material';
-    /**
      * [$chapter 课时章/节] 重构
      * @var string
      */
@@ -245,7 +240,6 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'material'         => array('delete'),
             'chapter'          => array('delete'),
             'draft'            => array('delete'),
             'lesson'           => array('delete'),
