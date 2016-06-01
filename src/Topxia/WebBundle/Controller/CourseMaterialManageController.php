@@ -71,7 +71,7 @@ class CourseMaterialManageController extends BaseController
             $conditions['type'] = $type;
         }
 
-        $courseMaterials = $this->getMaterialService()->findDistinctFileIdMaterials($course['id'], 0, PHP_INT_MAX);
+        $courseMaterials = $this->getMaterialService()->findMaterialsGroupByFileId($course['id'], 0, PHP_INT_MAX);
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $paginator = new Paginator(
             $request,
