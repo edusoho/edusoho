@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$LESSONVIEW 课程播放时长]重构
-     * @var string
-     */
-    const LESSONVIEW = 'lessonView';
-    /**
      * [$FAVORITE 课程收藏] 重构
      * @var string
      */
@@ -215,8 +210,6 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'LessonReplay'     => array('delete'),
-            'lessonView'       => array('delete'),
             'favorite'         => array('delete'),
             'note'             => array('delete'),
             'thread'           => array('delete'),

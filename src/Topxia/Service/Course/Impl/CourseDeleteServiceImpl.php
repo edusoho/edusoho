@@ -232,7 +232,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的播放时长";
-            $this->getLogService()->info('lessonView', 'delete', $lessonViewLog);
+            $this->getLogService()->info('course', 'delete_lessonView', $lessonViewLog);
         }
 
         return $count;
