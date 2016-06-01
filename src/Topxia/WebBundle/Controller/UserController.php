@@ -491,6 +491,12 @@ class UserController extends BaseController
         ));
     }
 
+    public function resetEmailAction(Request $request)
+    {
+
+        return $this->render('TopxiaWebBundle:User:reset-email.html.twig');
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

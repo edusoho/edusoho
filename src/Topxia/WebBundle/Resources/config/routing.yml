@@ -2059,6 +2059,10 @@ importer_index:
     path: /importer/{type}/index
     defaults: { _controller: TopxiaWebBundle:Importer:template}
 
+reset_email:
+    path: /email/reset
+    defaults: { _controller: TopxiaWebBundle:User:resetEmail}
+
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
