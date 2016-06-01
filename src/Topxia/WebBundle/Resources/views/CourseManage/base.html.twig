@@ -111,7 +111,7 @@
         </div>
       </div>
       
-      {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode : course.orgCode, inputClass: 'width-input width-input-large'} %}
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode : course.orgCode, inputClass: 'width-input width-input-large'} %}
 
       {% if course.type == 'live'%}
       <div id="live-plugin-url" class="form-group hidden">

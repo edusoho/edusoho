@@ -6,7 +6,7 @@
   {% include 'TopxiaAdminBundle:Course:tab-data.html.twig' %}
 
     <form id="message-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
-      {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
       
       <div class="form-group">
         <select class="form-control" name="categoryId">
