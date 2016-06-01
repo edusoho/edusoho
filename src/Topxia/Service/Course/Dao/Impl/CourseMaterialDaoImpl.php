@@ -146,7 +146,7 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
             ->andWhere('id = :id')
             ->andWhere('courseId = :courseId')
             ->andWhere('lessonId = :lessonId')
-            ->andWhere('lessonId <> ( :existLessonId )')
+            ->andWhere('lessonId <> ( :excludeLessonId )')
             ->andWhere('type = :type')
             ->andWhere('userId = :userId')
             ->andWhere('title LIKE :titleLike')

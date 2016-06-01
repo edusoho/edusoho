@@ -172,7 +172,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             array(
             	'courseId'      => $courseId, 
             	'fileIds'       => $fileIds,
-            	'existLessonId' => 0
+            	'excludeLessonId' => 0
             ),
             array('createdTime','DESC'), 0, PHP_INT_MAX 
         );
