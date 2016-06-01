@@ -9,7 +9,7 @@ seajs.config({
         "jquery.raty": "jquery-plugin/raty/2.5.2/raty",
         "jquery.cycle2": "jquery.cycle2/2.1.6/index",
         "jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar",
-        "jquery.select2": "jquery-plugin/select2/3.4.1/select2-debug",
+        "jquery.select2": "jquery-plugin/select2/3.4.1/select2",
         "jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
         "jquery.jcrop": "jquery-plugin/jcrop/0.9.12/jcrop",
         "jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
