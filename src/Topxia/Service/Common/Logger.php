@@ -102,11 +102,6 @@ class Logger
      */
     const ANNOUNCEMENT = 'announcement';
     /**
-     * [$STATUS 课程动态]
-     * @var string
-     */
-    const STATUS = 'status';
-    /**
      * [$member 课程学员]
      * @var string
      */
@@ -190,17 +185,14 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'note'             => array('delete'),
-            'thread'           => array('delete'),
-            'review'           => array('delete'),
             'announcement'     => array('delete'),
-            'status'           => array('delete'),
             'member'           => array('delete'),
             'course'           => array('course'),
             'crontab'          => array('job_start', 'job_end'),
             'uploadFile'       => array('delete'),
             'marker'           => array(),
-            'money_card_batch' => array()
+            'money_card_batch' => array(),
+            'thread'           => array('delete')
 
         );
     }

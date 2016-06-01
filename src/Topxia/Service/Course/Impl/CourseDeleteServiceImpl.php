@@ -420,7 +420,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $statusLog = "删除课程《{$course['title']}》(#{$course['id']})的动态";
-            $this->getLogService()->info('status', 'delete', $statusLog);
+            $this->getLogService()->info('course', 'delete_status', $statusLog);
         }
 
         return $count;
