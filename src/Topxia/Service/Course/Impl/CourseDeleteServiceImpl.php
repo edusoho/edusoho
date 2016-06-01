@@ -192,7 +192,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时时长";
-            $this->getLogService()->info('lessonLearn', 'delete', $lessonLearnLog);
+            $this->getLogService()->info('course', 'delete_lessonLearn', $lessonLearnLog);
         }
 
         return $count;
