@@ -20,9 +20,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'course.lesson.unpublish'       => 'onCourseLessonUnpublish',
             'course.lesson_start'           => 'onLessonStart',
             'course.lesson_finish'          => 'onLessonFinish',
-            'material.create'               => 'onMaterialCreate',
-            'material.update'               => 'onMaterialUpdate',
-            'material.delete'               => 'onMaterialDelete',
+            'course.material.create'        => 'onMaterialCreate',
+            'course.material.update'        => 'onMaterialUpdate',
+            'course.material.delete'        => 'onMaterialDelete',
             'chapter.create'                => 'onChapterCreate',
             'chapter.delete'                => 'onChapterDelete',
             'chapter.update'                => 'onChapterUpdate'

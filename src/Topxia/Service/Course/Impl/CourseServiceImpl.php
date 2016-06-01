@@ -67,11 +67,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
     }
 
-    public function findLessonsByCourseId($courseId)
-    {
-        return $this->getLessonDao()->findLessonsByCourseId($courseId);
-    }
-
     public function findLessonsByCopyIdAndLockedCourseIds($copyId, array $courseIds)
     {
         return $this->getLessonDao()->findLessonsByCopyIdAndLockedCourseIds($copyId, $courseIds);
@@ -188,8 +183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (isset($conditions['categoryId'])) {
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            $conditions['categoryIds'] = array();
+
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+
             unset($conditions['categoryId']);
         }
 
@@ -402,7 +402,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
@@ -442,8 +442,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields = CourseSerialize::serialize($fields);
-
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
@@ -488,7 +487,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable'    => 0,
             'tryLookTime'    => 0,
             'buyable'        => 0,
-            'conversationId' => ''
+            'conversationId' => '',
+            'orgCode'        => '1.'
         ));
 
         if (!empty($fields['about'])) {
@@ -640,7 +640,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent("course.delete",$course);
+        $this->dispatchEvent("course.delete", $course);
 
         return true;
     }

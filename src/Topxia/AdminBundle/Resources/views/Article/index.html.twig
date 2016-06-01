@@ -7,6 +7,9 @@
 {% block main %}
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
+
+     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+     
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
 		 <option value="">--所属栏目--</option>

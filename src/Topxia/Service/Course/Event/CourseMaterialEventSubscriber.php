@@ -12,12 +12,12 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'        => 'onCourseDelete',
-            'course.lesson.create' => array('onCourseLessonCreate', 0),
-            'course.lesson.delete' => array('onCourseLessonDelete', 0),
-            'course.lesson.update' => 'onCourseLessonUpdate',
-            'upload.file.delete'   => 'onUploadFileDelete',
-            'material.delete'      => 'onMaterialDelete',
+            'course.delete'          => 'onCourseDelete',
+            'course.lesson.create'   => array('onCourseLessonCreate', 0),
+            'course.lesson.delete'   => array('onCourseLessonDelete', 0),
+            'course.lesson.update'   => 'onCourseLessonUpdate',
+            'upload.file.delete'     => 'onUploadFileDelete',
+            'course.material.delete' => 'onMaterialDelete',
         );
     }
 
@@ -70,8 +70,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'courselesson'
+                'fileId'   => $lesson['mediaId']
             ),
             array('createdTime','DESC'), 0, 1
         );

@@ -19,7 +19,6 @@ define(function(require, exports, module) {
             uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
             uploaderWidget.uploader.option('chunked', true);
             uploaderWidget.uploader.option('chunkSize', 1024*1024);
-            uploaderWidget.uploader.option('chunkRetry', 2);
 
 
             var startUrl = uploaderWidget.get('uploadProxyUrl') + '/chunks/start';

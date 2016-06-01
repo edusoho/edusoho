@@ -99,14 +99,14 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->fetchColumn($sql, array($fileId)); 
     }
 
-    public function findDistinctFileIdMaterials($courseId, $start, $limit)
+    public function findMaterialsGroupByFileId($courseId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? GROUP BY fileId ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
 
-    public function findDistinctFileIdMaterialsCount($courseId)
+    public function findMaterialCountGroupByFileId($courseId)
     {
         $sql = "SELECT COUNT(DISTINCT(fileId)) FROM {$this->table} WHERE courseId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($courseId),0); 
@@ -146,7 +146,7 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
             ->andWhere('id = :id')
             ->andWhere('courseId = :courseId')
             ->andWhere('lessonId = :lessonId')
-            ->andWhere('lessonId <> ( :existLessonId )')
+            ->andWhere('lessonId <> ( :excludeLessonId )')
             ->andWhere('type = :type')
             ->andWhere('userId = :userId')
             ->andWhere('title LIKE :titleLike')

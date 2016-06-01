@@ -36,6 +36,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             } else {
 	        	$material = $this->addMaterial($fields, $argument);
 	        }
+        } elseif (!empty($fields['link'])) {
+        	$material = $this->addMaterial($fields, $argument);
         }
 
 		return $material;
@@ -45,7 +47,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		$material =  $this->getMaterialDao()->addMaterial($fields);
 
-		$this->dispatchEvent("material.create",array('argument'=>$argument,'material'=>$material));
+		$this->dispatchEvent("course.material.create",array('argument'=>$argument,'material'=>$material));
 
 		return $material;
 	}
@@ -54,7 +56,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		$material = $this->getMaterialDao()->updateMaterial($id, $fields);
 
-		$this->dispatchEvent("material.update",array('argument'=>$argument,'material'=>$material));
+		$this->dispatchEvent("course.material.update",array('argument'=>$argument,'material'=>$material));
 
 		return $material;
 	}
@@ -68,7 +70,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		$this->getMaterialDao()->deleteMaterial($materialId);
 
-		$this->dispatchEvent("material.delete",$material);
+		$this->dispatchEvent("course.material.delete",$material);
 	}
 
 
@@ -144,15 +146,15 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
 	}
 
-	public function findDistinctFileIdMaterials($courseId, $start, $limit)
-	{
-		return $this->getMaterialDao()->findDistinctFileIdMaterials($courseId, $start, $limit);
-	}
+	public function findMaterialsGroupByFileId($courseId, $start, $limit)
+    {
+        return $this->getMaterialDao()->findMaterialsGroupByFileId($courseId, $start, $limit);
+    }
 
-	public function findDistinctFileIdMaterialsCount($courseId)
-	{
-		return $this->getMaterialDao()->findDistinctFileIdMaterialsCount($courseId);
-	}
+    public function findMaterialCountGroupByFileId($courseId)
+    {
+        return $this->getMaterialDao()->findMaterialCountGroupByFileId($courseId);
+    }
 
 	public function searchMaterials($conditions, $orderBy, $start, $limit)
 	{
@@ -164,21 +166,23 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     	return $this->getMaterialDao()->searchMaterialCount($conditions);
     }
 
-    public function findCourseMaterialsQuotes($courseId, $fileIds)
+    public function findUsedCourseMaterials($courseId, $fileIds)
     {
     	$materials = $this->searchMaterials(
             array(
             	'courseId'      => $courseId, 
             	'fileIds'       => $fileIds,
-            	'existLessonId' => 0
+            	'excludeLessonId' => 0
             ),
             array('createdTime','DESC'), 0, PHP_INT_MAX 
         );
         $materials = ArrayToolkit::group($materials, 'fileId');
         $files     = array();
 
-        foreach ($materials as $fileId => $material) {
-        	$files[$fileId] = ArrayToolkit::column($material, 'source');
+        if ($materials) {
+        	foreach ($materials as $fileId => $material) {
+	        	$files[$fileId] = ArrayToolkit::column($material, 'source');
+	        }
         }
 
         return $files;

@@ -19,11 +19,11 @@ class CourseFileManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getMaterialService()->findDistinctFileIdMaterialsCount($course['id']),
+            $this->getMaterialService()->findMaterialCountGroupByFileId($course['id']),
             20
         );
 
-        $files = $this->getMaterialService()->findDistinctFileIdMaterials(
+        $files = $this->getMaterialService()->findMaterialsGroupByFileId(
             $course['id'], 
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
@@ -31,7 +31,7 @@ class CourseFileManageController extends BaseController
 
         $files      = $this->_materialsSort($files);
         $fileIds    = ArrayToolkit::column($files,'fileId');
-        $filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 

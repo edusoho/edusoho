@@ -1125,6 +1125,10 @@ settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
 
+settings_avatar_crop_modal:
+    pattern:  /settings/avatar/crop/modal
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
+
 settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
