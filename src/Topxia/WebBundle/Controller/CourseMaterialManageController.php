@@ -1,7 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
 
 class CourseMaterialManageController extends BaseController
 {
@@ -61,6 +64,61 @@ class CourseMaterialManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $this->getMaterialService()->deleteMaterial($courseId, $materialId);
         return $this->createJsonResponse(true);
+    }
+
+    public function browserAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $conditions = array();
+        $type = $request->query->get('type');
+        if (!empty($type)) {
+            $conditions['type'] = $type;
+        }
+
+        $courseMaterials = $this->getMaterialService()->findDistinctFileIdMaterials($course['id'], 0, PHP_INT_MAX);
+        $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
+        $paginator = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
+
+        $files = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            array('createdTime','DESC'), 
+            $paginator->getOffsetCount(), 
+            $paginator->getPerPageCount()
+        );
+        
+        return $this->createFilesJsonResponse($files);
+    }
+
+    protected function createFilesJsonResponse($files, $paginator = null)
+    {
+        foreach ($files as &$file) {
+            $file['updatedTime'] = $file['updatedTime'] ? $file['updatedTime'] : $file['createdTime'];
+            $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
+            $file['fileSize']    = FileToolkit::formatFileSize($file['fileSize']);
+
+            // Delete some file attributes to redunce the json response size
+            unset($file['hashId']);
+            unset($file['convertHash']);
+            unset($file['etag']);
+            unset($file['convertParams']);
+
+            unset($file);
+        }
+        
+        if(!empty($paginator)){
+            $paginator = Paginator::toArray($paginator);
+            return $this->createJsonResponse(array(
+                'files'     => $files,
+                'paginator' => $paginator
+            ));
+        }else{
+            return $this->createJsonResponse($files);
+        }
     }
 
     protected function getCourseService()
