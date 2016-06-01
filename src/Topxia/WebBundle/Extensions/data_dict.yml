@@ -184,11 +184,35 @@ logLevel:
     warning: 警告
     error: 错误
 
+logModule:
+    user: 用户
+    course: 课程
+    classroom: 班级
+    thread: 小组话题
+    uploadFile: 文件
+    order: 订单
+    article: 资讯
+    category: 栏目
+    content: 资讯内容
+    notify: 通知
+    sms: 短信
+    tag: 标签
+    system: 系统设置
+    crontab: 定时任务
+    marker: 驻点
+    vip: 会员
+    coin: 虚拟币
+    coupon: 优惠码
+    money_card: 学习卡
+    discount: 打折活动
+    exercise: 练习
+    homework: 作业
+    question_plus: 题库增强版
+
 logLevel:html:
     info: <span>提示</span>
     warning: <span class="text-warning">警告</span>
     error: <span class="text-danger">错误</span>
-
 
 analysisDateType:
     register: 新注册用户数

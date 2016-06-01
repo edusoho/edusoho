@@ -124,7 +124,7 @@ class Logger
      * [$tag 标签]
      * @var string
      */
-    const tag = 'tag';
+    const TAG = 'tag';
 
     public static function getModule($module)
     {
@@ -164,7 +164,9 @@ class Logger
             'crontab'       => array('job_start', 'job_end'),
             'uploadFile'    => array('delete'),
             'marker'        => array(),
-            'thread'        => array('delete')
+            'thread'        => array('delete'),
+            'sms'           => array(),
+            'tag'           => array()
 
         );
     }
