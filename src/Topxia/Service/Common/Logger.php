@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$lesson 课时]重构
-     * @var string
-     */
-    const LESSON = 'lesson';
-    /**
      * [$LESSONLEARN 课时时长]重构
      * @var string
      */
@@ -230,9 +225,6 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'chapter'          => array('delete'),
-            'draft'            => array('delete'),
-            'lesson'           => array('delete'),
             'lessonLearn'      => array('delete'),
             'LessonReplay'     => array('delete'),
             'lessonView'       => array('delete'),

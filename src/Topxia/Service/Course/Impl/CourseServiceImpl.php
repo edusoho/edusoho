@@ -1351,7 +1351,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
         //$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
-        $this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+        $this->getLogService()->info('course', 'delete_lesson', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
         $this->dispatchEvent("course.lesson.delete", array(
             "courseId" => $courseId,
             "lesson"   => $lesson
