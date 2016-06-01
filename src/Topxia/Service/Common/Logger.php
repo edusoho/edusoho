@@ -66,11 +66,6 @@ class Logger
      * @var string
      */
     const ARTICLE = 'article';
-    /**
-     * [$article 资讯] 重构
-     * @var string
-     */
-    const article = 'Article';
 
     const setArticleProperty    = 'setArticleProperty';
     const cancelArticleProperty = 'cancelArticleProperty';
@@ -268,16 +263,10 @@ class Logger
             'money_card'       => array(),
             'question_plus'    => array(),
             'userimporter'     => array(),
-            'level'            => array(),
             'vip'              => array(),
-            'Member'           => array('delete'),
-            'vipimporter'      => array('exportCsv'),
             'system'           => array('update_settings'),
             'classroom'        => array('add_student'),
-            'classroom_review' => array('delete'),
-            'cash'             => array(),
             'article'          => array(),
-            'Article'          => array('update'),
             'user'             => array('add'),
             'notify'           => array(),
             'order'            => array(),
