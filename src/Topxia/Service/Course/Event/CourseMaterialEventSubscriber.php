@@ -72,8 +72,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'courselesson'
+                'fileId'   => $lesson['mediaId']
             ),
             array('createdTime','DESC'), 0, 1
         );
