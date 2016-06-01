@@ -61,10 +61,6 @@ class Logger
      * @var string
      */
     const ARTICLE = 'article';
-
-    const setArticleProperty    = 'setArticleProperty';
-    const cancelArticleProperty = 'cancelArticleProperty';
-
     /**
      * [$USER 用户]
      * @var string
