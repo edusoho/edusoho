@@ -287,7 +287,7 @@ class CourseLessonManageController extends BaseController
 
         //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
         $this->getCourseService()->deleteLesson($course['id'], $lessonId);
-        $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+        //$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
         if ($this->isPluginInstalled('Homework')) {
             //如果安装了作业插件那么也删除作业和练习

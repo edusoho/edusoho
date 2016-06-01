@@ -13,38 +13,25 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $type = $request->query->get('type');
-        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
-
-        $conditions = array(
-            'targetType' => $type,
-            'targetId'   => $course['id']
-        );
-
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
-            $conditions['targetId'] = $course['parentId'];
+            $course['id'] = $course['parentId'];
         }
-
-        /*$courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
-        if ($courseMaterials) {
-            $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-        }*/
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFileCount($conditions),
+            $this->getMaterialService()->findMaterialCountGroupByFileId($course['id']),
             20
         );
 
-        $files = $this->getUploadFileService()->searchFiles(
-            $conditions,
-            array('createdTime','DESC'),
-            $paginator->getOffsetCount(),
+        $files = $this->getMaterialService()->findMaterialsGroupByFileId(
+            $course['id'], 
+            $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
 
-        //$fileIds    = ArrayToolkit::column($files, 'id');
-        //$filesQuote = $this->getMaterialService()->findCourseMaterialsQuotes($id, $fileIds);
+        $fileIds    = ArrayToolkit::column($files,'fileId');
+        $files      = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -54,7 +41,7 @@ class CourseFileManageController extends BaseController
             'users'      => ArrayToolkit::index($users, 'id'),
             'paginator'  => $paginator,
             'now'        => time(),
-            //'filesQuote' => $filesQuote
+            'filesQuote' => $filesQuote
         ));
     }
 
@@ -127,15 +114,28 @@ class CourseFileManageController extends BaseController
 
     public function deleteCourseFilesAction(Request $request, $id)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+ 
+            $formData = $request->request->all();
+ 
+            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
+                foreach ($formData['ids'] as $key => $fileId) {
+                    if ($this->getUploadFileService()->canManageFile($fileId)) {
+                        $this->getUploadFileService()->deleteFile($fileId);
+                    }
+                }
+            } 
+            
+            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
+ 
+            return $this->createJsonResponse(true);
         }
-
-        $ids = $request->request->get('ids', array());
-
-        $this->getUploadFileService()->deleteFiles($ids);
-
-        return $this->createJsonResponse(true);
+        
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course' => $course,
+        ));
     }
 
     protected function getCourseService()

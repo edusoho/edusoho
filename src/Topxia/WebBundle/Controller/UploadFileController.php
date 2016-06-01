@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,6 +98,14 @@ class UploadFileController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+
+        if (isset($conditions['targetTypes'])) {
+            $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+            if ($courseMaterials) {
+                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
+            }
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -128,6 +137,13 @@ class UploadFileController extends BaseController
 
             if ($course['parentId'] > 0 && $course['locked'] == 1) {
                 $conditions['targetId'] = $course['parentId'];
+            }
+        }
+
+        if (isset($conditions['targetTypes'])) {
+            $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+            if ($courseMaterials) {
+                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
             }
         }
 
@@ -411,6 +427,11 @@ class UploadFileController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
     protected function createFilesJsonResponse($files, $paginator = null)
