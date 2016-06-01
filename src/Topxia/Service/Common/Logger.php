@@ -126,13 +126,6 @@ class Logger
      */
     const tag = 'tag';
 
-//重构
-    /**
-     * [$setting 设置]
-     * @var string
-     */
-    const SETTING = 'setting';
-
     public static function getModule($module)
     {
         $modules = array_keys(self::moduleConfig());
