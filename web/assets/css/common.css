@@ -1916,3 +1916,11 @@ tr.placeholder:before {
 .treegrid-expander {
   cursor: pointer !important;
 }
+
+.form-group .select2-container .select2-choice {
+  height: 34px;
+  line-height: 34px;
+}
+.form-group .select2-search input, .form-group .select2-search-choice-close, .form-group .select2-container .select2-choice abbr, .form-group .select2-container .select2-choice .select2-arrow b {
+  background-size: 60px 50px!important;
+}
