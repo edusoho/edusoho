@@ -47,11 +47,6 @@ class Logger
      */
     const USERIMPORTER = 'userimporter';
     /**
-     * [$LEVEL 会员等级]
-     * @var string
-     */
-    const LEVEL = 'level';
-    /**
      * [$vip 会员]
      * @var string
      */
