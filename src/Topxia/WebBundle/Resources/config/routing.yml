@@ -994,6 +994,14 @@ course_manage_material_delete:
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
     methods: [POST]
 
+course_manage_material_browser:
+    pattern:  /course/{courseId}/manage/material/browser
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:browser }
+
+course_manage_material_create:
+    pattern:  /course/{courseId}/manage/material/create
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
+
 course_manage_media_library:
     pattern:  /course/{id}/manage/media/library
     defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
@@ -1116,6 +1124,10 @@ settings_avatar:
 settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+
+settings_avatar_crop_modal:
+    pattern:  /settings/avatar/crop/modal
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
 
 settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner

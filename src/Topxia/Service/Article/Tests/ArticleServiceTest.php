@@ -9,6 +9,7 @@ class ArticleServiceTest extends BaseTestCase
 {
     public function testgetArticle()
     {
+        $user = $this->getCurrentUser();
         $newArticle = $this->createArticle();
         $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
         $this->assertEquals('test article', $getArticle['title']);

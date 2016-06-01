@@ -12,7 +12,7 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
 }
 
 use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 

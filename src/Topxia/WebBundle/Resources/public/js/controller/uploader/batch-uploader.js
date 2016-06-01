@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             process: 'none',
             uploadToken: null,
             multi: true,
-            hookRegisted: false,
+            hookRegisted: false
         },
 
         _onUploadStop: function (event) {
@@ -124,6 +124,7 @@ define(function(require, exports, module) {
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                 pick: this.element.find('.file-pick-btn') ,
                 threads: 1,
+                chunkRetry: 5,
                 formData: {
 
                 }

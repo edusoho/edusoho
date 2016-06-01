@@ -36,6 +36,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             } else {
 	        	$material = $this->addMaterial($fields, $argument);
 	        }
+        } elseif (!empty($fields['link'])) {
+        	$material = $this->addMaterial($fields, $argument);
         }
 
 		return $material;
@@ -170,7 +172,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             array(
             	'courseId'      => $courseId, 
             	'fileIds'       => $fileIds,
-            	'existLessonId' => 0
+            	'excludeLessonId' => 0
             ),
             array('createdTime','DESC'), 0, PHP_INT_MAX 
         );

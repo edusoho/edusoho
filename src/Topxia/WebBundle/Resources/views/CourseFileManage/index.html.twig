@@ -11,29 +11,16 @@
   </style>
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      {#{% if app.request.get('type') == 'courselesson' %}#}
-        <a class="btn btn-info btn-sm pull-right"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
-        >
+      <a class="btn btn-info btn-sm pull-right"
+      data-toggle="modal" data-target="#modal"
+      data-url="{{ path('course_manage_material_create', {courseId:course.id}) }}"
+      >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课程文件'|trans}}
-        </a>
-      {#{% elseif app.request.get('type') == 'coursematerial' %}
-        <a class="btn btn-info btn-sm pull-right"
-        data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
-        >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传备用资料文件'|trans}}
-        </a>
-      {% endif %}#}
+      </a>
+      
       {{'课程文件'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
-      {#<ul class="nav nav-tabs mbm">
-        <li {% if app.request.get('type') == 'courselesson' %} class="active" {% endif %}>
-        <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
-        <li {% if app.request.get('type') == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
-      </ul>#}
 
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
@@ -47,19 +34,6 @@
           </tr>
         </thead>
         <tbody>
-          {#{% if app.request.get('type') == 'courselesson' %}
-            {% for uploadFile in files %}
-              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
-            {% else %}
-              <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
-            {% endfor %}
-          {% elseif app.request.get('type') == 'coursematerial' %}
-            {% for uploadFile in files %}
-              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr-coursematerial.html.twig' %}
-            {% else %}
-              <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
-            {% endfor %}
-          {% endif %}#}
 
           {% for uploadFile in files if uploadFile %}
             {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}

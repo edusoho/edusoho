@@ -81,23 +81,11 @@ class UserCommonAdminServiceTest extends BaseTestCase
      */
     public function testDeleteCommonAdmin()
     {
-        $currentUser = new CurrentUser();
         $field=array(
             'url'=>"http://www.esdev.com:81/",
             'title'=>"ceshi",
             'userId'=>1,
         );
-
-        $currentUser->fromArray(array(
-            'id' => 1,
-            'nickname' => 'admin',
-            'email' => 'admin@admin.com',
-            'password'=>'admin',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER')
-        ));
-
-        $this->getServiceKernel()->setCurrentUser($currentUser); 
 
         $returnField=$this->getUserCommonAdminService()->addCommonAdmin($field);
 
