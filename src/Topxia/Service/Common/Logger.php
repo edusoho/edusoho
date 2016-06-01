@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$FAVORITE 课程收藏] 重构
-     * @var string
-     */
-    const FAVORITE = 'favorite';
-    /**
      * [$note 课程笔记]
      * @var string
      */
@@ -210,7 +205,6 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'favorite'         => array('delete'),
             'note'             => array('delete'),
             'thread'           => array('delete'),
             'review'           => array('delete'),

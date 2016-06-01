@@ -318,7 +318,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $favoriteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程收藏";
-            $this->getLogService()->info('favorite', 'delete', $favoriteLog);
+            $this->getLogService()->info('course', 'delete_favorite', $favoriteLog);
         }
 
         return $count;
