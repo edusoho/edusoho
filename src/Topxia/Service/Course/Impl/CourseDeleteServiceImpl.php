@@ -140,7 +140,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $draftLog = "删除课程《{$course['title']}》(#{$course['id']})的草稿";
-            $this->getLogService()->info('draft', 'delete', $draftLog);
+            $this->getLogService()->info('course', 'delete_draft', $draftLog);
         }
 
         return $count;

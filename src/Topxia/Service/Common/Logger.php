@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$DRAFT 课程草稿]重构
-     * @var string
-     */
-    const DRAFT = 'draft';
-    /**
      * [$lesson 课时]重构
      * @var string
      */
