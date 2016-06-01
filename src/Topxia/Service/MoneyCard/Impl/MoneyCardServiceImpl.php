@@ -199,7 +199,6 @@ class MoneyCardServiceImpl extends BaseService
         $batch     = $this->getBatch($moneyCard['batchId']);
         $this->getMoneyCardDao()->deleteMoneyCard($id);
         $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
-
         if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
@@ -207,18 +206,17 @@ class MoneyCardServiceImpl extends BaseService
 
             $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
-
         $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
 
-// if ($moneyCard['cardStatus'] != 'recharged') {
+        // if ($moneyCard['cardStatus'] != 'recharged') {
 
-//     $this->getMoneyCardDao()->deleteMoneyCard($id);
+        //     $this->getMoneyCardDao()->deleteMoneyCard($id);
 
-//     $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+        //     $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
 
-// } else {
+        // } else {
 
-//     throw $this->createServiceException('不能删除已经充值的充值卡！');
+        //     throw $this->createServiceException('不能删除已经充值的充值卡！');
         // }
     }
 
