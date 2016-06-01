@@ -452,10 +452,10 @@ class CoinController extends BaseController
 
             if ($fields['type'] == "add") {
                 $this->getCashAccountService()->waveCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             } else {
                 $this->getCashAccountService()->waveDownCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'deduct_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             }
         }
 
