@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$thread 课程话题]
-     * @var string
-     */
-    const THREAD = 'thread';
-    /**
      * [$review 课程评价]
      * @var string
      */
@@ -156,7 +151,7 @@ class Logger
      * [$thread 小组话题]
      * @var string
      */
-    const thread = 'thread';
+    const THREAD = 'thread';
 
 //重构
     /**
