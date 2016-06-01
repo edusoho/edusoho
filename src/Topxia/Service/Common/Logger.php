@@ -46,6 +46,32 @@ class Logger
      * @var string
      */
     const vip = 'vip';
+
+    /**
+     * [$course 课程]
+     * @var string
+     */
+    const COURSE = 'course';
+    /**
+     * [$thread 小组话题]
+     * @var string
+     */
+    const THREAD = 'thread';
+    /**
+     * [$USER 用户]
+     * @var string
+     */
+    const USER = 'user';
+    /**
+     * [$ORDER 订单]
+     * @var string
+     */
+    const ORDER = 'order';
+    /**
+     * [$UPLOADFILE 文件]
+     * @var string
+     */
+    const UPLOADFILE = 'uploadFile';
     /**
      * [$SYSTEM 系统设置]
      * @var string
@@ -61,41 +87,23 @@ class Logger
      * @var string
      */
     const ARTICLE = 'article';
-    /**
-     * [$USER 用户]
-     * @var string
-     */
-    const USER = 'user';
+
     /**
      * [$NOTIFY 通知]
      * @var string
      */
     const NOTIFY = 'notify';
-    /**
-     * [$ORDER 订单]
-     * @var string
-     */
-    const ORDER = 'order';
+
     /**
      * [$CATEGORY 栏目]
      * @var string
      */
     const CATEGORY = 'category';
     /**
-     * [$BLOCK 编辑区]
-     * @var string
-     */
-    const BLOCK = 'block';
-    /**
      * [$CONTENT 资讯内容]
      * @var string
      */
     const CONTENT = 'content';
-    /**
-     * [$course 课程]
-     * @var string
-     */
-    const COURSE = 'course';
     /**
      * [$announcement 课程公告]
      * @var string
@@ -106,11 +114,7 @@ class Logger
      * @var string
      */
     const CRONTAB = 'crontab';
-    /**
-     * [$UPLOADFILE 文件]
-     * @var string
-     */
-    const UPLOADFILE = 'uploadFile';
+
     /**
      * [$Marker 驻点]
      * @var string
@@ -126,12 +130,6 @@ class Logger
      * @var string
      */
     const tag = 'tag';
-
-    /**
-     * [$thread 小组话题]
-     * @var string
-     */
-    const THREAD = 'thread';
 
 //重构
     /**
@@ -158,31 +156,29 @@ class Logger
     public static function moduleConfig()
     {
         return array(
-            'coin'             => array(),
-            'coupon'           => array(),
-            'discount'         => array(),
-            'exercise'         => array(),
-            'homework'         => array(),
-            'money_card'       => array(),
-            'question_plus'    => array(),
-            'vip'              => array(),
-            'system'           => array('update_settings'),
-            'classroom'        => array('add_student'),
-            'article'          => array(),
-            'user'             => array('add'),
-            'notify'           => array(),
-            'order'            => array(),
-            'category'         => array('create'),
-            'block'            => array('update'),
-            'content'          => array(),
-            'announcement'     => array('delete'),
-            'member'           => array('delete'),
-            'course'           => array('course'),
-            'crontab'          => array('job_start', 'job_end'),
-            'uploadFile'       => array('delete'),
-            'marker'           => array(),
-            'money_card_batch' => array(),
-            'thread'           => array('delete')
+            'coin'          => array(),
+            'coupon'        => array(),
+            'discount'      => array(),
+            'exercise'      => array(),
+            'homework'      => array(),
+            'money_card'    => array(),
+            'question_plus' => array(),
+            'vip'           => array(),
+            'system'        => array('update_settings'),
+            'classroom'     => array('add_student'),
+            'article'       => array(),
+            'user'          => array('add'),
+            'notify'        => array(),
+            'order'         => array(),
+            'category'      => array('create'),
+            'content'       => array(),
+            'announcement'  => array('delete'),
+            'member'        => array('delete'),
+            'course'        => array('course'),
+            'crontab'       => array('job_start', 'job_end'),
+            'uploadFile'    => array('delete'),
+            'marker'        => array(),
+            'thread'        => array('delete')
 
         );
     }
