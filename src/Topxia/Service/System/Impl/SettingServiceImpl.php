@@ -46,6 +46,25 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
+    public function setByNamespace($namespace,$name,$value)
+    {
+        $this->getSettingDao()->deleteByNamespaceAndName($namespace,$name);
+        $setting = array(
+            'namespace' => $namespace
+            'name'  => $name,
+            'value' => serialize($value)
+        );
+        $this->getSettingDao()->addSetting($setting);
+        $this->clearCache();
+
+    }
+    
+    public function deleteByNamespaceAndName($namespace,$name)
+    {
+        $this->getSettingDao()->deleteByNamespaceAndName($namespace,$name);
+        $this->clearCache();
+    }
+
     protected function clearCache()
     {
         $this->getCacheService()->clear(self::CACHE_NAME);
