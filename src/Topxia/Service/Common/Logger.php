@@ -97,11 +97,6 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$LESSONREPLAY 课程录播]重构
-     * @var string
-     */
-    const LESSONREPLAY = 'LessonReplay';
-    /**
      * [$LESSONVIEW 课程播放时长]重构
      * @var string
      */

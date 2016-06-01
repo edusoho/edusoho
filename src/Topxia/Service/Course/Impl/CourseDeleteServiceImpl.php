@@ -212,7 +212,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播";
-            $this->getLogService()->info('LessonReplay', 'delete', $LessonReplayLog);
+            $this->getLogService()->info('course', 'delete_lessonReplay', $LessonReplayLog);
         }
 
         return $count;
