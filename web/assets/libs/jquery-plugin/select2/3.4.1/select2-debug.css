@@ -391,6 +391,7 @@ Version: 3.4.1 Timestamp: Thu Jun 27 18:02:10 PDT 2013
 
 .select2-results .select2-result-label {
     display: inline-block;
+    width: 100%;
     padding: 3px 7px 4px;
     margin: 0;
     cursor: pointer;
@@ -682,6 +683,8 @@ disabled look for disabled choices in the results dropdown
 }
 .select2-result-text {
     white-space: nowrap;
+    display: inline-block;
+    width: 90%;
 }
 .select2-tree-icon {
     color: #333;

@@ -322,6 +322,7 @@ the specific language governing permissions and limitations under the Apache Lic
             dest.attr("class", replacements.join(" "));
         }
         function markMatch(text, term, markup, escapeMarkup) {
+            markup.push("<div class='select2-result-text'>");
             var match = text.toUpperCase().indexOf(term.toUpperCase()), tl = term.length;
             if (match < 0) {
                 markup.push(escapeMarkup(text));
@@ -331,9 +332,8 @@ the specific language governing permissions and limitations under the Apache Lic
             markup.push("<span class='select2-match'>");
             markup.push(escapeMarkup(text.substring(match, match + tl)));
             markup.push("</span>");
-            markup.push("<span class='select2-result-text'>");
             markup.push(escapeMarkup(text.substring(match + tl, text.length)));
-            markup.push("</span>");
+            markup.push("</div>");
         }
         function defaultEscapeMarkup(markup) {
             var replace_map = {
@@ -610,7 +610,7 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             init: function(opts) {
-                var results, search, resultsSelector = ".select2-results", disabled, readonly;
+                var results, search, resultsSelector = ".select2-results", disabled, readonly, nodeSelector = ".select2-result";
                 // prepare options
                 this.opts = opts = this.prepareOpts(opts);
                 this.id = opts.id;
@@ -674,7 +674,10 @@ the specific language governing permissions and limitations under the Apache Lic
                 search.on("blur", function() {
                     search.removeClass("select2-focused");
                 });
-                this.dropdown.on("mouseup", ".select2-result-text", this.bind(function(e) {
+                if (this.opts.treeview) {
+                    nodeSelector = ".select2-result-text";
+                }
+                this.dropdown.on("mouseup", nodeSelector, this.bind(function(e) {
                     if ($(e.target).closest(".select2-result-selectable").length > 0) {
                         this.highlightUnderEvent(e);
                         this.selectHighlighted(e);

@@ -3452,9 +3452,6 @@ Pagination Styles
   background-color: #f1f1f1;
   border-color: #ddd;
 }
-.select2-no-results {
-  display: none !important;
-}
 .member-item .course-picture {
   float: left;
 }
