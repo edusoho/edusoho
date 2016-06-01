@@ -42,11 +42,6 @@ class Logger
      */
     const QUESTIONPLUS = 'question_plus';
     /**
-     * [$USERIMPORTER 用户导出]
-     * @var string
-     */
-    const USERIMPORTER = 'userimporter';
-    /**
      * [$vip 会员]
      * @var string
      */
@@ -262,7 +257,6 @@ class Logger
             'homework'         => array(),
             'money_card'       => array(),
             'question_plus'    => array(),
-            'userimporter'     => array(),
             'vip'              => array(),
             'system'           => array('update_settings'),
             'classroom'        => array('add_student'),
