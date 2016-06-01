@@ -99,13 +99,6 @@ class UploadFileController extends BaseController
             unset($conditions['keyword']);
         }
 
-        /*if (isset($conditions['targetTypes'])) {
-            $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
-            if ($courseMaterials) {
-                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
-            }
-        }*/
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -137,13 +130,6 @@ class UploadFileController extends BaseController
 
             if ($course['parentId'] > 0 && $course['locked'] == 1) {
                 $conditions['targetId'] = $course['parentId'];
-            }
-        }
-
-        if (isset($conditions['targetTypes'])) {
-            $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
-            if ($courseMaterials) {
-                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
             }
         }
 

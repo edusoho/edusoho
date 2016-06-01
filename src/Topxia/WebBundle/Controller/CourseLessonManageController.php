@@ -74,7 +74,7 @@ class CourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
-            $name = !in_array($lesson['type'],array('text','live','testpaper')) ? '文件已在课程文件中移除' : $lesson['mediaName'];
+            $name = (!in_array($lesson['type'], array('text','live','testpaper')) and $lesson['mediaSource'] == 'self') ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
