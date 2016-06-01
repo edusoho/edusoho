@@ -36,6 +36,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             } else {
 	        	$material = $this->addMaterial($fields, $argument);
 	        }
+        } elseif (!empty($fields['link'])) {
+        	$material = $this->addMaterial($fields, $argument);
         }
 
 		return $material;
