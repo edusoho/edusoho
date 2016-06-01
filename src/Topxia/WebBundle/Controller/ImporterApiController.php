@@ -26,10 +26,9 @@ class ImporterApiController extends BaseController
 
     public function templateAction(Request $request, $type)
     {
-        $params = $request->query->all();
         $importer = ImporterFactory::create($type);
         $importer->tryImport($request);
-        $template = $importer->getTemplate();
-        return $this->render($template, $params);
+        $template = $importer->getTemplate($request);
+        return $template;
     }
 }

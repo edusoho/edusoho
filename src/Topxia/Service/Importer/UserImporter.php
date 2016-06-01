@@ -150,14 +150,14 @@ class UserImporter extends Importer
         $checkType  = $excelModel['rule'];
         if (!is_object($excel)) {
             return array(
-                'status'  => 'danger',
+                'status'  => self::DANGER_STATUS,
                 'message' => '请选择上传的文件'
             );
         }
 
         if (FileToolkit::validateFileExtension($excel, 'xls xlsx')) {
             return array(
-                'status'  => 'danger',
+                'status'  =>  self::DANGER_STATUS,
                 'message' => 'Excel格式不正确'
             );
         }
@@ -171,7 +171,7 @@ class UserImporter extends Importer
 
         if ($highestRow > 1000) {
             return array(
-                'status'  => 'danger',
+                'status'  => self::DANGER_STATUS,
                 'message' => 'Excel超过1000行数据'
             );
         }
@@ -188,7 +188,7 @@ class UserImporter extends Importer
 
         if (!$this->checkNecessaryFields($excelField)) {
             return array(
-                'status'  => 'danger',
+                'status'  => self::DANGER_STATUS,
                 'message' => '缺少必要的字段'
             );
         }
@@ -346,9 +346,9 @@ class UserImporter extends Importer
         }
     }
 
-    public function getTemplate()
+    public function getTemplate(Request $request)
     {
-        return "UserImporterBundle:UserImporter:userinfo.excel.html.twig";
+        return $this->render("UserImporterBundle:UserImporter:userinfo.excel.html.twig");
     }
 
     public function tryImport(Request $request)

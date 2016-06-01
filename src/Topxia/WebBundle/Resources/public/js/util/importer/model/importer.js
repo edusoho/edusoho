@@ -29,7 +29,6 @@ define(function (require, exports, module) {
             var chunkData = [].concat.apply([], _.map(this.get('importData'), function (elem, i) {
                 return i % self.get('chunkSize')? [] : [self.get('importData').slice(i, i + self.get('chunkSize'))];
             }));
-
             this.set('__total', chunkData.length);
 
             if(chunkData.length === 0){

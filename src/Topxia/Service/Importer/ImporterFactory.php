@@ -10,6 +10,7 @@ class ImporterFactory
     {
         $map = array(
             'user' => 'Topxia\\Service\\Importer\\UserImporter',
+            'course-user' => 'Topxia\\Service\\Importer\\CourseUserImporter'
         );
         $class = $map[$importerType];
         return new $class();
