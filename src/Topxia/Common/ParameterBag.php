@@ -20,7 +20,7 @@ class ParameterBag extends BaseParameterBag
         foreach($parameters as $key => $value) {
             if (is_array($value)){
                 $parameters[$key] = $this->trimArray($value);
-            } else {
+            } elseif (is_string($value)) {
                 $parameters[$key] = trim($value);
             }
         }
