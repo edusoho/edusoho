@@ -8,8 +8,8 @@ define(function(require, exports, module) {
 
 		$('[name="categoryId"]').select2({
 			treeview: true,
-			// treeviewInitState: 'collapsed'
-			treeviewInitState: 'expanded'
+			treeviewInitState: 'collapsed'
+			// treeviewInitState: 'expanded'
 		});
 
 		var $table = $('#course-table');

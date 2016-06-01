@@ -801,6 +801,7 @@ the specific language governing permissions and limitations under the Apache Lic
                                 result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
                                 node = $("<li></li>");
                                 node.css({'padding-left': 14 * indentCount});
+                                node.attr("id", "select2-result-" + result.id);
                                 node.attr("data-indent-count", indentCount);
                                 node.addClass("select2-results-dept-" + depth);
                                 node.addClass("select2-result");
@@ -841,7 +842,7 @@ the specific language governing permissions and limitations under the Apache Lic
                                     if ($children.length > 0) {
                                         $(this).addClass('select2-result-parent');
                                         var $icon = $('<i class="select2-tree-icon"></i>');
-                                        if (opts.treeviewInitState == 'expanded') {
+                                        if (opts.treeviewInitState == 'expanded' || query.term) {
                                             $(this).addClass('expanded');
                                             $icon.addClass(opts.treeviewExpandedClass);
                                         } else {
@@ -871,6 +872,27 @@ the specific language governing permissions and limitations under the Apache Lic
                                 }
                                 
                             });
+
+                            //auto expand current selected node's all parent when dropdown
+                            if (self.opts.element.val() > 0) {
+                                var $selectedNode = $('#select2-result-' + self.opts.element.val());
+                                var selectedNodeIndentCount = $selectedNode.data('indentCount');
+
+                                // show brother node
+                                // $selectedNode.show();
+                                // $selectedNode.nextUntil('[data-indent-count="' + (selectedNodeIndentCount - 1 ) + '"]').show();
+
+                                //show all parent node
+                                // var $rootParent;
+                                // for (var i = selectedNodeIndentCount - 1; i >= 0; i--) {
+                                //     var $parent = $selectedNode.prevAll('[data-indent-count="' + i + '"]').filter('.select2-result-parent').first();
+                                //     if ($parent.length > 0) {
+                                //         $rootParent = $parent;
+                                //     }
+                                // }
+                                var $rootParent = $selectedNode.prevAll('[data-indent-count="0"]').filter('.select2-result-parent').first();
+                                self.expandNode($rootParent, true);
+                            }
                         }
                     }
                 }, $.fn.select2.defaults, opts);
