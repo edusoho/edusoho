@@ -208,7 +208,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 1;
         $this->getArticleDao()->updateArticle($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('setArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$propertyVal}");
+        $this->getLogService()->info('article', 'update_property', "文章#{$id},$article[$property]=>{$propertyVal}");
         return $propertyVal;
     }
 
@@ -223,7 +223,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 0;
         $this->getArticleDao()->updateArticle($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('cancelArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$propertyVal}");
+        $this->getLogService()->info('article', 'cancel_property', "文章#{$id},$article[$property]=>{$propertyVal}");
 
         return $propertyVal;
     }
