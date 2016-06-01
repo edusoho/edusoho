@@ -222,8 +222,8 @@ class CategoryServiceTest extends BaseTestCase
         $groups = $this->getCategoryService()->getGroups(0, 2);
 
         $this->assertEquals(2, count($groups));
-        $this->assertContains(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3, 'orgCode' => '1.'), $groups);
-        $this->assertContains(array('id' => 2, 'code' => 'code2', 'name' => '课程分类2', 'depth' => 3, 'orgCode' => '1.'), $groups);
+        $this->assertContains(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3), $groups);
+        $this->assertContains(array('id' => 2, 'code' => 'code2', 'name' => '课程分类2', 'depth' => 3), $groups);
     }
 
     /**
@@ -232,7 +232,7 @@ class CategoryServiceTest extends BaseTestCase
     public function testGetGroup()
     {
         $group = $this->getCategoryService()->getGroup(1);
-        $this->assertEquals(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3, 'orgCode' => '1.'), $group);
+        $this->assertEquals(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3), $group);
 
         $group = $this->getCategoryService()->getGroup(999);
         $this->assertFalse($group);
@@ -244,7 +244,7 @@ class CategoryServiceTest extends BaseTestCase
     public function testGetGroupByCode()
     {
         $group = $this->getCategoryService()->getGroupByCode('code1');
-        $this->assertEquals(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3, 'orgCode' => '1.'), $group);
+        $this->assertEquals(array('id' => 1, 'code' => 'code1', 'name' => '课程分类1', 'depth' => 3), $group);
 
         $group = $this->getCategoryService()->getGroupByCode('xxx');
         $this->assertFalse($group);
