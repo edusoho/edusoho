@@ -15,20 +15,24 @@ class Version20160531203720 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $sql     = "select * from course_lesson where type not in('live','testpaper') and mediaId != 0";
+        $sql     = "select * from course_lesson where type not in('live','testpaper') and mediaId != 0 and mediaSource = 'self';";
         $lessons = $this->connection->fetchAll($sql, array());
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
+                $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
+                $course    = $this->connection->fetchAssoc($sql);
+
                 $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
                 $file = $this->connection->fetchAssoc($sql);
+
                 if ($file) {
                     $courseId = $lesson['courseId'];
                     $lessonId = $lesson['id'];
                     $title    = $file['filename'];
                     $fileId   = $file['id'];
                     $fileSize = $file['fileSize'];
-                    $copyId   = 0;
+                    $copyId   = $course['parentId'];
                     $userId   = $lesson['userId'];
                     $time     = time();
 
