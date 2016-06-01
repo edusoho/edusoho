@@ -558,7 +558,7 @@ class UserImporter extends Importer
                 $key    = $item['key'];
                 $method = $item['callback'];
                 if (is_callable($method)) {
-                    $error = $method($userData[$key]);
+                    $error = call_user_func($method, $userData[$key]);
                 } else {
                     $callback = function ($data) use ($row, $fieldCol, $method, $key) {
                         if (!forward_static_call_array($method, $data)) {
