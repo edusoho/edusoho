@@ -12,6 +12,7 @@ return array(
         '/^\/api\/classrooms\/discovery\/columns$/',
         '/^\/api\/lessons$/',
         '/^\/api\/lessons\/\d+$/',
+        '/^\/api\/classroom_play\/d+$/'
         // '/^\/api\/course\/\d+\/lessons$/'
     ),
     'POST' => array(
