@@ -92,15 +92,10 @@ class Logger
      */
     const CONTENT = 'content';
     /**
-     * [$QUESTION 课程问题]
+     * [$course 课程]
      * @var string
      */
-    const QUESTION = 'question';
-    /**
-     * [$TESTPAPER 课程试卷]
-     * @var string
-     */
-    const TESTPAPER = 'testpaper';
+    const COURSE = 'course';
     /**
      * [$MATERIAL 课程资料]
      * @var string
@@ -171,11 +166,6 @@ class Logger
      * @var string
      */
     const member = 'member';
-    /**
-     * [$course 课程]
-     * @var string
-     */
-    const COURSE = 'course';
     /**
      * [$CRONTAB 定时任务]
      * @var string
@@ -255,8 +245,6 @@ class Logger
             'category'         => array('create'),
             'block'            => array('update'),
             'content'          => array(),
-            'question'         => array(),
-            'testpaper'        => array('delete'),
             'material'         => array('delete'),
             'chapter'          => array('delete'),
             'draft'            => array('delete'),
