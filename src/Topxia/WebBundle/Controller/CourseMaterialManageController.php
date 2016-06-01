@@ -30,11 +30,6 @@ class CourseMaterialManageController extends BaseController
     public function uploadAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        /*$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if (empty($lesson)) {
-            throw $this->createNotFoundException();
-        }*/
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
