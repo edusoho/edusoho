@@ -257,7 +257,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
             foreach ($courseIds as $key => $courseId) {
                 $argument['courseId'] = $courseId;
-                $argument['lessonId'] = $lessonIds[$key];
+                $argument['lessonId'] = isset($lessonIds[$key]) ? $lessonIds[$key] : 0;
                 $this->getMaterialService()->uploadMaterial($argument);
             }
         }
