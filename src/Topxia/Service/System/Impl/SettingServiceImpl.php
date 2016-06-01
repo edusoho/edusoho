@@ -50,7 +50,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     {
         $this->getSettingDao()->deleteByNamespaceAndName($namespace,$name);
         $setting = array(
-            'namespace' => $namespace
+            'namespace' => $namespace,
             'name'  => $name,
             'value' => serialize($value)
         );
@@ -58,7 +58,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
 
     }
-    
+
     public function deleteByNamespaceAndName($namespace,$name)
     {
         $this->getSettingDao()->deleteByNamespaceAndName($namespace,$name);
