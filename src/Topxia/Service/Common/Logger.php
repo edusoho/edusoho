@@ -273,9 +273,8 @@ class Logger
             'member'           => array('delete'),
             'course'           => array('course'),
             'crontab'          => array('job_start', 'job_end'),
-            'upload_file'      => array('delete'),
-            'Marker'           => array(),
-            'questionMarker'   => array(),
+            'uploadFile'       => array('delete'),
+            'marker'           => array(),
             'money_card_batch' => array()
 
         );
