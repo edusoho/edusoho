@@ -24,7 +24,7 @@ define(function (require, exports, module) {
                 backdrop: 'static',
                 keyboard: false
             });
-            this.model.chunkUpload();
+            this.model.chunkImport();
         },
     });
 });

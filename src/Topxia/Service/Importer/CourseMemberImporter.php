@@ -383,17 +383,6 @@ class CourseMemberImporter extends Importer
         });
     }
 
-    protected function trim($data)
-    {
-        $data = trim($data);
-        $data = str_replace(" ", "", $data);
-        $data = str_replace('\n', '', $data);
-        $data = str_replace('\r', '', $data);
-        $data = str_replace('\t', '', $data);
-
-        return $data;
-    }
-
     public function getTemplate(Request $request)
     {
         $courseId = $request->query->get('courseId');

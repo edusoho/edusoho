@@ -21,7 +21,7 @@ define(function (require, exports, module) {
             '__status': STATUS.WAIT
         },
 
-        chunkUpload: function () {
+        chunkImport: function () {
 
             var self = this;
 
