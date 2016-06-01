@@ -61,7 +61,7 @@ class Lesson extends BaseResource
 
     protected function getPPTLesson($lesson)
     {
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->error('not_ppt', "文件不存在");
@@ -93,8 +93,7 @@ class Lesson extends BaseResource
 
     protected function getDocumentLesson($lesson)
     {
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
         if (empty($file)) {
             return $this->error('not_document', "文件不存在");
         }
@@ -162,7 +161,7 @@ class Lesson extends BaseResource
         $mediaUri    = $lesson['mediaUri'];
 
         if ($mediaSource == 'self') {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
