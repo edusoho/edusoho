@@ -62,11 +62,6 @@ class Logger
      */
     const CLASSROOM = 'classroom';
     /**
-     * [$CASH 虚拟币]
-     * @var string
-     */
-    const CASH = 'cash';
-    /**
      * [$article 资讯]
      * @var string
      */
