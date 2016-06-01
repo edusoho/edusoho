@@ -750,9 +750,27 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
             },
             // abstract
+            getChildrenByIndent: function($node) {
+                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $nodesToNextRoot = $node.nextUntil('[data-indent-count="0"]');
+                /**
+                 * fix status blow
+                 * 0
+                 *  1
+                 *   2
+                 *    3
+                 *  1
+                 * when get level 2's children, last level 1 node was included
+                 */
+                if ($children.length > $nodesToNextRoot.length) {
+                    return $nodesToNextRoot;
+                }
+                return $children;
+            },
+            // abstract
             expandNode: function($node, isExpandAll) {
                 var self = this;
-                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $children = self.getChildrenByIndent($node);
                 $children.slideDown();
                 $children.each2(function() {
                     var $father = $(this).prevAll('[data-indent-count="' + ($(this).data('indent-count') - 1) + '"]').first();
@@ -768,7 +786,7 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             collapseNode: function($node) {
-                var $children = $node.nextUntil('[data-indent-count="' + $node.data('indent-count') + '"]');
+                var $children = this.getChildrenByIndent($node);
                 $children.slideUp();
             },
             // abstract
@@ -838,7 +856,7 @@ the specific language governing permissions and limitations under the Apache Lic
                             $('.select2-result').each2(function() {
                                 var thisIndentCount = $(this).data('indent-count');
                                 if ($(this).next().length > 0 && $(this).next().data('indentCount') > thisIndentCount) {
-                                    var $children = $(this).nextUntil('[data-indent-count="' + thisIndentCount + '"]');
+                                    var $children = self.getChildrenByIndent($(this));
                                     if ($children.length > 0) {
                                         $(this).addClass('select2-result-parent');
                                         var $icon = $('<i class="select2-tree-icon"></i>');
