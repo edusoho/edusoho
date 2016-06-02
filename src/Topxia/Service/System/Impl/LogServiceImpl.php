@@ -152,7 +152,7 @@ class LogServiceImpl extends BaseService implements LogService
             $pluginModules[] = 'exercise';
         }
 
-        $modules = array_merge($pluginModules, $systemModules);
+        $modules = array_merge($systemModules, $pluginModules);
 
         return $modules;
     }
