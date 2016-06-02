@@ -8,6 +8,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\ServiceException;
 
 class RegisterController extends BaseController
 {
@@ -85,6 +86,8 @@ class RegisterController extends BaseController
                 }
 
                 return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+            } catch (ServiceException $se){
+                $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage());
             }
@@ -294,7 +297,7 @@ class RegisterController extends BaseController
         $user  = $this->getUserService()->getUserByEmail($email);
 
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该邮箱不存在');
+            $response = array('success' => false, 'message' => '该Email不存在');
         } else {
             $response = array('success' => true, 'message' => '');
         }
