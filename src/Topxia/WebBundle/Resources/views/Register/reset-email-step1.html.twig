@@ -14,7 +14,7 @@
             <label class="control-label required" for="register_email">{{ '原邮箱地址:'|trans }}</label>
             <div class="controls">
               <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
-                     data-url="{{ path('register_reset_email_check') }}" placeholder="{{ '请输入原来的邮箱地址'|trans }}">
+                     data-url="{{ path('register_reset_email_check') }}" readonly value="{{ user.email }}">
               <p class="help-block"></p>
             </div>
           </div>

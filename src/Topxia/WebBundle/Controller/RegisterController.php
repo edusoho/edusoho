@@ -86,7 +86,7 @@ class RegisterController extends BaseController
                 }
 
                 return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
-            } catch (ServiceException $se){
+            } catch (ServiceException $se) {
                 $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage());
@@ -236,10 +236,19 @@ class RegisterController extends BaseController
 
     public function resetEmailAction(Request $request, $id, $hash)
     {
+        $user = $this->checkHash($id, $hash);
+
         if ($request->isMethod('post')) {
             $password = $request->request->get('password');
             $email    = $request->request->get('email');
-            $user     = $this->getUserService()->getUserByEmail($email);
+
+            if ($user['email'] !== $email) {
+                throw $this->createAccessDeniedException('');
+            }
+
+            $user = $this->getUserService()->getUserByEmail($email);
+
+
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
                 $this->setFlashMessage('danger', '输入的密码不正确');
             } else {
@@ -252,14 +261,14 @@ class RegisterController extends BaseController
             }
         }
 
-        $user = $this->checkHash($id, $hash);
         if (empty($user)) {
             throw $this->createNotFoundException("hash is error");
         }
 
         return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig', array(
             'id'   => $id,
-            'hash' => $hash
+            'hash' => $hash,
+            'user' => $user
         ));
     }
 
@@ -283,7 +292,7 @@ class RegisterController extends BaseController
             throw $this->createNotFoundException('user not found');
         }
 
-        $this->getAuthService()->changeEmail($user['id'], $token['data']['password'],$newEmail);
+        $this->getAuthService()->changeEmail($user['id'], $token['data']['password'], $newEmail);
         $user = $this->getUserService()->getUser($user['id']);
         return $this->redirect($this->generateUrl('register_submited', array(
             'id'   => $user['id'],
