@@ -257,7 +257,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument  = $context['argument'];
         $material  = $context['material'];
 
-        if ($material['lessonId'] && $material['source'] == 'coursematerial') {
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
+
+        if ($lesson && $material['lessonId'] && $material['source'] == 'coursematerial') {
             $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
         }
     }
@@ -266,8 +268,12 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $material = $event->getSubject();
 
-        $this->_resetLessonMediaId($material);
-        $this->_waveLessonMaterialNum($material);
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
+
+        if ($lesson) {
+            $this->_resetLessonMediaId($material);
+            $this->_waveLessonMaterialNum($material);
+        }
     }
 
     public function onChapterCreate(ServiceEvent $event)
