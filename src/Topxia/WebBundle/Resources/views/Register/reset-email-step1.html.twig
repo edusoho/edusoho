@@ -11,7 +11,7 @@
         <form id="reset-email-form" method="post" action="{{ path('register_reset_email', {id: id, hash: hash}) }}">
           {{ web_macro.flash_messages() }}
           <div class="form-group mbl">
-            <label class="control-label required" for="register_email">{{ '原邮箱地址'|trans }}</label>
+            <label class="control-label required" for="register_email">{{ '原邮箱地址:'|trans }}</label>
             <div class="controls">
               <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
                      data-url="{{ path('register_reset_email_check') }}" placeholder="{{ '请输入原来的邮箱地址'|trans }}">
@@ -20,7 +20,7 @@
           </div>
 
           <div class="form-group mbl">
-            <label class="control-label required" for="register_password">{{ '密码'|trans }}</label>
+            <label class="control-label required" for="register_password">{{ '密码:'|trans }}</label>
             <div class="controls">
               <input type="password" id="password" name="password" required="required" autocomplete="off"
                      class="form-control input-lg" placeholder="{{ '请输入密码'|trans }}">
