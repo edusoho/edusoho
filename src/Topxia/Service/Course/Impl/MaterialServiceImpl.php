@@ -29,8 +29,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             );
             if ($courseMaterials) {
             	$updateFields = array(
-            		'lessonId' => $fields['lessonId'],
-            		'source'   => $fields['source']
+            		'lessonId'    => $fields['lessonId'],
+            		'source'      => $fields['source'],
+            		'description' => $fields['description']
             	);
                 $material = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
             } else {
