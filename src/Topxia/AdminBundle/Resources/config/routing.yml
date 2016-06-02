@@ -769,6 +769,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_logs_action_dicts:
+    pattern:  /setting/logs/logActions
+    defaults: { _controller: TopxiaAdminBundle:Log:logActions }
+    
 admin_cloud_access:
     pattern:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }
