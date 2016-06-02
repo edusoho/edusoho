@@ -20,11 +20,12 @@ class Version20160531203720 extends AbstractMigration
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
-                $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
-                $course    = $this->connection->fetchAssoc($sql);
 
                 $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
                 $file = $this->connection->fetchAssoc($sql);
+
+                $materialSql    = "select id from course_material where lessonId=".$lesson['copyId']." and fileId=".$lesson['mediaId']." and source='courselesson';";
+                $parentMaterial = $this->connection->fetchAssoc($materialSql);
 
                 if ($file) {
                     $courseId = $lesson['courseId'];
@@ -32,7 +33,7 @@ class Version20160531203720 extends AbstractMigration
                     $title    = $file['filename'];
                     $fileId   = $file['id'];
                     $fileSize = $file['fileSize'];
-                    $copyId   = $course['parentId'];
+                    $copyId   = $parentMaterial ? $parentMaterial['id'] : 0;
                     $userId   = $lesson['userId'];
                     $time     = time();
 
