@@ -173,6 +173,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
         $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
+        return $updatedUser;
     }
 
     public function changeAvatar($userId, $data)
