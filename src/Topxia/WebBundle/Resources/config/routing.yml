@@ -92,6 +92,19 @@ register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
 
+register_reset_email:
+    path: /email/reset
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
+
+register_reset_email_check:
+    path: /email/reset/check
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
+
+register_reset_email_verify:
+    path: /email/reset/verify
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
+    methods: [POST]
+
 register_email_send:
     pattern:  /register/email/send/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:emailSend }
@@ -2058,10 +2071,6 @@ importer_import:
 importer_index:
     path: /importer/{type}/index
     defaults: { _controller: TopxiaWebBundle:Importer:template}
-
-reset_email:
-    path: /email/reset
-    defaults: { _controller: TopxiaWebBundle:User:resetEmail}
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

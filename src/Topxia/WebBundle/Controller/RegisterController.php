@@ -231,6 +231,76 @@ class RegisterController extends BaseController
         ));
     }
 
+    public function resetEmailAction(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $password = $request->request->get('password');
+            $email    = $request->request->get('email');
+            $user     = $this->getUserService()->getUserByEmail($email);
+            if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
+                $this->setFlashMessage('danger', '输入的密码不正确');
+            } else {
+                $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'));
+                return $this->render('TopxiaWebBundle:Register:reset-email-step2.html.twig', array(
+                    'token' => $token
+                ));
+            }
+        }
+        return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+    }
+
+    public function resetEmailVerifyAction(Request $request)
+    {
+        $newEmail = $request->request->get('email');
+
+        if (empty($newEmail)) {
+            throw $this->createAccessDeniedException('email undefined');
+        }
+
+        $token = $request->request->get('token');
+        $token = $this->getUserService()->getToken('email-reset', $token);
+        if (empty($token)) {
+            $this->setFlashMessage('danger', '页面已过期, 请重新填写');
+            return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+        }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+
+        if (empty($user)) {
+            throw $this->createNotFoundException('user not found');
+        }
+
+        $user = $this->getUserService()->changeEmail($user['id'], $newEmail);
+
+        if ($user['email'] !== $newEmail) {
+            $this->setFlashMessage('danger', '邮箱变更失败, 请重新提交');
+            return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+        }
+
+        
+
+        return $this->redirect($this->generateUrl('register_submited', array(
+            'id'   => $user['id'],
+            'hash' => $this->makeHash($user),
+            'goto' => $this->generateUrl('homepage')
+        )));
+    }
+
+    public function resetEmailCheckAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $email = str_replace('!', '.', $email);
+        $user  = $this->getUserService()->getUserByEmail($email);
+
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '该邮箱不存在');
+        } else {
+            $response = array('success' => true, 'message' => '');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     protected function makeHash($user)
     {
         $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
