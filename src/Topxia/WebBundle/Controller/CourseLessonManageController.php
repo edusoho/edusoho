@@ -74,7 +74,7 @@ class CourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
-            $name = $this->hasSelfMedia($lesson) ? $lesson['mediaName'] : '文件已在课程文件中移除' ;
+            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
@@ -119,7 +119,7 @@ class CourseLessonManageController extends BaseController
 
     protected function hasSelfMedia($lesson)
     {
-        return in_array($lesson['type'], array('text','live','testpaper')) and $lesson['mediaSource'] == 'self';
+        return !in_array($lesson['type'], array('text','live','testpaper')) and $lesson['mediaSource'] == 'self';
     }
 
     public function createTestPaperAction(Request $request, $id)
@@ -292,7 +292,6 @@ class CourseLessonManageController extends BaseController
 
         //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
         $this->getCourseService()->deleteLesson($course['id'], $lessonId);
-        //$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
         if ($this->isPluginInstalled('Homework')) {
             //如果安装了作业插件那么也删除作业和练习

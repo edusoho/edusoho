@@ -84,8 +84,20 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     {
         $material  = $event->getSubject();
 
-        if(!empty($material['fileId'])){
-            $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
+        $file = $this->getUploadFileService()->getFile($material['fileId']);
+
+        if (!$file) {
+            return false;
+        }
+
+        $this->getUploadFileService()->waveUploadFile($file['id'],'usedCount',-1);
+
+        if (!$this->getUploadFileService()->canManageFile($file['id'])) {
+            return false;
+        }
+        
+        if ($file['targetId'] == $material['courseId']) {
+            $this->getUploadFileService()->update($material['fileId'], array('targetId' => 0));
         }
     }
 
