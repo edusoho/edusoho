@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\System\Impl;
 
+use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\Logger;
 use Topxia\Service\System\LogService;
 use Topxia\Service\Common\BaseService;
@@ -114,5 +115,58 @@ class LogServiceImpl extends BaseService implements LogService
     public function analysisLoginDataByTime($startTime, $endTime)
     {
         return $this->getLogDao()->analysisLoginDataByTime($startTime, $endTime);
+    }
+
+    public function getLogModuleDicts()
+    {
+        $moduleDicts = Logger::getLogModuleDict();
+        $modules     = $this->getLogModules();
+
+        $dealModuleDicts = array();
+        foreach ($modules as $module) {
+            if (in_array($module, array_keys($moduleDicts))) {
+                $dealModuleDicts[$module] = $moduleDicts[$module];
+            }
+        }
+        return $dealModuleDicts;
+    }
+
+    private function getLogModules()
+    {
+        $systemModules = array_keys(Logger::systemModuleConfig());
+        $pluginModules = array_keys(Logger::pluginModuleConfig());
+
+        $plugins = PluginToolkit::getPlugins();
+        if (empty($plugins)) {
+            return $systemModules;
+        }
+        $plugins = array_map('strtolower', array_keys($plugins));
+
+        foreach ($pluginModules as $key => $module) {
+            $formatModule = str_replace('_', '', $module);
+            if (!in_array($formatModule, $plugins)) {
+                unset($pluginModules[$key]);
+            }
+        }
+        if (in_array('homework', $plugins)) {
+            $pluginModules[] = 'exercise';
+        }
+
+        $modules = array_merge($pluginModules, $systemModules);
+
+        return $modules;
+    }
+
+    public function findLogActionDictsyModule($module)
+    {
+        $systemActions = Logger::systemModuleConfig();
+        $pluginActions = Logger::pluginModuleConfig();
+
+        $actions = array_merge($systemActions, $pluginActions);
+
+        if (isset($actions[$module])) {
+            return $actions[$module];
+        }
+        return array();
     }
 }

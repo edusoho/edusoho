@@ -2,10 +2,9 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Topxia\Service\Common\Mail;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\MailFactory;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
 class SystemController extends BaseController
@@ -53,9 +52,9 @@ class SystemController extends BaseController
                     return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
                 } else {
                     $mailOptions = array(
-                        'to'    => $user['email'],
+                        'to'       => $user['email'],
                         'template' => 'email_system_self_test',
-                        'params' => array(
+                        'params'   => array(
                             'sitename' => $site['name']
                         )
                     );
@@ -66,7 +65,7 @@ class SystemController extends BaseController
                     return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
                 }
             } catch (\Exception $e) {
-                $this->getLogService()->error('user', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
+                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
                 return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
             }
         } else {
