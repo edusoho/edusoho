@@ -118,14 +118,22 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $sql     = "select * from course_lesson where type not in('text','live','testpaper') and mediaId != 0 and mediaSource = 'self';";
-        $lessons = $this->connection->fetchAll($sql, array());
+        $lessons = $this->getConnection()->fetchAll($sql, array());
+
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
+                $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
+                $course    = $this->getConnection()->fetchAssoc($courseSql);
+
+                if (!$course) {
+                    continue;
+                }
+
                 $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
-                $file = $this->connection->fetchAssoc($sql);
+                $file = $this->getConnection()->fetchAssoc($sql);
 
                 $materialSql    = "select id from course_material where lessonId=".$lesson['copyId']." and fileId=".$lesson['mediaId']." and source='courselesson';";
-                $parentMaterial = $this->connection->fetchAssoc($materialSql);
+                $parentMaterial = $this->getConnection()->fetchAssoc($materialSql);
 
                 if ($file) {
                     $courseId = $lesson['courseId'];
@@ -137,7 +145,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     $userId   = $lesson['userId'];
                     $time     = time();
 
-                    $this->addSql("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
+                    $this->getConnection()->exec("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
                 }
             }
         }
