@@ -209,7 +209,7 @@ class UserSettingController extends BaseController
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', "用户中心设置", $setting);
+            $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
             $this->setFlashMessage('success', '用户中心设置已保存！');
         }
 

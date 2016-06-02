@@ -4,11 +4,10 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Common\MailFactory;
 
 class SettingsController extends BaseController
 {
@@ -841,7 +840,7 @@ class SettingsController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $site = $this->setting('site', array());
+                    $site        = $this->setting('site', array());
                     $mailOptions = array(
                         'to'       => $data['email'],
                         'template' => 'email_reset_email',
@@ -857,7 +856,7 @@ class SettingsController extends BaseController
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
-                    $this->getLogService()->error('setting', 'email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
+                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
                 return $this->redirect($this->generateUrl('settings_email'));
             }
@@ -875,12 +874,12 @@ class SettingsController extends BaseController
         $user      = $this->getCurrentUser();
         $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
-        $site = $this->setting('site', array());
+        $site      = $this->setting('site', array());
         try {
             $mailOptions = array(
-                'to'        => $user['email'],
-                'template'  => 'email_verify_email',
-                'params' => array(
+                'to'       => $user['email'],
+                'template' => 'email_verify_email',
+                'params'   => array(
                     'verifyurl' => $verifyurl,
                     'nickname'  => $user['nickname'],
                     'sitename'  => $site['name'],
@@ -891,7 +890,7 @@ class SettingsController extends BaseController
             $mail->send();
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
-            $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
+            $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
             $this->setFlashMessage('danger', "邮箱验证邮件发送失败，请联系管理员。");
         }
 
