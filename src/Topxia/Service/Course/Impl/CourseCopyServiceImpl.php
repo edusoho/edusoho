@@ -4,7 +4,6 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseCopyService;
-use Topxia\Service\Common\ServiceEvent;
 
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
@@ -207,7 +206,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             }
         }
 
-        //$this->dispatchEvent("course.copy.lessons", array('sourceCourseId'=>$courseId,'lessons'=>$lessons,'copyLessons'=>$map));
         return $map;
     }
 
