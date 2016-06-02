@@ -231,7 +231,7 @@ class RegisterController extends BaseController
         ));
     }
 
-    public function resetEmailAction(Request $request)
+    public function resetEmailAction(Request $request, $id, $hash)
     {
         if ($request->isMethod('post')) {
             $password = $request->request->get('password');
@@ -246,6 +246,12 @@ class RegisterController extends BaseController
                 ));
             }
         }
+
+        $user = $this->checkHash($id, $hash);
+        if(empty($user)){
+            throw $this->createNotFoundException("hash is error");
+        }
+
         return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
     }
 
@@ -276,8 +282,6 @@ class RegisterController extends BaseController
             $this->setFlashMessage('danger', '邮箱变更失败, 请重新提交');
             return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
         }
-
-        
 
         return $this->redirect($this->generateUrl('register_submited', array(
             'id'   => $user['id'],

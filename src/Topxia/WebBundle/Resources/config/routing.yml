@@ -93,15 +93,15 @@ register_submited:
     defaults: { _controller: TopxiaWebBundle:Register:submited }
 
 register_reset_email:
-    path: /email/reset
+    path: /register/email/reset/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
 
 register_reset_email_check:
-    path: /email/reset/check
+    path: /register/email/reset/check
     defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
 
 register_reset_email_verify:
-    path: /email/reset/verify
+    path: /register/email/reset/verify
     defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
     methods: [POST]
 
