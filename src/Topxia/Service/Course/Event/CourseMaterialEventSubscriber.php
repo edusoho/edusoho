@@ -154,9 +154,6 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             $lessonIds          = ArrayToolkit::column($lessons, 'id');
             $argument['copyId'] = $material['id'];
 
-            if (!$lessons) {
-                return false;
-            }
             foreach ($courseIds as $key => $courseId) {
                 $argument['courseId'] = $courseId;
                 $argument['lessonId'] = isset($lessonIds[$key]) ? $lessonIds[$key] : 0;
