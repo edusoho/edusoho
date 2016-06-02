@@ -1,0 +1,8 @@
+switch_org:
+    pattern: /swithOrg/{id}
+    defaults: { _controller: OrgBundle:Org:switchOrg }
+
+org_tree:
+    path: /org-tree.json
+    defaults: { _controller: OrgBundle:Org:orgTreeJson }
+    methods: [GET]

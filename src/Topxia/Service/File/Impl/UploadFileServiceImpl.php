@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Service\Common\AccessDeniedException;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
@@ -68,7 +67,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if ($showCloud) {
             $files = $this->getFileImplementor('cloud')->findFiles($files, array());
         }
-        
+
         return $files;
     }
 
@@ -97,7 +96,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description','targetId'));
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId'));
 
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->updateFile($file['id'], $fields);
@@ -221,7 +220,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
-            
+            $this->addCourseMaterial($file);
+
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
@@ -231,6 +231,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
                 'length' => isset($result['length']) ? $result['length'] : 0
             ));
+            $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
 
             if ($file['targetType'] == 'headLeader') {
                 $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
@@ -269,7 +270,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $msg = $e->getMessage();
         }
     }
-    
+
     public function deleteByGlobalId($globalId)
     {
         $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
@@ -588,7 +589,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $result = $this->getUploadFileDao()->deleteFile($id);
         }
 
-        $this->dispatchEvent("upload.file.delete",$file);
+        $this->dispatchEvent("upload.file.delete", $file);
         $this->getLogService()->info('upload_file', 'delete', "删除文件(#{$id})", $file);
 
         return $result;
@@ -836,7 +837,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function shareFiles($sourceUserId, $targetUserIds)
     {
         foreach ($targetUserIds as $targetUserId) {
-
             if ($targetUserId != $sourceUserId) {
                 $shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
 
@@ -918,7 +918,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (isset($conditions['source']) && !empty($conditions['source'])) {
-            if($conditions['source'] == 'upload') {
+            if ($conditions['source'] == 'upload') {
                 $conditions['createdUserId'] = $conditions['currentUserId'];
             } elseif ($conditions['source'] == 'shared') {
                 $sharedToMe = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
@@ -928,7 +928,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 } else {
                     $conditions['createdUserIds'] = array();
                 }
-                
             } elseif ($conditions['source'] == 'public') {
                 $conditions['isPublic'] = 1;
             } elseif ($conditions['source'] == 'collection') {
@@ -1045,6 +1044,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $key;
     }
 
+    protected function addCourseMaterial($file)
+    {
+        $material = array();
+        if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
+            $file['courseId'] = $file['targetId'];
+            $file['fileId']   = $file['id'];
+            $material         = $this->getMaterialService()->uploadMaterial($file);
+        }
+
+        return $material;
+    }
+
     protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
@@ -1120,7 +1131,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'nameAsc'       => array('filename', 'ASC'),
             'nameDesc'      => array('filename', 'DESC'),
             'sizeAsc'       => array('fileSize', 'ASC'),
-            'sizeDesc'      => array('fileSize','DESC')
+            'sizeDesc'      => array('fileSize', 'DESC')
         );
 
         if (in_array($order, $orderArray)) {
@@ -1129,7 +1140,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException('参数sort不正确。');
         }
     }
-
 }
 
 class FileFilter

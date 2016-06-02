@@ -81,7 +81,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         if (empty($media)) {
             $media['id'] = 0;
-            $this->getLogService()->error('mediaId', 'isNotExist', "视频文件不存在！");
+            $this->getLogService()->error('marker', 'mediaId_notExist', "视频文件不存在！");
         }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
@@ -109,7 +109,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $this->getMarkerDao()->deleteMarker($id);
-        $this->getLogService()->info('Marker', 'delete', "驻点#{$id}永久删除");
+        $this->getLogService()->info('marker', 'delete', "驻点#{$id}永久删除");
 
         return true;
     }

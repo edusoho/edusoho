@@ -335,7 +335,7 @@ class MobileBaseController extends BaseController
 
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
-            if ($item['status'] != 'published') {
+            if (isset($item['status']) && $item['status'] != 'published') {
                 return false;
             }
 

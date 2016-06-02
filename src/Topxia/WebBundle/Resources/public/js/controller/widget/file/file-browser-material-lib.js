@@ -72,7 +72,7 @@ define(function (require, exports, module) {
         },
 
         refreshFileList: function (files, paginator) {
-            console.log(files);
+            
             if (files.length > 0) {
                 var html = '<ul class="file-browser-list">';
                 $.each(files, function (i, file) {
@@ -144,7 +144,7 @@ define(function (require, exports, module) {
         onFilterByName: function (e) {
             var $key = $(".file-filter-by-name", this.element).val();
             var self = this;
-            $.get(this.get('url') + '&keyword=' + $key, function (response) {
+            $.get(this.get('baseUrl'), {keyword: $key, source: this.get('currentSource')}, function (response) {
                 self.refreshFileList.call(self, response.files, response.paginator);
             });
         },
@@ -166,6 +166,7 @@ define(function (require, exports, module) {
                 $(".file-filter-by-owner-container", this.element).hide();
             }
             //Refresh the file list panel
+            this.set('currentSource', $source);
             $.get(self.get('baseUrl'), {source: $source}, function (response) {
                 self.refreshFileList.call(self, response.files, response.paginator);
             }, 'json');

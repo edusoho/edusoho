@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,9 +68,9 @@ class UploadFileController extends BaseController
         $file['filename'] = urlencode($file['filename']);
 
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="' . $file['filename'] . '"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
-            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "' . $file['filename'] . '"');
+            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "'.$file['filename'].'"');
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
@@ -93,10 +93,11 @@ class UploadFileController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['currentUserId'] = $user['id'];
-        if(isset($conditions['keyword'])){
+        if (isset($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -234,7 +235,7 @@ class UploadFileController extends BaseController
             $result
         );
 
-        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
+        $this->getLogService()->info('upload_file', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
 
@@ -280,7 +281,7 @@ class UploadFileController extends BaseController
             $result
         );
 
-        $this->getLogService()->info('uploadfile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
+        $this->getLogService()->info('upload_file', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
 
@@ -289,7 +290,7 @@ class UploadFileController extends BaseController
         }
 
         if ($result['code'] != 0) {
-            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败", array('result' => $result));
+            $this->getLogService()->error('upload_file', 'cloud_convert_error', "文件云处理失败", array('result' => $result));
 
             return $this->createJsonResponse(true);
         }
@@ -297,7 +298,7 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
 
         if (empty($file)) {
-            $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
+            $this->getLogService()->error('upload_file', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
             $result = array(
                 "error" => "文件不存在"
             );
@@ -314,7 +315,7 @@ class UploadFileController extends BaseController
     {
         $data = $request->getContent();
 
-        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
+        $this->getLogService()->info('upload_file', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
         $key     = $request->query->get('key');
         $fullKey = $request->query->get('fullKey');
@@ -413,6 +414,11 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
     protected function createFilesJsonResponse($files, $paginator = null)
     {
         foreach ($files as &$file) {
@@ -428,14 +434,14 @@ class UploadFileController extends BaseController
 
             unset($file);
         }
-        
-        if(!empty($paginator)){
+
+        if (!empty($paginator)) {
             $paginator = Paginator::toArray($paginator);
             return $this->createJsonResponse(array(
                 'files'     => $files,
                 'paginator' => $paginator
             ));
-        }else{
+        } else {
             return $this->createJsonResponse($files);
         }
     }

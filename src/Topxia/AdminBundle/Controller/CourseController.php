@@ -36,6 +36,11 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
+        }
+
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
 
@@ -306,6 +311,11 @@ class CourseController extends BaseController
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
@@ -359,8 +369,12 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        if (isset($conditions['orgCode'])) {
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+            unset($conditions['orgCode']);
+        }
 
+        $count     = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
         $courses = $this->getCourseService()->searchCourses(

@@ -92,6 +92,19 @@ register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
 
+register_reset_email:
+    path: /register/email/reset/{id}/{hash}
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
+
+register_reset_email_check:
+    path: /register/email/reset/check
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
+
+register_reset_email_verify:
+    path: /register/email/reset/verify
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
+    methods: [POST]
+
 register_email_send:
     pattern:  /register/email/send/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:emailSend }
@@ -136,10 +149,6 @@ register_analysis:
 register_captcha_num:
     path:     /captcha_num
     defaults: { _controller: TopxiaWebBundle:Register:captcha }
-
-user_import_modal:
-    pattern:  /import/modal
-    defaults: { _controller: TopxiaWebBundle:Importer:importModal }
 
 file_upload:
     pattern:  /file/upload
@@ -994,6 +1003,14 @@ course_manage_material_delete:
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
     methods: [POST]
 
+course_manage_material_browser:
+    pattern:  /course/{courseId}/manage/material/browser
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:browser }
+
+course_manage_material_create:
+    pattern:  /course/{courseId}/manage/material/create
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
+
 course_manage_media_library:
     pattern:  /course/{id}/manage/media/library
     defaults: { _controller: TopxiaWebBundle:CourseMediaManage:library }
@@ -1116,6 +1133,10 @@ settings_avatar:
 settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+
+settings_avatar_crop_modal:
+    pattern:  /settings/avatar/crop/modal
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
 
 settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner
@@ -2036,6 +2057,20 @@ live_course_manage_lesson_replay_title_update:
     pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
+
+importer_check:
+    path: /importer/{type}/check
+    defaults: { _controller: TopxiaWebBundle:Importer:check}
+    methods: [POST]
+
+importer_import:
+    path: /importer/{type}/import
+    defaults: { _controller: TopxiaWebBundle:Importer:import}
+    methods: [POST]
+
+importer_index:
+    path: /importer/{type}/index
+    defaults: { _controller: TopxiaWebBundle:Importer:template}
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

@@ -4,7 +4,6 @@ namespace Topxia\Service\Content\Dao;
 
 interface NavigationDao
 {
-
     public function getNavigation($id);
 
     public function addNavigation($navigation);
@@ -22,5 +21,9 @@ interface NavigationDao
     public function findNavigations($start, $limit);
 
     public function findNavigationsByType($type, $start, $limit);
-    
+
+    public function searchNavigationCount($conditions);
+
+    public function searchNavigations($conditions, $start, $limit);
+
 }

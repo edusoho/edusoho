@@ -64,7 +64,10 @@ class FileServiceImpl extends BaseService implements FileService {
 		}
 		$record = array();
 		$record['userId'] = $user['id'];
-		$record['groupId'] = $group['id'];
+
+		if(!empty($group)){
+			$record['groupId'] = $group['id'];
+		}
 		// @todo fix it.
 		$record['mime'] = '';
 		// $record['mime'] = $file->getMimeType();

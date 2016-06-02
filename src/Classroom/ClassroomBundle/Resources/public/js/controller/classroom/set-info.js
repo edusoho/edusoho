@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('es-ckeditor');
 
+    require('/bundles/topxiaweb/js/controller/widget/category-select').run();
 
     exports.run = function() {
 
