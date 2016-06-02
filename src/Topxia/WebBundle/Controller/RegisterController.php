@@ -59,6 +59,8 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
 
+                $user = $this->getAuthService()->register($registration);
+
                 if (($authSettings
                         && isset($authSettings['email_enabled'])
                         && $authSettings['email_enabled'] == 'closed')
