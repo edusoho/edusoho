@@ -81,7 +81,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         if (empty($media)) {
             $media['id'] = 0;
-            $this->getLogService()->error('mediaId', 'isNotExist', "视频文件不存在！");
+            $this->getLogService()->error('marker', 'mediaId_notExist', "视频文件不存在！");
         }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
