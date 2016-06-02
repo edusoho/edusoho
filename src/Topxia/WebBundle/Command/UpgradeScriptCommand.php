@@ -25,9 +25,8 @@ class UpgradeScriptCommand extends BaseCommand
 
         $code    = 'MAIN';
         $version = $input->getArgument('version');
-        $index   = $input->getArgument('index');
 
-        $this->executeScript($code, $version, $index);
+        $this->executeScript($code, $version);
         $output->writeln("<info>执行脚本</info>");
 
         $this->removeCache();
@@ -50,8 +49,9 @@ class UpgradeScriptCommand extends BaseCommand
 
         if (method_exists($upgrade, 'update')) {
             $info = $upgrade->update($index);
+            var_dump($info);
             if(isset($info) && !empty($info['index'])) {
-                $info = $upgrade->update($info['index']);
+                $info = $this->executeScript($code, $version, $info['index']);
             }
         }
     }
