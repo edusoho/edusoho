@@ -21,6 +21,13 @@ class Version20160531203720 extends AbstractMigration
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
 
+                $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
+                $course    = $this->connection->fetchAssoc($courseSql);
+
+                if (!$course) {
+                    continue;
+                }
+
                 $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
                 $file = $this->connection->fetchAssoc($sql);
 
