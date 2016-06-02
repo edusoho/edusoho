@@ -16,8 +16,9 @@ class CourseMaterialController extends CourseBaseController
         }
 
         $conditions = array(
-            'courseId' => $id,
-            'source'   => 'coursematerial'
+            'courseId'        => $id,
+            'excludeLessonId' => 0,
+            'source'          => 'coursematerial'
         );
 
         $paginator = new Paginator(
