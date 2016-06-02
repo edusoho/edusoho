@@ -11,7 +11,9 @@ class EduSohoUpgrade extends AbstractUpdater
         try {
             $result = $this->updateScheme($index);
             $this->getConnection()->commit();
-            return $result;
+            if($result) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
