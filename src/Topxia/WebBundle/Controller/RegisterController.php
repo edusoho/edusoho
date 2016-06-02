@@ -280,10 +280,6 @@ class RegisterController extends BaseController
 
         $user = $this->getUserService()->changeEmail($user['id'], $newEmail);
 
-        if ($user['email'] !== $newEmail) {
-            return $this->createNotFoundException('邮箱变更失败');
-        }
-
         return $this->redirect($this->generateUrl('register_submited', array(
             'id'   => $user['id'],
             'hash' => $this->makeHash($user),
