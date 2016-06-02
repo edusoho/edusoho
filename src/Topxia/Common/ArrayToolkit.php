@@ -136,12 +136,22 @@ class ArrayToolkit
         return $filtered;
     }
 
-    /**
-     * The every() method tests whether all elements in the array pass the test implemented by the provided function.
-     * @param      $array
-     * @param null $callback
-     * @return bool
-     */
+    public static function trim($array){
+        if (!is_array($array)) { 
+            return $array;
+        }
+
+        foreach($array as $key => $value) {
+            if (is_array($value)){
+                $array[$key] = ArrayToolkit::trim($value);
+            } elseif(is_string($value)) {
+                $array[$key] = trim($value);
+            }
+        }
+        
+        return $array;
+    }
+
     public static function every($array, $callback=null)
     {
         foreach ($array as $value){
@@ -154,12 +164,6 @@ class ArrayToolkit
         return true;
     }
 
-    /**
-     * The some() method tests whether some element in the array passes the test implemented by the provided function.
-     * @param      $array
-     * @param null $callback
-     * @return bool
-     */
     public static function some($array, $callback=null)
     {
         foreach ($array as $value){

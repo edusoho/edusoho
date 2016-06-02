@@ -612,22 +612,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryAdminCourse($id);
 
-        // Decrease the course lesson files usage counts, if there are files used by the course lessons.
-        /*$lessons = $this->getLessonDao()->findLessonsByCourseId($id);
-
-        if (!empty($lessons)) {
-        $fileIds = ArrayToolkit::column($lessons, "mediaId");
-
-        if (!empty($fileIds)) {
-        foreach ($fileIds as $fileId) {
-        $this->getUploadFileService()->waveUploadFile($fileId, 'usedCount', -1);
-        }
-        }
-        }*/
-
-        // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        //$this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
-
         // Delete course related data
         $this->getMemberDao()->deleteMembersByCourseId($id);
         $this->getLessonDao()->deleteLessonsByCourseId($id);
@@ -1271,24 +1255,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
 
-        /*// Update link count of the course lesson file, if the lesson file is changed
-
-        if (array_key_exists('mediaId', $fields)) {
-        if ($fields['mediaId'] != $lesson['mediaId']) {
-        // Incease the link count of the new selected lesson file
-
-        if (!empty($fields['mediaId'])) {
-        $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
-        }
-
-        // Decrease the link count of the original lesson file
-
-        if (!empty($lesson['mediaId'])) {
-        $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-        }
-        }
-        }*/
-
         $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
         $updatedLesson['fields'] = $lesson;
@@ -1340,18 +1306,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
 
-        // [END] 更新课时序号
-
-        // Decrease the course lesson file usage count, if there's a linked file used by this lesson.
-
-        /*if (!empty($lesson['mediaId'])) {
-        $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-        }*/
-
-        // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        //$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
-
         $this->getLogService()->info('course', 'delete_lesson', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+
         $this->dispatchEvent("course.lesson.delete", array(
             "courseId" => $courseId,
             "lesson"   => $lesson
@@ -1420,6 +1376,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
         $this->dispatchEvent("course.lesson.unpublish", $unpublishLesson);
+    }
+
+    public function resetLessonMediaId($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+        if ($lesson) {
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            return true;
+        }
+
+        return false;
     }
 
     public function getNextLessonNumber($courseId)
