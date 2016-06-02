@@ -297,7 +297,7 @@ class RegisterController extends BaseController
         $user  = $this->getUserService()->getUserByEmail($email);
 
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该邮箱不存在');
+            $response = array('success' => false, 'message' => '该Email不存在');
         } else {
             $response = array('success' => true, 'message' => '');
         }

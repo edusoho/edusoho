@@ -21,7 +21,7 @@ define(function (require, exports, module) {
             element: '[name="email"]',
             required: true,
             rule: 'email email_remote',
-            display: '邮箱'
+            display: 'Email'
         });
 
         validator.addItem({
