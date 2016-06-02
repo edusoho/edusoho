@@ -191,7 +191,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $count += $result;
             }
 
-            $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时时长";
+            $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时学习记录";
             $this->getLogService()->info('course', 'delete_lessonLearn', $lessonLearnLog);
         }
 
@@ -231,7 +231,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $count += $result;
             }
 
-            $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的播放时长";
+            $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的浏览记录";
             $this->getLogService()->info('course', 'delete_lessonView', $lessonViewLog);
         }
 
