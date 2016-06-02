@@ -29,10 +29,10 @@
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <div class="form-group mbl">
-            <div class="controls">
-              <a href="{{ path('login') }}" class="btn btn-primary btn-lg btn-block">{{ '取消'|trans }}</a>
+            <div class="controls text-right">
+              <a href="{{ path('login') }}" class="btn btn-link btn-lg">{{ '取消'|trans }}</a>
               <button type="submit" id="next-btn" data-submiting-text="{{ '正在提交'|trans }}"
-                      class="btn btn-primary btn-lg btn-block">{{ '下一步'|trans }}</button>
+                      class="btn btn-primary btn-lg">{{ '下一步'|trans }}</button>
             </div>
           </div>
         </form>
