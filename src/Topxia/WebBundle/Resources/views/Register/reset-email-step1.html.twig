@@ -8,7 +8,7 @@
   <div class="es-section login-section">
     {% if setting('mailer.enabled', '') == 1 or setting('cloud_email.status', '') == 'enable' %}
       <div class="login-main">
-        <form id="reset-email-form" method="post" action="">
+        <form id="reset-email-form" method="post" action="{{ path('register_reset_email', {id: id, hash: hash}) }}">
           {{ web_macro.flash_messages() }}
           <div class="form-group mbl">
             <label class="control-label required" for="register_email">{{ '原邮箱地址'|trans }}</label>

@@ -248,11 +248,14 @@ class RegisterController extends BaseController
         }
 
         $user = $this->checkHash($id, $hash);
-        if(empty($user)){
+        if (empty($user)) {
             throw $this->createNotFoundException("hash is error");
         }
 
-        return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+        return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig', array(
+            'id'   => $id,
+            'hash' => $hash
+        ));
     }
 
     public function resetEmailVerifyAction(Request $request)
@@ -266,8 +269,8 @@ class RegisterController extends BaseController
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('email-reset', $token);
         if (empty($token)) {
-            $this->setFlashMessage('danger', '页面已过期, 请重新填写');
-            return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+            $this->setFlashMessage('danger', 'token已失效');
+            return $this->createNotFoundException('token已失效');
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
