@@ -684,7 +684,7 @@ disabled look for disabled choices in the results dropdown
 .select2-result-text {
     white-space: nowrap;
     display: inline-block;
-    width: 90%;
+    width: 75%;
 }
 .select2-tree-icon {
     color: #333;
