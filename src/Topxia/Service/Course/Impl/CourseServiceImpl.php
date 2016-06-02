@@ -1377,6 +1377,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent("course.lesson.unpublish", $unpublishLesson);
     }
 
+    public function resetLessonMediaId($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+        if ($lesson) {
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            return true;
+        }
+
+        return false;
+    }
+
     public function getNextLessonNumber($courseId)
     {
         return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;

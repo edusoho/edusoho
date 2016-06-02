@@ -15,7 +15,7 @@ class Version20160531203720 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $sql     = "select * from course_lesson where type not in('live','testpaper') and mediaId != 0 and mediaSource = 'self';";
+        $sql     = "select * from course_lesson where type not in('text','live','testpaper') and mediaId != 0 and mediaSource = 'self';";
         $lessons = $this->connection->fetchAll($sql, array());
 
         if ($lessons) {
