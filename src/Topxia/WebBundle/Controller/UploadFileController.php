@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,6 +98,7 @@ class UploadFileController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -411,6 +413,11 @@ class UploadFileController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
     protected function createFilesJsonResponse($files, $paginator = null)

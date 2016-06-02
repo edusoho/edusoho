@@ -14,7 +14,6 @@ define(function(require, exports, module) {
         $('#start-import-btn').on("click",function(){
             $('#start-import-btn').button('submiting').addClass('disabled');
         });
-
     };
 
 });

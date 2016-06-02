@@ -71,6 +71,18 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         );
     }
 
+    public function findCategoriesByGroupIdAndOrgId($groupId, $orgId)
+    {
+        $that = $this;
+
+        return $this->fetchCached("groupId:{$groupId}orgId:{$orgId}", $groupId, $orgId, function ($groupId, $orgId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE groupId = ? AND orgId =?  ORDER BY weight ASC";
+            return $that->getConnection()->fetchAll($sql, array($groupId, $orgId)) ?: array();
+        }
+
+        );
+    }
+
     public function findCategoriesByParentId($parentId, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

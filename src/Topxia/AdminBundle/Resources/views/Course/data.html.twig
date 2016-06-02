@@ -2,12 +2,16 @@
 
 {% set menu = 'admin_course_data' %}
 
+{% set script_controller = 'course/data' %}
+
 {% block main %}
   {% include 'TopxiaAdminBundle:Course:tab-data.html.twig' %}
 
     <form id="message-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      
       <div class="form-group">
-        <select class="form-control" name="categoryId">
+        <select style="width:150px;" class="form-control" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
         </select>
       </div>

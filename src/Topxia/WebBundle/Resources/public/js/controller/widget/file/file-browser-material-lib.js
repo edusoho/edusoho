@@ -72,7 +72,7 @@ define(function (require, exports, module) {
         },
 
         refreshFileList: function (files, paginator) {
-            console.log(files);
+            
             if (files.length > 0) {
                 var html = '<ul class="file-browser-list">';
                 $.each(files, function (i, file) {

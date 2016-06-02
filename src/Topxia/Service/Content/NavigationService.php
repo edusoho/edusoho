@@ -24,4 +24,8 @@ interface NavigationService
     public function updateNavigationsSequenceByIds($ids);
 
     public function deleteNavigation($id);
+
+    public function searchNavigationCount($conditions);
+
+    public function searchNavigations($conditions, $start, $limit);
 }

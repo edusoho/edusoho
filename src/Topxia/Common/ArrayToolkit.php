@@ -151,4 +151,28 @@ class ArrayToolkit
         
         return $array;
     }
+
+    public static function every($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && !$value){
+                return false;
+            }else if(is_callable($callback) && !$callback($value)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function some($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && $value){
+                return true;
+            }else if(is_callable($callback) && $callback($value)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
