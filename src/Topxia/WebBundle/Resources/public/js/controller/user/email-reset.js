@@ -20,7 +20,8 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name="email"]',
             required: true,
-            rule: 'email email_remote'
+            rule: 'email email_remote',
+            display: '邮箱'
         });
 
         validator.addItem({

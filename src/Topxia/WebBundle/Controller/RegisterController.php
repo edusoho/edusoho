@@ -8,6 +8,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\MailFactory;
+use Topxia\Service\Common\ServiceException;
 
 class RegisterController extends BaseController
 {
@@ -58,8 +59,6 @@ class RegisterController extends BaseController
 
                 $registration['createdIp'] = $request->getClientIp();
 
-                $user = $this->getAuthService()->register($registration);
-
                 if (($authSettings
                         && isset($authSettings['email_enabled'])
                         && $authSettings['email_enabled'] == 'closed')
@@ -85,6 +84,8 @@ class RegisterController extends BaseController
                 }
 
                 return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+            } catch (ServiceException $se){
+                $this->setFlashMessage('danger', $se->getMessage());
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage());
             }
