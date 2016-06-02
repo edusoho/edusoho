@@ -34,6 +34,7 @@ define(function (require, exports, module) {
             if(chunkData.length === 0){
                 this.set('__progress', 100);
                 this.set('__status', STATUS.COMPLETE);
+                return;
             }
 
             var privateAttr = ['__quantity', '__total', '__current', 'chunkSize', 'status', '__progress', '__status', 'checkInfo', 'checkUrl', 'importUrl'];
