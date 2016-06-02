@@ -57,7 +57,12 @@ class CourseMaterialManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $lessonId, $materialId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $this->getMaterialService()->deleteMaterial($courseId, $materialId);
+        
+        $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
+        if ($material) {
+            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>$lessonId,'materialId'=>$materialId,'fileId'=>$material['fileId']));
+        }
+        
         return $this->createJsonResponse(true);
     }
 
