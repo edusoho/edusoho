@@ -243,7 +243,9 @@ class RegisterController extends BaseController
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
                 $this->setFlashMessage('danger', '输入的密码不正确');
             } else {
-                $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'));
+                $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'), array(
+                    'password' => $password
+                ));
                 return $this->render('TopxiaWebBundle:Register:reset-email-step2.html.twig', array(
                     'token' => $token
                 ));
@@ -281,7 +283,7 @@ class RegisterController extends BaseController
             throw $this->createNotFoundException('user not found');
         }
 
-        $user = $this->getUserService()->changeEmail($user['id'], $newEmail);
+        $this->getAuthService()->changeEmail($user['id'], $token['data']['password'],$newEmail);
 
         return $this->redirect($this->generateUrl('register_submited', array(
             'id'   => $user['id'],
