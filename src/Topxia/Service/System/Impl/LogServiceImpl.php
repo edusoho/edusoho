@@ -5,7 +5,6 @@ namespace Topxia\Service\System\Impl;
 use Topxia\Service\Common\Logger;
 use Topxia\Service\System\LogService;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\Logger;
 
 class LogServiceImpl extends BaseService implements LogService
 {
