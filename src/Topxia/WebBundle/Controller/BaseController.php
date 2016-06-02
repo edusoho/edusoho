@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
@@ -186,13 +187,9 @@ abstract class BaseController extends Controller
     {
         $whiteList = array("iPhone", "iPad", "Android", "HTC");
 
-        foreach ($whiteList as $value) {
-            if (strpos($userAgent, $value) > -1) {
-                return true;
-            }
-        }
-
-        return false;
+        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
+            return strpos($userAgent, $agent) > -1;
+        });
     }
 
     protected function getServiceKernel()

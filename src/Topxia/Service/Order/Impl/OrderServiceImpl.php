@@ -221,8 +221,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function generateOrderSn($order)
     {
-        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
-        return $prefix . date('YmdHis', time()) . mt_rand(10000, 99999);
+        $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
+        return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array())
@@ -268,7 +268,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $payment = $this->getSettingService()->get("payment");
 
         if (isset($payment["enabled"]) && $payment["enabled"] == 1
-            && isset($payment[$order["payment"] . "_enabled"]) && $payment[$order["payment"] . "_enabled"] == 1
+            && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
             && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
         ) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
@@ -401,7 +401,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($refund['status'] == 'success') {
             $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
         } else {
-            $this->_createLog($order['id'], 'refund_apply', '订单申请退款' . (is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
+            $this->_createLog($order['id'], 'refund_apply', '订单申请退款'.(is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
         }
 
         return $refund;
@@ -440,7 +440,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $actualAmount = 0;
             }
 
-            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
+            $actualAmount = number_format((float) $actualAmount, 2, '.', '');
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
@@ -468,7 +468,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
-        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+        $this->getLogService()->info('order', 'andit_refund', "审核退款申请#{$refund['id']}");
 
         return $pass;
     }
@@ -510,7 +510,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => 'paid'
         ));
-
+        $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 

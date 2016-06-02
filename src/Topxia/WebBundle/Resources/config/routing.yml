@@ -137,10 +137,6 @@ register_captcha_num:
     path:     /captcha_num
     defaults: { _controller: TopxiaWebBundle:Register:captcha }
 
-user_import_modal:
-    pattern:  /import/modal
-    defaults: { _controller: TopxiaWebBundle:Importer:importModal }
-
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
@@ -2048,6 +2044,20 @@ live_course_manage_lesson_replay_title_update:
     pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
+
+importer_check:
+    path: /importer/{type}/check
+    defaults: { _controller: TopxiaWebBundle:Importer:check}
+    methods: [POST]
+
+importer_import:
+    path: /importer/{type}/import
+    defaults: { _controller: TopxiaWebBundle:Importer:import}
+    methods: [POST]
+
+importer_index:
+    path: /importer/{type}/index
+    defaults: { _controller: TopxiaWebBundle:Importer:template}
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

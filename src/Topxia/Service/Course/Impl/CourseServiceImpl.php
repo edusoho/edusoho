@@ -1175,7 +1175,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->_filterDraftFields($fields);
 
-        $this->getLogService()->info('draft', 'update', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
+        $this->getLogService()->info('course', 'update_draft', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
 
         $fields = LessonSerialize::serialize($fields);
 
@@ -1306,7 +1306,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
 
-        $this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+        $this->getLogService()->info('course', 'delete_lesson', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+
         $this->dispatchEvent("course.lesson.delete", array(
             "courseId" => $courseId,
             "lesson"   => $lesson
@@ -1968,9 +1969,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        if(is_array($sort)){
+        if (is_array($sort)) {
             $orderBy = $sort;
-        }else{
+        } else {
             $orderBy = array('createdTime', 'DESC');
         }
 
@@ -2519,12 +2520,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("course, member参数不能为空");
         }
 
-/*
-如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
-if ($course['expiryDay'] == 0) {
-return true;
-}
- */
+        /*
+        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
+        if ($course['expiryDay'] == 0) {
+        return true;
+        }
+         */
 
         if ($member['deadline'] == 0) {
             return true;

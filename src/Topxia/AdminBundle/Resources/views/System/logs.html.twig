@@ -25,7 +25,9 @@
   </div>
 
   <div class="form-group">
-    <input type="text" id="module" name="module" value="{{app.request.query.get('module')}}" class="form-control" placeholder="模块名" style="width:100px;">
+    <select class="form-control" name="module">
+        {{ select_options(dict('logModule'), app.request.query.get('module'), '--所有模块--') }}
+    </select>
   </div>
 
   <div class="form-group">

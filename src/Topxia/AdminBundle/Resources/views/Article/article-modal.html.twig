@@ -54,7 +54,7 @@
         </div>
       </div>
       
-      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true, falsemodal: 'modal'} %}
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true} %}
      
       <div class="form-group">
         <label for="richeditor-body-field" class="control-label">正文</label>
