@@ -71,7 +71,7 @@ class Logger
      * [$UPLOADFILE 文件]
      * @var string
      */
-    const UPLOADFILE = 'uploadFile';
+    const UPLOADFILE = 'uploadfile';
     /**
      * [$SYSTEM 系统设置]
      * @var string
@@ -133,12 +133,13 @@ class Logger
         if (in_array($module, $modules)) {
             return $module;
         }
-
-        throw new NotFoundException("模块名不存在,请检查是否拼写错误");
+        return $module;
+        //  throw new NotFoundException("模块名不存在,请检查是否拼写错误");
     }
 
     /**
      * 模块(module)  -> 操作(action)
+     * 操作待完善
      * @return [type] [description]
      */
     public static function moduleConfig()
@@ -160,14 +161,13 @@ class Logger
             'order'         => array(),
             'category'      => array('create'),
             'content'       => array(),
-            'course'        => array('course'),
+            'course'        => array('add'),
             'crontab'       => array('job_start', 'job_end'),
             'uploadFile'    => array('delete'),
             'marker'        => array(),
             'thread'        => array('delete'),
             'sms'           => array(),
             'tag'           => array()
-
         );
     }
 }

@@ -235,7 +235,7 @@ class UploadFileController extends BaseController
             $result
         );
 
-        $this->getLogService()->info('uploadFile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
 
@@ -281,7 +281,7 @@ class UploadFileController extends BaseController
             $result
         );
 
-        $this->getLogService()->info('uploadFile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
 
@@ -315,7 +315,7 @@ class UploadFileController extends BaseController
     {
         $data = $request->getContent();
 
-        $this->getLogService()->info('uploadFile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
+        $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
         $key     = $request->query->get('key');
         $fullKey = $request->query->get('fullKey');
