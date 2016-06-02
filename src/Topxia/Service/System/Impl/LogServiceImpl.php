@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\System\Impl;
 
+use Topxia\Service\Common\Logger;
 use Topxia\Service\System\LogService;
 use Topxia\Service\Common\BaseService;
 
@@ -9,19 +10,16 @@ class LogServiceImpl extends BaseService implements LogService
 {
     public function info($module, $action, $message, array $data = null)
     {
-        $module = Logger::getModule($module);
         return $this->addLog('info', $module, $action, $message, $data);
     }
 
     public function warning($module, $action, $message, array $data = null)
     {
-        $module = Logger::getModule($module);
         return $this->addLog('warning', $module, $action, $message, $data);
     }
 
     public function error($module, $action, $message, array $data = null)
     {
-        $module = Logger::getModule($module);
         return $this->addLog('error', $module, $action, $message, $data);
     }
 
@@ -61,7 +59,7 @@ class LogServiceImpl extends BaseService implements LogService
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
         return $this->getLogDao()->addLog(array(
-            'module'      => $module,
+            'module'      => Logger::getModule($module),
             'action'      => $action,
             'message'     => $message,
             'data'        => empty($data) ? '' : json_encode($data),
