@@ -38,7 +38,7 @@
         <label for="categoryId" class="control-label">所属栏目</label>
         <div class="controls">
           <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
-            {% if article %}{% else %}<option value="">--选择所属栏目--</option>{% endif %}
+            {% if article %}{% else %}<option value="0">--选择所属栏目--</option>{% endif %}
           {% for tree in categoryTree %}
             <option value={{ tree.id }} {% if tree.id == category.id|default()  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
           {% endfor %}
