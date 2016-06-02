@@ -147,14 +147,16 @@ class CourseFileManageController extends BaseController
         $fileIds = ArrayToolkit::column($materials,'fileId');
         $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
 
-        $files   = ArrayToolkit::index($files, 'id');
+        $files     = ArrayToolkit::index($files, 'id');
+        $sortFiles = array();
         foreach ($materials as $key => $material) {
-
-            $file = isset($files[$material['fileId']]) ? array_merge($material, $files[$material['fileId']]) : $material;
-            $materials[$key] = $file;
+            if (isset($files[$material['fileId']])) {
+                $file = array_merge($material, $files[$material['fileId']]);
+                $sortFiles[$key] = $file;
+            }
         }
 
-        return $materials;
+        return $sortFiles;
     }
 
     protected function getCourseService()
