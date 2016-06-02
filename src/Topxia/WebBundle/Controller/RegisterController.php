@@ -7,6 +7,7 @@ use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\MailFactory;
 
 class RegisterController extends BaseController
 {
@@ -26,7 +27,7 @@ class RegisterController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            try{
+            try {
 
                 $registration = $request->request->all();
 
@@ -60,9 +61,10 @@ class RegisterController extends BaseController
                 $user = $this->getAuthService()->register($registration);
 
                 if (($authSettings
-                    && isset($authSettings['email_enabled'])
-                    && $authSettings['email_enabled'] == 'closed')
-                    || !$this->isEmptyVeryfyMobile($user)) {
+                        && isset($authSettings['email_enabled'])
+                        && $authSettings['email_enabled'] == 'closed')
+                    || !$this->isEmptyVeryfyMobile($user)
+                ) {
                     $this->authenticateUser($user);
                 }
 
@@ -182,7 +184,8 @@ class RegisterController extends BaseController
 
         if ($auth && $auth['register_mode'] != 'mobile'
             && array_key_exists('email_enabled', $auth)
-            && ($auth['email_enabled'] == 'opened')) {
+            && ($auth['email_enabled'] == 'opened')
+        ) {
             return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user'          => $user,
                 'hash'          => $hash,
@@ -230,7 +233,7 @@ class RegisterController extends BaseController
 
     protected function makeHash($user)
     {
-        $string = $user['id'].$user['email'].$this->container->getParameter('secret');
+        $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
         return md5($string);
     }
 
@@ -251,15 +254,15 @@ class RegisterController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
-        $email                  = $request->query->get('value');
-        $email                  = str_replace('!', '.', $email);
+        $email = $request->query->get('value');
+        $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile                 = $request->query->get('value');
+        $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
         return $this->validateResult($result, $message);
@@ -267,8 +270,8 @@ class RegisterController extends BaseController
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile          = $request->query->get('value');
-        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
@@ -286,8 +289,8 @@ class RegisterController extends BaseController
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname               = $request->query->get('value');
-        $randomName             = $request->query->get('randomName');
+        $nickname   = $request->query->get('value');
+        $randomName = $request->query->get('randomName');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname, $randomName);
         return $this->validateResult($result, $message);
     }
@@ -333,14 +336,14 @@ class RegisterController extends BaseController
         $host = substr($email, strpos($email, '@') + 1);
 
         if ($host == 'hotmail.com') {
-            return 'http://www.'.$host;
+            return 'http://www.' . $host;
         }
 
         if ($host == 'gmail.com') {
             return 'http://mail.google.com';
         }
 
-        return 'http://mail.'.$host;
+        return 'http://mail.' . $host;
     }
 
     public function analysisAction(Request $request)
@@ -361,7 +364,7 @@ class RegisterController extends BaseController
 
         $headers = array(
             'Content-type'        => 'image/jpeg',
-            'Content-Disposition' => 'inline; filename="'."reg_captcha.jpg".'"');
+            'Content-Disposition' => 'inline; filename="' . "reg_captcha.jpg" . '"');
 
         return new Response($str, 200, $headers);
     }
@@ -435,33 +438,23 @@ class RegisterController extends BaseController
 
     protected function sendVerifyEmail($token, $user)
     {
-        $site       = $this->getSettingService()->get('site', array());
-        $emailTitle = $this->setting('auth.email_activation_title',
-            '请激活你的帐号 完成注册');
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
-        $valuesToReplace   = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
-        $emailTitle        = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
-        $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
         try {
-            $normalMail = array(
-                'to'    => $user['email'],
-                'title' => $emailTitle,
-                'body'  => $emailBody
+            $site        = $this->getSettingService()->get('site', array());
+            $verifyurl   = $this->generateUrl('register_email_verify', array('token' => $token), true);
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_registration',
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url'],
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname']
+                ),
             );
-            $cloudMail = array(
-                'to'        => $user['email'],
-                'verifyurl' => $verifyurl,
-                'template'  => 'email_registration',
-                'nickname'  => $user['nickname']
-            );
-            $mail = new Mail($normalMail, $cloudMail);
-
-            $this->sendEmail($mail);
+            $mail        = MailFactory::create($mailOptions);
+            $mail->send();
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
+            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:' . $e->getMessage());
         }
     }
 
@@ -493,6 +486,7 @@ class RegisterController extends BaseController
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
         }
     }
+
     protected function smsCodeValidator($authSettings, $registration)
     {
         if (
@@ -505,5 +499,4 @@ class RegisterController extends BaseController
     }
 
 
-    
 }

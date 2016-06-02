@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  {% include 'OrgBundle:org:org-tree-select.html.twig' with {orgCode:announcement.orgCode|default(null), modal: 'modal'} %}
+  {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode:announcement.orgCode|default(null), modal: 'modal'} %}
   
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

@@ -6,7 +6,7 @@
     {% endif %}
 </li>
 
-{% do load_script('article/category/tbody') %}
+{% do load_script('category/tbody') %}
 
 {% macro showCategoryTree(categories, isCollapseChildren) %}
     <ul class="list-table sortable-list" data-group-id="{{ categories[0]['parentId'] }}">

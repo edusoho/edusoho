@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             })
         });
 
-        var userValidator = new Validator({
+        var validator = new Validator({
             element: '#user-profile-form',
             autoSubmit: false,
             onFormValidate:function(){
@@ -42,17 +42,22 @@ define(function(require, exports, module) {
                 })
             }
         });
+        
+        validator.addItem({
+            element: '[id="profile_avatar"]',
+            required: true,
+            errormessageRequired: '请上传用户头像'
+        });
 
-        userValidator.addItem({
+        validator.addItem({
             element: '[id="profile_title"]',
             rule: 'chinese_limit{max:24}',
             required: true
         });
 
-        userValidator.addItem({
+        validator.addItem({
             element: '[id="profile_about"]',
             required: true
         });
     }
 });
-//==============

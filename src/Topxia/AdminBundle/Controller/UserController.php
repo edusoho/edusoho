@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,7 +57,7 @@ class UserController extends BaseController
                 0,
                 $profilesCount
             );
-            $userIds = ArrayToolkit::column($userProfiles, 'id');
+            $userIds       = ArrayToolkit::column($userProfiles, 'id');
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
@@ -101,31 +102,31 @@ class UserController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
-        $email                  = $request->query->get('value');
-        $email                  = str_replace('!', '.', $email);
+        $email = $request->query->get('value');
+        $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile                 = $request->query->get('value');
-        $mobile                 = str_replace('!', '.', $mobile);
+        $mobile = $request->query->get('value');
+        $mobile = str_replace('!', '.', $mobile);
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
         return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname               = $request->query->get('value');
+        $nickname = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
         return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile          = $request->query->get('value');
-        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
@@ -382,7 +383,7 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
@@ -422,26 +423,23 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-
+        $site   = $this->setting('site', array());
         try {
-            $mail = new Mail(array(
+            $mailOptions = array(
                 'to'     => $user['email'],
-                'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                'format' => 'html',
-                'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                    'user'  => $user,
-                    'token' => $token
-                ))),
-                array(
-                    'to'        => $user['email'],
-                    'template'  => 'email_reset_password',
+                'template' => 'email_reset_password',
+                'params' => array(
+                    'nickname' => $user['nickname'],
                     'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                    'nickname'  => $user['nickname']
-                ));
-            $this->sendEmail($mail);
+                    'sitename' => $site['name'],
+                    'siteurl' => $site['url']
+                )
+            );
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
             throw $e;
         }
 
@@ -457,42 +455,27 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-        $auth  = $this->getSettingService()->get('auth', array());
 
         $site      = $this->getSettingService()->get('site', array());
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
-
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
         $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
-        $valuesToReplace   = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
-        $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-
-        if (!empty($emailBody)) {
-            $emailBody = $emailBody;
-        } else {
-            $emailBody = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                'user'  => $user,
-                'token' => $token
-            ));
-        }
 
         try {
-            $normalMail = array(
-                'to'    => $user['email'],
-                'title' => '请激活你的帐号 完成注册',
-                'body'  => $emailBody
-            );
-            $cloudMail = array(
+            $mailOptions  = array(
                 'to'        => $user['email'],
-                'template'  => 'email_reset_password',
-                'verifyurl' => $verifyurl,
-                'nickname'  => $user['nickname']
+                'template'  => 'email_registration',
+                'params' => array(
+                    'sitename' => $site['name'],
+                    'siteurl' => $site['url'],
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname']
+                ),
             );
-            $mail = new Mail($normalMail, $cloudMail);
-            $this->sendEmail($mail);
+
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
             throw $e;
         }
 

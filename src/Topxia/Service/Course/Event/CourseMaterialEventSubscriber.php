@@ -12,12 +12,19 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create' => array('onCourseLessonCreate', 0),
-            'course.lesson.delete' => array('onCourseLessonDelete', 0),
-            'course.lesson.update' => 'onCourseLessonUpdate',
-            'upload.file.delete'   => 'onUploadFileDelete',
-            'material.delete'      => 'onMaterialDelete',
+            'course.delete'          => 'onCourseDelete',
+            'course.lesson.create'   => array('onCourseLessonCreate', 0),
+            'course.lesson.delete'   => array('onCourseLessonDelete', 0),
+            'course.lesson.update'   => 'onCourseLessonUpdate',
+            'upload.file.delete'     => 'onUploadFileDelete',
+            'course.material.delete' => 'onMaterialDelete',
         );
+    }
+
+    public function onCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $this->getMaterialService()->deleteMaterialsByCourseId($course['id']);
     }
 
     public function onCourseLessonCreate(ServiceEvent $event)
@@ -56,10 +63,24 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context  = $event->getSubject();
-        $lesson   = $context["lesson"];
-        $courseId = $context["courseId"];
+        $lesson   = $context['lesson'];
+        $courseId = $context['courseId'];
 
-        $this->getMaterialService()->deleteMaterialsByLessonId($lesson['id']);
+        $material = $this->getMaterialService()->searchMaterials(
+            array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId'   => $lesson['mediaId']
+            ),
+            array('createdTime','DESC'), 0, 1
+        );
+        if ($material) {
+            $updateFields = array(
+                'lessonId' => 0
+            );
+            $this->getMaterialService()->updateMaterial($material[0]['id'], $updateFields, array('fileId'=>$material[0]['fileId']));
+        }
+        
     }
 
     public function onCourseLessonUpdate(ServiceEvent $event)
@@ -83,8 +104,10 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
         if ($material) {
             if ($material[0]['fileId'] != $lesson['mediaId']) {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $updateFields = array('fileId' => $lesson['mediaId'],'title'=>$file['filename']);
                 $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    array('fileId' => $lesson['mediaId'])
+                    $updateFields, array('fileId'=>$material[0]['fileId'])
                 );
             }
         } else {
@@ -107,20 +130,20 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context = $event->getSubject();
+        $material = $event->getSubject();
 
-        $file = $this->getUploadFileService()->getFile($context['fileId']);
+        $file = $this->getUploadFileService()->getFile($material['fileId']);
 
         if (!$file) {
             return false;
         }
 
-        if (!$this->getUploadFileService()->canManageFile()) {
+        if (!$this->getUploadFileService()->canManageFile($file['id'])) {
             return false;
         }
         
-        if ($file['targetId'] == $context['courseId']) {
-            $this->getUploadFileService()->update($context['fileId'], array('targetId' => 0));
+        if ($file['targetId'] == $material['courseId']) {
+            $this->getUploadFileService()->update($material['fileId'], array('targetId' => 0));
         }
         
     }
