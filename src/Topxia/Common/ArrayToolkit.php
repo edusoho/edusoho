@@ -135,4 +135,20 @@ class ArrayToolkit
 
         return $filtered;
     }
+
+    public static function trim($array){
+        if (!is_array($array)) { 
+            return $array;
+        }
+
+        foreach($array as $key => $value) {
+            if (is_array($value)){
+                $array[$key] = ArrayToolkit::trim($value);
+            } elseif(is_string($value)) {
+                $array[$key] = trim($value);
+            }
+        }
+        
+        return $array;
+    }
 }
