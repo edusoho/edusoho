@@ -35,7 +35,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
 
-        if ($lesson['type'] == 'testpaper' || !$lesson['mediaId']) {
+        if (in_array($lesson['type'],array('testpaper','live','text')) || !$lesson['mediaId']) {
             return false;
         }
 
