@@ -144,7 +144,7 @@ define(function (require, exports, module) {
         onFilterByName: function (e) {
             var $key = $(".file-filter-by-name", this.element).val();
             var self = this;
-            $.get(this.get('url'), {keyword: $key, source: this.get('currentSource')}, function (response) {
+            $.get(this.get('baseUrl'), {keyword: $key, source: this.get('currentSource')}, function (response) {
                 self.refreshFileList.call(self, response.files, response.paginator);
             });
         },
