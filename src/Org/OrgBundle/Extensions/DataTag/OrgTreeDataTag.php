@@ -12,18 +12,8 @@ class OrgTreeDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $orgCode = $this->getOrgCode($arguments);
-        $orgs    = $this->getOrgService()->findOrgsStartByOrgCode($orgCode);
-        return json_encode($orgs);
-    }
-
-    private function getOrgCode($arguments)
-    {
-        $orgCode = null;
-
-        if (isset($arguments['orgCode'])) {
-            $orgCode = $arguments['orgCode'];
-        }
+        $orgCode = isset($arguments['orgCode']) ? $arguments['orgCode'] : null;
+        return $this->getOrgService()->findOrgsStartByOrgCode($orgCode);
     }
 
     public function getOrgService()
