@@ -284,7 +284,7 @@ class RegisterController extends BaseController
         }
 
         $this->getAuthService()->changeEmail($user['id'], $token['data']['password'],$newEmail);
-
+        $user = $this->getUserService()->getUser($user['id']);
         return $this->redirect($this->generateUrl('register_submited', array(
             'id'   => $user['id'],
             'hash' => $this->makeHash($user),
