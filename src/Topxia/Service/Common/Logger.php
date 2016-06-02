@@ -249,6 +249,7 @@ class Logger
                 'job_start' => '开始任务',
                 'job_end'   => '结束任务'),
             'upload_file' => array(
+                'create'                 => '新增文件',
                 'delete'                 => '删除文件',
                 'download'               => '下载文件',
                 'cloud_convert_callback' => '回调处理',

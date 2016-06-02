@@ -231,6 +231,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
                 'length' => isset($result['length']) ? $result['length'] : 0
             ));
+            $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
 
             if ($file['targetType'] == 'headLeader') {
                 $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
