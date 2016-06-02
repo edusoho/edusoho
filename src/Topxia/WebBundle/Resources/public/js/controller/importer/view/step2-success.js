@@ -15,16 +15,19 @@ define(function (require, exports, module) {
         },
 
         onStartImport: function (event) {
+            var self = this;
             this.progress = new ProgressView({
                 model: this.model
             });
-            $('#modal').html(this.progress.el);
-            $('#modal').modal({
+
+            var $modal = $('#modal');
+            $modal.html(this.progress.el);
+            $modal.modal({
                 show: true,
                 backdrop: 'static',
                 keyboard: false
             });
-            this.model.chunkImport();
-        },
+            self.model.chunkImport();
+        }
     });
 });

@@ -43,25 +43,31 @@ define(function (require, exports, module) {
                 delete postData[attr];
             });
 
-            _.each(chunkData, function (data) {
-                postData.importData = data;
-                $.post(self.get('importUrl'), postData).then(function (response) {
+            (function importFunc(index) {
+                postData.importData = chunkData[index];
+                $.ajax(self.get('importUrl'),
+                    {
+                        'data': postData,
+                        'method': 'post',
+                        'dataType': 'json'
+                    }
+                ).then(function (response) {
                     self.set('__current', self.get('__current') + 1);
                     var current = self.get('__current');
                     var total = self.get('__total');
                     var quantity = self.get('__quantity');
                     self.set('__progress', current / total * 100);
-                    self.set('__quantity', quantity + data.length);
+                    self.set('__quantity', quantity + chunkData[index].length);
                     if(current === total){
                         self.set('__status', STATUS.COMPLETE);
                     }else{
                         self.set('__status', STATUS.PROGRESS);
+                        importFunc(index + 1);
                     }
                 }, function (error) {
                     self.set('__status', STATUS.ERROR);
                 });
-            });
-
+            })(0);
         }
     });
 });
