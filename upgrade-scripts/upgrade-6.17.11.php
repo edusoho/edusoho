@@ -5,12 +5,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $result = $this->updateScheme($index);
             $this->getConnection()->commit();
+            return $result;
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -33,8 +34,82 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    private function updateData($index)
     {
+
+        $total = $this->countCourseLessons();
+
+        $maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
+        $page = 100;
+        $start = ($index-1)*$page;
+
+        $sql = "select * from course_lesson where type not in('text','live','testpaper') and mediaId != 0 and mediaSource = 'self' order by createdTime limit {$start}, {$page};";
+
+        $lessons = $this->getConnection()->fetchAll($sql, array());
+        if ($lessons) {
+            foreach ($lessons as $key => $lesson) {
+                $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
+                $file = $this->getConnection()->fetchAssoc($sql);
+
+                $materialSql    = "select id from course_material where lessonId=".$lesson['copyId']." and fileId=".$lesson['mediaId']." and source='courselesson';";
+                $parentMaterial = $this->getConnection()->fetchAssoc($materialSql);
+
+
+                if ($file) {
+                    
+                    $emptyCourseMaterial = $this->emptyCourseMaterial($lesson['courseId'], $lesson['id'], $file['id']);
+
+                    if(!$emptyCourseMaterial) {
+                        continue;
+                    }
+
+                    $courseId = $lesson['courseId'];
+                    $lessonId = $lesson['id'];
+                    $title    = $file['filename'];
+                    $fileId   = $file['id'];
+                    $fileSize = $file['fileSize'];
+                    $copyId   = $parentMaterial ? $parentMaterial['id'] : 0;
+                    $userId   = $lesson['userId'];
+                    $time     = time();
+
+                    $this->getConnection()->exec("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
+                }
+            }
+        }
+
+
+        if ($index <= $maxPage) {
+            return array(
+                'index'    => $index + 1,
+                'message'  => '正在升级数据...',
+                'progress' => 4.4
+            );
+        }
+    }
+
+    protected function emptyCourseMaterial($courseId, $lessonId, $fileId)
+    {
+        $sql = "select * from course_material where courseId={$courseId} and lessonId=".$lessonId." and fileId=".$fileId." and source='courselesson';";
+        $result = $this->getConnection()->fetchAssoc($sql, array());
+
+        return empty($result);
+    }
+
+    protected function countCourseLessons()
+    {
+        $sql     = "select count(*) as total from course_lesson where type not in('text','live','testpaper') and mediaId != 0 and mediaSource = 'self';";
+
+        $count = $this->getConnection()->fetchAssoc($sql, array());
+
+        return $count['total'];
+    }
+
+    protected function updateScheme($index)
+    {
+        if($index > 0){
+            return $this->updateData($index);
+        }
+
         if (!$this->isTableExist('org')) {
             $this->getConnection()->exec("CREATE TABLE IF NOT EXISTS  `org` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
@@ -51,7 +126,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `updateTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '最后更新时间',
               PRIMARY KEY (`id`),
               UNIQUE KEY `orgCode` (`orgCode`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区';
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
             ");
 
             $this->getConnection()->exec("INSERT INTO `org` (`id`, `name`, `parentId`, `childrenNum`, `depth`, `seq`, `description`, `code`, `orgCode`, `createdUserId`, `createdTime`, `updateTime`) VALUES (1, '全站', 0, 0, 1, 0, '', 'FullSite', '1.', 1, 1463555406, 0);");
@@ -117,30 +192,11 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `org` CHANGE `seq` `seq` INT(11) NOT NULL DEFAULT '0' COMMENT '索引';");
         }
 
-        $sql     = "select * from course_lesson where type not in('text','live','testpaper') and mediaId != 0 and mediaSource = 'self';";
-        $lessons = $this->connection->fetchAll($sql, array());
-        if ($lessons) {
-            foreach ($lessons as $key => $lesson) {
-                $sql  = "select id,filename,fileSize from upload_files where id=".$lesson['mediaId'];
-                $file = $this->connection->fetchAssoc($sql);
-
-                $materialSql    = "select id from course_material where lessonId=".$lesson['copyId']." and fileId=".$lesson['mediaId']." and source='courselesson';";
-                $parentMaterial = $this->connection->fetchAssoc($materialSql);
-
-                if ($file) {
-                    $courseId = $lesson['courseId'];
-                    $lessonId = $lesson['id'];
-                    $title    = $file['filename'];
-                    $fileId   = $file['id'];
-                    $fileSize = $file['fileSize'];
-                    $copyId   = $parentMaterial ? $parentMaterial['id'] : 0;
-                    $userId   = $lesson['userId'];
-                    $time     = time();
-
-                    $this->addSql("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
-                }
-            }
-        }
+        return array(
+            'index'    => 1,
+            'message'  => '正在升级数据...',
+            'progress' => 4.4
+        );
     }
 
     protected function isFieldExist($table, $filedName)
