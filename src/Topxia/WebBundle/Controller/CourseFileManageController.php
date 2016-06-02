@@ -149,7 +149,8 @@ class CourseFileManageController extends BaseController
 
         $files   = ArrayToolkit::index($files, 'id');
         foreach ($materials as $key => $material) {
-            $file = array_merge($material, $files[$material['fileId']]);
+
+            $file = isset($files[$material['fileId']]) ? array_merge($material, $files[$material['fileId']]) : $material;
             $materials[$key] = $file;
         }
 
