@@ -269,7 +269,6 @@ class RegisterController extends BaseController
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('email-reset', $token);
         if (empty($token)) {
-            $this->setFlashMessage('danger', 'token已失效');
             return $this->createNotFoundException('token已失效');
         }
 
@@ -282,8 +281,7 @@ class RegisterController extends BaseController
         $user = $this->getUserService()->changeEmail($user['id'], $newEmail);
 
         if ($user['email'] !== $newEmail) {
-            $this->setFlashMessage('danger', '邮箱变更失败, 请重新提交');
-            return $this->render('TopxiaWebBundle:Register:reset-email-step1.html.twig');
+            return $this->createNotFoundException('邮箱变更失败');
         }
 
         return $this->redirect($this->generateUrl('register_submited', array(
