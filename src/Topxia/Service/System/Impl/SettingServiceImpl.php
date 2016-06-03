@@ -7,9 +7,9 @@ use Topxia\Service\System\SettingService;
 class SettingServiceImpl extends BaseService implements SettingService
 {
     const CACHE_NAME = 'settings';
-    
+    const NAME_SPACE = 'default';
+
     private $cached;
-    private $nameSpace = 'default';
 
     public function set($name, $value)
     {
@@ -85,9 +85,6 @@ class SettingServiceImpl extends BaseService implements SettingService
     }
 
     public function getNameSpace(){
-        return $this->nameSpace;
-    }
-    public  function setNameSpace($namespace){
-        $this->namespace = $namespace; 
-    }    
+        return self::NAME_SPACE;
+    } 
 }
