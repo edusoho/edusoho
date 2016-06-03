@@ -41,10 +41,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         return isset($this->cached[$settingName]) ? unserialize($this->cached[$settingName]) : $default;
     }
     private function getSettingName($name){
-        return   in_array($name, $this->getNeedNameSpaceKey()) ?  $this->getNameSpace() . $name : $name; 
-    }
-    private function getNeedNameSpaceKey(){
-        return array("site");
+        return  $this->getNameSpace() . $name ;
     }
     public function delete($name)
     {
