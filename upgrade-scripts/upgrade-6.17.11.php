@@ -65,16 +65,19 @@ class EduSohoUpgrade extends AbstractUpdater
                         continue;
                     }
 
-                    $courseId = $lesson['courseId'];
-                    $lessonId = $lesson['id'];
-                    $title    = $file['filename'];
-                    $fileId   = $file['id'];
-                    $fileSize = $file['fileSize'];
-                    $copyId   = $parentMaterial ? $parentMaterial['id'] : 0;
-                    $userId   = $lesson['userId'];
-                    $time     = time();
+                    $fileds = array(
+                        'courseId' => $lesson['courseId'],
+                        'lessonId' => $lesson['id'],
+                        'title' => $file['filename'],
+                        'fileId' => $file['id'],
+                        'fileSize' => $file['fileSize'],
+                        'source' => 'courselesson',
+                        'copyId' => ($parentMaterial ? $parentMaterial['id'] : 0),
+                        'userId' => $lesson['userId'],
+                        'createdTime' => time()
+                    );
 
-                    $this->getConnection()->exec("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
+                    $this->getConnection()->insert("course_material", $fileds);
                 }
             }
         }
