@@ -539,7 +539,7 @@ EOD;
                 'username' => 'user@example.com',
                 'password' => '',
                 'from'     => 'user@example.com',
-                'name'     => $sitename
+                'name'     => $_POST['sitename']
             ),
             'payment'        => array(
                 'enabled'        => 0,
@@ -895,7 +895,7 @@ EOD;
 
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org.OrgService');
+        return ServiceKernel::instance()->createService('Org:xOrg.OrgService');
     }
 
     protected function postRequest($url, $params)
