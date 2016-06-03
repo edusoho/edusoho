@@ -3,7 +3,7 @@ namespace Topxia\Common;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class PluginLoaderToolkit
+class PointcutToolkit
 {
 
 	public static function loader($key)
