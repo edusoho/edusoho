@@ -895,7 +895,7 @@ EOD;
 
     protected function getOrgService()
     {
-        return ServiceKernel::instance()->createService('Org:xOrg.OrgService');
+        return ServiceKernel::instance()->createService('Org:Org.OrgService');
     }
 
     protected function postRequest($url, $params)
