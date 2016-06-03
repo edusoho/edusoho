@@ -192,6 +192,10 @@ admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
 
+admin_user_org_update:
+    path: /user/{id}/org/update
+    defaults: { _controller: TopxiaAdminBundle:User:orgUpdate}
+
 admin_user_lock:
     pattern:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }
@@ -765,6 +769,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_logs_action_dicts:
+    pattern:  /setting/logs/logActions
+    defaults: { _controller: TopxiaAdminBundle:Log:logActions }
+    
 admin_cloud_access:
     pattern:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }

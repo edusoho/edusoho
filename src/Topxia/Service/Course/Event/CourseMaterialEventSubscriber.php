@@ -12,12 +12,21 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create' => array('onCourseLessonCreate', 0),
-            'course.lesson.delete' => array('onCourseLessonDelete', 0),
-            'course.lesson.update' => 'onCourseLessonUpdate',
-            'upload.file.delete'   => 'onUploadFileDelete',
-            'material.delete'      => 'onMaterialDelete',
+            'course.delete'          => 'onCourseDelete',
+            'course.lesson.create'   => array('onCourseLessonCreate', 0),
+            'course.lesson.delete'   => array('onCourseLessonDelete', 0),
+            'course.lesson.update'   => 'onCourseLessonUpdate',
+            'upload.file.delete'     => 'onUploadFileDelete',
+            'course.material.create' => 'onMaterialCreate',
+            'course.material.update' => 'onMaterialUpdate',
+            'course.material.delete' => 'onMaterialDelete',
         );
+    }
+
+    public function onCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $this->getMaterialService()->deleteMaterialsByCourseId($course['id']);
     }
 
     public function onCourseLessonCreate(ServiceEvent $event)
@@ -26,7 +35,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
 
-        if ($lesson['type'] == 'testpaper' || !$lesson['mediaId']) {
+        if (in_array($lesson['type'],array('testpaper','live','text')) || !$lesson['mediaId']) {
             return false;
         }
 
@@ -56,10 +65,30 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context  = $event->getSubject();
-        $lesson   = $context["lesson"];
-        $courseId = $context["courseId"];
+        $lesson   = $context['lesson'];
+        $courseId = $context['courseId'];
 
-        $this->getMaterialService()->deleteMaterialsByLessonId($lesson['id']);
+        $materials = $this->getMaterialService()->searchMaterials(
+            array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+            ),
+            array('createdTime','DESC'), 0, PHP_INT_MAX
+        );
+        if (!$materials) {
+            return false;
+        }
+
+        foreach ($materials as $key => $material) {
+            if ($material['fileId'] == 0 && !empty($material['link'])) {
+                $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
+            } else {
+                $updateFields = array(
+                    'lessonId' => 0
+                );
+                $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId'=>$material['fileId']));
+            }
+        }
     }
 
     public function onCourseLessonUpdate(ServiceEvent $event)
@@ -68,7 +97,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
 
-        if ($lesson['type'] == 'testpaper' || !$lesson['mediaId']) {
+        if (in_array($lesson['type'],array('text','testpaper','live')) && isset($argument['mediaId'])) {
             return false;
         }
 
@@ -82,9 +111,22 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
 
         if ($material) {
-            if ($material[0]['fileId'] != $lesson['mediaId']) {
+            if ($material[0]['fileId'] != $lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $updateFields = array(
+                    'fileId'   => $lesson['mediaId'],
+                    'title'    => $file ? $file['filename'] : '',
+                    'fileSize' => $file ? $file['fileSize'] : 0
+                );
                 $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    array('fileId' => $lesson['mediaId'])
+                    $updateFields, array('fileId'=>$material[0]['fileId'])
+                );
+            } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0){
+                $updateFields = array(
+                    'lessonId' => 0
+                );
+                $this->getMaterialService()->updateMaterial($material[0]['id'], 
+                    $updateFields, array('fileId'=>$material[0]['fileId'])
                 );
             }
         } else {
@@ -105,22 +147,67 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $this->getMaterialService()->deleteMaterialsByFileId($file['id']);
     }
 
+    public function onMaterialCreate(ServiceEvent $event)
+    {
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $material  = $context['material'];
+
+        $courses   = $this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        if ($courseIds) {
+            $lessons            = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'], $courseIds);
+            $lessonIds          = ArrayToolkit::column($lessons, 'id');
+            $argument['copyId'] = $material['id'];
+
+            foreach ($courseIds as $key => $courseId) {
+                $argument['courseId'] = $courseId;
+                $argument['lessonId'] = isset($lessonIds[$key]) ? $lessonIds[$key] : 0;
+
+                $this->getMaterialService()->uploadMaterial($argument);
+            }
+        }
+    }
+
+    public function onMaterialUpdate(ServiceEvent $event)
+    {
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $material  = $context['material'];
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
+
+        if ($courseIds) {
+            $copyMaterials = $this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($material['id'], $courseIds);
+
+            foreach ($copyMaterials as $key => $copyMaterial) {
+                
+                if ($material['lessonId']) {
+                    $parentMaterial = $this->getMaterialService()->getMaterial($material['courseId'], $copyMaterial['copyId']);
+                    $copyLesson     = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($parentMaterial['lessonId'], array($copyMaterial['courseId']));
+
+                    $this->getMaterialService()->updateMaterial($copyMaterial['id'], array('lessonId' => $copyLesson[0]['id']), $argument);
+                } else {
+                    $this->getMaterialService()->updateMaterial($copyMaterial['id'], array('lessonId' => 0), $argument);
+                }
+                
+            }
+        }
+    }
+
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context = $event->getSubject();
+        $material = $event->getSubject();
 
-        $file = $this->getUploadFileService()->getFile($context['fileId']);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
-        if (!$file) {
-            return false;
-        }
+        if ($courseIds) {
+            $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($material['id'], $courseIds), 'id');
 
-        if (!$this->getUploadFileService()->canManageFile()) {
-            return false;
-        }
-        
-        if ($file['targetId'] == $context['courseId']) {
-            $this->getUploadFileService()->update($context['fileId'], array('targetId' => 0));
+            foreach ($materialIds as $key => $materialId) {
+                $this->getMaterialService()->deleteMaterial($courseIds[$key], $materialId);
+            }
         }
         
     }

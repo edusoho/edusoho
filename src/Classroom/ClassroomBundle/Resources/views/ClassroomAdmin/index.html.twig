@@ -5,9 +5,8 @@
 {% set script_controller='classroombundle/controller/classroom-admin/classroom' %}
 {% block main %}
 
-
-
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="{{setting("classroom.name")|default("班级")}}名称" name="title" value="{{ app.request.get('title') }}">

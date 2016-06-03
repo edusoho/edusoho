@@ -17,16 +17,13 @@
       <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换(调试模式)'|trans}}</a>
     {% endif %}
     <br>
-    {% if uploadFile.usedCount == 0 %}
-    <span class="label label-danger tip">{{'未使用'|trans}}</span>
-    {% endif %}
 
   </td>
   <td>
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
   <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
-  {#<td>
+  <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
     {% if 'courselesson' in fileQuotes %}
       <span class="label label-success tip">{{'课时'|trans}}</span>
@@ -34,7 +31,7 @@
     {% if 'coursematerial' in fileQuotes %}
       <span class="label label-success tip">{{'资料'|trans}}</span>
     {% endif %}
-  </td>#}
+  </td>
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>

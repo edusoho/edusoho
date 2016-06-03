@@ -59,7 +59,9 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'test1'
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+
         $this->getClassroomService()->publishClassroom($classroom['id']);
+
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $user        = $this->createUser();

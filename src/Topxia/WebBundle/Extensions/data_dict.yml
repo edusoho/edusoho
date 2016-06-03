@@ -189,7 +189,6 @@ logLevel:html:
     warning: <span class="text-warning">警告</span>
     error: <span class="text-danger">错误</span>
 
-
 analysisDateType:
     register: 新注册用户数
     login: 用户登录数

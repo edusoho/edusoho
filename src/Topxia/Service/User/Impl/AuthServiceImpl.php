@@ -201,7 +201,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function checkUsername($username, $randomName = '')
     {
 //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
-
         if (empty($randomName) || $username != $randomName) {
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
@@ -357,7 +356,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-
+            
             if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
