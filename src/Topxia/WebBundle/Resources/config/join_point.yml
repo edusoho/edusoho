@@ -2,4 +2,3 @@
 importer:
   course-member: Topxia\Service\Importer\CourseMemberImporter
   classroom-member: Topxia\Service\Importer\ClassroomMemberImporter
-  vip: Topxia\Service\Importer\VipImporter
