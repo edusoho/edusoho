@@ -7,8 +7,9 @@ use Topxia\Service\System\SettingService;
 class SettingServiceImpl extends BaseService implements SettingService
 {
     const CACHE_NAME = 'settings';
-
+    
     private $cached;
+    private $nameSpace = 'default';
 
     public function set($name, $value)
     {
@@ -23,23 +24,28 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     public function get($name, $default = null)
     {
+
         if (is_null($this->cached)) {
             $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
 
             if (is_null($this->cached)) {
                 $settings = $this->getSettingDao()->findAllSettings();
-
                 foreach ($settings as $setting) {
-                    $this->cached[$setting['name']] = $setting['value'];
+                    $settingName = $this->getSettingName($setting['name']);
+                    $this->cached[$settingName] = $setting['value'];
                 }
-
                 $this->getCacheService()->set(self::CACHE_NAME, $this->cached);
             }
         }
-
-        return isset($this->cached[$name]) ? unserialize($this->cached[$name]) : $default;
+        $settingName = $this->getSettingName($name);
+        return isset($this->cached[$settingName]) ? unserialize($this->cached[$settingName]) : $default;
     }
-
+    private function getSettingName($name){
+        return   in_array($name, $this->getNeedNameSpaceKey()) ?  $this->getNameSpace() . $name : $name; 
+    }
+    private function getNeedNameSpaceKey(){
+        return array("site");
+    }
     public function delete($name)
     {
         $this->getSettingDao()->deleteSettingByName($name);
@@ -80,4 +86,11 @@ class SettingServiceImpl extends BaseService implements SettingService
     {
         return $this->createDao('System.SettingDao');
     }
+
+    public function getNameSpace(){
+        return $this->nameSpace;
+    }
+    public  function setNameSpace($namespace){
+        $this->namespace = $namespace; 
+    }    
 }
