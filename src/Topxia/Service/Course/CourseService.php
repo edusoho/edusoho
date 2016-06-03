@@ -136,6 +136,8 @@ interface CourseService
 
     public function unpublishLesson($courseId, $lessonId);
 
+    public function resetLessonMediaId($lessonId);
+
     public function getNextLessonNumber($courseId);
 
     public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);

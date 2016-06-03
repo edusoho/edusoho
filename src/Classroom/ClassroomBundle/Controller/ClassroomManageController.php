@@ -182,7 +182,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields    = $request->query->all();
+        $fields = $request->query->all();
 
         $condition = array();
 
@@ -190,11 +190,10 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition['targetId'] = $id;
+        $condition['targetId']   = $id;
         $condition['targetType'] = 'classroom';
-        $condition['status'] = 'success';
+        $condition['status']     = 'success';
 
-        
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchRefundCount($condition),
@@ -202,26 +201,26 @@ class ClassroomManageController extends BaseController
         );
 
         $refunds = $this->getOrderService()->searchRefunds(
-            $condition, 
+            $condition,
             'createdTime',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = ArrayToolkit::column($refunds,'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, "id");
+        $userIds = ArrayToolkit::column($refunds, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::index($users, "id");
 
-        $orderIds = ArrayToolkit::column($refunds,'orderId');
-        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-        $orders = ArrayToolkit::index($orders, "id");
+        $orderIds = ArrayToolkit::column($refunds, 'orderId');
+        $orders   = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders   = ArrayToolkit::index($orders, "id");
 
         foreach ($refunds as $key => $refund) {
-            if(isset($users[$refund['userId']])) {
+            if (isset($users[$refund['userId']])) {
                 $refunds[$key]['user'] = $users[$refund['userId']];
             }
 
-            if(isset($orders[$refund['orderId']])) {
+            if (isset($orders[$refund['orderId']])) {
                 $refunds[$key]['order'] = $orders[$refund['orderId']];
             }
         }
@@ -229,7 +228,7 @@ class ClassroomManageController extends BaseController
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
             'classroom' => $classroom,
             'paginator' => $paginator,
-            'refunds' => $refunds
+            'refunds'   => $refunds
         ));
     }
 
@@ -280,11 +279,12 @@ class ClassroomManageController extends BaseController
 
         $condition = array(
             'targetType' => 'classroom',
-            'targetId' => $classroomId,
-            'userId' => $userId,
-            'status' => 'paid'
-            );
+            'targetId'   => $classroomId,
+            'userId'     => $userId,
+            'status'     => 'paid'
+        );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+
         foreach ($orders as $key => $value) {
             $order = $value;
         }
@@ -294,8 +294,8 @@ class ClassroomManageController extends BaseController
         $reason = array(
             'type' => 'other',
             'note' => '手动移除'
-            );
-        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+        );
+        $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],
@@ -312,8 +312,6 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-// $currentUser = $this->getCurrentUser();
-
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
@@ -328,6 +326,7 @@ class ClassroomManageController extends BaseController
 
             $classroomSetting = $this->getSettingService()->get('classroom');
             $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+
             if (empty($data['price'])) {
                 $data['price'] = 0;
             }

@@ -16,13 +16,13 @@ define(function(require, exports, module) {
 
         $form.on('click', '.delete-btn', function(){
             var $btn = $(this);
-            if (!confirm('真的要删除该资料吗？')) {
+            if (!confirm('真的要移除该资料吗？')) {
                 return ;
             }
 
             $.post($btn.data('url'), function(){
                 $btn.parents('.list-group-item').remove();
-                Notify.success('资料已删除');
+                Notify.success('资料已移除');
             });
         });
 

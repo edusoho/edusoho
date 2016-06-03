@@ -20,8 +20,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'course.lesson.unpublish'       => 'onCourseLessonUnpublish',
             'course.lesson_start'           => 'onLessonStart',
             'course.lesson_finish'          => 'onLessonFinish',
-            'material.create'               => 'onMaterialCreate',
-            'material.delete'               => 'onMaterialDelete',
+            'course.material.create'        => 'onMaterialCreate',
+            'course.material.update'        => 'onMaterialUpdate',
+            'course.material.delete'        => 'onMaterialDelete',
             'chapter.create'                => 'onChapterCreate',
             'chapter.delete'                => 'onChapterDelete',
             'chapter.update'                => 'onChapterUpdate'
@@ -241,60 +242,37 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialCreate(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $material = $context['material'];
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $material  = $context['material'];
 
-        $course = $this->getCourseService()->getCourse($material['courseId']);
-
-        if (!$course || ($course && !in_array($course['type'], array('normal', 'live')))) {
-            return;
+        if ($material['lessonId'] && $material['source'] == 'coursematerial') {
+            $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
         }
+    }
 
-        $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
+    public function onMaterialUpdate(ServiceEvent $event)
+    {
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $material  = $context['material'];
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
-        if ($courseIds) {
-            $lessonIds          = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'], $courseIds), 'id');
-            $argument['copyId'] = $material['id'];
-
-            foreach ($courseIds as $key => $courseId) {
-                $argument['courseId'] = $courseId;
-                $argument['lessonId'] = $lessonIds[$key];
-                $this->getMaterialService()->uploadMaterial($argument);
-            }
+        if ($lesson && $material['lessonId'] && $material['source'] == 'coursematerial') {
+            $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
         }
     }
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context = $event->getSubject();
-        $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $material = $event->getSubject();
 
-        $course = $this->getCourseService()->getCourse($context['courseId']);
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
-        if (!$course || ($course && !in_array($course['type'], array('normal', 'live')))) {
-            return;
-        }
-
-        $count = $this->getMaterialService()->searchMaterialCount(array('courseId' => $context['courseId'], 'lessonId' => $context['lessonId'], 'type' => 'course'));
-        $this->getCourseService()->resetLessonMaterialCount($context['lessonId'], $count);
-
-        if ($courses) {
-            $materials = $this->getMaterialService()->searchMaterials(
-                array('copyId' => $context['id'], 'courseIds' => ArrayToolkit::column($courses, 'id')),
-                array('createdTime', 'DESC'),
-                0, PHP_INT_MAX
-            );
-
-            if (!$materials) {
-                return true;
-            }
-
-            foreach ($materials as $key => $material) {
-                $this->getMaterialService()->deleteMaterial($courses[$material['courseId']]['id'], $material['id']);
-            }
+        if ($lesson) {
+            $this->_resetLessonMediaId($material);
+            $this->_waveLessonMaterialNum($material);
         }
     }
 
@@ -391,7 +369,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'jobParams'  => '',
             'targetType' => "lesson",
             'targetId'   => $lesson['id'],
-            'time'       => $lesson['testStartTime'] + $second
+            'nextExcutedTime'  => $lesson['testStartTime'] + $second
         );
 
         $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
@@ -434,6 +412,31 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     private function isRealTimeTest($lesson)
     {
         return $lesson['type'] == 'testpaper' && !empty($lesson['testMode']) && $lesson['testMode'] == 'realTime';
+    }
+
+    private function _resetLessonMediaId($material)
+    {
+        if ($material['lessonId'] && $material['source'] == 'courselesson') {
+            $this->getCourseService()->resetLessonMediaId($material['lessonId']);
+        }
+
+        return false;
+    }
+
+    private function _waveLessonMaterialNum($material)
+    {
+        if($material['lessonId'] && $material['source'] == 'coursematerial'){
+            $count = $this->getMaterialService()->searchMaterialCount(array(
+                    'courseId' => $material['courseId'],
+                    'lessonId' => $material['lessonId'],
+                    'source'   => 'coursematerial'
+                )
+            );
+           $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
+           return true;
+        }
+
+        return false;
     }
 
     protected function getStatusService()

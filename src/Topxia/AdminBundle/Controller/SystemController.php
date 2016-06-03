@@ -2,8 +2,8 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Topxia\Service\Common\Mail;
 use Symfony\Component\Finder\Finder;
+use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
@@ -28,6 +28,7 @@ class SystemController extends BaseController
 
         if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
             $discuzProvider = new DiscuzAuthProvider();
+
             if ($discuzProvider->checkConnect()) {
                 return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
             } else {
@@ -44,29 +45,31 @@ class SystemController extends BaseController
         $site      = $this->getSettingService()->get('site', array());
         $mailer    = $this->getSettingService()->get('mailer', array());
         $cloudMail = $this->getSettingService()->get('cloud_mail', array());
+
         if (!empty($mailer['enabled'])) {
             try {
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
                     return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
                 } else {
-                    $normalMail = array(
-                        'to'    => $user['email'],
-                        'title' => "【{$site['name']}】系统自检邮件",
-                        'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
+                    $mailOptions = array(
+                        'to'       => $user['email'],
+                        'template' => 'email_system_self_test',
+                        'params'   => array(
+                            'sitename' => $site['name']
+                        )
                     );
-                    $cloudMail = array();
-                    $mail      = new Mail($normalMail, $cloudMail);
 
-                    $this->sendEmail($mail);
+                    $mail = MailFactory::create($mailOptions);
+                    $mail->send();
 
                     return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
                 }
             } catch (\Exception $e) {
-                $this->getLogService()->error('user', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
+                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
                 return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送服务并没开通！'));
+            return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送服务并没开通！'));
         }
     }
 
@@ -89,6 +92,7 @@ class SystemController extends BaseController
         if (PHP_OS !== 'WINNT') {
             foreach ($paths as $folder => $opts) {
                 $finder = new Finder();
+
                 if (!empty($opts['depth'])) {
                     $finder->depth($opts['depth']);
                 }
@@ -99,8 +103,10 @@ class SystemController extends BaseController
 
                 try {
                     $finder->in($this->container->getParameter('kernel.root_dir').'/../'.$folder);
+
                     foreach ($finder as $fileInfo) {
                         $relaPath = $fileInfo->getRealPath();
+
                         if (!(is_writable($relaPath) && is_readable($relaPath))) {
                             $errorPaths[] = $relaPath;
                         }

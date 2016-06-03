@@ -1,7 +1,5 @@
 define(function(require, exports, module) {
-
-	var Validator = require('bootstrap.validator');
-
+    var Validator = require('bootstrap.validator');
     exports.run = function() {
 
         var $form = $('#course-create-form');
@@ -11,7 +9,7 @@ define(function(require, exports, module) {
             var validator = new Validator({
                 element: $form,
                 triggerType: 'change',
-                onFormValidated: function(error){
+                onFormValidated: function(error) {
                     if (error) {
                         return false;
                     }

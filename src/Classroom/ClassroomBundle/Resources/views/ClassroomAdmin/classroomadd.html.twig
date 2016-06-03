@@ -26,6 +26,8 @@
             </div>
           </div>
 
+          {% include 'OrgBundle:Org:org-tree-select.html.twig' with {lablecolmd:3} %}
+
           <div class="form-group">
             <div class="col-md-3 control-label">
               <label >{{setting("classroom.name")|default("班级")}}展示</label>

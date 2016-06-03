@@ -16,14 +16,16 @@ class CourseMaterialController extends CourseBaseController
         }
 
         $conditions = array(
-            'courseId' => $id,
-            'type'     => 'course'
+            'courseId'        => $id,
+            'excludeLessonId' => 0,
+            'source'          => 'coursematerial',
+            'type'            => 'course'
         );
 
         $paginator = new Paginator(
             $request,
             $this->getMaterialService()->searchMaterialCount($conditions),
-            1
+            20
         );
 
         $materials = $this->getMaterialService()->searchMaterials(

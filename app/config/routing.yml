@@ -37,6 +37,14 @@ sensitive_admin:
     resource: "@SensitiveWordBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
+org_web:
+    resource: "@OrgBundle/Resources/config/routing.yml"
+    prefix:   /
+
+org_admin:
+    resource: "@OrgBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /

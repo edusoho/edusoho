@@ -76,31 +76,51 @@ class AppPackageUpdateController extends BaseController
 
     public function checkNewestAction($code)
     {
-        if (empty($code)) {
-            $errors[] = '参数缺失,更新应用包失败';
+        try{
+            if (empty($code)) {
+                $errors[] = '参数缺失,更新应用包失败';
 
-            return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
+                return $this->createJsonResponse(array(
+                    'status' => 'error', 
+                    'errors' => $errors
+                ));
+            }
+
+            $apps = $this->getAppService()->checkAppUpgrades();
+
+            if (empty($apps)) {
+                return $this->createJsonResponse(array(
+                    'isUpgrade' => false
+                ));
+            }
+
+            $apps = ArrayToolkit::index($apps, 'code');
+
+            if (empty($apps[$code])) {
+                return $this->createJsonResponse(array(
+                    'isUpgrade' => false
+                ));
+            }
+
+            if (empty($apps[$code]['package']['id']) || empty($apps[$code]['package']['toVersion'])) {
+                $errors[] = '获取当前最新应用包信息失败';
+
+                return $this->createJsonResponse(array(
+                    'status' => 'error', 
+                    'errors' => $errors
+                ));
+            }
+
+            $result = array(
+                'isUpgrade' => true, 
+                'packageId' => $apps[$code]['package']['id'], 
+                'toVersion' => $apps[$code]['package']['toVersion']
+            );
+        } catch(\Exception $e) {
+            $result = array('isUpgrade' => false);
         }
 
-        $apps = $this->getAppService()->checkAppUpgrades();
-
-        if (empty($apps)) {
-            return $this->createJsonResponse(array('isUpgrade' => false));
-        }
-
-        $apps = ArrayToolkit::index($apps, 'code');
-
-        if (empty($apps[$code])) {
-            return $this->createJsonResponse(array('isUpgrade' => false));
-        }
-
-        if (empty($apps[$code]['package']['id']) || empty($apps[$code]['package']['toVersion'])) {
-            $errors[] = '获取当前最新应用包信息失败';
-
-            return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
-        }
-
-        return $this->createJsonResponse(array('isUpgrade' => true, 'packageId' => $apps[$code]['package']['id'], 'toVersion' => $apps[$code]['package']['toVersion']));
+        return $this->createJsonResponse($result);
     }
 
     protected function createResponseWithErrors($errors)

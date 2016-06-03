@@ -55,38 +55,42 @@
 }
 
 .balloon-filelist-heading {
-  position: relative;
+  padding: 8px 10px;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
 
 .balloon-uploader-body {
   position: relative;
+}
 
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
 }
 
 .balloon-filelist .file-name {
-  margin-right: 250px;
-  padding: 8px;
+  display: inline-block;
+  width: 40%;
 }
 
 .balloon-filelist .file-size {
-  position: absolute;
-  top: 0px;
-  right: 150px;
-  width: 100px;
-  text-align: right;
-  padding: 8px;
+  display: inline-block;
+  width: 20%;
 }
 
 .balloon-filelist .file-status {
+  display: inline-block;
+  width: 18%;
+}
+.balloon-filelist .file-manage {
+  display: inline-block;
+  width: 20%;
+  z-index: 9999;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 120px;
-  text-align: left;
-  padding: 8px;
-
 }
 
 .balloon-filelist ul {
@@ -101,6 +105,7 @@
 .balloon-filelist ul li {
   position: relative;
   border-bottom: 1px solid #ddd;
+  padding: 8px 10px;
 }
 
 .balloon-dnd {
@@ -165,6 +170,7 @@
 }
 
 .balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
   background: rgba(59, 181, 33, 0.18);
   float: left;
   height: 100%;
@@ -172,23 +178,25 @@
 
 </style>
 
-
-
+{% set showCourseMaterialPane = showCourseMaterialPane|default(1) %}
+{% set showLinkPane = showLinkPane|default(1) %}
 
 <div class="file-chooser">
   <div class="file-chooser-bar" style="display:none;">
     <span data-role="placeholder"></span>
-    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}</button>
+    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'重新选择'|trans}}</button>
   </div>
 
   <div class="file-chooser-main">
     <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
       <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">{{'上传文件'|trans}}</a></li>
-      {% if is_plugin_installed('MaterialLib') %}
-        <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'从资料库中选择'|trans}}</a></li>
+      <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'从资料库中选择'|trans}}</a></li>
+      {% if showCourseMaterialPane %}
+        <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'从课程文件中选择'|trans}}</a></li>
       {% endif %}
-      <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'从课程文件中选择'|trans}}</a></li>
-      <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'网络链接'|trans}}</a></li>
+      {% if showLinkPane %}
+        <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'网络链接'|trans}}</a></li>
+      {% endif %}
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="file-chooser-upload-pane">
@@ -219,21 +227,20 @@
           </div>
         </div>
       </div>
-      {% if is_plugin_installed('MaterialLib') %}
-        <div class="tab-pane" id="file-chooser-browser-pane">
-            <div id="file-browser" data-role="file-browser"
-              data-base-url="{{ path('uploadfile_browser') }}"
-              data-default-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
-              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-             data-empty="{{'暂无文件，请先上传。'|trans}}">
-              <div class="file-browser-list-container"></div>
-            </div>
+      
+      <div class="tab-pane" id="file-chooser-browser-pane">
+        <div id="file-browser" data-role="file-browser"
+          data-base-url="{{ path('uploadfile_browser') }}"
+          data-default-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
+          data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+         data-empty="{{'暂无文件，请先上传。'|trans}}">
+          <div class="file-browser-list-container"></div>
         </div>
-      {% endif %}
+      </div>
 
       <div class="tab-pane" id="file-chooser-course-pane">
           <div id="file-browser" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId}) }}"
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId}) }}"
             data-empty="{{'暂无文件，请先上传。'|trans}}">
           </div>
       </div>

@@ -173,6 +173,41 @@ class CourseServiceTest extends BaseTestCase
         $this->assertCount(3, $result);
     }
 
+    public function testSearchCoursesByLikeOrgCode()
+    {
+        $course1 = array(
+            'title'   => 'test course 1',
+            'orgCode' => '1.'
+        );
+        $course2 = array(
+            'title'   => 'test course 2',
+            'orgCode' => '1.2.'
+        );
+        $course3 = array(
+            'title'   => 'test course 3',
+            'orgCode' => '1.2.3.'
+        );
+
+        $this->getCourseService()->createCourse($course1);
+        $this->getCourseService()->createCourse($course2);
+        $this->getCourseService()->createCourse($course3);
+
+        $conditions = array(
+            'likeOrgCode' => '1.'
+        );
+
+        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
+
+        $this->assertCount(3, $result);
+
+        $conditions = array(
+            'likeOrgCode' => '1.2.'
+        );
+        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
+
+        $this->assertCount(2, $result);
+    }
+
     public function testSearchCourseCount()
     {
         $course1 = array(
@@ -359,13 +394,7 @@ class CourseServiceTest extends BaseTestCase
         $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
         $user          = $this->createNormalUser();
         $currentUser   = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1'
-        ));
+        $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
@@ -397,13 +426,7 @@ class CourseServiceTest extends BaseTestCase
         $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
         $user          = $this->createNormalUser();
         $currentUser   = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1'
-        ));
+        $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'], $user['id']);
@@ -419,14 +442,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course1 = array(
@@ -650,11 +666,13 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'online test course1'
         );
         $courseUpdateData = array(
-            'title' => 'updateData'
+            'title'   => 'updateData',
+            'orgCode' => '1.'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $updateCourse = $this->getCourseService()->updateCourse($createCourse['id'], $courseUpdateData);
         $this->assertEquals('updateData', $updateCourse['title']);
+        $this->assertEquals('1.', $updateCourse['orgCode']);
     }
 
     /**
@@ -1822,14 +1840,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $course = $this->getCourseService()->createCourse(array(
             'title' => 'online test course 1'
@@ -2369,14 +2380,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course = $this->getCourseService()->createCourse(array(
@@ -2454,14 +2458,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course = $this->getCourseService()->createCourse(array(
@@ -2638,10 +2635,17 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'test course 1'
         );
-        $createCourse = $this->getCourseService()->createCourse($course);
-        $conditions   = array('unique' => true, 'role' => 'teacher');
-        $result       = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, 10);
-        $this->assertEquals($result[0]['userId'], '2');
+
+        $course2 = array(
+            'title' => 'test course 2'
+        );
+        $createCourse  = $this->getCourseService()->createCourse($course);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $conditions    = array('unique' => true, 'role' => 'teacher');
+        $result        = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, 10);
+
+        $this->assertEquals($result[0]['userId'], $this->getCurrentUser()->id);
+        $this->assertArrayEquals($result, array(array('userId' => $this->getCurrentUser()->id)));
     }
 
     public function testUpdateCourseMember()
@@ -2671,14 +2675,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $course = array(
             'title' => 'test course 1'
@@ -2876,14 +2873,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user        = $this->createUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => $user['id'],
-            'nickname'  => $user['nickname'],
-            'email'     => $user['email'],
-            'password'  => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles'     => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $course = array(
             'title' => 'test course 1'

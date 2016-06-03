@@ -5,14 +5,16 @@
 {% set menu = 'admin_operation_article_manage' %}
 
 {% block main %}
-
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
+
+     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+     
 	<div class="form-group">
-		<select class="form-control" name="categoryId">
-		 <option value="">--所属栏目--</option>
-		   {% for tree in categoryTree %}
-					<option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
-					{% endfor %}
+		<select style="width:150px;" class="form-control" name="categoryId">
+            <option value="0">--所属栏目--</option>
+            {% for tree in categoryTree %}
+                <option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+            {% endfor %}
 		</select>
 	</div>
 	<div class="form-group">

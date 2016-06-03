@@ -3,6 +3,7 @@
 namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\WebBundle\Controller\BaseController;
 
 class JSONAPIController extends BaseController
 {
@@ -46,6 +47,6 @@ class JSONAPIController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

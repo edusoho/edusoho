@@ -158,7 +158,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new \InvalidArgumentException();
         }
 
-        return in_array($order['status'], array('created'));
+        return in_array($order['status'], array('created', 'cancelled'));
     }
 
     public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status)
@@ -269,7 +269,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         if (isset($payment["enabled"]) && $payment["enabled"] == 1
             && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
-            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1) {
+            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
+        ) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 
@@ -388,7 +389,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             'reasonType'     => empty($reason['type']) ? 'other' : $reason['type'],
             'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
             'updatedTime'    => time(),
-            'createdTime'    => time()
+            'createdTime'    => time(),
+            'operator'       => 0
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
@@ -442,6 +444,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
+                'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
@@ -454,6 +457,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'      => 'failed',
+                'operator'    => $user->id,
                 'updatedTime' => time()
             ));
 
@@ -464,7 +468,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
-        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+        $this->getLogService()->info('order', 'andit_refund', "审核退款申请#{$refund['id']}");
 
         return $pass;
     }
@@ -499,13 +503,14 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $this->getOrderRefundDao()->updateRefund($refund['id'], array(
             'status'      => 'cancelled',
+            'operator'    => $user->id,
             'updatedTime' => time()
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => 'paid'
         ));
-
+        $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 

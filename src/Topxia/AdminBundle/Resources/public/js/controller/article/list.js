@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+	require('../widget/category-select').run('article');
+
 	exports.run = function() {
 		$("#article-table").on('click', '[data-role=trash-item]', function(){
 			$.post($(this).data('url'), function(){

@@ -69,11 +69,7 @@ class SettingController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if (array_key_exists('ver', $mobile) && $mobile['ver']) {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        } else {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");
-        }
+        $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
 
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
@@ -509,7 +505,7 @@ class SettingController extends BaseController
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', "用户中心设置", $setting);
+            $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
             $this->setFlashMessage('success', '用户中心设置已保存！');
         }
 

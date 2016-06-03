@@ -3,18 +3,20 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
+
     require('jquery.select2-css');
     require('jquery.select2');
+    require('./header').run();
+
+    require('../widget/category-select').run('course');
 
     exports.run = function() {
 
-        require('./header').run();
-
-        $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data){
+        $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data) {
             $("#maxStudentNum-field").data("liveCapacity", data.capacity);
-            if(data.code == 2 || data.code == 1) {
+            if (data.code == 2 || data.code == 1) {
                 $("#live-plugin-url").removeClass("hidden");
-                $("#live-plugin-url").find("a").attr("href","http://www.edusoho.com/files/liveplugin/live_desktop_"+data.code+".rar");
+                $("#live-plugin-url").find("a").attr("href", "http://www.edusoho.com/files/liveplugin/live_desktop_" + data.code + ".rar");
             }
         })
 
@@ -92,33 +94,20 @@ define(function(require, exports, module) {
             display: '副标题'
         });
 
-        if ($('input[name=expiryDay]').length > 0) {
-            validator.addItem({
-                element: '[name=expiryDay]',
-                rule: 'integer'
-            });
-        } else {
-            validator.removeItem('[name=expiryDay]');
-        }
-        
-        if ($('input[name=maxStudentNum]').length > 0) {
-            validator.addItem({
-                element: '[name=maxStudentNum]',
-                rule: 'integer',
-                onItemValidated: function(error, message, elem) {
-                    if (error) {
-                        return ;
-                    }
+        validator.addItem({
+            element: '[name=maxStudentNum]',
+            rule: 'integer',
+            onItemValidated: function(error, message, elem) {
+                if (error) {
+                    return;
+                }
 
-                    var current = parseInt($(elem).val());
-                    var capacity = parseInt($(elem).data('liveCapacity'));
-                    if (current > capacity) {
-                        message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
-                        if ($(elem).parent().find('.alert-warning').length > 0) {
-                            $(elem).parent().find('.alert-warning').html(message).show();
-                        } else {
-                            $(elem).parent().append('<div class="alert alert-warning mts">' + message + '</div>');
-                        }
+                var current = parseInt($(elem).val());
+                var capacity = parseInt($(elem).data('liveCapacity'));
+                if (current > capacity) {
+                    message = '网校可支持最多' + capacity + '人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
+                    if ($(elem).parent().find('.alert-warning').length > 0) {
+                        $(elem).parent().find('.alert-warning').html(message).show();
                     } else {
                         $(elem).parent().find('.alert-warning').hide();
                     }

@@ -624,13 +624,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'       => "PushNotificationOneHourJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 60 * 60,
-                'jobClass'   => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
-                'jobParams'  => '',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "PushNotificationOneHourJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
+                'jobClass'        => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
+                'jobParams'       => '',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

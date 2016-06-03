@@ -195,6 +195,11 @@ class UserDaoImpl extends BaseDao implements UserDao
             }
         }
 
+        if(isset($conditions['likeOrgCode'])){
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+            unset($conditions['orgCode']);
+        }
+
         $conditions['verifiedMobileNull'] = "";
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -223,7 +228,10 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('id IN ( :userIds)')
             ->andWhere('inviteCode = :inviteCode')
             ->andWhere('inviteCode != :NoInviteCode')
-            ->andWhere('id NOT IN ( :excludeIds )');
+            ->andWhere('id NOT IN ( :excludeIds )')
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('orgCode = :orgCode')
+        ;
 
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');

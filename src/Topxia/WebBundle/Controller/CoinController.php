@@ -362,7 +362,7 @@ class CoinController extends BaseController
     {
         $inviteSetting = $this->setting('invite');
 
-        if ($inviteSetting['get_coupon_setting'] == 0) {
+        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 0) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
 
             if (!empty($inviteCoupon)) {

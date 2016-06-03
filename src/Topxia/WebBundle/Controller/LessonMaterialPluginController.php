@@ -17,11 +17,11 @@ class LessonMaterialPluginController extends BaseController
         }
 
         $lessonMaterials = $this->getMaterialService()->searchMaterials(
-            array('lessonId' => $lesson['id'], 'type' => 'course'),
-            array('createdTime', 'DESC'),
+            array('lessonId' => $lesson['id'], 'source' => 'coursematerial', 'type' => 'course'),
+            array('createdTime','DESC'), 
             0, 100
         );
-        return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(
             'materials' => $lessonMaterials,
             'course'    => $course,
             'lesson'    => $lesson,

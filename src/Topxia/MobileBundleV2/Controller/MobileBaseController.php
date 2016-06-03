@@ -320,7 +320,7 @@ class MobileBaseController extends BaseController
         $self      = $this;
         $container = $this->container;
 
-        return array_map(function ($item) use ($self, $container) {
+        $items = array_map(function ($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
 
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
@@ -335,8 +335,14 @@ class MobileBaseController extends BaseController
 
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
+            if (isset($item['status']) && $item['status'] != 'published') {
+                return false;
+            }
+
             return $item;
         }, $items);
+
+        return array_filter($items);
     }
 
     public function coverPath($path, $coverPath)
@@ -520,7 +526,7 @@ class MobileBaseController extends BaseController
 
     public function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     public function getMemberDao()
