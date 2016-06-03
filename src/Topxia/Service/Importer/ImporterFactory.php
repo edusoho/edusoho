@@ -5,6 +5,7 @@ namespace Topxia\Service\Importer;
 
 
 use Topxia\Service\Common\NotFoundException;
+use Topxia\Common\JoinPointToolkit;
 
 class ImporterFactory
 {
