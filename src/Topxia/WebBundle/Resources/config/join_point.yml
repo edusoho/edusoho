@@ -1,5 +1,5 @@
-order.processor:
-  course: Topxia\Service\Order\OrderProcessor\CourseOrderProcessor
-  classroom: Topxia\Service\Order\OrderProcessor\ClassroomOrderProcessor
 
-
+importer:
+  course-member: Topxia\Service\Importer\CourseMemberImporter
+  classroom-member: Topxia\Service\Importer\ClassroomMemberImporter
+  vip: Topxia\Service\Importer\VipImporter
