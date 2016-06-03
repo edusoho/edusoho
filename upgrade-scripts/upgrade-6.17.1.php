@@ -117,6 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (empty($block)) {
+            $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->createBlock(array(
                 'code' => $code,
                 'mode' => 'template',
@@ -128,7 +129,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 'content' => $html
             ));
             
-            $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->updateBlock($block['id'], array(
                 'content' => $html
             ));
