@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\PointcutToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,7 +11,6 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-
         $user = $this->getCurrentUser();
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
