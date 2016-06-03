@@ -5,15 +5,15 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
-class PointcutToolkit
+class JoinPointToolkit
 {
 	public static function load($key)
 	{
-        $pointcutFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/'.ServiceKernel::instance()->getEnvironment().'/ponitcut.php';
+        $pointcutFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/'.ServiceKernel::instance()->getEnvironment().'/join_point.php';
 
-        $pointcuts = array();
+        $joinPoints = array();
         if (file_exists($pointcutFile)) {
-            $pointcuts = include $pointcutFile;
+            $joinPoints = include $pointcutFile;
         } else {
             $finder = new Finder();
             $finder->directories()->depth('== 0');
@@ -25,20 +25,20 @@ class PointcutToolkit
             }
 
             foreach ($finder as $dir) {
-                $filepath = $dir->getRealPath().'/pointcut.yml';
+                $filepath = $dir->getRealPath().'/join_point.yml';
                 if (file_exists($filepath)) {
                 	$points = Yaml::parse($filepath);
-                    $pointcuts = array_merge_recursive($pointcuts, $points);
+                    $joinPoints = array_merge_recursive($joinPoints, $points);
                 }
             }
 
             if (!ServiceKernel::instance()->isDebug()) {
-                $cache = "<?php \nreturn ".var_export($pointcuts, true).';';
+                $cache = "<?php \nreturn ".var_export($joinPoints, true).';';
                 file_put_contents($pointcutFile, $cache);
             }
         }
 
-        return isset($pointcuts[$key])? $pointcuts[$key] : array();
+        return isset($joinPoints[$key])? $joinPoints[$key] : array();
     }
 
 }
