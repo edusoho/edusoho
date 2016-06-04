@@ -57,7 +57,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getLoggerFile()
     {
-        return ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/log/upgrade.log";
+        return ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/logs/upgrade.log";
     }
 
     public function updateUploadFileInitsAutoIncrement()
@@ -71,16 +71,18 @@ class EduSohoUpgrade extends AbstractUpdater
             $uploadFileInitMaxId = $this->getConnection()->fetchAssoc($sql);
 
             if(empty($uploadFileMaxId['maxId'])) {
+                $this->logger('info', 'upload_files没有记录');
                 return;
             }
 
             if($uploadFileMaxId['maxId']<$uploadFileInitMaxId['auto_increment']){
+                $this->logger('info', "upload_files表的最大id小于init表的自增值, uploadFileMaxId: {$uploadFileMaxId['maxId']}, uploadFileInitIncrement: {$uploadFileInitMaxId['auto_increment']}");
                 return;
             }
 
             $start = $uploadFileMaxId['maxId'] + 10;
             $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$start};");
-            $this->logger('info', '成功修改upload_file_inits的自增值');
+            $this->logger('info', "成功修改upload_file_inits的自增值, {$start}");
         }
     }
 
