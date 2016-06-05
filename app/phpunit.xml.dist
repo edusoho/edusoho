@@ -36,6 +36,7 @@
                 <file>../src/Classroom/Service/*/*Service.php</file>
                 <file>../src/Classroom/Service/*/Dao/*Dao.php</file>
                 <directory>../src/Topxia/Service/Util/Phpsec</directory>
+                <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
             <directory>../src/Topxia/Common</directory>
