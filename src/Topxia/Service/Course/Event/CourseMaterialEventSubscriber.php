@@ -17,6 +17,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             'course.lesson.delete'   => array('onCourseLessonDelete', 0),
             'course.lesson.update'   => 'onCourseLessonUpdate',
             'upload.file.delete'     => 'onUploadFileDelete',
+            'upload.file.finish'     => 'onUploadFileFinish',
             'course.material.create' => 'onMaterialCreate',
             'course.material.update' => 'onMaterialUpdate',
             'course.material.delete' => 'onMaterialDelete',
@@ -93,11 +94,14 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $lesson   = $context['lesson'];
+        $context      = $event->getSubject();
+        $argument     = $context['argument'];
+        $lesson       = $context['lesson'];
+        $sourceLesson = $context['sourceLesson'];
 
-        if (in_array($lesson['type'],array('text','testpaper','live')) && isset($argument['mediaId'])) {
+        if (in_array($lesson['type'],array('text','testpaper','live')) || 
+            ($lesson['mediaId'] == $sourceLesson['mediaId'])
+        ) {
             return false;
         }
 
@@ -111,23 +115,18 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
 
         if ($material) {
-            if ($material[0]['fileId'] != $lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
-                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-                $updateFields = array(
+            if ($lesson['mediaId'] != 0 && $lesson['mediaSource'] == 'self') {
+                $this->_resetExistMaterialLessonId($material[0]);
+                
+                $fields = array(
+                    'courseId' => $lesson['courseId'],
+                    'lessonId' => $lesson['id'],
                     'fileId'   => $lesson['mediaId'],
-                    'title'    => $file ? $file['filename'] : '',
-                    'fileSize' => $file ? $file['fileSize'] : 0
+                    'source'   => 'courselesson'
                 );
-                $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    $updateFields, array('fileId'=>$material[0]['fileId'])
-                );
+                $this->getMaterialService()->uploadMaterial($fields);
             } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0){
-                $updateFields = array(
-                    'lessonId' => 0
-                );
-                $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    $updateFields, array('fileId'=>$material[0]['fileId'])
-                );
+                $this->_resetExistMaterialLessonId($material[0]);
             }
         } else {
             $fields = array(
@@ -145,6 +144,19 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     {
         $file = $event->getSubject();
         $this->getMaterialService()->deleteMaterialsByFileId($file['id']);
+    }
+
+    public function onUploadFileFinish(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $file = $context['file'];
+
+        if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
+            $file['courseId'] = $file['targetId'];
+            $file['fileId']   = $file['id'];
+
+            $this->getMaterialService()->uploadMaterial($file);
+        }
     }
 
     public function onMaterialCreate(ServiceEvent $event)
@@ -210,6 +222,17 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             }
         }
         
+    }
+
+    private function _resetExistMaterialLessonId(array $material)
+    {
+        $updateFields = array('lessonId' => 0);
+
+        $this->getMaterialService()->updateMaterial($material['id'], 
+            $updateFields, array('fileId'=>$material['fileId'])
+        );
+
+        return true;
     }
 
     protected function getCourseService()
