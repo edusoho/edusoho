@@ -114,23 +114,18 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
 
         if ($material) {
-            if ($material[0]['fileId'] != $lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
-                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-                $updateFields = array(
+            if ($lesson['mediaId'] != 0 && $lesson['mediaSource'] == 'self') {
+                $this->_resetExistMaterialLessonId($material[0]);
+                
+                $fields = array(
+                    'courseId' => $lesson['courseId'],
+                    'lessonId' => $lesson['id'],
                     'fileId'   => $lesson['mediaId'],
-                    'title'    => $file ? $file['filename'] : '',
-                    'fileSize' => $file ? $file['fileSize'] : 0
+                    'source'   => 'courselesson'
                 );
-                $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    $updateFields, array('fileId'=>$material[0]['fileId'])
-                );
+                $this->getMaterialService()->uploadMaterial($fields);
             } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0){
-                $updateFields = array(
-                    'lessonId' => 0
-                );
-                $this->getMaterialService()->updateMaterial($material[0]['id'], 
-                    $updateFields, array('fileId'=>$material[0]['fileId'])
-                );
+                $this->_resetExistMaterialLessonId($material[0]);
             }
         } else {
             $fields = array(
@@ -213,6 +208,17 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             }
         }
         
+    }
+
+    private function _resetExistMaterialLessonId(array $material)
+    {
+        $updateFields = array('lessonId' => 0);
+
+        $this->getMaterialService()->updateMaterial($material['id'], 
+            $updateFields, array('fileId'=>$material['fileId'])
+        );
+
+        return true;
     }
 
     protected function getCourseService()
