@@ -50,25 +50,16 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function searchMaterials($conditions, $orderBy, $start, $limit)
+    public function deleteMaterialsByLessonId($lessonId, $courseType)
     {
-        $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
-
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        return $builder->execute()->fetchAll() ?: array();
+        $sql = "DELETE FROM {$this->table} WHERE lessonId = ? AND type = ?";
+        return $this->getConnection()->executeUpdate($sql, array($lessonId, $courseType));
     }
 
-    public function searchMaterialCount($conditions)
+    public function deleteMaterialsByCourseId($courseId, $courseType)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        $sql = "DELETE FROM {$this->table} WHERE courseId = ? AND type = ?";
+        return $this->getConnection()->executeUpdate($sql, array($courseId, $courseType));
     }
 
     public function deleteMaterialsByFileId($fileId)

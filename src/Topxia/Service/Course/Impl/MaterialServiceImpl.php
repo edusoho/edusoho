@@ -1,16 +1,18 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\MaterialService;
+use Topxia\Common\ArrayToolkit;
 
 class MaterialServiceImpl extends BaseService implements MaterialService
 {
+
 	public function uploadMaterial($material)
 	{
 		$argument = $material;
-		if (!ArrayToolkit::requireds($material, array('courseId', 'fileId','type'))) {
+		if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
 			throw $this->createServiceException('参数缺失，上传失败！');
 		}
 
@@ -83,14 +85,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		return $this->getMaterialDao()->deleteMaterial($materialId);
 	}
 
-	public function deleteMaterialsByLessonId($lessonId)
+	public function deleteMaterialsByLessonId($lessonId, $courseType='course')
 	{
-		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
+		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId, $courseType);
 	}
 
-	public function deleteMaterialsByCourseId($courseId)
+	public function deleteMaterialsByCourseId($courseId, $courseType='course')
 	{
-		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
+		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId, $courseType);
 	}
 
 	public function deleteMaterials($courseId, $fileIds)
@@ -137,12 +139,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function findLessonMaterials($lessonId, $start, $limit)
     {
-        return $this->searchMaterials(
-            array('lessonId' => $lessonId, 'type' => 'course'),
-            array('createdTime', 'DESC'),
-            $start, $limit
-        );
+        return $this->getMaterialDao()->findMaterialsByLessonId($lessonId, $start, $limit);
     }
+
+	public function getMaterialCount($courseId)
+	{
+		return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
+	}
 
 	public function findMaterialsGroupByFileId($courseId, $start, $limit)
     {
@@ -195,7 +198,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             'userId' => $this->getCurrentUser()->id,
             'source' => isset($material['source']) ? $material['source'] : 'coursematerial',
             'createdTime' => time(),
-            'type'        => empty($material['type']) ? 'course' : $material['type']
         );
 
         if (empty($material['fileId'])) {
@@ -225,17 +227,17 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getMaterialDao()
     {
-        return $this->createDao('Course.CourseMaterialDao');
+    	return $this->createDao('Course.CourseMaterialDao');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+    	return $this->createService('Course.CourseService');
     }
 
     protected function getFileService()
     {
-        return $this->createService('Content.FileService');
+    	return $this->createService('Content.FileService');
     }
 
     protected function getUploadFileService()
