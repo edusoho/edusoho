@@ -190,6 +190,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
         }
 
+        $this->getLogger('UploadFileService')->info("initUpload 上传文件： #{$file['id']}");
+
         return $initParams;
     }
 
@@ -220,6 +222,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
+
             $this->addCourseMaterial($file);
 
             $result = $implementor->finishedUpload($file, $params);
@@ -231,7 +234,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
                 'length' => isset($result['length']) ? $result['length'] : 0
             ));
+            
             $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
+
+            $this->getLogger('UploadFileService')->info("finishedUpload 添加文件：#{$file['id']}");
 
             if ($file['targetType'] == 'headLeader') {
                 $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
@@ -565,6 +571,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFileImplementor($implemtor)->addFile($targetType, $targetId, $fileInfo, $originalFile);
 
         $file = $this->getUploadFileDao()->addFile($file);
+
+        $this->getLogService()->info('upload_file', 'add', "添加文件(#{$file['id']})", $file);
+        $this->getLogger('UploadFileService')->info("addFile 添加文件：#{$file['id']}");
 
         return $file;
     }
