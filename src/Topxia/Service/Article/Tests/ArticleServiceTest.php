@@ -23,10 +23,28 @@ class ArticleServiceTest extends BaseTestCase
         $getArticle     = $this->getArticleService()->getArticlePrevious($newArticle['id']);
     }
 
-    // public function testgetArticleByAlias()
-    // {
-    //     // article表里并没有alias字段
-    // }
+    public function testgetArticleNext()
+    {
+        $newArticle     = $this->createArticle();
+        sleep(1);
+        $newArticlesend = $this->createArticle();
+        $getArticle     = $this->getArticleService()->getArticleNext($newArticle['id']);
+
+        $this->assertEquals($newArticlesend['id'], $getArticle['id']);
+    }
+
+    public function testDeleteArticlesByIds()
+    {
+        $newArticle     = $this->createArticle();
+        $newArticlesend = $this->createArticle();
+        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'],$newArticlesend['id']));
+
+
+        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle['id']));
+        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticlesend['id']));
+        
+    }
+
 
     public function testfindAllArticles()
     {
@@ -286,8 +304,7 @@ class ArticleServiceTest extends BaseTestCase
             'tags'          => 'default',
             'tagIds'        => 'default'
         );
-        $article = $this->getArticleService()->createArticle($fileds);
-        return $article;
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createArticlesencond()
@@ -304,8 +321,7 @@ class ArticleServiceTest extends BaseTestCase
             'sourceUrl'     => 'http://try6.edusoho.cn',
             'tags'          => 'default'
         );
-        $article = $this->getArticleService()->createArticle($fileds);
-        return $article;
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createUser($user)
