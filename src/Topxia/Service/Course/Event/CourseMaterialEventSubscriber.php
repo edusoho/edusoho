@@ -93,11 +93,14 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $lesson   = $context['lesson'];
+        $context      = $event->getSubject();
+        $argument     = $context['argument'];
+        $lesson       = $context['lesson'];
+        $sourceLesson = $context['sourceLesson'];
 
-        if (in_array($lesson['type'],array('text','testpaper','live')) && isset($argument['mediaId'])) {
+        if (in_array($lesson['type'],array('text','testpaper','live')) || 
+            ($lesson['mediaId'] == $sourceLesson['mediaId'])
+        ) {
             return false;
         }
 
