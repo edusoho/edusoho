@@ -13,7 +13,15 @@ define(function(require, exports, module) {
 
         setup: function() {
         	var that = this;
-        	var audioPlayer = new MediaElementPlayer('#'+this.element.attr('id'), {
+
+            var $id = $('#'+this.element.attr('id'))
+                .attr('width', '100%')
+                .attr('height', '100%')
+                .css({
+                    width: '100%',
+                    height: '100%'
+                });
+        	var audioPlayer = new MediaElementPlayer($id, {
                 mode:'auto_plugin',
                 enablePluginDebug: false,
                 enableAutosize:true,
