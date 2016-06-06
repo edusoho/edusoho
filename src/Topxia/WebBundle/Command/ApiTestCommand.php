@@ -34,7 +34,6 @@ class ApiTestCommand extends BaseCommand
 
         $result = $api->get('/me');
 
-        var_dump($result);
     }
 
 
