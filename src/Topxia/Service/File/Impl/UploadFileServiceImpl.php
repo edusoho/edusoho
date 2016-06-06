@@ -572,7 +572,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $file = $this->getUploadFileDao()->addFile($file);
 
-        $this->getLogService()->info('upload_file', 'add', "添加文件(#{$file['id']})", $file);
+        $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
         $this->getLogger('UploadFileService')->info("addFile 添加文件：#{$file['id']}");
 
         return $file;
