@@ -162,6 +162,10 @@ class BuildPackageCommand extends BaseCommand
             return str_ireplace('src/MaterialLib/MaterialLibBundle/Resources/public', 'web/bundles/materiallib', $file);
         }
 
+        if (stripos($file, 'src/Org/OrgBundle/Resources/public') === 0) {
+            return str_ireplace('src/Org/OrgBundle/Resources/public', 'web/bundles/org', $file);
+        }
+
         return null;
     }
 
