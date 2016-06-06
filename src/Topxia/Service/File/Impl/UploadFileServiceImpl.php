@@ -220,7 +220,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getUploadFileInitDao()->deleteFile($file['id']);
 
             $file = $this->getUploadFileDao()->addFile($file);
-            $this->addCourseMaterial($file);
 
             $result = $implementor->finishedUpload($file, $params);
 
@@ -242,6 +241,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                     }
                 }
             }
+
+            $this->dispatchEvent("upload.file.finish",array('file' => $file));
 
             $connection->commit();
             return $file;
@@ -1044,18 +1045,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $key;
     }
 
-    protected function addCourseMaterial($file)
-    {
-        $material = array();
-        if ($file['targetType'] == 'courselesson' || $file['targetType'] == 'coursematerial') {
-            $file['courseId'] = $file['targetId'];
-            $file['fileId']   = $file['id'];
-            $material         = $this->getMaterialService()->uploadMaterial($file);
-        }
-
-        return $material;
-    }
-
     protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
@@ -1098,11 +1087,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
-    }
-
-    protected function getMaterialService()
-    {
-        return $this->createService('Course.MaterialService');
     }
 
     protected function getUploadFileTagDao()
