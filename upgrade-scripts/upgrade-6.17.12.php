@@ -51,7 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function logger($level, $message)
     {
-        $data = date("Y-m-d H:i:s").' ['.$level.'] 6.17.9 '.$message.PHP_EOL;
+        $data = date("Y-m-d H:i:s").' ['.$level.'] 6.17.12 '.$message.PHP_EOL;
         file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
     }
 
