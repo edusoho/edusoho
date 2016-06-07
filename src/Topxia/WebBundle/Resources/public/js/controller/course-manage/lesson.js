@@ -156,11 +156,15 @@ define(function(require, exports, module) {
                 var $elem = this.elem;
                 $elem.addClass('sticky');
                 $elem.width($elem.parent().width() - 10);
+                $elem.css({
+                    bottom: 'auto'
+                });
             } else {
                 this.elem.removeClass('sticky');
                 this.elem.width('auto');
             }
         });
+
 
         $("#course-item-list .item-actions .btn-link").tooltip();
         $("#course-item-list .fileDeletedLesson").tooltip();
