@@ -46,6 +46,10 @@ class EditorController extends BaseController
             }
 
             $record = $this->getFileService()->uploadFile($token['group'], $file);
+
+            $parsed = $this->getFileService()->parseFileUri($record['uri']);
+            FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
+
             $url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
             if ($isWebuploader) {
