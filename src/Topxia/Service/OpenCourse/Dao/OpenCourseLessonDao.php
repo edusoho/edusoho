@@ -22,5 +22,7 @@ interface OpenCourseLessonDao
 
     public function deleteLesson($id);
 
+    public function deleteLessonsByCourseId($id);
+
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId);
 }

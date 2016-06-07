@@ -2156,9 +2156,8 @@ open_course_manage_files_upload:
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles }
 
 open_course_manage_files_delete:
-    pattern:  /open/course/{id}/files/delete/{type}
+    pattern:  /open/course/{id}/manage/materials/delete
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
-    methods: [POST]
 
 open_course_manage_course_pick:
     pattern: /open/course/{id}/manage/recommend/pick/{filter}

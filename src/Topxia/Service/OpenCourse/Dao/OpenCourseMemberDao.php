@@ -22,6 +22,8 @@ interface OpenCourseMemberDao
 
     public function deleteMember($id);
 
+    public function deleteMembersByCourseId($courseId);
+
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
 }

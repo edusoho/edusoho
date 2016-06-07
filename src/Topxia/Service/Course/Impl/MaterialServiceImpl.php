@@ -96,11 +96,16 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId, $courseType);
 	}
 
-	public function deleteMaterials($courseId, $fileIds)
+	public function deleteMaterials($courseId, $fileIds, $courseType='course')
 	{
 		$materials = $this->searchMaterials(
-			array('courseId' => $courseId, 'fileIds' => $fileIds),
-			array('createdTime','DESC'), 0, PHP_INT_MAX
+			array(
+                'courseId' => $courseId,
+                'fileIds'  => $fileIds,
+                'type'     => $courseType
+            ),
+			array('createdTime','DESC'),
+            0, PHP_INT_MAX
 		);
 
 		if (!$materials) {
@@ -147,16 +152,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
 	}
-
-	public function findMaterialsGroupByFileId($courseId, $start, $limit)
-    {
-        return $this->getMaterialDao()->findMaterialsGroupByFileId($courseId, $start, $limit);
-    }
-
-    public function findMaterialCountGroupByFileId($courseId)
-    {
-        return $this->getMaterialDao()->findMaterialCountGroupByFileId($courseId);
-    }
 
 	public function searchMaterials($conditions, $orderBy, $start, $limit)
 	{

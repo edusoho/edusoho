@@ -85,7 +85,21 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function deleteCourse($id)
     {
-        return $this->getOpenCourseDao()->deleteCourse($id);
+        $course = $this->tryAdminCourse($id);
+
+        $this->getOpenCourseMemberDao()->deleteMembersByCourseId($id);
+        $this->getOpenCourseLessonDao()->deleteLessonsByCourseId($id);
+
+        $this->getOpenCourseDao()->deleteCourse($id);
+
+        if ($course["type"] == "liveOpen") {
+            $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id, 'liveOpen');
+        }
+
+        $this->getLogService()->info('openCourse', 'delete', "删除公开课课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent("open.course.delete", $course);
+
+        return true;
     }
 
     public function waveCourse($id, $field, $diff)
@@ -140,6 +154,27 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $course;
     }
 
+    public function tryAdminCourse($courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($user->id)) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+        }
+
+        return $course;
+    }
+
     public function changeCoursePicture($courseId, $data)
     {
         $course = $this->getCourse($courseId);
@@ -162,7 +197,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->_deleteNotUsedPictures($course);
 
-        $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
+        $this->getLogService()->info('openCourse', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
 
         $update_picture = $this->getOpenCourseDao()->updateCourse($courseId, $fields);
 
@@ -424,20 +459,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedLesson = $this->getOpenCourseLessonDao()->updateLesson($lessonId, $fields);
 
-        if (array_key_exists('mediaId', $fields)) {
-            if ($fields['mediaId'] != $lesson['mediaId']) {
-                if (!empty($fields['mediaId'])) {
-                    $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
-                }
-
-                if (!empty($lesson['mediaId'])) {
-                    $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-                }
-            }
-        }
-
         $updatedLesson['fields'] = $lesson;
-        $this->dispatchEvent("open.course.lesson.update", array('lesson' => $updatedLesson));
+        $this->dispatchEvent("open.course.lesson.update", array('lesson' => $updatedLesson, 'sourceLesson' => $lesson));
 
         return $updatedLesson;
     }
@@ -469,7 +492,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             return $replayList;
         }
 
-        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, 'openCourse');
+        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, 'liveOpen');
 
         if (isset($replayList['data']) && !empty($replayList['data'])) {
             $replayList = json_decode($replayList["data"], true);
@@ -695,7 +718,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
         }
 
-        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+        $this->getLogService()->info('openCourse', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->updateCourse($courseId, $fields);

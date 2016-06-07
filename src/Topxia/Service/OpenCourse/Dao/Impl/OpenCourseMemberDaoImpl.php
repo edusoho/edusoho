@@ -98,6 +98,13 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         return $result;
     }
 
+    public function deleteMembersByCourseId($courseId)
+    {
+        $result = $this->getConnection()->delete($this->table, array('courseId' => $courseId));
+        $this->clearCached();
+        return $result;
+    }
+
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

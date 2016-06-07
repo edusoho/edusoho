@@ -94,29 +94,24 @@ class OpenCourseLessonManageController extends BaseController
         }
 
         $user       = $this->getCurrentUser();
-        $userId     = $user['id'];
         $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $filePath   = "openCourselesson/{$course['id']}";
+        $filePath   = "opencourselesson/{$course['id']}";
         $fileKey    = "{$filePath}/".$randString;
         $convertKey = $randString;
-
-        $targetType = 'openCourseLesson';
-        $targetId   = $course['id'];
-
-        $setting = $this->setting('storage');
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('TopxiaWebBundle:OpenCourseLessonManage:lesson-modal.html.twig', array(
             'course'         => $course,
-            'targetType'     => $targetType,
-            'targetId'       => $targetId,
+            'targetType'     => 'opencourselesson',
+            'targetId'       => $course['id'],
             'filePath'       => $filePath,
             'fileKey'        => $fileKey,
             'convertKey'     => $convertKey,
-            'storageSetting' => $setting,
+            'storageSetting' => $this->setting('storage'),
             'features'       => $features,
-            'parentId'       => $parentId
+            'parentId'       => $parentId,
+            'courseType'     => 'openCourse'
         ));
     }
 
@@ -182,11 +177,12 @@ class OpenCourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
+            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
                 'source' => $lesson['mediaSource'],
-                'name'   => $lesson['mediaName'],
+                'name'   => $name,
                 'uri'    => $lesson['mediaUri']
             );
         }
@@ -194,15 +190,10 @@ class OpenCourseLessonManageController extends BaseController
         list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
 
         $user       = $this->getCurrentUser();
-        $userId     = $user['id'];
         $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $filePath   = "openCourseLesson/{$course['id']}";
+        $filePath   = "opencourselesson/{$course['id']}";
         $fileKey    = "{$filePath}/".$randString;
         $convertKey = $randString;
-
-        $targetType = 'oepnCourseLesson';
-        $targetId   = $course['id'];
-        $setting    = $this->setting('storage');
 
         $lesson['title'] = str_replace(array('"', "'"), array('&#34;', '&#39;'), $lesson['title']);
 
@@ -212,12 +203,12 @@ class OpenCourseLessonManageController extends BaseController
             'course'         => $course,
             'lesson'         => $lesson,
             'file'           => $file,
-            'targetType'     => $targetType,
-            'targetId'       => $targetId,
+            'targetType'     => 'opencourselesson',
+            'targetId'       => $course['id'],
             'filePath'       => $filePath,
             'fileKey'        => $fileKey,
             'convertKey'     => $convertKey,
-            'storageSetting' => $setting,
+            'storageSetting' => $this->setting('storage'),
             'features'       => $features
         ));
     }
@@ -290,11 +281,13 @@ class OpenCourseLessonManageController extends BaseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             array(
+                'courseId' => $courseId,
                 'lessonId' => $lesson['id'],
+                'source'   => 'opencoursematerial',
                 'type'     => 'openCourse'
             ),
             array('createdTime', 'DESC'),
-            0, 100
+            0, PHP_INT_MAX
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
             'course'         => $course,
@@ -302,6 +295,7 @@ class OpenCourseLessonManageController extends BaseController
             'materials'      => $materials,
             'storageSetting' => $this->setting('storage'),
             'targetType'     => 'opencoursematerial',
+            'courseType'     => 'openCourse'
         ));
     }
 
@@ -322,7 +316,7 @@ class OpenCourseLessonManageController extends BaseController
             }
 
             $fields['courseId'] = $course['id'];
-            $fields['lessonId'] = $lesson['id'];
+            $fields['lessonId'] = $lessonId;
             $fields['type']     = 'openCourse';
             $fields['source']   = 'opencoursematerial';
 
@@ -334,16 +328,17 @@ class OpenCourseLessonManageController extends BaseController
             ));
         }
 
-        return $this->render('TopxiaWebBundle:CourseMaterial:upload-modal.html.twig', array(
-            'form'   => $form->createView(),
-            'course' => $course
-        ));
     }
 
     public function materialDeleteAction(Request $request, $courseId, $materialId)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
-        $this->getMaterialService()->deleteMaterial($courseId, $materialId);
+        
+        $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
+        if ($material) {
+            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>$lessonId,'materialId'=>$materialId,'fileId'=>$material['fileId']));
+        }
+        
         return $this->createJsonResponse(true);
     }
 
@@ -357,6 +352,11 @@ class OpenCourseLessonManageController extends BaseController
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
         return array($minutes, $seconds);
+    }
+
+    protected function hasSelfMedia($lesson)
+    {
+        return !in_array($lesson['type'], array('liveOpen')) && $lesson['mediaSource'] == 'self';
     }
 
     protected function getAppService()

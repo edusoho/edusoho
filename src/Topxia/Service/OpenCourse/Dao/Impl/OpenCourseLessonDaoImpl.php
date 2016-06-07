@@ -110,6 +110,13 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
         return $result;
     }
 
+    public function deleteLessonsByCourseId($id)
+    {
+        $result = $this->getConnection()->delete($this->table, array('courseId' => $id));
+        $this->clearCached();
+        return $result;
+    }
+
     public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId = 0)
     {
         $addtionalCondition = ";";

@@ -119,7 +119,7 @@ class CourseLessonManageController extends BaseController
 
     protected function hasSelfMedia($lesson)
     {
-        return !in_array($lesson['type'], array('text','live','testpaper')) and $lesson['mediaSource'] == 'self';
+        return !in_array($lesson['type'], array('text','live','testpaper')) && $lesson['mediaSource'] == 'self';
     }
 
     public function createTestPaperAction(Request $request, $id)

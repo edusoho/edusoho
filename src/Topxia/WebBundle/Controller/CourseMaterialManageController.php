@@ -41,6 +41,7 @@ class CourseMaterialManageController extends BaseController
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lessonId;
             $fields['type']     = 'course';
+            $fields['source']   = 'coursematerial';
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
@@ -49,11 +50,6 @@ class CourseMaterialManageController extends BaseController
                 'course'   => $course
             ));
         }
-
-        return $this->render('TopxiaWebBundle:CourseMaterial:upload-modal.html.twig', array(
-            'form'   => $form->createView(),
-            'course' => $course
-        ));
     }
 
     public function deleteAction(Request $request, $courseId, $lessonId, $materialId)
@@ -78,7 +74,16 @@ class CourseMaterialManageController extends BaseController
             $conditions['type'] = $type;
         }
 
-        $courseMaterials = $this->getMaterialService()->findMaterialsGroupByFileId($course['id'], 0, PHP_INT_MAX);
+        $courseType = empty($request->query->get('courseType')) ? 'course' : $request->query->get('courseType');
+        $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            array(
+                'courseId' => $course['id'],
+                'type' =>$courseType
+            ),
+            array('createdTime','DESC'),
+            0,PHP_INT_MAX
+        );
+
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $paginator = new Paginator(
             $request,

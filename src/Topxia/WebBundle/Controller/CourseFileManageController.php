@@ -13,18 +13,20 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        $conditions = array('courseId' => $id, 'type' => 'course');
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
-            $course['id'] = $course['parentId'];
+            $conditions['courseId'] = $course['parentId'];
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getMaterialService()->findMaterialCountGroupByFileId($course['id']),
+            $this->getMaterialService()->searchMaterialCountGroupByFileId($conditions),
             20
         );
 
-        $materials = $this->getMaterialService()->findMaterialsGroupByFileId(
-            $course['id'], 
+        $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            $conditions, 
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
@@ -128,7 +130,7 @@ class CourseFileManageController extends BaseController
                 }
             } 
             
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
+            $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'course');
  
             return $this->createJsonResponse(true);
         }

@@ -13,7 +13,7 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $conditions = array(
-            'targetId' => $course['id'],
+            'courseId' => $course['id'],
             'type'     => 'openCourse'
         );
 
@@ -64,9 +64,7 @@ class OpenCourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
-        if ($id != 0) {
-            $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        }
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -88,16 +86,11 @@ class OpenCourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
             'course'         => $course,
-            'storageSetting' => $storageSetting,
+            'storageSetting' => $this->setting('storage', array()),
             'targetType'     => $targetType,
             'targetId'       => $id
         ));
@@ -111,33 +104,45 @@ class OpenCourseFileManageController extends BaseController
             $course = null;
         }
 
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $fileExts       = "";
+        $fileExts = '';
 
-        if ("courselesson" == $targetType) {
+        if ('opencourselesson' == $targetType) {
             $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
         }
 
         return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
             'course'         => $course,
-            'storageSetting' => $storageSetting,
+            'storageSetting' => $this->setting('storage', array()),
             'targetType'     => $targetType,
             'targetId'       => $id,
             'fileExts'       => $fileExts
         ));
     }
 
-    public function deleteCourseFilesAction(Request $request, $id, $type)
+    public function deleteCourseFilesAction(Request $request, $id)
     {
-        if (!empty($id)) {
-            $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+ 
+            $formData = $request->request->all();
+
+            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
+                foreach ($formData['ids'] as $key => $fileId) {
+                    if ($this->getUploadFileService()->canManageFile($fileId)) {
+                        $this->getUploadFileService()->deleteFile($fileId);
+                    }
+                }
+            } 
+            
+            $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
+ 
+            return $this->createJsonResponse(true);
         }
-
-        $ids = $request->request->get('ids', array());
-
-        $this->getUploadFileService()->deleteFiles($ids);
-
-        return $this->createJsonResponse(true);
+        
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course' => $course,
+        ));
     }
 
     public function lessonMaterialModalAction(Request $request, $courseId, $lessonId)
@@ -168,11 +173,6 @@ class OpenCourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getMaterialService()
