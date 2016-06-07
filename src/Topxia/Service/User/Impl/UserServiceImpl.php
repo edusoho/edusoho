@@ -156,7 +156,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->updateUser(
             $userId, 
-            array('orgCode' => $org['orgCode'],'orgId' => $org['orgId'])
+            array('orgCode' => $org['orgCode'],'orgId' => $org['id'])
         );
 
         return $user;
