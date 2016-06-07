@@ -38,8 +38,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
         }
 
         );
