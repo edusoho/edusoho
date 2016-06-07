@@ -17,4 +17,6 @@ interface BlockDao
     public function findBlocks($condition, $sort, $start, $limit);
 
     public function updateBlock($id, array $fields);
+
+    public function getBlockByTemplateId($blockTemplateId,$orgId=0)
 }

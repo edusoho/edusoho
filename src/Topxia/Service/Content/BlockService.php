@@ -6,6 +6,8 @@ interface BlockService
 
 	public function getBlock($id);
 
+	public function getBlockByTemplateId($blockTemplateId,$orgId=0);
+
 	public function getBlockByCode($code);
 
 	public function searchBlocks($condition, $sorty, $start, $limit);

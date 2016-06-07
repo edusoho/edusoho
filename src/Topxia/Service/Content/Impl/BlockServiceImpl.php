@@ -201,6 +201,11 @@ class BlockServiceImpl extends BaseService implements BlockService
             'data'    => $history['data']
         ));
     }
+    public function getBlockByTemplateId($blockTemplateId,$orgId=0){
+        $blockTemp = $this->getBlockTemplateService()->getBlockTemplate($blockTemplateId);
+        $block = $this->getBlockDao()->getBlockByTemplateId($blockTemplateId,$orgId);
+        
+    }
 
     protected function getBlockDao()
     {
@@ -220,5 +225,10 @@ class BlockServiceImpl extends BaseService implements BlockService
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getBlockTemplateService()
+    {
+        return $this->createService('Content.BlockTemplateService');
     }
 }

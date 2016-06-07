@@ -163,7 +163,7 @@ class BlockController extends BaseController
         ));
     }
 
-    public function visualEditAction(Request $request, $blockId)
+    public function visualEditAction(Request $request, $blockTemplateId)
     {
         $block = $this->getBlockService()->getBlock($blockId);
 
