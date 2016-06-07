@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
 
-    var SelectTree = require('edusoho.selecttree');
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
@@ -8,15 +7,10 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('es-ckeditor');
+    
+    require('../widget/category-select').run('article');
 
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
-
         var $form = $("#article-form");
         $modal = $form.parents('.modal');
 

@@ -289,7 +289,7 @@ class EduCloudController extends BaseController
             $smsStatus['sms_enabled']     = 1;
             $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
 
-            if (isset($status['error']) && $status['error'] == '不存在短信账号') {
+            if (isset($status['error']) && $status['error'] == '不存在短信账号' || $status['status'] !=='used') {
                 $info   = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
                 $status = $api->get('/me/sms_account');
             }

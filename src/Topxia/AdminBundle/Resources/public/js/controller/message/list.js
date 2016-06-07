@@ -1,16 +1,9 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var SelectTree = require('edusoho.selecttree');
     require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
         var $container = $('#message-table-container');
         var $table = $("#message-table");
         require('../../util/short-long-text')($table);

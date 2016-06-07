@@ -25,11 +25,26 @@
   </div>
 
   <div class="form-group">
-    <input type="text" id="module" name="module" value="{{app.request.query.get('module')}}" class="form-control" placeholder="模块名" style="width:100px;">
+    <select class="form-control" name="module" id="log-module">
+        <option value="0">--所有模块--</option>
+        {% for key, value in moduleDicts %}
+              <option value="{{key}}"  {% if app.request.query.get('module') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+        {% endfor %}
+    </select>
   </div>
 
   <div class="form-group">
-    <input type="text" id="action" name="action" value="{{app.request.query.get('action')}}" class="form-control" placeholder="操作名" style="width:100px;">
+    <select class="form-control" name="action" id="log-action" data-url="{{path('admin_logs_action_dicts')}}">
+       {% if actions|default(null) %}
+          <option value="0">--所有模块--</option>
+          {% for key, value in actions %}
+                <option value="{{key}}" {% if app.request.query.get('action') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
+          {% endfor %}
+        {% else %}
+          <option value="0">--请选择模块--</option>
+      {% endif %}
+    </select>
+  {#   <input type="text" id="action" name="action" value="{{app.request.query.get('action')}}" class="form-control" placeholder="操作名" style="width:100px;"> #}
   </div>
 
   <div class="form-group">

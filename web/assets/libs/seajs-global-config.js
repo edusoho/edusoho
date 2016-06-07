@@ -96,7 +96,9 @@ seajs.config({
 
     charset: 'utf-8',
 
-    debug: app.debug
+    debug: app.debug,
+
+    plugins: ['text']
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;

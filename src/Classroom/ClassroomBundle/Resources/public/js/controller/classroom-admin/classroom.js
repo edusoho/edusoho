@@ -2,15 +2,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var SelectTree = require('edusoho.selecttree');
 
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#orgSelectTree",
-                name: 'orgCode'
-            });
-        }
         var $table = $('#classroom-table');
 
         $table.on('click', '.close-classroom,.open-classroom,.cancel-recommend-classroom', function() {

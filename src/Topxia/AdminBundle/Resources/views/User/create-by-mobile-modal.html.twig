@@ -47,22 +47,8 @@
       </div>
     </div>
 
-    {% set enableOrg = setting('magic.enable_org','0')%}
-    {% if enableOrg %}
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="orgCode">组织机构</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input id="modalOrgSelectTree" 
-          value="{{  app.user.orgName|default("--选择组织机构--"|trans) }}" autocomplete="off"
-          class="form-control"
-          data-url ="{{ path('org_tree') }}" 
-          data-code ="{{ app.user.orgCode }}"
-        />
-      </div>
-    </div>
-    {% endif %}
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
+    
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label for="roles">用户权限</label>

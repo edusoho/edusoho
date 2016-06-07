@@ -1,20 +1,9 @@
 define(function(require, exports, module) {
-    "use strict";
-
     var Notify = require('common/bootstrap-notify');
-    var SelectTree = require('edusoho.selecttree');
-
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        if ($("#orgSelectTree").val()) {
-            var selectTree = new SelectTree({
-                element: "#modalOrgSelectTree",
-                name: 'orgCode',
-                modal: true
-            });
-        }
-
-        var Validator = require('bootstrap.validator');
-        require('common/validator-rules').inject(Validator);
+        require('orgbundle/controller/org/org-tree-select').run();
 
         var validator = new Validator({
             element: '#user-edit-form',

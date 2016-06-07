@@ -305,7 +305,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map = array();
 
         foreach ($materials as $material) {
-            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId'));
+            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId','source'));
 
             $fields['courseId'] = $newCourse['id'];
             $fields['copyId']   = $material['id'];

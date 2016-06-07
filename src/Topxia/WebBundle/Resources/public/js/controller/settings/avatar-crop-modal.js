@@ -4,9 +4,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $form = $("#avatar-crop-form"),
-            $picture = $("#avatar-crop");
-
         var imageCrop = new ImageCrop({
             element: "#avatar-crop",
             group: "user",
@@ -20,11 +17,13 @@ define(function(require, exports, module) {
                 images: response
             }, function(response) {
                 if (response.status === 'success') {
-                    $("#settings-avatar-form img").attr('src', response.avatar)
+                    $("#profile_avatar").val(response.avatar);
+                    $("#user-profile-form img").attr('src', response.avatar);
+                    $("#profile_avatar").blur();
                     $("#modal").modal('hide');
                     Notify.success('上传成功');
                 } else {
-                      Notify.success('上传失败,请重试');
+                    Notify.success('上传失败,请重试');
                 }
             });
         });
