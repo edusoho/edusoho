@@ -40,9 +40,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         $settingName = $this->getSettingName($name);
         return isset($this->cached[$settingName]) ? unserialize($this->cached[$settingName]) : $default;
     }
-    private function getSettingName($name){
-        return  $this->getNameSpace() . $name ;
-    }
+
     public function delete($name)
     {
         $this->getSettingDao()->deleteSettingByName($name);
@@ -68,6 +66,11 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
+    // TODO: org
+    protected function getSettingName($name){
+        return  $this->getNameSpace() . $name ;
+    }
+
     protected function clearCache()
     {
         $this->getCacheService()->clear(self::CACHE_NAME);
@@ -84,7 +87,7 @@ class SettingServiceImpl extends BaseService implements SettingService
         return $this->createDao('System.SettingDao');
     }
 
-    public function getNameSpace(){
+    protected function getNameSpace(){
         return self::NAME_SPACE;
     } 
 }

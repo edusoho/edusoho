@@ -56,7 +56,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $conditions;
     }
 
-//TO DO
+    // TODO: org
     public function getOpenedNavigationsTreeByType($type)
     {   
         $user = $this->getCurrentUser();
