@@ -22,6 +22,8 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert material error.');
         }
+
+        return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
     public function updateMaterial($id, $fields)
@@ -110,6 +112,28 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchMaterialsGroupByFileId($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->groupBy('fileId')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchMaterialCountGroupByFileId($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(DISTINCT(fileId))');
         return $builder->execute()->fetchColumn(0);
     }
 

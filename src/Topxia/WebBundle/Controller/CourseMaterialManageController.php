@@ -24,7 +24,6 @@ class CourseMaterialManageController extends BaseController
             'materials'      => $materials,
             'storageSetting' => $this->setting('storage'),
             'targetType'     => 'coursematerial',
-            'targetId'       => $course['id']
         ));
     }
 

@@ -25,6 +25,8 @@
     </div>
   </div>
 
+  {% set targetType = targetType|default('coursematerial') %}
+  {% set targetId   = course.id %}
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
       {% include 'TopxiaWebBundle:CourseMaterialManage:file-chooser.html.twig' %}

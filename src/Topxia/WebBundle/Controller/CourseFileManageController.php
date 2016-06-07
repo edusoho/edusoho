@@ -23,13 +23,13 @@ class CourseFileManageController extends BaseController
             20
         );
 
-        $files = $this->getMaterialService()->findMaterialsGroupByFileId(
+        $materials = $this->getMaterialService()->findMaterialsGroupByFileId(
             $course['id'], 
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
 
-        $files      = $this->_materialsSort($files);
+        $files      = $this->getMaterialService()->findFullFilesAndSort($materials);
         $fileIds    = ArrayToolkit::column($files,'fileId');
         $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
 
@@ -136,27 +136,6 @@ class CourseFileManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
             'course' => $course,
         ));
-    }
-
-    private function _materialsSort($materials)
-    {
-        if (!$materials) {
-            return array();
-        }
-
-        $fileIds = ArrayToolkit::column($materials,'fileId');
-        $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
-
-        $files     = ArrayToolkit::index($files, 'id');
-        $sortFiles = array();
-        foreach ($materials as $key => $material) {
-            if (isset($files[$material['fileId']])) {
-                $file = array_merge($material, $files[$material['fileId']]);
-                $sortFiles[$key] = $file;
-            }
-        }
-
-        return $sortFiles;
     }
 
     protected function getCourseService()

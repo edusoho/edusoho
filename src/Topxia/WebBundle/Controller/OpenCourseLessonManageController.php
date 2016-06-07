@@ -289,7 +289,10 @@ class OpenCourseLessonManageController extends BaseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         $materials = $this->getMaterialService()->searchMaterials(
-            array('lessonId' => $lesson['id'], 'type' => 'openCourse'),
+            array(
+                'lessonId' => $lesson['id'],
+                'type'     => 'openCourse'
+            ),
             array('createdTime', 'DESC'),
             0, 100
         );
@@ -298,8 +301,7 @@ class OpenCourseLessonManageController extends BaseController
             'lesson'         => $lesson,
             'materials'      => $materials,
             'storageSetting' => $this->setting('storage'),
-            'targetType'     => 'coursematerial',
-            'targetId'       => $course['id']
+            'targetType'     => 'opencoursematerial',
         ));
     }
 
@@ -322,6 +324,7 @@ class OpenCourseLessonManageController extends BaseController
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lesson['id'];
             $fields['type']     = 'openCourse';
+            $fields['source']   = 'opencoursematerial';
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 

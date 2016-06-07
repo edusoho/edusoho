@@ -200,7 +200,7 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="file-chooser-upload-pane">
-        {% set token = uploader_token('coursematerial', course.id, 'private') %}
+        {% set token = uploader_token(targetType, course.id, 'private') %}
         <div class="balloon-uploader" id="batch-uploader"
           data-init-url="{{ path('uploader_init', {token:token}) }}"
           data-finish-url="{{ path('uploader_finished', {token:token}) }}"

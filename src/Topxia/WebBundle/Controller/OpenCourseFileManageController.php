@@ -12,51 +12,37 @@ class OpenCourseFileManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $type = $request->query->get('type');
-        //$type = 'opencourselesson';
-        $type = in_array($type, array('opencourselesson', 'coursematerial')) ? $type : 'opencourselesson';
-
         $conditions = array(
-            'targetType' => $type,
-            'targetId'   => $course['id']
+            'targetId' => $course['id'],
+            'type'     => 'openCourse'
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFileCount($conditions),
+            $this->getMaterialService()->searchMaterialCountGroupByFileId($conditions),
             20
         );
 
-        $files = $this->getUploadFileService()->searchFiles(
-            $conditions,
-            'latestCreated',
-            $paginator->getOffsetCount(),
+        $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            $conditions, 
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
 
-        foreach ($files as $key => $file) {
-            $files[$key]['metas2'] = json_decode($file['metas2'], true) ?: array();
-
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
-            $useNum = $this->getOpenCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-
-            $manageFilesUseNum = $this->getMaterialService()->searchMaterialCount(array('fileId' => $file['id'], 'type' => 'openCourse'));
-
-            $files[$key]['useNum'] = $useNum;
-        }
+        $files      = $this->getMaterialService()->findFullFilesAndSort($materials);
+        $fileIds    = ArrayToolkit::column($files,'fileId');
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'           => $type,
-            'course'         => $course,
-            'courseLessons'  => $files,
-            'users'          => ArrayToolkit::index($users, 'id'),
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'storageSetting' => $storageSetting
+            'course'     => $course,
+            'files'      => $files,
+            'users'      => ArrayToolkit::index($users, 'id'),
+            'paginator'  => $paginator,
+            'now'        => time(),
+            'filesQuote' => $filesQuote
         ));
     }
 

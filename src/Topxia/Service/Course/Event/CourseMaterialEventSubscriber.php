@@ -153,6 +153,10 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $argument  = $context['argument'];
         $material  = $context['material'];
 
+        if ($material['type'] == 'openCourse') {
+            return false;
+        }
+
         $courses   = $this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
