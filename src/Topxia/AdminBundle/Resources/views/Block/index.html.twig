@@ -14,9 +14,9 @@
     </tr>
   </thead>
   <tbody>
-    {% if blocks %}
-      {% for block in blocks %}
-        {% set latestHistory = latestHistories[block.id]|default(null) %}
+    {% if blockTemplates %}
+      {% for blockTemplate in blockTemplates %}
+        {% set latestHistory = latestHistories[blockTemplate.id]|default(null) %}
         {% set latestUpdateUser = users[latestHistory.userId|default(null)]|default(null) %}
         {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
         

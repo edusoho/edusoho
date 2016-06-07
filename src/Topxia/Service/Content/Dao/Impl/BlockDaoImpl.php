@@ -27,6 +27,11 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         );
     }
 
+    public function getBlockByTemplateId($blockTemplateId,$orgId=0)
+    {
+        return null;
+    }
+
     public function searchBlockCount($condition)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table}";
@@ -36,6 +41,12 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         }
 
         return $this->getConnection()->fetchColumn($sql, array());
+    }
+
+    public function getBlocksByBlockTemplateIdAndOrgId($blockTemplateId,$orgId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}' AND orgId =  '{$orgId}' ";
+        return $this->getConnection()->fetchAssoc($sql, array($blockTemplateId,$orgId)) ? : null;
     }
 
     protected function createBlockQueryBuilder($conditions)

@@ -2,7 +2,6 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
@@ -14,57 +13,66 @@ use Topxia\Common\StringToolkit;
 
 class BlockController extends BaseController
 {
-    public function indexAction(Request $request, $category='')
+    public function indexAction(Request $request, $category = '')
     {
+        $user = $this->getCurrentUser();
 
-        list($condation, $sort)= $this->dealQueryFields($category);
+        list($condation, $sort) = $this->dealQueryFields($category);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getBlockService()->searchBlockCount($condation),
+            $this->getBlockTemplateService()->searchBlockTemplateCount($condation),
             20
         );
-        $findedBlocks = $this->getBlockService()->searchBlocks($condation, $sort, $paginator->getOffsetCount(),
+        $BlockTemplates = $this->getBlockTemplateService()->searchBlockTemplates($condation, $sort, $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
-        
-        $blockIds = ArrayToolkit::column($findedBlocks, 'id');
+
+        $blockTemplateIds = ArrayToolkit::column($BlockTemplates, 'id');
+
+        $blocks = $this->getBlockService()->getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $user['orgId']);
+        $blockIds = ArrayToolkit::column($blocks, 'id');
         $latestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
+
         $userIds = ArrayToolkit::column($latestHistories, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
-            'blocks'=>$findedBlocks,
-            'users'=>$users,
+            'blockTemplates' => $BlockTemplates,
+            'users' => $users,
             'latestHistories' => $latestHistories,
             'paginator' => $paginator,
-            'type' => $category
+            'type' => $category,
         ));
     }
     protected function dealQueryFields($category)
     {
         $sort = array();
         $condation = array();
-        if($category =='lastest'){
+        if ($category == 'lastest') {
             $sort = array('updateTime', 'DESC');
-        }elseif($category != 'all'){
-          if($category == 'theme'){
-            $theme = $this->getSettingService()->get('theme', array());
-            $category = $theme['uri'];
-          }
-           $condation['category'] =  $category;
+        } elseif ($category != 'all') {
+            if ($category == 'theme') {
+                $theme = $this->getSettingService()->get('theme', array());
+                $category = $theme['uri'];
+            }
+            $condation['category'] = $category;
         }
+
         return array($condation,  $sort);
     }
 
-    public function blockMatchAction(Request $request){
+    public function blockMatchAction(Request $request)
+    {
         $likeString = $request->query->get('q');
-        $blocks = $this->getBlockService()->searchBlocks(array('title'=>$likeString), array('updateTime', 'DESC'), 0, 10);
+        $blocks = $this->getBlockService()->searchBlocks(array('title' => $likeString), array('updateTime', 'DESC'), 0, 10);
+
         return $this->createJsonResponse($blocks);
     }
     public function previewAction(Request $request, $id)
     {
         $blockHistory = $this->getBlockService()->getBlockHistory($id);
+
         return $this->render('TopxiaAdminBundle:Block:blockhistory-preview.html.twig', array(
-            'blockHistory'=>$blockHistory
+            'blockHistory' => $blockHistory,
         ));
     }
 
@@ -81,21 +89,21 @@ class BlockController extends BaseController
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
             5
         );
-        
+
         $templateData = array();
         $templateItems = array();
         if ($block['mode'] == 'template') {
             $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
-            $templateData = json_decode($block['templateData'],true);
-        } 
+            $templateData = json_decode($block['templateData'], true);
+        }
 
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
-            $block['id'], 
+            $block['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         foreach ($blockHistorys as &$blockHistory) {
-            $blockHistory['templateData'] = json_decode($blockHistory['templateData'],true);
+            $blockHistory['templateData'] = json_decode($blockHistory['templateData'], true);
         }
 
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
@@ -106,31 +114,32 @@ class BlockController extends BaseController
             $templateData = array();
             if ($block['mode'] == 'template') {
                 $template = $block['template'];
-                
-                $template = str_replace(array("(( "," ))","((  ","  )"),array("((","))","((","))"),$template); 
-                
-                $content = "";
-                
-                foreach ($fields as $key => $value) {   
+
+                $template = str_replace(array('(( ', ' ))', '((  ', '  )'), array('((', '))', '((', '))'), $template);
+
+                $content = '';
+
+                foreach ($fields as $key => $value) {
                     $content = str_replace('(('.$key.'))', $value, $template);
                     break;
                 }
-                foreach ($fields as $key => $value) {   
+                foreach ($fields as $key => $value) {
                     $content = str_replace('(('.$key.'))', $value, $content);
                 }
                 $templateData = $fields;
-                $fields = "";
+                $fields = '';
                 $fields['content'] = $content;
                 $fields['templateData'] = json_encode($templateData);
             }
-            
+
             $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'latestUpdateUser'=>$latestUpdateUser
+                'block' => $block, 'latestUpdateUser' => $latestUpdateUser,
             ));
-            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));          
+
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
@@ -139,7 +148,7 @@ class BlockController extends BaseController
             'historyUsers' => $historyUsers,
             'paginator' => $paginator,
             'templateItems' => $templateItems,
-            'templateData' => $templateData
+            'templateData' => $templateData,
         ));
     }
 
@@ -148,18 +157,18 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlock($block);
 
         if ('POST' == $request->getMethod()) {
-
             $fields = $request->request->all();
             $block = $this->getBlockService()->updateBlock($block['id'], $fields);
             $user = $this->getCurrentUser();
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'latestUpdateUser'=>$user
+                'block' => $block, 'latestUpdateUser' => $user,
             ));
+
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
-            'editBlock' => $block
+            'editBlock' => $block,
         ));
     }
 
@@ -171,10 +180,10 @@ class BlockController extends BaseController
             $data = $request->request->get('data');
             $block['data'] = $data;
             $html = BlockToolkit::render($block, $this->container);
-            
+
             $block = $this->getBlockService()->updateBlock($blockId, array(
                 'data' => $data,
-                'content' => $html
+                'content' => $html,
             ));
             $this->setFlashMessage('success', '保存成功!');
         }
@@ -192,8 +201,8 @@ class BlockController extends BaseController
         foreach ($block['meta']['items'] as $key => &$item) {
             $item['default'] = $block['data'][$key];
         }
-        
-        return new Response('<pre>' . StringToolkit::jsonPettry(StringToolkit::jsonEncode($block['meta'])) . '</pre>');    
+
+        return new Response('<pre>'.StringToolkit::jsonPettry(StringToolkit::jsonEncode($block['meta'])).'</pre>');
     }
 
     public function visualHistoryAction(Request $request, $blockId)
@@ -206,26 +215,27 @@ class BlockController extends BaseController
         );
 
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
-            $block['id'], 
+            $block['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
-        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig", array(
+
+        return $this->render('TopxiaAdminBundle:Block:block-visual-history.html.twig', array(
             'block' => $block,
             'paginator' => $paginator,
             'blockHistorys' => $blockHistorys,
-            'historyUsers' => $historyUsers
+            'historyUsers' => $historyUsers,
         ));
     }
 
     public function createAction(Request $request)
     {
-        
         if ('POST' == $request->getMethod()) {
             $block = $this->getBlockService()->createBlock($request->request->all());
             $user = $this->getCurrentUser();
-            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block,'latestUpdateUser'=>$user));
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block, 'latestUpdateUser' => $user));
+
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
 
@@ -234,11 +244,11 @@ class BlockController extends BaseController
             'title' => '',
             'code' => '',
             'mode' => 'html',
-            'template' => ''
+            'template' => '',
         );
 
         return $this->render('TopxiaAdminBundle:Block:block-modal.html.twig', array(
-            'editBlock' => $editBlock
+            'editBlock' => $editBlock,
         ));
     }
 
@@ -246,6 +256,7 @@ class BlockController extends BaseController
     {
         try {
             $this->getBlockService()->deleteBlock($id);
+
             return $this->createJsonResponse(array('status' => 'ok'));
         } catch (ServiceException $e) {
             return $this->createJsonResponse(array('status' => 'error'));
@@ -259,6 +270,7 @@ class BlockController extends BaseController
         if (empty($blockByCode)) {
             return $this->createJsonResponse(array('success' => true, 'message' => '此编码可以使用'));
         }
+
         return $this->createJsonResponse(array('success' => false, 'message' => '此编码已存在,不允许使用'));
     }
 
@@ -266,11 +278,11 @@ class BlockController extends BaseController
     {
         $code = $request->query->get('value');
         $blockByCode = $this->getBlockService()->getBlockByCode($code);
-        if(empty($blockByCode)){
+        if (empty($blockByCode)) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-        } elseif ($id == $blockByCode['id']){
+        } elseif ($id == $blockByCode['id']) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-        } elseif ($id != $blockByCode['id']){
+        } elseif ($id != $blockByCode['id']) {
             return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));
         }
     }
@@ -284,7 +296,7 @@ class BlockController extends BaseController
                 throw $this->createAccessDeniedException('图片格式不正确！');
             }
 
-            $filename = 'block_picture_' . time() . '.' . $file->getClientOriginalExtension();
+            $filename = 'block_picture_'.time().'.'.$file->getClientOriginalExtension();
 
             $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
             $file = $file->move($directory, $filename);
@@ -297,14 +309,16 @@ class BlockController extends BaseController
                 'url' => $url,
             );
         }
+
         return $this->createJsonResponse($response);
     }
 
     public function picPreviewAction(Request $request, $blockId)
     {
         $url = $request->query->get('url', '');
+
         return $this->render('TopxiaAdminBundle:Block:picture-preview-modal.html.twig', array(
-            'url' => $url
+            'url' => $url,
         ));
     }
 
@@ -313,6 +327,7 @@ class BlockController extends BaseController
         $history = $this->getBlockService()->getBlockHistory($historyId);
         $this->getBlockService()->recovery($blockId, $history);
         $this->setFlashMessage('success', '恢复成功!');
+
         return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockId' => $blockId)));
     }
 
@@ -321,9 +336,13 @@ class BlockController extends BaseController
         return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
+    protected function getBlockTemplateService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockTemplateService');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-
 }

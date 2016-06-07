@@ -104,7 +104,7 @@ admin_block_code_check_foredit:
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
 
 admin_block_update:
-    pattern:  /block/{block}/update
+    pattern:  /block/{blockTemplate}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
 
 admin_block_edit:
@@ -112,7 +112,7 @@ admin_block_edit:
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
 admin_block_visual_edit:
-    pattern:  /block/{blockId}/visual/edit
+    pattern:  /block/{blockTemplateId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
 admin_block_visual_view_data:

@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\Service\Content\Impl;
 
 use Topxia\Common\ArrayToolkit;
@@ -28,6 +29,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         foreach ($blockIds as $key => $blockId) {
             $blockHistories[] = $this->getBlockHistoryDao()->getLatestBlockHistoryByBlockId($blockId);
         }
+
         return ArrayToolkit::index($blockHistories, 'blockId');
     }
 
@@ -35,7 +37,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $result = $this->getBlockDao()->getBlock($id);
         if (!$result) {
-            return null;
+            return;
         } else {
             return $result;
         }
@@ -60,12 +62,13 @@ class BlockServiceImpl extends BaseService implements BlockService
             return $templateItems;
         } else {
             foreach ($templateDatas as &$item) {
-                $item  = explode(":", $item);
+                $item = explode(':', $item);
                 $arr[] = array('title' => $item[0], 'type' => $item[1]);
             }
 
             $templateItems = ArrayToolkit::index($arr, 'title');
             $templateItems = array_values($templateItems);
+
             return $templateItems;
         }
     }
@@ -74,7 +77,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $result = $this->getBlockDao()->getBlockByCode($code);
         if (!$result) {
-            return null;
+            return;
         } else {
             return $result;
         }
@@ -90,51 +93,62 @@ class BlockServiceImpl extends BaseService implements BlockService
         return $this->getBlockHistoryDao()->findBlockHistorysByBlockId($blockId, $start, $limit);
     }
 
+    public function getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $orgId)
+    {
+        $blocks = array();
+        foreach ($blockTemplateIds as $key => $blockTemplateId) {
+            $blocks[] = $this->getBlockDao()->getBlocksByBlockTemplateIdAndOrgId($blockTemplateId, $orgId);
+        }
+        return $blocks;
+    }
+
     public function createBlock($block)
     {
         if (!ArrayToolkit::requireds($block, array('code', 'title'))) {
-            throw $this->createServiceException("创建编辑区失败，缺少必要的字段");
+            throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
         }
 
-        $user                 = $this->getCurrentUser();
-        $block['userId']      = $user['id'];
-        $block['tips']        = empty($block['tips']) ? '' : $block['tips'];
+        $user = $this->getCurrentUser();
+        $block['userId'] = $user['id'];
+        $block['tips'] = empty($block['tips']) ? '' : $block['tips'];
         $block['createdTime'] = time();
-        $block['updateTime']  = time();
-        $createdBlock         = $this->getBlockDao()->addBlock($block);
+        $block['updateTime'] = time();
+        $createdBlock = $this->getBlockDao()->addBlock($block);
 
         $blockHistoryInfo = array(
-            'blockId'     => $createdBlock['id'],
-            'content'     => $createdBlock['content'],
-            'userId'      => $createdBlock['userId'],
-            'createdTime' => time()
+            'blockId' => $createdBlock['id'],
+            'content' => $createdBlock['content'],
+            'userId' => $createdBlock['userId'],
+            'createdTime' => time(),
         );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
+
         return $createdBlock;
     }
 
     public function updateBlock($id, $fields)
     {
         $block = $this->getBlockDao()->getBlock($id);
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$block) {
-            throw $this->createServiceException("此编辑区不存在，更新失败!");
+            throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
         $fields['updateTime'] = time();
-        $updatedBlock         = $this->getBlockDao()->updateBlock($id, $fields);
+        $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
-            'blockId'      => $updatedBlock['id'],
-            'content'      => $updatedBlock['content'],
-            'data'         => $updatedBlock['data'],
+            'blockId' => $updatedBlock['id'],
+            'content' => $updatedBlock['content'],
+            'data' => $updatedBlock['data'],
             'templateData' => $updatedBlock['templateData'],
-            'userId'       => $user['id'],
-            'createdTime'  => time()
+            'userId' => $user['id'],
+            'createdTime' => time(),
         );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
         $this->getLogService()->info('system', 'update_block', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
+
         return $updatedBlock;
     }
 
@@ -142,16 +156,17 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $block = $this->getBlockDao()->getBlock($id);
         $this->getBlockHistoryDao()->deleteBlockHistoryByBlockId($block['id']);
+
         return $this->getBlockDao()->deleteBlock($id);
     }
 
     public function getContentsByCodes(array $codes)
     {
         if (empty($codes)) {
-            throw $this->createServiceException("获取内容失败，不允许查询空编号所对应的内容!");
+            throw $this->createServiceException('获取内容失败，不允许查询空编号所对应的内容!');
         }
 
-        $cdn    = $this->getSettingService()->get('cdn');
+        $cdn = $this->getSettingService()->get('cdn');
         $cdnUrl = empty($cdn['enabled']) ? '' : $cdn['url'];
 
         $contents = array();
@@ -167,6 +182,7 @@ class BlockServiceImpl extends BaseService implements BlockService
                 $contents[$value] = '';
             }
         }
+
         return $contents;
     }
 
@@ -174,13 +190,13 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $block = $this->getBlockDao()->getBlock($id);
         if (!$block) {
-            throw $this->createServiceException("此编辑区不存在，更新失败!");
+            throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
 
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($id, array(
-            'content'    => $content,
-            'updateTime' => time()
+            'content' => $content,
+            'updateTime' => time(),
         ));
     }
 
@@ -188,23 +204,23 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $block = $this->getBlockDao()->getBlock($blockId);
         if (!$block) {
-            throw $this->createServiceException("此编辑区不存在，更新失败!");
+            throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
 
         if ($block['mode'] == 'template' && empty($history['data'])) {
-            throw $this->createServiceException("此编辑区数据不存在，更新失败!");
+            throw $this->createServiceException('此编辑区数据不存在，更新失败!');
         }
 
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($blockId, array(
             'content' => $history['content'],
-            'data'    => $history['data']
+            'data' => $history['data'],
         ));
     }
-    public function getBlockByTemplateId($blockTemplateId,$orgId=0){
+    public function getBlockByTemplateId($blockTemplateId, $orgId = 0)
+    {
         $blockTemp = $this->getBlockTemplateService()->getBlockTemplate($blockTemplateId);
-        $block = $this->getBlockDao()->getBlockByTemplateId($blockTemplateId,$orgId);
-        
+        $block = $this->getBlockDao()->getBlockByTemplateId($blockTemplateId, $orgId);
     }
 
     protected function getBlockDao()

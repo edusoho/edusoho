@@ -30,15 +30,14 @@ class Version20160607153959 extends AbstractMigration
                   `meta` text  COMMENT '编辑区元信息',
                   `tips` VARCHAR( 255 ),
                   `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
-                      `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
+                  `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
                   `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)                  
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';"
         );      
         $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'");
         $this->addSql("ALTER TABLE  `block` ADD  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'");
-        //迁移block 到blockTemplate
-        // $this->addSql("");
+        $this->addSql("INSERT INTO `block_template`( `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime`) select `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime` from `block`;");
 
     }
 
