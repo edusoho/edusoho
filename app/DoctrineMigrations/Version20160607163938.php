@@ -16,6 +16,7 @@ class Version20160607163938 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `setting` DROP INDEX `name`");
         $this->addSql("ALTER TABLE `setting` ADD UNIQUE KEY(`name`, `namespace`)");
     }
 
