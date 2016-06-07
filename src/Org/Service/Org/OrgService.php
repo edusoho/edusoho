@@ -27,4 +27,8 @@ interface OrgService
     public function switchOrg($id);
 
     public function sortOrg($ids);
+
+    public function searchOrgs($conditions, $orderBy, $start, $limit);
+
+    public function findOrgsByIds($ids);
 }
