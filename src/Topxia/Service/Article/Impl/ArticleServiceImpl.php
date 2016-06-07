@@ -338,6 +338,48 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
+    public function findRelativeArticles($articleId, $num = 3)
+    {
+        $article = $this->getArticle($articleId);
+
+        if (empty($article)) {
+            throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
+        }
+
+        $self = $this;
+
+        //通过每个标签找出其他articles并且将key设置为 id-{$article['id']}的形式方便array_merge去重
+        $relativeArticles = array_map(function ($tagId) use ($article, $self) {
+            $conditions = array(
+                'tagId'      => $tagId,
+                'idNotEqual' => $article['id'],
+                'hasThumb'   => true
+            );
+            $count      = $self->searchArticlesCount($conditions);
+            $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
+            return call_user_func(
+                function ($articles) {
+                    $indexed = array();
+                    if (empty($articles)) {
+                        return $indexed;
+                    }
+
+                    foreach ($articles as $article) {
+                        $key           = 'id-' . (string)$article['id'];
+                        $indexed[$key] = $article;
+                    }
+
+                    return $indexed;
+                }, $articles);
+        }, $article['tagIds']);
+
+        $ret = array_reduce($relativeArticles, function ($ret, $articles){
+            return array_merge($ret, $articles);
+        }, array());
+
+        return array_slice($ret, 0, $num);
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article            = array();
