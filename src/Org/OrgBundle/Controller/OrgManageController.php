@@ -9,10 +9,12 @@ use Topxia\AdminBundle\Controller\BaseController;
 class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
-    {
+    {   
+        $user = $this->getCurrentUser();
+        $org  = $this->getOrgService()->getOrg($user['orgId']);
         $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
 
-        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq');
+        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq' , $org['parentId']);
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
