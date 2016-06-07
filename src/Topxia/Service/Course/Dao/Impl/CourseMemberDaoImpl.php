@@ -208,9 +208,14 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:role:{$role}:start:{$start}:limit:{$limit}", $courseId, $role, $start, $limit, function ($courseId, $role, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($courseId, $role));
+        });
     }
 
     public function findMemberCountByCourseIdAndRole($courseId, $role)
