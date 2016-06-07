@@ -1,5 +1,5 @@
 CKEDITOR.dialog.add('uploadpictures', function(editor) {
-
+    
     var imageHtml = '', uploader;
 
     var onLoadDialog = function() {
@@ -17,7 +17,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             fileSingleSizeLimit: 10*1024*1024,
             accept: {
                 title: 'Images',
-                extensions: 'gif,jpg,jpeg,bmp,png',
+                extensions: 'gif,jpg,jpeg,bmp,png,ico',
                 mimeTypes: 'image/*'
             }
         });
@@ -61,7 +61,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         });
 
         uploader.on('uploadSuccess', function(file, response) {
-            imageHtml += '<p><img src=' + response.url  + ' /></p>';
+            imageHtml += '<p><img src="' + response.url  + '" /></p>';
 
             var $li = $('.' + editor.id + ' #' + file.id);
             $li.find('.file-status').html('已上传');
@@ -107,7 +107,8 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
                     return false;
                 }
             }
-            editor.insertHtml(imageHtml, 'unfiltered_html');
+            // editor.insertHtml(imageHtml, 'unfiltered_html');
+            editor.insertElement(new CKEDITOR.dom.element.createFromHtml(imageHtml));
             imageHtml = ''; //清空
             uploader.reset();
             $('.' + editor.id + ' .balloon-filelist ul').empty();
