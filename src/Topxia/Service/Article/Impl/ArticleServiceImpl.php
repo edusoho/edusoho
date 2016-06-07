@@ -348,7 +348,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $self = $this;
 
-        //通过每个标签找出其他articles并且将key设置为 id-{$article['id']}的形式方便array_merge去重
         $relativeArticles = array_map(function ($tagId) use ($article, $self) {
             $conditions = array(
                 'tagId'      => $tagId,
@@ -357,26 +356,13 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             );
             $count      = $self->searchArticlesCount($conditions);
             $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
-            return call_user_func(
-                function ($articles) {
-                    $indexed = array();
-                    if (empty($articles)) {
-                        return $indexed;
-                    }
-
-                    foreach ($articles as $article) {
-                        $key           = 'id-' . (string)$article['id'];
-                        $indexed[$key] = $article;
-                    }
-
-                    return $indexed;
-                }, $articles);
+            return ArrayToolkit::index($articles, 'id');
         }, $article['tagIds']);
 
         $ret = array_reduce($relativeArticles, function ($ret, $articles){
             return array_merge($ret, $articles);
         }, array());
-
+        $ret = array_unique($ret, SORT_REGULAR);
         return array_slice($ret, 0, $num);
     }
 
