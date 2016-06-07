@@ -62,6 +62,8 @@ interface OpenCourseService
 
     public function publishLesson($courseId, $lessonId);
 
+    public function resetLessonMediaId($lessonId);
+
     public function sortCourseItems($courseId, array $items);
 
     public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);

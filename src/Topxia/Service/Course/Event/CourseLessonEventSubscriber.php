@@ -246,7 +246,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument  = $context['argument'];
         $material  = $context['material'];
 
-        if ($material['lessonId'] && $material['source'] == 'coursematerial') {
+        if ($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course') {
             $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
         }
     }
@@ -416,7 +416,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function _resetLessonMediaId($material)
     {
-        if ($material['lessonId'] && $material['source'] == 'courselesson') {
+        if ($material['lessonId'] && $material['source'] == 'courselesson' && $material['type'] == 'course') {
             $this->getCourseService()->resetLessonMediaId($material['lessonId']);
         }
 
@@ -425,11 +425,12 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function _waveLessonMaterialNum($material)
     {
-        if($material['lessonId'] && $material['source'] == 'coursematerial'){
+        if($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course'){
             $count = $this->getMaterialService()->searchMaterialCount(array(
                     'courseId' => $material['courseId'],
                     'lessonId' => $material['lessonId'],
-                    'source'   => 'coursematerial'
+                    'source'   => 'coursematerial',
+                    'type'     => 'course'
                 )
             );
            $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);

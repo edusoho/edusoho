@@ -534,6 +534,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
     }
 
+    public function resetLessonMediaId($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+        if ($lesson) {
+            $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            return true;
+        }
+
+        return false;
+    }
+
     public function sortCourseItems($courseId, array $itemIds)
     {
         $items          = $this->getLessonItems($courseId);

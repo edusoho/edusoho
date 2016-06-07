@@ -180,6 +180,10 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         $argument  = $context['argument'];
         $material  = $context['material'];
 
+        if ($material['type'] == 'openCourse') {
+            return false;
+        }
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
         if ($courseIds) {
@@ -204,6 +208,10 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     {
         $material = $event->getSubject();
 
+        if ($material['type'] == 'openCourse') {
+            return false;
+        }
+        
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
         if ($courseIds) {

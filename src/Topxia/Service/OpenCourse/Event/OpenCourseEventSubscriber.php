@@ -13,8 +13,8 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             'open.course.lesson.create' => 'onLessonCreate',
             'open.course.lesson.delete' => 'onLessonDelete',
             'open.course.member.create' => 'onMemberCreate',
-            'material.create'           => 'onMaterialCreate',
-            'material.delete'           => 'onMaterialDelete'
+            'course.material.create'    => 'onMaterialCreate',
+            'course.material.delete'    => 'onMaterialDelete'
         );
     }
 
@@ -52,7 +52,20 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $material = $context['material'];
 
-        if ($material) {
+        if ($material && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
+            $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
+        }
+    }
+
+    public function onMaterialUpdate(ServiceEvent $event)
+    {
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $material  = $context['material'];
+
+        $lesson = $this->getOpenCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
+
+        if ($lesson && $material['lessonId'] && $material['source'] == 'opencoursematerial') {
             $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
         }
     }
@@ -61,8 +74,16 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
     {
         $material = $event->getSubject();
 
-        if ($material) {
-            $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
+
+        if ($lesson) {
+            if ($material['lessonId'] && $material['source'] == 'opencourselesson' && $material['type'] == 'openCourse') {
+                $this->getOpenCourseService()->resetLessonMediaId($material['lessonId']);
+            }
+            
+            if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse'){
+               $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
+            }
         }
     }
 
