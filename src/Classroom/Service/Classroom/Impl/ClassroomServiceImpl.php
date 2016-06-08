@@ -98,42 +98,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($title)) {
             throw $this->createServiceException('班级名称不能为空！');
         }
-
+        $user                     = $this->getCurrentUser();
         $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
+        $this->getLogService()->info('classroom', 'create', "{$user['nickname']}创建了班级《{$classroom['title']}》(#{$classroom['id']})");
+
         return $classroom;
     }
 
-    //TO-DO 班级课程表加了一个父课程Id字段,逻辑可以重构了! BY wenqin 2015-5-21
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
         $this->getClassroomDao()->getConnection()->beginTransaction();
         try {
-            //find Existing Courses, open it and active it
-            $allExistingCourses   = $this->findCoursesByClassroomId($classroomId);
-            $existCourseIds       = array();
-            $existCourseParentIds = array();
+            $allExistingCourses = $this->findCoursesByClassroomId($classroomId);
 
-            foreach ($allExistingCourses as $key => $existCourse) {
-                if (in_array($existCourse['parentId'], $courseIds)) {
-                    $existCourseIds[$existCourse['parentId']] = $existCourse['id'];
-                    $existCourseParentIds[]                   = $existCourse['parentId'];
-                }
-            }
+            $existCourseIds = ArrayToolkit::column($allExistingCourses, 'parentId');
 
-            $sameCourseIds = array_intersect($existCourseParentIds, $courseIds);
-
-            foreach ($sameCourseIds as $key => $courseId) {
-                $courseId = $existCourseIds[$courseId];
-                $this->getClassroomCourseDao()->updateByParam(array('classroomId' => $classroomId, 'courseId' => $courseId), array('disabled' => 0));
-                $this->getCourseService()->publishCourse($courseId, 'classroom');
-            }
-
-            $diff = array_values(array_diff($courseIds, $sameCourseIds));
-
-//if new copy it
+            $diff = array_diff($courseIds, $existCourseIds);
 
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
@@ -189,9 +172,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
         }
-
+        $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
-
+        $this->getLogService()->info('classroom', 'update', "{$user['nickname']}更新了班级信息《{$classroom['title']}》(#{$classroom['id']})");
         return $classroom;
     }
 
