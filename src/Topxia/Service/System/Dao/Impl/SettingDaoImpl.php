@@ -51,4 +51,10 @@ class SettingDaoImpl extends BaseDao implements SettingDao
         $this->clearCached();
         return $result;
     }
+    public function deleteByNamespaceAndName($namespace,$name)
+    {
+        $result = $this->getConnection()->delete($this->table, array('namespace'=>$namespace,'name' => $name));
+        $this->clearCached();
+        return $result;
+    }
 }

@@ -5,8 +5,8 @@ admin_org_manage:
     children:
         admin_org:
             name: 组织机构
-            children:
-                admin_org_create:
-                    name: 添加组织机构
-                    mode: modal
-                    group: topBtn
+# admin_org_create:
+#     name: 添加组织机构
+#     parent: admin_operation_org_manage
+#     mode: modal
+#     group: 2
