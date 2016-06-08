@@ -270,7 +270,7 @@ class Logger
             ),
             self::SMS        => array(
                 'sms_forget_password'       => '登录密码重置',
-                'sms_user_pay'              => 'sms_user_pay',
+                'sms_user_pay'              => '使用网站余额支付',
                 'sms_forget_pay_password'   => '支付密码重置',
                 'sms_bind'                  => '手机绑定',
                 'sms_classroom_publish'     => '新班级发布',
