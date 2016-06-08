@@ -300,9 +300,9 @@ class Logger
                 'update_setting' => '更新设置'),
             self::COUPON       => array(
                 'batch_generate' => '生成优惠码',
-                'batch_delete'   => '批量删除',
                 'receive'        => '领取优惠码',
                 'use'            => '使用优惠码',
+                'batch_delete'   => '删除优惠码',
                 'setting'        => '更新设置'),
             self::DISCOUNT     => array(
                 'apply_audit'  => '申请打折',
