@@ -348,6 +348,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function closeThread($threadId)
     {
         $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
+        $this->getLogService()->info('group', 'close_thread', "关闭话题 {$thread['title']}({$thread['id']})");
         $this->dispatchEvent('group.thread.close', $thread);
     }
 
