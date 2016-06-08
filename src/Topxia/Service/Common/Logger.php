@@ -30,7 +30,7 @@ class Logger
      * [$HOMEWORK 作业]
      * @var string
      */
-    const homework = 'homework';
+    const HOMEWORK = 'homework';
     /**
      * [$MONEY_CARD 学习卡]
      * @var string
@@ -45,7 +45,7 @@ class Logger
      * [$vip 会员]
      * @var string
      */
-    const vip = 'vip';
+    const VIP = 'vip';
 
     /**
      * [$course 课程]
@@ -53,10 +53,10 @@ class Logger
      */
     const COURSE = 'course';
     /**
-     * [$thread 小组话题]
+     * [$GROUP 小组话题]
      * @var string
      */
-    const THREAD = 'thread';
+    const GROUP = 'group';
     /**
      * [$USER 用户]
      * @var string
@@ -139,8 +139,6 @@ class Logger
 
     /**
      * 模块(module)  -> 操作(action)
-     * 操作待完善
-     * @return [type] [description]
      */
     public static function systemModuleConfig()
     {
@@ -208,15 +206,17 @@ class Logger
                 'update_app_version'     => '更新版本'),
             self::CLASSROOM  => array(
                 'create'           => '新增班级',
-                'add_course'       => '添加课程',
-                'delete_course'    => '移除课程',
-                'add_student'      => '添加学员',
-                'delete_review'    => '删除评价',
                 'delete'           => '删除班级',
+                'add_course'       => '添加课程',
+                'add_student'      => '添加学员',
+                'delete_course'    => '移除课程',
+                'delete_review'    => '删除评价',
+                'delete_thread'    => '删除话题',
                 'update_picture'   => '更新图片',
                 'remove_student'   => '移除学员',
                 'recommend'        => '推荐班级',
-                'cancel_recommend' => '取消推荐'),
+                'cancel_recommend' => '取消推荐'
+            ),
             self::ARTICLE    => array(
                 'update_settings' => '更新设置',
                 'create'          => '新增',
@@ -248,7 +248,7 @@ class Logger
                 'delete'  => '删除',
                 'publish' => '发布'),
 
-            'crontab'        => array(
+            self::CRONTAB    => array(
                 'job_start' => '开始任务',
                 'job_end'   => '结束任务'),
             self::UPLOADFILE => array(
@@ -257,19 +257,23 @@ class Logger
                 'download'               => '下载文件',
                 'cloud_convert_callback' => '回调处理',
                 'cloud_convert_error'    => '转码失败'),
-            'marker'         => array(
+            self::MARKER     => array(
                 'create'           => '增加驻点',
                 'delete'           => '删除驻点',
                 'mediaId_notExist' => '视频不存在',
                 'delete_question'  => '删除驻点问题'),
-            self::THREAD     => array(
-                'delete' => '删除'),
-            'sms'            => array(),
-            'tag'            => array(
+            self::GROUP      => array(
+                'create_thread' => '新增话题',
+                'delete_thread' => '删除话题',
+                'close_thread'  => '关闭话题',
+                'open_thread'   => '开启话题'
+            ),
+            self::SMS        => array(),
+            self::TAG        => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除'),
-            'coin'           => array(
+            self::COIN       => array(
                 'update_settings' => '设置',
                 'add_coin'        => '增加',
                 'deduct_coin'     => '扣除')
@@ -279,25 +283,35 @@ class Logger
     public static function pluginModuleConfig()
     {
         return array(
-            'vip'           => array(
+            self::VIP          => array(
+                'create_member'  => '新增会员',
+                'renew_member'   => '续费会员',
+                'upgrade_member' => '升级会员',
+                'delete_member'  => '删除会员',
+                'update_member'  => '编辑会员',
+
                 'create_level'   => '添加等级',
                 'update_level'   => '修改等级',
                 'on_level'       => '开启加入',
                 'off_level'      => '关闭加入',
                 'delete_level'   => '删除等级',
-                'edit'           => '修改',
-                'delete_member'  => '删除会员',
+
                 'exportCsv'      => '导出',
                 'update_setting' => '更新设置'),
-            'coupon'        => array(
-                'coupon_setting' => '更新设置',
-                'batch_delete'   => '批量删除'),
-            'discount'      => array(
-                'apply_audit' => '申请打折',
-                'start'       => '开启',
-                'close'       => '关闭',
-                'delete'      => '删除'),
-            'money_card'    => array(
+            self::COUPON       => array(
+                'batch_generate' => '生成优惠码',
+                'batch_delete'   => '批量删除',
+                'receive'        => '领取优惠码',
+                'use'            => '使用优惠码',
+                'setting'        => '更新设置'),
+            self::DISCOUNT     => array(
+                'apply_audit'  => '申请打折',
+                'audit_pass'   => '审核通过',
+                'audit_reject' => '审核拒绝',
+                'start'        => '开启',
+                'close'        => '关闭',
+                'delete'       => '删除'),
+            self::MONEY_CARD   => array(
                 'money_card_use' => '使用',
                 'export'         => '导出',
                 'show_password'  => '查询密码',
@@ -307,13 +321,13 @@ class Logger
                 'delete'         => '删除',
                 'batch_lock'     => '批量作废',
                 'batch_delete'   => '批量删除'),
-            'question_plus' => array(
+            self::QUESTIONPLUS => array(
                 'update_setting' => '更新设置'),
-            'homework'      => array(
+            self::HOMEWORK     => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除'),
-            'exercise'      => array(
+            self::EXERCISE     => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除')
@@ -323,29 +337,29 @@ class Logger
     public static function getLogModuleDict()
     {
         return array(
-            self::USER       => '用户',
-            self::COURSE     => '课程',
-            self::CLASSROOM  => '班级',
-            self::THREAD     => '小组话题',
-            self::UPLOADFILE => '文件',
-            self::ORDER      => '订单',
-            self::ARTICLE    => '资讯',
-            self::CATEGORY   => '栏目',
-            self::CONTENT    => '资讯内容',
-            self::NOTIFY     => '通知',
-            'sms'            => '短信',
-            'tag'            => '标签',
-            self::SYSTEM     => '系统设置',
-            'crontab'        => '定时任务',
-            'marker'         => '驻点',
-            'vip'            => '会员',
-            'coin'           => '虚拟币',
-            'coupon'         => '优惠码',
-            'money_card'     => '学习卡',
-            'discount'       => '打折活动',
-            'exercise'       => '练习',
-            'homework'       => '作业',
-            'question_plus'  => '题库增强版'
+            self::USER         => '用户',
+            self::COURSE       => '课程',
+            self::CLASSROOM    => '班级',
+            self::GROUP        => '小组话题',
+            self::UPLOADFILE   => '文件',
+            self::ORDER        => '订单',
+            self::ARTICLE      => '资讯',
+            self::CATEGORY     => '栏目',
+            self::CONTENT      => '资讯内容',
+            self::NOTIFY       => '通知',
+            self::SMS          => '短信',
+            self::TAG          => '标签',
+            self::SYSTEM       => '系统设置',
+            self::CRONTAB      => '定时任务',
+            self::MARKER       => '驻点',
+            self::VIP          => '会员',
+            self::COIN         => '虚拟币',
+            self::COUPON       => '优惠码',
+            self::MONEY_CARD   => '学习卡',
+            self::DISCOUNT     => '打折活动',
+            self::EXERCISE     => '练习',
+            self::HOMEWORK     => '作业',
+            self::QUESTIONPLUS => '题库增强版'
         );
     }
 }
