@@ -356,6 +356,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
         $this->dispatchEvent('group.thread.open', $thread);
+        $this->getLogService()->info('group', 'open_thread', "开启话题 {$thread['title']}({$thread['id']})");
     }
 
     public function searchThreads($conditions, $orderBy, $start, $limit)
@@ -539,6 +540,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->createService('System.LogService');
     }
 }
