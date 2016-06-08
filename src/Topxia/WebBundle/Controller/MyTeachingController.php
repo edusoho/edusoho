@@ -81,7 +81,7 @@ class MyTeachingController extends BaseController
 
         $OpenCourses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('hitNum', 'ASC'),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
