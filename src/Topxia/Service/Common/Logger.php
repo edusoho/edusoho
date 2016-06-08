@@ -71,7 +71,7 @@ class Logger
      * [$UPLOADFILE 文件]
      * @var string
      */
-    const UPLOADFILE = 'uploadfile';
+    const UPLOADFILE = 'upload_file';
     /**
      * [$SYSTEM 系统设置]
      * @var string
@@ -268,7 +268,24 @@ class Logger
                 'close_thread'  => '关闭话题',
                 'open_thread'   => '开启话题'
             ),
-            self::SMS        => array(),
+            self::SMS        => array(
+                'sms_forget_password'       => '登录密码重置',
+                'sms_user_pay'              => 'sms_user_pay',
+                'sms_forget_pay_password'   => '支付密码重置',
+                'sms_bind'                  => '手机绑定',
+                'sms_classroom_publish'     => '新班级发布',
+                'sms_course_publish'        => '新课程发布',
+                'sms_normal_lesson_publish' => '新课时发布通知（普通课程',
+                'sms_live_lesson_publish'   => '新课时发布通知（直播',
+                'sms_live_play_one_day'     => '直播开播前通知（提前1天)',
+                'sms_live_play_one_hour'    => '直播开播前通知（提前1小时）',
+                'sms_homework_check'        => '作业完成批阅',
+                'sms_testpaper_check'       => '试卷完成批阅',
+                'sms_course_buy_notify'     => '课程购买',
+                'sms_classroom_buy_notify'  => '班级购买',
+                'sms_vip_buy_notify'        => '会员购买',
+                'sms_coin_buy_notify'       => '虚拟币充值'
+            ),
             self::TAG        => array(
                 'create' => '新增',
                 'update' => '修改',
