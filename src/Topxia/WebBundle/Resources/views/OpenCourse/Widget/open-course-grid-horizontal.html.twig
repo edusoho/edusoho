@@ -6,9 +6,11 @@
   <div class="course-block clearfix">
     <div class="course-img">
       <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+        {% if course.type == 'liveOpen' %}
         <span class="tags">
-          <span class="tag-live"></span>
+          <span class="tag-open-live"></span>
         </span>
+        {% endif %}
         {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
       </a>
       {% if course.type == 'liveOpen' and lessons %}
@@ -24,9 +26,9 @@
       <div class="title text-overflow">
         {% if course.type == 'liveOpen' and lessons %}
           {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
-            <span class="label label-primary mrm">正在直播</span>
+            <span class="label label-primary label-md">正在直播</span>
           {% elseif "now"|date("U") < lessons[0].startTime %}
-            <span class="label label-warning mrm">即将直播</span>
+            <span class="label label-warning label-md">即将直播</span>
           {% endif %}
         {% endif %}
         
@@ -34,15 +36,18 @@
           {{ course.title }}
         </a>
       </div>
+      <div class="color-gray mbm hidden-xs">
+        教师：<a class="mrs" href="">讲师名称</a><a class="mrs" href="">讲师名称</a>
+      </div>
       <div class="open-course-intro hidden-sm hidden-xs">
         {% if course.subtitle %}
           {{ course.subtitle|raw }}
         {% endif %}
       </div>
       <div class="metas clearfix">
-        <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+        <span class="num"><i class="es-icon es-icon-whatshot"></i>{{ course.hitNum }}</span>
         <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-        <a class="btn btn-primary btn-lg pull-right hidden-xs" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
+        <a class="btn btn-primary pull-right hidden-xs" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">立即参加</a>
       </div>
     </div>
   </div>

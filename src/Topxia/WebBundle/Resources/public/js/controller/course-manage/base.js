@@ -111,11 +111,11 @@ define(function(require, exports, module) {
                     } else {
                         $(elem).parent().find('.alert-warning').hide();
                     }
+                } else {
+                    validator.removeItem('[name=expiryDay]');
                 }
-            });
-        } else {
-            validator.removeItem('[name=expiryDay]');
-        }
+            }
+        }) 
         
         if ($('#course-about-field').length > 0) {
             CKEDITOR.replace('course-about-field', {
