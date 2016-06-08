@@ -98,11 +98,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($title)) {
             throw $this->createServiceException('班级名称不能为空！');
         }
-        $user                     = $this->getCurrentUser();
         $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
-        $this->getLogService()->info('classroom', 'create', "{$user['nickname']}创建了班级《{$classroom['title']}》(#{$classroom['id']})");
+        $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
 
         return $classroom;
     }
@@ -117,7 +116,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $existCourseIds = ArrayToolkit::column($allExistingCourses, 'parentId');
 
             $diff      = array_diff($courseIds, $existCourseIds);
-            $user      = $this->getCurrentUser();
             $classroom = $this->getClassroom($classroomId);
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
@@ -126,7 +124,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 foreach ($courses as $key => $course) {
                     $newCourse      = $this->getCourseCopyService()->copy($course, true);
                     $newCourseIds[] = $newCourse['id'];
-                    $this->getLogService()->info('classroom', 'add_course', "{$user['nickname']}给班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
+                    $this->getLogService()->info('classroom', 'add_course', "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
                 }
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
@@ -598,7 +596,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff      = array_diff($existCourseIds, $activeCourseIds);
             $classroom = $this->getClassroom($classroomId);
-            $user      = $this->getCurrentUser();
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
                     $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
@@ -607,7 +604,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseService()->closeCourse($courseId, 'classroom');
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->waveClassroom($classroomId, 'noteNum', "-{$course['noteNum']}");
-                    $this->getLogService()->info('classroom', 'delete_course', "{$user['nickname']}从班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
+                    $this->getLogService()->info('classroom', 'delete_course', "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
                 }
 
                 $courses    = $this->findActiveCoursesByClassroomId($classroomId);
