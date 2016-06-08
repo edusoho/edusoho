@@ -107,9 +107,12 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
                     return false;
                 }
             }
-            // editor.insertHtml(imageHtml, 'unfiltered_html');
-            editor.insertElement(new CKEDITOR.dom.element.createFromHtml(imageHtml));
-            imageHtml = ''; //清空
+            if (imageHtml) {
+                editor.insertHtml(imageHtml, 'unfiltered_html');
+                // editor.insertElement(new CKEDITOR.dom.element.createFromHtml(imageHtml));
+                imageHtml = ''; //清空
+            }
+            //关闭对话框后清除上传列表，因为列表有数量限制
             uploader.reset();
             $('.' + editor.id + ' .balloon-filelist ul').empty();
         }
