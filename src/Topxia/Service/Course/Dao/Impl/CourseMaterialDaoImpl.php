@@ -69,18 +69,6 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
     }
 
-    public function getLessonMaterialCount($courseId,$lessonId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
-    } 
-
-    public function getMaterialCountByFileId($fileId)
-    {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($fileId)); 
-    }
-
     public function searchMaterials($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

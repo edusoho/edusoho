@@ -76,7 +76,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $lessonId        = $this->getParam("lessonId");
         $start           = (int) $this->getParam("start", 0);
         $limit           = (int) $this->getParam("limit", 10);
-        $lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, $start, 1000);
+        $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
+            array(
+                'lessonId' => $lessonId,
+                'source'   => 'coursematerial',
+                'type'     => 'course'
+            ), 
+            array('createdTime','DESC'), 
+            0, 1000
+        );
         $files           = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
 
         return array(
@@ -157,7 +165,16 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($user->isLogin()) {
             $learnStatus     = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-            $lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, 0, 1);
+            $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
+                array(
+                    'lessonId' => $lessonId,
+                    'source'   => 'coursematerial',
+                    'type'     => 'course'
+                ), 
+                array('createdTime','DESC'), 
+                0, 1
+            );
+
             return array(
                 "learnStatus" => $learnStatus,
                 "hasMaterial" => empty($lessonMaterials) ? false : true

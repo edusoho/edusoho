@@ -75,15 +75,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		$this->dispatchEvent("course.material.delete",$material);
 	}
 
-
 	public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
 	{
 		return $this->getMaterialDao()->findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
-	}
-
-	public function deleteMaterialByMaterialId($materialId)
-	{
-		return $this->getMaterialDao()->deleteMaterial($materialId);
 	}
 
 	public function deleteMaterialsByLessonId($lessonId, $courseType='course')
@@ -131,26 +125,6 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 			return null;
 		}
 		return $material;
-	}
-
-	public function findCourseMaterials($courseId, $start, $limit)
-	{
-		return $this->getMaterialDao()->findMaterialsByCourseId($courseId, $start, $limit);
-	}
-
-	public function getMaterialCountByFileId($fileId)
-	{
-		return $this->getMaterialDao()->getMaterialCountByFileId($fileId);
-	}
-
-    public function findLessonMaterials($lessonId, $start, $limit)
-    {
-        return $this->getMaterialDao()->findMaterialsByLessonId($lessonId, $start, $limit);
-    }
-
-	public function getMaterialCount($courseId)
-	{
-		return $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
 	}
 
 	public function searchMaterials($conditions, $orderBy, $start, $limit)

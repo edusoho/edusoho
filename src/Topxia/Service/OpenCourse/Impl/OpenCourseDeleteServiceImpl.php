@@ -13,7 +13,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             $this->getOpenCourseDao()->getConnection()->beginTransaction();
             $course = $this->getOpenCourseService()->getCourse($courseId);
 
-            $types = array('lessons', 'members', 'course', 'recommend');
+            $types = array('lessons', 'members', 'course', 'recommend','materials');
 
             if (!in_array($type, $types)) {
                 throw $this->createServiceException('未知类型,删除失败');
@@ -48,8 +48,8 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 $count += $result;
             }
 
-            $lessonLog = "删除课程《{$course['title']}》(#{$course['id']})的课时";
-            $this->getLogService()->info('open.course.lesson', 'delete', $lessonLog);
+            $lessonLog = "删除公开课《{$course['title']}》(#{$course['id']})的所有课时";
+            $this->getLogService()->info('open_course', 'delete_lesson', $lessonLog);
         }
 
         return $count;
@@ -68,8 +68,8 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 $count += $result;
             }
 
-            $memberLog = "删除课程《{$course['title']}》(#{$course['id']})的成员";
-            $this->getLogService()->info('open.course.member', 'delete', $memberLog);
+            $memberLog = "删除公开课《{$course['title']}》(#{$course['id']})的成员";
+            $this->getLogService()->info('open_course', 'delete_member', $memberLog);
         }
 
         return $count;
@@ -77,12 +77,12 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteRecommend($course)
     {
-        $recommendCount = $this->getRecommendCourseDao()->searchRecommendCount(array('recommendCourseId' => $course['id']));
+        //$recommendCount = $this->getRecommendCourseDao()->searchRecommendCount(array('recommendCourseId' => $course['id']));
         $openCount      = $this->getRecommendCourseDao()->searchRecommendCount(array('openCourseId' => $course['id']));
 
         $count = 0;
 
-        if ($recommendCount > 0) {
+        /*if ($recommendCount > 0) {
             $recommends = $this->getRecommendCourseDao()->searchRecommends(array('recommendCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($recommends as $recommend) {
@@ -90,9 +90,9 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 $count += $result;
             }
 
-            $memberLog = "删除推荐课程《{$course['title']}》(#{$course['id']})的成员";
-            $this->getLogService()->info('open.course.recommend', 'delete', $memberLog);
-        }
+            $memberLog = "删除公开课《{$course['title']}》(#{$course['id']})的所有推荐课程";
+            $this->getLogService()->info('open_course', 'delete_recommend_course', $memberLog);
+        }*/
 
         if ($openCount > 0) {
             $openCourses = $this->getRecommendCourseDao()->searchRecommends(array('openCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
@@ -102,8 +102,8 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 $count += $result;
             }
 
-            $memberLog = "删除推荐课程《{$course['title']}》(#{$course['id']})的成员";
-            $this->getLogService()->info('open.course.recommend', 'delete', $memberLog);
+            $memberLog = "删除公开课《{$course['title']}》(#{$course['id']})的所有推荐课程";
+            $this->getLogService()->info('open_course', 'delete_recommend_course', $memberLog);
         }
 
         return $count;
@@ -112,9 +112,30 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function deleteCourse($course)
     {
         $this->getOpenCourseDao()->deleteCourse($course['id']);
-        $courseLog = "删除课程《{$course['title']}》(#{$course['id']})";
-        $this->getLogService()->info('open.course', 'delete', $courseLog);
+        $courseLog = "删除公开课《{$course['title']}》(#{$course['id']})";
+        $this->getLogService()->info('open_course', 'delete_course', $courseLog);
         return 0;
+    }
+
+    protected function deleteMaterials($course)
+    {
+        $conditions    = array('courseId' => $course['id'], 'type' => 'course');
+        $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
+        $count         = 0;
+
+        if ($materialCount > 0) {
+            $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, $materialCount);
+
+            foreach ($materials as $material) {
+                $result = $this->getMaterialService()->deleteMaterial($course['id'], $material['id']);
+                $count += $result;
+            }
+
+            $materialLog = "删除公开课《{$course['title']}》(#{$course['id']})的所有课时资料";
+            $this->getLogService()->info('open_course', 'delete_material', $materialLog);
+        }
+
+        return $count;
     }
 
     protected function getOpenCourseService()
@@ -130,6 +151,11 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 
     protected function getOpenCourseDao()

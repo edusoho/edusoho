@@ -85,18 +85,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteMaterials($course)
     {
         $conditions    = array('courseId' => $course['id'], 'type' => 'course');
-        $materialCount = $this->getMaterialDao()->searchMaterialCount($conditions);
+        $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
         $count         = 0;
 
         if ($materialCount > 0) {
-            $materials = $this->getMaterialDao()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, $materialCount);
+            $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, $materialCount);
 
             foreach ($materials as $material) {
-                if (!empty($material['fileId'])) {
-                    $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
-                }
-
-                $result = $this->getMaterialDao()->deleteMaterial($material['id']);
+                $result = $this->getMaterialService()->deleteMaterial($course['id'], $material['id']);
                 $count += $result;
             }
 
@@ -494,6 +490,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createService('Crontab.CrontabService');
     }
 
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
+    }
+
     protected function getCourseChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
@@ -522,11 +523,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getLessonViewDao()
     {
         return $this->createDao('Course.LessonViewDao');
-    }
-
-    protected function getMaterialDao()
-    {
-        return $this->createDao('Course.CourseMaterialDao');
     }
 
     protected function getClassroomDao()

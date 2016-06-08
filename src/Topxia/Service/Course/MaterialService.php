@@ -11,8 +11,6 @@ interface MaterialService
 
 	public function deleteMaterial($courseId, $materialId);
 
-    public function deleteMaterialByMaterialId($materialId);
-
     public function deleteMaterialsByLessonId($lessonId, $courseType);
 
     public function deleteMaterialsByCourseId($courseId, $courseType);
@@ -23,13 +21,7 @@ interface MaterialService
 
 	public function getMaterial($courseId, $materialId);
 
-    public function findLessonMaterials($lessonId, $start, $limit);
-
 	public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
-
-	public function getMaterialCount($courseId);
-
-	public function getMaterialCountByFileId($fileId);
 
 	public function searchMaterials($conditions, $orderBy, $start, $limit);
 
