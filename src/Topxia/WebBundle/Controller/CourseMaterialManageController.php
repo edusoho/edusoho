@@ -69,12 +69,14 @@ class CourseMaterialManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $conditions = array();
-        $type = $request->query->get('type');
+        $type       = $request->query->get('type');
+        
         if (!empty($type)) {
             $conditions['type'] = $type;
         }
 
-        $courseType = empty($request->query->get('courseType')) ? 'course' : $request->query->get('courseType');
+        $courseType = $request->query->get('type');
+        $courseType = empty($courseType) ? 'course' : $courseType;
         $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
             array(
                 'courseId' => $course['id'],
