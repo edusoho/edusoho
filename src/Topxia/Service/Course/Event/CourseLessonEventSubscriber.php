@@ -245,21 +245,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context   = $event->getSubject();
         $argument  = $context['argument'];
         $material  = $context['material'];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
         if ($material['lessonId'] && $material['source'] == 'coursematerial') {
             $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
-        }
-
-        if ($courseIds) {
-            $lessonIds          = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'], $courseIds), 'id');
-            $argument['copyId'] = $material['id'];
-
-            foreach ($courseIds as $key => $courseId) {
-                $argument['courseId'] = $courseId;
-                $argument['lessonId'] = isset($lessonIds[$key]) ? $lessonIds[$key] : 0;
-                $this->getMaterialService()->uploadMaterial($argument);
-            }
         }
     }
 
@@ -269,7 +257,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument  = $context['argument'];
         $material  = $context['material'];
 
-        if ($material['lessonId'] && $material['source'] == 'coursematerial') {
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
+
+        if ($lesson && $material['lessonId'] && $material['source'] == 'coursematerial') {
             $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
         }
     }
@@ -278,17 +268,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $material = $event->getSubject();
 
-        $this->_resetLessonMediaId($material);
-        $this->_waveLessonMaterialNum($material);
+        $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
-
-        if ($courseIds) {
-            $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($material['id'], $courseIds), 'id');
-
-            foreach ($materialIds as $key => $materialId) {
-                $this->getMaterialService()->deleteMaterial($courseIds[$key], $materialId);
-            }
+        if ($lesson) {
+            $this->_resetLessonMediaId($material);
+            $this->_waveLessonMaterialNum($material);
         }
     }
 
@@ -433,11 +417,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     private function _resetLessonMediaId($material)
     {
         if ($material['lessonId'] && $material['source'] == 'courselesson') {
-            $lesson = $this->getCourseService()->getLesson($material['lessonId']);
-            if ($lesson) {
-                $this->getCourseService()->updateLesson($lesson['courseId'], $lesson['id'], array('mediaId'=>0));
-                return true;
-            }
+            $this->getCourseService()->resetLessonMediaId($material['lessonId']);
         }
 
         return false;

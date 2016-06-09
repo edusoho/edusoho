@@ -28,6 +28,9 @@ class UserUtil
             $registration['email'] = $setData['email'];
         } else {
             $nicknames = array();
+            if (mb_strlen($oauthUser['name'], 'utf-8') < 4) {
+                $oauthUser['name'] .= substr($randString, 0, 3);
+            }
             $nicknames[] = $oauthUser['name'];
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);

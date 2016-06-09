@@ -92,7 +92,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         $tag                = $this->filterTagFields($tag);
         $tag['createdTime'] = time();
-        $tag                = $this->setOrg($tag);
+        $tag                = $this->setTagOrg($tag);
         $tag                = $this->getTagDao()->addTag($tag);
 
         $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
@@ -100,7 +100,7 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
-    protected function setOrg($tag)
+    protected function setTagOrg($tag)
     {
         $magic = $this->getSettingService()->get('magic');
 

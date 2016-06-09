@@ -12,16 +12,14 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
       <a class="btn btn-info btn-sm pull-right"
-      data-toggle="modal" data-target="#modal"
-      data-url="{{ path('course_manage_material_create', {courseId:course.id}) }}"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
       >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课程文件'|trans}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'添加课程文件'|trans}}
       </a>
-      
       {{'课程文件'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
-
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
           <tr>
@@ -49,21 +47,12 @@
       <div class="btn-group mbm">
         <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
         <i class="glyphicon glyphicon-trash"></i>
-        {{'删除'|trans}}</button>
+        {{'移除'|trans}}</button>
       </div>
 
       <nav class="text-center">
         {{ web_macro.paginator(paginator) }}
       </nav>
-
-      {% if app.request.get('type') == 'coursematerial' %}
-        <div class="alert alert-info">
-          <ul>
-            <li>{{'上传备用资料文件成功后，在添加课时资料时可直接选取。'|trans}}</li>
-            <li><strong><a href="{{ path('course_materials', {id:course.id}) }}">课程资料区</a></strong>显示的是所有课时下的资料文件。</li>
-          </ul>
-        </div>
-      {% endif %}
 
     </div>
   </div>

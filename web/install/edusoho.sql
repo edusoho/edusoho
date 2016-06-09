@@ -20,6 +20,8 @@ CREATE TABLE `article` (
   `postNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '回复数',
   `upsNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '点赞数',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文章发布人的ID',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
@@ -99,6 +101,8 @@ CREATE TABLE `category` (
   `weight` int(11) NOT NULL DEFAULT '0' COMMENT '分类权重',
   `groupId` int(10) unsigned NOT NULL COMMENT '分类组ID',
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父分类ID',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uri` (`code`)
@@ -253,6 +257,9 @@ CREATE TABLE `course` (
   `tryLookable` TINYINT NOT NULL DEFAULT '0',
   `tryLookTime` INT NOT NULL DEFAULT '0',
   `conversationId` varchar(255) NOT NULL DEFAULT '0',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
@@ -267,6 +274,8 @@ CREATE TABLE `announcement` (
   `endTime` int(10) unsigned NOT NULL DEFAULT '0',
   `targetId` INT(10) UNSIGNED NOT NULL COMMENT '所属ID',
   `content` text NOT NULL COMMENT '公告内容',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
   PRIMARY KEY (`id`)
@@ -410,6 +419,7 @@ CREATE TABLE `course_material` (
   `fileUri` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件URI',
   `fileMime` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件MIME',
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
+  `source` varchar(50) NOT NULL DEFAULT 'coursematerial',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
@@ -701,6 +711,9 @@ CREATE TABLE `navigation` (
   `type` varchar(30) NOT NULL COMMENT '类型',
   `isOpen` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认1，为开启',
   `isNewWin` tinyint(2) NOT NULL DEFAULT '1' COMMENT '默认为1,另开窗口',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='导航数据表';
 
@@ -878,7 +891,10 @@ DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '标签ID',
   `name` varchar(64) NOT NULL COMMENT '标签名称',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
   `createdTime` int(10) unsigned NOT NULL COMMENT '标签创建时间',
+
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -1093,6 +1109,9 @@ CREATE TABLE `user` (
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `inviteCode` varchar(255) NUll DEFAULT NUll COMMENT '邀请码',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `nickname` (`nickname`)
@@ -1515,6 +1534,9 @@ CREATE TABLE `classroom` (
   `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示',
   `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
   `conversationId` varchar(255) NOT NULL DEFAULT '0',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
+  `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1838,4 +1860,25 @@ CREATE TABLE `dictionary` (
  `type` varchar(255) NOT NULL COMMENT '字典类型',
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `org`;
+
+CREATE TABLE IF NOT EXISTS  `org` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `parentId` int(11) NOT NULL DEFAULT '0' COMMENT '组织机构父ID',
+  `childrenNum` tinyint(3) unsigned NOT NULL  DEFAULT  '0' COMMENT '辖下组织机构数量',
+  `depth` int(11) NOT NULL   DEFAULT  '1' COMMENT '当前组织机构层级',
+  `seq` int(11) NOT NULL  DEFAULT '0' COMMENT '索引',
+  `description` text COMMENT '备注',
+  `code` varchar(255) NOT NULL DEFAULT '' COMMENT '机构编码',
+  `orgCode` varchar(255) NOT NULL DEFAULT '0' COMMENT '内部编码',
+  `createdUserId` int(11) NOT NULL COMMENT '创建用户ID',
+  `createdTime` int(11) unsigned NOT NULL  COMMENT '创建时间',
+  `updateTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `orgCode` (`orgCode`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
+
+
 

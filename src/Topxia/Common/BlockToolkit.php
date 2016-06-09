@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Common;
 
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
 class BlockToolkit

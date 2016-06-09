@@ -160,7 +160,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             }
         }
 
-        $fields                = $this->setOrg($fields);
+        $fields                = $this->setNavigationOrg($fields);
         $fields['createdTime'] = $fields['updateTime'] = time();
         $fields['sequence']    = $this->getNavigationDao()->getNavigationsCountByType($fields['type']) + 1;
         $result                = $this->getNavigationDao()->addNavigation($fields);
@@ -170,7 +170,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $result;
     }
 
-    protected function setOrg($fields)
+    protected function setNavigationOrg($fields)
     {
         $magic = $this->getSettingService()->get('magic');
 

@@ -698,16 +698,13 @@ class CourseLessonController extends BaseController
             $lessonLearns = array();
         }
 
-        $testpaperIds = array();
-        array_walk($items, function ($item, $key) use (&$testpaperIds) {
-            if ($item['type'] == 'testpaper') {
-                array_push($testpaperIds, $item['mediaId']);
-            }
-        }
-
-        );
+        $testpaperIds = ArrayToolkit::column(array_filter($items, function($item){
+            return $item['type'] == 'testpaper';
+        }), 'mediaId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        ;
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items'              => $items,

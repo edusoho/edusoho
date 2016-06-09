@@ -4,9 +4,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $form = $("#avatar-crop-form"),
-            $picture = $("#avatar-crop");
-
         var imageCrop = new ImageCrop({
             element: "#avatar-crop",
             group: "user",
@@ -26,7 +23,7 @@ define(function(require, exports, module) {
                     $("#modal").modal('hide');
                     Notify.success('上传成功');
                 } else {
-                      Notify.success('上传失败,请重试');
+                    Notify.success('上传失败,请重试');
                 }
             });
         });

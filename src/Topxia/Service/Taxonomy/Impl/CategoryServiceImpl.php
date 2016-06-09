@@ -237,7 +237,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->filterCategoryFields($category);
 
-        $category = $this->setOrg($category);
+        $category = $this->setCategoryOrg($category);
         $category = $this->getCategoryDao()->addCategory($category);
 
         $this->getLogService()->info('category', 'create', "添加分类 {$category['name']}(#{$category['id']})", $category);
@@ -245,7 +245,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $category;
     }
 
-    protected function setOrg($category)
+    protected function setCategoryOrg($category)
     {
         $magic = $this->getSettingService()->get('magic');
 
