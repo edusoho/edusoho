@@ -419,6 +419,7 @@ CREATE TABLE `course_material` (
   `fileUri` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件URI',
   `fileMime` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件MIME',
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
+  `source` varchar(50) NOT NULL DEFAULT 'coursematerial',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
