@@ -65,7 +65,7 @@ admin_operation_block:
 admin_block_visual_edit:
     name: 编辑
     parent: admin_operation_block
-    router_params: {'blockId': 'block.id'}
+    router_params: {'blockTemplateId': 'block.id'}
     router_params_context: 1
 
 

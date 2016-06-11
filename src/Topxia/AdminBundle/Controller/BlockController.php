@@ -33,6 +33,7 @@ class BlockController extends BaseController
         $latestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
 
         $userIds = ArrayToolkit::column($latestHistories, 'userId');
+
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
@@ -76,44 +77,16 @@ class BlockController extends BaseController
         ));
     }
 
-    public function updateAction(Request $request, $block)
+    public function updateAction(Request $request, $blockTemplate)
     {
-        if (is_numeric(($block))) {
-            $block = $this->getBlockService()->getBlock($block);
-        } else {
-            $block = $this->getBlockService()->getBlockByCode($block);
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
-            5
-        );
-
-        $templateData = array();
-        $templateItems = array();
-        if ($block['mode'] == 'template') {
-            $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
-            $templateData = json_decode($block['templateData'], true);
-        }
-
-        $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
-            $block['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
-
-        foreach ($blockHistorys as &$blockHistory) {
-            $blockHistory['templateData'] = json_decode($blockHistory['templateData'], true);
-        }
-
-        $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+        $user = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
             $templateData = array();
-            if ($block['mode'] == 'template') {
-                $template = $block['template'];
+            if ($fields['mode'] == 'template') {
+                $template = $fields['template'];
 
                 $template = str_replace(array('(( ', ' ))', '((  ', '  )'), array('((', '))', '((', '))'), $template);
 
@@ -131,15 +104,52 @@ class BlockController extends BaseController
                 $fields['content'] = $content;
                 $fields['templateData'] = json_encode($templateData);
             }
-
-            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
+            if (empty($fields['blockId'])) {
+                $block = $this->getBlockService()->createBlock($fields);
+            } else {
+                $block = $this->getBlockService()->updateBlock($fields['blockId'], $fields);
+            }
             $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
             $latestUpdateUser = $this->getUserService()->getUser($latestBlockHistory['userId']);
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'latestUpdateUser' => $latestUpdateUser,
+                'blockTemplate' => $block, 'latestUpdateUser' => $latestUpdateUser,
             ));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
+        }
+        if (is_numeric(($blockTemplate))) {
+            $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplate, $user['orgId']);
+        } else {
+            $block = $this->getBlockService()->getBlockByCodeAndOrgId($blockTemplate, $user['orgId']);
+        }
+
+        $templateData = array();
+        $templateItems = array();
+        $blockHistorys = array();
+        $historyUsers = array();
+        $paginator = null;
+        if (!empty($block['blockId'])) {
+            $paginator = new Paginator(
+            $this->get('request'),
+            $this->getBlockService()->findBlockHistoryCountByBlockId($block['blockId']),
+            5
+        );
+
+            if ($block['mode'] == 'template') {
+                $templateItems = $this->getBlockService()->generateBlockTemplateItems($block);
+                $templateData = json_decode($block['templateData'], true);
+            }
+
+            $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
+            $block['blockId'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+            foreach ($blockHistorys as &$blockHistory) {
+                $blockHistory['templateData'] = json_decode($blockHistory['templateData'], true);
+            }
+
+            $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-update-modal.html.twig', array(
@@ -174,19 +184,33 @@ class BlockController extends BaseController
 
     public function visualEditAction(Request $request, $blockTemplateId)
     {
-        $block = $this->getBlockService()->getBlock($blockId);
+        $user = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
-            $data = $request->request->get('data');
-            $block['data'] = $data;
+            $condation = $request->request->all();
+            $block['data'] = $condation['data'];
+            $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
 
-            $block = $this->getBlockService()->updateBlock($blockId, array(
-                'data' => $data,
+            $fields = array(
+                'data' => $block['data'],
                 'content' => $html,
-            ));
+                'userId' => $user['id'],
+                'blockTemplateId' => $condation['blockTemplateId'],
+                'orgId' => $user['orgId'],
+                'code' => $condation['code'],
+                'mode' => $condation['mode'],
+            );
+            if (empty($condation['blockId'])) {
+                $block = $this->getBlockService()->createBlock($fields);
+            } else {
+                $block = $this->getBlockService()->updateBlock($condation['blockId'], $fields);
+            }
+
             $this->setFlashMessage('success', '保存成功!');
         }
+
+        $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
 
         return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
             'block' => $block,

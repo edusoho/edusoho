@@ -27,6 +27,19 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         );
     }
 
+    public function getBlockTemplateByCode($code)
+    {
+        $that = $this;
+
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
+            $block = $that->getConnection()->fetchAssoc($sql, array($code));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        }
+
+        );
+    }
+
     public function searchBlockTemplates($conditions, $orderBy, $start, $limit)
     {
         if (!isset($orderBy) || empty($orderBy)) {
@@ -51,14 +64,17 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addBlockTemplate($content)
+    public function addBlockTemplate($block)
     {
-        $affected = $this->getConnection()->insert($this->table, $content);
+        $this->createSerializer()->serialize($block, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $block);
+        $this->clearCached();
+
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert content error.');
+            throw $this->createDaoException('Insert block error.');
         }
 
-        return $this->getConnection()->lastInsertId();
+        return $this->getBlock($this->getConnection()->lastInsertId());
     }
 
     protected function _createSearchQueryBuilder($conditions)

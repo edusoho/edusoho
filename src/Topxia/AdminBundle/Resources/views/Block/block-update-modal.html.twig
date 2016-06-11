@@ -10,11 +10,15 @@
 
 <h5>编辑区名称：{{block.title}}</h5>
 
-<form id="block-form"  {% if block.mode == 'template' %}class="form-horizontal" {% endif %} action="{{ path('admin_block_update', {block:block.id}) }}" method="post">
+<form id="block-form"  {% if block.mode == 'template' %}class="form-horizontal" {% endif %} action="{{ path('admin_block_update', {blockTemplate:block.id}) }}" method="post">
   {% if block.mode == 'html' %}
   <div class="form-group">
       <div class="controls">
         <textarea class="form-control" id="blockContent" rows="10" name="content" data-role="editor-field" style="z-index:1000;">{{ block.content }}</textarea>
+        <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
+        <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
+        <input type="hidden" name="mode" value="{{ block.mode|default() }}">
+        <input type="hidden" name="template" value="{{ block.template|default() }}">
       </div>
   </div>
   {% else %}

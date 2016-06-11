@@ -9,4 +9,8 @@ interface BlockTemplateDao
     public function searchBlockTemplates($conditions, $orderBy, $start, $limit);
 
     public function searchBlockTemplateCount($conditions);
+
+    public function addBlockTemplate($block);
+
+    public function getBlockTemplateByCode($code);
 }

@@ -12,13 +12,13 @@ interface BlockDao
 
     public function deleteBlock($id);
 
-    public function getBlockByCode($code);
-
-    public function getBlocksByBlockTemplateIdAndOrgId($blockTemplateId,$orgId);
+    public function getBlockByCode($code,$orgId);
 
     public function findBlocks($condition, $sort, $start, $limit);
 
     public function updateBlock($id, array $fields);
 
-    public function getBlockByTemplateId($blockTemplateId,$orgId=0);
+    public function getBlockByTemplateIdAndOrgId($blockTemplateId,$orgId=0);
+
+    public function getBlockByTemplateId($blockTemplateId);
 }

@@ -27,9 +27,20 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         );
     }
 
-    public function getBlockByTemplateId($blockTemplateId,$orgId=0)
+    public function getBlockByTemplateIdAndOrgId($blockTemplateId,$orgId=0)
     {
-        return null;
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}' AND orgId =  '{$orgId}' ";
+        $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId,$orgId));
+
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+    }
+
+    public function getBlockByTemplateId($blockTemplateId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}'";
+        $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId));
+
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
     public function searchBlockCount($condition)
@@ -42,13 +53,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
         return $this->getConnection()->fetchColumn($sql, array());
     }
-
-    public function getBlocksByBlockTemplateIdAndOrgId($blockTemplateId,$orgId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}' AND orgId =  '{$orgId}' ";
-        return $this->getConnection()->fetchAssoc($sql, array($blockTemplateId,$orgId)) ? : null;
-    }
-
+    
     protected function createBlockQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
@@ -104,17 +109,12 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         return $result;
     }
 
-    public function getBlockByCode($code)
+    public function getBlockByCode($code,$orgId=0)
     {
-        $that = $this;
+        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
+        $block = $this->getConnection()->fetchAssoc($sql, array($code,$orgId));
 
-        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?  LIMIT 1";
-            $block = $that->getConnection()->fetchAssoc($sql, array($code));
-            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
-        }
-
-        );
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
     public function findBlocks($conditions, $orderBy, $start, $limit)
@@ -135,6 +135,10 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function updateBlock($id, array $fields)
     {
+        if (!empty($fields['blockId']))
+         {
+            unset($fields['blockId']);
+        }
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();

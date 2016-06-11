@@ -34,10 +34,12 @@ class Version20160607153959 extends AbstractMigration
                   `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)                  
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';"
-        );      
+        );
         $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'");
         $this->addSql("ALTER TABLE  `block` ADD  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'");
         $this->addSql("INSERT INTO `block_template`( `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime`) select `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime` from `block`;");
+        $this->addSql("ALTER TABLE `block` DROP INDEX `code`");
+        $this->addSql("DELETE from `block` where 1=1");
 
     }
 

@@ -17,6 +17,11 @@ class BlockTemplateServiceImpl extends BaseService implements BlockTemplateServi
          return $result;
     }
 
+    public function getBlockTemplateByCode($code)
+    {
+        return $this->getBlockTemplateDao()->getBlockTemplateByCode($code);
+    }
+
     public function searchBlockTemplateCount($condition)
     {
         return $this->getBlockTemplateDao()->searchBlockTemplateCount($condition);
