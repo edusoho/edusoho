@@ -14,7 +14,7 @@
             <label class="control-label required" for="register_email">{{ '原邮箱地址:'|trans }}</label>
             <div class="controls">
               <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
-                     data-url="{{ path('register_reset_email_check') }}" readonly value="{{ user.email }}">
+                     data-url="{{ path('register_reset_email_check') }}" readonly value="{{ user.email }}" data-display="Email">
               <p class="help-block"></p>
             </div>
           </div>
@@ -23,7 +23,7 @@
             <label class="control-label required" for="register_password">{{ '网校密码:'|trans }}</label>
             <div class="controls">
               <input type="password" id="password" name="password" required="required" autocomplete="off"
-                     class="form-control input-lg" placeholder="{{ '请输入网校密码'|trans }}">
+                     class="form-control input-lg" placeholder="{{ '请输入网校密码'|trans }}" data-display="网校密码">
               <p class="help-block"></p>
             </div>
           </div>
