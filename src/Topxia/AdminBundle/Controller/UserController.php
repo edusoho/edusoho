@@ -234,7 +234,7 @@ class UserController extends BaseController
 
         if ($request->isMethod('POST')) {
             $orgCode = $request->request->get('orgCode', $user['orgCode']);
-            $this->getUserService()->changeOrgCode($user['id'], $orgCode);
+            $this->getUserService()->changeUserOrg($user['id'], $orgCode);
         }
 
         $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
@@ -251,7 +251,6 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
-
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user'    => $user,
             'profile' => $profile,
