@@ -27,4 +27,10 @@ interface OrgService
     public function switchOrg($id);
 
     public function sortOrg($ids);
+
+    /**
+     * @param $id
+     * @return orgName1->orgName2->orgName3
+     */
+    public function geFullOrgNameById($id);
 }
