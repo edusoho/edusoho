@@ -24,7 +24,7 @@ interface UserService
 
     public function setEmailVerified($userId);
 
-    public function changeUserOrg($userId, $fields);
+    public function changeUserOrg($userId, $orgCode);
 
     public function changeNickname($userId, $nickname);
 
