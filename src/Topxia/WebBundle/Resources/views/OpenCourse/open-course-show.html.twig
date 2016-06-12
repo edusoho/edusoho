@@ -13,16 +13,7 @@
       </ol>
       
       <div class="row" style="margin:0">
-        <!-- <div class="col-md-9 open-course-views">
-          <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="">
-          <div class="mask">
-            <div class="mask-content">
-              <button class="btn btn-warning btn-lg mask-btn" style="margin-top:60px;">
-                开始播放<i class="es-icon es-icon-playcircleoutline"></i>
-              </button>
-            </div>
-          </div>
-        </div> --> 
+
         {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
         
         <div class="col-md-3 open-course-tab">

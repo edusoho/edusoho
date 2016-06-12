@@ -2194,6 +2194,10 @@ open_course_material_download:
     pattern:  /open/course/{courseId}/material/{materialId}/download
     defaults: { _controller: TopxiaWebBundle:OpenCourse:materialDownload }
 
+open_course_manage_material_browser:
+    pattern:  /open/course/{courseId}/manage/material/browser
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialBrowser }
+
 open_course_course_search:
     pattern: /open/course/{id}/recommended/search/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}

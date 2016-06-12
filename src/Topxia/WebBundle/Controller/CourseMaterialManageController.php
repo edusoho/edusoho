@@ -68,6 +68,14 @@ class CourseMaterialManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
+                'request'  => $request,
+                'courseId' => $courseId
+            ));
+    }
+
+    public function materialBrowserAction(Request $request, $courseId)
+    {
         $conditions = array();
         $type       = $request->query->get('type');
         
@@ -75,12 +83,13 @@ class CourseMaterialManageController extends BaseController
             $conditions['type'] = $type;
         }
 
-        $courseType = $request->query->get('type');
+        $courseType = $request->query->get('courseType');
         $courseType = empty($courseType) ? 'course' : $courseType;
+
         $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
             array(
-                'courseId' => $course['id'],
-                'type' =>$courseType
+                'courseId' => $courseId,
+                'type'     => $courseType
             ),
             array('createdTime','DESC'),
             0,PHP_INT_MAX

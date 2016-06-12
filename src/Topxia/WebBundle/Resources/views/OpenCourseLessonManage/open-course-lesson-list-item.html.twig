@@ -13,7 +13,7 @@
       {% else %}
       <i class="fa fa-file-video-o text-success"></i>
       {% endif %}
-    {% elseif lesson.type == 'live' %}
+    {% elseif lesson.type == 'liveOpen' %}
       {% if mediaStatus == 'waiting' %}
       <i class="fa fa-video-camera text-warning"></i>
       {% elseif mediaStatus == 'doing' %}
@@ -30,14 +30,11 @@
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
 
-    {% if course.type == 'normal'%}
-    {% if lesson.free == 1 %}
-      <span class="label label-success">{{'免费'|trans}}</span>
-    {% elseif course.tryLookable and lesson.type == 'video' and file.storage|default('') == 'cloud' %}
-      <span class="label label-warning mrm">{{'试看'|trans}}</span>{% endif %}
-    {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
+    {% if lesson.type not in ['liveOpen'] 
+      and lesson.mediaSource == 'self'
+      and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId) 
+    %}
       <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
-    {% endif %}
     {% endif %}
     {{ lesson.title }}
 

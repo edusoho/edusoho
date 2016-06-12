@@ -336,10 +336,20 @@ class OpenCourseLessonManageController extends BaseController
         
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
         if ($material) {
-            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>$lessonId,'materialId'=>$materialId,'fileId'=>$material['fileId']));
+            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>0,'materialId'=>$materialId,'fileId'=>$material['fileId']));
         }
         
         return $this->createJsonResponse(true);
+    }
+
+    public function materialBrowserAction(Request $request, $courseId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+
+        return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
+                'request'  => $request,
+                'courseId' => $courseId
+            ));
     }
 
     protected function textToSeconds($minutes, $seconds)

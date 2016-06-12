@@ -42,7 +42,7 @@ class OpenCourseFileManageController extends BaseController
             'users'      => ArrayToolkit::index($users, 'id'),
             'paginator'  => $paginator,
             'now'        => time(),
-            'filesQuote' => $filesQuote
+            'filesQuote' => $filesQuote,
         ));
     }
 

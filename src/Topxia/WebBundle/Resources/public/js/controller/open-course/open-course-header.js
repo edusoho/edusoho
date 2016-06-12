@@ -58,9 +58,12 @@ define(function(require, exports, module) {
             $.get(url,function(lesson){
 
                 if (lesson.mediaError) {
-                    Notify.danger(lesson.mediaError);
+                    //Notify.danger(lesson.mediaError);
+                    $('#media-error-dialog').show();
+                    $('#media-error-dialog').find('.modal-body').html(lesson.mediaError);
                     return;
                 }
+                $('#media-error-dialog').hide();
 
                 if (lesson.mediaSource == 'iframe') {
                     var html = '<iframe class="embed-responsive-item" src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
@@ -77,7 +80,7 @@ define(function(require, exports, module) {
                             return;
                         }
 
-                        var playerUrl = '../../open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                        var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
                         
                         var html = '<iframe class="embed-responsive-item" src="' + playerUrl + '" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%"" style="border:0px;position:absolute; left:0; top:0;"></iframe>';
 

@@ -92,6 +92,15 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '该课时不存在！');
         }
 
+        if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!$file) {
+                return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+            }
+        } else if ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
+            return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+        }
+
         $lesson = $this->_getLessonVedioInfo($request, $lesson);
 
         return $this->createJsonResponse($lesson);
@@ -112,7 +121,7 @@ class OpenCourseController extends BaseController
             $lesson = $this->_checkPublishedLessonExists($course['id']);
         }
 
-        $lesson = $lesson ? $lesson : array();
+        $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
 
         $member = $this->_getMember($request, $course['id']);
 
@@ -371,8 +380,10 @@ class OpenCourseController extends BaseController
         }
 
         $conditions = array(
-            'courseId' => $id,
-            'type'     => 'openCourse'
+            'courseId'        => $id,
+            'excludeLessonId' => 0,
+            'source'          => 'opencoursematerial',
+            'type'            => 'openCourse'
         );
 
         $paginator = new Paginator(

@@ -642,10 +642,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             $startJob = array(
                 'name'       => "LiveOpenPushNotificationOneHourJob",
                 'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 60 * 60,
                 'jobClass'   => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
                 'targetType' => 'liveOpenLesson',
-                'targetId'   => $lesson['id']
+                'targetId'   => $lesson['id'],
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
