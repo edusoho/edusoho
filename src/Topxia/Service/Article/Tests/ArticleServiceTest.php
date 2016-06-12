@@ -289,6 +289,61 @@ class ArticleServiceTest extends BaseTestCase
         $result = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount();
     }
 
+    public function testFindRelativeArticles()
+    {
+        $tag1 = $this->getTagService()->addTag(array('name' => 'tag1'));
+        $tag2 = $this->getTagService()->addTag(array('name' => 'tag2'));
+        $tag3 = $this->getTagService()->addTag(array('name' => 'tag3'));
+        $article1 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article1',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s,%s', $tag1['name'], $tag2['name'])
+        );
+        $article1 = $this->getArticleService()->createArticle($article1);
+
+        $article2 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article2',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s,%s,%s', $tag1['name'], $tag2['name'], $tag3['name'])
+        );
+        $article2 = $this->getArticleService()->createArticle($article2);
+
+        $article3 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article3',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s', $tag3['name'])
+        );
+        $article3 = $this->getArticleService()->createArticle($article3);
+
+
+        $relativeArticles = $this->getArticleService()->findRelativeArticles($article1['id'], 3);
+        $this->assertEquals(count($relativeArticles), 1);
+
+        $relativeArticles = $this->getArticleService()->findRelativeArticles($article3['id'], 3);
+        $this->assertEquals(count($relativeArticles), 1);
+    }
+
     protected function createArticle()
     {
         $fileds = array(
@@ -344,6 +399,11 @@ class ArticleServiceTest extends BaseTestCase
         $user['currentIp'] = '127.0.0.1';
         $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         return $user;
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getArticleService()

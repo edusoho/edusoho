@@ -338,6 +338,34 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
+    public function findRelativeArticles($articleId, $num = 3)
+    {
+        $article = $this->getArticle($articleId);
+
+        if (empty($article)) {
+            throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
+        }
+
+        $self = $this;
+
+        $relativeArticles = array_map(function ($tagId) use ($article, $self) {
+            $conditions = array(
+                'tagId'      => $tagId,
+                'idNotEqual' => $article['id'],
+                'hasThumb'   => true
+            );
+            $count      = $self->searchArticlesCount($conditions);
+            $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
+            return ArrayToolkit::index($articles, 'id');
+        }, $article['tagIds']);
+
+        $ret = array_reduce($relativeArticles, function ($ret, $articles){
+            return array_merge($ret, $articles);
+        }, array());
+        $ret = array_unique($ret, SORT_REGULAR);
+        return array_slice($ret, 0, $num);
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article            = array();
