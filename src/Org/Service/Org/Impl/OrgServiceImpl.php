@@ -144,6 +144,19 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         return $this->getOrgDao()->getOrgByCode($code);
     }
+    
+    public function geFullOrgNameById($id, $orgs = array())
+    {
+        $orgs[] = $org = $this->getOrg($id);
+        if (isset($org['parentId'])) {
+            return $this->geFullOrgNameById($org['parentId'], $orgs);
+        } else {
+            $orgs = ArrayToolkit::index($orgs, 'id');
+            ksort($orgs);
+            $orgs  = ArrayToolkit::column($orgs, 'name');
+            return implode($orgs, '->');
+        }
+    }
 
     protected function getOrgDao()
     {
