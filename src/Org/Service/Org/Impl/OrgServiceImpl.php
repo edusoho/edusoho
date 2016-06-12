@@ -46,10 +46,10 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = array();
 
         if (empty($parentOrg)) {
-            $fields['orgCode'] = $org['id'].'.';
+            $fields['orgCode'] = $org['id'] . '.';
             $fields['depth']   = 1;
         } else {
-            $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
+            $fields['orgCode'] = $parentOrg['orgCode'] . $org['id'] . '.';
             $fields['depth']   = $parentOrg['depth'] + 1;
         }
 
@@ -138,6 +138,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         foreach ($ids as $index => $id) {
             $this->getOrgDao()->updateOrg($id, array('seq' => $index));
         }
+    }
+
+    public function getOrgByCode($code)
+    {
+        return $this->getOrgDao()->getOrgByCode($code);
     }
 
     protected function getOrgDao()
