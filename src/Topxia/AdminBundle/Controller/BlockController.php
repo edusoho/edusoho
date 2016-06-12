@@ -85,6 +85,8 @@ class BlockController extends BaseController
             $fields = $request->request->all();
 
             $templateData = array();
+            $fields['userId'] = $user['id'];
+            $fields['orgId'] = $user['orgId'];
             if ($fields['mode'] == 'template') {
                 $template = $fields['template'];
 
@@ -127,7 +129,9 @@ class BlockController extends BaseController
         $templateItems = array();
         $blockHistorys = array();
         $historyUsers = array();
-        $paginator = null;
+        $paginator = new Paginator($this->get('request'),
+            null,
+            5);
         if (!empty($block['blockId'])) {
             $paginator = new Paginator(
             $this->get('request'),
@@ -184,6 +188,7 @@ class BlockController extends BaseController
 
     public function visualEditAction(Request $request, $blockTemplateId)
     {
+
         $user = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
@@ -211,7 +216,7 @@ class BlockController extends BaseController
         }
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
-
+        
         return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
             'block' => $block,
             'action' => 'edit',

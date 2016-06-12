@@ -32,7 +32,8 @@ class Version20160607153959 extends AbstractMigration
                   `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
                   `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
                   `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-                  PRIMARY KEY (`id`)                  
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `code` (`code`)                  
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';"
         );
         $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'");

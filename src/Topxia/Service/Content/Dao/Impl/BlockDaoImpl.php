@@ -91,6 +91,10 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function addBlock($block)
     {
+        if (isset($block['blockId']))
+         {
+            unset($block['blockId']);
+        }
         $this->createSerializer()->serialize($block, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $block);
         $this->clearCached();
@@ -135,7 +139,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function updateBlock($id, array $fields)
     {
-        if (!empty($fields['blockId']))
+        if (isset($fields['blockId']))
          {
             unset($fields['blockId']);
         }
