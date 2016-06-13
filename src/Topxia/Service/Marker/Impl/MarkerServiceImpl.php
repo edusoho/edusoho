@@ -75,10 +75,6 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     {
         $media = $this->getUploadFileService()->getFile($mediaId);
 
-        // if (empty($mediaId) || empty($media)) {
-        //     throw $this->createServiceException("视频文件不存在！");
-        // }
-
         if (empty($media)) {
             $media['id'] = 0;
             $this->getLogService()->error('marker', 'mediaId_notExist', "视频文件不存在！");
@@ -94,7 +90,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'updatedTime' => time(),
             'second'      => $fields['second']
         );
-
+        $this->getLogService()->info('marker', 'create', "增加驻点#{$id}");
         $marker   = $this->getMarkerDao()->addMarker($marker);
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
         return $question;

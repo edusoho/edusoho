@@ -82,14 +82,14 @@ class ClassroomAdminController extends BaseController
 
     public function addClassroomAction(Request $request)
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
-        }
-
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+        }
+
+        if (!$user->isAdmin()) {
+            return $this->createMessageResponse('info', '只允许管理员创建班级!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -118,9 +118,12 @@ class ClassroomAdminController extends BaseController
             $classroom = array(
                 'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable'  => $myClassroom['buyable'],
-                'orgCode'  => $myClassroom['orgCode']
+                'buyable'  => $myClassroom['buyable']
             );
+
+            if (array_key_exists('orgCode', $myClassroom)) {
+                $classroom['orgCode'] = $myClassroom['orgCode'];
+            }
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
