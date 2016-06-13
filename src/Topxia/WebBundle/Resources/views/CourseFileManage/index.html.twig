@@ -25,7 +25,7 @@
     <div class="panel-heading">
       <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_uplod', {token:uploader_token({{ targetType }}, course.id, 'private')}) }}"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token(targetType, course.id, 'private')}) }}"
       >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'添加课程文件'|trans}}
       </a>
