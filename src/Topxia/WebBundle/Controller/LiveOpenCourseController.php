@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveOpenCourseController extends BaseController
 {
@@ -24,7 +25,7 @@ class LiveOpenCourseController extends BaseController
 
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : 0;
-        $params['nickname'] = $user->isLogin() ? $user['nickname'] : 'guest';
+        $params['nickname'] = $user->isLogin() ? $user['nickname'] : '游客';
 
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
@@ -60,8 +61,10 @@ class LiveOpenCourseController extends BaseController
             return $this->createJsonResponse($resultList);
         }
 
-        $lesson          = $this->getOpenCourseService()->getLesson($lessonId);
-        $lesson["isEnd"] = intval(time() - $lesson["endTime"]) > 0;
+        $client              = new EdusohoLiveClient();
+        $lesson              = $this->getOpenCourseService()->getLesson($lessonId);
+        $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
+        $lesson['canRecord'] = $client->isAvailableRecord($lesson['mediaId']);
 
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
             'course' => $course,
@@ -118,8 +121,10 @@ class LiveOpenCourseController extends BaseController
         $course  = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
+        $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
             $lesson["isEnd"]                   = intval(time() - $lesson["endTime"]) > 0;
+            $lesson["canRecord"]               = $client->isAvailableRecord($lesson['mediaId']);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
 

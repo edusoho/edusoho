@@ -722,7 +722,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             }
         }
 
-        $this->getLogService()->info('openCourse', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->updateCourse($courseId, $fields);

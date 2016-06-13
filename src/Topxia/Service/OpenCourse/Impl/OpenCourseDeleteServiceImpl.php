@@ -77,22 +77,8 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteRecommend($course)
     {
-        //$recommendCount = $this->getRecommendCourseDao()->searchRecommendCount(array('recommendCourseId' => $course['id']));
-        $openCount      = $this->getRecommendCourseDao()->searchRecommendCount(array('openCourseId' => $course['id']));
-
-        $count = 0;
-
-        /*if ($recommendCount > 0) {
-            $recommends = $this->getRecommendCourseDao()->searchRecommends(array('recommendCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
-
-            foreach ($recommends as $recommend) {
-                $result = $this->getRecommendCourseDao()->deleteRecommendedCourse($recommend['id']);
-                $count += $result;
-            }
-
-            $memberLog = "删除公开课《{$course['title']}》(#{$course['id']})的所有推荐课程";
-            $this->getLogService()->info('open_course', 'delete_recommend_course', $memberLog);
-        }*/
+        $openCount = $this->getRecommendCourseDao()->searchRecommendCount(array('openCourseId' => $course['id']));
+        $count     = 0;
 
         if ($openCount > 0) {
             $openCourses = $this->getRecommendCourseDao()->searchRecommends(array('openCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
@@ -119,7 +105,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteMaterials($course)
     {
-        $conditions    = array('courseId' => $course['id'], 'type' => 'course');
+        $conditions    = array('courseId' => $course['id'], 'type' => 'openCourse');
         $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
         $count         = 0;
 

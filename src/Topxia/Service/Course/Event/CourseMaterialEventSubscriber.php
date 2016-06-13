@@ -22,6 +22,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             'course.material.update' => 'onMaterialUpdate',
             'course.material.delete' => 'onMaterialDelete',
 
+            'open.course.delete'        => 'onOpenCourseDelete',
             'open.course.lesson.create' => 'onOpenCourseLessonCreate',
             'open.course.lesson.update' => 'onOpenCourseLessonUpdate',
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
@@ -244,6 +245,13 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
             }
         }
         
+    }
+
+    public function onOpenCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+
+        $this->getMaterialService()->deleteMaterialsByCourseId($course['id'], 'openCourse');
     }
 
     public function onOpenCourseLessonCreate(ServiceEvent $event)

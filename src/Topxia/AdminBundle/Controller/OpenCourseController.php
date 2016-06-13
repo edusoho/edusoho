@@ -89,12 +89,6 @@ class OpenCourseController extends BaseController
             throw $this->createAccessDeniedException('发布课程，不能删除！');
         }
 
-        $subCourses = $this->getOpenCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
-
-        if (!empty($subCourses)) {
-            return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
-        }
-
         if ($course['status'] == 'draft') {
             $result = $this->getOpenCourseService()->deleteCourse($courseId);
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
@@ -213,7 +207,7 @@ class OpenCourseController extends BaseController
 
     protected function returnDeleteStatus($result, $type)
     {
-        $dataDictionary = array('lessons' => '课时', 'recommend' => '推荐课程', 'members' => '课程成员', 'course' => '课程');
+        $dataDictionary = array('lessons' => '课时', 'recommend' => '推荐课程', 'members' => '课程成员', 'course' => '课程', 'materials' => '课程文件');
 
         if ($result > 0) {
             $message = $dataDictionary[$type]."数据删除";

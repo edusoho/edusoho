@@ -482,11 +482,12 @@ class OpenCourseManageController extends BaseController
 
     private function _filterConditions($conditions, $excludeCourseIds)
     {
-        $conditions = array(
-            'status'     => 'published',
-            'parentId'   => 0,
-            'excludeIds' => (empty($excludeCourseIds)) ? null : $excludeCourseIds
-        );
+        $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
+
+        if (!empty($excludeCourseIds)) {
+            $conditions['excludeIds'] = $excludeCourseIds;
+        }
 
         if (isset($conditions['title']) && $conditions['title'] == "") {
             unset($conditions['title']);

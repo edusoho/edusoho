@@ -19,22 +19,27 @@ define(function(require, exports, module) {
 
                 title: '删除成员',
                 url: urls.memberDeleteUrl,              
-                progressRange: [3, 30]
+                progressRange: [3, 20]
             },
             {
                 title: '删除相关推荐课程',
                 url: urls.recommendDeleteUrl,               
-                progressRange: [31, 64]
+                progressRange: [21, 40]
             },
             {
                 title: '删除课时资料',
+                url: urls.materialDeleteUrl,
+                progressRange: [41,60]
+            }, 
+            {
+                title: '删除课时',
                 url: urls.lessonDeleteUrl,
-                progressRange: [65,98]
-            },       
+                progressRange: [61,80]
+            },      
             {
                 title: '删除课程',
                 url: urls.courseDeleteUrl,
-                progressRange: [99, 100]
+                progressRange: [81, 100]
             }
         ];
 
