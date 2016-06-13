@@ -28,7 +28,7 @@
   pointer-events:none;
 }
 
-.ckeditor-balloon-uploader .balloon-uploader {
+.ckeditor-balloon-uploader {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -135,11 +135,11 @@
   color: #999;
 }
 
-.ckeditor-balloon-uploader .balloon-uploader .file-pick-btn {
+.ckeditor-balloon-uploader .file-pick-btn {
   display: inline-block;
 }
 
-.ckeditor-balloon-uploader .balloon-uploader .start-upload-btn {
+.ckeditor-balloon-uploader .start-upload-btn {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -152,7 +152,7 @@
   overflow: hidden;
 }
 
-.ckeditor-balloon-uploader .balloon-uploader .start-upload-btn:hover {
+.ckeditor-balloon-uploader .start-upload-btn:hover {
   background: #31b0d5;
   border-color: #269abc;
 }
