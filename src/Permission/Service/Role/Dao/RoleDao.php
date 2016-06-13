@@ -7,6 +7,8 @@ interface RoleDao
 
     public function getRoleByCode($Code);
 
+    public function findRolesByCodes($codes);
+
     public function createRole($role);
 
     public function updateRole($id, array $fiedls);

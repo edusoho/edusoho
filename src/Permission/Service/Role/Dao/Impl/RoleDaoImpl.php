@@ -24,6 +24,18 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         return $role ? $this->createSerializer()->unserialize($role, $this->getSerializeFields()) : null;
     }
 
+    public function findRolesByCodes($codes)
+    {
+        if (empty($codes)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($codes) - 1).'?';
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE code IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $codes);
+
+    }
+
     public function getRoleByName($name)
     {
         $sql  = "SELECT * FROM {$this->table} WHERE name = ? LIMIT 1";
@@ -75,8 +87,8 @@ class RoleDaoImpl extends BaseDao implements RoleDao
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, $this->table)
-                        ->andWhere("name LIKE :name")
-                        ->andWhere("code LIKE :code")
+                        ->andWhere("name = :name")
+                        ->andWhere("code = :code")
                         ->andWhere('createdUserId = :createdUserId');
         return $builder;
     }

@@ -1703,6 +1703,7 @@ class UserSerialize
 {
     public static function
     serialize(array $user) {
+
         $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
         return $user;
     }
@@ -1713,7 +1714,9 @@ class UserSerialize
             return null;
         }
 
-        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+        $roles = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+        $roles = array_unique($roles);
+        $user['roles'] = $roles;
 
         $user = UserSerialize::_userRolesSort($user);
 

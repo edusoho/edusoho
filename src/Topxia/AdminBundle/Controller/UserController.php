@@ -46,7 +46,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-//根据mobile查询user_profile获得userIds
+        //根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
@@ -90,13 +90,27 @@ class UserController extends BaseController
         $userIds  = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
+        $roles = $this->getRoles($users);
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users'          => $users,
+            'roles'          => $roles,
             'userCount'      => $userCount,
             'paginator'      => $paginator,
             'profiles'       => $profiles,
             'showUserExport' => $showUserExport
         ));
+    }
+
+    protected function getRoles($users)
+    {
+        $roles = array();
+        foreach ($users as $key => $user) {
+            $roles = array_unique(array_merge($user['roles'],$roles));
+        }
+
+        $roles = $this->getRoleService()->findRolesByCodes($roles);
+        return ArrayToolkit::index($roles, 'code');
     }
 
     public function emailCheckAction(Request $request)

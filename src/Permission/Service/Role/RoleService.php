@@ -5,7 +5,9 @@ interface RoleService
 {
     public function getRole($id);
 
-    public function getRoleByCode($Code);
+    public function getRoleByCode($code);
+
+    public function findRolesByCodes($codes);
 
     public function createRole($role);
 

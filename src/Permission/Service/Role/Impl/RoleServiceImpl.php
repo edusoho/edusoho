@@ -17,6 +17,11 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $this->getRoleDao()->getRoleByCode($code);
     }
 
+    public function findRolesByCodes($codes)
+    {
+        return $this->getRoleDao()->findRolesByCodes($codes);
+    }
+
     public function createRole($role)
     {
         $role['createdTime']   = time();
