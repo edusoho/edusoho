@@ -361,7 +361,8 @@ class Logger
             'discount'      => '打折活动',
             'exercise'      => '练习',
             'homework'      => '作业',
-            'question_plus' => '题库增强版'
+            'question_plus' => '题库增强版',
+            'open_course'   => '公开课'
         );
     }
 }
