@@ -11,7 +11,6 @@ admin_user_org_update:
     parent: admin_user_manage
     mode: modal
     group: groupButton
-    visable: (setting('magic.enable_org','0') == 1)
     router_params:
         id: (user.id)
 
