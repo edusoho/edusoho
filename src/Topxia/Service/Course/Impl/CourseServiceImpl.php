@@ -409,6 +409,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
+        $course                = $this->fillOrgId($course);
         $course                = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 
         $member = array(
@@ -441,7 +442,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->_filterCourseFields($fields);
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
-
+       
+        $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
@@ -488,7 +490,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookTime'    => 0,
             'buyable'        => 0,
             'conversationId' => '',
-            'orgCode'        => '1.'
+            'orgCode'        => '',
+            'orgId'          => ''
         ));
 
         if (!empty($fields['about'])) {

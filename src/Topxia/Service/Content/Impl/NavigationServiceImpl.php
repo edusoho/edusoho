@@ -50,7 +50,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $conditions['orgId'] = isset($user['org']) ? $user['org']['id'] : null;
+            $conditions['orgId'] = !empty($user['org']) ? $user['org']['id'] : null;
         }
 
         return $conditions;
@@ -182,6 +182,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $currentOrg = $user['org'];
 
         if (empty($fields['parentId'])) {
+            if(empty($user['org'])){
+                return $fields;
+            }
             $fields['orgId']   = $currentOrg['id'];
             $fields['orgCode'] = $currentOrg['orgCode'];
         } else {

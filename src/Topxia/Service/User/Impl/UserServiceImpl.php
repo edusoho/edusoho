@@ -534,6 +534,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($registration['orgCode'])) {
             $user['orgCode'] = $registration['orgCode'];
+            $user['orgId']   = $registration['orgId'];
         }
 
         $user['createdTime'] = time();
@@ -553,7 +554,6 @@ class UserServiceImpl extends BaseService implements UserService
             $user['password'] = '';
             $user['setup']    = 0;
         }
-
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
