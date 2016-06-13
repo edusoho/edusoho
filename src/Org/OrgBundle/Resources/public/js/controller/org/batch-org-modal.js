@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     exports.run = function() {
     	var ids=[];
-        $( "input[name='select']:checked").each(function(){
+        $("[data-role='batch-item']:checked").each(function(){
         	var id = $(this).parents('tr').attr('id');
         	ids.push(id.split('-').pop());
         });
@@ -9,3 +9,4 @@ define(function(require, exports, module) {
         $("#batch-ids").val(ids);
     };
 });
+
