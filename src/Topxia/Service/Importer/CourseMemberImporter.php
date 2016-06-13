@@ -61,7 +61,7 @@ class CourseMemberImporter extends Importer
                     'targetType' => 'course',
                     'targetId'   => $targetObject['id'],
                     'amount'     => $orderData['amount'],
-                    'payment'    => 'none',
+                    'payment'    => 'realpay',
                     'snPrefix'   => 'CR',
                     'note'       => '通过批量导入添加'
                 ));

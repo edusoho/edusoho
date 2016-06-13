@@ -70,6 +70,7 @@ payment:
     heepay: 网银支付
     quickpay: 快捷支付
     iosiap: 苹果应用内支付
+    realpay: 线下支付
 
 moneyRecordType:
     income: 充值

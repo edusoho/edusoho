@@ -62,7 +62,7 @@ class ClassroomMemberImporter extends Importer
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
                     'amount'     => $orderData['amount'],
-                    'payment'    => 'none',
+                    'payment'    => 'realpay',
                     'snPrefix'   => 'CR'
                 ));
 
