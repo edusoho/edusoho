@@ -151,18 +151,103 @@ admin:
                                 admin_course_add:
                                     name: 创建课程
                                     router_name: course_create
-                                    group: 2
+                                    group: topBtn
                                     blank: 1
                                 admin_live_course_add:
                                     name: 创建直播课程
                                     router_name: course_create
                                     router_params:
                                         flag: isLive
-                                    group: 2
+                                    group: topBtn
+                                admin_course_recommend:
+                                    name: 推荐课程
+                                    router_params:
+                                        id: (course.id)
+                                        filter: (filter)
+                                        ref: 'courseList'
+                                    group: groupButton
+                                    visable: ( filter == 'normal' and not course.recommended )
+                                    icon: 'glyphicon glyphicon-hand-up'
+                                    mode: modal
+                                admin_course_cancel_recommend:
+                                    name: 取消推荐
+                                    router_params:
+                                        id: (course.id)
+                                        filter: (filter)
+                                        target: (target)
+                                    group: groupButton
+                                    visable: ( filter == 'normal' and course.recommended )
+                                    icon: 'glyphicon glyphicon-hand-right'
+                                    mode: none
+                                admin_course_copy:
+                                    name: 复制课程
+                                    router_params:
+                                        id: (course.id)
+                                    group: groupButton
+                                    visable: ( filter == 'normal' and not course.type == 'live' )
+                                    icon: 'glyphicon glyphicon-plus-sign'
+                                    mode: modal
+                                admin_course_guest_member_preview:
+                                    name: 预览：作为未购买用户
+                                    router_name: course_show
+                                    router_params:
+                                        id: (course.id)
+                                        previewAs: 'guest'
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-eye-open'
+                                    mode: none
                                     blank: 1
-                        admin_course_recommend:
+                                admin_course_member_preview:
+                                    name: 预览：作为已购买用户
+                                    router_name: course_show
+                                    router_params:
+                                        id: (course.id)
+                                        previewAs: 'member'
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-eye-open'
+                                    mode: none
+                                    blank: 1
+                                admin_course_close:
+                                    name: 关闭课程
+                                    router_params:
+                                        id: (course.id)
+                                        filter: (filter)
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-ban-circle'
+                                    mode: none
+                                    visable: (course.status == 'published')
+                                admin_course_sms_prepare:
+                                    name: 发送发布通知短信
+                                    router_name: sms_prepare
+                                    router_params:
+                                        id: (course.id)
+                                        targetType: 'course'
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-envelope'
+                                    mode: modal
+                                    visable: (course.status == 'published')
+                                admin_course_publish:
+                                    name: 发布课程
+                                    router_params:
+                                        id: (course.id)
+                                        filter: (filter)
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-ok-circle'
+                                    mode: none
+                                    visable: (course.status != 'published')
+                                admin_course_delete:
+                                    name: 删除课程
+                                    router_params:
+                                        courseId: (course.id)
+                                        filter: (filter)
+                                        type: ''
+                                    group: groupButton
+                                    icon: 'glyphicon glyphicon-trash'
+                                    mode: none
+                                    visable: (course.status != 'published' and app.user.isSuperAdmin())
+
+                        admin_course_recommend_list:
                             name: 课程推荐
-                            router_name: admin_course_recommend_list
                         admin_course_data:
                             name: 课程统计
                 admin_live_course:
