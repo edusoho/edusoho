@@ -35,4 +35,11 @@ interface OrgService
      * @return orgName1->orgName2->orgName3
      */
     public function geFullOrgNameById($id);
+
+    /**
+     * @param  [type] $module , 要更新的模块名
+     * @param  [type] $ids,     要更新Ids
+     * @param  [type] $orgCode
+     */
+    public function batchUpgradeOrg($module, $ids, $orgCode);
 }

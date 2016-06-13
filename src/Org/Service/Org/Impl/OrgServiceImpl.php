@@ -158,8 +158,31 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
     }
 
+     public function batchUpgradeOrg($module, $ids, $orgCode)
+     {
+        $this->checkModule($module);
+
+        $org = $this->getOrgByOrgCode($orgCode);
+        if(empty($org)){
+             throw $this->createServiceException('组织机构不存在,更新失败');
+        }
+        $ids = explode(',', $ids);
+        foreach ($ids as $id) {
+            $this->getOrgDao()->batchUpgradeOrgCodeAndOrgId($module, $id, $org['orgCode'],$org['id']);
+        }
+     }
+
     protected function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
     }
+
+    protected function checkModule($module){
+        if(!in_array($module, array( 'user', 'course', 'classroom', 'article'))){
+            throw $this->createServiceException("模块({#module})不存在,无法更新组织机构");
+        }
+    }
+
+
+
 }

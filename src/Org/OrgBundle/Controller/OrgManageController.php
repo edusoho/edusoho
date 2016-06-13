@@ -77,6 +77,20 @@ class OrgManageController extends BaseController
         $this->getOrgService()->sortOrg($ids);
         return $this->createJsonResponse(true);
     }
+    /**
+     * @param  Request
+     * @param  [string] module  要更新的模块名
+     * @return [type]
+     */
+    public function batchUpdateAction(Request $request, $module){
+
+        if($request->getMethod() =='POST'){
+            $ids = $request->request->get('ids');
+            $orgCode = $request->request->get('orgCode');
+            $this->getOrgService()->batchUpgradeOrg($module, $ids, $orgCode);
+        }
+        return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module'=>$module));
+    }
 
     protected function getOrgService()
     {

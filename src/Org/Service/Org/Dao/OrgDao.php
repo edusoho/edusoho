@@ -15,4 +15,6 @@ interface OrgDao
     public function deleteOrgsByOrgCode($orgCode);
 
     public function findOrgsStartByOrgCode($orgCode);
+
+    public function batchUpgradeOrgCodeAndOrgId($module, $id, $orgCode, $orgId);
 }
