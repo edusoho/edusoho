@@ -209,7 +209,8 @@ class OpenCourseLessonManageController extends BaseController
             'fileKey'        => $fileKey,
             'convertKey'     => $convertKey,
             'storageSetting' => $this->setting('storage'),
-            'features'       => $features
+            'features'       => $features,
+            'courseType'     => 'openCourse'
         ));
     }
 
