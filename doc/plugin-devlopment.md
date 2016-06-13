@@ -57,4 +57,8 @@ EduSoho基于一系列的开源框架/类库搭建，在做插件开发之前，
   2. 在twig代码中，加入以下代码：
       ```
       {% set script_controller = 'examplebundle/your_script' %}
+
+      {% do load_script('examplebundle/your_script') %}
+
+      <script>app.load('examplebundle/your_script')</script>
       ```
