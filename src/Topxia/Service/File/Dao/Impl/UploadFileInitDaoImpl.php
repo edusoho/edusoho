@@ -21,11 +21,6 @@ class UploadFileInitDaoImpl extends BaseDao implements UploadFileInitDao
         return $this->getConnection()->fetchAssoc($sql, array($globalId)) ?: null;
     }
 
-    public function deleteFile($id)
-    {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
     public function addFile(array $file)
     {
         $file['createdTime'] = time();
