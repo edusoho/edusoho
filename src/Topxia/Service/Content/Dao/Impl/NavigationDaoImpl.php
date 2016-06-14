@@ -110,6 +110,7 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
+            ->orderBy('sequence', 'ASC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
