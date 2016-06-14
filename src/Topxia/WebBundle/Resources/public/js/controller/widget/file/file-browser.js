@@ -35,7 +35,7 @@ define(function(require, exports, module) {
             }, 'json');
 
             this.element.on('click.switch-page', '.js-switch-page', $.proxy(this._onSwitchPage, this));
-            
+
             return this;
         },
 
@@ -100,9 +100,9 @@ define(function(require, exports, module) {
                 this.element.html(html);
                 this.set('files', files);
             } else {
-                var message = self.element.data('empty');
+                var message = this.element.data('empty');
                 if (message) {
-                    self.element.html('<div class="empty">' + message + '</div>');
+                    this.element.html('<div class="empty">' + message + '</div>');
                 }
             }
         },
