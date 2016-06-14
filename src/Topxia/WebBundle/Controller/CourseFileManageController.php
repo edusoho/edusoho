@@ -112,6 +112,22 @@ class CourseFileManageController extends BaseController
         ));
     }
 
+    public function deleteMaterialShowAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $fileIds   = $request->request->get('ids');
+        $materials = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files,'id');
+        
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course'    => $course,
+            'materials' => $materials,
+            'files'     => $files
+        ));
+    }
+
     public function deleteCourseFilesAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
@@ -132,10 +148,6 @@ class CourseFileManageController extends BaseController
  
             return $this->createJsonResponse(true);
         }
-        
-        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
-            'course' => $course,
-        ));
     }
 
     private function _materialsSort($materials)
