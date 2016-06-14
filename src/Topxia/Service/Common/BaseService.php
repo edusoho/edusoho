@@ -86,6 +86,19 @@ abstract class BaseService
         return new NotFoundException($message, $code);
     }
 
+    protected function fillOrgId($fields){
+         $magic = $this->createService('System.SettingService')->get('magic');
+
+         if (isset($magic['enable_org']) && $magic['enable_org'] && isset($fields['orgCode'])) {
+            $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+            if(empty($org)){
+                throw $this->createServiceException("组织机构{$fields['orgCode']}不存在,更新失败");
+            }
+            $fields['orgId']   = $org['id'];
+            $fields['orgCode'] = $org['orgCode'];
+        }
+        return $fields;
+    }
     protected function getLogger($name)
     {
         if($this->logger) {

@@ -148,6 +148,7 @@ class UserController extends BaseController
             $formData['type'] = 'import';
             $registration     = $this->getRegisterData($formData, $request->getClientIp());
             $user             = $this->getAuthService()->register($registration);
+
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
@@ -182,6 +183,10 @@ class UserController extends BaseController
         $userData['password']  = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type']      = $formData['type'];
+
+        if(isset($formData['orgCode'])){
+            $userData['orgCode']  = $formData['orgCode'];
+        }
 
         return $userData;
     }
@@ -234,7 +239,7 @@ class UserController extends BaseController
 
         if ($request->isMethod('POST')) {
             $orgCode = $request->request->get('orgCode', $user['orgCode']);
-            $this->getUserService()->changeOrgCode($user['id'], $orgCode);
+            $this->getUserService()->changeUserOrg($user['id'], $orgCode);
         }
 
         $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
@@ -251,7 +256,6 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
-
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user'    => $user,
             'profile' => $profile,

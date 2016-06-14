@@ -99,6 +99,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('班级名称不能为空！');
         }
 
+        $classroom = $this->fillOrgId($classroom);
         $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
         $this->dispatchEvent("classroom.create", $classroom);
@@ -184,15 +185,27 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId', 'orgCode'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
         }
 
+        $fields = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
         return $classroom;
+    }
+
+    public function batchUpdateOrg($classroomIds, $orgCode){
+        if(!is_array($classroomIds)){
+            $classroomIds = array($classroomIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+
+        foreach ($classroomIds as $classroomId) {
+            $user = $this->getClassroomDao()->updateClassroom($classroomId,  $fields);
+        }
     }
 
     public function waveClassroom($id, $field, $diff)
