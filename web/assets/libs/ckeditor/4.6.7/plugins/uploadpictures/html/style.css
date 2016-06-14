@@ -47,6 +47,7 @@
 
 .ckeditor-balloon-uploader .balloon-filelist-heading {
   position: relative;
+  padding: 0;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
