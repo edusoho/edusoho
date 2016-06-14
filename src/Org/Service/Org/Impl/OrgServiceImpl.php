@@ -5,6 +5,7 @@ namespace Org\Service\Org\Impl;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Org\Service\Org\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -158,18 +159,9 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
     }
 
-     public function batchUpgradeOrg($module, $ids, $orgCode)
+     public function batchUpdateOrg($module, $ids, $orgCode)
      {
-        $this->checkModule($module);
-
-        $org = $this->getOrgByOrgCode($orgCode);
-        if(empty($org)){
-             throw $this->createServiceException('组织机构不存在,更新失败');
-        }
-        $ids = explode(',', $ids);
-        foreach ($ids as $id) {
-            $this->getOrgDao()->batchUpgradeOrgCodeAndOrgId($module, $id, $org['orgCode'],$org['id']);
-        }
+        $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
      }
 
     protected function getOrgDao()
@@ -177,10 +169,9 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->createDao('Org:Org.OrgDao');
     }
 
-    protected function checkModule($module){
-        if(!in_array($module, array( 'user', 'course', 'classroom', 'article'))){
-            throw $this->createServiceException("模块({#module})不存在,无法更新组织机构");
-        }
+    protected function getModuleService($module){
+        $moduleService = OrgBatchUpdateFactory::getModuleService($module);
+        return $this->createService($moduleService);
     }
 
 

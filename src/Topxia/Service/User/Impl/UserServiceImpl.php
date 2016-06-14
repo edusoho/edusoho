@@ -159,6 +159,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
+    public function batchUpdateOrg($userIds, $orgCode){
+        if(!is_array($userIds)){
+            $userIds = array($userIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+
+        foreach ($userIds as $userId) {
+            $user = $this->getUserDao()->updateUser($userId,  $fields);
+        }
+    }
+
     public function changeEmail($userId, $email)
     {
         if (!SimpleValidator::email($email)) {

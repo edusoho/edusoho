@@ -126,6 +126,16 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
+     public function batchUpdateOrg($articleIds, $orgCode){
+        if(!is_array($articleIds)){
+            $articleIds = array($articleIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+        foreach ($articleIds as $articleId) {
+            $user = $this->getArticleDao()->updateArticle($articleId, $fields);
+        }
+    }
+
     public function hitArticle($id)
     {
         $checkArticle = $this->getArticle($id);

@@ -452,6 +452,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
+    public function batchUpdateOrg($courseIds, $orgCode){
+        if(!is_array($courseIds)){
+            $courseIds = array($courseIds);
+        }
+        
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+        foreach ($courseIds as $courseId) {
+            $user = $this->getCourseDao()->updateCourse($courseId, $fields);
+        }
+    }
     // TODO refactor
     public function updateCourseCounter($id, $counter)
     {

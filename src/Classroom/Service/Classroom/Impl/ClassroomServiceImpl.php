@@ -197,6 +197,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    public function batchUpdateOrg($classroomIds, $orgCode){
+        if(!is_array($classroomIds)){
+            $classroomIds = array($classroomIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+
+        foreach ($classroomIds as $classroomId) {
+            $user = $this->getClassroomDao()->updateClassroom($classroomId,  $fields);
+        }
+    }
+
     public function waveClassroom($id, $field, $diff)
     {
         return $this->getClassroomDao()->waveClassroom($id, $field, $diff);

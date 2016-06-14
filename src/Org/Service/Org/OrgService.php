@@ -41,5 +41,5 @@ interface OrgService
      * @param  [type] $ids,     要更新Ids
      * @param  [type] $orgCode
      */
-    public function batchUpgradeOrg($module, $ids, $orgCode);
+    public function batchUpdateOrg($module, $ids, $orgCode);
 }
