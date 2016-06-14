@@ -9,8 +9,9 @@
     <br>
     <span class="text-muted text-sm">
       {% for role in user.roles %}
-        {% if roles[role]|default(false) %}
-          {{roles[role].name|default('')}}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
         {% else %}
           {{ dict_text('userRole', role) }}
         {% endif %}

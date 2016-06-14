@@ -2,8 +2,12 @@
 
 namespace Permission\PermissionBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Topxia\Common\ExtensionalBundle;
 
-class PermissionBundle extends Bundle
+class PermissionBundle extends ExtensionalBundle
 {
+	public function getEnabledExtensions()
+    {
+        return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
+    }
 }
