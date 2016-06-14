@@ -19,7 +19,7 @@ class UserController extends BaseController
             'keywordType'     => '',
             'keyword'         => '',
             'keywordUserType' => '',
-            'orgCode'         => $user->getCurrentOrgCode()
+            'orgCode'         => $this->getSelectOrgCode()
         );
 
         if (empty($fields)) {
@@ -27,7 +27,6 @@ class UserController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
-
         if (isset($conditions['orgCode'])) {
             $conditions['likeOrgCode'] = $conditions['orgCode'];
         }
