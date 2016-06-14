@@ -12,7 +12,7 @@ class LoginRecordController extends BaseController
     {
         $user           = $this->getCurrentUser();
         $conditions     = $request->query->all();
-        $userConditions = array();
+        $userConditions = array( 'orgCode'         => $this->getSelectOrgCode());
 
         if (isset($conditions['keywordType'])) {
             $userConditions['keywordType'] = $conditions["keywordType"];
