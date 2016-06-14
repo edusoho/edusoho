@@ -2447,7 +2447,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
-        if (!in_array('admin', $user['permissions'])) {
+        $permissions = $user->getPermissions();
+        if (!in_array('admin', array_keys($permissions))) {
             throw $this->createAccessDeniedException('您不是管理员，无权操作！');
         }
 
