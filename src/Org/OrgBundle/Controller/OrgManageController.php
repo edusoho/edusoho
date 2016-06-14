@@ -88,6 +88,7 @@ class OrgManageController extends BaseController
             $ids = $request->request->get('ids');
             $orgCode = $request->request->get('orgCode');
             $this->getOrgService()->batchUpdateOrg($module, $ids, $orgCode);
+            return $this->createJsonResponse(true);
         }
         return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module'=>$module));
     }
