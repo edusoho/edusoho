@@ -176,6 +176,7 @@ admin:
                                         filter: (filter)
                                         target: (target)
                                     group: groupButton
+                                    class: cancel-recommend-course
                                     visable: ( filter == 'normal' and course.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
@@ -195,7 +196,6 @@ admin:
                                         previewAs: 'guest'
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
-                                    mode: none
                                     blank: 1
                                 admin_course_member_preview:
                                     name: 预览：作为已购买用户
@@ -205,7 +205,6 @@ admin:
                                         previewAs: 'member'
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
-                                    mode: none
                                     blank: 1
                                 admin_course_close:
                                     name: 关闭课程
@@ -215,6 +214,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-ban-circle'
                                     mode: none
+                                    class: close-course
                                     visable: (course.status == 'published')
                                 admin_course_sms_prepare:
                                     name: 发送发布通知短信

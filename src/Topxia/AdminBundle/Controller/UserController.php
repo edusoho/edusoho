@@ -109,6 +109,8 @@ class UserController extends BaseController
             $roles = array_unique(array_merge($user['roles'],$roles));
         }
 
+        $roles = array_values($roles);
+
         $roles = $this->getRoleService()->findRolesByCodes($roles);
         return ArrayToolkit::index($roles, 'code');
     }
