@@ -38,7 +38,6 @@
         <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
       </div>
       <button class="btn btn-primary">搜索</button>
-       {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
     </form>
   </div>
 
@@ -69,7 +68,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+   {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}

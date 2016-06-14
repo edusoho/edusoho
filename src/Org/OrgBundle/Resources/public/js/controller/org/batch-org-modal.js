@@ -5,7 +5,6 @@ define(function(require, exports, module) {
         	var id = $(this).parents('tr').attr('id');
         	ids.push(id.split('-').pop());
         });
-        console.log(ids);//JSON.stringify()
         $("#batch-ids").val(ids);
     };
 });

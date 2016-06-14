@@ -31,7 +31,6 @@
 		</select>
 	</div>
 	<button class="btn btn-primary" type="submit">搜索</button>
-	{% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'article', formId:'article-table', generate:"false"} %}
 </form>
 
 <div id="aticle-table-container">
@@ -70,6 +69,7 @@
   <div>
     <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
     <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="资讯" data-url="{{ path('admin_article_delete') }}">删除</button>
+    {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'article', formId:'article-table', generate:"no-generate"} %}
   </div>
   </div>
 
