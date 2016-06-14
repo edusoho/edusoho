@@ -146,7 +146,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
-    public function changeOrgCode($userId, $orgCode)
+    public function changeUserOrg($userId, $orgCode)
     {
         $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
 
@@ -154,7 +154,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("org #{$orgCode} not found");
         }
 
-        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode']));
+        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode'], 'orgId'=> $org['id']));
 
         return $user;
     }
