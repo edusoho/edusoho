@@ -20,4 +20,15 @@ class BaseController extends WebBaseController
 
         return $disableds;
     }
+    /** 
+     * [getSelectOrgCode 获取当前用的选择的组织机构编码]
+     * @return [String] [orgcCode]
+     */
+    protected function getSelectOrgCode(){
+        $enableOrg = $this->setting('magic.enable_org');
+
+        if($enableOrg){
+           return $this->getCurrentUser()->getSelectOrgCode();   
+        }
+    }
 }
