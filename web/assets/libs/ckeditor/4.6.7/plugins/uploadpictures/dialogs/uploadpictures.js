@@ -14,6 +14,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             pick: '.' + editor.id + ' .ckeditor-uploadpictures-pick-btn',
             resize: false,
             fileNumLimit: 10,
+            threads: 1,
             fileSingleSizeLimit: 10*1024*1024,
             accept: {
                 title: 'Images',
