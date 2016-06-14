@@ -1171,8 +1171,8 @@ class WebExtension extends \Twig_Extension
                     $default = '网银支付';
                 } elseif ($order['payment'] == 'quickpay') {
                     $default = '快捷支付';
-                } elseif ($order['payment'] == 'realpay') {
-                    $default = '线下支付';
+                } elseif ($order['payment'] == 'outside') {
+                    $default = '站外支付';
                 } else {
                     $default = '支付宝';
                 }

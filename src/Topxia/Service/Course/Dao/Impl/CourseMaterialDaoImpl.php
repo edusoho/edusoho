@@ -103,12 +103,7 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     public function findMaterialsGroupByFileId($courseId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $array = ArrayToolkit::column($this->getConnection()->fetchAll("DESC {$this->table}"), 'Field');
-        $attr = implode(',', array_filter($array, function ($field){
-            return $field != 'fileId';
-        }));
-        $sql = "SELECT DISTINCT fileId, {$attr} FROM course_material WHERE courseId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        //$sql = "SELECT * FROM {$this->table} WHERE courseId = ? and fileId != 0 GROUP BY fileId ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? and fileId != 0 GROUP BY fileId ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
     }
 
