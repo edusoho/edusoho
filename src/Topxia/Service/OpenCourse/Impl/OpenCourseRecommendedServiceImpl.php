@@ -125,7 +125,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             $course = $this->getTypeCourseService($course['type'])->getCourse($course['recommendCourseId']);
 
             if ($course) {
-                $courses[] = $course;
+                $courses[$course['id']] = $course;
             }
         }
 

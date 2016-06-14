@@ -3,6 +3,7 @@
 namespace Topxia\Service\OpenCourse\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Common\ArrayToolkit;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
@@ -76,20 +77,26 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
         $recommendedCourses = $this->getCourseRecommendedService()->searchRecommends(array('courseId'=>$openCourse['id']), array('createdTime','DESC'), 0, 2);
+        $recommendedCourses = ArrayToolkit::index($recommendedCourses, 'id');
 
         $this->assertEquals(2, count($recommendedCourses));
-        $this->assertEquals($course2['id'], $recommendedCourses[0]['recommendCourseId']));
-        $this->assertEquals($course1['id'], $recommendedCourses[1]['recommendCourseId']));
+        $this->assertEquals($course2['id'], $recommendedCourses[$course2['id']]['recommendCourseId']);
+        $this->assertEquals($course1['id'], $recommendedCourses[$course1['id']]['recommendCourseId']);
     }
 
     public function testRecommendedCoursesSort()
     {
-        $this->getCourseRecommendedService()->recommendedCoursesSort($recommendCourses);
-    }
+        $course1             = $this->createCourse("test1");
+        $course2             = $this->createCourse("test2");
+        $openCourse          = $this->createOpenCourse('录播公开课');
+        $recommendCourseIds1 = array($course1['id'], $course2['id']);
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
-    public function testGetRecommendedCourseByCourseIdAndType()
-    {
-        $this->getCourseRecommendedService()->getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
+        $recommendCourses = $this->getCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourse['id']);
+        $recommendCourses = $this->getCourseRecommendedService()->recommendedCoursesSort($recommendCourses);
+
+        $this->assertEquals($course1['title'],$recommendCourses[$course1['id']]['title']);
+        $this->assertEquals($course2['title'],$recommendCourses[$course2['id']]['title']);
     }
 
     protected function createCourse($title)

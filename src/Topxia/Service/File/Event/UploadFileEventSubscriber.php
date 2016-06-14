@@ -118,7 +118,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     {
         $course = $event->getSubject();
         
-        $lessons = $this->getOpenCourseService()->getCourseLessons($course['id']);
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         if (!empty($lessons)) {
             $fileIds = ArrayToolkit::column($lessons, "mediaId");

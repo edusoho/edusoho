@@ -339,11 +339,10 @@ class OpenCourseServiceTest extends BaseTestCase
         $course2 = $this->_createLiveOpenCourse();
 
         $courseMember1 = $this->_createLoginMember($course1['id']);
-        $courseMember2 = $this->_createGuestMember($course2['id']);
 
-        $member = $this->getOpenCourseService()->getCourseMember(1, 0);
+        $member1 = $this->getOpenCourseService()->getCourseMember($course1['id'], 1);
 
-        $this->assertEquals($courseMember2['mobile'], $member['mobile']);
+        $this->assertEquals($courseMember1['userId'], $member1['userId']);
     }
 
     public function getCourseMemberByIp($courseId, $ip)
