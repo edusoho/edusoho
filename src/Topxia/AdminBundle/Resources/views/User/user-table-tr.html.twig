@@ -13,7 +13,7 @@
       {% endfor %}
     </span>
   </td>
-
+ {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">(已绑定)</span>
