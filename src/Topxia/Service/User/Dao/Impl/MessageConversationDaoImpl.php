@@ -34,8 +34,12 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
 
     public function getConversationByFromIdAndToId($fromId, $toId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId, $toId));
+        $that = $this;
+
+        return $this->fetchCached("fromId:{$fromId}:toId:{$toId}", $fromId, $toId, function ($fromId, $toId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE fromId = ? AND toId = ?";
+            return $that->getConnection()->fetchAssoc($sql, array($fromId, $toId));
+        });
     }
 
     public function updateConversation($id, $toUpdateConversation)

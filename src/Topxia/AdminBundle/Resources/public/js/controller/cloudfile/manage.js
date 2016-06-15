@@ -231,27 +231,20 @@ define(function(require, exports, module) {
             },
             onClickDeleteBatchBtn: function(event)
             {
-                if (confirm('确定要删除这些资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    var ids = [];
-                    $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
-                        ids.push(this.value);
-                    });
-                    if(ids == ""){
-                        Notify.danger('请先选择你要删除的资源!');
-                        return;
-                    }
-
-                    $.post($target.data('url'),{"ids":ids},function(data){
-                        if(data){
-                            Notify.success('删除资源成功');
-                            self.renderTable(true);
-                        }
-                        $('#materials-form').find('[data-role=batch-item]').show();
-                        $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
-                    });
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+                $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
+                    ids.push(this.value);
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要删除的资源!');
+                    return;
                 }
+
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
 
             },
             onClickShareBatchBtn: function(event)
@@ -502,6 +495,24 @@ define(function(require, exports, module) {
 
         window.materialWidget = new MaterialWidget({
             element: '#materials-form'
+        });
+
+        $('#modal').on('click','.file-delete-form-btn', function(event){
+            var ids = [];
+            $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
+                ids.push(this.value);
+            });
+
+            $.post($('#file-delete-form').attr('action'),{"ids":ids},function(data){
+                if(data){
+                    $('#modal').modal('hide');
+                    Notify.success('删除资源成功');
+                    materialWidget.renderTable(true);
+                    $("input[name = 'batch-select']").attr("checked",false);
+                }
+                $('#materials-form').find('[data-role=batch-item]').show();
+                $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
+            });
         });
 
         var $panel = $('#materials-form');
