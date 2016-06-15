@@ -13,14 +13,17 @@ class UserGenerateCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName ( 'topxia:user-generate' );
+        $this->setName ( 'util:user-generate' )
+             ->addArgument('index', InputArgument::REQUIRED, '次数');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initServiceKernel();
 
-        for ($i=0; $i < 50; $i++) { 
+        $index = $input->getArgument('index');
+
+        for ($i=0; $i < $index; $i++) { 
             $user = array();
             $user['nickname'] = 'test_' . $i;
             $user['password'] = 'abcde';
