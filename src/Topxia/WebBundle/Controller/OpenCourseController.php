@@ -27,11 +27,13 @@ class OpenCourseController extends BaseController
 
         $paginator->setBaseUrl($this->generateUrl('open_course_explore_list'));
 
-        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', 10);
+        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', 10);
+        $teachers = $this->findCourseTeachers($courses);
 
         return $this->render('TopxiaWebBundle:OpenCourse/Widget:open-course-grid-horizontal.html.twig', array(
             'courses'   => $courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'teachers'  => $teachers
         ));
     }
 
@@ -688,6 +690,20 @@ class OpenCourseController extends BaseController
         }
 
         return true;
+    }
+
+    protected function findCourseTeachers($courses)
+    {
+        if (!$courses) {
+            return array();
+        }
+
+        $userIds = array();
+        foreach ($courses as $key => $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        return $this->getUserService()->findUsersByIds($userIds);
     }
 
     protected function getOpenCourseService()

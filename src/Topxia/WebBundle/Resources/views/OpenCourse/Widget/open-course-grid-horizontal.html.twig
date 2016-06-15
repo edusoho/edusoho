@@ -37,7 +37,11 @@
         </a>
       </div>
       <div class="color-gray mbm hidden-xs">
-        教师：<a class="mrs" href="">讲师名称</a><a class="mrs" href="">讲师名称</a>
+        教师：
+        {% for teacherId in course.teacherIds if teacherId %}
+          {% set teacher = teachers[teacherId] %}
+          <a class="mrs" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">{{ teacher.nickname }}</a>
+        {% endfor %}
       </div>
       <div class="open-course-intro hidden-sm hidden-xs">
         {% if course.subtitle %}
