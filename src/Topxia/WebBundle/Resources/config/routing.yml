@@ -2025,6 +2025,10 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+esbar_my_study_center:
+    pattern:  /esbar/my/study_center
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
+
 my_cards:
     pattern:  /my/cards
     defaults: { _controller: TopxiaWebBundle:Card:index }
