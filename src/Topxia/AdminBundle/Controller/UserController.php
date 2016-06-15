@@ -82,9 +82,11 @@ class UserController extends BaseController
         $userIds  = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
+        $allRoles = $this->getAllRoles();
 
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users'          => $users,
+            'allRoles'       => $allRoles,
             'userCount'      => $userCount,
             'paginator'      => $paginator,
             'profiles'       => $profiles,
@@ -92,17 +94,15 @@ class UserController extends BaseController
         ));
     }
 
-    protected function getRoles($users)
+    protected function getAllRoles()
     {
-        $roles = array();
-        foreach ($users as $key => $user) {
-            $roles = array_unique(array_merge($user['roles'],$roles));
+        $roles = $this->getRoleService()->searchRoles(array(), 'created', 0, PHP_INT_MAX);
+
+        $roleDicts = array();
+        foreach ($roles as $key => $role) {
+            $roleDicts[$role['code']] = $role['name'];
         }
-
-        $roles = array_values($roles);
-
-        $roles = $this->getRoleService()->findRolesByCodes($roles);
-        return ArrayToolkit::index($roles, 'code');
+        return $roleDicts;
     }
 
     public function emailCheckAction(Request $request)
