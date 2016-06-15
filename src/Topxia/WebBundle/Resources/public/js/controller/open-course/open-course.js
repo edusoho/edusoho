@@ -3,9 +3,11 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
         
-        var threadShowWidget = new ThreadShowWidget({
-            element: '#open-course-comment',
-        });
+        if (!$('#open-course-comment').find('[type=submit]').hasClass('disabled')) {
+            var threadShowWidget = new ThreadShowWidget({
+                element: '#open-course-comment',
+            });
+        }
 
 		$('.tab-header').on('click', function() {
 			var $this = $(this);
