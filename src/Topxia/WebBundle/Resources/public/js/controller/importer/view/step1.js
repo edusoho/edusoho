@@ -7,7 +7,7 @@ define(function (require, exports, module) {
     require("jquery.form");
     var Step1View = Backbone.View.extend({
         events: {
-            'change input[type=file]': 'onChangeExcelFile',
+            'change input[type=file]': 'onChangeExcelFile'
         },
 
         initialize: function () {
