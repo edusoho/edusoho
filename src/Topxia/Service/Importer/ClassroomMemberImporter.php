@@ -24,10 +24,14 @@ class ClassroomMemberImporter extends Importer
         $importData  = $request->request->get('importData');
         $classroomId = $request->request->get('classroomId');
         $classroom   = $this->getClassroomService()->getClassroom($classroomId);
-        return $this->excelDataImporting($classroom, $importData);
+        $price = $request->request->get('price');
+        $orderData = array(
+            'amount' => $price
+        );
+        return $this->excelDataImporting($classroom, $importData, $orderData);
     }
 
-    protected function excelDataImporting($targetObject, $userData)
+    protected function excelDataImporting($targetObject, $userData, $orderData)
     {
         $existsUserCount = 0;
         $successCount    = 0;
@@ -57,15 +61,15 @@ class ClassroomMemberImporter extends Importer
                     'title'      => "购买班级《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
-                    'amount'     => 0,
-                    'payment'    => 'none',
+                    'amount'     => $orderData['amount'],
+                    'payment'    => 'outside',
                     'snPrefix'   => 'CR'
                 ));
 
                 $this->getOrderService()->payOrder(array(
                     'sn'       => $order['sn'],
                     'status'   => 'success',
-                    'amount'   => 0,
+                    'amount'   => $order['amount'],
                     'paidTime' => time()
                 ));
 
@@ -100,6 +104,7 @@ class ClassroomMemberImporter extends Importer
     {
         $file        = $request->files->get('excel');
         $classroomId = $request->request->get('classroomId');
+        $price = $request->request->get('price');
         $danger      = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
@@ -125,7 +130,8 @@ class ClassroomMemberImporter extends Importer
             $importData['allUserData'],
             $importData['checkInfo'],
             array(
-                'classroomId' => $classroomId
+                'classroomId' => $classroomId,
+                'price'       => $price
             ));
     }
 
@@ -386,8 +392,9 @@ class ClassroomMemberImporter extends Importer
     public function getTemplate(Request $request)
     {
         $classroomId = $request->query->get('classroomId');
+        $classroom   = $this->getClassroomService()->getClassroom($classroomId);
         return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
-            'classroomId' => $classroomId,
+            'classroom'    => $classroom,
             'importerType' => $this->type
         ));
     }

@@ -91,7 +91,7 @@ class CourseMaterialManageController extends BaseController
             $paginator->getPerPageCount()
         );
         
-        return $this->createFilesJsonResponse($files);
+        return $this->createFilesJsonResponse($files, $paginator);
     }
 
     public function createAction(Request $request, $courseId)
