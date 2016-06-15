@@ -47,7 +47,7 @@
 
         {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
         
-        {% cache 'course/sidebar/students' 600 %}
+        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
           {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
         {% endcache %}
         
