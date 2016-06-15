@@ -19,7 +19,8 @@ define(function(require, exports, module) {
 
             validator.addItem({
                 element: '[name="title"]',
-                required: true
+                required: true,
+                display: '标题'
             });
 
            $("#course-create-form .course-select").click(function(){

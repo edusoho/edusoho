@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         });
 
 
-    	$(".open-course-list").on('click','.section-more-btn a' function(){
+    	$(".open-course-list").on('click','.section-more-btn a', function(){
       	var url = $(this).attr('data-url');
 	      	$.ajax({
 		        url: url,
