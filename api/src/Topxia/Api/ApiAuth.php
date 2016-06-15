@@ -56,7 +56,7 @@ class ApiAuth
             $token = $this->getUserService()->getToken('mobile_login', $token);
 
             if (!$inWhiteList && empty($token['userId'])) {
-                throw new \RuntimeException('API Token不不正确！');
+                throw new \RuntimeException('API Token不正确！');
             }
 
             $user = $this->getUserService()->getUser($token['userId']);

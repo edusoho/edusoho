@@ -146,7 +146,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
-    public function changeOrgCode($userId, $orgCode)
+    public function changeUserOrg($userId, $orgCode)
     {
         $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
 
@@ -160,6 +160,18 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         return $user;
+    }
+
+    public function batchUpdateOrg($userIds, $orgCode)
+    {
+        if (!is_array($userIds)) {
+            $userIds = array($userIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($userIds as $userId) {
+            $user = $this->getUserDao()->updateUser($userId, $fields);
+        }
     }
 
     public function changeEmail($userId, $email)
@@ -537,6 +549,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($registration['orgCode'])) {
             $user['orgCode'] = $registration['orgCode'];
+            $user['orgId']   = $registration['orgId'];
         }
 
         $user['createdTime'] = time();
@@ -556,7 +569,6 @@ class UserServiceImpl extends BaseService implements UserService
             $user['password'] = '';
             $user['setup']    = 0;
         }
-
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );

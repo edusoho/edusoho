@@ -20,6 +20,12 @@ class Version20160531203720 extends AbstractMigration
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
+                $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
+                $course    = $this->connection->fetchAssoc($courseSql);
+                
+                if (!$course) {
+                    continue;
+                }
 
                 $courseSql = "select id,parentId from course where id=".$lesson['courseId'];
                 $course    = $this->connection->fetchAssoc($courseSql);
@@ -44,7 +50,7 @@ class Version20160531203720 extends AbstractMigration
                     $userId   = $lesson['userId'];
                     $time     = time();
 
-                    $this->addSql("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
+                    //$this->addSql("insert into course_material (courseId,lessonId,title,fileId,fileSize,source,copyId,userId,createdTime) values({$courseId},{$lessonId},'{$title}',{$fileId},{$fileSize},'courselesson',{$copyId},{$userId},UNIX_TIMESTAMP());");
                 }
             }
         }

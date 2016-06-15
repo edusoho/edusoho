@@ -27,6 +27,8 @@ interface ArticleService
 
     public function updateArticle($id, $article);
 
+    public function batchUpdateOrg($articleIds, $orgCode);
+
     public function hitArticle($id);
 
     public function getArticleLike($articleId, $userId);
@@ -52,5 +54,7 @@ interface ArticleService
     public function changeIndexPicture($options);
 
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
+
+    public function findRelativeArticles($articleId, $num = 3);
 
 }

@@ -12,7 +12,6 @@ use Topxia\MobileBundleV2\Processor\UserProcessor;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 	public function getVersion() {
-		var_dump($this->request->get("name"));
 		return $this->formData;
 	}
 
@@ -476,11 +475,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 				return $this->createErrorResponse('password_invalid', '密码格式不正确');
 			}
 			$registTypeName = $auth['register_mode'] == "email" ? "email" : "emailOrMobile";
-			$user = $this->controller->getAuthService()->register(array(
-				$registTypeName => $email,
-				'nickname' => $nickname,
-				'password' => $password,
-			));
+			try {
+				$user = $this->controller->getAuthService()->register(array(
+					$registTypeName => $email,
+					'nickname' => $nickname,
+					'password' => $password,
+					'createdIp' => $this->request->getClientIp(),
+				));
+			} catch (\Exception $e) {
+				return $this->createErrorResponse('register_invalid', $e->getMessage());
+			}
+			
 		} else {
 			if (!$this->checkPhoneNum($phoneNumber)) {
 				return $this->createErrorResponse('phone_invalid', '手机号格式不正确');
@@ -494,11 +499,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 				list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
 				if ($result) {
 					$registTypeName = $auth['register_mode'] == "mobile" ? "mobile" : "emailOrMobile";
-					$user = $this->controller->getAuthService()->register(array(
-						$registTypeName => $sessionField['to'],
-						'nickname' => $nickname,
-						'password' => $password,
-					));
+					try {
+						$user = $this->controller->getAuthService()->register(array(
+							$registTypeName => $sessionField['to'],
+							'nickname' => $nickname,
+							'password' => $password,
+							'createdIp' => $this->request->getClientIp(),
+						));
+					} catch (\Exception $e) {
+						return $this->createErrorResponse('register_invalid', $e->getMessage());
+					}
 
 					$this->clearSmsSession($this->request, 'sms_registration');
 				} else {

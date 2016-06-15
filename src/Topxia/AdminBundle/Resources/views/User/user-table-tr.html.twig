@@ -18,7 +18,7 @@
       {% endfor %}
     </span>
   </td>
-
+ {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">(已绑定)</span>
@@ -71,7 +71,7 @@
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
       
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_user_manage', group:'groupButton', user: user} %}
-      
+
     </div>
   </td>
 </tr>

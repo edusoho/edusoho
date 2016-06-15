@@ -12,7 +12,7 @@
       <span class="label label-default">荐:{{ classroom.recommendedTime|date('Y-m-d') }} / 序号:{{ classroom.recommendedSeq }}</span>
     {% endif %}
     </td>
-
+    {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
     <td>
     {{ classroomCoursesNum[classroom.id] }}
 

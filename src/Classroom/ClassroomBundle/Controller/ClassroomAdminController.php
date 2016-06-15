@@ -4,7 +4,7 @@ namespace Classroom\ClassroomBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomAdminController extends BaseController
 {
@@ -12,11 +12,7 @@ class ClassroomAdminController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
-
+        $conditions = $this->fillOrgCode($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
@@ -83,7 +79,7 @@ class ClassroomAdminController extends BaseController
     public function addClassroomAction(Request $request)
     {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
+            return $this->createMessageResponse('info', '您没有权限创建班级!');
         }
 
         $user = $this->getCurrentUser();
@@ -119,8 +115,11 @@ class ClassroomAdminController extends BaseController
                 'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
                 'buyable'  => $myClassroom['buyable'],
-                'orgCode'  => $myClassroom['orgCode']
             );
+
+            if (array_key_exists('orgCode', $myClassroom)) {
+                $classroom['orgCode'] = $myClassroom['orgCode'];
+            }
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 

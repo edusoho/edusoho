@@ -197,10 +197,6 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $conditions = array(
-            'targetType' => 'article'
-        );
-
-        $conditions = array(
             'targetId'   => $id,
             'targetType' => 'article'
         );
@@ -212,15 +208,7 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 10);
-
-        $sameTagArticles = array();
-
-        foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
-                $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
-            }
-        }
+        $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
 
         $user = $this->getCurrentUser();
 

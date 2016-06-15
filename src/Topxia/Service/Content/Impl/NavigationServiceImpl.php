@@ -200,6 +200,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $currentOrg = $user['org'];
 
         if (empty($fields['parentId'])) {
+            if(empty($user['org'])){
+                return $fields;
+            }
             $fields['orgId']   = $currentOrg['id'];
             $fields['orgCode'] = $currentOrg['orgCode'];
         } else {

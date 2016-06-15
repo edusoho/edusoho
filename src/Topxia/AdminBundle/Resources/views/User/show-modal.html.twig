@@ -24,6 +24,19 @@
       {% endif %}
     </td>
   </tr>
+  {% if setting('magic.enable_org','0') %}
+    <tr>
+      <th>所属组织机构</th>
+      <td>
+        {% set orgName = data('OrgDisplay',{id: user.orgId}) %}
+        {% if orgName %}
+          {{ orgName }}
+        {% else %}
+          暂无
+        {% endif %}
+      </td>
+    </tr>
+  {% endif  %}
 
   <tr>
     <th>用户组</th>

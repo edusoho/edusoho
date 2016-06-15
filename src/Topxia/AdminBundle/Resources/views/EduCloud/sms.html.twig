@@ -69,7 +69,7 @@
                   <button class="btn btn-default btn-sm mlm" name="sms-close">
                     <span class="text-muted">关闭</span>
                   </button>
-                  <p><span>短信签名：{{ smsStatus.sms_school_name }}</span> <a href="#" name="sign-update">修改</a></p>
+                  <p><span>短信签名：{{ smsStatus.sms_school_name }}</span> <a href="javascript:;" name="sign-update">修改</a></p>
                 </div>
                 <div name="submit-sign" hidden="hidden">
                 <span>
@@ -78,7 +78,7 @@
                          style="width:250px">
                 </span>
                   <button class="btn btn-primary mlm mrm">提交</button>
-                  <span><a href="">取消</a></span>
+                  <span><a href="{{ path('admin_edu_cloud_sms') }}">取消</a></span>
                   <span class="glyphicon glyphicon-question-sign text-muted" id="article-property-tips17"
                         data-toggle="tooltip" data-placement="bottom" href="javascript:" data-original-title=""></span>
                   <div id="article-property-tips17-html" style="display:none;">

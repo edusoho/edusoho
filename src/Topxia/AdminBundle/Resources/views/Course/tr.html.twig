@@ -22,6 +22,7 @@
     {% endif %}
 
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
     {% if  course.serializeMode =="none" %}
     <span class="text-info">非连载课程</span>

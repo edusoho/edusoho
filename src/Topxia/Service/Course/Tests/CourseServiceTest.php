@@ -3341,7 +3341,6 @@ $this->getCourseService()->tryLearnCourse($createCourse['id']);
     ));
 
     $result = $this->getCourseService()->generateLessonReplay($course['id'],$lesson['id']);
-    var_dump($result);
     // $this->assertEquals*/
     }
 

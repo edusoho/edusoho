@@ -46,6 +46,16 @@ class CategoeryServiceTest extends BaseTestCase
         $this->assertEquals($createdCategory1['name'], $finds['name']);
         $this->assertEquals($createdCategory1['code'], $finds['code']);
         $this->assertEquals($createdCategory1['parentId'], $finds['parentId']);
+    }
+
+    public function testGetCategoryTree()
+    {
+        $createdCategory1 = $this->createCategory('deew', 'code1');
+        $createdCategory2 = $this->createCategory('deewddd', 'code2',$createdCategory1['id']);
+        $createdCategory3 = $this->createCategory('dwwsqq', 'code3',$createdCategory1['id']);
+        $tree             = $this->getCategoryService()->getCategoryTree();
+
+        $this->assertEquals(count($tree), 3);
 
     }
 
@@ -59,7 +69,14 @@ class CategoeryServiceTest extends BaseTestCase
         $this->assertEquals($updateField['code'], $updateCategory['code']);
         $this->assertEquals($updateField['weight'], $updateCategory['weight']);
         $this->assertEquals($updateField['parentId'], $updateCategory['parentId']);
+    }
 
+    public function testDeleteCategory()
+    {
+        $createdCategory1 = $this->createCategory('deewddd', 'code2', 1);
+        $this->getCategoryService()->deleteCategory($createdCategory1['id']);
+
+        $this->assertEquals(null, $this->getCategoryService()->getCategory($createdCategory1['id']));
     }
 
     private function createCategory($name = 'cate', $code = 'code1', $parentId = 0)
