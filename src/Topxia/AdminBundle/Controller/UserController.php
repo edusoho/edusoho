@@ -18,19 +18,11 @@ class UserController extends BaseController
             'roles'           => '',
             'keywordType'     => '',
             'keyword'         => '',
-            'keywordUserType' => '',
-            'orgCode'         => $user->getCurrentOrgCode()
+            'keywordUserType' => ''
         );
 
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
-
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-        }
+        $conditions = $this->fillOrgCode($conditions);
 
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
