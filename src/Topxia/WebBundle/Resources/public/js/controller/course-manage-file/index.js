@@ -72,7 +72,7 @@ define(function(require, exports, module) {
           return ;
         }
 
-        $.post("/course/manage/file/status",{'ids':fileIds.join(",")},function(data){
+        $.post($("#file-manage-panel").data("fileStatusUrl"),{'ids':fileIds.join(",")},function(data){
             if(!data||data.length==0){
                 return ;
             }
