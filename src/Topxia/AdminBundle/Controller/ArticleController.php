@@ -19,12 +19,7 @@ class ArticleController extends BaseController
             $categoryId                    = $conditions['categoryId'];
         }
 
-        $user = $this->getCurrentUser();
-
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $request,

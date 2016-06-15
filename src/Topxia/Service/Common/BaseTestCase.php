@@ -73,28 +73,28 @@ class BaseTestCase extends WebTestCase
         }
 
         $this->initCurrentUser();
-
     }
 
     protected function initCurrentUser()
     {
-        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService = static::$serviceKernel->createService('User.UserService');
 
         $user = $userService->register(array(
-            'nickname' => 'admin',
-            'email'    => 'admin@admin.com',
-            'password' => 'admin',
-            'createdIp'  => '127.0.0.1',
-            'orgCode'  => '1.'
+            'nickname'  => 'admin',
+            'email'     => 'admin@admin.com',
+            'password'  => 'admin',
+            'createdIp' => '127.0.0.1',
+            'orgCode'   => '1.',
+            'orgId'     => '1'
         ));
 
-        $currentUser = new CurrentUser();
+        $currentUser       = new CurrentUser();
         $user['currentIp'] = $user['createdIp'];
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
         $userService->changeUserRoles($user['id'], $roles);
-        $user = $userService->getUser($user['id']);
+        $user              = $userService->getUser($user['id']);
         $user['currentIp'] = $user['createdIp'];
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
@@ -102,33 +102,32 @@ class BaseTestCase extends WebTestCase
 
     /**
      * mock对象
-     * @param $name mock的类名
+     * @param $name                                       mock的类名
      * @param $params,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
 
-    protected function mock($objectName,$params = array())
+    protected function mock($objectName, $params = array())
     {
-      $newService = explode('.',$objectName);
-      $mockObject = Mockery::mock($newService[1]);
+        $newService = explode('.', $objectName);
+        $mockObject = Mockery::mock($newService[1]);
 
+        foreach ($params as $key => $param) {
+            $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+        }
 
-      foreach ($params as $key => $param) {
-        $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
-      }
-
-      $pool = array();
-      $pool[$objectName] = $mockObject;
-      $this->setPool($pool);
+        $pool              = array();
+        $pool[$objectName] = $mockObject;
+        $this->setPool($pool);
     }
 
     protected function setPool($object)
     {
-      $reflectionObject = new \ReflectionObject(static::$serviceKernel);
-      $pool             = $reflectionObject->getProperty("pool");
-      $pool->setAccessible(true);
-      $value = $pool->getValue(static::$serviceKernel);
-      $objects = array_merge($value,$object);
-      $pool->setValue(static::$serviceKernel, $objects);
+        $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+        $pool             = $reflectionObject->getProperty("pool");
+        $pool->setAccessible(true);
+        $value   = $pool->getValue(static::$serviceKernel);
+        $objects = array_merge($value, $object);
+        $pool->setValue(static::$serviceKernel, $objects);
     }
 
     protected function flushPool()
@@ -174,7 +173,7 @@ class BaseTestCase extends WebTestCase
 
         $tableWhiteList = array(
             'migration_versions',
-            'file_group',
+            'file_group'
         );
 
         $sql = '';
