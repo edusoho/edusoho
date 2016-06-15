@@ -41,5 +41,5 @@ interface MaterialService
 
     public function searchMaterialCount($conditions);
 
-    public function findFileUsedInMaterials($fileIds, $courseId);
+    public function findUsedCourseMaterials($fileIds, $courseId);
 }

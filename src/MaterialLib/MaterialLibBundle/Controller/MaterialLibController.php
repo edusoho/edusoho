@@ -433,7 +433,7 @@ class MaterialLibController extends BaseController
     {
         $fileIds = $request->request->get('ids');
 
-        $materials = $this->getCourseMaterialService()->findFileUsedInMaterials($fileIds, $courseId=0);
+        $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId=0);
         $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
         $files     = ArrayToolkit::index($files,'id');
         

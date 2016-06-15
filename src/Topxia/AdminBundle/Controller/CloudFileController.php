@@ -163,7 +163,7 @@ class CloudFileController extends BaseController
         if ($files) {
             $files     = ArrayToolkit::index($files,'id');
             $fileIds   = ArrayToolkit::column($files, 'id');
-            $materials = $this->getCourseMaterialService()->findFileUsedInMaterials($fileIds, $courseId = 0);
+            $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
         }
         
         return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(

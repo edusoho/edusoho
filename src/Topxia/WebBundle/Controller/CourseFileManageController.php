@@ -31,7 +31,7 @@ class CourseFileManageController extends BaseController
 
         $files      = $this->_materialsSort($files);
         $fileIds    = ArrayToolkit::column($files,'fileId');
-        $filesQuote = $this->getMaterialService()->findFileUsedInMaterials($fileIds, $id);
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -117,7 +117,7 @@ class CourseFileManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $fileIds   = $request->request->get('ids');
-        $materials = $this->getMaterialService()->findFileUsedInMaterials($fileIds, $id);
+        $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
         $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
         $files     = ArrayToolkit::index($files,'id');
         
