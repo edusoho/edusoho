@@ -20,15 +20,26 @@ class BaseController extends WebBaseController
 
         return $disableds;
     }
-    /** 
-     * [getSelectOrgCode 获取当前用的选择的组织机构编码]
-     * @return [String] [orgcCode]
+    /**
+     * condtions 中添加 likeOrgCode
+     * @param  [type] $conditions [description]
+     * @return [type]             [description]
      */
-    protected function getSelectOrgCode(){
-        $enableOrg = $this->setting('magic.enable_org');
+    protected function fillOrgCode($conditions){
 
-        if($enableOrg){
-           return $this->getCurrentUser()->getSelectOrgCode();   
+        if($this->setting('magic.enable_org')){
+             if( !isset($conditions['orgCode'])){
+                $conditions['likeOrgCode'] =  $this->getCurrentUser()->getSelectOrgCode();
+             }else{
+                $conditions['likeOrgCode'] =  $conditions['orgCode'];
+                 unset($conditions['orgCode']); 
+             }
+        }else{
+             if(isset($conditions['orgCode'])){
+               unset($conditions['orgCode']); 
+             }
         }
+
+        return $conditions;
     }
 }
