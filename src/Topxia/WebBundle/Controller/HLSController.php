@@ -80,7 +80,7 @@ class HLSController extends BaseController
         );
         $api = CloudAPIFactory::create('leaf');
 
-        if ($fromApi) {
+        if (1) {
             $playlist = $api->get('/hls/playlist', array(
                 'streams'   => $streams,
                 'qualities' => $qualities,

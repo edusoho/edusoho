@@ -1,9 +1,6 @@
 define(function(require, exports, module) {
 
-    var Store = require('store');
-    var Class = require('class');
     var Messenger = require('./messenger');
-    var swfobject = require('swfobject');
 
     exports.run = function() {
 
@@ -27,39 +24,31 @@ define(function(require, exports, module) {
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
 
-        var markers = [{'id':0,text:'',time:-1}];
-        var html = "";
-        if(fileType == 'video'){
-            if (playerType == 'local-video-player'){
-                html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
-            } else {
-                html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
-            }
-        }else if(fileType == 'audio'){
-            videoHtml.parent().css({"margin-top":"100px"});
-            html += '<audio id="lesson-player" width="500" height="50" style="margin-top:100px">';
-            html += '<source src="' + url + '" type="audio/mp3" />';
-            html += '</audio>';
-        }
-
-        videoHtml.html(html);
-        videoHtml.show();
-
-        var PlayerFactory = require('./player-factory');
-        var playerFactory = new PlayerFactory();
-        var player = playerFactory.create(
-            playerType,
-            {
-                element: '#lesson-player',
-                url: url,
-                fingerprint: fingerprint,
-                fingerprintSrc: fingerprintSrc,
-                watermark: watermark,
-                starttime: starttime,
-                agentInWhiteList: agentInWhiteList,
-                timelimit:timelimit
-            }
-        );
+        // var PlayerFactory = require('./player-factory');
+        // var playerFactory = new PlayerFactory();
+        // var player = playerFactory.create(
+        //     playerType,
+        //     {
+        //         element: '#lesson-player',
+        //         url: url,
+        //         fingerprint: fingerprint,
+        //         fingerprintSrc: fingerprintSrc,
+        //         watermark: watermark,
+        //         starttime: starttime,
+        //         agentInWhiteList: agentInWhiteList,
+        //         timelimit:timelimit
+        //     }
+        // );
+        var player = new VideoPlayerSDK({
+            id: 'lesson-video-content',
+            // disableControlBar: true,
+            // disableProgressBar: true,
+            playlist : url,
+            fingerprint : {
+              html : fingerprint,
+              duration : 2000
+            },
+        });
 
         var messenger = new Messenger({
             name: 'parent',
@@ -67,10 +56,16 @@ define(function(require, exports, module) {
             type: 'child'
         });
 
+        // player.on('timeupdate', function(data) {
+        //     console.log('timeupdate', data);
+        // });
+
+        // player.on('anwsered', function(data) {
+        //     console.log('anwsered', data);
+        // });
+
         player.on("timechange", function(e){
-            if(parseInt(player.getCurrentTime()) != parseInt(player.getDuration())){
-                DurationStorage.set(userId, fileId, player.getCurrentTime());
-            }
+
         });
 
         player.on("firstplay", function(){
@@ -79,10 +74,6 @@ define(function(require, exports, module) {
         
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
-            var time = DurationStorage.get(userId, fileId);
-            if(time>0){
-                player.setCurrentTime(DurationStorage.get(userId, fileId));
-            }
             player.play();
         });
         player.on("onMarkerReached",function(markerId,questionId){
@@ -104,52 +95,8 @@ define(function(require, exports, module) {
 
         player.on("ended", function(){
             messenger.sendToParent("ended", {stop: true});
-            DurationStorage.del(userId, fileId);
         });
 
-    };
-
-    var DurationStorage = {
-        set: function(userId,fileId,duration) {
-            var durations = Store.get("durations");
-            if(!durations || !(durations instanceof Array)){
-                durations = new Array();
-            }
-
-            var value = userId+"-"+fileId+":"+duration;
-            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+fileId)>-1){
-                durations.splice(durations.length-1, durations.length);
-            }
-            if(durations.length>=20){
-                durations.shift();
-            }
-            durations.push(value);
-            Store.set("durations", durations);
-        },
-        get: function(userId,fileId) {
-            var durationTmpArray = Store.get("durations");
-            if(durationTmpArray){
-                for(var i = 0; i<durationTmpArray.length; i++){
-                    var index = durationTmpArray[i].indexOf(userId+"-"+fileId);
-                    if(index>-1){
-                        var key = durationTmpArray[i];
-                        return parseFloat(key.split(":")[1])-5;
-                    }
-                }
-            }
-            return 0;
-        },
-        del: function(userId,fileId) {
-            var key = userId+"-"+fileId;
-            var durationTmpArray = Store.get("durations");
-            for(var i = 0; i<durationTmpArray.length; i++){
-                var index = durationTmpArray[i].indexOf(userId+"-"+fileId);
-                if(index>-1){
-                    durationTmpArray.splice(i,1);
-                }
-            }
-            Store.set("durations", durationTmpArray);
-        }
     };
 
 });
