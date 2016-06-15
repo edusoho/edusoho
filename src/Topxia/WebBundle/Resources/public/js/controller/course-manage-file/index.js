@@ -43,14 +43,17 @@ define(function(require, exports, module) {
 
         $('[data-role=batch-delete]').click(function(){
             var flag = false;
+            var ids = [];
             $('[data-role=batch-item]').each(function(){
                 if($(this).is(":checked")) {
                     flag = true;
+                    ids.push(this.value);
                 }
             })
 
             if(flag) {
-                $('#modal').load($(this).data('url'));
+                $('#modal').html('');
+                $('#modal').load($(this).data('url'),{ids:ids});
                 $('#modal').modal('show');
             } else {
                 Notify.danger('未选中任何文件记录');

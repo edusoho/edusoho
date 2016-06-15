@@ -167,15 +167,20 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     	return $this->getMaterialDao()->searchMaterialCount($conditions);
     }
 
-    public function findUsedCourseMaterials($courseId, $fileIds)
+    public function findUsedCourseMaterials($fileIds, $courseId = 0)
     {
+        $conditions = array(
+            'fileIds'         => $fileIds,
+            'excludeLessonId' => 0
+        );
+        if ($courseId) {
+            $conditions['courseId'] = $courseId;
+        }
+
     	$materials = $this->searchMaterials(
-            array(
-            	'courseId'      => $courseId, 
-            	'fileIds'       => $fileIds,
-            	'excludeLessonId' => 0
-            ),
-            array('createdTime','DESC'), 0, PHP_INT_MAX 
+            $conditions,
+            array('createdTime','DESC'), 
+            0, PHP_INT_MAX 
         );
         $materials = ArrayToolkit::group($materials, 'fileId');
         $files     = array();
