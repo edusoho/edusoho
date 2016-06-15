@@ -5,7 +5,11 @@
 {% block title %}批量导入{% endblock %}
 
 {% block body %}
-  <div id="importer-app" data-type="{{ importerType }}" data-check-url="{{ path('importer_check', {type: importerType}) }}" data-import-url="{{ path('importer_import', {type: importerType}) }}">
+  <div id="importer-app"
+       data-type="{{ importerType }}"
+       data-check-url="{{ path('importer_check', {type: importerType}) }}"
+       data-import-url="{{ path('importer_import', {type: importerType}) }}"
+  >
 
   </div>
 
@@ -18,7 +22,7 @@
     </div>
 
     <div class="row">
-      <form method="post" enctype="multipart/form-data" class="form-horizontal">
+      <form method="post" id="importer-form" enctype="multipart/form-data" class="form-horizontal">
         {% block form_data %}
 
         {% endblock %}
@@ -38,6 +42,13 @@
 
   {% endblock %}
   <script type="text/javascript">
-    app.load('topxiawebbundle/controller/importer/importer');
+    seajs.use('topxiawebbundle/controller/importer/importer', function(module) {
+      if ($.isFunction(module.run)) {
+        module.run();
+        {% block load_import_js %}
+        {% endblock %}
+      }
+    });
+
   </script>
 {% endblock %}

@@ -31,7 +31,21 @@
 		</div>
 	</div>
 
+	<div class="row form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="student-remark">{{'备注'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<input type="text" id="student-remark" name="remark" class="form-control">
+			<div class="help-block">{{'选填'|trans}}</div>
+		</div>
+	</div>
+
 	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
+{% endblock %}
+
+{% block load_import_js %}
+	app.load('classroombundle/controller/classroom/manage/student-import');
 {% endblock %}
 
 {% block stylesheet %}
