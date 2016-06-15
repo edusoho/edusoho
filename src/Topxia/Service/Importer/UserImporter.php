@@ -103,7 +103,7 @@ class UserImporter extends Importer
                         'targetType' => 'classroom',
                         'targetId'   => $classroom['id'],
                         'amount'     => '0.00', //暂时默认为0
-                        'payment'    => 'none',
+                        'payment'    => 'outside',
                         'snPrefix'   => 'CR'
                     ));
 
