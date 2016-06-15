@@ -22,11 +22,13 @@ class CourseMemberImporter extends Importer
     public function import(Request $request)
     {
         $importData = $request->request->get('importData');
-        $courseId = $request->request->get('courseId');
-        $price = $request->request->get('price');
-        $course = $this->getCourseService()->getCourse($courseId);
-        $orderData = array(
-            'amount' => $price
+        $courseId   = $request->request->get('courseId');
+        $price      = $request->request->get('price');
+        $remark     = $request->request->get('remark');
+        $course     = $this->getCourseService()->getCourse($courseId);
+        $orderData  = array(
+            'amount' => $price,
+            'remark' => $remark
         );
         return $this->excelDataImporting($course, $importData, $orderData);
     }
@@ -63,7 +65,7 @@ class CourseMemberImporter extends Importer
                     'amount'     => $orderData['amount'],
                     'payment'    => 'outside',
                     'snPrefix'   => 'C',
-                    'note'       => '通过批量导入添加'
+                    'note'       => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
                 ));
 
                 $this->getOrderService()->payOrder(array(
@@ -101,10 +103,11 @@ class CourseMemberImporter extends Importer
 
     public function check(Request $request)
     {
-        $file   = $request->files->get('excel');
+        $file     = $request->files->get('excel');
         $courseId = $request->request->get('courseId');
-        $price = $request->request->get('price');
-        $danger = $this->validateExcelFile($file);
+        $price    = $request->request->get('price');
+        $remark   = $request->request->get('remark');
+        $danger   = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
         }
@@ -121,7 +124,7 @@ class CourseMemberImporter extends Importer
             if ($passedRepeatInfo) {
                 return $this->createErrorResponse($passedRepeatInfo);
             }
-        }else{
+        } else {
             return $this->createErrorResponse($importData['errorInfo']);
         }
 
@@ -130,7 +133,8 @@ class CourseMemberImporter extends Importer
             $importData['checkInfo'],
             array(
                 'courseId' => $courseId,
-                'price' => $price
+                'price'    => $price,
+                'remark'   => $remark
             ));
     }
 
@@ -389,9 +393,9 @@ class CourseMemberImporter extends Importer
     public function getTemplate(Request $request)
     {
         $courseId = $request->query->get('courseId');
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course   = $this->getCourseService()->getCourse($courseId);
         return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
-            'course' => $course,
+            'course'       => $course,
             'importerType' => $this->type
         ));
     }
@@ -400,7 +404,7 @@ class CourseMemberImporter extends Importer
     {
         $courseId = $request->query->get('courseId');
 
-        if(empty($courseId)){
+        if (empty($courseId)) {
             $courseId = $request->request->get('courseId');
         }
 

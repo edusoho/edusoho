@@ -24,9 +24,11 @@ class ClassroomMemberImporter extends Importer
         $importData  = $request->request->get('importData');
         $classroomId = $request->request->get('classroomId');
         $classroom   = $this->getClassroomService()->getClassroom($classroomId);
-        $price = $request->request->get('price');
-        $orderData = array(
-            'amount' => $price
+        $price       = $request->request->get('price');
+        $remark      = $request->request->get('remark');
+        $orderData   = array(
+            'amount' => $price,
+            'remark' => $remark
         );
         return $this->excelDataImporting($classroom, $importData, $orderData);
     }
@@ -75,7 +77,7 @@ class ClassroomMemberImporter extends Importer
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'note'    => '通过批量导入添加'
+                    'note'    => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
                 );
 
                 if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -104,7 +106,8 @@ class ClassroomMemberImporter extends Importer
     {
         $file        = $request->files->get('excel');
         $classroomId = $request->request->get('classroomId');
-        $price = $request->request->get('price');
+        $price       = $request->request->get('price');
+        $remark      = $request->request->get('remark');
         $danger      = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
@@ -131,7 +134,8 @@ class ClassroomMemberImporter extends Importer
             $importData['checkInfo'],
             array(
                 'classroomId' => $classroomId,
-                'price'       => $price
+                'price'       => $price,
+                'remark'      => $remark
             ));
     }
 

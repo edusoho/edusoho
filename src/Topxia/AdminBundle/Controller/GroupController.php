@@ -211,10 +211,13 @@ class GroupController extends BaseController
         $thread=$this->getThreadService()->getThread($threadId);
         $this->getThreadService()->deleteThread($threadId);
 
+        $user = $this->getCurrentUser();
+
         $message = array(
-            'title'=> $thread['title'],
-            'type' => 'delete'
-            );
+            'title' => $thread['title'],
+            'type' =>'delete',
+            'userId' => $user['id'],
+            'userName' => $user['nickname']);
         $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
         return $this->createJsonResponse('success');
 
