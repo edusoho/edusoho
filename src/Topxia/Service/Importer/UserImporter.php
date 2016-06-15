@@ -557,7 +557,8 @@ class UserImporter extends Importer
             if (!empty($userData[$item['key']])) {
                 $key    = $item['key'];
                 $method = $item['callback'];
-                if (is_callable($method)) {
+
+                if (!is_array($method)) {
                     $error = call_user_func($method, $userData[$key]);
                 } else {
                     $callback = function ($data) use ($row, $fieldCol, $method, $key) {
@@ -567,8 +568,9 @@ class UserImporter extends Importer
                             return "";
                         }
                     };
-                    $error    = call_user_func($callback, $userData[$key]);
+                    $error    = call_user_func($callback, array($userData[$key]));
                 }
+
                 if (!empty($error) && is_string($error)) {
                     $errorInfo[] = $error;
                 }
