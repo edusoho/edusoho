@@ -90,8 +90,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'updatedTime' => time(),
             'second'      => $fields['second']
         );
-        $this->getLogService()->info('marker', 'create', "增加驻点#{$id}");
-        $marker   = $this->getMarkerDao()->addMarker($marker);
+        $marker = $this->getMarkerDao()->addMarker($marker);
+        $this->getLogService()->info('marker', 'create', "增加驻点#{$marker['id']}");
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
         return $question;
     }
