@@ -442,7 +442,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->_filterCourseFields($fields);
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
-       
+
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
@@ -452,16 +452,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
-    public function batchUpdateOrg($courseIds, $orgCode){
-        if(!is_array($courseIds)){
+    public function batchUpdateOrg($courseIds, $orgCode)
+    {
+        if (!is_array($courseIds)) {
             $courseIds = array($courseIds);
         }
-        
-        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
         foreach ($courseIds as $courseId) {
             $user = $this->getCourseDao()->updateCourse($courseId, $fields);
         }
     }
+
     // TODO refactor
     public function updateCourseCounter($id, $counter)
     {
@@ -1395,7 +1398,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $lesson = $this->getLesson($lessonId);
         if ($lesson) {
-            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId' => 0));
             return true;
         }
 

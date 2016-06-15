@@ -154,19 +154,20 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("org #{$orgCode} not found");
         }
 
-        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode'], 'orgId'=> $org['id']));
+        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode'], 'orgId' => $org['id']));
 
         return $user;
     }
 
-    public function batchUpdateOrg($userIds, $orgCode){
-        if(!is_array($userIds)){
+    public function batchUpdateOrg($userIds, $orgCode)
+    {
+        if (!is_array($userIds)) {
             $userIds = array($userIds);
         }
-        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
 
         foreach ($userIds as $userId) {
-            $user = $this->getUserDao()->updateUser($userId,  $fields);
+            $user = $this->getUserDao()->updateUser($userId, $fields);
         }
     }
 
