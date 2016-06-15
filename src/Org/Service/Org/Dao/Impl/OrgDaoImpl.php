@@ -32,8 +32,11 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function getOrg($id)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+        return $this->fetchCached("orgId:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function delete($id)
