@@ -10,6 +10,7 @@
       {% endif %}
     </div>
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>{{ lesson.startTime|date('Y-m-d H:i') }}</td>
   <td>{{ lesson.length }}</td>
   <td>

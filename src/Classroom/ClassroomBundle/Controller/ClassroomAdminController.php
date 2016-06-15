@@ -4,7 +4,7 @@ namespace Classroom\ClassroomBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomAdminController extends BaseController
 {
@@ -12,12 +12,8 @@ class ClassroomAdminController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
-
-        $paginator = new Paginator(
+        $conditions = $this->fillOrgCode($conditions);
+        $paginator  = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
             10

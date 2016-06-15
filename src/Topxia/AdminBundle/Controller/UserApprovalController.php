@@ -17,20 +17,10 @@ class UserApprovalController extends BaseController
             'roles'          => '',
             'keywordType'    => '',
             'keyword'        => '',
-            'approvalStatus' => $approvalStatus,
-            'likeOrgCode'    => $user->getCurrentOrgCode()
+            'approvalStatus' => $approvalStatus
         );
-
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
-
-        if(!empty($conditions['orgCode'])){
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-        }
-
+   
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
             $approvalcount   = $this->getUserService()->searchApprovalsCount($conditions);
@@ -46,8 +36,9 @@ class UserApprovalController extends BaseController
         $userConditions = array(
             'userIds'        => $userApprovingId,
             'approvalStatus' => $approvalStatus,
-            'likeOrgCode'    => $conditions['likeOrgCode']
+            'likeOrgCode'    => isset($conditions['orgCode']) ? $conditions['orgCode'] : null
         );
+        $userConditions = $this->fillOrgCode($userConditions);
 
         if (!empty($conditions['startDateTime'])) {
             $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);

@@ -187,7 +187,6 @@ class UserImporter extends Importer
         }
 
         $excelField = $strs;
-
         if (!$this->checkNecessaryFields($excelField)) {
             return array(
                 'status'  => self::DANGER_STATUS,
@@ -230,7 +229,6 @@ class UserImporter extends Importer
             }
 
             unset($strs);
-
             if (!empty($userData['classroomId']) || $userData['classroomId'] == '0') {
                 $classroomIds = explode(",", $userData['classroomId']);
 
@@ -239,10 +237,16 @@ class UserImporter extends Importer
                     $isClassroomExit = $this->getClassroomService()->getClassroom($classroomId);
 
                     if ($isClassroomExit && $isClassroomExit['status'] != 'published') {
-                        $errorInfo[] = "第" . $row . "行班级号为的" . $classroomId . "的班级未发布，请检查。";
+                        $errorInfo[] = "第" . $row . "行班级号为" . $classroomId . "的班级未发布，请检查。";
                     } elseif (!$isClassroomExit) {
-                        $errorInfo[] = "第" . $row . "行班级号为的" . $classroomId . "的班级不存在，请检查。";
+                        $errorInfo[] = "第" . $row . "行班级号为" . $classroomId . "的班级不存在，请检查。";
                     }
+                }
+            }
+            if(!empty($userData['orgCode'])){
+                $org = $this->getOrgService()->getOrgByCode($userData['orgCode']);
+                if(empty($org)){
+                    $errorInfo[] = "第" . $row . "行组织机编码为" . $userData['orgCode'] . "的组织机构不存在，请检查。";
                 }
             }
 
@@ -691,7 +695,8 @@ class UserImporter extends Importer
             "weixin"      => '微信',
             "qq"          => 'QQ',
             "classroomId" => '班级编号',
-            "courseId"    => '课程编号'
+            "courseId"    => '课程编号',
+            "orgCode"    => '组织机构编码'
         );
 
         foreach ($userFields as $userField) {
@@ -748,6 +753,11 @@ class UserImporter extends Importer
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course.CourseMemberService');
+    }
+
+    protected function getOrgService()
+    {
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 
     private function getOrderService()
