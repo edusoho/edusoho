@@ -92,9 +92,9 @@ define(function(require, exports, module) {
 
                 }
                 if(file.type == 'video' && file.metas2) {
-                    if(file.metas2.hd) {
+                    if(file.metas2.shd) {
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">超清</span>');
-                    } else if(file.metas2.md){
+                    } else if(file.metas2.hd){
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">高清</span>');
                     } else if(file.metas2.sd) {
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">标清</span>');
