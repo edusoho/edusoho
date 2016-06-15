@@ -16,5 +16,4 @@ interface OrgDao
 
     public function findOrgsStartByOrgCode($orgCode);
 
-    public function batchUpgradeOrgCodeAndOrgId($module, $id, $orgCode, $orgId);
 }
