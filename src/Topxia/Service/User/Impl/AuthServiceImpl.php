@@ -114,7 +114,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         if ($this->getUserService()->isMobileRegisterMode() && !isset($registration['email'])) {
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
-
+        $registration = $this->fillOrgId($registration);
         return $registration;
     }
 

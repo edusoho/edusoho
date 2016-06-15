@@ -1,0 +1,13 @@
+{% if setting('magic.enable_org','0') %}
+	{% do load_script('orgbundle/controller/org/batch-org-btn') %}
+	{% set generate = generate|default('generate') != 'no-generate' %}
+	{% if generate %}
+		<div>
+	    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+	{% endif %}
+  	<a class="btn btn-default btn-sm {% if generate %} mlm {% endif %}" id="batch-update-org" data-form-id="{{formId}}" data-toggle="modal" data-generate="{{generate|default(false)}}" data-target="#modal" data-url="{{path('admin_batch_update_org',{module:module})}}">设置组织机构</a>
+	{% if generate %}
+	  </div>
+	{% endif %}
+
+{% endif %}

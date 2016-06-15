@@ -4,6 +4,7 @@
     <span class="text-muted"><a href="{{ path('article_detail',{id:article.id}) }}"
                                 target="_blank">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a></span>
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: article.orgCode}%}
   <td>
     {% if category %}
       <span class="text-muted"><a href="{{ path('article_category',{categoryCode:category.code}) }}"

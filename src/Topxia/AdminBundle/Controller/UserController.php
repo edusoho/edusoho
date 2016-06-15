@@ -148,6 +148,7 @@ class UserController extends BaseController
             $formData['type'] = 'import';
             $registration     = $this->getRegisterData($formData, $request->getClientIp());
             $user             = $this->getAuthService()->register($registration);
+
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
@@ -182,6 +183,10 @@ class UserController extends BaseController
         $userData['password']  = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type']      = $formData['type'];
+
+        if(isset($formData['orgCode'])){
+            $userData['orgCode']  = $formData['orgCode'];
+        }
 
         return $userData;
     }

@@ -30,6 +30,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
+
         if (!isset($announcement['content']) || empty($announcement['content'])) {
             throw $this->createServiceException("公告内容不能为空！");
         }
@@ -50,7 +51,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
 		$announcement['userId'] = $this->getCurrentUser()->id;
 		$announcement['createdTime'] = time();
-
+        $announcement = $this->fillOrgId($announcement);
         $announcement = $this->getAnnouncementDao()->addAnnouncement($announcement);
         $this->dispatchEvent('announcement.create', $announcement);
         return $announcement;
@@ -69,7 +70,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
             throw $this->createServiceException("结束时间不能为空！");
         }
-
+        $announcement = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
         return $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
 	}

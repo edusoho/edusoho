@@ -74,4 +74,11 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         $sql = "SELECT * FROM {$this->getTable()} WHERE  code = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($value)) ?: array();
     }
+
+
+     public function batchUpgradeOrgCodeAndOrgId($module, $id, $orgCode, $orgId){
+        $sql = "UPDATE {$module} SET orgCode = ?, orgId = ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($orgCode, $orgId, $id));
+     }
+
 }

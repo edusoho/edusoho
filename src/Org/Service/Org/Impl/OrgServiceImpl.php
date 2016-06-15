@@ -5,6 +5,7 @@ namespace Org\Service\Org\Impl;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Org\Service\Org\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -140,6 +141,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
     }
 
+    public function getOrgByCode($code)
+    {
+        return $this->getOrgDao()->getOrgByCode($code);
+    }
+    
     public function geFullOrgNameById($id, $orgs = array())
     {
         $orgs[] = $org = $this->getOrg($id);
@@ -153,8 +159,21 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
     }
 
+     public function batchUpdateOrg($module, $ids, $orgCode)
+     {
+        $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
+     }
+
     protected function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
     }
+
+    protected function getModuleService($module){
+        $moduleService = OrgBatchUpdateFactory::getModuleService($module);
+        return $this->createService($moduleService);
+    }
+
+
+
 }
