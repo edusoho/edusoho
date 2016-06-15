@@ -15,7 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class UpgradeOrdersCommand extends BaseCommand
 {
-
     private $host = '';
 
     protected function configure()
@@ -33,7 +32,7 @@ class UpgradeOrdersCommand extends BaseCommand
         $filePath = $input->getArgument('filePath');
 
         $file = file($filePath);
-        foreach($file as &$sn) {
+        foreach($file as $sn) {
             echo $sn;
             $order = $this->getOrderService()->getOrderBySn(trim($sn));
             $this->processOrder($order);
@@ -42,8 +41,7 @@ class UpgradeOrdersCommand extends BaseCommand
 
     protected function processOrder($order)
     {
-		if(in_array($order['payment'], array('wxpay'))) {
-
+        if(in_array($order['payment'], array('wxpay'))) {
             if($order['status'] == 'paid') {
                 echo $order['status'];
                 return;

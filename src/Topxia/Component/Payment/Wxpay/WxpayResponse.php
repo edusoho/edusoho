@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayResponse extends Response
 {
-    protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
+    protected $orderQueryUrl = 'http://ke.esdev.com/order/order_check';
     public function getPayData()
     {
         $params          = $this->params;
@@ -16,7 +16,6 @@ class WxpayResponse extends Response
         $data['sn']      = $params['out_trade_no'];
         $result          = $this->confirmSellerSendGoods($data['sn']);
         $returnArray     = $this->fromXml($result);
-
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException('微信支付失败');
         }
