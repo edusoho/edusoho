@@ -173,41 +173,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertCount(3, $result);
     }
 
-    public function testSearchCoursesByLikeOrgCode()
-    {
-        $course1 = array(
-            'title'   => 'test course 1',
-            'orgCode' => '1.'
-        );
-        $course2 = array(
-            'title'   => 'test course 2',
-            'orgCode' => '1.2.'
-        );
-        $course3 = array(
-            'title'   => 'test course 3',
-            'orgCode' => '1.2.3.'
-        );
-
-        $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->createCourse($course2);
-        $this->getCourseService()->createCourse($course3);
-
-        $conditions = array(
-            'likeOrgCode' => '1.'
-        );
-
-        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
-
-        $this->assertCount(3, $result);
-
-        $conditions = array(
-            'likeOrgCode' => '1.2.'
-        );
-        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
-
-        $this->assertCount(2, $result);
-    }
-
     public function testSearchCourseCount()
     {
         $course1 = array(
