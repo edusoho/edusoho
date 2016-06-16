@@ -387,18 +387,6 @@ define(function(require, exports, module) {
             },
            "{{display}}的长度必须小于或等于{{max}}(一个中文字符长度为2)"
         ]
-
-       /* addRule("minlength", function(options) {
-        var element = options.element;
-        var l = element.val().length;
-        return l >= Number(options.min);
-    }, );
-    addRule("maxlength", function(options) {
-        var element = options.element;
-        var l = element.val().length;
-        return l <= Number(options.max);
-    }, "{{display}}的长度必须小于或等于{{max}}");       
-*/
     ];
 
     function strlen(str){  
