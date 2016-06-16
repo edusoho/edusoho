@@ -7,7 +7,7 @@
 
     <div class="form-group">
       <div class="controls mll">
-        <span>{{'文件将从该课程中移除关联'|trans}}</span>
+        <span>{{'是否确认删除资源？'|trans}}</span>
       </div>
       <div class="controls mll mtl">
 				<input type="checkbox" name="isDeleteFile" value="1" />
@@ -24,7 +24,7 @@
 
 {% block footer %}
     <div class="pull-left pts"> 
-      <span class="text-danger">文件被引用，移除或删除会引起引用课时无法正常使用</span>
+      <span class="text-danger">文件若被引用，移除或删除会引起引用课时无法正常使用</span>
     </div>
     <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="正在删除...">确认</button>
     <script>app.load('course-manage-file/material-delete.js');</script>
