@@ -124,7 +124,8 @@ class CourseFileManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
             'course'    => $course,
             'materials' => $materials,
-            'files'     => $files
+            'files'     => $files,
+            'ids'       => $fileIds
         ));
     }
 
