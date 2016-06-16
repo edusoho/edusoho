@@ -23,7 +23,8 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $authUser     = $this->getAuthProvider()->register($registration);
+
+            $authUser = $this->getAuthProvider()->register($registration);
 
             if ($type == 'default') {
                 if (!empty($authUser['id'])) {
@@ -356,7 +357,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-            
+
             if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
