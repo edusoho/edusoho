@@ -3,6 +3,7 @@ namespace Topxia\Service\Order\Tests;
 
 // use Coupon\Service\Coupon\CouponService;
 
+use Topxia\Service\Common\ServiceException;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 
@@ -634,7 +635,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则paymen会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -712,7 +713,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1206,7 +1207,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1315,7 +1316,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1   = $this->getOrderService()->createOrder($order1);
         $payOrder = $this->getOrderService()->payOrder(array(
@@ -1372,7 +1373,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1441,7 +1442,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1510,7 +1511,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1579,7 +1580,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1656,7 +1657,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -1729,7 +1730,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1   = $this->getOrderService()->createOrder($order1);
         $payOrder = $this->getOrderService()->payOrder(array(
@@ -1832,7 +1833,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1   = $this->getOrderService()->createOrder($order1);
         $payOrder = $this->getOrderService()->payOrder(array(
@@ -2037,7 +2038,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1   = $this->getOrderService()->createOrder($order1);
         $payOrder = $this->getOrderService()->payOrder(array(
@@ -2261,7 +2262,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2340,7 +2341,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2422,7 +2423,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2495,7 +2496,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2572,7 +2573,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2650,7 +2651,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
@@ -2724,7 +2725,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1 = $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->updateOrderCashSn($order1['id'], '999999999');
@@ -2818,7 +2819,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order1  = $this->getOrderService()->createOrder($order1);
         $payData = array('status' => 'closed');
@@ -2865,7 +2866,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'     => 1.00, //价格一定要有,否则payment会变成none
             'targetType' => 'course',
             'targetId'   => $createCourse1['id'],
-            'payment'    => 'tenpay'
+            'payment'    => 'alipay'
         );
         $order2 = array(
             'userId'     => $user['id'],
