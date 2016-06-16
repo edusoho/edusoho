@@ -67,13 +67,24 @@ class CourseFileManageController extends BaseController
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $materials = $this->getMaterialService()->searchMaterials(
+            array(
+                'courseId' => $id,
+                'fileId'   => $fileId,
+                'source'   => 'coursematerial'
+            ),
+            array('createdTime','DESC'),
+            0, 1
+        );
+
+        if (!$materials) {
+            throw $this->createNotFoundException();
+        }
+        
         $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($id != $file["targetId"]) {
             throw $this->createNotFoundException();
         }
 
