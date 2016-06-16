@@ -159,7 +159,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->hideThings($thread['content'], $thread['id']);
         $this->dispatchEvent('group.thread.create', $thread);
-
+        $this->getLogService()->info('group', 'create_thread', "新增话题 {$thread['title']}({$thread['id']})");
         return $thread;
     }
 
@@ -349,12 +349,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
         $this->dispatchEvent('group.thread.close', $thread);
+        $this->getLogService()->info('group', 'close_thread', "关闭话题 {$thread['title']}({$thread['id']})");
     }
 
     public function openThread($threadId)
     {
         $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
         $this->dispatchEvent('group.thread.open', $thread);
+        $this->getLogService()->info('group', 'open_thread', "开启话题 {$thread['title']}({$thread['id']})");
     }
 
     public function searchThreads($conditions, $orderBy, $start, $limit)
@@ -437,6 +439,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'threadNum', -1);
         $this->dispatchEvent('group.thread.delete', $thread);
+        $this->getLogService()->info('group', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
     public function updatePost($id, $fields)
@@ -533,5 +536,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getSensitiveService()
     {
         return $this->createService("SensitiveWord:Sensitive.SensitiveService");
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }

@@ -111,7 +111,8 @@ class OrderController extends BaseController
         $conditions = $this->buildExportCondition($request, $targetType);
 
         $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
-        $payment        = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
+
+        $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
         $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');

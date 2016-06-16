@@ -11,14 +11,13 @@ class AnnouncementController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user  = $this->getCurrentUser();
         $query = $request->query->all();
+        $conditions = array(
+            'targetType' => 'global'
+        );
 
-        $conditions = array('targetType' => 'global');
-
-        if (isset($query['orgCode'])) {
-            $conditions['likeOrgCode'] = $query['orgCode'];
-        }
+        $conditions = array_merge($conditions, $query);
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),

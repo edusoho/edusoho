@@ -203,6 +203,11 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             }
         }
 
+        if (array_key_exists('hasThumb', $conditions)) {
+            $conditions['thumbNotEqual'] = '';
+            unset($conditions['hasThumb']);
+        }
+
         if (isset($conditions['keywords'])) {
             $conditions['keywords'] = "%{$conditions['keywords']}%";
         }
@@ -230,6 +235,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             ->andWhere('categoryId = :categoryId')
             ->andWhere('categoryId IN (:categoryIds)')
             ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('id != :idNotEqual')
+            ->andWhere('thumb != :thumbNotEqual')
             ->andWhere('orgCode = :orgCode');
 
         return $builder;

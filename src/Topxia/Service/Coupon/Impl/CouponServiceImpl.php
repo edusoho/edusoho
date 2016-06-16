@@ -3,7 +3,6 @@ namespace Topxia\Service\Coupon\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Coupon\CouponService;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -210,7 +209,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 'userId' => $currentUser['id'],
                 'status' => 'receive'
             ));
-
+            $this->getLogService()->info('coupon', 'receive', "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠码 {$coupon['code']}", $coupon);
             if (empty($coupon)) {
                 return false;
             }
@@ -242,7 +241,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     public function useCoupon($code, $order)
     {
         $coupon = $this->getCouponDao()->getCouponByCode($code, true);
-
+        $user   = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;
         }
@@ -259,7 +258,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             'userId'     => $order['userId'],
             'orderId'    => $order['id']
         ));
-
+        $this->getLogService()->info('coupon', 'use', "用户{$user['nickname']}(#{$user['id']})使用了优惠码 {$coupon['code']}", $coupon);
         $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
@@ -326,5 +325,10 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getNotificationService()
     {
         return $this->createService('User.NotificationService');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

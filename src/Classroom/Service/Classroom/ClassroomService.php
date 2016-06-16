@@ -8,6 +8,8 @@ interface ClassroomService
 
     public function updateClassroom($id, $fields);
 
+    public function batchUpdateOrg($classroomIds, $orgCode);
+
     public function waveClassroom($id, $field, $diff);
 
     public function findClassroomsByIds(array $ids);

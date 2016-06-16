@@ -3,8 +3,8 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\ThreadService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Course\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -287,7 +287,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->deleteThread($threadId);
 
         $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
-        $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
+        $this->getLogService()->info('course', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
     public function stickThread($courseId, $threadId)
@@ -465,7 +465,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新post过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        $post = $this->getThreadPostDao()->updatePost($id, $fields);
+        $post              = $this->getThreadPostDao()->updatePost($id, $fields);
         $this->dispatchEvent('course.thread.post.update', $post);
         return $post;
     }
