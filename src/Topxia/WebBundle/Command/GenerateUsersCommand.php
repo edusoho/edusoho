@@ -14,7 +14,7 @@ class GenerateUsersCommand extends BaseCommand
     protected function configure()
     {
         $this->setName ( 'util:generate-users' )
-             ->addArgument('index', InputArgument::REQUIRED, '数量');
+             ->addArgument('index', InputArgument::REQUIRED, '数量')
              ->addArgument('start', InputArgument::OPTIONAL, '起始值');
     }
 
