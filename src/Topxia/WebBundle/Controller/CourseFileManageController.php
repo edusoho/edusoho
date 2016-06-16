@@ -71,8 +71,7 @@ class CourseFileManageController extends BaseController
         $materialCount = $this->getMaterialService()->searchMaterialCount(
             array(
                 'courseId' => $id,
-                'fileId'   => $fileId,
-                'source'   => 'coursematerial'
+                'fileId'   => $fileId
             )
         );
 
