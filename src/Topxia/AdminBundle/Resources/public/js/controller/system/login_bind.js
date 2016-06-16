@@ -1,4 +1,3 @@
-var aa =null;
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -22,27 +21,22 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=verify_code]',
-            rule: 'htmlTag validatehtmlTag'
+            rule: 'htmlTag'
         });
 
         Validator.addRule("htmlTag", function(options) {
             var value = $(options.element).val();
-            var isMatch = value.match(/>\s*\w{1,}|^\w{1,}\s*</gm);
-              console.log(isMatch)
-            return isMatch == null 
+            var illegalMatch = value.match(/>\s*\w{1,}|^\w{1,}\s*</gm);
+            var legalMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
+            return (illegalMatch == null ) && (legalMatch && legalMatch.length >0 )
         }, "{{display}}应该为HTML meta标签");
-
+/*
         Validator.addRule("validatehtmlTag", function(options) {
             var value = $(options.element).val();
             var isMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
-            aa = isMatch;
-            console.log(isMatch)
             return isMatch && isMatch.length >0 
         }, "{{display}}应该为HTML meta标签");
-
-
-      //  Validator.addRule('htmlTag', /<(meta|link|script)(.*)?(\/*)>$/gm, "{{display}}应该为HTML meta标签");
-
+*/
         var hideOrShowTimeAndMinutes = function() {
             if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1) {
                 $('#times_and_minutes').show();
