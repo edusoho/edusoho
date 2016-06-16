@@ -370,7 +370,7 @@ define(function(require, exports, module) {
                 }
                 return l >= Number(options.min);
             },
-            "{{display}}的长度必须大于或等于{{min}}"
+            "{{display}}的长度必须大于或等于{{min}}(一个中文字符长度为2)"
         ], 
         [
             'maxlength',
@@ -385,7 +385,7 @@ define(function(require, exports, module) {
                 }
                 return l <= Number(options.max);
             },
-           "{{display}}的长度必须小于或等于{{max}}"
+           "{{display}}的长度必须小于或等于{{max}}(一个中文字符长度为2)"
         ]
 
        /* addRule("minlength", function(options) {
