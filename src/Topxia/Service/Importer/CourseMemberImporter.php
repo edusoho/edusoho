@@ -62,7 +62,7 @@ class CourseMemberImporter extends Importer
                     'title'      => "购买课程《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'course',
                     'targetId'   => $targetObject['id'],
-                    'amount'     => $orderData['amount'],
+                    'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
                     'payment'    => 'outside',
                     'snPrefix'   => 'C',
                     'note'       => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
