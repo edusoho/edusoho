@@ -30,13 +30,7 @@ define(function(require, exports, module) {
             var legalMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
             return (illegalMatch == null ) && (legalMatch && legalMatch.length >0 )
         }, "{{display}}应该为HTML meta标签");
-/*
-        Validator.addRule("validatehtmlTag", function(options) {
-            var value = $(options.element).val();
-            var isMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
-            return isMatch && isMatch.length >0 
-        }, "{{display}}应该为HTML meta标签");
-*/
+
         var hideOrShowTimeAndMinutes = function() {
             if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1) {
                 $('#times_and_minutes').show();
