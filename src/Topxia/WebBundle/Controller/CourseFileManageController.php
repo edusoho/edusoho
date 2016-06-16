@@ -68,17 +68,15 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $materials = $this->getMaterialService()->searchMaterials(
+        $materialCount = $this->getMaterialService()->searchMaterialCount(
             array(
                 'courseId' => $id,
                 'fileId'   => $fileId,
                 'source'   => 'coursematerial'
-            ),
-            array('createdTime','DESC'),
-            0, 1
+            )
         );
 
-        if (!$materials) {
+        if (!$materialCount) {
             throw $this->createNotFoundException();
         }
         
