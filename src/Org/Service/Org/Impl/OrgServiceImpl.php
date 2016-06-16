@@ -47,10 +47,10 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = array();
 
         if (empty($parentOrg)) {
-            $fields['orgCode'] = $org['id'] . '.';
+            $fields['orgCode'] = $org['id'].'.';
             $fields['depth']   = 1;
         } else {
-            $fields['orgCode'] = $parentOrg['orgCode'] . $org['id'] . '.';
+            $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
             $fields['depth']   = $parentOrg['depth'] + 1;
         }
 
@@ -105,6 +105,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->getOrg($id);
     }
 
+    public function findOrgsByIds($ids)
+    {
+        return $this->getOrgDao()->findOrgsByIds($ids);
+    }
+
     public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
@@ -145,7 +150,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         return $this->getOrgDao()->getOrgByCode($code);
     }
-    
+
     public function geFullOrgNameById($id, $orgs = array())
     {
         $orgs[] = $org = $this->getOrg($id);
@@ -154,26 +159,24 @@ class OrgServiceImpl extends BaseService implements OrgService
         } else {
             $orgs = ArrayToolkit::index($orgs, 'id');
             ksort($orgs);
-            $orgs  = ArrayToolkit::column($orgs, 'name');
+            $orgs = ArrayToolkit::column($orgs, 'name');
             return implode($orgs, '->');
         }
     }
 
-     public function batchUpdateOrg($module, $ids, $orgCode)
-     {
+    public function batchUpdateOrg($module, $ids, $orgCode)
+    {
         $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
-     }
+    }
 
     protected function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
     }
 
-    protected function getModuleService($module){
+    protected function getModuleService($module)
+    {
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
         return $this->createService($moduleService);
     }
-
-
-
 }
