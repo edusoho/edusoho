@@ -356,8 +356,49 @@ define(function(require, exports, module) {
                 return  result;  
              },
              "{{display}}格式错误"
-        ]        
+        ], 
+        [
+            'minlength',
+            function(options){
+                var element = options.element;
+                var l = element.val().length;
+                var value = element.val();
+                for(var i = 0; i < value.length; i++){
+                    if(value.charCodeAt(i) > 127){
+                        l++;
+                    }
+                }
+                return l >= Number(options.min);
+            },
+            "{{display}}的长度必须大于或等于{{min}}"
+        ], 
+        [
+            'maxlength',
+            function(options){
+                var element = options.element;
+                var l = element.val().length;
+                var value = element.val();
+                for(var i = 0; i < value.length; i++){
+                    if(value.charCodeAt(i) > 127){
+                        l++;
+                    }
+                }
+                return l <= Number(options.max);
+            },
+           "{{display}}的长度必须小于或等于{{max}}"
+        ]
 
+       /* addRule("minlength", function(options) {
+        var element = options.element;
+        var l = element.val().length;
+        return l >= Number(options.min);
+    }, );
+    addRule("maxlength", function(options) {
+        var element = options.element;
+        var l = element.val().length;
+        return l <= Number(options.max);
+    }, "{{display}}的长度必须小于或等于{{max}}");       
+*/
     ];
 
     function strlen(str){  
