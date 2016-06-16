@@ -67,13 +67,21 @@ class CourseFileManageController extends BaseController
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $materialCount = $this->getMaterialService()->searchMaterialCount(
+            array(
+                'courseId' => $id,
+                'fileId'   => $fileId
+            )
+        );
+
+        if (!$materialCount) {
+            throw $this->createNotFoundException();
+        }
+        
         $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($id != $file["targetId"]) {
             throw $this->createNotFoundException();
         }
 
@@ -124,7 +132,8 @@ class CourseFileManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
             'course'    => $course,
             'materials' => $materials,
-            'files'     => $files
+            'files'     => $files,
+            'ids'       => $fileIds
         ));
     }
 

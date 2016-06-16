@@ -14,7 +14,8 @@ class GenerateUsersCommand extends BaseCommand
     protected function configure()
     {
         $this->setName ( 'util:generate-users' )
-             ->addArgument('index', InputArgument::REQUIRED, '数量');
+             ->addArgument('index', InputArgument::REQUIRED, '数量')
+             ->addArgument('start', InputArgument::OPTIONAL, '起始值');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -22,8 +23,9 @@ class GenerateUsersCommand extends BaseCommand
         $this->initServiceKernel();
 
         $index = $input->getArgument('index');
+        $start = $input->getArgument('start', 0);
 
-        for ($i=0; $i < $index; $i++) { 
+        for ($i = $start; $start < $index; $start++) { 
             $user = array();
             $user['nickname'] = 'test_' . $i;
             $user['password'] = 'abcde';

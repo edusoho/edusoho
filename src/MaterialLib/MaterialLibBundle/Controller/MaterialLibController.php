@@ -440,6 +440,7 @@ class MaterialLibController extends BaseController
         return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,
+            'ids'           => $fileIds,
             'deleteFormUrl' => $this->generateUrl('material_batch_delete')
         ));
     }
