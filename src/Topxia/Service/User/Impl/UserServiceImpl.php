@@ -148,6 +148,10 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeUserOrg($userId, $orgCode)
     {
+        $user = $this->getUser($userId);
+        if (empty($user || empty($orgCode) || ($user['orgCode'] == $orgCode))) {
+            return;
+        }
         $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
 
         if (empty($org)) {

@@ -356,8 +356,7 @@ define(function(require, exports, module) {
                 return  result;  
              },
              "{{display}}格式错误"
-        ]        
-
+        ]
     ];
 
     function strlen(str){  

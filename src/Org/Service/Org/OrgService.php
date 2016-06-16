@@ -9,6 +9,8 @@ interface OrgService
 
     public function getOrg($id);
 
+    public function findOrgsByIds($ids);
+
     public function deleteOrg($id);
 
     public function getOrgByOrgCode($orgCode);
@@ -31,15 +33,15 @@ interface OrgService
     public function sortOrg($ids);
 
     /**
-     * @param $id
+     * @param  $id
      * @return orgName1->orgName2->orgName3
      */
     public function geFullOrgNameById($id);
 
     /**
-     * @param  [type] $module , 要更新的模块名
-     * @param  [type] $ids,     要更新Ids
-     * @param  [type] $orgCode
+     * @param [type] $module    , 要更新的模块名
+     * @param [type] $ids,      要更新Ids
+     * @param [type] $orgCode
      */
     public function batchUpdateOrg($module, $ids, $orgCode);
 }

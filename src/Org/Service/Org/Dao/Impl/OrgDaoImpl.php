@@ -39,6 +39,20 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         });
     }
 
+    public function findOrgsByIds($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks});";
+
+        // var_dump($sql, $marks, $ids);
+        $org = $this->getConnection()->fetchAll($sql, $ids);
+        return $org;
+    }
+
     public function delete($id)
     {
         $result = $this->getConnection()->delete($this->getTable(), array('id' => $id));
