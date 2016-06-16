@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayResponse extends Response
 {
-    protected $orderQueryUrl = 'http://ke.esdev.com/order/order_check';
+    protected $orderQueryUrl = 'http://192.168.6.200/order/order_check';
     public function getPayData()
     {
         $params          = $this->params;

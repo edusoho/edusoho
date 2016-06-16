@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 class WxpayTradeQueryRequest extends Request
 {
     protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    protected $orderQueryUrl   = 'http://ke.esdev.com/order/order_check';
+    protected $orderQueryUrl   = 'http://192.168.6.200/order/order_check';
 
     public function form()
     {
