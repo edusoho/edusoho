@@ -548,11 +548,6 @@ class UserServiceImpl extends BaseService implements UserService
         $user['type']          = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp']     = empty($registration['createdIp']) ? '' : $registration['createdIp'];
 
-        if (!empty($registration['orgCode'])) {
-            $user['orgCode'] = $registration['orgCode'];
-            $user['orgId']   = $registration['orgId'];
-        }
-
         $user['createdTime'] = time();
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
@@ -569,6 +564,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user['salt']     = '';
             $user['password'] = '';
             $user['setup']    = 0;
+        }
+        if (isset($registration['orgId'])) {
+            $user['orgId']   = $registration['orgId'];
+            $user['orgCode'] = $registration['orgCode'];
         }
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))

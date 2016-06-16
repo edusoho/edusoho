@@ -89,20 +89,21 @@ abstract class BaseService
         $magic = $this->createService('System.SettingService')->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            if (isset($fields['orgCode'])) {
+            if (isset($fields['orgCode']) && !empty($fields['orgCode'])) {
                 $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw $this->createServiceException("组织机构{$fields['orgCode']}不存在,更新失败");
                 }
                 $fields['orgId']   = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];
+            } else {
+                unset($fields['orgCode']);
             }
         } else {
             unset($fields['orgCode']);
         }
         return $fields;
     }
-
     protected function getLogger($name)
     {
         if ($this->logger) {
