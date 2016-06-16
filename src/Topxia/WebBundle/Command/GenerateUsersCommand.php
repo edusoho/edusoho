@@ -15,7 +15,7 @@ class GenerateUsersCommand extends BaseCommand
     {
         $this->setName ( 'util:generate-users' )
              ->addArgument('index', InputArgument::REQUIRED, '数量')
-             ->addArgument('start', InputArgument::REQUIRED, '数量');
+             ->addArgument('start', InputArgument::REQUIRED, '起始值');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -25,9 +25,9 @@ class GenerateUsersCommand extends BaseCommand
         $index = $input->getArgument('index');
         $start = $input->getArgument('start', 0);
 
-        for ($start=0; $start < $index; $start++) { 
+        for ($i=$start; $i < $index; $i++) { 
             $user = array();
-            $user['nickname'] = 'test_' . $start;
+            $user['nickname'] = 'test_' . $i;
             $user['password'] = 'abcde';
             $user['email'] = $user['nickname'] . '@edusoho.com';
             $this->getUserService()->register($user);
