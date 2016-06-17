@@ -520,8 +520,6 @@ admin:
                             class: app-upgrade
                         admin_app_logs:
                             name: 更新日志
-                admin_cloud_file:
-                    name: 云资源
                 admin_setting_cloud:
                     name: 授权信息
                     children:

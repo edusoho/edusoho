@@ -9,7 +9,6 @@ class PermissionBuilder
 {
     private $position = 'admin';
 
-    private $menus = array();
 
     private static $builder;
     private $cached = array();
@@ -156,6 +155,13 @@ class PermissionBuilder
             return $this->cached['getOriginPermissions'];
         }
 
+        $environment = ServiceKernel::instance()->getEnvironment();
+        $cacheFile = "../app/cache/".$environment."/menus_".$this->position.".php";
+        if ($environment != "dev" && file_exists($cacheFile)) {
+            $this->cached['getOriginPermissions'] = include $cacheFile;
+            return $this->cached['getOriginPermissions'];
+        }
+
         $configs = $this->getPermissionConfig();
         $permissions = array();
         foreach ($configs as $key => $config) {
@@ -172,6 +178,14 @@ class PermissionBuilder
         }
 
         $this->cached['getOriginPermissions'] = $permissions;
+
+        if (in_array($environment, array('test','dev'))) {
+            return $permissions;
+        }
+        
+        $cache = "<?php \nreturn ".var_export($permissions, true).';';
+        file_put_contents($cacheFile, $cache);
+
         return $permissions;
     }
 
@@ -266,18 +280,6 @@ class PermissionBuilder
 
     private function buildPermissions()
     {
-        if ($this->menus) {
-            return $this->menus;
-        }
-
-        $environment = ServiceKernel::instance()->getEnvironment();
-
-        $cacheFile = "../app/cache/".$environment."/menus_".$this->position.".php";
-
-        if ($environment != "dev" && file_exists($cacheFile)) {
-            return include $cacheFile;
-        }
-
         $menus = $this->loadPermissions();
         if(empty($menus)) {
             return array();
@@ -325,14 +327,6 @@ class PermissionBuilder
             $menus[$menu['parent']]['children'][] = $code;
         }
 
-        $this->menus = $menus;
-
-        if (in_array($environment, array('test','dev'))) {
-            return $menus;
-        }
-
-        $cache = "<?php \nreturn ".var_export($menus, true).';';
-        file_put_contents($cacheFile, $cache);
         return $menus;
     }
 
