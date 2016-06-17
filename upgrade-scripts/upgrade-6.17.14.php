@@ -60,6 +60,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('INFO', '更改orders表字段payment结构为VARCHAR(32)');
             $connection->exec("UPDATE orders o SET payment = 'outside' WHERE (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' order by ol.createdTime desc limit 1) IS NOT NULL AND userId != (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' order by ol.createdTime desc limit 1)  AND o.status='paid';");
             $this->logger('INFO', '将之前管理员导入的订单order表记录payment字段值改为outside');
+
+            if (!$this->isFieldExist('course_material', 'source')) {
+                $connection->exec("ALTER TABLE `course_material` ADD `source` varchar(50) NOT NULL DEFAULT 'coursematerial' AFTER `fileSize`;");
+            }
         } catch (\Exception $e) {
             $this->logger('ERROR', $e->getMessage());
         }
