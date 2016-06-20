@@ -45,7 +45,26 @@
             "retry_interval": 100
           }
         }
-    </li>
+      </li>
+      <li>
+        redis集群配置案例：{
+          "default" :{"servers": [{
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          },
+          {
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          }]
+          }
+        }
+      </li>
     </ul>
   {% endverbatim %}
 </div>

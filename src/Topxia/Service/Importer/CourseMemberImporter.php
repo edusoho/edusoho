@@ -16,21 +16,24 @@ class CourseMemberImporter extends Importer
     protected $colTotal         = 0;
     protected $excelFields      = array();
     protected $passValidateUser = array();
-    protected $excelExample     = 'bundles/topxiaweb/example/coursemember_import_example.xls';
-    protected $validateRouter   = 'course_manage_student_import';
-    protected $importingRouter  = 'course_manage_student_to_base';
 
     protected $type = 'course-member';
 
     public function import(Request $request)
     {
         $importData = $request->request->get('importData');
-        $courseId = $request->request->get('courseId');
-        $course = $this->getCourseService()->getCourse($courseId);
-        return $this->excelDataImporting($course, $importData);
+        $courseId   = $request->request->get('courseId');
+        $price      = $request->request->get('price');
+        $remark     = $request->request->get('remark');
+        $course     = $this->getCourseService()->getCourse($courseId);
+        $orderData  = array(
+            'amount' => $price,
+            'remark' => $remark
+        );
+        return $this->excelDataImporting($course, $importData, $orderData);
     }
 
-    protected function excelDataImporting($targetObject, $userData)
+    protected function excelDataImporting($targetObject, $userData, $orderData)
     {
         $existsUserCount = 0;
         $successCount    = 0;
@@ -59,21 +62,21 @@ class CourseMemberImporter extends Importer
                     'title'      => "购买课程《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'course',
                     'targetId'   => $targetObject['id'],
-                    'amount'     => 0,
-                    'payment'    => 'none',
-                    'snPrefix'   => 'CR'
+                    'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
+                    'payment'    => 'outside',
+                    'snPrefix'   => 'C',
+                    'note'       => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
                 ));
 
                 $this->getOrderService()->payOrder(array(
                     'sn'       => $order['sn'],
                     'status'   => 'success',
-                    'amount'   => 0,
+                    'amount'   => $order['amount'],
                     'paidTime' => time()
                 ));
 
                 $info = array(
-                    'orderId' => $order['id'],
-                    'note'    => '通过批量导入添加'
+                    'orderId' => $order['id']
                 );
 
                 if ($this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -100,9 +103,11 @@ class CourseMemberImporter extends Importer
 
     public function check(Request $request)
     {
-        $file   = $request->files->get('excel');
+        $file     = $request->files->get('excel');
         $courseId = $request->request->get('courseId');
-        $danger = $this->validateExcelFile($file);
+        $price    = $request->request->get('price');
+        $remark   = $request->request->get('remark');
+        $danger   = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
         }
@@ -119,7 +124,7 @@ class CourseMemberImporter extends Importer
             if ($passedRepeatInfo) {
                 return $this->createErrorResponse($passedRepeatInfo);
             }
-        }else{
+        } else {
             return $this->createErrorResponse($importData['errorInfo']);
         }
 
@@ -127,7 +132,9 @@ class CourseMemberImporter extends Importer
             $importData['allUserData'],
             $importData['checkInfo'],
             array(
-                'courseId' => $courseId
+                'courseId' => $courseId,
+                'price'    => $price,
+                'remark'   => $remark
             ));
     }
 
@@ -386,8 +393,9 @@ class CourseMemberImporter extends Importer
     public function getTemplate(Request $request)
     {
         $courseId = $request->query->get('courseId');
+        $course   = $this->getCourseService()->getCourse($courseId);
         return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
-            'courseId' => $courseId,
+            'course'       => $course,
             'importerType' => $this->type
         ));
     }
@@ -396,7 +404,7 @@ class CourseMemberImporter extends Importer
     {
         $courseId = $request->query->get('courseId');
 
-        if(empty($courseId)){
+        if (empty($courseId)) {
             $courseId = $request->request->get('courseId');
         }
 

@@ -29,7 +29,7 @@ define(function(require, exports, module) {
     validator.addItem({
         element: '#org-name-field',
         required: true,
-        rule: 'chinese_alphanumeric minlength{min:4} maxlength{max:100}'
+        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:40}',
     });
 
     validator.addItem({

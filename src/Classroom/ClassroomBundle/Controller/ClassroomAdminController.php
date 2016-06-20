@@ -4,7 +4,7 @@ namespace Classroom\ClassroomBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomAdminController extends BaseController
 {
@@ -12,12 +12,8 @@ class ClassroomAdminController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
-
-        $paginator = new Paginator(
+        $conditions = $this->fillOrgCode($conditions);
+        $paginator  = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
             10
@@ -82,14 +78,14 @@ class ClassroomAdminController extends BaseController
 
     public function addClassroomAction(Request $request)
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
-        }
-
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+        }
+
+        if (!$user->isAdmin()) {
+            return $this->createMessageResponse('info', '只允许管理员创建班级!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -118,9 +114,12 @@ class ClassroomAdminController extends BaseController
             $classroom = array(
                 'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable'  => $myClassroom['buyable'],
-                'orgCode'  => $myClassroom['orgCode']
+                'buyable'  => $myClassroom['buyable']
             );
+
+            if (array_key_exists('orgCode', $myClassroom)) {
+                $classroom['orgCode'] = $myClassroom['orgCode'];
+            }
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 

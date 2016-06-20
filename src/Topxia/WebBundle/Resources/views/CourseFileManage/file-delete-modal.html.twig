@@ -3,10 +3,11 @@
 {% block title %}{{'文件移除'|trans}}{% endblock %}
 
 {% block body %}
+
   {% if course.type in ['open','liveOpen'] %}
     {% set deleteUrl = path('open_course_manage_files_delete', {id:course.id}) %}
   {% else %}
-    {% set deleteUrl = path('course_manage_upload_course_delete_files', {id:course.id}) %}
+    {% set deleteUrl = path('course_manage_delete_materials', {id:course.id}) %}
   {% endif %}
 	<form id="material-delete-form" class="form-horizontal" method="post" action="{{ deleteUrl }}" onsubmit="return false">
 
@@ -18,6 +19,8 @@
 				<input type="checkbox" name="isDeleteFile" value="1" />
       	{{'同时在我的教学资料中删除相关文件'|trans}}
       </div>
+
+      {% include 'TopxiaWebBundle:CourseFileManage:file-used-in-material-list.html.twig' %}
     </div>
     
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -26,6 +29,9 @@
 {% endblock %}
 
 {% block footer %}
+    <div class="pull-left pts"> 
+      <span class="text-danger">文件若被引用，移除或删除会引起引用课时无法正常使用</span>
+    </div>
     <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="正在删除...">确认</button>
     <script>app.load('course-manage-file/material-delete.js');</script>
 {% endblock %}

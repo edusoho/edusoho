@@ -1,4 +1,6 @@
 CKEDITOR.dialog.add('uploadpictures', function(editor) {
+    
+    var imageHtml = '', uploader;
 
     var onLoadDialog = function() {
 
@@ -6,32 +8,24 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         uploadUrl += uploadUrl.indexOf('?') == -1 ? '?' : '&';
         uploadUrl += 'CKEditorFuncNum=0&isWebuploader=1';
 
-        var uploader = WebUploader.create({
+        uploader = WebUploader.create({
             swf: CKEDITOR.getUrl('plugins/uploadpictures/webuploader/Uploader.swf'),
             server: uploadUrl,
-            pick: '#ckeditor-uploadpictures-pick-btn',
+            pick: '.' + editor.id + ' .ckeditor-uploadpictures-pick-btn',
+            compress: false,
             resize: false,
             fileNumLimit: 10,
+            threads: 1,
             fileSingleSizeLimit: 10*1024*1024,
             accept: {
                 title: 'Images',
-                extensions: 'gif,jpg,jpeg,bmp,png',
+                extensions: 'gif,jpg,jpeg,bmp,png,ico',
                 mimeTypes: 'image/*'
             }
         });
 
         $('.start-upload-btn').on('click', function(){
             uploader.upload();
-        });
- 
-        var imageHtml = '';
-        uploader.on('uploadSuccess', function(file, response) {
-            imageHtml += '<p><img src=' + response.url  + ' /></p>';
-        });
-
-        uploader.on('uploadFinished', function() {
-            editor.insertHtml(imageHtml);
-            imageHtml = ''; //清空
         });
 
         uploader.on('error', function(errorCode) {
@@ -43,8 +37,8 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         });
 
         uploader.on('fileQueued', function(file) {
-            $('.balloon-nofile').remove();
-            var $list =$('.balloon-filelist ul');
+            $('.' + editor.id + ' .balloon-nofile').remove();
+            var $list = $('.' + editor.id + ' .balloon-filelist ul');
             $list.append(
                 '<li id="' + file.id + '">' +
                 '  <div class="file-name">' + file.name + '</div>' +
@@ -56,25 +50,30 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             );
         });
 
-        $(".balloon-filelist").delegate(".file-remove", "click", function(){
+        $('.' + editor.id + ' .balloon-filelist').delegate('.file-remove', 'click', function(){
             uploader.removeFile($(this).parent('li').attr('id'), true);
             $(this).parent().remove();
         });
 
         uploader.on('uploadProgress', function(file, percentage) {
-            var $li = $('#' + file.id);
+            var $li = $('.' + editor.id + ' #' + file.id);
             percentage = (percentage * 100).toFixed(2) + '%';
             $li.find('.file-status').html(percentage);
             $li.find('.file-progress-bar').css('width', percentage);
         });
 
-        uploader.on('uploadSuccess', function(file) {
-            var $li = $('#' + file.id);
+        uploader.on('uploadSuccess', function(file, response) {
+            imageHtml += '<p><img src="' + response.url  + '" /></p>';
+
+            var $li = $('.' + editor.id + ' #' + file.id);
             $li.find('.file-status').html('已上传');
             $li.find('.file-progress-bar').css('width', '0%');
             $li.find('.file-remove').remove();
         });
 
+        // uploader.on('uploadFinished', function() {
+            
+        // });
     };
 
     var dialogDefinition = {
@@ -95,16 +94,32 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         }],
         
         onLoad: function() {
-            $('.cke_dialog_contents_body').css({'vertical-align': 'top'});
-            $('.cke_dialog_contents_body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index.html'), onLoadDialog);
+            $('.' + editor.id + ' .cke_dialog_contents_body').css({'vertical-align': 'top'});
+            $('.' + editor.id + ' .cke_dialog_contents_body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index.html'), onLoadDialog);
         },
 
         onOk: function() {
-            
+            if (uploader.isInProgress()) {
+                alert('请等待文件上传完成...');
+                return false;
+            }
+
+            if (uploader.getFiles('inited').length > 0) { //未点击上传
+                if (!confirm("当前列表中还有文件未上传，确认将清空列表，是否继续？")) {
+                    return false;
+                }
+            }
+            if (imageHtml) {
+                editor.insertHtml(imageHtml, 'unfiltered_html');
+                // editor.insertElement(new CKEDITOR.dom.element.createFromHtml(imageHtml));
+                imageHtml = ''; //清空
+            }
+            //关闭对话框后清除上传列表，因为列表有数量限制
+            uploader.reset();
+            $('.' + editor.id + ' .balloon-filelist ul').empty();
         }
        
     };
-
 
     return dialogDefinition;
 });

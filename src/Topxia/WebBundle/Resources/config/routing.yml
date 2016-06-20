@@ -681,9 +681,15 @@ course_manage_file_status:
     pattern:  /course/manage/file/status
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
 
-course_manage_upload_course_delete_files:
-    pattern:  /course/{id}/delete/materials
+course_manage_delete_materials:
+    pattern:  /course/{id}/manage/delete/materials
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
+    methods: [POST]
+
+course_manage_delete_materials_show:
+    pattern:  /course/{id}/manage/show/delete/materials
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteMaterialShow }
+    methods: [POST]
 
 course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
@@ -2037,6 +2043,10 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+esbar_my_study_center:
+    pattern:  /esbar/my/study_center
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
+
 my_cards:
     pattern:  /my/cards
     defaults: { _controller: TopxiaWebBundle:Card:index }
@@ -2155,9 +2165,15 @@ open_course_manage_files_upload:
     pattern:  /open/course/{id}/manage/files/upload/{targetType}
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles }
 
+open_course_manage_delete_materials_show:
+    pattern:  /open/course/{id}/manage/show/delete/materials
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteMaterialShow }
+    methods: [POST]
+
 open_course_manage_files_delete:
     pattern:  /open/course/{id}/manage/materials/delete
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
+    methods: [POST]
 
 open_course_manage_course_pick:
     pattern: /open/course/{id}/manage/recommend/pick/{filter}

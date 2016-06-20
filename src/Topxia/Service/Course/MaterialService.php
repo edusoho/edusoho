@@ -5,25 +5,25 @@ interface MaterialService
 {
     public function uploadMaterial($material);
 
-	public function addMaterial($fields, $argument);
+    public function addMaterial($fields, $argument);
 
-	public function updateMaterial($id, $fields, $argument);
+    public function updateMaterial($id, $fields, $argument);
 
-	public function deleteMaterial($courseId, $materialId);
+    public function deleteMaterial($courseId, $materialId);
 
     public function deleteMaterialsByLessonId($lessonId, $courseType);
 
     public function deleteMaterialsByCourseId($courseId, $courseType);
 
-	public function deleteMaterials($courseId, $fileIds, $courseType);
+    public function deleteMaterials($courseId, $fileIds, $courseType);
 
-	public function deleteMaterialsByFileId($fileId);
+    public function deleteMaterialsByFileId($fileId);
 
-	public function getMaterial($courseId, $materialId);
+    public function getMaterial($courseId, $materialId);
 
-	public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
-	public function searchMaterials($conditions, $orderBy, $start, $limit);
+    public function searchMaterials($conditions, $orderBy, $start, $limit);
 
     public function searchMaterialCount($conditions);
 
@@ -31,7 +31,8 @@ interface MaterialService
 
     public function searchMaterialCountGroupByFileId($conditions);
 
-    public function findUsedCourseMaterials($courseId, $fileIds);
+    public function findUsedCourseMaterials($fileIds, $courseId);
 
     public function findFullFilesAndSort($materials);
+
 }

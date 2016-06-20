@@ -32,6 +32,22 @@ class OrgServiceTest extends BaseTestCase
         $this->assertEquals('1', $getOrg['childrenNum']);
     }
 
+    public function testFindOrgsByIds()
+    {
+        $user = $this->setCurrent();
+
+        $org = $this->mookOrg($name = "edusoho");
+        $org = $this->getOrgService()->createOrg($org);
+
+        $childOrg             = $this->mookOrg($name = "tech");
+        $childOrg['parentId'] = $org['id'];
+        $childOrg             = $this->getOrgService()->createOrg($childOrg);
+
+        $orgs = $this->getOrgService()->findOrgsByIds(array($org['id'], $childOrg['id']));
+
+        $this->assertEquals(2, count($orgs));
+    }
+
     public function testCreateOrg()
     {
         $org = $this->mookOrg($name = "edusoho");
@@ -49,7 +65,6 @@ class OrgServiceTest extends BaseTestCase
         $org['name'] = 'updateEdu';
         $updateOrg   = $this->getOrgService()->updateOrg($org['id'], $org);
         $this->assertEquals('updateEdu', $updateOrg['name']);
-
     }
 
     public function testDeleteOrg()
@@ -113,6 +128,59 @@ class OrgServiceTest extends BaseTestCase
         $this->assertGreaterThan(array_sum($seqs), array_sum($sortSeqs));
     }
 
+    public function testBatchUpdateOrg()
+    {
+        $magic = $this->getServiceKernel()->createService('System.SettingService')->set('magic', array('enable_org' => 0));
+        $magic = $this->getServiceKernel()->createService('System.SettingService')->get('magic');
+
+        $org  = $this->mookOrg($name = "edusoho");
+        $org1 = $this->mookOrg($name = "edusoho1");
+        $org  = $this->getOrgService()->createOrg($org);
+        $org1 = $this->getOrgService()->createOrg($org1);
+
+        $course = array(
+            'title'   => 'online test course 1',
+            'orgCode' => $org['orgCode']
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $this->assertEquals($org['id'], $createCourse['orgId']);
+        $this->assertEquals($org['orgCode'], $createCourse['orgCode']);
+
+        $this->getOrgService()->batchUpdateOrg('course', $createCourse['id'], $org1['orgCode']);
+        $course = $this->getCourseService()->getCourse($createCourse['id']);
+
+        $this->assertEquals($org['id'], $course['orgId']);
+        $this->assertEquals($org['orgCode'], $course['orgCode']);
+    }
+
+    public function testBatchUpdateOrgwithEnableOrg()
+    {
+        $magic = $this->getServiceKernel()->createService('System.SettingService')->set('magic', array('enable_org' => 1));
+        $magic = $this->getServiceKernel()->createService('System.SettingService')->get('magic');
+
+        $org  = $this->mookOrg($name = "edusoho");
+        $org1 = $this->mookOrg($name = "edusoho1");
+        $org  = $this->getOrgService()->createOrg($org);
+        $org1 = $this->getOrgService()->createOrg($org1);
+
+        $course = array(
+            'title'   => 'online test course 1',
+            'orgCode' => $org['orgCode']
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+
+        $this->assertEquals($org['id'], $createCourse['orgId']);
+        $this->assertEquals($org['orgCode'], $createCourse['orgCode']);
+
+        $this->getOrgService()->batchUpdateOrg('course', $createCourse['id'], $org1['orgCode']);
+        $course = $this->getCourseService()->getCourse($createCourse['id']);
+
+        $this->assertEquals($org1['id'], $course['orgId']);
+        $this->assertEquals($org1['orgCode'], $course['orgCode']);
+
+    }
+
     private function mookOrg($name)
     {
         $org         = array();
@@ -127,7 +195,6 @@ class OrgServiceTest extends BaseTestCase
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-
     }
 
     protected function createUser()
@@ -140,6 +207,11 @@ class OrgServiceTest extends BaseTestCase
         $user['currentIp'] = '127.0.0.1';
         $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         return $user;
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     public function getOrgService()

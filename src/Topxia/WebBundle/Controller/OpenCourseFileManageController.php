@@ -24,15 +24,15 @@ class OpenCourseFileManageController extends BaseController
         );
 
         $materials = $this->getMaterialService()->searchMaterialsGroupByFileId(
-            $conditions, 
+            $conditions,
             array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(), 
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $files      = $this->getMaterialService()->findFullFilesAndSort($materials);
-        $fileIds    = ArrayToolkit::column($files,'fileId');
-        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
+        $fileIds    = ArrayToolkit::column($files, 'fileId');
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -42,7 +42,7 @@ class OpenCourseFileManageController extends BaseController
             'users'      => ArrayToolkit::index($users, 'id'),
             'paginator'  => $paginator,
             'now'        => time(),
-            'filesQuote' => $filesQuote,
+            'filesQuote' => $filesQuote
         ));
     }
 
@@ -124,7 +124,6 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         if ($request->getMethod() == 'POST') {
- 
             $formData = $request->request->all();
 
             if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
@@ -133,15 +132,32 @@ class OpenCourseFileManageController extends BaseController
                         $this->getUploadFileService()->deleteFile($fileId);
                     }
                 }
-            } 
-            
+            }
+
             $this->getMaterialService()->deleteMaterials($id, $formData['ids'], 'openCourse');
- 
+
             return $this->createJsonResponse(true);
         }
-        
+
         return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
-            'course' => $course,
+            'course' => $course
+        ));
+    }
+
+    public function deleteMaterialShowAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        $fileIds   = $request->request->get('ids');
+        $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files, 'id');
+
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course'    => $course,
+            'materials' => $materials,
+            'files'     => $files,
+            'ids'       => $fileIds
         ));
     }
 

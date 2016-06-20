@@ -4,6 +4,7 @@
   <td>
     {{ admin_macro.user_link(user) }}
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {{ user.promotedTime|date('Y-m-d') }}
   </td>

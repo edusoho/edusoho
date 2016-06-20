@@ -24,10 +24,16 @@ class ClassroomMemberImporter extends Importer
         $importData  = $request->request->get('importData');
         $classroomId = $request->request->get('classroomId');
         $classroom   = $this->getClassroomService()->getClassroom($classroomId);
-        return $this->excelDataImporting($classroom, $importData);
+        $price       = $request->request->get('price');
+        $remark      = $request->request->get('remark');
+        $orderData   = array(
+            'amount' => $price,
+            'remark' => $remark
+        );
+        return $this->excelDataImporting($classroom, $importData, $orderData);
     }
 
-    protected function excelDataImporting($targetObject, $userData)
+    protected function excelDataImporting($targetObject, $userData, $orderData)
     {
         $existsUserCount = 0;
         $successCount    = 0;
@@ -57,21 +63,21 @@ class ClassroomMemberImporter extends Importer
                     'title'      => "购买班级《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
-                    'amount'     => 0,
-                    'payment'    => 'none',
+                    'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
+                    'payment'    => 'outside',
                     'snPrefix'   => 'CR'
                 ));
 
                 $this->getOrderService()->payOrder(array(
                     'sn'       => $order['sn'],
                     'status'   => 'success',
-                    'amount'   => 0,
+                    'amount'   => $order['amount'],
                     'paidTime' => time()
                 ));
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'note'    => '通过批量导入添加'
+                    'note'    => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
                 );
 
                 if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -100,6 +106,8 @@ class ClassroomMemberImporter extends Importer
     {
         $file        = $request->files->get('excel');
         $classroomId = $request->request->get('classroomId');
+        $price       = $request->request->get('price');
+        $remark      = $request->request->get('remark');
         $danger      = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
@@ -125,7 +133,9 @@ class ClassroomMemberImporter extends Importer
             $importData['allUserData'],
             $importData['checkInfo'],
             array(
-                'classroomId' => $classroomId
+                'classroomId' => $classroomId,
+                'price'       => $price,
+                'remark'      => $remark
             ));
     }
 
@@ -386,8 +396,9 @@ class ClassroomMemberImporter extends Importer
     public function getTemplate(Request $request)
     {
         $classroomId = $request->query->get('classroomId');
+        $classroom   = $this->getClassroomService()->getClassroom($classroomId);
         return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
-            'classroomId' => $classroomId,
+            'classroom'    => $classroom,
             'importerType' => $this->type
         ));
     }

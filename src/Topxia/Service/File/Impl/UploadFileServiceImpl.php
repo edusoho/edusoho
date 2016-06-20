@@ -168,7 +168,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file       = $this->getUploadFileInitDao()->getFile($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
-            if ($initParams['resumed'] == 'ok' && $file) {
+            if ($initParams['resumed'] == 'ok' && $file && $file['status']!='ok') {
                 $file = $this->getUploadFileInitDao()->updateFile($file['id'], array(
                     'filename'   => $params['fileName'],
                     'fileSize'   => $params['fileSize'],
@@ -217,12 +217,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'fileSize'      => $params['size']
             );
 
-            $file = $this->getUploadFileInitDao()->getFile($params['id']);
+            $file = $this->getUploadFileInitDao()->updateFile($params['id'], array('status'=>'ok'));
+
             $file = array_merge($file, $fields);
-            $this->getUploadFileInitDao()->deleteFile($file['id']);
-
             $file = $this->getUploadFileDao()->addFile($file);
-
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {

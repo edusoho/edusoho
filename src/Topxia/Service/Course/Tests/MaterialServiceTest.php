@@ -2,53 +2,52 @@
 namespace Topxia\Service\Course\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MaterialServiceTest extends BaseTestCase
-{   
+{
     public function testUploadMaterial()
     {
         $course = $this->createCourse();
         $lesson = $this->createdCourseLesson($course['id']);
 
-        $name = 'File.UploadFileService';
+        $name   = 'File.UploadFileService';
         $params = array(
             array(
                 'functionName' => 'getFile',
-                'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' =>array(
-                   'id' => 1,
-                   'storage' => 'cloud',
-                   'filename'=> 'test',
-                   'createdUserId' => 1,
-                   'fileSize' => 1024
+                'runTimes'     => 1,
+                'withParams'   => array(1),
+                'returnValue'  => array(
+                    'id'            => 1,
+                    'storage'       => 'cloud',
+                    'filename'      => 'test',
+                    'createdUserId' => 1,
+                    'fileSize'      => 1024
                 )
             ),
             array(
                 'functionName' => 'waveUploadFile',
-                'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' =>array(
-                   'id'        => 1,
-                   'usedCount' => 1
+                'runTimes'     => 1,
+                'withParams'   => array(1),
+                'returnValue'  => array(
+                    'id'        => 1,
+                    'usedCount' => 1
                 )
             )
         );
-        $this->mock($name,$params);
+        $this->mock($name, $params);
 
         $fields = array(
-            'courseId'    => $course['id'],
-            'lessonId'    => $lesson['id'],
-            'source'      => 'coursematerial',
-            'type'        => 'course',
-            'fileId'      => 1
+            'courseId' => $course['id'],
+            'lessonId' => $lesson['id'],
+            'source'   => 'coursematerial',
+            'type'     => 'course',
+            'fileId'   => 1
         );
         $material = $this->getMaterialService()->uploadMaterial($fields);
 
-        $this->assertEquals(1,$material['fileId']);
-        $this->assertEquals('coursematerial',$material['source']);
-        $this->assertEquals('course',$material['type']);
+        $this->assertEquals(1, $material['fileId']);
+        $this->assertEquals('coursematerial', $material['source']);
+        $this->assertEquals('course', $material['type']);
     }
 
     public function testAddMaterial()
@@ -67,7 +66,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material = $this->getMaterialService()->addMaterial($fields, $fields);
 
@@ -94,12 +93,12 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material = $this->getMaterialService()->addMaterial($fields, $fields);
 
-        $updateFields = array('lessonId' => $lesson['id']);
-        $updateMaterial = $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId'=>$fields['fileId']));
+        $updateFields   = array('lessonId' => $lesson['id']);
+        $updateMaterial = $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId' => $fields['fileId']));
 
         $this->assertEquals($lesson['id'], $updateMaterial['lessonId']);
         $this->assertEquals($fields['source'], $updateMaterial['source']);
@@ -121,7 +120,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material = $this->getMaterialService()->addMaterial($fields, $fields);
         $this->assertEquals($fields['fileId'], $material['fileId']);
@@ -148,7 +147,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material = $this->getMaterialService()->addMaterial($fields, $fields);
 
@@ -164,7 +163,7 @@ class MaterialServiceTest extends BaseTestCase
             'title'       => 'test.doc',
             'fileSize'    => 1024,
             'copyId'      => $material['id'],
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields, $fields);
 
@@ -180,11 +179,11 @@ class MaterialServiceTest extends BaseTestCase
             'title'       => 'test.doc',
             'fileSize'    => 1024,
             'copyId'      => $material['id'],
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields, $fields);
 
-        $materials = $this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($material['id'], array(2,3));
+        $materials = $this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($material['id'], array(2, 3));
 
         $this->assertEquals(2, count($materials));
     }
@@ -205,7 +204,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
         $this->assertEquals($fields1['fileId'], $material1['fileId']);
@@ -222,13 +221,13 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
         $this->assertEquals($fields2['fileId'], $material2['fileId']);
         $this->assertEquals($fields2['source'], $material2['source']);
 
-        $this->getMaterialService()->deleteMaterialsByLessonId($lesson['id'], $courseType='course');
+        $this->getMaterialService()->deleteMaterialsByLessonId($lesson['id'], $courseType = 'course');
         $material = $this->getMaterialService()->getMaterial($course['id'], $material1['id']);
 
         $this->assertNull($material);
@@ -250,7 +249,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
         $this->assertEquals($fields1['fileId'], $material1['fileId']);
@@ -267,13 +266,13 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
         $this->assertEquals($fields2['fileId'], $material2['fileId']);
         $this->assertEquals($fields2['source'], $material2['source']);
 
-        $this->getMaterialService()->deleteMaterialsByCourseId($course['id'], $courseType='course');
+        $this->getMaterialService()->deleteMaterialsByCourseId($course['id'], $courseType = 'course');
         $material = $this->getMaterialService()->getMaterial($course['id'], $material1['id']);
 
         $this->assertNull($material);
@@ -295,7 +294,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
         $this->assertEquals($fields1['fileId'], $material1['fileId']);
@@ -312,13 +311,13 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test1.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
         $this->assertEquals($fields2['fileId'], $material2['fileId']);
         $this->assertEquals($fields2['source'], $material2['source']);
 
-        $this->getMaterialService()->deleteMaterials($course['id'], array($material1['fileId'],$material2['fileId']), $courseType='course');
+        $this->getMaterialService()->deleteMaterials($course['id'], array($material1['fileId'], $material2['fileId']), $courseType = 'course');
         $material1 = $this->getMaterialService()->getMaterial($course['id'], $material1['id']);
         $material2 = $this->getMaterialService()->getMaterial($course['id'], $material2['id']);
 
@@ -339,7 +338,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
         $this->assertEquals($fields1['fileId'], $material1['fileId']);
@@ -356,7 +355,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
         $this->assertEquals($fields2['fileId'], $material2['fileId']);
@@ -384,7 +383,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -406,7 +405,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -421,12 +420,12 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
         $conditions = array('type' => 'course');
-        $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, 1);
+        $materials  = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, 1);
 
         $this->assertEquals($material1['id'], $materials[0]['id']);
         $this->assertEquals($material1['source'], $materials[0]['source']);
@@ -445,7 +444,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -460,14 +459,14 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
-        $conditions = array('type' => 'course');
+        $conditions     = array('type' => 'course');
         $materialsCount = $this->getMaterialService()->searchMaterialCount($conditions);
 
-        $this->assertEquals(1,$materialsCount);
+        $this->assertEquals(1, $materialsCount);
     }
 
     public function testSearchMaterialsGroupByFileId()
@@ -483,7 +482,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -498,7 +497,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
@@ -513,12 +512,12 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material3 = $this->getMaterialService()->addMaterial($fields3, $fields3);
 
         $conditions = array('courseId' => 1, 'type' => 'course');
-        $materials = $this->getMaterialService()->searchMaterialsGroupByFileId($conditions, array('createdTime','DESC'), 0, PHP_INT_MAX);
+        $materials  = $this->getMaterialService()->searchMaterialsGroupByFileId($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $this->assertEquals(1, count($materials));
     }
@@ -536,7 +535,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -551,7 +550,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
@@ -566,11 +565,11 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material3 = $this->getMaterialService()->addMaterial($fields3, $fields3);
 
-        $conditions = array('courseId' => 1, 'type' => 'course');
+        $conditions    = array('courseId' => 1, 'type' => 'course');
         $materialCount = $this->getMaterialService()->searchMaterialCountGroupByFileId($conditions);
 
         $this->assertEquals(1, $materialCount);
@@ -592,7 +591,7 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material1 = $this->getMaterialService()->addMaterial($fields1, $fields1);
 
@@ -607,24 +606,24 @@ class MaterialServiceTest extends BaseTestCase
             'link'        => '',
             'title'       => 'test.doc',
             'fileSize'    => 1024,
-            'createdTime' => time(),
+            'createdTime' => time()
         );
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
-        $usedMaterials = $this->getMaterialService()->findUsedCourseMaterials($course['id'], array(1));
+        $usedMaterials = $this->getMaterialService()->findUsedCourseMaterials(array(1), $course['id']);
 
         $this->assertArrayHasKey(1, $usedMaterials);
         $usedKeys = $usedMaterials[1];
-        $this->assertContains('coursematerial',$usedKeys);
-        $this->assertContains('courselesson',$usedKeys);
+        $this->assertContains('coursematerial', $usedKeys);
+        $this->assertContains('courselesson', $usedKeys);
     }
 
     protected function createUser()
     {
-        $user = array();
-        $user['email'] = "user@user.com";
+        $user             = array();
+        $user['email']    = "user@user.com";
         $user['nickname'] = "user";
-        $user['password']= "user";
+        $user['password'] = "user";
         return $this->getUserService()->register($user);
     }
 
@@ -632,7 +631,7 @@ class MaterialServiceTest extends BaseTestCase
     {
         $course = array(
             'title' => 'material-test',
-            'type' => 'normal',
+            'type'  => 'normal'
         );
         return $this->getCourseService()->createCourse($course);
     }
