@@ -27,9 +27,9 @@ class Version20160620110021 extends AbstractMigration
               `sourceName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
               `orderCount` int(10) unsigned  DEFAULT '0'  COMMENT '促成订单数',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
-              `createdUser` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
+              `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='资源访问日志';
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='功课开访问日志';
 
             DROP TABLE IF EXISTS `order_source_log`;
             CREATE TABLE `order_source_log` (
