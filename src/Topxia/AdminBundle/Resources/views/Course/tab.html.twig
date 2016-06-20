@@ -4,4 +4,8 @@
 
 
 	<a href=" {{ url('admin_course', {filter: 'classroom'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'classroom' %}btn-primary{% endif %}">{{setting("classroom.name")|default("班级")}}课程</a>
+
+	{% if is_plugin_installed('studyMap') %}
+		<a href="{{ url('admin_study_map', {filter: 'studyMap'}) }}"　type="button" class="btn btn-default btn-sm {% if filter == 'studyMap' %}btn-primary{% endif %}">学习地图</a>
+	{% endif %}
 </div>
