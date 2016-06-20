@@ -3,6 +3,10 @@
     function KityformulaDialog(editor) {
         var isIE=!-[1,];
 
+        //防止modal关闭后重新打开创建多个iframe导致BUG
+        if($("#editorContainer_"+editor.name).length > 0 ){
+            $("#editorContainer_"+editor.name).remove();
+        }
         var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="/assets/libs/ckeditor/4.6.7/plugins/kityformula/kityformula/index.html" width="780" height="500"></iframe>';
         
         return {
@@ -27,14 +31,7 @@
                 // alert('onLoad');
             },
             onShow: function () {
-                if(isIE){
-                    $("#oldFormula").val(source);
-                    return false;
-                }
-                var kfe = $("#editorContainer_"+editor.name)[0].contentWindow.kfe;
-                if(kfe){
-                    kfe.execCommand( "render", '\\placeholder');
-                }
+
             },
             onHide: function () {
                 // alert('onHide');
