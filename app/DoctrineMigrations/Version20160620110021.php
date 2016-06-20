@@ -29,7 +29,7 @@ class Version20160620110021 extends AbstractMigration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
               `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='功课开访问日志';
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
             DROP TABLE IF EXISTS `order_source_log`;
             CREATE TABLE `order_source_log` (
