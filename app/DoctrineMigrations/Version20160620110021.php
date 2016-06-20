@@ -17,8 +17,8 @@ class Version20160620110021 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("
-            DROP TABLE IF EXISTS `visit_log`;
-            CREATE TABLE `visit_log` (
+            DROP TABLE IF EXISTS `referer_log`;
+            CREATE TABLE `referer_log` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `targertId` int(11) NOT NULL COMMENT '模块ID',
               `targertType` varchar(64) NOT NULL COMMENT '模块类型',
@@ -29,12 +29,12 @@ class Version20160620110021 extends AbstractMigration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
               `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='访问日志';
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
 
-            DROP TABLE IF EXISTS `order_source_log`;
-            CREATE TABLE `order_source_log` (
+            DROP TABLE IF EXISTS `order_referer_log`;
+            CREATE TABLE `order_referer_log` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-              `visitLogId` int(11) NOT NULL COMMENT '促成订单的访问日志ID',
+              `refererLogId` int(11) NOT NULL COMMENT '促成订单的访问日志ID',
               `orderId` int(10) unsigned  DEFAULT '0'  COMMENT '订单ID',
               `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '订单的对象类型',
               `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的对象ID',
