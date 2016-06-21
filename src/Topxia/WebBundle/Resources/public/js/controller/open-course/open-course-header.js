@@ -36,7 +36,9 @@ define(function(require, exports, module) {
         },
 
         show: function () {
-            this.$el.modal('show');
+            this.$el.modal({
+                backdrop: false
+            });
         },
         
         hide: function () {
