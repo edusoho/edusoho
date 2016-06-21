@@ -468,8 +468,12 @@ class OpenCourseController extends BaseController
                 $courses = array_merge($courses, $recommendCourses);
             }
         }
-
-        return $this->createJsonResponse(array_values($courses));
+        $self = $this;
+        $courses = array_map(function($course) use ($self){
+            $course['smallPicture'] = $self->get('topxia.twig.web_extension').getFpath($course['smallPicture']);
+            return $course;
+        }, $courses);
+        return $this->createJsonResponse($courses);
     }
 
     private function _getMember($request, $courseId)
