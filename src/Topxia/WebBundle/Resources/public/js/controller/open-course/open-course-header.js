@@ -174,7 +174,7 @@ define(function(require, exports, module) {
         _replay: function () {
             var player = this.get('player');
             if(player === undefined){
-                window.reload();
+                window.location.reload();
             }else {
                 player.setCurrentTime(0);
                 player.play();

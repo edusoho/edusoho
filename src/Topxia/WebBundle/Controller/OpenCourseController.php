@@ -470,7 +470,9 @@ class OpenCourseController extends BaseController
         }
         $self = $this;
         $courses = array_map(function($course) use ($self){
-            $course['smallPicture'] = $self->get('topxia.twig.web_extension')->getFpath($course['smallPicture'], 'course.png');
+            foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key){
+                $course[$key] = $self->get('topxia.twig.web_extension')->getFpath($course[$key], 'course.png');
+            }
             return $course;
         }, $courses);
         return $this->createJsonResponse($courses);
