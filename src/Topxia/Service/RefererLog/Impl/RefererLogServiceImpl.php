@@ -16,30 +16,34 @@ class RefererLogServiceImpl extends BaseService implements ReferLogService
             'targertId'     => $targertId,
             'targertType'   => $targertType,
             'refererUrl'    => $refererUrl,
+            'refererHost'   => $this->prepareRefererUrl($refererUrl),
             'createdTime'   => time(),
             'createdUserId' => $user['id']
         );
-        $this->prepareRefererUrl($refererUrl);
+        return $this->getRefererLogDao()->addRefererLog($refererlog);
+    }
 
-        /*
+    public function getRefererLogById($id)
+    {
+        return $this->getRefererLogDao()->getRefererLogDao($id);
+    }
 
-    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `targertId` int(11) NOT NULL COMMENT '模块ID',
-    `targertType` varchar(64) NOT NULL COMMENT '模块类型',
-    `refererUrl`  varchar(255) DEFAULT '' COMMENT '访问来源Url',
-    `refererHost` varchar(80)  DEFAULT '' COMMENT '访问来源HOST',
-    `refererName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
-    `orderCount` int(10) unsigned  DEFAULT '0'  COMMENT '促成订单数',
-    `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
-    `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',*/
+    protected function getRefererLogDao()
+    {
+        return $this->createDao('RefererLog.RefererLogDao');
     }
 
     private function prepareRefererUrl($refererUrl)
     {
-        $referer = explode('/', $refererUrl);
-    }
-
-    public function findRefererLogById($id)
-    {
+        $refererMap = array(
+            'baidu.com'        => '百度',
+            'mp.weixin.qq.com' => '微信',
+            'weibo.com'        => '微博'
+        );
+        $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
+        preg_match($patten, $refererUrl, $matches);
+        $refererHost = $matches[0];
+        //  TODO $refererName = array
+        return $refererHost;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -16,10 +16,9 @@ class Version20160517093034 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        if (!$this->isFieldExist('upload_files', 'description')){
+        if (!$this->isFieldExist('upload_files', 'description')) {
             $this->addSql("ALTER TABLE `upload_files` ADD `description` text DEFAULT NUll AFTER `length`;");
         }
-        
     }
 
     /**
@@ -28,7 +27,6 @@ class Version20160517093034 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-
     }
 
     protected function isFieldExist($table, $filedName)

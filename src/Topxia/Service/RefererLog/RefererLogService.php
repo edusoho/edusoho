@@ -3,7 +3,7 @@ namespace Topxia\Service\RefererLog;
 
 interface ReferLogService
 {
-    public function addRefererLog($referLog);
+    public function addRefererLog($targertId, $targertType, $refererUrl);
 
     public function findRefererLogById($id);
 
