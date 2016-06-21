@@ -113,7 +113,15 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         return $result;
     }
 
-    public function getBlockByCode($code,$orgId=0)
+    public function getBlockByCode($code)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}'";
+        $block = $this->getConnection()->fetchAssoc($sql, array($code));
+
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+    }
+
+    public function getBlockByCodeAndOrgId($code,$orgId=0)
     {
         $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
         $block = $this->getConnection()->fetchAssoc($sql, array($code,$orgId));

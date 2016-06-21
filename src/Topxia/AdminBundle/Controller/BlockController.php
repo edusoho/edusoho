@@ -18,6 +18,7 @@ class BlockController extends BaseController
         $user = $this->getCurrentUser();
 
         list($condation, $sort) = $this->dealQueryFields($category);
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getBlockTemplateService()->searchBlockTemplateCount($condation),
@@ -31,9 +32,7 @@ class BlockController extends BaseController
         $blocks = $this->getBlockService()->getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $user['orgId']);
         $blockIds = ArrayToolkit::column($blocks, 'id');
         $latestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
-
         $userIds = ArrayToolkit::column($latestHistories, 'userId');
-
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
@@ -64,7 +63,7 @@ class BlockController extends BaseController
     public function blockMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $blocks = $this->getBlockService()->searchBlocks(array('title' => $likeString), array('updateTime', 'DESC'), 0, 10);
+        $blocks = $this->getBlockTemplateService()->searchBlockTemplates(array('title' => $likeString), array('updateTime', 'DESC'), 0, 10);
 
         return $this->createJsonResponse($blocks);
     }
@@ -122,7 +121,7 @@ class BlockController extends BaseController
         if (is_numeric(($blockTemplate))) {
             $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplate, $user['orgId']);
         } else {
-            $block = $this->getBlockService()->getBlockByCodeAndOrgId($blockTemplate, $user['orgId']);
+            $block = $this->getBlockService()->getBlockByCodeAndOrgId($blockTemplate);
         }
 
         $templateData = array();
@@ -166,16 +165,16 @@ class BlockController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $block)
+    public function editAction(Request $request, $blockTemplate)
     {
-        $block = $this->getBlockService()->getBlock($block);
+        $block = $this->getBlockTemplateService()->getBlockTemplate($blockTemplate);
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
-            $block = $this->getBlockService()->updateBlock($block['id'], $fields);
+            $block = $this->getBlockTemplateService()->updateBlockTemplate($block['id'], $fields);
             $user = $this->getCurrentUser();
             $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array(
-                'block' => $block, 'latestUpdateUser' => $user,
+                'blockTemplate' => $block, 'latestUpdateUser' => $user,
             ));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
@@ -188,7 +187,6 @@ class BlockController extends BaseController
 
     public function visualEditAction(Request $request, $blockTemplateId)
     {
-
         $user = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
@@ -216,16 +214,16 @@ class BlockController extends BaseController
         }
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
-        
+
         return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
             'block' => $block,
             'action' => 'edit',
         ));
     }
 
-    public function dataViewAction(Request $request, $blockId)
+    public function dataViewAction(Request $request, $blockTemplateId)
     {
-        $block = $this->getBlockService()->getBlock($blockId);
+        $block = $this->getBlockTemplateService()->getBlockTemplate($blockTemplateId);
         unset($block['meta']['default']);
         foreach ($block['meta']['items'] as $key => &$item) {
             $item['default'] = $block['data'][$key];
@@ -236,20 +234,29 @@ class BlockController extends BaseController
 
     public function visualHistoryAction(Request $request, $blockId)
     {
-        $block = $this->getBlockService()->getBlock($blockId);
+        $block = array('blockId'=>0);
         $paginator = new Paginator(
+            $this->get('request'),
+            null,
+            5
+        );
+        $blockHistorys = array();
+        $historyUsers = array();
+        if (!empty($blockId)) {
+            $block = $this->getBlockService()->getBlock($blockId);
+            $paginator = new Paginator(
             $this->get('request'),
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
             20
         );
 
-        $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
+            $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
             $block['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
-        $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
-
+            $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+        }
         return $this->render('TopxiaAdminBundle:Block:block-visual-history.html.twig', array(
             'block' => $block,
             'paginator' => $paginator,
@@ -261,9 +268,9 @@ class BlockController extends BaseController
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $block = $this->getBlockService()->createBlock($request->request->all());
+            $block = $this->getBlockTemplateService()->createBlock($request->request->all());
             $user = $this->getCurrentUser();
-            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('block' => $block, 'latestUpdateUser' => $user));
+            $html = $this->renderView('TopxiaAdminBundle:Block:list-tr.html.twig', array('blockTemplate' => $block, 'latestUpdateUser' => $user));
 
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
@@ -284,7 +291,7 @@ class BlockController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         try {
-            $this->getBlockService()->deleteBlock($id);
+            $this->getBlockTemplateService()->deleteBlockTemplate($id);
 
             return $this->createJsonResponse(array('status' => 'ok'));
         } catch (ServiceException $e) {
@@ -295,23 +302,23 @@ class BlockController extends BaseController
     public function checkBlockCodeForCreateAction(Request $request)
     {
         $code = $request->query->get('value');
-        $blockByCode = $this->getBlockService()->getBlockByCode($code);
-        if (empty($blockByCode)) {
+        $blockTemplateByCode = $this->getBlockTemplateService()->getBlockTemplateByCode($code);
+        if (empty($blockTemplateByCode)) {
             return $this->createJsonResponse(array('success' => true, 'message' => '此编码可以使用'));
         }
 
         return $this->createJsonResponse(array('success' => false, 'message' => '此编码已存在,不允许使用'));
     }
 
-    public function checkBlockCodeForEditAction(Request $request, $id)
+    public function checkBlockTemplateCodeForEditAction(Request $request, $id)
     {
         $code = $request->query->get('value');
-        $blockByCode = $this->getBlockService()->getBlockByCode($code);
-        if (empty($blockByCode)) {
+        $blockTemplateByCode = $this->getBlockTemplateService()->getBlockTemplateByCode($code);
+        if (empty($blockTemplateByCode)) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-        } elseif ($id == $blockByCode['id']) {
+        } elseif ($id == $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-        } elseif ($id != $blockByCode['id']) {
+        } elseif ($id != $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));
         }
     }

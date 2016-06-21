@@ -11,4 +11,8 @@ interface BlockTemplateService
     public function searchBlockTemplateCount($condition);
 
     public function getBlockTemplateByCode($code);
+
+    public function deleteBlockTemplate($id);
+
+    public function updateBlockTemplate($id, $fields);
 }

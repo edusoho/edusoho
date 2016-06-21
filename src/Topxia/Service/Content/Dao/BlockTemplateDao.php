@@ -12,5 +12,9 @@ interface BlockTemplateDao
 
     public function addBlockTemplate($block);
 
+    public function deleteBlockTemplate($id);
+
     public function getBlockTemplateByCode($code);
+
+    public function updateBlockTemplate($id, array $fields);
 }

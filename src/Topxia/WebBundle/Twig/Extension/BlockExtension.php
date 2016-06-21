@@ -28,7 +28,7 @@ class BlockExtension extends \Twig_Extension
 
     public function showBlock($code)
     {
-        $block = ServiceKernel::instance()->createService('Content.BlockService')->getBlockByCodeAndOrgId($code,$orgId=1);
+        $block = ServiceKernel::instance()->createService('Content.BlockService')->getBlockByCodeAndOrgId($code);
         if (empty($block)) {
             return '';
         }

@@ -16,6 +16,8 @@ interface BlockService
 
 	public function searchBlockCount($condition);
 
+    	public function getBlockByCode($code);
+
 	public function findBlockHistorysByBlockId($blockId, $start, $limit);
 
 	public function getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds,$orgId);

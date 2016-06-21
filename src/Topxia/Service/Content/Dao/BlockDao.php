@@ -12,7 +12,9 @@ interface BlockDao
 
     public function deleteBlock($id);
 
-    public function getBlockByCode($code,$orgId);
+    public function getBlockByCodeAndOrgId($code,$orgId);
+
+    public function getBlockByCode($code);
 
     public function findBlocks($condition, $sort, $start, $limit);
 

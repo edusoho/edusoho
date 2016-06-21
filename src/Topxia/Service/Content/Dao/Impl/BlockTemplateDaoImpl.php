@@ -11,7 +11,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
 
     public $serializeFields = array(
         'meta' => 'json',
-        'data' => 'json'
+        'data' => 'json',
     );
 
     public function getBlockTemplate($id)
@@ -21,10 +21,28 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $block = $that->getConnection()->fetchAssoc($sql, array($id));
+
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         }
 
         );
+    }
+
+    public function deleteBlockTemplate($id)
+    {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+
+        return $result;
+    }
+
+    public function updateBlockTemplate($id, array $fields)
+    {
+        $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
+
+        return $this->getBlockTemplate($id);
     }
 
     public function getBlockTemplateByCode($code)
@@ -34,6 +52,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
             $block = $that->getConnection()->fetchAssoc($sql, array($code));
+
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         }
 
@@ -45,7 +64,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         if (!isset($orderBy) || empty($orderBy)) {
             $orderBy = array('updateTime', 'DESC');
         }
-        
+
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -79,11 +98,14 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
-
+        if (isset($conditions['title'])) {
+            $conditions['title'] = "%{$conditions['title']}%";
+        }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'block_template')
             ->andWhere('id = :id')
-            ->andWhere('category = :category');
+            ->andWhere('category = :category')
+            ->andWhere('title LIKE :title');
 
         return $builder;
     }

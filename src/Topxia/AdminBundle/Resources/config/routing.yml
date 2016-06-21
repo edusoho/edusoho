@@ -101,14 +101,14 @@ admin_block_code_check_forcreate:
 
 admin_block_code_check_foredit:
     pattern:  /block/code/{id}/check/foredit
-    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
+    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockTemplateCodeForEdit }
 
 admin_block_update:
     pattern:  /block/{blockTemplate}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
 
 admin_block_edit:
-    pattern:  /block/{block}/edit
+    pattern:  /block/{blockTemplate}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
 admin_block_visual_edit:
@@ -116,7 +116,7 @@ admin_block_visual_edit:
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
 admin_block_visual_view_data:
-    pattern:  /block/{blockId}/data/view
+    pattern:  /block/{blockTemplateId}/data/view
     defaults: { _controller: TopxiaAdminBundle:Block:dataView }
 
 admin_block_visual_edit_history:

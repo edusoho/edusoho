@@ -82,9 +82,17 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
     }
 
+    public function getBlockByCode($code)
+    {
+        $result = $this->getBlockDao()->getBlockByCode($code);
+        return $result;
+    }
+
     public function getBlockByCodeAndOrgId($code,$orgId=0)
     {
-        $result = $this->getBlockDao()->getBlockByCode($code,$orgId);
+        $user = $this->getCurrentUser();
+
+        $result = $this->getBlockDao()->getBlockByCodeAndOrgId($code,$user['orgId']);
         if (empty($result)) {
             $blockTemplate = $this->getBlockTemplateService()->getBlockTemplateByCode($code);
             $blockTemplate['blockTemplateId']  = $blockTemplate['id'];
@@ -115,7 +123,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $blocks = array();
         foreach ($blockTemplateIds as $key => $blockTemplateId) {
-            $blocks[] = $this->getBlockDao()->getBlockByTemplateId($blockTemplateId, $orgId);
+            $blocks[] = $this->getBlockDao()->getBlockByTemplateIdAndOrgId($blockTemplateId, $orgId);
         }
 
         return $blocks;
