@@ -87,7 +87,6 @@ class MobileAlipayRequest
 
         $html_text = $alipaySubmit->buildRequestHttp($para_token);
         
-        //var_dump($html_text);
         
         //URLDECODE返回的信息
         $html_text = urldecode($html_text);

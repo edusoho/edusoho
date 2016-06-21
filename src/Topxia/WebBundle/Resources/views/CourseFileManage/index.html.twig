@@ -19,7 +19,7 @@
       </a>
       {{'课程文件'|trans}}
     </div>
-    <div class="panel-body" id="file-manage-panel">
+    <div class="panel-body" id="file-manage-panel" data-file-status-url="{{path('course_manage_file_status')}}">
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
           <tr>
@@ -45,7 +45,7 @@
       <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
 
       <div class="btn-group mbm">
-        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
+        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('course_manage_delete_materials_show', {id:course.id, type:tab}) }}">
         <i class="glyphicon glyphicon-trash"></i>
         {{'移除'|trans}}</button>
       </div>

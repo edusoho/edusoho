@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class CloudFileController extends BaseController
 {
@@ -149,6 +150,30 @@ class CloudFileController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function deleteShowAction(Request $request)
+    {
+        $globalIds = $request->request->get('ids');
+        $files     = $this->getUploadFileService()->searchFiles(
+            array('globalIds' => $globalIds),
+            array('createdTime','desc'),
+            0, PHP_INT_MAX
+        );
+
+        $materials = array();
+        if ($files) {
+            $files     = ArrayToolkit::index($files,'id');
+            $fileIds   = ArrayToolkit::column($files, 'id');
+            $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
+        }
+        
+        return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
+            'materials'     => $materials,
+            'files'         => $files,
+            'ids'           => $globalIds,
+            'deleteFormUrl' => $this->generateUrl('admin_cloud_file_batch_delete')
+        ));
+    }
+
     public function batchTagShowAction(Request $request)
     {
         $data    = $request->request->all();
@@ -186,5 +211,10 @@ class CloudFileController extends BaseController
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 }

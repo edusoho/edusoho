@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -235,7 +236,8 @@ class PlayerController extends BaseController
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $context['hideBeginning'] = $this->haveHeadLeader();
+                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
+                    $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
                     $token                    = $this->makeToken('hls.playlist', $file['id'], $context);
                     $params                   = array(
                         'id'    => $file['id'],
@@ -325,15 +327,14 @@ class PlayerController extends BaseController
         return $response;
     }
 
-    protected function haveHeadLeader()
+    protected function isHiddenVideoHeader($isHidden=false)
     {
         $storage = $this->setting("storage");
-
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+            return false;
+        }else{
             return true;
         }
-
-        return false;
     }
 
     protected function getTokenService()

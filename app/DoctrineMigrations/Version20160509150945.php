@@ -31,7 +31,7 @@ class Version20160509150945 extends AbstractMigration
 			  `updateTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '最后更新时间',
 			  PRIMARY KEY (`id`),
 			  UNIQUE KEY `orgCode` (`orgCode`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区';"
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';"
         );
     }
 

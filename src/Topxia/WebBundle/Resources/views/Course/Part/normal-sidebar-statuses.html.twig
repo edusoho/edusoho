@@ -1,4 +1,9 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% cache 'course/' ~ course.id ~ '/sidebar/statuses' 600 %}
+
 {% set learns = data('LatestStatuses', {count:5, mode:'simple', objectType: 'course', objectId: course.id}) %}
 
 {% include "TopxiaWebBundle:Status:status-block.html.twig" %}
+
+{% endcache %}

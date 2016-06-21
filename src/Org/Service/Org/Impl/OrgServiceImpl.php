@@ -5,6 +5,7 @@ namespace Org\Service\Org\Impl;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Org\Service\Org\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -104,6 +105,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->getOrg($id);
     }
 
+    public function findOrgsByIds($ids)
+    {
+        return $this->getOrgDao()->findOrgsByIds($ids);
+    }
+
     public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
@@ -140,8 +146,37 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
     }
 
+    public function getOrgByCode($code)
+    {
+        return $this->getOrgDao()->getOrgByCode($code);
+    }
+
+    public function geFullOrgNameById($id, $orgs = array())
+    {
+        $orgs[] = $org = $this->getOrg($id);
+        if (isset($org['parentId'])) {
+            return $this->geFullOrgNameById($org['parentId'], $orgs);
+        } else {
+            $orgs = ArrayToolkit::index($orgs, 'id');
+            ksort($orgs);
+            $orgs = ArrayToolkit::column($orgs, 'name');
+            return implode($orgs, '->');
+        }
+    }
+
+    public function batchUpdateOrg($module, $ids, $orgCode)
+    {
+        $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
+    }
+
     protected function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
+    }
+
+    protected function getModuleService($module)
+    {
+        $moduleService = OrgBatchUpdateFactory::getModuleService($module);
+        return $this->createService($moduleService);
     }
 }

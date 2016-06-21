@@ -9,13 +9,13 @@
   {% set top_banner = block_show('autumn:home_top_banner')%}
 
   {% if top_banner %}
-    <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
-      <ol class="carousel-indicators"></ol>
+    <div id="autumn-carousel" class="carousel slide mbl" data-ride="carousel">
+      <ol class="carousel-indicators hidden-xs"></ol>
       <div class="carousel-inner">{{ top_banner|raw }}</div>
-      <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
+      <a class="left carousel-control hidden-xs" href="#autumn-carousel" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
-      <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
+      <a class="right carousel-control hidden-xs" href="#autumn-carousel" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
     </div>      

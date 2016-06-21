@@ -64,7 +64,7 @@
         
         {% if source != 'public' %}
           <li>
-            <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {fileId:uploadFile.id}) }}">
+            <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete_modal_show') }}" data-id="{{uploadFile.id }}">
               <i class="glyphicon glyphicon-trash prm"></i>删除
             </a>
           </li>
