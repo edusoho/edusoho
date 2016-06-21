@@ -12,9 +12,15 @@ class RefererLogServiceTest extends BaseTestCase
         );
         $createCourse = $this->getCourseService()->createCourse($course);
 
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($createCourse['id'], 'coruse', 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd');
+        $refererlog = array(
+            'targertId'   => $createCourse['id'],
+            'targertType' => 'coruse',
+            'refererUrl'  => 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd'
+        );
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
 
         $this->assertGreaterThan(0, $createRefererLog['id']);
+        $this->assertEquals('https://www.baidu.com', $createRefererLog['refererHost']);
     }
 
     public function testGetRefererLogById()
@@ -24,9 +30,13 @@ class RefererLogServiceTest extends BaseTestCase
         );
         $createCourse = $this->getCourseService()->createCourse($course);
 
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($createCourse['id'], 'coruse', 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd');
-
-        $refererLog = $this->getRefererLogService()->getRefererLogById($createRefererLog['id']);
+        $refererlog = array(
+            'targertId'   => $createCourse['id'],
+            'targertType' => 'coruse',
+            'refererUrl'  => 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd'
+        );
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererLog       = $this->getRefererLogService()->getRefererLogById($createRefererLog['id']);
         $this->assertEquals($refererLog['id'], $createRefererLog['id']);
     }
 
