@@ -443,13 +443,32 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function recommendCourseAction(Request $request, $id)
+    public function adModalRecommendCourseAction(Request $request, $id)
     {
         $num = $request->query->get('num', 3);
         $courses = $this->getOpenCourseRecommendedService()->findRandomRecommendCourses($id, $num);
-        if(count($courses) < $num){
-            
+        $courses = array_values($courses);
+        $conditions = array(
+            array(
+                'status' => 'published',
+                'recommended' => 1,
+                'parentId' => 0
+            ),
+            array(
+                'status' => 'published',
+                'parentId' => 0
+            )
+        );
+        //数量不够 随机取推荐课程里的课程 还是不够随机取所有课程
+        foreach ($conditions as $condition){
+            if(count($courses) < $num){
+                $needNum = $num - count($courses);
+                $condition['excludeIds'] = ArrayToolkit::column($courses, 'id');
+                $recommendCourses = $this->getCourseService()->findRandomCourses($condition, $needNum);
+                $courses = array_merge($courses, $recommendCourses);
+            }
         }
+
         return $this->createJsonResponse(array_values($courses));
     }
 
