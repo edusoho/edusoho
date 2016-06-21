@@ -59,6 +59,8 @@ interface CourseService
 
     public function findUserFavoritedCourses($userId, $start, $limit);
 
+    public function findRandomCourses($conditions, $num);
+
     public function createCourse($course);
 
     public function updateCourse($id, $fields);

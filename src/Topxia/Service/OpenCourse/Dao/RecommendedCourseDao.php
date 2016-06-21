@@ -21,4 +21,5 @@ interface RecommendedCourseDao
 
     public function searchRecommends($conditions, $orderBy, $start, $limit);
 
+    public function findRandomRecommendCourses($courseId, $num);
 }

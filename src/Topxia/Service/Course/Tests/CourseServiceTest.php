@@ -111,6 +111,27 @@ class CourseServiceTest extends BaseTestCase
         $this->assertNotEmpty($result);
     }
 
+    public function testFindRandomCourses()
+    {
+        $empty = $this->getCourseService()->findRandomCourses(array(), 10);
+        $this->assertEquals(empty($empty), true);
+        $this->assertEquals(count($empty), 0);
+        foreach (range(0, 9) as $i){
+            $course = array(
+                'title' => 'test course'.$i
+            );
+            $course = $this->getCourseService()->createCourse($course);
+            if($i % 2 == 0){
+                $this->getCourseService()->recommendCourse($course['id'], $i);
+            }
+        }
+        $conditions = array(
+            'recommended' => 1
+        );
+        $randomCourses = $this->getCourseService()->findRandomCourses($conditions, 10);
+        $this->assertEquals(count($randomCourses), 5);
+    }
+
     public function testFindCoursesByTagIdsAndStatus()
     {
         $tags = array(
