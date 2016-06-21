@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\RefererLog;
 
-interface ReferLogService
+interface RefererLogService
 {
     public function addRefererLog($targertId, $targertType, $refererUrl);
 
-    public function findRefererLogById($id);
+    public function getRefererLogById($id);
 
 }

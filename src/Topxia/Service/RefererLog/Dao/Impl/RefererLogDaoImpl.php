@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\RefererLog\Dao\Impl;
 
-use Topxia\Service\BaseDao;
+use Topxia\Service\Common\BaseDao;
 use Topxia\Service\RefererLog\Dao\RefererLogDao;
 
-class RefererLogDaoImple extends BaseDao implements RefererLogDao
+class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 {
     protected $table = 'referer_log';
 
@@ -16,7 +16,8 @@ class RefererLogDaoImple extends BaseDao implements RefererLogDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user error.');
         }
-        $this->getRefererLogById($this->getConnection()->lastInsertId());
+
+        return $this->getRefererLogById($this->getConnection()->lastInsertId());
     }
 
     public function getRefererLogById($id)

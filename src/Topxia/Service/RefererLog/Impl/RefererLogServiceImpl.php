@@ -2,13 +2,13 @@
 namespace Topxia\Service\RefererLog\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\RefererLog\ReferLogService;
+use Topxia\Service\RefererLog\RefererLogService;
 
-class RefererLogServiceImpl extends BaseService implements ReferLogService
+class RefererLogServiceImpl extends BaseService implements RefererLogService
 {
     public function addRefererLog($targertId, $targertType, $refererUrl)
     {
-        if (in_array($targertType, array('course', 'open_course', 'classroom', 'vip'))) {
+        if (in_array($targertType, array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$targertType} 不允许添加RefererLog");
         }
         $user       = $this->getCurrentUser();
@@ -25,7 +25,7 @@ class RefererLogServiceImpl extends BaseService implements ReferLogService
 
     public function getRefererLogById($id)
     {
-        return $this->getRefererLogDao()->getRefererLogDao($id);
+        return $this->getRefererLogDao()->getRefererLogById($id);
     }
 
     protected function getRefererLogDao()
