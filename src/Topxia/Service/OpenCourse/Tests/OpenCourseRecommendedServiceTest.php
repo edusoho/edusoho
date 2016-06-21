@@ -99,6 +99,20 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
         $this->assertEquals($course2['title'],$recommendCourses[$course2['id']]['title']);
     }
 
+    public function testFindRandomRecommendCourses()
+    {
+        $openCourse = $this->createOpenCourse('公开课1');
+        $courseIds = array();
+        foreach (range(1, 10) as $i){
+            $course = $this->createCourse('course'.$i);
+            $courseIds[] = $course['id'];
+        }
+        $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $courseIds, 'course');
+        $needNum = 5;
+        $randomCourses = $this->getCourseRecommendedService()->findRandomRecommendCourses($openCourse['id'], $needNum);
+        $this->assertEquals(count($randomCourses), $needNum);
+    }
+
     protected function createCourse($title)
     {
         $course = array(

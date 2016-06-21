@@ -11,12 +11,12 @@
         <li><a href="{{ path('open_course_explore') }}" target="_blank">公开课</a></li>
         <li>{{ course.title }}</li>
       </ol>
-      
+
       <div class="row" style="margin:0">
 
         {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
         
-        <div class="col-md-3 open-course-tab">
+        <div class="col-md-3 open-course-tab js-open-course-tab">
           <ul class="clearfix">
             <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
             {% if course.type == 'open' %}
@@ -52,6 +52,8 @@
           {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
         </div>
       </div>
+
+
     {% endblock %}
   </div>
   
