@@ -108,19 +108,18 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
             'openCourseId' => $courseId
         );
 
-        $count      = $this->searchRecommendCount($conditions);
-        $max = $count - $num - 1;
-        if($max < 0){
+        $count = $this->searchRecommendCount($conditions);
+        $max   = $count - $num - 1;
+        if ($max < 0) {
             $max = 0;
         }
-        $randomSeed = (int)rand(0, $max);
-        $self = $this;
-        return $this->fetchCached("openCourseId:{$courseId}:randomSeed:{$randomSeed}:num:$num", $courseId, $randomSeed, $num, function ($courseId, $randomSeed, $num) use ($self) {
-            $sql        = "SELECT * FROM {$this->table} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
-            return $self->getConnection()->fetchAll($sql, array($courseId)) ?: array();
+        $randomSeed = (int) rand(0, $max);
+        $that       = $this;
+        return $this->fetchCached("openCourseId:{$courseId}:randomSeed:{$randomSeed}:num:$num", $courseId, $randomSeed, $num, function ($courseId, $randomSeed, $num) use ($that) {
+            $sql = "SELECT * FROM {$that->table} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+            return $that->getConnection()->fetchAll($sql, array($courseId)) ?: array();
         });
     }
-
 
     protected function _createSearchQueryBuilder($conditions)
     {
