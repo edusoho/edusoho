@@ -337,7 +337,6 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id)
     {
-        var_dump($request->headers->get('referer'));
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if ($course['parentId']) {
