@@ -9,10 +9,10 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 {
     public function addRefererLog($refererlog)
     {
-        if (!ArrayToolkit::requireds($refererlog, array('targertId', 'targertType', 'refererUrl'))) {
+        if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
             throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
         }
-        if (in_array($refererlog['targertId'], array('course', 'openCourse', 'classroom', 'vip'))) {
+        if (in_array($refererlog['targetId'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$targertType} 不允许添加RefererLog");
         }
 
