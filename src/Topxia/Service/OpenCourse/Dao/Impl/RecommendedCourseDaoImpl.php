@@ -102,6 +102,26 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
+    public function findRandomRecommendCourses($courseId, $num)
+    {
+        $conditions = array(
+            'openCourseId' => $courseId
+        );
+
+        $count      = $this->searchRecommendCount($conditions);
+        $max = $count - $num - 1;
+        if($max < 0){
+            $max = 0;
+        }
+        $randomSeed = (int)rand(0, $max);
+        $self = $this;
+        return $this->fetchCached("openCourseId:{$courseId}:randomSeed:{$randomSeed}:num:$num", $courseId, $randomSeed, $num, function ($courseId, $randomSeed, $num) use ($self) {
+            $sql        = "SELECT * FROM {$this->table} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+            return $self->getConnection()->fetchAll($sql, array($courseId)) ?: array();
+        });
+    }
+
+
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -113,8 +133,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
             ->andWhere('recommendCourseId = :recommendCourseId')
             ->andWhere('type = :type')
             ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan')
-        ;
+            ->andWhere('createdTime < :startTimeLessThan');
         return $builder;
     }
 }

@@ -68,6 +68,8 @@ interface OpenCourseService
 
     public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);
 
+    public function getNextLesson($courseId, $lessonId);
+
     /**
      * open_course_member
      */

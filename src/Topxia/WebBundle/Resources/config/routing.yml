@@ -2307,6 +2307,11 @@ open_course_mobile_check:
     pattern:  /open/course/mobile/check
     defaults: { _controller: TopxiaWebBundle:OpenCourse:mobileCheck }
 
+open_course_ad_modal_recommend_course:
+    path: /open/course/{id}/ad-modal/recommend/course
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:adModalRecommendCourse}
+    methods: [GET]
+
 importer_check:
     path: /importer/{type}/check
     defaults: { _controller: TopxiaWebBundle:Importer:check}

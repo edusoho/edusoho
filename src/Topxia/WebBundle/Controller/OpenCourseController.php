@@ -55,7 +55,7 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
-        if ($request->query->get('as') && $request->query->get('as') == 'preview') {
+        if ($request->query->get('as') === 'preview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
             if (!$this->_checkPublishedLessonExists($courseId)) {
@@ -124,7 +124,7 @@ class OpenCourseController extends BaseController
         }
 
         $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
-
+        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
         $member = $this->_getMember($request, $course['id']);
 
         $lesson['replays'] = $this->_getLiveReplay($lesson);
@@ -135,7 +135,8 @@ class OpenCourseController extends BaseController
             'course'    => $course,
             'lesson'    => $lesson,
             'member'    => $member,
-            'notifyNum' => $notifyNum
+            'notifyNum' => $notifyNum,
+            'nextLesson'=> $nextLesson
         ));
     }
 
@@ -440,6 +441,41 @@ class OpenCourseController extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    public function adModalRecommendCourseAction(Request $request, $id)
+    {
+        $num = $request->query->get('num', 3);
+        $courses = $this->getOpenCourseRecommendedService()->findRandomRecommendCourses($id, $num);
+        $courses = array_values($courses);
+        $conditions = array(
+            array(
+                'status' => 'published',
+                'recommended' => 1,
+                'parentId' => 0
+            ),
+            array(
+                'status' => 'published',
+                'parentId' => 0
+            )
+        );
+        //数量不够 随机取推荐课程里的课程 还是不够随机取所有课程
+        foreach ($conditions as $condition){
+            if(count($courses) < $num){
+                $needNum = $num - count($courses);
+                $condition['excludeIds'] = ArrayToolkit::column($courses, 'id');
+                $recommendCourses = $this->getCourseService()->findRandomCourses($condition, $needNum);
+                $courses = array_merge($courses, $recommendCourses);
+            }
+        }
+        $self = $this;
+        $courses = array_map(function($course) use ($self){
+            foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key){
+                $course[$key] = $self->get('topxia.twig.web_extension')->getFpath($course[$key], 'course.png');
+            }
+            return $course;
+        }, $courses);
+        return $this->createJsonResponse($courses);
     }
 
     private function _getMember($request, $courseId)
@@ -749,5 +785,10 @@ class OpenCourseController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getOpenCourseRecommendedService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
     }
 }
