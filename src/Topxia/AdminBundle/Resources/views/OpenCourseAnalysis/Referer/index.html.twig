@@ -1,5 +1,40 @@
 {% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
+{% do load_script('open-course-analysis/referer') %}
 {% block analysis_content %}
+	 <div class="">
+	 	<div  class= "row" >
+			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer')}}" role="button">汇总</a>
+			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer')}}" role="button">明细</a>
+	 	</div>
 
-	<div>helo</div>
+		<div  class= "col-md-4" id="echats-pie" style="height: 300px; width: 400px;"></div>
+		<div  class= "col-md-6">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>来源</th>
+						<th>来源数</th>
+						<th>占比</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">百度</th>
+						<th>500060</th>
+						<th>10%</th>
+					</tr>
+					<tr>
+						<th scope="row">facebook</th>
+						<th>500060</th>
+						<th>10%</th>
+					</tr>
+					<tr>
+						<th scope="row">微信</th>
+						<th>500060</th>
+						<th>10%</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}
