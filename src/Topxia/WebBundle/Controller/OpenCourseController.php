@@ -10,7 +10,6 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        //var_dump($this->getCurrentUser());
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
