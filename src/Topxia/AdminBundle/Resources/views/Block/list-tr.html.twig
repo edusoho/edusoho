@@ -6,7 +6,11 @@
         <span class="text-muted text-sm">编码：{{ blockTemplate.code }}</span>
     </td>
     <td>
+        {% if latestHistory.userId|default(null) %}
         {{ admin_macro.user_link(latestUpdateUser|default(null)) }}
+        {% else %}
+        <span class="text-muted">未编辑</span>
+        {% endif %}
         <br>
         {% if latestHistory.createdTime|default(null) %}
         <span class="text-muted text-sm">{{ latestHistory.createdTime|date('Y-n-d H:i:s') }}</span>
@@ -14,7 +18,7 @@
     </td>
     <td>
         {% if blockTemplate.mode == 'html' %}
-            <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {blockTemplate:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal">编辑html</button>
+            <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {blockTemplateId:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal">编辑html</button>
         {% endif %}
 
         {% if blockTemplate.mode == 'template' %}
@@ -23,7 +27,7 @@
 
         {% if setting('developer.debug') %}
         
-        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_block_edit', {blockTemplate:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal" >设置</button>
+        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_block_edit', {blockTemplateId:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal" >设置</button>
         <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:blockTemplate.id}) }}" data-target="{{ blockTemplate.id }}">删除</button>
         {% endif %}
     </td>

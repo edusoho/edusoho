@@ -18,7 +18,7 @@
   {% if editBlock.id == 0 %}
     action="{{ path('admin_block_create') }}"
   {% else %}
-    action="{{ path('admin_block_edit', {blockTemplate:editBlock.id}) }}" 
+    action="{{ path('admin_block_edit', {blockTemplateId:editBlock.id}) }}" 
   {% endif %}  method="post">
 
 

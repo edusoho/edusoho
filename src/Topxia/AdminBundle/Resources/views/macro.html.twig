@@ -2,7 +2,7 @@
   {% if user %}
 		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
 	{% else %}
-	  <span class="text-muted">未使用该模板</span>
+	  <span class="text-muted">用户已删除</span>
 	{% endif %}
 {% endmacro %}
 

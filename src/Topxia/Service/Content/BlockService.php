@@ -1,57 +1,67 @@
 <?php
+
 namespace Topxia\Service\Content;
 
 interface BlockService
 {
+    public function getBlock($id);
 
-	public function getBlock($id);
+    public function getBlockByTemplateIdAndOrgId($blockTemplateId, $orgId = 0);
 
-	public function getBlockByTemplateId($blockTemplateId);
+    public function searchBlocks($condition, $sorty, $start, $limit);
 
-	public function getBlockByTemplateIdAndOrgId($blockTemplateId,$orgId=0);
+    public function searchBlockCount($condition);
 
-	public function getBlockByCodeAndOrgId($code,$orgId=0);
+    public function getBlockByCode($code);
 
-	public function searchBlocks($condition, $sorty, $start, $limit);
+    public function findBlockHistorysByBlockId($blockId, $start, $limit);
 
-	public function searchBlockCount($condition);
+    public function getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds, $orgId);
 
-    	public function getBlockByCode($code);
+    public function findBlockHistoryCountByBlockId($blockId);
 
-	public function findBlockHistorysByBlockId($blockId, $start, $limit);
+    public function generateBlockTemplateItems($block);
 
-	public function getBlocksByBlockTemplateIdsAndOrgId($blockTemplateIds,$orgId);
+    public function getBlockHistory($id);
 
-	public function findBlockHistoryCountByBlockId($blockId);
+    public function getLatestBlockHistory();
 
-	public function generateBlockTemplateItems($block);
+    public function getLatestBlockHistoriesByBlockIds($blockIds);
 
-	public function getBlockHistory($id);
+    public function createBlock($block);
 
-	public function getLatestBlockHistory();
+    public function updateBlock($id, $fields);
 
-	public function getLatestBlockHistoriesByBlockIds($blockIds);
-	
-	public function createBlock($block);
+    public function deleteBlock($id);
 
-	public function updateBlock($id, $fields);
+    public function updateContent($id, $content);
 
-	public function deleteBlock($id);
+    public function recovery($blockId, $history);
 
-	public function updateContent($id, $content);
+    public function getBlockTemplate($id);
 
-	public function recovery($blockId, $history);
+    public function searchBlockTemplates($conditions, $orderBy, $start, $limit);
 
-	/**
-	 * 批量获取指定code的，编辑区块内容。
-	 * @param  array  $codes 编号列表
-	 * @return array 以code为key，编辑区内容为value的内容。
-	 *         $codes = array('homepage-top-bannner', 'site-bottom-banner');
-	 *         array(
-	 *         		'homepage-top-bannner' => 'xxxxxxx',
-	 *         		'site-bottom-banner' => 'xxxxxxx',
-	 *         		'xxxxxqqqq' => '',
-	 *         );
-	 */
-	public function getContentsByCodes(array $codes);
+    public function searchBlockTemplateCount($condition);
+
+    public function getBlockTemplateByCode($code);
+
+    public function deleteBlockTemplate($id);
+
+    public function updateBlockTemplate($id, $fields);
+
+    /**
+     * 批量获取指定code的，编辑区块内容。
+     *
+     * @param array $codes 编号列表
+     *
+     * @return array 以code为key，编辑区内容为value的内容。
+     *               $codes = array('homepage-top-bannner', 'site-bottom-banner');
+     *               array(
+     *               'homepage-top-bannner' => 'xxxxxxx',
+     *               'site-bottom-banner' => 'xxxxxxx',
+     *               'xxxxxqqqq' => '',
+     *               );
+     */
+    public function getContentsByCodes(array $codes);
 }

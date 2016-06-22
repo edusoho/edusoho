@@ -105,6 +105,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
             ->from($this->table, 'block_template')
             ->andWhere('id = :id')
             ->andWhere('category = :category')
+            ->andWhere('code IN ( :codes )')
             ->andWhere('title LIKE :title');
 
         return $builder;
