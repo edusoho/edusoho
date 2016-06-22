@@ -20,8 +20,8 @@ class Version20160620110021 extends AbstractMigration
             DROP TABLE IF EXISTS `referer_log`;
             CREATE TABLE `referer_log` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-              `targertId` int(11) NOT NULL COMMENT '模块ID',
-              `targertType` varchar(64) NOT NULL COMMENT '模块类型',
+              `targetId` int(11) NOT NULL COMMENT '模块ID',
+              `targetType` varchar(64) NOT NULL COMMENT '模块类型',
               `sourceUrl`  varchar(255) DEFAULT '' COMMENT '访问来源Url',
               `sourceHost` varchar(80)  DEFAULT '' COMMENT '访问来源HOST',
               `sourceName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
