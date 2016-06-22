@@ -80,10 +80,23 @@ class OpenCourseController extends BaseController
 
         $member = $this->_memberOperate($request, $courseId);
 
+        $this->_addRefererLog($request, $courseId);
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
             'lessonId' => $lessonId
         ));
+    }
+
+    private function _addRefererLog($request, $courseId)
+    {
+        $refererUrl = empty($request->headers->get('referer')) ? $request->getUri() : $request->headers->get('referer');
+        $refererlog = array(
+            'targetId'   => $courseId,
+            'targetType' => 'openCourse',
+            'refererUrl' => $refererUrl
+        );
+        $this->getPrefererLogService()->addRefererLog($refererlog);
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -97,10 +110,10 @@ class OpenCourseController extends BaseController
         if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!$file) {
-                return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+                return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
             }
-        } else if ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
-            return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+        } elseif ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
+            return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
         }
 
         $lesson = $this->_getLessonVedioInfo($request, $lesson);
@@ -749,5 +762,10 @@ class OpenCourseController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getPrefererLogService()
+    {
+        return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
 }
