@@ -27,6 +27,14 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
+admin_operation_analysis_opencourse:
+    pattern:  /operation/opencourse/analysis
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
+
+admin_opencourse_analysis_referer:
+    pattern:  /operation/opencourse/analysis/referer
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:referer }
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }

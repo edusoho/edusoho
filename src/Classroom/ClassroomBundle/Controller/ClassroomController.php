@@ -137,12 +137,12 @@ class ClassroomController extends BaseController
         $classrooms = array();
 
         $studentClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role' => 'student', 
+            'role'   => 'student',
             'userId' => $user->id
         ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
-            'role' => 'auditor', 
+            'role'   => 'auditor',
             'userId' => $user->id
         ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
