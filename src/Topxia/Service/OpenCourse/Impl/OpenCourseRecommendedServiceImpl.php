@@ -71,6 +71,10 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     {
         $seq = 1;
 
+        if (!$recommendIds) {
+            return false;
+        }
+
         foreach ($recommendIds as $key => &$recommendId) {
             $this->getRecommendedCourseDao()->updateRecommendedCourse($recommendId, array('seq' => $seq));
             $seq++;
