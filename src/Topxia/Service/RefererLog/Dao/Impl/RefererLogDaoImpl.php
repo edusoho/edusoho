@@ -28,4 +28,21 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         });
     }
+
+    public function waveRefererLog($id, $field, $diff)
+    {
+        $fields = array('orderCount');
+
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
+
+        $currentTime = time();
+
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $this->clearCached();
+        return $this->getRefererLogById($id);
+    }
 }

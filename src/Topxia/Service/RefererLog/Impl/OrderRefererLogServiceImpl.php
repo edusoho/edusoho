@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\RefererLog\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\RefererLog\OrderRefererLogService;
 
@@ -13,6 +14,10 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
 
     public function addOrderRefererLog($fields)
     {
+        if (!ArrayToolkit::requireds($fields, array('refererLogId', 'orderId', 'targetId', 'targetType'))) {
+            throw $this->createServiceException("缺少字段,添加OrderRefererLog失败");
+        }
+
         $fields['createdTime'] = time();
         return $this->getOrderRefererLogDao()->addOrderRefererLog($fields);
     }

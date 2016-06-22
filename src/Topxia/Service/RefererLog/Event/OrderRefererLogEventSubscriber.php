@@ -24,19 +24,28 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $order = $event->getSubject();
 
-        $fields = array(
-            'refererLogId'  => $refererLogId,
-            'orderId'       => $order['id'],
-            'targetType'    => $order['targetType'],
-            'targetId'      => $order['targetId'],
-            'createdUserId' => $order['userId']
-        );
+        if ($refererLogId) {
+            $fields = array(
+                'refererLogId'  => $refererLogId,
+                'orderId'       => $order['id'],
+                'targetType'    => $order['targetType'],
+                'targetId'      => $order['targetId'],
+                'createdUserId' => $order['userId']
+            );
 
-        $refererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
+            $refererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
+
+            $this->getRefererLogService()->waveRefererLog($refererLogId, 'orderCount', 1);
+        }
     }
 
     protected function getOrderRefererLogService()
     {
         return ServiceKernel::instance()->createService('RefererLog.OrderRefererLogService');
+    }
+
+    protected function getRefererLogService()
+    {
+        return ServiceKernel::instance()->createService('RefererLog.RefererLogService');
     }
 }

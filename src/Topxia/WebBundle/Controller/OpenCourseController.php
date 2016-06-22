@@ -705,7 +705,7 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog($request, $courseId)
     {
-        $refererUrl = $request->server->get('HTTP_REFERER'); //$request->headers->get('referer');
+        $refererUrl = $request->server->get('HTTP_REFERER');
 
         $fields = array(
             'targetId'   => $courseId,
@@ -713,9 +713,8 @@ class OpenCourseController extends BaseController
             'refererUrl' => $refererUrl
         );
 
-        //$refererLog = $this->getRefererLogService()->addRefererLog($courseId, $targetType, $refererUrl);
-        //$request->getSession()->set("refererLogId", $refererLog['id']);
-        $request->getSession()->set("refererLogId", 1);
+        $refererLog = $this->getRefererLogService()->addRefererLog($fields);
+        $request->getSession()->set("refererLogId", $refererLog['id']);
     }
 
     protected function getOpenCourseService()

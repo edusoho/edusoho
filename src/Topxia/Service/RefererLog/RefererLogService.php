@@ -7,4 +7,6 @@ interface RefererLogService
 
     public function getRefererLogById($id);
 
+    public function waveRefererLog($id, $field, $diff);
+
 }
