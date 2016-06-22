@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var ThreadShowWidget = require('../thread/thread-show.js');
+    var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
         
@@ -19,10 +20,13 @@ define(function(require, exports, module) {
 		$("#favorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
+                console.log(data);
                 if (data['result']) {
                     $btn.hide();
                     $("#unfavorite-btn").show();
                     // $("#unfavorite-btn").find('.gray-darker').html(parseInt(data['number']));
+                } else {
+                    Notify.danger(data['message']);
                 }
             });
         });
@@ -30,10 +34,13 @@ define(function(require, exports, module) {
         $("#unfavorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
+                console.log(data);
                 if (data['result']) {
                     $btn.hide();
                     $("#favorite-btn").show();
                     // $("#favorite-btn").find('.gray-darker').html(parseInt(data['number']));
+                } else {
+                    Notify.danger(data['message']);
                 }
             });
         });
