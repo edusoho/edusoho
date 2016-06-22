@@ -10,7 +10,7 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        //BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/./../themes/block.json');
+        //var_dump($this->getCurrentUser());
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
@@ -49,10 +49,6 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-        /*$sms_setting                  = $this->getSettingService()->get('cloud_sms');
-        $sms_setting['system_remind'] = 'on';
-        $this->getSettingService()->set('cloud_sms', $sms_setting);*/
-
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if ($request->query->get('as') && $request->query->get('as') == 'preview') {
@@ -77,6 +73,7 @@ class OpenCourseController extends BaseController
         }
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+        $this->createRefererLog($request, $courseId);
 
         $member = $this->_memberOperate($request, $courseId);
 
@@ -97,10 +94,10 @@ class OpenCourseController extends BaseController
         if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!$file) {
-                return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+                return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
             }
-        } else if ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
-            return $this->createJsonResponse(array('mediaError'=>'该课时为无效课时，不能播放'));
+        } elseif ($lesson['mediaId'] == 0 && $lesson['mediaSource'] == 'self') {
+            return $this->createJsonResponse(array('mediaError' => '该课时为无效课时，不能播放'));
         }
 
         $lesson = $this->_getLessonVedioInfo($request, $lesson);
@@ -706,6 +703,21 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
+    protected function createRefererLog($request, $courseId)
+    {
+        $refererUrl = $request->server->get('HTTP_REFERER'); //$request->headers->get('referer');
+
+        $fields = array(
+            'targetId'   => $courseId,
+            'targetType' => 'openCourse',
+            'refererUrl' => $refererUrl
+        );
+
+        //$refererLog = $this->getRefererLogService()->addRefererLog($courseId, $targetType, $refererUrl);
+        //$request->getSession()->set("refererLogId", $refererLog['id']);
+        $request->getSession()->set("refererLogId", 1);
+    }
+
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
@@ -749,5 +761,10 @@ class OpenCourseController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getRefererLogService()
+    {
+        return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
 }

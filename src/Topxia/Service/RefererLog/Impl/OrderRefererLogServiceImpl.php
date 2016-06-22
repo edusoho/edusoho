@@ -13,6 +13,7 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
 
     public function addOrderRefererLog($fields)
     {
+        $fields['createdTime'] = time();
         return $this->getOrderRefererLogDao()->addOrderRefererLog($fields);
     }
 
