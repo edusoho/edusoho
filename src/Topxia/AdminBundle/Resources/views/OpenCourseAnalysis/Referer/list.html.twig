@@ -1,5 +1,4 @@
 {% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
-{% do load_script('open-course-analysis/referer') %}
 
 {% block form %}
 	<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
@@ -19,8 +18,8 @@
 {% block analysis_content %}
 	 <div class="">
 	 	<div  class= "" >
-			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer')}}" role="button">汇总</a>
-			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer_list')}}" role="button">明细</a>
+			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer')}}" role="button">汇总</a>
+			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer_list')}}" role="button">明细</a>
 	 	</div>
 
 		<div  class= "col-md-5" id="echats-pie" style="height: 300px; width: 500px;"></div>
@@ -34,19 +33,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for refererlog in refererlogAnalysisList %}
-						<tr>
-							<th scope="row">{{refererlog.name}}</th>
-							<th>{{refererlog.value}}</th>
-							<th>{{refererlog.percent}}</th>
-						</tr>
-						{% else %} 
-						  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
-					{% endfor %}
 				</tbody>
 			</table>
 		</div>
-		<input id="data"  type="hidden" value="{% if refererlogAnalysisDatas %} {{refererlogAnalysisDatas}} {% endif %}">
-		<input id="dataName" type="hidden" value="{% if analysisDataNames %} {{analysisDataNames}} {% endif %}">
 	</div>
 {% endblock %}

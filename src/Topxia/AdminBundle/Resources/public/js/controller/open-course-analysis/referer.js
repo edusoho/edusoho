@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		var myChart = echarts.init(document.getElementById('echats-pie'));
+
 		option = {
 			tooltip: {
 				trigger: 'item',
@@ -12,20 +13,20 @@ define(function(require, exports, module) {
 			legend: {
 				orient: 'vertical',
 				x: 'left',
-				data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+				data: eval("(" + $("#dataName").val() + ")")
 			},
 			series: [{
 				name: '访问来源',
 				type: 'pie',
-				radius: ['', '70%'],
+				radius: '55%',
+				center: ['50%', '60%'],
 				avoidLabelOverlap: false,
 				label: {
 					normal: {
 						show: false,
-						position: 'center'
 					},
 					emphasis: {
-						show: true,
+						show: false,
 						textStyle: {
 							fontSize: '30',
 							fontWeight: 'bold'
@@ -37,22 +38,7 @@ define(function(require, exports, module) {
 						show: false
 					}
 				},
-				data: [{
-					value: 335,
-					name: '直接访问'
-				}, {
-					value: 310,
-					name: '邮件营销'
-				}, {
-					value: 234,
-					name: '联盟广告'
-				}, {
-					value: 135,
-					name: '视频广告'
-				}, {
-					value: 1548,
-					name: '搜索引擎'
-				}]
+				data: eval("(" + $("#data").val() + ")")
 			}]
 		};
 
