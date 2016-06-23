@@ -864,11 +864,11 @@ the specific language governing permissions and limitations under the Apache Lic
                             // init tree state
                             $('.select2-result').each2(function() {
                                 var thisIndentCount = $(this).data('indent-count');
+                                var $icon = $('<i class="select2-tree-icon"></i>');
                                 if ($(this).next().length > 0 && $(this).next().data('indentCount') > thisIndentCount) {
                                     var $children = self.getChildrenByIndent($(this));
                                     if ($children.length > 0) {
                                         $(this).addClass('select2-result-parent');
-                                        var $icon = $('<i class="select2-tree-icon"></i>');
                                         if (opts.treeviewInitState == 'expanded' || query.term) {
                                             $(this).addClass('expanded');
                                             $icon.addClass(opts.treeviewExpandedClass);
@@ -877,9 +877,9 @@ the specific language governing permissions and limitations under the Apache Lic
                                             $children.hide();
                                             $icon.addClass(opts.treeviewCollapsedClass);
                                         }
-                                        $(this).find('.select2-result-label').prepend($icon);
                                     }
                                 }
+                                $(this).find('.select2-result-label').prepend($icon);
                             });
 
                             $('.select2-tree-icon').click(function() {
