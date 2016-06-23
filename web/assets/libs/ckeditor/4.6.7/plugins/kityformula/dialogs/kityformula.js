@@ -28,13 +28,16 @@
                 }]
             }],
             onLoad: function () {
-                // alert('onLoad');
-            },
-            onShow: function () {
 
             },
+            onShow: function () {
+                var kfe = $("#editorContainer_"+editor.name)[0].contentWindow.kfe;
+                if(kfe){
+                    kfe.execCommand( "render", '\\placeholder');
+                }
+            },
             onHide: function () {
-                // alert('onHide');
+                
             },
             onOk: function () {
                 var source;
