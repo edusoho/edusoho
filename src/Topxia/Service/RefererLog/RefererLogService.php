@@ -7,4 +7,6 @@ interface RefererLogService
 
     public function getRefererLogById($id);
 
+    public function searchAnalysisRefererLogSum($conditions, $groupBy);
+
 }
