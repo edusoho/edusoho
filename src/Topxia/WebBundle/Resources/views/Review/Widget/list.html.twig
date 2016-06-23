@@ -4,7 +4,7 @@
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
 
-  <form id="review-form" method="post" action="{{ reviewSaveUrl }}" onsubmit="return document.readyState == 'complete'" {% if userReview %}style="display:none;"{% endif %}>
+  <form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
     <div class="form-group controls">
       {{'请打分：'|trans}} <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
       <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
