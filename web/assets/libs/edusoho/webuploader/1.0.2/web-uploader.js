@@ -16,7 +16,8 @@ define(function(require, exports, module) {
 	            mimeTypes: 'image/*'
 	        },
 	        uploader: null,
-	        fileVal: 'file'
+	        fileVal: 'file',
+            className: 'btn btn-default'
         },
 
         events: {
@@ -40,6 +41,8 @@ define(function(require, exports, module) {
 				fileNumLimit: 1,
 				fileSizeLimit: self.get("fileSizeLimit")
 		    });
+
+            self.element.find('.webuploader-pick').addClass(self.get('className'));
 
 		    uploader.on( 'fileQueued', function( file ) {
 		    	
