@@ -33,6 +33,7 @@ define( function ( require ) {
     };
 
     EditorWrapper.prototype.ready = function ( cb ) {
+
         if ( this.editor.isReady() ) {
             cb.call( this.editor, this.editor );
         } else {
