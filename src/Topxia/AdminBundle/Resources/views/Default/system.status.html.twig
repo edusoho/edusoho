@@ -118,27 +118,6 @@
       {% endif %}
     </td>
   </tr>
-  <tr>
-    <td width="17%">系统空间占用</td>
-    <td class="row">
-      {% for diskUsage in systemDiskUsage %}
-        <div class="col-md-3 phs">
-          {{ diskUsage.name }}
-          <a class="glyphicon glyphicon-question-sign text-muted pull-center" data-toggle="popover"
-             data-trigger="hover" data-placement="top" data-content="{{ diskUsage.title }}">
-          </a>
-        </div>
-        <div class="col-md-3 phs">
-          可用: {{ diskUsage.free }}</div>
-        <div class="col-md-3 phs">
-          总共: {{ diskUsage.total }}
-        </div>
-        <div class="col-md-2 phs">
-          剩余: {{ diskUsage.rate }}
-        </div>
-      {% endfor %}
-    </td>
-  </tr>
 
   {% if mobileCustomization.status == 'ok' %}
   <tr>
