@@ -3409,7 +3409,9 @@ Pagination Styles
   padding: 0;
   float: none;
 }
-.select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active {
+.select2-container-active .select2-choice,
+.select2-container-active .select2-choices,
+.select2-drop-active {
   border-color: #46c37b !important;
 }
 .select2-results .select2-highlighted {
@@ -7639,7 +7641,8 @@ textarea {
   border: none;
 }
 .bar-message > li .notification-footer {
-  display: none;
+  margin-top: 5px;
+  color: #919191;
 }
 .bar-message > li > i {
   position: absolute;

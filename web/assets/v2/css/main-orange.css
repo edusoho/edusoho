@@ -3409,9 +3409,10 @@ Pagination Styles
   padding: 0;
   float: none;
 }
+.select2-container-active .select2-choice,
+.select2-container-active .select2-choices,
 .select2-drop-active {
-  border: 1px solid #ff7200 !important;
-  border-bottom: none  !important;
+  border-color: #ff7200 !important;
 }
 .select2-results .select2-highlighted {
   background: #ff7200 !important;
@@ -3452,9 +3453,6 @@ Pagination Styles
   background-image: none;
   background-color: #f1f1f1;
   border-color: #ddd;
-}
-.select2-no-results {
-  display: none !important;
 }
 .member-item .course-picture {
   float: left;
@@ -7643,7 +7641,8 @@ textarea {
   border: none;
 }
 .bar-message > li .notification-footer {
-  display: none;
+  margin-top: 5px;
+  color: #919191;
 }
 .bar-message > li > i {
   position: absolute;
