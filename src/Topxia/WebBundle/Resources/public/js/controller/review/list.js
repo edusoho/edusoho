@@ -40,11 +40,12 @@ define(function(require, exports, module) {
 
 
             validator.on('formValidated', function(error, msg, $form) {
+                console.log("validate.....", error);
                 if (error) {
                     return;
                 }
 
-                $form.find('[type=submit]').button('loading');
+                $('.js-btn-save').button('loading');
 
                 $.post($form.attr('action'), $form.serialize(), function(json) {
                     $form.find('.text-success').fadeIn('fast', function(){
@@ -52,6 +53,12 @@ define(function(require, exports, module) {
                     });
                 }, 'json');
 
+            });
+
+            $(".js-btn-save").on("click", function(){
+                if(document.readyState == 'complete'){
+                    $form.submit();
+                }
             });
 
 

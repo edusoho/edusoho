@@ -31,24 +31,13 @@ class ArrayToolkit
         return $array;
     }
 
-    public static function requireds(array $array, array $keys)
+    public static function requireds(array $array, array $keys, $strictMode=false)
     {
         foreach ($keys as $key) {
             if (!array_key_exists($key, $array)) {
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    public static function requiredStrict(array $array, array $keys)
-    {
-        foreach ($keys as $key) {
-            if (!array_key_exists($key, $array)) {
-                return false;
-            }
-            if(is_null($array[$key]) || $array[$key] === "" || $array[$key] === -1 || $array[$key] === 0){
+            if($strictMode && (is_null($array[$key]) || $array[$key] === "" || $array[$key] === 0)){
                 return false;
             }
         }

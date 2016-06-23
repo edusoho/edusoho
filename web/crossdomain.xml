@@ -3,4 +3,5 @@
   <allow-access-from domain="cdn.staticfile.org" />
   <allow-access-from domain="cache.upuday.com" />
   <allow-access-from domain="*.edusoho.net" />
+  <allow-access-from domain="www.esdev.com" />
 </cross-domain-policy>
