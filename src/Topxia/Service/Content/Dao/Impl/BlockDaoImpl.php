@@ -27,41 +27,20 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         );
     }
 
-    public function searchBlockCount($condition)
+    public function getBlockByTemplateIdAndOrgId($blockTemplateId,$orgId=0)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table}";
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}' AND orgId =  '{$orgId}' ";
+        $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId,$orgId));
 
-        if (isset($condition['category']) && !$this->isSortField($condition)) {
-            $sql .= " where category = '{$condition['category']}'";
-        }
-
-        return $this->getConnection()->fetchColumn($sql, array());
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
-    protected function createBlockQueryBuilder($conditions)
+    public function getBlockByTemplateId($blockTemplateId)
     {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
+        $sql = "SELECT * FROM {$this->table} WHERE blockTemplateId = '{$blockTemplateId}'";
+        $block = $this->getConnection()->fetchAssoc($sql, array($blockTemplateId));
 
-            if (empty($v)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        );
-
-        if (isset($conditions['title'])) {
-            $conditions['title'] = "%{$conditions['title']}%";
-        }
-
-        return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'block')
-                    ->andWhere('category = :category')
-                    ->andWhere('title LIKE :title');
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
     protected function isSortField($condition)
@@ -75,6 +54,10 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function addBlock($block)
     {
+        if (isset($block['blockId']))
+         {
+            unset($block['blockId']);
+        }
         $this->createSerializer()->serialize($block, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $block);
         $this->clearCached();
@@ -95,35 +78,26 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlockByCode($code)
     {
-        $that = $this;
+        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}'";
+        $block = $this->getConnection()->fetchAssoc($sql, array($code));
 
-        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?  LIMIT 1";
-            $block = $that->getConnection()->fetchAssoc($sql, array($code));
-            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
-        }
-
-        );
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
-    public function findBlocks($conditions, $orderBy, $start, $limit)
+    public function getBlockByCodeAndOrgId($code,$orgId=0)
     {
-        if (!isset($orderBy) || empty($orderBy)) {
-            $orderBy = array('createdTime', 'DESC');
-        }
+        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
+        $block = $this->getConnection()->fetchAssoc($sql, array($code,$orgId));
 
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->createBlockQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
-        $blocks = $builder->execute()->fetchAll() ?: array();
-        return $blocks ? $this->createSerializer()->unserializes($blocks, $this->serializeFields) : array();
+        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
-
+    
     public function updateBlock($id, array $fields)
     {
+        if (isset($fields['blockId']))
+         {
+            unset($fields['blockId']);
+        }
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
