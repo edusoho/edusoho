@@ -3,7 +3,6 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -105,7 +104,6 @@ class DefaultController extends BaseController
 
     public function inspectAction(Request $request)
     {
-        $inspectList = array();
         $inspectList = array(
             $this->addInspectRole('host', $this->hostInspect($request))
         );
@@ -217,8 +215,6 @@ class DefaultController extends BaseController
         $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
 
-        $systemDiskUsage = $this->getSystemDiskUsage();
-
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
             "apps"                => $apps,
             "error"               => $error,
@@ -226,8 +222,7 @@ class DefaultController extends BaseController
             "app_count"           => $appCount,
             "unInstallAppCount"   => $unInstallAppCount,
             "liveCourseStatus"    => $liveCourseStatus,
-            "mobileCustomization" => $mobileCustomization,
-            "systemDiskUsage"     => $systemDiskUsage
+            "mobileCustomization" => $mobileCustomization
         ));
     }
 
@@ -478,45 +473,6 @@ class DefaultController extends BaseController
     {
         $site = $this->getSettingService()->get('site');
         return 'token_' . date('Ymd', time()) . $site['url'];
-    }
-
-    private function getSystemDiskUsage()
-    {
-        $rootDir  = $this->get('kernel')->getRootDir();
-        $logs     = array(
-            'name' => '/app/logs',
-            'dir'  => $rootDir . '/logs',
-            'title' => '用户在站点进行操作的日志存放目录'
-        );
-
-        $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
-        $webFiles = array(
-            'name' => substr($webFileDir, strrpos($webFileDir, '/')),
-            'dir'  => $webFileDir,
-            'title' => '用户在站点上传图片的存放目录'
-        );
-
-        $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
-        $material = array(
-            'name' => substr($materialDir, strrpos($materialDir, '/')),
-            'dir'  => $materialDir,
-            'title' => '用户教学资料库中资源的所在目录(云文件除外)'
-        );
-
-        return array_map(function ($array) {
-            $name = $array['name'];
-            $dir = $array['dir'];
-            $total = disk_total_space($dir);
-            $free  = disk_free_space($dir);
-            $rate  = (string)number_format($free / $total, 2) * 100 . '%';
-            return array(
-                'name'  => $name,
-                'rate'  => $rate,
-                'free'  => StringToolkit::printMem($free),
-                'total' => StringToolkit::printMem($total),
-                'title' => $array['title']
-            );
-        }, array($logs, $webFiles, $material));
     }
 
     public function weekday($time)

@@ -66,7 +66,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     public function saveReview($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('classroomId', 'userId', 'rating'))) {
+        if (!ArrayToolkit::requireds($fields, array('classroomId', 'userId', 'rating'), true)) {
             throw $this->createServiceException('参数不正确，评价失败！');
         }
 

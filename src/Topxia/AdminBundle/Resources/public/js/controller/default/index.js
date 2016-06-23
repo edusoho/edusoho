@@ -64,7 +64,6 @@ define(function(require, exports, module) {
     function step5() {
         $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html("登录人数："+res.loginCount+"人");
-            $('[data-toggle="popover"]').popover();
         });
     }
 
