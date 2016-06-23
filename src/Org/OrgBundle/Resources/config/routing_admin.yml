@@ -17,7 +17,12 @@ admin_org_delete:
 admin_org_checkcode:
     pattern: /org/checkcode
     defaults: { _controller: OrgBundle:OrgManage:checkCode }
+
 admin_org_sort:
     pattern:  /org/sort
     defaults: { _controller: OrgBundle:OrgManage:sort }
     methods: [POST]
+
+admin_batch_update_org:
+    pattern:  batch/update/{module}/org
+    defaults: { _controller: OrgBundle:OrgManage:batchUpdate }

@@ -10,31 +10,20 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
         $fields     = $request->query->all();
-
-        if(!isset($fields['orgCode'])){
-            $fields['orgCode'] = $user->getCurrentOrgCode();
-        }
 
         $conditions = array(
             'content'   => '',
             'nickname'  => '',
             'startDate' => 0,
-            'endDate'   => time(),
+            'endDate'   => 0,
         );
 
-        if (!empty($fields)) {
-            $conditions = $this->convertConditions($fields);
-        }
+        $conditions = array_merge($conditions, $fields);
 
+        $conditions = $this->convertConditions($fields);
         if(isset($conditions['fromIds']) && empty($conditions['fromIds'])){
-            $paginator = new Paginator(
-                $request,
-                0,
-                20
-            );
-
+            $paginator = new Paginator($request, 0, 20);
             $messages = array();
         }else{
             $paginator = new Paginator(
@@ -76,43 +65,25 @@ class MessageController extends BaseController
 
     protected function convertConditions($conditions)
     {
-        if (!empty($conditions['nickname']) || !empty($conditions['orgCode'])) {
-            $userConditions = array();
-            if(!empty($conditions['orgCode'])){
-                $userConditions['likeOrgCode'] = $conditions['orgCode'];
-            }
-
-            if(!empty($conditions['nickname'])){
-                $userConditions['nickname'] = trim($conditions['nickname']);
-            }
-
+        if (!empty($conditions['nickname'])) {
+            $conditions['fromIds']= "";
+            
+            $userConditions = array('nickname' => trim($conditions['nickname']));
             $userCount = $this->getUserService()->searchUserCount($userConditions);
             if ($userCount) {
                 $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
             }
+            
         }
 
         unset($conditions['nickname']);
-        unset($conditions['orgCode']);
-
-        if (empty($conditions['content'])) {
-            unset($conditions['content']);
-        }
-
-        if (empty($conditions['startDate'])) {
-            unset($conditions['startDate']);
-        }
-
-        if (empty($conditions['endDate'])) {
-            unset($conditions['endDate']);
-        }
-
-        if (isset($conditions['startDate'])) {
+      
+        if (!empty($conditions['startDate'])  ) {
             $conditions['startDate'] = strtotime($conditions['startDate']);
         }
 
-        if (isset($conditions['endDate'])) {
+        if (!empty($conditions['endDate'])) {
             $conditions['endDate'] = strtotime($conditions['endDate']);
         }
 

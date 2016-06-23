@@ -1,0 +1,6 @@
+{% if setting('magic.enable_org','0') %}
+	 <td>
+	    {% set org = data('Org',{orgCode: orgCode}) %}
+	    {{ org.name|default('--')}}
+	  </td>
+{% endif %}

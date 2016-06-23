@@ -56,15 +56,18 @@
   {% endif %}
 </form>
 
+
+
 <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
       <th>用户名</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>手机号</th>
       <th>Email</th>
       <th>注册时间</th>
       <th>最近登录</th>
-      <th>操作</th>
+      <th width="10%">操作</th>
     </tr>
   </thead>
   <tbody>
@@ -76,5 +79,6 @@
     {% endfor %}
   </tbody>
 </table>
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'user', formId:'user-table'} %}
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}

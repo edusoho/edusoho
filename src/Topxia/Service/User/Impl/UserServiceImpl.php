@@ -146,20 +146,38 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
-    public function changeOrgCode($userId, $orgCode)
+    public function changeUserOrg($userId, $orgCode)
     {
-        $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
-
-        if (empty($org)) {
-            throw $this->createNotFoundException("org #{$orgCode} not found");
+        $user = $this->getUser($userId);
+        if (empty($user) || ($user['orgCode'] == $orgCode)) {
+            return;
         }
 
-        $user = $this->getUserDao()->updateUser(
-            $userId, 
-            array('orgCode' => $org['orgCode'],'orgId' => $org['id'])
-        );
+        if (empty($orgCode)) {
+            $fields = array('orgCode' => '1.', 'orgId' => 1);
+        } else {
+            $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
+            if (empty($org)) {
+                throw $this->createNotFoundException("org #{$orgCode} not found");
+            }
+            $fields = array('orgCode' => $org['orgCode'], 'orgId' => $org['id']);
+        }
+
+        $user = $this->getUserDao()->updateUser($userId, $fields);
 
         return $user;
+    }
+
+    public function batchUpdateOrg($userIds, $orgCode)
+    {
+        if (!is_array($userIds)) {
+            $userIds = array($userIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($userIds as $userId) {
+            $user = $this->getUserDao()->updateUser($userId, $fields);
+        }
     }
 
     public function changeEmail($userId, $email)
@@ -535,10 +553,6 @@ class UserServiceImpl extends BaseService implements UserService
         $user['type']          = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp']     = empty($registration['createdIp']) ? '' : $registration['createdIp'];
 
-        if (!empty($registration['orgCode'])) {
-            $user['orgCode'] = $registration['orgCode'];
-        }
-
         $user['createdTime'] = time();
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
@@ -556,7 +570,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user['password'] = '';
             $user['setup']    = 0;
         }
-
+        if (isset($registration['orgId'])) {
+            $user['orgId']   = $registration['orgId'];
+            $user['orgCode'] = $registration['orgCode'];
+        }
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );

@@ -10,8 +10,6 @@ interface UploadFileInitDao
 
     public function addFile(array $file);
 
-    public function deleteFile($id);
-
     public function updateFile($id, array $fields);
 
 }

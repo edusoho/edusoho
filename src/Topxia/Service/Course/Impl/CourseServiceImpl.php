@@ -409,6 +409,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
+        $course                = $this->fillOrgId($course);
         $course                = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 
         $member = array(
@@ -442,12 +443,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
+        $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
 
         return CourseSerialize::unserialize($updatedCourse);
+    }
+
+    public function batchUpdateOrg($courseIds, $orgCode)
+    {
+        if (!is_array($courseIds)) {
+            $courseIds = array($courseIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($courseIds as $courseId) {
+            $user = $this->getCourseDao()->updateCourse($courseId, $fields);
+        }
     }
 
     // TODO refactor
@@ -489,7 +504,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'buyable'        => 0,
             'conversationId' => '',
             'orgCode'        => '1.',
-            'orgId'             =>0
+            'orgId'          => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -1383,7 +1398,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $lesson = $this->getLesson($lessonId);
         if ($lesson) {
-            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId' => 0));
             return true;
         }
 

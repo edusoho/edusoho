@@ -11,7 +11,6 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
-
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
@@ -35,11 +34,7 @@ class CourseController extends BaseController
         if (isset($conditions["creator"]) && $conditions["creator"] == "") {
             unset($conditions["creator"]);
         }
-
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
+        $conditions = $this->fillOrgCode($conditions);
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
@@ -307,14 +302,11 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions                = $request->query->all();
+        $conditions = $request->query->all();
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -351,6 +343,7 @@ class CourseController extends BaseController
 
     public function dataAction(Request $request, $filter)
     {
+
         $conditions = $request->query->all();
 
         if ($filter == 'normal') {
@@ -369,10 +362,7 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        if (isset($conditions['orgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-            unset($conditions['orgCode']);
-        }
+        $conditions = $this->fillOrgCode($conditions);
 
         $count     = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);

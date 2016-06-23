@@ -38,8 +38,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
         }
 
         );
@@ -208,9 +208,29 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+        if($role == 'student') {
+            return $this->findStudentsByCourseId($courseId, $start, $limit);
+        }
+
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:role:{$role}:start:{$start}:limit:{$limit}", $courseId, $role, $start, $limit, function ($courseId, $role, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($courseId, $role));
+        });
+    }
+
+    protected function findStudentsByCourseId($courseId, $start, $limit)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:role:student:start:{$start}:limit:{$limit}", $courseId, $start, $limit, function ($courseId, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = 'student' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($courseId));
+        });
     }
 
     public function findMemberCountByCourseIdAndRole($courseId, $role)

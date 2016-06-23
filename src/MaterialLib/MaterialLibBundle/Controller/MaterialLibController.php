@@ -429,6 +429,22 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function deleteModalShowAction(Request $request)
+    {
+        $fileIds = $request->request->get('ids');
+
+        $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId=0);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files,'id');
+        
+        return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
+            'materials'     => $materials,
+            'files'         => $files,
+            'ids'           => $fileIds,
+            'deleteFormUrl' => $this->generateUrl('material_batch_delete')
+        ));
+    }
+
     public function deleteAction(Request $request, $fileId)
     {
         $this->getUploadFileService()->tryManageFile($fileId);
@@ -536,5 +552,10 @@ class MaterialLibController extends BaseController
     protected function getCloudFileService()
     {
         return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 }

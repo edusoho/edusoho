@@ -20,15 +20,13 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name="email"]',
             required: true,
-            rule: 'email email_remote',
-            display: 'Email'
+            rule: 'email email_remote'
         });
 
         validator.addItem({
             element: '[name="password"]',
             required: true,
-            rule: 'minlength{min:5} maxlength{max:20}',
-            display: '密码'
+            rule: 'minlength{min:5} maxlength{max:20}'
         });
     }
 });

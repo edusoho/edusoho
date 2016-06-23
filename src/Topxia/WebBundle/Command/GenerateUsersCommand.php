@@ -8,19 +8,24 @@ use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 
-class UserGenerateCommand extends BaseCommand
+class GenerateUsersCommand extends BaseCommand
 {
 
     protected function configure()
     {
-        $this->setName ( 'topxia:user-generate' );
+        $this->setName ( 'util:generate-users' )
+             ->addArgument('index', InputArgument::REQUIRED, '数量')
+             ->addArgument('start', InputArgument::OPTIONAL, '起始值');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initServiceKernel();
 
-        for ($i=0; $i < 50; $i++) { 
+        $index = $input->getArgument('index');
+        $start = $input->getArgument('start', 0);
+
+        for ($i = $start; $start < $index; $start++) {
             $user = array();
             $user['nickname'] = 'test_' . $i;
             $user['password'] = 'abcde';

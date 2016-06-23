@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
@@ -68,7 +69,9 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay', 'coin'))) {
+        $payment = ExtensionManager::instance()->getDataDict('payment');
+        $payment = array_keys($payment);
+        if (!in_array($order['payment'], $payment)) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 
@@ -87,7 +90,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
 
-        if (intval($order['amount'] * 100) == 0) {
+        if (intval($order['amount'] * 100) == 0 && $order['payment'] != 'outside') {
             $order['payment'] = 'none';
         }
 

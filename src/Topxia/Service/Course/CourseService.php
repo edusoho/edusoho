@@ -63,6 +63,8 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
+    public function batchUpdateOrg($courseIds, $orgCode);
+
     public function updateCourseCounter($id, $counter);
 
     public function changeCoursePicture($courseId, $files);

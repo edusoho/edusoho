@@ -771,6 +771,10 @@ the specific language governing permissions and limitations under the Apache Lic
                 return $children;
             },
             // abstract
+            filterVal: function(val) {
+                return val.replace(/[\.]/g, '-').replace(/-$/g, '');
+            },
+            // abstract
             expandNode: function($node, isExpandAll) {
                 var self = this;
                 var $children = self.getChildrenByIndent($node);
@@ -823,7 +827,7 @@ the specific language governing permissions and limitations under the Apache Lic
                                     result.text = result.text.replace(new RegExp("^" + opts.indentChar + "*"), '');
                                 }
                                 node = $("<li></li>");
-                                node.attr("id", "select2-result-" + result.id);
+                                node.attr("id", "select2-result-" + self.filterVal(result.id));
                                 node.attr("data-indent-count", indentCount);
                                 node.addClass("select2-results-dept-" + depth);
                                 node.addClass("select2-result");
@@ -897,8 +901,8 @@ the specific language governing permissions and limitations under the Apache Lic
                             });
 
                             //auto expand current selected node's all parent when dropdown
-                            if (self.opts.element.val() > 0) {
-                                var $selectedNode = $('#select2-result-' + self.opts.element.val());
+                            if (self.opts.element.val()) {
+                                var $selectedNode = $('#select2-result-' + self.filterVal(self.opts.element.val()));
                                 var selectedNodeIndentCount = $selectedNode.data('indentCount');
 
                                 // show brother node
@@ -1138,21 +1142,18 @@ the specific language governing permissions and limitations under the Apache Lic
             },
             // abstract
             positionDropdown: function() {
-                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = $dropdown.outerWidth(false), enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, $resultsListNode, resultsList;
+                var $dropdown = this.dropdown, offset = this.container.offset(), height = this.container.outerHeight(false), width = this.container.outerWidth(false), dropHeight = $dropdown.outerHeight(false), viewPortRight = $(window).scrollLeft() + $(window).width(), viewportBottom = $(window).scrollTop() + $(window).height(), dropTop = offset.top + height, dropLeft = offset.left, enoughRoomBelow = dropTop + dropHeight <= viewportBottom, enoughRoomAbove = offset.top - dropHeight >= this.body().scrollTop(), dropWidth = 0, enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight, aboveNow = $dropdown.hasClass("select2-drop-above"), bodyOffset, above, css, $resultsListNode, resultsList;
                 if (this.opts.dropdownAutoWidth) {
                     $resultsListNode = $(".select2-result", $dropdown);
                     $dropdown.addClass("select2-drop-auto-width");
                     $dropdown.css("width", "");
                     // set dropdown width to longest node content's width
-                    if ($resultsListNode.length > 0) {
-                        dropWidth = 0;
-                        $resultsListNode.each2(function() {
-                            var thisWidth = $(this).find('.select2-result-text').text().length * 14;
-                            dropWidth = dropWidth > thisWidth ? dropWidth : thisWidth;
-                        });
-                        resultsList = $(".select2-results", $dropdown)[0];
-                        dropWidth += (resultsList.scrollHeight === resultsList.clientHeight ? 0 : scrollBarDimensions.width);
-                    }
+                    $resultsListNode.each2(function() {
+                        var thisWidth = $(this).data('indentCount') * 25 + $(this).find('.select2-result-text').text().length * 14;
+                        dropWidth = dropWidth > thisWidth ? dropWidth : thisWidth;
+                    });
+                    resultsList = $(".select2-results", $dropdown)[0];
+                    dropWidth += (resultsList.scrollHeight === resultsList.clientHeight ? 0 : scrollBarDimensions.width);
                     
                     dropWidth > width ? width = dropWidth : dropWidth = width;
                     enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
@@ -2010,6 +2011,9 @@ the specific language governing permissions and limitations under the Apache Lic
                 this.selection.data("select2-data", data);
                 container.empty();
                 formatted = this.opts.formatSelection(data, container, this.opts.escapeMarkup);
+                if (this.opts.treeview) {
+                    formatted = formatted.replace(new RegExp("^" + this.opts.indentChar + "*"), '');
+                }
                 if (formatted !== undefined) {
                     container.append(formatted);
                 }

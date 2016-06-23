@@ -4,6 +4,10 @@ namespace Org\Service\Org\Dao;
 
 interface OrgDao
 {
+    public function getOrg($id);
+
+    public function findOrgsByIds($ids);
+
     public function getOrgByCode($value);
 
     public function createOrg($org);
@@ -18,5 +22,4 @@ interface OrgDao
 
     public function searchOrgs($conditions, $orderBy, $start, $limit);
 
-    public function findOrgsByIds($ids);
 }

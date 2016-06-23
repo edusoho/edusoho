@@ -498,7 +498,7 @@ class UserServiceTest extends BaseTestCase
 
 // public function testChangeAvatar()//*
 
-// {var_dump(500);
+// {
 
 //     $userInfo = array(
 
@@ -522,7 +522,7 @@ class UserServiceTest extends BaseTestCase
 
 //     $a = $this->getUserService()->changeAvatar($registeredUser['id'],$data);
 
-//     var_dump($a);
+//
     // }
 
     public function testIsEmailAvaliable()

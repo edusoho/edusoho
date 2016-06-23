@@ -12,7 +12,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
     public function getVersion()
     {
-        var_dump("CourseProcessorImpl->getVersion");
         return $this->formData;
     }
 

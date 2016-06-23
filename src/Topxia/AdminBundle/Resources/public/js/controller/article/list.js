@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 			var $self = $(this);
 			var span = $self.find('span');
 			var spanClass = span.attr('class');
-			var postUrl = "";
+			var postUrl;
 
 			if(spanClass == "label label-default"){
 				postUrl = $self.data('setUrl');

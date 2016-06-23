@@ -63,6 +63,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
     {
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
+            unset($conditions['orgCode']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)

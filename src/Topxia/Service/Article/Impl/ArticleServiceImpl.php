@@ -126,6 +126,16 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
+     public function batchUpdateOrg($articleIds, $orgCode){
+        if(!is_array($articleIds)){
+            $articleIds = array($articleIds);
+        }
+        $fields = $this->fillOrgId(array('orgCode' =>$orgCode));
+        foreach ($articleIds as $articleId) {
+            $user = $this->getArticleDao()->updateArticle($articleId, $fields);
+        }
+    }
+
     public function hitArticle($id)
     {
         $checkArticle = $this->getArticle($id);
@@ -338,6 +348,34 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
+    public function findRelativeArticles($articleId, $num = 3)
+    {
+        $article = $this->getArticle($articleId);
+
+        if (empty($article)) {
+            throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
+        }
+
+        $self = $this;
+
+        $relativeArticles = array_map(function ($tagId) use ($article, $self) {
+            $conditions = array(
+                'tagId'      => $tagId,
+                'idNotEqual' => $article['id'],
+                'hasThumb'   => true
+            );
+            $count      = $self->searchArticlesCount($conditions);
+            $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
+            return ArrayToolkit::index($articles, 'id');
+        }, $article['tagIds']);
+
+        $ret = array_reduce($relativeArticles, function ($ret, $articles){
+            return array_merge($ret, $articles);
+        }, array());
+        $ret = array_unique($ret, SORT_REGULAR);
+        return array_slice($ret, 0, $num);
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article            = array();
@@ -352,13 +390,18 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article['featured']      = empty($fields['featured']) ? 0 : 1;
         $article['promoted']      = empty($fields['promoted']) ? 0 : 1;
         $article['sticky']        = empty($fields['sticky']) ? 0 : 1;
-        $article['orgCode']       = empty($fields['orgCode']) ? $user->getCurrentOrgCode() : $fields['orgCode'];
+       
         $article['categoryId']    = $fields['categoryId'];
         $article['source']        = $fields['source'];
         $article['sourceUrl']     = $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
         $article['updatedTime']   = time();
 
+        $fields = $this->fillOrgId($fields);
+        if(isset( $fields['orgId'])){
+            $article['orgCode'] = $fields['orgCode'];
+            $article['orgId'] = $fields['orgId'];
+        }
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
             $fields['tags']    = explode(",", $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');

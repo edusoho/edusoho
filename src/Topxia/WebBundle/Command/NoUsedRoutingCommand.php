@@ -65,14 +65,12 @@ class NoUsedRoutingCommand extends BaseCommand
 
                     $classExists = class_exists($bundls[$bandleName].'\\'.$controllerName.'Controller');
                     if(!$classExists){
-                        var_dump($key);
                         continue;   
                     }
 
                     $classInfo =new \ReflectionClass($bundls[$bandleName].'\\'.$controllerName.'Controller');
                     $hasMethod = $classInfo->hasMethod($methodName.'Action');
                     if(!$hasMethod){
-                        var_dump($key);
                     }
                 }
             }
