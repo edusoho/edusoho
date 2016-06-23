@@ -11,7 +11,7 @@
     <meta content="telephone=no" name="format-detection" />
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
-    <script src="http://andytest.bj.public.edusoho.net/js-sdk/video-player/1.0.2/sdk.js"></script>
+    <script src="http://andytest.bj.public.edusoho.net/js-sdk/video-player/1.0.6/sdk.js"></script>
   </head>
   <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}
@@ -28,7 +28,7 @@
           data-url="{{url}}"
           data-player="{{player}}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-            data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+            data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
             data-fingerprint="{{ finger_print() }}"

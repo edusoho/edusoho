@@ -43,11 +43,24 @@ define(function(require, exports, module) {
             id: 'lesson-video-content',
             // disableControlBar: true,
             // disableProgressBar: true,
-            playlist : url,
-            fingerprint : {
-              html : fingerprint,
-              duration : 2000
+            playlist: url,
+            fingerprint: {
+                html: fingerprint,
+                duration: 2000
             },
+            watermark: {
+                file: watermark,
+                xpos: 0,
+                ypos: 0,
+                xrepeat: 0,
+                opacity: 0.5,
+            },
+            pluck: {
+                timelimit: timelimit,
+                text: "免费试看结束，购买后可完整观看",
+                display: true
+            },
+            remeberLastPos : true
         });
 
         var messenger = new Messenger({
@@ -57,7 +70,8 @@ define(function(require, exports, module) {
         });
 
         player.on('timeupdate', function(data) {
-            console.log('timeupdate', data);
+            messenger.sendToParent("timechange", {pause: true});
+            console.log(data.currentTime);
         });
 
         player.on('anwsered', function(data) {
@@ -72,29 +86,29 @@ define(function(require, exports, module) {
  
         // });
         
-        // player.on("ready", function(){
-        //     messenger.sendToParent("ready", {pause: true});
-        //     player.play();
-        // });
-        // player.on("onMarkerReached",function(markerId,questionId){
-        //     messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
-        // });
+        player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
+            player.play();
+        });
+        player.on("onMarkerReached",function(markerId,questionId){
+            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
+        });
 
-        // player.on("timechange", function(){
-        //     messenger.sendToParent("timechange", {pause: true});
-        // });
+        player.on("timechange", function(){
+            messenger.sendToParent("timechange", {pause: true});
+        });
 
-        // player.on("paused", function(){
-        //     messenger.sendToParent("paused", {pause: true});
-        // });
+        player.on("paused", function(){
+            messenger.sendToParent("paused", {pause: true});
+        });
 
-        // player.on("playing", function(){
-        //     messenger.sendToParent("playing", {pause: false});
-        // });
+        player.on("playing", function(){
+            messenger.sendToParent("playing", {pause: false});
+        });
 
-        // player.on("ended", function(){
-        //     messenger.sendToParent("ended", {stop: true});
-        // });
+        player.on("ended", function(){
+            messenger.sendToParent("ended", {stop: true});
+        });
 
     };
 
