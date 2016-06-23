@@ -45,20 +45,6 @@ class ArrayToolkit
         return true;
     }
 
-    public static function requiredStrict(array $array, array $keys)
-    {
-        foreach ($keys as $key) {
-            if (!array_key_exists($key, $array)) {
-                return false;
-            }
-            if(is_null($array[$key]) || $array[$key] === "" || $array[$key] === -1 || $array[$key] === 0){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public static function changes(array $before, array $after)
     {
         $changes = array('before' => array(), 'after' => array());
