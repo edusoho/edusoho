@@ -86,7 +86,8 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
-            $fields = $this->dealBlockTemplateFields($fields);
+            $fields['userId'] = $user['id'];
+            $fields['orgId'] = $user['orgId'];
             if (empty($fields['blockId'])) {
                 $block = $this->getBlockService()->createBlock($fields);
             } else {
@@ -148,35 +149,6 @@ class BlockController extends BaseController
         ));
     }
 
-    public function dealBlockTemplateFields($fields)
-    {
-        $user = $this->getCurrentUser();
-        $templateData = array();
-        $fields['userId'] = $user['id'];
-        $fields['orgId'] = $user['orgId'];
-        if ($fields['mode'] == 'template') {
-            $template = $fields['template'];
-
-            $template = str_replace(array('(( ', ' ))', '((  ', '  )'), array('((', '))', '((', '))'), $template);
-
-            $content = '';
-
-            foreach ($fields as $key => $value) {
-                $content = str_replace('(('.$key.'))', $value, $template);
-                break;
-            }
-            foreach ($fields as $key => $value) {
-                $content = str_replace('(('.$key.'))', $value, $content);
-            }
-            $templateData = $fields;
-            $fields = '';
-            $fields['content'] = $content;
-            $fields['templateData'] = json_encode($templateData);
-        }
-
-        return $fields;
-    }
-
     public function editAction(Request $request, $blockTemplateId)
     {
         $block = $this->getBlockService()->getBlockTemplate($blockTemplateId);
@@ -206,7 +178,6 @@ class BlockController extends BaseController
             $block['data'] = $condation['data'];
             $block['templateName'] = $condation['templateName'];
             $html = BlockToolkit::render($block, $this->container);
-
             $fields = array(
                 'data' => $block['data'],
                 'content' => $html,

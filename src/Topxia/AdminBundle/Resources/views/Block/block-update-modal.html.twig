@@ -16,8 +16,6 @@
         <textarea class="form-control" id="blockContent" rows="10" name="content" data-role="editor-field" style="z-index:1000;">{{ block.content }}</textarea>
         <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
         <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
-        <input type="hidden" name="mode" value="{{ block.mode|default() }}">
-        <input type="hidden" name="template" value="{{ block.template|default() }}">
         <input type="hidden" name="code" value="{{ block.code|default() }}">
         <input type="hidden" name="data" value="{{ block.data|default() }}">
       </div>

@@ -10,7 +10,7 @@ interface BlockTemplateDao
 
     public function searchBlockTemplateCount($conditions);
 
-    public function addBlockTemplate($block);
+    public function addBlockTemplate($blockTemplate);
 
     public function deleteBlockTemplate($id);
 

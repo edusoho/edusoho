@@ -43,43 +43,6 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
 
-    public function searchBlockCount($condition)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table}";
-
-        if (isset($condition['category']) && !$this->isSortField($condition)) {
-            $sql .= " where category = '{$condition['category']}'";
-        }
-
-        return $this->getConnection()->fetchColumn($sql, array());
-    }
-    
-    protected function createBlockQueryBuilder($conditions)
-    {
-        $conditions = array_filter($conditions, function ($v) {
-            if ($v === 0) {
-                return true;
-            }
-
-            if (empty($v)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        );
-
-        if (isset($conditions['title'])) {
-            $conditions['title'] = "%{$conditions['title']}%";
-        }
-
-        return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'block')
-                    ->andWhere('category = :category')
-                    ->andWhere('title LIKE :title');
-    }
-
     protected function isSortField($condition)
     {
         if (isset($condition['category']) && $condition['category'] == 'lastest') {
@@ -128,23 +91,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
         return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
     }
-
-    public function findBlocks($conditions, $orderBy, $start, $limit)
-    {
-        if (!isset($orderBy) || empty($orderBy)) {
-            $orderBy = array('createdTime', 'DESC');
-        }
-
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->createBlockQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
-        $blocks = $builder->execute()->fetchAll() ?: array();
-        return $blocks ? $this->createSerializer()->unserializes($blocks, $this->serializeFields) : array();
-    }
-
+    
     public function updateBlock($id, array $fields)
     {
         if (isset($fields['blockId']))

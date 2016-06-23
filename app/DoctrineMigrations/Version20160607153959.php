@@ -39,8 +39,9 @@ class Version20160607153959 extends AbstractMigration
         $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'");
         $this->addSql("ALTER TABLE  `block` ADD  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'");
         $this->addSql("INSERT INTO `block_template`( `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime`) select `id`, `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime` from `block`;");
+        $this->addSql("UPDATE block SET blockTemplateId=id WHERE id=id;");
         $this->addSql("ALTER TABLE `block` DROP INDEX `code`");
-        $this->addSql("DELETE from `block` where 1=1");
+        $this->addSql("ALTER TABLE `block` DROP `mode`, DROP `template`, DROP `title`, DROP `templateName`, DROP `templateData`, DROP `meta`, DROP `tips`, DROP `category`");
 
     }
 

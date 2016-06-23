@@ -6,11 +6,9 @@ interface BlockService
 {
     public function getBlock($id);
 
+    public function createBlockTemplate($blockTemplate);
+
     public function getBlockByTemplateIdAndOrgId($blockTemplateId, $orgId = 0);
-
-    public function searchBlocks($condition, $sorty, $start, $limit);
-
-    public function searchBlockCount($condition);
 
     public function getBlockByCode($code);
 
@@ -34,7 +32,7 @@ interface BlockService
 
     public function deleteBlock($id);
 
-    public function updateContent($id, $content);
+    public function updateTemplateContent($id, $content);
 
     public function recovery($blockId, $history);
 
@@ -49,7 +47,6 @@ interface BlockService
     public function deleteBlockTemplate($id);
 
     public function updateBlockTemplate($id, $fields);
-
     /**
      * 批量获取指定code的，编辑区块内容。
      *

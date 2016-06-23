@@ -51,9 +51,9 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
 
         return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
-            $block = $that->getConnection()->fetchAssoc($sql, array($code));
+            $blockTemplate = $that->getConnection()->fetchAssoc($sql, array($code));
 
-            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+            return $blockTemplate ? $that->createSerializer()->unserialize($blockTemplate, $that->serializeFields) : null;
         }
 
         );
@@ -83,17 +83,17 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addBlockTemplate($block)
+    public function addBlockTemplate($blockTemplate)
     {
-        $this->createSerializer()->serialize($block, $this->serializeFields);
-        $affected = $this->getConnection()->insert($this->table, $block);
+        $this->createSerializer()->serialize($blockTemplate, $this->serializeFields);
+        $affected = $this->getConnection()->insert($this->table, $blockTemplate);
         $this->clearCached();
 
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert block error.');
+            throw $this->createDaoException('Insert blockTemplate error.');
         }
 
-        return $this->getBlock($this->getConnection()->lastInsertId());
+        return $this->getBlockTemplate($this->getConnection()->lastInsertId());
     }
 
     protected function _createSearchQueryBuilder($conditions)
