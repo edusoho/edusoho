@@ -45,4 +45,70 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         $this->clearCached();
         return $this->getRefererLogById($id);
     }
+
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy($orderBy[0], $orderBy[1]);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchRefererLogCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('id,COUNT(id) AS hitNum,targetId,targetType,SUM(orderCount) AS orderCount,createdTime')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->groupBy('targetId');
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchRefererLogCountGroupByTargetId($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)')
+            ->groupBy('targetId');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value === '' || is_null($value)) {
+                return false;
+            }
+            return true;
+        });
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table)
+            ->andWhere("id IN ( :ids )")
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN (:targetIds)')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('targetType = :targetType');
+
+        return $builder;
+    }
 }

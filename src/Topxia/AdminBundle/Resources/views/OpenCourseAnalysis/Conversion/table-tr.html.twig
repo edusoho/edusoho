@@ -1,0 +1,19 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+
+{% set refererLog = refererLogs[course.id]|default(null) %}
+<tr id="course-tr-{{ course.id }}">
+  <td>
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    {% if course.type == 'live' or course.type == 'liveOpen' %}
+      <span class="label label-success live-label mls">直播</span>
+    {% endif %}
+  </td>
+  
+  <td>
+    {% if refererLog %}{{ refererLog.orderCount }} {% else %} 0 {% endif %} 次
+  </td>
+  <td>{% if refererLog %} {{ refererLog.hitNum }}{% else %} 0 {% endif %} 次</td>
+  <td>
+    {% if refererLog and refererLog.orderCount and course.hitNum %}{{ (refererLog.orderCount / course.hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
+  </td>
+</tr>

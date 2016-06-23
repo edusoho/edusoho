@@ -61,11 +61,8 @@ class OrderRefererLogDaoImpl extends BaseDao implements OrderRefererLogDao
             if ($value === '' || is_null($value)) {
                 return false;
             }
-
             return true;
-        }
-
-        );
+        });
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)

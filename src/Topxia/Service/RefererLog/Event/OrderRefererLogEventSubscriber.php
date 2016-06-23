@@ -18,13 +18,17 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
     {
         global $kernel;
 
-        $container    = $kernel->getContainer();
-        $session      = $container->get('request')->getSession();
-        $refererLogId = $session->get('refererLogId');
+        $container     = $kernel->getContainer();
+        $session       = $container->get('request')->getSession();
+        $refererLogIds = unserialize($session->get('refererLogIds'));
 
         $order = $event->getSubject();
 
-        if ($refererLogId) {
+        if (empty($refererLogIds)) {
+            return false;
+        }
+
+        foreach ($refererLogIds as $key => $refererLogId) {
             $fields = array(
                 'refererLogId'  => $refererLogId,
                 'orderId'       => $order['id'],

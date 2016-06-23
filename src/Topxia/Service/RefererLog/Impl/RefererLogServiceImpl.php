@@ -32,6 +32,43 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->waveRefererLog($id, $field, $diff);
     }
 
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getRefererLogDao()->searchRefererLogs($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchRefererLogCount($conditions)
+    {
+        return $this->getRefererLogDao()->searchRefererLogCount($conditions);
+    }
+
+    public function searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->prepareConditions($conditions);
+        return $this->getRefererLogDao()->searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchRefererLogCountGroupByTargetId($conditions)
+    {
+        $conditions = $this->prepareConditions($conditions);
+        return $this->getRefererLogDao()->searchRefererLogCountGroupByTargetId($conditions);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (!empty($conditions['startDate'])) {
+            $conditions['startTime'] = strtotime($conditions['startDate']);
+            unset($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endTime'] = strtotime($conditions['endDate']);
+            unset($conditions['endDate']);
+        }
+
+        return $conditions;
+    }
+
     protected function getRefererLogDao()
     {
         return $this->createDao('RefererLog.RefererLogDao');

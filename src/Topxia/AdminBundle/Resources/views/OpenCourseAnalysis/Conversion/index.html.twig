@@ -1,0 +1,24 @@
+{% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
+
+{% set nav = 'conversion' %}
+{% block analysis_content %}
+
+	<table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
+    <thead>
+	    <tr>
+	      <th width="35%">课程名称</th>
+	      <th width="35%">购买转化数</th>
+	      <th>课程点击数</th>
+	      <th>购买转化率</th>
+	    </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+        {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Conversion:table-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

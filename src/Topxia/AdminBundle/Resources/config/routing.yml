@@ -35,6 +35,11 @@ admin_opencourse_analysis_referer:
     pattern:  /operation/opencourse/analysis/referer
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:referer }
 
+admin_opencourse_analysis_conversion:
+    pattern:  /operation/opencourse/analysis/conversion
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
+
+
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }

@@ -9,4 +9,12 @@ interface RefererLogService
 
     public function waveRefererLog($id, $field, $diff);
 
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit);
+
+    public function searchRefererLogCount($conditions);
+
+    public function searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit);
+
+    public function searchRefererLogCountGroupByTargetId($conditions);
+
 }

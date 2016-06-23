@@ -249,7 +249,7 @@ class OpenCourseController extends BaseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -713,7 +713,15 @@ class OpenCourseController extends BaseController
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $request->getSession()->set("refererLogId", $refererLog['id']);
+
+        if (!empty($request->getSession()->get('refererLogIds'))) {
+            $refererLogIds   = unserialize($request->getSession()->get('refererLogIds'));
+            $refererLogIds[] = $refererLog['id'];
+        } else {
+            $refererLogIds = array($refererLog['id']);
+        }
+
+        $request->getSession()->set("refererLogIds", serialize($refererLogIds));
     }
 
     protected function getOpenCourseService()
