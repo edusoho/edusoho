@@ -20,4 +20,6 @@ interface OrgDao
 
     public function findOrgsStartByOrgCode($orgCode);
 
+    public function searchOrgs($conditions, $orderBy, $start, $limit);
+
 }
