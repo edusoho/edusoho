@@ -3,6 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -99,14 +100,15 @@ class DefaultController extends BaseController
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
         $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         $site  = urlencode(http_build_query($site));
-        return $this->redirect("http://www.edusoho.com/question?site=".$site."");
+        return $this->redirect("http://www.edusoho.com/question?site=" . $site . "");
     }
 
     public function inspectAction(Request $request)
     {
         $inspectList = array();
-        $inspectList = array($this->addInspectRole('host', $this->hostInspect($request)));
-
+        $inspectList = array(
+            $this->addInspectRole('host', $this->hostInspect($request))
+        );
         $inspectList = array_filter($inspectList);
         return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
             'inspectList' => $inspectList
@@ -133,7 +135,7 @@ class DefaultController extends BaseController
 
         if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
-                'status'       => 'fail',
+                'status'       => 'warning',
                 'errorMessage' => '当前域名和设置域名不符，为避免影响云短信、云搜索功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
@@ -212,17 +214,20 @@ class DefaultController extends BaseController
         $api              = CloudAPIFactory::create('leaf');
         $liveCourseStatus = $api->get('/lives/account');
 
-        $rootApi = CloudAPIFactory::create('root');
+        $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
 
+        $systemDiskUsage = $this->getSystemDiskUsage();
+
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
-            "apps"              => $apps,
-            "error"             => $error,
-            "mainAppUpgrade"    => $mainAppUpgrade,
-            "app_count"         => $appCount,
-            "unInstallAppCount" => $unInstallAppCount,
-            "liveCourseStatus"  => $liveCourseStatus,
+            "apps"                => $apps,
+            "error"               => $error,
+            "mainAppUpgrade"      => $mainAppUpgrade,
+            "app_count"           => $appCount,
+            "unInstallAppCount"   => $unInstallAppCount,
+            "liveCourseStatus"    => $liveCourseStatus,
             "mobileCustomization" => $mobileCustomization,
+            "systemDiskUsage"     => $systemDiskUsage
         ));
     }
 
@@ -338,31 +343,31 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'todayUserSum'                 => $todayUserSum,
-            'yesterdayUserSum'             => $yesterdayUserSum,
-            'todayCourseSum'               => $todayCourseSum,
-            'yesterdayCourseSum'           => $yesterdayCourseSum,
-            'todayRegisterNum'             => $todayRegisterNum,
-            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
-            'todayLoginNum'                => $todayLoginNum,
-            'yesterdayLoginNum'            => $yesterdayLoginNum,
-            'todayCourseNum'               => $todayCourseNum,
-            'yesterdayCourseNum'           => $yesterdayCourseNum,
-            'todayLessonNum'               => $todayLessonNum,
-            'yesterdayLessonNum'           => $yesterdayLessonNum,
-            'todayJoinLessonNum'           => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'            => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
+            'todayUserSum'           => $todayUserSum,
+            'yesterdayUserSum'       => $yesterdayUserSum,
+            'todayCourseSum'         => $todayCourseSum,
+            'yesterdayCourseSum'     => $yesterdayCourseSum,
+            'todayRegisterNum'       => $todayRegisterNum,
+            'yesterdayRegisterNum'   => $yesterdayRegisterNum,
+            'todayLoginNum'          => $todayLoginNum,
+            'yesterdayLoginNum'      => $yesterdayLoginNum,
+            'todayCourseNum'         => $todayCourseNum,
+            'yesterdayCourseNum'     => $yesterdayCourseNum,
+            'todayLessonNum'         => $todayLessonNum,
+            'yesterdayLessonNum'     => $yesterdayLessonNum,
+            'todayJoinLessonNum'     => $todayJoinLessonNum,
+            'yesterdayJoinLessonNum' => $yesterdayJoinLessonNum,
+            'todayBuyLessonNum'      => $todayBuyLessonNum,
+            'yesterdayBuyLessonNum'  => $yesterdayBuyLessonNum,
 
-            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
+            'todayBuyClassroomNum'     => $todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum' => $yesterdayBuyClassroomNum,
 
-            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
+            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
 
-            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
+            'todayAllVideoViewedNum'     => $todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum' => $yesterdayAllVideoViewedNum,
 
             'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
             'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
@@ -370,20 +375,20 @@ class DefaultController extends BaseController
             'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
             'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
 
-            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
+            'todayNetVideoViewedNum'     => $todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum' => $yesterdayNetVideoViewedNum,
 
-            'todayIncome'                  => $todayIncome,
-            'yesterdayIncome'              => $yesterdayIncome,
-            'todayCourseIncome'            => $todayCourseIncome,
-            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
-            'todayClassroomIncome'         => $todayClassroomIncome,
-            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
-            'todayVipIncome'               => $todayVipIncome,
-            'yesterdayVipIncome'           => $yesterdayVipIncome,
-            'todayExitLessonNum'           => $todayExitLessonNum,
-            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
-            'keyCheckResult'               => $keyCheckResult
+            'todayIncome'              => $todayIncome,
+            'yesterdayIncome'          => $yesterdayIncome,
+            'todayCourseIncome'        => $todayCourseIncome,
+            'yesterdayCourseIncome'    => $yesterdayCourseIncome,
+            'todayClassroomIncome'     => $todayClassroomIncome,
+            'yesterdayClassroomIncome' => $yesterdayClassroomIncome,
+            'todayVipIncome'           => $todayVipIncome,
+            'yesterdayVipIncome'       => $yesterdayVipIncome,
+            'todayExitLessonNum'       => $todayExitLessonNum,
+            'yesterdayExitLessonNum'   => $yesterdayExitLessonNum,
+            'keyCheckResult'           => $keyCheckResult
         ));
     }
 
@@ -472,7 +477,46 @@ class DefaultController extends BaseController
     private function getToken()
     {
         $site = $this->getSettingService()->get('site');
-        return 'token_'.date('Ymd', time()).$site['url'];
+        return 'token_' . date('Ymd', time()) . $site['url'];
+    }
+
+    private function getSystemDiskUsage()
+    {
+        $rootDir  = $this->get('kernel')->getRootDir();
+        $logs     = array(
+            'name' => '/app/logs',
+            'dir'  => $rootDir . '/logs',
+            'title' => '用户在站点进行操作的日志存放目录'
+        );
+
+        $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
+        $webFiles = array(
+            'name' => substr($webFileDir, strrpos($webFileDir, '/')),
+            'dir'  => $webFileDir,
+            'title' => '用户在站点上传图片的存放目录'
+        );
+
+        $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $material = array(
+            'name' => substr($materialDir, strrpos($materialDir, '/')),
+            'dir'  => $materialDir,
+            'title' => '用户教学资料库中资源的所在目录(云文件除外)'
+        );
+
+        return array_map(function ($array) {
+            $name = $array['name'];
+            $dir = $array['dir'];
+            $total = disk_total_space($dir);
+            $free  = disk_free_space($dir);
+            $rate  = (string)number_format($free / $total, 2) * 100 . '%';
+            return array(
+                'name'  => $name,
+                'rate'  => $rate,
+                'free'  => StringToolkit::printMem($free),
+                'total' => StringToolkit::printMem($total),
+                'title' => $array['title']
+            );
+        }, array($logs, $webFiles, $material));
     }
 
     public function weekday($time)
