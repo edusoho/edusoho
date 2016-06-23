@@ -110,11 +110,15 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->findOrgsByIds($ids);
     }
 
+    // TODO: org
     public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
+        $user = $this->getCurrentUser();
 
-        return $this->getOrgDao()->findOrgsStartByOrgCode($orgCode);
+        $org = $this->getOrg($user['orgId']);
+
+        return $this->getOrgDao()->findOrgsStartByOrgCode($org['orgCode']);
     }
 
     public function isCodeAvaliable($value, $exclude)
@@ -144,6 +148,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         foreach ($ids as $index => $id) {
             $this->getOrgDao()->updateOrg($id, array('seq' => $index));
         }
+    }
+
+    public function searchOrgs($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getOrgDao()->searchOrgs($conditions, $orderBy, $start, $limit);
     }
 
     public function getOrgByCode($code)

@@ -27,5 +27,5 @@ interface NavigationService
 
     public function searchNavigationCount($conditions);
 
-    public function searchNavigations($conditions, $start, $limit);
+    public function searchNavigations($conditions, $orderBy, $start, $limit);
 }

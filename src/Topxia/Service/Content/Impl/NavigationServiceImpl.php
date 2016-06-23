@@ -38,19 +38,20 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->searchNavigationCount($conditions);
     }
 
-    public function searchNavigations($conditions, $start, $limit)
+    public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        return $this->getNavigationDao()->searchNavigations($conditions, $start, $limit);
+        return $this->getNavigationDao()->searchNavigations($conditions, $orderBy, $start, $limit);
     }
 
+    // TODO: org
     private function _prepareSearchConditions($conditions)
     {
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $conditions['orgId'] = !empty($user['org']) ? $user['org']['id'] : null;
+            $conditions['orgId'] = isset($user['selectedOrgId']) ? $user['selectedOrgId'] : $user['orgId'];
         }
 
         return $conditions;
@@ -58,17 +59,29 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function getOpenedNavigationsTreeByType($type)
     {
-        $count       = $this->getNavigationsCountByType($type);
-        $navigations = $this->findNavigationsByType($type, 0, $count);
+        $user       = $this->getCurrentUser();
+        $conditions = array(
+            'type'   => $type,
+            'isOpen' => 1,
+            'orgId'  => $user['selectedOrgId']
+        );
+
+        $count       = $this->searchNavigationCount($conditions);
+        $navigations = $this->searchNavigations(
+            $conditions,
+            array('sequence', 'ASC'),
+            0,
+            $count
+        );
 
         $navigations = ArrayToolkit::index($navigations, 'id');
 
         foreach ($navigations as $index => $nav) {
 //只显示Open菜单
-            if (empty($nav['isOpen']) || $nav['isOpen'] != 1) {
-                unset($navigations[$index]);
-                continue;
-            }
+            // if (empty($nav['isOpen']) || $nav['isOpen'] != 1) {
+            //     unset($navigations[$index]);
+            //     continue;
+            // }
 
 //一级菜单 - 保留
             if ($nav['parentId'] == 0) {
@@ -110,7 +123,12 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     {
         $conditions  = array('type' => $type);
         $count       = $this->searchNavigationCount($conditions);
-        $navigations = $this->searchNavigations($conditions, 0, $count);
+        $navigations = $this->searchNavigations(
+            $conditions,
+            array('sequence', 'ASC'),
+            0,
+            $count
+        );
 
         $prepare = function ($navigations) {
             $prepared = array();
@@ -182,7 +200,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $currentOrg = $user['org'];
 
         if (empty($fields['parentId'])) {
-            if(empty($user['org'])){
+            if (empty($user['org'])) {
                 return $fields;
             }
             $fields['orgId']   = $currentOrg['id'];
