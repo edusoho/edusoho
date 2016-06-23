@@ -7641,7 +7641,8 @@ textarea {
   border: none;
 }
 .bar-message > li .notification-footer {
-  display: none;
+  margin-top: 5px;
+  color: #919191;
 }
 .bar-message > li > i {
   position: absolute;
