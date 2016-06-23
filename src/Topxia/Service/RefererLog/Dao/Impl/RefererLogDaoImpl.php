@@ -28,4 +28,32 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         });
     }
+
+    public function searchAnalysisRefererLogSum($conditions, $groupBy)
+    {
+        $orderBy = array('value', 'DESC');
+        $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
+            ->select('COUNT(id) as value , r.refererHost as name ');
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    protected function createQueryBuilder($conditions, $orderBy, $groupBy)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->getTable(), 'r')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime');
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+        //  ->orderBy($orderBy[0], $orderBy[1]);
+        if (!empty($groupBy)) {
+            $builder->groupBy($groupBy);
+        }
+        return $builder;
+    }
 }
