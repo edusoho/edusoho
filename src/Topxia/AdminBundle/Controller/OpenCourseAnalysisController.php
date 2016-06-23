@@ -35,9 +35,27 @@ class OpenCourseAnalysisController extends BaseController
         $timeRange  = $this->getTimeRange($query);
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
+        $refererlogDatas = $this->getRefererLogService()->searchAnalysisRefererLogs($conditions, $groupBy = 'targetId');
+        $refererlogDatas = $this->prepareCountPercent($refererlogDatas);
+
+        $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
+        $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
+        $openCourses = ArrayToolkit::index($openCourses, 'id');
+
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:list.html.twig', array(
-            'dateRange' => $this->getDataInfo($timeRange)
+            'dateRange'       => $this->getDataInfo($timeRange),
+            'refererlogDatas' => $refererlogDatas,
+            'openCourses'     => $openCourses
         ));
+    }
+
+    private function prepareCountPercent($refererlogDatas)
+    {
+        array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
+            $refererlogDatas[$key]['percent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+        });
+
+        return $refererlogDatas;
     }
 
     private function prepareAnalysisDatas($refererlogDatas)
@@ -86,5 +104,10 @@ class OpenCourseAnalysisController extends BaseController
     protected function getRefererLogService()
     {
         return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 }

@@ -8,4 +8,6 @@ interface RefererLogDao
     public function getRefererLogById($id);
 
     public function searchAnalysisRefererLogSum($conditions, $groupBy);
+
+    public function searchAnalysisRefererLogs($conditions, $groupBy);
 }

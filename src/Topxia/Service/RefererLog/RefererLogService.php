@@ -9,4 +9,6 @@ interface RefererLogService
 
     public function searchAnalysisRefererLogSum($conditions, $groupBy);
 
+    public function searchAnalysisRefererLogs($conditions, $groupBy);
+
 }
