@@ -11,9 +11,7 @@ define(function(require, exports, module) {
                 Notify.success('提醒教师的通知，发送成功！');
             });
         });
-
         step1();
-
     };
 
     function step1() {
@@ -66,6 +64,7 @@ define(function(require, exports, module) {
     function step5() {
         $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html("登录人数："+res.loginCount+"人");
+            $('[data-toggle="popover"]').popover();
         });
     }
 
