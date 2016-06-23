@@ -80,11 +80,8 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function saveReview($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'), true)) {
+        if (!ArrayToolkit::requiredStrict($fields, array('courseId', 'userId', 'rating'))) {
             throw $this->createServiceException('参数不正确，评价失败！');
-        }
-        if(!is_numeric($fields['rating']) || $fields['rating'] > 5 || $fields['rating']< 1){
-            throw $this->createServiceException("评分(#{$fields['rating']})无效，评价失败！");   
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
