@@ -35,7 +35,7 @@ class OpenCourseAnalysisController extends BaseController
         $query      = $request->query->all();
         $timeRange  = $this->getTimeRange($query);
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
-
+        var_dump($timeRange);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->searchRefererLogCount($conditions),
@@ -184,21 +184,21 @@ class OpenCourseAnalysisController extends BaseController
         return array(
             'startTime'      => date("Y-m-d", $timeRange['startTime']),
             'endTime'        => date("Y-m-d", $timeRange['endTime']),
-            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 2 * 24 * 3600),
-            'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 24 * 3600),
+            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
+            'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
-            'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 8 * 24 * 3600),
-            'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time())) - 24 * 3600),
+            'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
+            'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
-            'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 31 * 24 * 3600),
-            'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 24 * 3600)
+            'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 30 * 24 * 3600),
+            'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())))
         );
     }
 
     protected function getTimeRange($fields)
     {
         if (empty($fields['startTime']) && empty($fields['endTime'])) {
-            return array('startTime' => strtotime(date("Y-m-d", time())) - 8 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time())) - 24 * 3600);
+            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time())));
         }
         return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'])));
     }
