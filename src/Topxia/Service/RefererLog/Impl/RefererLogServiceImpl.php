@@ -12,8 +12,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
             throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
         }
-        if (in_array($refererlog['targetId'], array('course', 'openCourse', 'classroom', 'vip'))) {
-            throw $this->createServiceException("模块 {$targertType} 不允许添加RefererLog");
+        if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
+            throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
         $user = $this->getCurrentUser();
 
@@ -32,9 +32,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->getRefererLogById($id);
     }
 
-    public function searchAnalysisRefererLogSum($conditions, $groupBy)
+    public function searchAnalysisSummary($conditions, $groupBy)
     {
-        return $this->getRefererLogDao()->searchAnalysisRefererLogSum($conditions, $groupBy);
+        return $this->getRefererLogDao()->searchAnalysisSummary($conditions, $groupBy);
     }
 
     public function searchAnalysisRefererLogs($conditions, $groupBy, $start, $limit)

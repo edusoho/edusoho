@@ -19,7 +19,7 @@ class OpenCourseAnalysisController extends BaseController
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
         //根据refererHost分组统计数据总数
-        $refererlogDatas        = $this->getRefererLogService()->searchAnalysisRefererLogSum($conditions, $groupBy = 'refererHost');
+        $refererlogDatas        = $this->getRefererLogService()->searchAnalysisSummary($conditions, $groupBy = 'refererHost');
         $refererlogAnalysisList = $this->prepareAnalysisDatas($refererlogDatas);
         $analysisDataNames      = json_encode(ArrayToolkit::column($refererlogAnalysisList, 'refererHost'));
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:index.html.twig', array(

@@ -29,7 +29,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         });
     }
 
-    public function searchAnalysisRefererLogSum($conditions, $groupBy)
+    public function searchAnalysisSummary($conditions, $groupBy)
     {
         $orderBy = array('count', 'DESC');
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)

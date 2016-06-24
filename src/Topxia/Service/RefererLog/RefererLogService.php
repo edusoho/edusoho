@@ -7,12 +7,12 @@ interface RefererLogService
 
     public function getRefererLogById($id);
     /**
-     * [searchAnalysisRefererLogSum 统计所有公开课的统计信息]
+     * [searchAnalysisSummary 公开课数据统计 ->来源分析->汇总]
      * @param  [type] $conditions     [description]
      * @param  [type] $groupBy        [description]
      * @return [type] [description]
      */
-    public function searchAnalysisRefererLogSum($conditions, $groupBy);
+    public function searchAnalysisSummary($conditions, $groupBy);
     /**
      * [searchAnalysisRefererLogs 统计公开课的列表信息]
      * @param  [type] $conditions     [description]
