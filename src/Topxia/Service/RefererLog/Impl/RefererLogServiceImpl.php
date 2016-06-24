@@ -15,9 +15,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (in_array($refererlog['targetId'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$targertType} 不允许添加RefererLog");
         }
+        $user = $this->getCurrentUser();
 
-        $user                        = $this->getCurrentUser();
-        $refererlog['refererHost']   = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['schemeHost']);
+        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['schemeHost']);
+
+        $refererlog['refererHost']   = $refererHost;
+        $refererlog['refererName']   = $refererName;
         $refererlog['createdUserId'] = $user['id'];
         unset($refererlog['schemeHost']);
 
@@ -93,6 +96,6 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
                 $refererName = $value;
             }
         }
-        return $refererHost;
+        return array($refererHost, $refererName);
     }
 }
