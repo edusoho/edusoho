@@ -90,7 +90,8 @@ class OpenCourseController extends BaseController
 
     private function _addRefererLog($request, $courseId)
     {
-        $refererUrl = empty($request->headers->get('referer')) ? $request->getUri() : $request->headers->get('referer');
+        $referer    = $request->headers->get('referer');
+        $refererUrl = empty($referer) ? $request->getUri() : $referer;
         $refererlog = array(
             'targetId'   => $courseId,
             'targetType' => 'openCourse',
