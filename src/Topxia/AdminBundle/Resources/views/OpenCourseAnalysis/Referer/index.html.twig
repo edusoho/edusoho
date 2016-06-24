@@ -1,26 +1,11 @@
 {% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
 {% do load_script('open-course-analysis/referer') %}
-
-{% block form %}
-	<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
-	     <div class="form-group ">
-	      <label for="startDate">起始日期</label>
-	      <input class="form-control" type="text" id="startTime" name="startTime" value="{{dateRange.startTime}}" placeholder="起始时间">
-	      <label for="endDate">截止日期</label>
-	      <input class="form-control" type="text" id="endTime" name="endTime" value="{{dateRange.endTime}}" placeholder="结束时间">
-	     </div>
-	 	<button class="btn btn-default btn-data-range" type="button" id="btn-yesterday-range" data-start="{{dateRange.yesterdayStart}}" data-end="{{dateRange.yesterdayEnd}}">昨天</button>
-	 	<button class="btn btn-default btn-data-range" type="button" id="btn-lastWeek-range" data-start="{{dateRange.lastWeekStart}}" data-end="{{dateRange.lastWeekEnd}}">最近七天</button>
-		<button class="btn btn-default btn-data-range" type="button" id="btn-lastMonth-range" data-start="{{dateRange.lastMonthStart}}" data-end="{{dateRange.lastMonthEnd}}">最近30天</button>
-	  	<button class="btn btn-primary" type="submit">搜索</button>
-	</form>
-{% endblock form %}
 	
 {% block analysis_content %}
 	 <div class="">
 	 	<div  class= "" >
-			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer_summary')}}" role="button">汇总</a>
-			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer_summary_list')}}" role="button">明细</a>
+			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer_summary',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">汇总</a>
+			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer_summary_list',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">明细</a>
 	 	</div>
 
 		<div  class= "col-md-5" id="echats-pie" style="height: 300px; width: 500px;"></div>
