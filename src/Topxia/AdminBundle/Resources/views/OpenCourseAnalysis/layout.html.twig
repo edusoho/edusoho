@@ -1,30 +1,32 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
-{# {% set panel = 'dashboard' %}
-{% set nav = 'system' %} #}
+{# {% set panel = 'dashboard' %}#}
+{% set nav = nav|default(null) %} 
+{% do load_script('open-course-analysis/index') %}
 {% set menu = 'admin_operation_analysis_opencourse' %}
-{% set searchUrl = searchUrl|default(null) %}
 
 {% block main %}
 	{% block top %}
-		<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
-		  <div class="form-group ">
-	      <label for="startDate">起始日期</label>
-	      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-	      <label for="endDate">截止日期</label>
-	      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
-		  </div>
-		 	<button class="btn btn-default" type="submit">昨天</button>
-		 	<button class="btn btn-default" type="submit">最近七天</button>
-			<button class="btn btn-default" type="submit">最近30天</button>
-		  <button class="btn btn-primary">搜索</button>
-		</form>
-
-		<div class="btn-group" role="group" aria-label="...">
+		<div class="btn-group mbm" role="group" aria-label="...">
 		   <a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer')}}" role="button">来源分析</a>
 		   <a class="btn btn-default {% if nav == 'conversion' %}active{% endif %}" href="{{path('admin_opencourse_analysis_conversion')}}" role="button">购买转化分析</a>
 		   <a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer')}}" role="button">观看统计</a>
 		</div>
 	{% endblock %}
+	{% block form %}
+		<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
+	    <div class="form-group ">
+	      <label for="startDate">起始日期</label>
+	      <input class="form-control" type="text" id="startTime" name="startTime" value="{{dateRange.startTime}}" placeholder="起始时间">
+	      <label for="endDate">截止日期</label>
+	      <input class="form-control" type="text" id="endTime" name="endTime" value="{{dateRange.endTime}}" placeholder="结束时间">
+	    </div>
+		 	<button class="btn btn-default btn-data-range" type="button" id="btn-yesterday-range" data-start="{{dateRange.yesterdayStart}}" data-end="{{dateRange.yesterdayEnd}}">昨天</button>
+		 	<button class="btn btn-default btn-data-range" type="button" id="btn-lastWeek-range" data-start="{{dateRange.lastWeekStart}}" data-end="{{dateRange.lastWeekEnd}}">最近七天</button>
+			<button class="btn btn-default btn-data-range" type="button" id="btn-lastMonth-range" data-start="{{dateRange.lastMonthStart}}" data-end="{{dateRange.lastMonthEnd}}">最近30天</button>
+		  <button class="btn btn-primary" type="submit">搜索</button>
+		</form>
+	{% endblock form %}
+
 	{% block analysis_content %}
 
 	{% endblock %}

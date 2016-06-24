@@ -10,6 +10,7 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
+        print_r(unserialize($request->getSession()->get('refererLogIds')));
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 

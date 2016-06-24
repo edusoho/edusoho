@@ -12,6 +12,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
             throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
         }
+
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
@@ -32,40 +33,25 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->waveRefererLog($id, $field, $diff);
     }
 
-    public function searchRefererLogs($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getRefererLogDao()->searchRefererLogs($conditions, $orderBy, $start, $limit);
-    }
-
-    public function searchRefererLogCount($conditions)
-    {
-        return $this->getRefererLogDao()->searchRefererLogCount($conditions);
-    }
-
-    public function searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit)
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
     {
         $conditions = $this->prepareConditions($conditions);
-        return $this->getRefererLogDao()->searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit);
+        return $this->getRefererLogDao()->searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
-    public function searchRefererLogCountGroupByTargetId($conditions)
+    public function searchRefererLogCount($conditions, $groupBy)
     {
         $conditions = $this->prepareConditions($conditions);
-        return $this->getRefererLogDao()->searchRefererLogCountGroupByTargetId($conditions);
+        return $this->getRefererLogDao()->searchRefererLogCount($conditions, $groupBy);
+    }
+
+    public function searchAnalysisRefererLogSum($conditions, $groupBy)
+    {
+        return $this->getRefererLogDao()->searchAnalysisRefererLogSum($conditions, $groupBy);
     }
 
     protected function prepareConditions($conditions)
     {
-        if (!empty($conditions['startDate'])) {
-            $conditions['startTime'] = strtotime($conditions['startDate']);
-            unset($conditions['startDate']);
-        }
-
-        if (!empty($conditions['endDate'])) {
-            $conditions['endTime'] = strtotime($conditions['endDate']);
-            unset($conditions['endDate']);
-        }
-
         return $conditions;
     }
 

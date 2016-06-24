@@ -46,69 +46,59 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $this->getRefererLogById($id);
     }
 
-    public function searchRefererLogs($conditions, $orderBy, $start, $limit)
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
     {
         $this->filterStartLimit($start, $limit);
         $this->checkOrderBy($orderBy, array('createdTime'));
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
+        $searchFields = '*';
+
+        if (!empty($groupBy)) {
+            $searchFields = 'id,COUNT(id) AS hitNum,targetId,targetType,SUM(orderCount) AS orderCount,createdTime';
+        }
+
+        $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
+            ->select($searchFields)
             ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
+            ->setMaxResults($limit);
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchRefererLogCount($conditions)
+    public function searchRefererLogCount($conditions, $groupBy)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->createQueryBuilder($conditions, array(), $groupBy)
             ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchRefererLogsGroupByTargetId($conditions, $orderBy, $start, $limit)
+    public function searchAnalysisRefererLogSum($conditions, $groupBy)
     {
-        $this->filterStartLimit($start, $limit);
-        $this->checkOrderBy($orderBy, array('createdTime'));
-
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('id,COUNT(id) AS hitNum,targetId,targetType,SUM(orderCount) AS orderCount,createdTime')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->groupBy('targetId');
+        $orderBy = array('value', 'DESC');
+        $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
+            ->select('COUNT(id) as value , r.refererHost as name ');
 
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchRefererLogCountGroupByTargetId($conditions)
+    protected function createQueryBuilder($conditions, $orderBy, $groupBy)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)')
-            ->groupBy('targetId');
-
-        return $builder->execute()->fetchColumn(0);
-    }
-
-    protected function _createSearchQueryBuilder($conditions)
-    {
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value === '' || is_null($value)) {
-                return false;
-            }
-            return true;
-        });
-
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere("id IN ( :ids )")
+            ->from($this->getTable(), 'r')
+            ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
             ->andWhere('targetId IN (:targetIds)')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime')
-            ->andWhere('targetType = :targetType');
+            ->andWhere('createdTime <= :endTime');
 
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+        //  ->orderBy($orderBy[0], $orderBy[1]);
+        if (!empty($groupBy)) {
+            $builder->groupBy($groupBy);
+        }
         return $builder;
     }
 }

@@ -14,7 +14,7 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
 
     public function addOrderRefererLog($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('refererLogId', 'orderId', 'targetId', 'targetType'))) {
+        if (!ArrayToolkit::requireds($fields, array('refererLogId', 'orderId', 'targetId', 'targetType', 'sourceTargetId', 'sourceTargetId'))) {
             throw $this->createServiceException("缺少字段,添加OrderRefererLog失败");
         }
 
@@ -32,16 +32,16 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
         return $this->getOrderRefererLogDao()->deleteOrderRefererLog($id);
     }
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit)
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy = '')
     {
         $conditions = $this->prepareConditions($conditions);
-        return $this->getOrderRefererLogDao()->searchOrderRefererLogs($conditions, $orderBy, $start, $limit);
+        return $this->getOrderRefererLogDao()->searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
-    public function searchOrderRefererLogCount($conditions)
+    public function searchOrderRefererLogCount($conditions, $groupBy = '')
     {
         $conditions = $this->prepareConditions($conditions);
-        return $this->getOrderRefererLogDao()->searchOrderRefererLogCount($conditions);
+        return $this->getOrderRefererLogDao()->searchOrderRefererLogCount($conditions, $groupBy);
     }
 
     protected function prepareConditions($conditions)

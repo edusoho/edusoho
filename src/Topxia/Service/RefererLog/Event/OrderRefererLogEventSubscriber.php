@@ -29,15 +29,18 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         }
 
         foreach ($refererLogIds as $key => $refererLogId) {
-            $fields = array(
-                'refererLogId'  => $refererLogId,
-                'orderId'       => $order['id'],
-                'targetType'    => $order['targetType'],
-                'targetId'      => $order['targetId'],
-                'createdUserId' => $order['userId']
+            $refererLog = $this->getRefererLogService()->getRefererLogById($refererLogId);
+            $fields     = array(
+                'refererLogId'     => $refererLogId,
+                'orderId'          => $order['id'],
+                'sourceTargetId'   => $refererLog['targetId'],
+                'sourceTargetType' => $refererLog['targetType'],
+                'targetType'       => $order['targetType'],
+                'targetId'         => $order['targetId'],
+                'createdUserId'    => $order['userId']
             );
 
-            $refererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
+            $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
             $this->getRefererLogService()->waveRefererLog($refererLogId, 'orderCount', 1);
         }

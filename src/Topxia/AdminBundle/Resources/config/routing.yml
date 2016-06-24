@@ -39,6 +39,10 @@ admin_opencourse_analysis_conversion:
     pattern:  /operation/opencourse/analysis/conversion
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
 
+admin_opencourse_analysis_conversion_result:
+    pattern:  /operation/opencourse/{courseId}/analysis/conversion/result
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversionResult }
+
 
 admin_content:
     pattern:  /content

@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}
+  查询结果&nbsp;&nbsp;{{ dateRange.startTime }} - {{ dateRange.endTime }}
+{% endblock %}
+{% block body %}
+  {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Conversion:order-list.html.twig' %}
+
+  <!-- 以下是来源详情 -->
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}
