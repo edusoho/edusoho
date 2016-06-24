@@ -11,8 +11,8 @@ class UserApprovalController extends BaseController
 {
     public function approvalsAction(Request $request, $approvalStatus)
     {
-        $fields = $request->query->all();
-        $user = $this->getCurrentUser();
+        $fields     = $request->query->all();
+        $user       = $this->getCurrentUser();
         $conditions = array(
             'roles'          => '',
             'keywordType'    => '',
@@ -20,7 +20,8 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus
         );
         $conditions = array_merge($conditions, $fields);
-   
+        $conditions = $this->fillOrgCode($conditions);
+
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
             $approvalcount   = $this->getUserService()->searchApprovalsCount($conditions);
@@ -35,10 +36,8 @@ class UserApprovalController extends BaseController
         //在user表里筛选要求的实名认证状态
         $userConditions = array(
             'userIds'        => $userApprovingId,
-            'approvalStatus' => $approvalStatus,
-            'likeOrgCode'    => isset($conditions['orgCode']) ? $conditions['orgCode'] : null
+            'approvalStatus' => $approvalStatus
         );
-        $userConditions = $this->fillOrgCode($userConditions);
 
         if (!empty($conditions['startDateTime'])) {
             $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);

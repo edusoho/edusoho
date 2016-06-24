@@ -7,35 +7,24 @@
 
     <div class="form-group">
       <div class="controls mll">
-        <span>{{'确认删除这些资源吗？'|trans}}</span>
+        <span>{{'是否确认删除资源？'|trans}}</span>
       </div>
 
-      {% if materials %}
-        <div class="controls mll mtl">
-          <ul>
-            {% for fileId,material in materials %}
-              {% if  material|length > 0 and loop.index <= 3 %}
-                <li>文件：{{ files[fileId].filename }} 被引用</li>
-              {% else %}
-                ......
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
+      {% include 'TopxiaWebBundle:CourseFileManage:file-used-in-material-list.html.twig' %}
     </div>
     
+    {% for id in ids if id %}
+      <input type="hidden" name="ids[]" value="{{ id }}" />
+    {% endfor %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
 {% endblock %}
 
 {% block footer %}
-  {% if materials %}
     <div class="pull-left pts"> 
-      <span class="text-danger">文件被引用，删除会引起引用课时无法正常使用</span>
+      <span class="text-danger">文件若被引用，删除会引起引用课时无法正常使用</span>
     </div>
-  {% endif %}
     <button class="btn btn-danger file-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#file-delete-form" data-loading-text="正在删除...">确认</button>
     
 {% endblock %}

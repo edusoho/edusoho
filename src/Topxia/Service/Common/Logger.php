@@ -143,7 +143,7 @@ class Logger
     public static function systemModuleConfig()
     {
         return array(
-            self::COURSE     => array(
+            self::COURSE    => array(
                 'delete_testpaper'    => '删除试卷',
                 'delete_material'     => '删除课时资料',
                 'delete_chapter'      => '删除章节',
@@ -158,9 +158,9 @@ class Logger
                 'delete_review'       => '删除评价',
                 'delete_announcement' => '删除公告',
                 'delete_status'       => '删除动态',
-                'delete_member'       => '删除学员',
                 'delete'              => '删除课程',
                 'add_student'         => '增加学员',
+                'remove_student'      => '移除学员',
                 'create'              => '增加课程',
                 'update'              => '修改课程',
                 'update_picture'      => '更新图片',
@@ -172,9 +172,9 @@ class Logger
                 'update_draft'        => '更新草稿',
                 'update_lesson'       => '更新课时',
                 'update_teacher'      => '更新教师',
-                'cancel_teachers_all' => '取消所有教师角色',
-                'remove_student'      => '移除学员'),
-            self::USER       => array(
+                'cancel_teachers_all' => '取消所有教师角色'
+            ),
+            self::USER      => array(
                 'exportCsv'              => '导出',
                 'add'                    => '新增',
                 'edit'                   => '修改',
@@ -194,7 +194,7 @@ class Logger
                 'approved'               => '实名认证成功',
                 'approval_fail'          => '实名认证失败',
                 'password-reset'         => '重置密码'),
-            self::SYSTEM     => array(
+            self::SYSTEM    => array(
                 'email_send_check'       => '邮件自检',
                 'setting_email_change'   => '更变邮箱',
                 'setting_email-verify'   => '邮箱验证',
@@ -204,7 +204,7 @@ class Logger
                 'setting_userCenter'     => '用户中心设置',
                 'update_block'           => '更新编辑区',
                 'update_app_version'     => '更新版本'),
-            self::CLASSROOM  => array(
+            self::CLASSROOM => array(
                 'create'           => '新增班级',
                 'delete'           => '删除班级',
                 'add_course'       => '添加课程',
@@ -217,7 +217,7 @@ class Logger
                 'recommend'        => '推荐班级',
                 'cancel_recommend' => '取消推荐'
             ),
-            self::ARTICLE    => array(
+            self::ARTICLE   => array(
                 'update_settings' => '更新设置',
                 'create'          => '新增',
                 'update'          => '修改',
@@ -229,19 +229,19 @@ class Logger
                 'publish'         => '发布',
                 'unpublish'       => '取消发布'),
 
-            self::NOTIFY     => array(
+            self::NOTIFY   => array(
                 'create'     => '创建',
                 'check_fail' => '检测'),
-            self::ORDER      => array(
+            self::ORDER    => array(
                 'pay_result'    => '支付结果',
                 'andit_refund'  => '退款审核',
                 'refund_cancel' => '取消退款',
                 'unbind-back'   => '解绑银行卡'),
-            self::CATEGORY   => array(
+            self::CATEGORY => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除'),
-            self::CONTENT    => array(
+            self::CONTENT  => array(
                 'create'  => '新增',
                 'update'  => '修改',
                 'trash'   => '移动到回收站',
@@ -307,11 +307,11 @@ class Logger
                 'delete_member'  => '删除会员',
                 'update_member'  => '编辑会员',
 
-                'create_level'   => '添加等级',
-                'update_level'   => '修改等级',
-                'on_level'       => '开启加入',
-                'off_level'      => '关闭加入',
-                'delete_level'   => '删除等级',
+                'create_level' => '添加等级',
+                'update_level' => '修改等级',
+                'on_level'     => '开启加入',
+                'off_level'    => '关闭加入',
+                'delete_level' => '删除等级',
 
                 'exportCsv'      => '导出',
                 'update_setting' => '更新设置'),

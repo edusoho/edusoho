@@ -449,7 +449,8 @@ CREATE TABLE `course_member` (
   `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
   `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `courseId` (`courseId`,`userId`)
+  UNIQUE KEY `courseId` (`courseId`,`userId`),
+  KEY `courseId_role_createdTime` (`courseId`,`role`,`createdTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_note`;
@@ -669,8 +670,9 @@ CREATE TABLE `message_conversation` (
   `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型',
   `unreadNum` int(10) unsigned NOT NULL COMMENT '未读数量',
   `createdTime` int(10) unsigned NOT NULL COMMENT '会话创建时间',
-  
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `toId_fromId` (`toId`,`fromId`),
+  KEY `toId_latestMessageTime` (`toId`,`latestMessageTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `message_relation`;
@@ -748,7 +750,7 @@ CREATE TABLE `orders` (
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` varchar(32) NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',

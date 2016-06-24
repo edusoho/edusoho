@@ -169,6 +169,7 @@ class CloudFileController extends BaseController
         return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,
+            'ids'           => $globalIds,
             'deleteFormUrl' => $this->generateUrl('admin_cloud_file_batch_delete')
         ));
     }

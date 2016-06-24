@@ -63,7 +63,7 @@ class ClassroomMemberImporter extends Importer
                     'title'      => "购买班级《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
-                    'amount'     => $orderData['amount'],
+                    'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
                     'payment'    => 'outside',
                     'snPrefix'   => 'CR'
                 ));

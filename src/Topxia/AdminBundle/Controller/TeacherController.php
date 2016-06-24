@@ -11,7 +11,7 @@ class TeacherController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions = $this->fillOrgCode($conditions);
-       
+        $conditions['roles'] = 'ROLE_TEACHER';
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),

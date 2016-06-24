@@ -35,7 +35,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
 
-            'article.create'            => 'onArticleCreate',
             'article.publish'           => 'onArticleCreate',
             'article.update'            => 'onArticleUpdate',
             'article.trash'             => 'onArticleDelete',

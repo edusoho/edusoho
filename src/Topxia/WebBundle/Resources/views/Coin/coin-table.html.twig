@@ -44,6 +44,12 @@
         <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
       </td> #}
     </tr>
+  {% else %}
+    <tr>
+      <td colspan="6">
+        <div class="empty">暂无虚拟币订单记录</div>
+      </td>
+    </tr>
   {% endfor %}
   </tbody>
 </table>

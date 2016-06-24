@@ -112,20 +112,15 @@ define(function(require, exports, module) {
             },
             onClickDeleteBtn: function(event)
             {
-                if (confirm('真的要删除该资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    this._loading();
-                    $.ajax({
-                        type:'POST',
-                        url:$target.data('url'),
-                    }).done(function(){
-                        Notify.success('删除成功!');
-                        self.renderTable(true);
-                    }).fail(function(){
-                        Notify.danger('删除失败!');
-                    });
-                }
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+
+                ids.push($target.data('id'));
+                
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
             },
             onClickReconvertBtn: function(event)
             {
@@ -498,12 +493,11 @@ define(function(require, exports, module) {
         });
 
         $('#modal').on('click','.file-delete-form-btn', function(event){
-            var ids = [];
-            $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
-                ids.push(this.value);
-            });
+            
+            var $form = $('#file-delete-form');
 
-            $.post($('#file-delete-form').attr('action'),{"ids":ids},function(data){
+            $(this).button('loading').addClass('disabled');
+            $.post($form.attr('action'),$form.serialize(),function(data){
                 if(data){
                     $('#modal').modal('hide');
                     Notify.success('删除资源成功');

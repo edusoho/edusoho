@@ -24,12 +24,17 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
         if ($affected <= 0) {
             throw $this->createDaoException('Insert conversation error.');
         }
+
+        $this->clearCached();
+
         return $this->getConversation($this->getConnection()->lastInsertId());
     }
 
     public function deleteConversation($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function getConversationByFromIdAndToId($fromId, $toId)
@@ -45,6 +50,7 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
     public function updateConversation($id, $toUpdateConversation)
     {
         $this->getConnection()->update($this->table, $toUpdateConversation, array('id' => $id));
+        $this->clearCached();
         return $this->getConversation($id);
     }
 

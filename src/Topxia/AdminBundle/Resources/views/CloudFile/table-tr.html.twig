@@ -63,7 +63,7 @@
             <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
           </li>
           <li>
-            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete', {globalId:cloudFile.no}) }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
+            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.no }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
           </li>
         </ul>
       </div>
