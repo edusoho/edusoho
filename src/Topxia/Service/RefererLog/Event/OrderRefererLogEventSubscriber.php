@@ -31,13 +31,13 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         foreach ($refererLogIds as $key => $refererLogId) {
             $refererLog = $this->getRefererLogService()->getRefererLogById($refererLogId);
             $fields     = array(
-                'refererLogId'     => $refererLogId,
-                'orderId'          => $order['id'],
-                'sourceTargetId'   => $refererLog['targetId'],
-                'sourceTargetType' => $refererLog['targetType'],
-                'targetType'       => $order['targetType'],
-                'targetId'         => $order['targetId'],
-                'createdUserId'    => $order['userId']
+                'refererLogId'      => $refererLogId,
+                'orderId'           => $order['id'],
+                'refererTargetId'   => $refererLog['targetId'],
+                'refererTargetType' => $refererLog['targetType'],
+                'targetType'        => $order['targetType'],
+                'targetId'          => $order['targetId'],
+                'createdUserId'     => $order['userId']
             );
 
             $this->getOrderRefererLogService()->addOrderRefererLog($fields);

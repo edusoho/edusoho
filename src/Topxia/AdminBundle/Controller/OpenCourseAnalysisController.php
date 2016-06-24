@@ -81,7 +81,7 @@ class OpenCourseAnalysisController extends BaseController
     public function conversionResultAction(Request $request, $courseId)
     {
         $timeRange  = $this->getTimeRange($request->query->all());
-        $conditions = array_merge($timeRange, array('sourceTargetId' => $courseId));
+        $conditions = array_merge($timeRange, array('refererTargetId' => $courseId));
 
         $orderLogs = $this->getConversionOrderData($conditions);
 
