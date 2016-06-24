@@ -16,9 +16,9 @@
 		<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
 		     <div class="form-group ">
 		      <label for="startDate">起始日期</label>
-		      <input class="form-control" type="text" id="startTime" name="startTime" value="{{dateRange.lastWeekStart}}" placeholder="起始时间">
+		      <input class="form-control" type="text" id="startTime" name="startTime" value="{{dateRange.startTime}}" placeholder="起始时间">
 		      <label for="endDate">截止日期</label>
-		      <input class="form-control" type="text" id="endTime" name="endTime" value="{{dateRange.lastWeekEnd}}" placeholder="结束时间">
+		      <input class="form-control" type="text" id="endTime" name="endTime" value="{{dateRange.endTime}}" placeholder="结束时间">
 		     </div>
 		 	<button class="btn btn-default btn-data-range" type="button" id="btn-yesterday-range" data-start="{{dateRange.yesterdayStart}}" data-end="{{dateRange.yesterdayEnd}}">昨天</button>
 		 	<button class="btn btn-default btn-data-range active" type="button" id="btn-lastWeek-range" data-start="{{dateRange.lastWeekStart}}" data-end="{{dateRange.lastWeekEnd}}">最近七天</button>
