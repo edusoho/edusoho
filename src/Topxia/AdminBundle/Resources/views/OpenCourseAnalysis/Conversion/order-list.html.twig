@@ -10,18 +10,21 @@
   <tbody>
     {% for orderLog in orderLogs %}
       {% set target = orderLog.target|default(null) %}
-      <td>
-        {% if target %}
-          {{ target.title }}
-        {% else %}
-          -
-        {% endif %}
-      </td>
-      <td>{{ orderLog.targetType }}</td>
-      <td>{{ orderLog.buyNum }}</td>
-      <td>
-        {% if orderLog.targetType == 'vip'%} - {% else %}{{ target.price }}{% endif %}
-      </td>
+      <tr>
+        <td>
+          {% if target %}
+            {{ target.title }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ orderLog.targetType }}</td>
+        <td>{{ orderLog.buyNum }}</td>
+        <td>
+          {% if orderLog.targetType == 'vip'%} - {% else %}{{ target.price }}{% endif %}
+        </td>
+      </tr>
+      
     {% else %}
       <tr><td colspan="20"><div class="empty">{{ '暂无记录'|trans }}</div></td></tr>
     {% endfor %}
