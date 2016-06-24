@@ -9,10 +9,10 @@ class OpenCourseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer'));
+        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary'));
     }
 
-    public function refererAction(Request $request)
+    public function summaryAction(Request $request)
     {
         $query      = $request->query->all();
         $timeRange  = $this->getTimeRange($query);
@@ -30,7 +30,7 @@ class OpenCourseAnalysisController extends BaseController
         ));
     }
 
-    public function refererListAction(Request $request)
+    public function summaryListAction(Request $request)
     {
         $query      = $request->query->all();
         $timeRange  = $this->getTimeRange($query);
@@ -63,7 +63,7 @@ class OpenCourseAnalysisController extends BaseController
         ));
     }
 
-    public function refererDetailAction(Request $request, $id)
+    public function detailAction(Request $request, $id)
     {
         $timeRange  = $this->getTimeRange($request->query->all());
         $conditions = array(
@@ -73,18 +73,62 @@ class OpenCourseAnalysisController extends BaseController
             'endTime'    => $timeRange['endTime']
         );
         $refererlogsDetail = $this->getRefererLogService()->searchAnalysisRefererLogsDetail($conditions, $groupBy = 'refererHost');
-        array_walk($refererlogsDetail, function ($referelog, $key) use (&$refererlogsDetail) {
-            $refererlogsDetail[$key]['orderPercent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
-        });
-
         $refererlogsDetail = $this->prepareAnalysisDetailDatas($refererlogsDetail);
         $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererHost'));
+
+        list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
             'refererlogsDetail'     => $refererlogsDetail,
             'refererlogDetailDatas' => json_encode($refererlogsDetail),
-            'refererlogNames'       => $refererlogNames
+            'refererlogNames'       => $refererlogNames,
+            'paginator'             => $paginator,
+            'refererloglist'        => $refererloglist,
+            'targetId'              => $id
         ));
+    }
+
+    public function detailListAction(Request $request, $id)
+    {
+        $timeRange  = $this->getTimeRange($request->query->all());
+        $conditions = array(
+            'targetType' => 'openCourse',
+            'targetId'   => $id,
+            'startTime'  => $timeRange['startTime'],
+            'endTime'    => $timeRange['endTime']
+        );
+
+        list($paginator, $refererloglist) = $this->getDetailList($conditions);
+
+        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Parts:referer-detail-list.html.twig", array(
+            'paginator'      => $paginator,
+            'refererloglist' => $refererloglist,
+            'targetId'       => $id
+        ));
+    }
+
+    private function getDetailList($conditions)
+    {
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getRefererLogService()->searchAnalysisRefererLogCount($conditions),
+            2
+        );
+        $refererloglist = $this->getRefererLogService()->searchAnalysisRefererLoglist(
+            $conditions,
+            $groupBy = 'refererUrl',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $totoalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
+
+        array_walk($refererloglist, function ($data, $key, $totoalCount) use (&$refererloglist) {
+            $refererloglist[$key]['percent']      = round($data['count'] / $totoalCount * 100, 2).'%';
+            $refererloglist[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
+        }, $totoalCount);
+
+        return array($paginator, $refererloglist);
     }
 
     private function prepareCountPercent($refererlogDatas)
