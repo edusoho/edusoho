@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,7 +21,7 @@ class OpenCourseAnalysisController extends BaseController
         //根据refererHost分组统计数据总数
         $refererlogDatas        = $this->getRefererLogService()->searchAnalysisRefererLogSum($conditions, $groupBy = 'refererHost');
         $refererlogAnalysisList = $this->prepareAnalysisDatas($refererlogDatas);
-        $analysisDataNames      = json_encode(ArrayToolkit::column($refererlogAnalysisList, 'name'));
+        $analysisDataNames      = json_encode(ArrayToolkit::column($refererlogAnalysisList, 'refererHost'));
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:index.html.twig', array(
             'dateRange'               => $this->getDataInfo($timeRange),
             'refererlogAnalysisList'  => $refererlogAnalysisList,
@@ -35,8 +36,20 @@ class OpenCourseAnalysisController extends BaseController
         $timeRange  = $this->getTimeRange($query);
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
-        $refererlogDatas = $this->getRefererLogService()->searchAnalysisRefererLogs($conditions, $groupBy = 'targetId');
-        $refererlogDatas = $this->prepareCountPercent($refererlogDatas);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getRefererLogService()->searchRefererLogCount($conditions),
+            20
+        );
+        $refererlogDatas = $this->getRefererLogService()->searchAnalysisRefererLogs(
+            $conditions,
+            $groupBy = 'targetId',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
+            $refererlogDatas[$key]['percent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+        });
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
@@ -45,16 +58,37 @@ class OpenCourseAnalysisController extends BaseController
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:list.html.twig', array(
             'dateRange'       => $this->getDataInfo($timeRange),
             'refererlogDatas' => $refererlogDatas,
-            'openCourses'     => $openCourses
+            'openCourses'     => $openCourses,
+            'paginator'       => $paginator
+        ));
+    }
+
+    public function refererDetailAction(Request $request, $id)
+    {
+        $timeRange  = $this->getTimeRange($request->query->all());
+        $conditions = array(
+            'targetType' => 'openCourse',
+            'targetId'   => $id,
+            'startTime'  => $timeRange['startTime'],
+            'endTime'    => $timeRange['endTime']
+        );
+        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisRefererLogsDetail($conditions, $groupBy = 'refererHost');
+        array_walk($refererlogsDetail, function ($referelog, $key) use (&$refererlogsDetail) {
+            $refererlogsDetail[$key]['orderPercent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+        });
+
+        $refererlogsDetail = $this->prepareAnalysisDetailDatas($refererlogsDetail);
+        $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererHost'));
+
+        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
+            'refererlogsDetail'     => $refererlogsDetail,
+            'refererlogDetailDatas' => json_encode($refererlogsDetail),
+            'refererlogNames'       => $refererlogNames
         ));
     }
 
     private function prepareCountPercent($refererlogDatas)
     {
-        array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
-            $refererlogDatas[$key]['percent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
-        });
-
         return $refererlogDatas;
     }
 
@@ -68,12 +102,34 @@ class OpenCourseAnalysisController extends BaseController
         $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
         $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
 
-        $totoalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'value'));
-        $otherTotoalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'value'));
-
-        array_push($analysisDatas, array('value' => $otherTotoalCount, 'name' => '其他'));
+        $totoalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $otherTotoalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        array_push($analysisDatas, array('count' => $otherTotoalCount, 'refererHost' => '其他'));
         array_walk($analysisDatas, function ($data, $key, $totoalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent'] = round($data['value'] / $totoalCount * 100, 2).'%';
+            $analysisDatas[$key]['percent'] = round($data['count'] / $totoalCount * 100, 2).'%';
+        }, $totoalCount);
+
+        return $analysisDatas;
+    }
+
+    private function prepareAnalysisDetailDatas($refererlogDatas)
+    {
+        if (empty($refererlogDatas)) {
+            return array();
+        }
+        $lenght = 6;
+
+        $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
+        $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
+
+        $totoalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $otherTotoalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        $otherOrderTotoalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
+
+        array_push($analysisDatas, array('count' => $otherTotoalCount, 'orderCount' => $otherOrderTotoalCount, 'refererHost' => '其他'));
+        array_walk($analysisDatas, function ($data, $key, $totoalCount) use (&$analysisDatas) {
+            $analysisDatas[$key]['percent']      = round($data['count'] / $totoalCount * 100, 2).'%';
+            $analysisDatas[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
         }, $totoalCount);
 
         return $analysisDatas;

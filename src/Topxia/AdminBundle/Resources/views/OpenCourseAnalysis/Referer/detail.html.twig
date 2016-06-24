@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}转化详情{% endblock %}
+
+{% block body %}
+    <div class="row form-group">
+    	<div>
+	       <div  class= "col-md-4" id="echats-pie" style="height: 300px; width: 400px;"></div>
+			<div  class= "col-md-6">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>来源</th>
+							<th>来源数</th>
+							<th>占比</th>
+							<th>购买转化数</th>
+							<th>购买转化率</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for refererlog in refererlogsDetail %}
+							<tr>
+								<th scope="row">{{refererlog.refererHost}}</th>
+								<th>{{refererlog.count}}</th>
+								<th>{{refererlog.percent}}</th>
+								<th>{{refererlog.orderCount}}</th>
+								<th>{{refererlog.orderPercent}}</th>
+							</tr>
+							{% else %} 
+							  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<input id="data"  type="hidden" value="{% if refererlogDetailDatas %} {{refererlogDetailDatas}} {% endif %}">
+			<input id="dataName" type="hidden" value="{% if refererlogNames %} {{refererlogNames}} {% endif %}">
+		</div>
+    </div>    
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}
+
+{% block script %}
+    <script>app.load('open-course-analysis/detail')</script>
+{% endblock %}

@@ -31,24 +31,42 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     public function searchAnalysisRefererLogSum($conditions, $groupBy)
     {
-        $orderBy = array('value', 'DESC');
+        $orderBy = array('count', 'DESC');
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select('COUNT(id) as value , r.refererHost as name ');
+            ->select('COUNT(id) as count , r.refererHost');
 
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchAnalysisRefererLogs($conditions, $groupBy)
+    public function searchAnalysisRefererLogs($conditions, $groupBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = array('count', 'DESC');
+        $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
+            ->select('targetId, count(id) as count , sum(ordercount) as orderCount')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchAnalysisRefererLogsDetail($conditions, $groupBy)
     {
         $orderBy = array('count', 'DESC');
-        //  select targetid, count(id) as count  , sum(ordercount) as ordercount from referer_log group by targetid order by count desc
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select('targetId, count(id) as count , sum(ordercount) as orderCount');
+            ->select('refererHost, count(targetid) as count, sum(ordercount) as orderCount');
 
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    protected function createQueryBuilder($conditions, $orderBy, $groupBy)
+    public function searchRefererLogCount($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(DISTINCT targetId)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function createQueryBuilder($conditions, $orderBy = null, $groupBy = null)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->getTable(), 'r')
@@ -60,7 +78,6 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         for ($i = 0; $i < count($orderBy); $i = $i + 2) {
             $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
         };
-        //  ->orderBy($orderBy[0], $orderBy[1]);
         if (!empty($groupBy)) {
             $builder->groupBy($groupBy);
         }

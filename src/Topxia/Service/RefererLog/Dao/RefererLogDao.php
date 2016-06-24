@@ -9,5 +9,9 @@ interface RefererLogDao
 
     public function searchAnalysisRefererLogSum($conditions, $groupBy);
 
-    public function searchAnalysisRefererLogs($conditions, $groupBy);
+    public function searchAnalysisRefererLogs($conditions, $groupBy, $start, $limit);
+
+    public function searchAnalysisRefererLogsDetail($conditions, $groupBy);
+
+    public function searchRefererLogCount($conditions);
 }
