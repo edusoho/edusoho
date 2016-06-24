@@ -36,8 +36,8 @@
 				<tbody>
 					{% for refererlog in refererlogAnalysisList %}
 						<tr>
-							<th scope="row">{{refererlog.name}}</th>
-							<th>{{refererlog.value}}</th>
+							<th scope="row">{{refererlog.refererHost}}</th>
+							<th>{{refererlog.count}}</th>
 							<th>{{refererlog.percent}}</th>
 						</tr>
 						{% else %} 

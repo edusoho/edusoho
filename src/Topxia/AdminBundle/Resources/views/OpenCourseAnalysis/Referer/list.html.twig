@@ -28,6 +28,7 @@
 					<tr>
 						<th width="40%">课程名称</th>
 						<th>访问数</th>
+						<th>转化详情</th>
 						<th>购买转化数</th>
 						<th>购买转化率</th>
 					</tr>
@@ -37,6 +38,7 @@
 						<tr>
 							<th scope="row">{{openCourses[refererlog.targetId].title }}</th>
 							<th>{{refererlog.count}}</th>
+							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererlog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
 							<th>{{refererlog.orderCount}}</th>
 							<th>{{refererlog.percent}}</th>
 						</tr>
@@ -46,5 +48,6 @@
 				</tbody>
 			</table>
 		</div>
+		{{web_macro.paginator(paginator)}}
 	</div>
 {% endblock %}

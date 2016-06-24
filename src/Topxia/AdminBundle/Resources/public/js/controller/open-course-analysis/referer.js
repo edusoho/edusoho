@@ -3,46 +3,66 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-		var myChart = echarts.init(document.getElementById('echats-pie'));
-
-		option = {
-			tooltip: {
-				trigger: 'item',
-				formatter: "{a} <br/>{b}: {c} ({d}%)"
+		function EchartsConfig() {}
+		EchartsConfig.prototype = {
+			legendData: function() {
+				return eval("(" + $("#dataName").val() + ")");
 			},
-			legend: {
-				orient: 'vertical',
-				x: 'left',
-				data: eval("(" + $("#dataName").val() + ")")
+			seriesData: function() {
+				var datas = eval("(" + $("#data").val() + ")");
+				var optionDatas = [];
+				datas.forEach(function(element, index, array) {
+					optionDatas.push({
+						name: element.refererHost,
+						value: element.count
+					})
+				}, optionDatas);
+				return optionDatas;
 			},
-			series: [{
-				name: '访问来源',
-				type: 'pie',
-				radius: '55%',
-				center: ['50%', '60%'],
-				avoidLabelOverlap: false,
-				label: {
-					normal: {
-						show: false,
+			option: function() {
+				return {
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b}: {c} ({d}%)"
 					},
-					emphasis: {
-						show: false,
-						textStyle: {
-							fontSize: '30',
-							fontWeight: 'bold'
-						}
-					}
-				},
-				labelLine: {
-					normal: {
-						show: false
-					}
-				},
-				data: eval("(" + $("#data").val() + ")")
-			}]
-		};
+					legend: {
+						orient: 'vertical',
+						x: 'left',
+						data: this.legendData()
+					},
+					series: [{
+						name: '访问来源',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						avoidLabelOverlap: false,
+						label: {
+							normal: {
+								show: false,
+							},
+							emphasis: {
+								show: false,
+								textStyle: {
+									fontSize: '30',
+									fontWeight: 'bold'
+								}
+							}
+						},
+						labelLine: {
+							normal: {
+								show: false
+							}
+						},
+						data: this.seriesData()
+					}]
+				};
+			}
+		}
 
-		myChart.setOption(option);
+		var myChart = echarts.init(document.getElementById('echats-pie'));
+		var config = new EchartsConfig();
+		myChart.setOption(config.option());
+
 
 	}
 });
