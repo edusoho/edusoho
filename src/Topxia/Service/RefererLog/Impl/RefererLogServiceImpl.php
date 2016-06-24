@@ -17,8 +17,10 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }
 
         $user                        = $this->getCurrentUser();
-        $refererlog['refererHost']   = $this->prepareRefererUrl($refererlog['refererUrl']);
+        $refererlog['refererHost']   = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['schemeHost']);
         $refererlog['createdUserId'] = $user['id'];
+        unset($refererlog['schemeHost']);
+
         return $this->getRefererLogDao()->addRefererLog($refererlog);
     }
 
@@ -62,17 +64,35 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->createDao('RefererLog.RefererLogDao');
     }
 
-    private function prepareRefererUrl($refererUrl)
+    private function prepareRefererUrl($refererUrl, $schemeHost)
     {
+        $refererHost = null;
+        $refererName = null;
+
         $refererMap = array(
-            'baidu.com'        => '百度',
-            'mp.weixin.qq.com' => '微信',
-            'weibo.com'        => '微博'
+            'open/course/explore'  => '公开课列表',
+            'open/course'          => '公开课详情页',
+            'my/courses/favorited' => '收藏页面',
+            $schemeHost            => '首页',
+            'baidu.com'            => '百度',
+            'mp.weixin.qq.com'     => '微信',
+            'weibo.com'            => '微博'
         );
-        $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
-        preg_match($patten, $refererUrl, $matches);
-        $refererHost = $matches[0];
-        //  TODO $refererName = array
+
+        //站外
+        if (strpos($refererUrl, $schemeHost) === false) {
+            $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
+            preg_match($patten, $refererUrl, $matches);
+            $refererHost = $matches[0];
+        } else {
+            $refererHost = $refererUrl;
+        }
+
+        foreach ($refererMap as $key => $value) {
+            if (strpos($refererUrl, $key) !== false) {
+                $refererName = $value;
+            }
+        }
         return $refererHost;
     }
 }
