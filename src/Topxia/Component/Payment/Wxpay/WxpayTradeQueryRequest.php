@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 class WxpayTradeQueryRequest extends Request
 {
     protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    protected $orderQueryUrl   = 'http://192.168.6.200/order/order_check';
+    protected $orderQueryUrl   = 'https://api.mch.weixin.qq.com/pay/orderquery';
 
     public function form()
     {
@@ -21,10 +21,10 @@ class WxpayTradeQueryRequest extends Request
 
     public function tradeQuery()
     {
-        $params                    = $this->params;
-        $converted                 = array();
-        $converted['appid']        = $this->options['key'];
-        
+        $params             = $this->params;
+        $converted          = array();
+        $converted['appid'] = $this->options['key'];
+
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
