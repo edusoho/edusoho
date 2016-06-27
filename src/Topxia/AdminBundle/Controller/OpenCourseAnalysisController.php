@@ -47,7 +47,7 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
         array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
-            $refererlogDatas[$key]['percent'] = round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+            $refererlogDatas[$key]['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
         });
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
@@ -123,8 +123,8 @@ class OpenCourseAnalysisController extends BaseController
         $totalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
 
         array_walk($refererloglist, function ($data, $key, $totalCount) use (&$refererloglist) {
-            $refererloglist[$key]['percent']      = round($data['count'] / $totalCount * 100, 2).'%';
-            $refererloglist[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
+            $refererloglist[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $refererloglist[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
         }, $totalCount);
 
         return array($paginator, $refererloglist);
@@ -149,7 +149,7 @@ class OpenCourseAnalysisController extends BaseController
         $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
         array_push($analysisDatas, array('count' => $othertotalCount, 'refererHost' => '其他'));
         array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent'] = round($data['count'] / $totalCount * 100, 2).'%';
+            $analysisDatas[$key]['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
         }, $totalCount);
 
         return $analysisDatas;
@@ -171,8 +171,8 @@ class OpenCourseAnalysisController extends BaseController
 
         array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererHost' => '其他'));
         array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent']      = round($data['count'] / $totalCount * 100, 2).'%';
-            $analysisDatas[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
+            $analysisDatas[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $analysisDatas[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
         }, $totalCount);
 
         return $analysisDatas;
