@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                $form.find('[type=submit]').button('loading');
+                $form.find('.js-btn-save').button('loading');
 
                 $.post($form.attr('action'), $form.serialize(), function(json) {
                     $form.find('.text-success').fadeIn('fast', function(){
@@ -52,6 +52,10 @@ define(function(require, exports, module) {
                     });
                 }, 'json');
 
+            });
+
+            $form.find('.js-btn-save').on("click", function(){
+                $form.submit();
             });
 
 

@@ -338,7 +338,7 @@ class ClassroomManageController extends BaseController
                 'targetType' => 'classroom',
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
-                'payment'    => 'none',
+                'payment'    => 'outside',
                 'snPrefix'   => 'CR'
             ));
 

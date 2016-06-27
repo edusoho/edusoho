@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Topxia\Service\Importer;
 
-
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\AccessDeniedException;
 
 class UserImporter extends Importer
@@ -15,8 +13,8 @@ class UserImporter extends Importer
 
     public function import(Request $request)
     {
-        $postData = $request->request->all();
-        $importerData = $postData['importData'];
+        $postData       = $request->request->all();
+        $importerData   = $postData['importData'];
         $checkType      = $postData["checkType"];
         $userByEmail    = array();
         $userByNickname = array();
@@ -65,7 +63,7 @@ class UserImporter extends Importer
         }
 
         return array(
-            'status' => "success",
+            'status'  => "success",
             'message' => "finished"
         );
     }
@@ -103,7 +101,7 @@ class UserImporter extends Importer
                         'targetType' => 'classroom',
                         'targetId'   => $classroom['id'],
                         'amount'     => '0.00', //暂时默认为0
-                        'payment'    => 'none',
+                        'payment'    => 'outside',
                         'snPrefix'   => 'CR'
                     ));
 
@@ -159,7 +157,7 @@ class UserImporter extends Importer
 
         if (FileToolkit::validateFileExtension($excel, 'xls xlsx')) {
             return array(
-                'status'  =>  self::DANGER_STATUS,
+                'status'  => self::DANGER_STATUS,
                 'message' => 'Excel格式不正确'
             );
         }
@@ -183,7 +181,7 @@ class UserImporter extends Importer
         $strs = '';
         for ($col = 0; $col < $highestColumnIndex; $col++) {
             $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
-            $strs[$col] = $fieldTitle . "";
+            $strs[$col] = $fieldTitle."";
         }
 
         $excelField = $strs;
@@ -216,7 +214,7 @@ class UserImporter extends Importer
 
             for ($col = 0; $col < $highestColumnIndex; $col++) {
                 $infoData   = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $strs[$col] = $infoData . "";
+                $strs[$col] = $infoData."";
                 unset($infoData);
             }
 
@@ -237,16 +235,16 @@ class UserImporter extends Importer
                     $isClassroomExit = $this->getClassroomService()->getClassroom($classroomId);
 
                     if ($isClassroomExit && $isClassroomExit['status'] != 'published') {
-                        $errorInfo[] = "第" . $row . "行班级号为" . $classroomId . "的班级未发布，请检查。";
+                        $errorInfo[] = "第".$row."行班级号为".$classroomId."的班级未发布，请检查。";
                     } elseif (!$isClassroomExit) {
-                        $errorInfo[] = "第" . $row . "行班级号为" . $classroomId . "的班级不存在，请检查。";
+                        $errorInfo[] = "第".$row."行班级号为".$classroomId."的班级不存在，请检查。";
                     }
                 }
             }
-            if(!empty($userData['orgCode'])){
+            if (!empty($userData['orgCode'])) {
                 $org = $this->getOrgService()->getOrgByCode($userData['orgCode']);
-                if(empty($org)){
-                    $errorInfo[] = "第" . $row . "行组织机编码为" . $userData['orgCode'] . "的组织机构不存在，请检查。";
+                if (empty($org)) {
+                    $errorInfo[] = "第".$row."行组织机编码为".$userData['orgCode']."的组织机构不存在，请检查。";
                 }
             }
 
@@ -258,11 +256,11 @@ class UserImporter extends Importer
                     $isCourseExit = $this->getCourseService()->getCourse($courseId);
 
                     if ($isCourseExit && $isCourseExit['status'] != 'published') {
-                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程未发布，请检查。";
+                        $errorInfo[] = "第".$row."行课程号为的".$courseId."的课程未发布，请检查。";
                     } elseif ($isCourseExit && $isCourseExit['parentId'] != '0') {
-                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程课程属于班级课程,无法加入";
+                        $errorInfo[] = "第".$row."行课程号为的".$courseId."的课程课程属于班级课程,无法加入";
                     } elseif (!$isCourseExit) {
-                        $errorInfo[] = "第" . $row . "行课程号为的" . $courseId . "的课程不存在，请检查。";
+                        $errorInfo[] = "第".$row."行课程号为的".$courseId."的课程不存在，请检查。";
                     }
                 }
             }
@@ -270,7 +268,7 @@ class UserImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = "第" . $row . "行为空行，已跳过";
+                $checkInfo[] = "第".$row."行为空行，已跳过";
                 continue;
             }
 
@@ -286,12 +284,12 @@ class UserImporter extends Importer
 
             if (!empty($userData['nickname']) && !$this->checkFieldWithThirdPartyAuth($userData['nickname'], 'nickname')) {
                 if ($checkType == "ignore") {
-                    $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                    $checkInfo[] = "第".$row."行的用户已存在，已略过";
                     continue;
                 }
 
                 if ($checkType == "update") {
-                    $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                    $checkInfo[] = "第".$row."行的用户已存在，将会更新";
                 }
 
                 $userCount    = $userCount + 1;
@@ -301,12 +299,12 @@ class UserImporter extends Importer
 
             if (!empty($userData['email']) && !$this->checkFieldWithThirdPartyAuth($userData['email'], 'email')) {
                 if ($checkType == "ignore") {
-                    $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                    $checkInfo[] = "第".$row."行的用户已存在，已略过";
                     continue;
                 };
 
                 if ($checkType == "update") {
-                    $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                    $checkInfo[] = "第".$row."行的用户已存在，将会更新";
                 }
 
                 $userCount    = $userCount + 1;
@@ -317,12 +315,12 @@ class UserImporter extends Importer
             if (!empty($userData['mobile']) && !$this->checkFieldWithThirdPartyAuth($userData['mobile'], 'mobile')) {
                 if (!$this->getUserService()->isMobileAvaliable($userData['mobile'])) {
                     if ($checkType == "ignore") {
-                        $checkInfo[] = "第" . $row . "行的用户已存在，已略过";
+                        $checkInfo[] = "第".$row."行的用户已存在，已略过";
                         continue;
                     };
 
                     if ($checkType == "update") {
-                        $checkInfo[] = "第" . $row . "行的用户已存在，将会更新";
+                        $checkInfo[] = "第".$row."行的用户已存在，将会更新";
                     }
 
                     $userCount    = $userCount + 1;
@@ -342,7 +340,7 @@ class UserImporter extends Importer
                 'status'     => 'success',
                 'checkInfo'  => $checkInfo,
                 'importData' => $importData,
-                'checkType'  => $checkType,
+                'checkType'  => $checkType
             );
         } else {
             return array(
@@ -362,7 +360,7 @@ class UserImporter extends Importer
     public function tryImport(Request $request)
     {
         $user = $this->getServiceKernel()->getCurrentUser();
-        if(!$user->isAdmin()){
+        if (!$user->isAdmin()) {
             throw new AccessDeniedException('当前用户没有导入用户权限');
         }
     }
@@ -391,11 +389,11 @@ class UserImporter extends Importer
         for ($row; $row <= $highestRow; $row++) {
             $emailColData = $objWorksheet->getCellByColumnAndRow($emailCol, $row)->getValue();
 
-            if ($emailColData . "" == "") {
+            if ($emailColData."" == "") {
                 continue;
             }
 
-            $emailData[] = $emailColData . "";
+            $emailData[] = $emailColData."";
         }
 
         $errorInfo = $this->arrayRepeat($emailData);
@@ -403,11 +401,11 @@ class UserImporter extends Importer
         for ($row = 3; $row <= $highestRow; $row++) {
             $nickNameColData = $objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
 
-            if ($nickNameColData . "" == "") {
+            if ($nickNameColData."" == "") {
                 continue;
             }
 
-            $nicknameData[] = $nickNameColData . "";
+            $nicknameData[] = $nickNameColData."";
         }
 
         $errorInfo .= $this->arrayRepeat($nicknameData);
@@ -415,11 +413,11 @@ class UserImporter extends Importer
         for ($row = 3; $row <= $highestRow; $row++) {
             $mobileColData = $objWorksheet->getCellByColumnAndRow($mobileCol, $row)->getValue();
 
-            if ($mobileColData . "" == "") {
+            if ($mobileColData."" == "") {
                 continue;
             }
 
-            $mobileData[] = $mobileColData . "";
+            $mobileData[] = $mobileColData."";
         }
 
         $errorInfo .= $this->arrayRepeat($mobileData);
@@ -437,7 +435,7 @@ class UserImporter extends Importer
 
                 for ($i = 1; $i <= $repeatCount; $i++) {
                     $row = array_search($key, $array) + 3;
-                    $repeatRow .= "第" . $row . "行" . "    " . $key . "<br>";
+                    $repeatRow .= "第".$row."行"."    ".$key."<br>";
                     unset($array[$row - 3]);
                 }
             }
@@ -462,34 +460,34 @@ class UserImporter extends Importer
             case 'email_or_mobile':
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
                     }
                 } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
                     }
                 } else {
-                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 或者" . $fieldCol["mobile"] . "列 的数据不能均为空，请检查。";
+                    $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["email"]." 或者".$fieldCol["mobile"]."列 的数据不能均为空，请检查。";
                 }
 
                 break;
             case 'email':
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
                     }
                 } else {
-                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["email"] . " 列 的数据不能为空，请检查。";
+                    $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["email"]." 列 的数据不能为空，请检查。";
                 }
 
                 break;
             case 'mobile':
                 if (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
                     }
                 } else {
-                    $errorInfo[] = "根据网校当前注册模式，第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据不能为空，请检查。";
+                    $errorInfo[] = "根据网校当前注册模式，第 ".$row."行".$fieldCol["mobile"]." 列 的数据不能为空，请检查。";
                 }
 
                 break;
@@ -497,14 +495,14 @@ class UserImporter extends Importer
 
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = "第 " . $row . "行" . $fieldCol["email"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
                     }
                 } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = "第 " . $row . "行" . $fieldCol["mobile"] . " 列 的数据存在问题，请检查。";
+                        $errorInfo[] = "第 ".$row."行".$fieldCol["mobile"]." 列 的数据存在问题，请检查。";
                     }
                 } else {
-                    $errorInfo[] = "第 " . $row . "行" . $fieldCol["email"] . " 或者" . $fieldCol["mobile"] . "列 的数据不能均为空，请检查。";
+                    $errorInfo[] = "第 ".$row."行".$fieldCol["email"]." 或者".$fieldCol["mobile"]."列 的数据不能均为空，请检查。";
                 }
 
                 break;
@@ -531,7 +529,7 @@ class UserImporter extends Importer
                 'key'      => 'gender',
                 'callback' => function ($data) use ($row, $fieldCol) {
                     if (!in_array($data, array("男", "女"))) {
-                        return "第 " . $row . "行" . $fieldCol["gender"] . " 列 的数据存在问题，请检查。";
+                        return "第 ".$row."行".$fieldCol["gender"]." 列 的数据存在问题，请检查。";
                     }
                 }
             ),
@@ -554,25 +552,27 @@ class UserImporter extends Importer
             array(
                 'key'      => 'weibo',
                 'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
-            ),
+            )
         );
 
         foreach ($array as $item) {
             if (!empty($userData[$item['key']])) {
                 $key    = $item['key'];
                 $method = $item['callback'];
-                if (is_callable($method)) {
+
+                if (!is_array($method)) {
                     $error = call_user_func($method, $userData[$key]);
                 } else {
                     $callback = function ($data) use ($row, $fieldCol, $method, $key) {
                         if (!forward_static_call_array($method, $data)) {
-                            return "第 " . $row . "行" . $fieldCol[$key] . " 列 的数据存在问题，请检查。";
+                            return "第 ".$row."行".$fieldCol[$key]." 列 的数据存在问题，请检查。";
                         } else {
                             return "";
                         }
                     };
-                    $error    = call_user_func($callback, $userData[$key]);
+                    $error = call_user_func($callback, array($userData[$key]));
                 }
+
                 if (!empty($error) && is_string($error)) {
                     $errorInfo[] = $error;
                 }
@@ -580,16 +580,16 @@ class UserImporter extends Importer
         }
 
         for ($i = 1; $i <= 5; $i++) {
-            if (isset($userData['intField' . $i]) && $userData['intField' . $i] != "" && !SimpleValidator::integer($userData['intField' . $i])) {
-                $errorInfo[] = "第 " . $row . "行" . $fieldCol["intField" . $i] . " 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
+            if (isset($userData['intField'.$i]) && $userData['intField'.$i] != "" && !SimpleValidator::integer($userData['intField'.$i])) {
+                $errorInfo[] = "第 ".$row."行".$fieldCol["intField".$i]." 列 的数据存在问题，请检查(必须为整数,最大到9位整数)。";
             }
 
-            if (isset($userData['floatField' . $i]) && $userData['floatField' . $i] != "" && !SimpleValidator::float($userData['floatField' . $i])) {
-                $errorInfo[] = "第 " . $row . "行" . $fieldCol["floatField" . $i] . " 列 的数据存在问题，请检查(只保留到两位小数)。";
+            if (isset($userData['floatField'.$i]) && $userData['floatField'.$i] != "" && !SimpleValidator::float($userData['floatField'.$i])) {
+                $errorInfo[] = "第 ".$row."行".$fieldCol["floatField".$i]." 列 的数据存在问题，请检查(只保留到两位小数)。";
             }
 
-            if (isset($userData['dateField' . $i]) && $userData['dateField' . $i] != "" && !SimpleValidator::date($userData['dateField' . $i])) {
-                $errorInfo[] = "第 " . $row . "行" . $fieldCol["dateField" . $i] . " 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
+            if (isset($userData['dateField'.$i]) && $userData['dateField'.$i] != "" && !SimpleValidator::date($userData['dateField'.$i])) {
+                $errorInfo[] = "第 ".$row."行".$fieldCol["dateField".$i]." 列 的数据存在问题，请检查(格式如XXXX-MM-DD)。";
             }
         }
 
@@ -600,21 +600,21 @@ class UserImporter extends Importer
     {
         switch ($type) {
             case 'nickname':
-                $defaultResult = $this->getUserService()->isNicknameAvaliable($field);
+                $defaultResult    = $this->getUserService()->isNicknameAvaliable($field);
                 list($result, $_) = $this->getAuthService()->checkUsername($field);
-                $authResult = $this->validateResult($result);
+                $authResult       = $this->validateResult($result);
                 break;
 
             case 'email':
-                $defaultResult = $this->getUserService()->isEmailAvaliable($field);
+                $defaultResult    = $this->getUserService()->isEmailAvaliable($field);
                 list($result, $_) = $this->getAuthService()->checkEmail($field);
-                $authResult = $this->validateResult($result);
+                $authResult       = $this->validateResult($result);
                 break;
 
             case 'mobile':
-                $defaultResult = $this->getUserService()->isMobileAvaliable($field);
+                $defaultResult    = $this->getUserService()->isMobileAvaliable($field);
                 list($result, $_) = $this->getAuthService()->checkMobile($field);
-                $authResult = $this->validateResult($result);
+                $authResult       = $this->validateResult($result);
                 break;
 
             default:
@@ -694,7 +694,7 @@ class UserImporter extends Importer
             "qq"          => 'QQ',
             "classroomId" => '班级编号',
             "courseId"    => '课程编号',
-            "orgCode"    => '组织机构编码'
+            "orgCode"     => '组织机构编码'
         );
 
         foreach ($userFields as $userField) {

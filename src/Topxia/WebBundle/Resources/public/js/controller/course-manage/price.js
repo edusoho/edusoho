@@ -13,7 +13,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
     
-        require('./header').run();
 
         var $form = $("#price-form");
 

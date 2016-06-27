@@ -1166,40 +1166,22 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if ($coinSettings['coin_enabled'] == 1 && $coinSettings['price_type'] == 'coin') {
-            if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
-                $default = "无";
-            } else {
-                if ($order['amount'] > 0) {
-                    if ($order['payment'] == 'wxpay') {
-                        $default = "微信支付";
-                    } elseif ($order['payment'] == 'heepay') {
-                        $default = "网银支付";
-                    } elseif ($order['payment'] == 'quickpay') {
-                        $default = "快捷支付";
-                    } else {
-                        $default = "支付宝";
-                    }
-                }
-
-                $default = "余额支付";
-            }
-        }
-
         if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
-                $default = "余额支付";
+                $default = '余额支付';
             } else {
                 if ($order['amount'] == 0) {
                     $default = "无";
                 } elseif ($order['payment'] == 'wxpay') {
-                    $default = "微信支付";
+                    $default = '微信支付';
                 } elseif ($order['payment'] == 'heepay') {
-                    $default = "网银支付";
+                    $default = '网银支付';
                 } elseif ($order['payment'] == 'quickpay') {
-                    $default = "快捷支付";
+                    $default = '快捷支付';
+                } elseif ($order['payment'] == 'outside') {
+                    $default = '站外支付';
                 } else {
-                    $default = "支付宝";
+                    $default = '支付宝';
                 }
             }
         }

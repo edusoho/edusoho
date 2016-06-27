@@ -1,5 +1,6 @@
 {% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
+  {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}

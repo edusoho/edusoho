@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.17.13
+        assets_version: 6.17.15
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -200,7 +200,7 @@ services:
 
     topxia.twig.file_cache:
         class: Topxia\Service\Common\FilesystemCache
-        arguments:    ['%kernel.root_dir%/../app/cache']
+        arguments:    ['%kernel.root_dir%/cache']
 
     topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter

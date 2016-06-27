@@ -9,7 +9,6 @@ define(function(require, exports, module) {
                 return;
             }
             $("#" + formId).find('thead tr').prepend('<th><input type="checkbox"  data-role="batch-select"></th>');
-            $("#" + formId).find('tbody tr').prepend('<td><input type="checkbox"  data-role="batch-item"></td>');
         }
 
         var getCheckstatus = function(ischeck) {

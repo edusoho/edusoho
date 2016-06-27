@@ -1006,6 +1006,10 @@ admin_cloud_file_batch_delete:
     pattern: /cloud_file/delete/batch
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchDelete }
 
+admin_cloud_file_delete_modal_show:
+    pattern: /cloud_file/delete/show
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:deleteShow }
+
 admin_cloud_file_tag_show:
     pattern: /cloud_file/tag/show
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchTagShow }

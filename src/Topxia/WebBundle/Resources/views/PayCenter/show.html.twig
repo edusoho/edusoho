@@ -27,7 +27,7 @@
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
-        {% set activePayment = '' %}
+        {% set activePayment = order.payment %}
         {% for payment,options in payments %}
           {% if not (payment == 'alipay' and is_micro_messenger()) and not activePayment %}
             {% set activePayment = payment %}

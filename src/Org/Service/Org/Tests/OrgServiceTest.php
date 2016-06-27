@@ -32,6 +32,22 @@ class OrgServiceTest extends BaseTestCase
         $this->assertEquals('1', $getOrg['childrenNum']);
     }
 
+    public function testFindOrgsByIds()
+    {
+        $user = $this->setCurrent();
+
+        $org = $this->mookOrg($name = "edusoho");
+        $org = $this->getOrgService()->createOrg($org);
+
+        $childOrg             = $this->mookOrg($name = "tech");
+        $childOrg['parentId'] = $org['id'];
+        $childOrg             = $this->getOrgService()->createOrg($childOrg);
+
+        $orgs = $this->getOrgService()->findOrgsByIds(array($org['id'], $childOrg['id']));
+
+        $this->assertEquals(2, count($orgs));
+    }
+
     public function testCreateOrg()
     {
         $org = $this->mookOrg($name = "edusoho");

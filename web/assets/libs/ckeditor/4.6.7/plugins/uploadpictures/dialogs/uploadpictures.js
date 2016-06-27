@@ -15,6 +15,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             compress: false,
             resize: false,
             fileNumLimit: 10,
+            threads: 1,
             fileSingleSizeLimit: 10*1024*1024,
             accept: {
                 title: 'Images',
@@ -87,14 +88,15 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             title: '批量图片上传',
             expand: true,
             elements: [{
+                id: "body",
                 type: "html",
-                html: ''
+                html: '<div id="uploadpictures-body"></div>'
             }]
         }],
         
         onLoad: function() {
-            $('.' + editor.id + ' .cke_dialog_contents_body').css({'vertical-align': 'top'});
-            $('.' + editor.id + ' .cke_dialog_contents_body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index.html'), onLoadDialog);
+            $('.' + editor.id + ' #uploadpictures-body').css({'vertical-align': 'top'});
+            $('.' + editor.id + ' #uploadpictures-body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index.html'), onLoadDialog);
         },
 
         onOk: function() {

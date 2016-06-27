@@ -99,6 +99,14 @@ define(function(require, exports, module) {
             $(this).addClass("btn-primary");
             var modle = $(this).data('modle');
 
+
+
+            if (modle != 'email' || modle != 'email_or_mobile') {
+                if ($("input[name='email_enabled']").parents('.form-group').hasClass('has-error')) {
+                    $("input[name='email_enabled'][value='closed']").prop('checked', true);
+                     validator.query('[name="email_enabled"]').execute();
+                }
+            }
             if (modle == 'mobile' || modle == 'email_or_mobile') {
                 if ($('input[name=_cloud_sms]').val() != 1) {
                     $('.model').removeClass("btn-primary");

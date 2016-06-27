@@ -1913,6 +1913,10 @@ tr.placeholder:before {
   line-height: 45px;
   height: 45px;
 }
+.list-table-tree-icon {
+  display: inline-block;
+  width: 14px;
+}
 .treegrid-expander {
   cursor: pointer !important;
 }

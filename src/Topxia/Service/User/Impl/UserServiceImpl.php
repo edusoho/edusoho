@@ -148,16 +148,22 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeUserOrg($userId, $orgCode)
     {
-        $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
-
-        if (empty($org)) {
-            throw $this->createNotFoundException("org #{$orgCode} not found");
+        $user = $this->getUser($userId);
+        if (empty($user) || ($user['orgCode'] == $orgCode)) {
+            return;
         }
 
-        $user = $this->getUserDao()->updateUser(
-            $userId, 
-            array('orgCode' => $org['orgCode'],'orgId' => $org['id'])
-        );
+        if (empty($orgCode)) {
+            $fields = array('orgCode' => '1.', 'orgId' => 1);
+        } else {
+            $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
+            if (empty($org)) {
+                throw $this->createNotFoundException("org #{$orgCode} not found");
+            }
+            $fields = array('orgCode' => $org['orgCode'], 'orgId' => $org['id']);
+        }
+
+        $user = $this->getUserDao()->updateUser($userId, $fields);
 
         return $user;
     }
@@ -547,11 +553,6 @@ class UserServiceImpl extends BaseService implements UserService
         $user['type']          = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp']     = empty($registration['createdIp']) ? '' : $registration['createdIp'];
 
-        if (!empty($registration['orgCode'])) {
-            $user['orgCode'] = $registration['orgCode'];
-            $user['orgId']   = $registration['orgId'];
-        }
-
         $user['createdTime'] = time();
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
@@ -568,6 +569,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user['salt']     = '';
             $user['password'] = '';
             $user['setup']    = 0;
+        }
+        if (isset($registration['orgId'])) {
+            $user['orgId']   = $registration['orgId'];
+            $user['orgCode'] = $registration['orgCode'];
         }
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
@@ -1715,7 +1720,6 @@ class UserSerialize
 {
     public static function
     serialize(array $user) {
-
         $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
         return $user;
     }
@@ -1726,8 +1730,8 @@ class UserSerialize
             return null;
         }
 
-        $roles = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
-        $roles = array_unique($roles);
+        $roles         = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+        $roles         = array_unique($roles);
         $user['roles'] = $roles;
 
         $user = UserSerialize::_userRolesSort($user);
