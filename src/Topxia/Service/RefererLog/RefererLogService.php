@@ -22,6 +22,8 @@ interface RefererLogService
      * @return [type] [description]
      */
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
+
+    public function searchAnalysisSummaryListCount($conditions);
     /**
      * [searchAnalysisDetail 统计单个功课开的的日志的统计信息]
      * @param  [type] $conditions     [description]
@@ -34,5 +36,4 @@ interface RefererLogService
 
     public function searchAnalysisRefererLogCount($conditions);
 
-    public function searchRefererLogCount($conditions);
 }

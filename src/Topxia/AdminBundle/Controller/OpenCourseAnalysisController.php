@@ -37,7 +37,7 @@ class OpenCourseAnalysisController extends BaseController
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
         $paginator  = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->searchRefererLogCount($conditions),
+            $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions),
             20
         );
         $refererlogDatas = $this->getRefererLogService()->searchAnalysisSummaryList(
