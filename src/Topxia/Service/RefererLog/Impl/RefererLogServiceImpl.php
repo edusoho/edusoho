@@ -94,6 +94,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         foreach ($refererMap as $key => $value) {
             if (strpos($refererUrl, $key) !== false) {
                 $refererName = $value;
+                break;
             }
         }
         return array($refererHost, $refererName);
