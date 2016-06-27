@@ -87,16 +87,20 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$start};");
             $this->logger('info', "成功修改upload_file_inits的自增值, {$start}");
 
-            $this->getConnection()->exec("
-                INSERT INTO `upload_file_inits` (`id`, `globalId`, `status`, `hashId`, `targetId`, `targetType`, `filename`, `ext`, `fileSize`, `etag`, `length`, `convertHash`, `convertStatus`, `metas`, `metas2`, `type`, `storage`, `convertParams`, `updatedUserId`, `updatedTime`, `createdUserId`, `createdTime`)
-                    VALUES
-                ({$start}, 'testglobalId', 'uploading', 'materiallib-1/test-test', 1, 'materiallib', 'Dell XPS 15 Infinity vs.  Retina MacBook Pro 15 mid 2015 Comparison Smackdown.mp4', 'mp4', 360718284, 'materiallib-1/test-test', 0, 'materiallib-1/test-test', 'none', NULL, NULL, 'video', 'cloud', NULL, 1, 1465702959, 1, 1465702959);
-            ");
-            $this->logger('info', "使用最新设置的自增值插入upload_file_inits一条测试数据, ＃{$start}");
+            $sql                = "select *  from upload_file_inits where id = {$uploadFileMaxId['maxId']} ;";
+            $uploadFileInitsMax = $this->getConnection()->fetchAssoc($sql);
+            if (empty($uploadFileInitsMax)) {
+                $this->logger('info', "upload_file_inits需要插入一条数据,防止自增值回落");
+                $this->getConnection()->exec("
+                   insert into `upload_file_inits`  select `id`, `globalId`, `status`, `hashId`, `targetId`,`targetType`, `filename`,`ext`,`fileSize`,`etag`,`length`,  `convertHash`,  `convertStatus`, `metas`,  `metas2`,`type`, `storage`, `convertParams`,`updatedUserId` , `updatedTime` , `createdUserId`,  `createdTime`
+                      from `upload_files` where id ={$uploadFileMaxId['maxId']};
+                ");
+                $this->logger('info', "使用最新设置的自增值插入upload_file_inits一条测试数据, ＃{$start}");
+            }
 
-            $sql                 = "SELECT auto_increment FROM information_schema.`TABLES` WHERE table_schema='".$this->getSchema()."' AND table_name = 'upload_file_inits';";
-            $uploadFileInitMaxId = $this->getConnection()->fetchAssoc($sql);
-            $this->logger('info', "upload_file_inits中测试数据 AUTO_INCREMENT已增长到最大值, ＃{$uploadFileInitMaxId['auto_increment']}");
+            $sql                = "SELECT *  FROM `upload_file_inits` where id = {$uploadFileMaxId['maxId']};";
+            $uploadFileInitsMax = $this->getConnection()->fetchAssoc($sql);
+            $this->logger('info', "upload_file_inits中测试数据 ID, ＃{$uploadFileInitsMax['id']}");
         }
     }
 
