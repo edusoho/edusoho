@@ -445,6 +445,7 @@ admin_operation_mobile_customization_upgrade:
 admin_discovery_column_delete:
     pattern:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
+    methods: [POST]
 
 admin_discovery_column_edit:
     pattern:  /discovery_column/{id}/edit
@@ -884,10 +885,12 @@ admin_cloud_file_download:
 admin_cloud_file_delete:
     pattern: /cloud_file/{globalId}/delete
     defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
+    methods:  [POST]
 
 admin_cloud_file_batch_delete:
     pattern: /cloud_file/delete/batch
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchDelete }
+    methods:  [POST]
 
 admin_cloud_file_delete_modal_show:
     pattern: /cloud_file/delete/show
@@ -1201,6 +1204,7 @@ admin_groupThread:
 admin_groupThread_batch_delete:
     pattern:  /group/batchDeleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
+    methods:  [POST]
 admin_group_close:
     pattern:  /group/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
@@ -1228,6 +1232,7 @@ admin_group_thread_open:
 admin_group_thread_delete:
     pattern:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+    methods:  [POST]
 admin_group_transfer:
     pattern:  /group/transfer/{groupId}
     defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }
