@@ -91,6 +91,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         $data                  = $user->toArray();
         $data['selectOrgCode'] = $org['orgCode'];
+        $data['selectOrg']     = $org;
         $user->fromArray($data);
         $this->getKernel()->setCurrentUser($user);
     }
