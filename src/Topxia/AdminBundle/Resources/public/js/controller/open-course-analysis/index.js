@@ -24,14 +24,14 @@ define(function(require, exports, module) {
 
 		$("#endTime").datetimepicker('setStartDate', $("#startTime").val());
 
-		$('#user-search-form').on('click', '.btn-data-range', function() {
+		$('#refererlog-search-form').on('click', '.btn-data-range', function() {
 			$('.btn-data-range').removeClass('active');
 			$(this).addClass('active');
 			$("#startTime").val($(this).data('start'));
 			$("#endTime").val($(this).data('end'));
 			$("#endTime").datetimepicker('setStartDate', $("#startTime").val());
-
-		})
-
-	}
+			$("input[name='date-range']").val($(this).data('type'));
+			$("#refererlog-search-form").submit();
+		});
+	}	
 });
