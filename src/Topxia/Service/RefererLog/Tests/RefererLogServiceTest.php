@@ -38,6 +38,22 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(2, count($summary));
     }
 
+    public function testsearchAnalysisSummaryList()
+    {
+        $refererlog       = $this->moocReferelog();
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererlog       = $this->moocReferelog($_SERVER['HTTP_HOST']);
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererlog       = $this->moocReferelog();
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $timeRange  = $this->getTimeRange();
+        $conditions = array_merge($timeRange, array('targetType' => 'course'));
+
+        $refererlist = $this->getRefererLogService()->searchAnalysisSummaryList($conditions, 'targetId', 0, 10);
+        $this->assertEquals(3, count($refererlist));
+    }
+
     private function createCourse()
     {
         $course = array(

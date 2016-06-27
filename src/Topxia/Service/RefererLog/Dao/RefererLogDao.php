@@ -9,7 +9,7 @@ interface RefererLogDao
 
     public function searchAnalysisSummary($conditions, $groupBy);
 
-    public function searchAnalysisRefererLogs($conditions, $groupBy, $start, $limit);
+    public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
     public function searchAnalysisRefererLogsDetail($conditions, $groupBy);
 

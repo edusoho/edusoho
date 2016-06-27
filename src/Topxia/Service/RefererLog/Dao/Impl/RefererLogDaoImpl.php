@@ -38,7 +38,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchAnalysisRefererLogs($conditions, $groupBy, $start, $limit)
+    public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $orderBy = array('count', 'DESC');
