@@ -16,4 +16,6 @@ interface OpenCourseRecommendedService
     public function recommendedCoursesSort($recommendCourses);
 
     public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
+
+    public function findRandomRecommendCourses($courseId, $num=3);
 }

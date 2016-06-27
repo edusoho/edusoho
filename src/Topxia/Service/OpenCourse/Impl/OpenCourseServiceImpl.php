@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\OpenCourse\OpenCourseService;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -353,7 +354,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testMode'      => 'normal',
             'testStartTime' => 0,
             'suggestHours'  => '0.0',
-            'copyId'        => 0,
             'status'        => 'unpublished'
         ));
 
@@ -535,6 +535,23 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $lesson;
     }
 
+    public function getNextLesson($courseId, $lessonId)
+    {
+        $lesson      = $this->getCourseLesson($courseId, $lessonId);
+
+        if(empty($lesson)){
+            throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
+        }
+
+        $conditions  = array(
+            'number'   => $lesson['number'] + 1,
+            'courseId' => $courseId
+        );
+        $orderBy     = array('seq', 'ASC');
+        $nextLessons = $this->searchLessons($conditions, $orderBy, 0, 1);
+        return array_shift($nextLessons);
+    }
+
     public function publishLesson($courseId, $lessonId)
     {
         $course = $this->tryManageOpenCourse($courseId);
@@ -565,7 +582,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $lesson = $this->getLesson($lessonId);
         if ($lesson) {
-            $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('mediaId'=>0));
+            $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('mediaId' => 0));
             return true;
         }
 
@@ -858,7 +875,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             }
 
             );
