@@ -77,7 +77,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchAnalysisRefererLogCount($conditions)
+    public function searchAnalysisDetailListCount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select('COUNT(DISTINCT refererUrl)');

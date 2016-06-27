@@ -110,7 +110,7 @@ class OpenCourseAnalysisController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->searchAnalysisRefererLogCount($conditions),
+            $this->getRefererLogService()->searchAnalysisDetailListCount($conditions),
             20
         );
         $refererloglist = $this->getRefererLogService()->searchAnalysisDetailList(

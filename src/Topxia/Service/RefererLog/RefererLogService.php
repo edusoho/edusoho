@@ -34,6 +34,6 @@ interface RefererLogService
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
 
-    public function searchAnalysisRefererLogCount($conditions);
+    public function searchAnalysisDetailListCount($conditions);
 
 }

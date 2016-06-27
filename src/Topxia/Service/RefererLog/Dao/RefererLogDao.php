@@ -15,7 +15,7 @@ interface RefererLogDao
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
 
-    public function searchAnalysisRefererLogCount($conditions);
+    public function searchAnalysisDetailListCount($conditions);
 
     public function searchAnalysisSummaryListCount($conditions);
 }
