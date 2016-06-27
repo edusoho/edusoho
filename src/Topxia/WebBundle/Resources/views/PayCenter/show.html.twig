@@ -35,7 +35,6 @@
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
-   <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' href='javascript:;'>复制地址</a></p>
         <input type="hidden" name="payment" value={{activePayment}}>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
