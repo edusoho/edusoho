@@ -29,8 +29,7 @@
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% set activePayment = order.payment %}
         {% for payment,options in payments %}
-          {% if ( not is_micro_messenger() and activePayment == 'none') 
-            or (is_micro_messenger() and (activePayment == 'none' or activePayment == 'alipay') and not payment == 'alipay') %}
+          {% if (is_micro_messenger() and (activePayment == 'none' or activePayment == 'alipay') and not payment == 'alipay') %}
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
