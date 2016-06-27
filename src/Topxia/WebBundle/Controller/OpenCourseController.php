@@ -81,6 +81,7 @@ class OpenCourseController extends BaseController
         $member = $this->_memberOperate($request, $courseId);
 
         $this->_addRefererLog($request, $courseId);
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
             'lessonId' => $lessonId
@@ -810,7 +811,7 @@ class OpenCourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-    
+
     protected function getPrefererLogService()
     {
         return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
