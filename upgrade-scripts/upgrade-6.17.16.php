@@ -78,7 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if ($uploadFileMaxId['maxId'] >= $uploadFileInitMaxId['auto_increment']) {
-                $start = $uploadFileMaxId['maxId'] + 10;
+                $start = $uploadFileMaxId['maxId'] + 1;
                 $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$start};");
                 $this->logger('info', "成功修改upload_file_inits的自增值, {$start}");
             }
@@ -91,11 +91,12 @@ class EduSohoUpgrade extends AbstractUpdater
                    insert into `upload_file_inits`  select `id`, `globalId`, `status`, `hashId`, `targetId`,`targetType`, `filename`,`ext`,`fileSize`,`etag`,`length`,  `convertHash`,  `convertStatus`, `metas`,  `metas2`,`type`, `storage`, `convertParams`,`updatedUserId` , `updatedTime` , `createdUserId`,  `createdTime`
                       from `upload_files` where id ={$uploadFileMaxId['maxId']};
                 ");
-            }
 
-            $sql                = "SELECT *  FROM `upload_file_inits` where id = {$uploadFileMaxId['maxId']};";
-            $uploadFileInitsMax = $this->getConnection()->fetchAssoc($sql);
-            $this->logger('info', "upload_file_inits中测试数据 ID, ＃{$uploadFileInitsMax['id']}");
+                $uploadFileInitsMax = $this->getConnection()->fetchAssoc($sql);
+                $this->logger('info', "upload_file_inits中insert了最大ID ＃{$uploadFileInitsMax['id']}");
+            } else {
+                $this->logger('info', "upload_file_inits中已存在最大ID, ＃{$uploadFileInitsMax['id']}");
+            }
         }
     }
 
