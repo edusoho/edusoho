@@ -500,7 +500,7 @@ define(function(require, exports, module) {
                         });
                         $li.find('.js-file-pause').addClass('hidden');
                         $li.find('[data-toggle="popover"]').popover({
-                            content: '你的文件可能已损坏，请检查后重新上传',
+                            content: '你的源文件可能已损坏，请检查后重新上传',
                             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" style="z-index: 5000"></div></div>',
                             trigger: 'hover',
                             placement: 'bottom',
