@@ -5,15 +5,26 @@
 {% set tab_nav = 'favorited' %}
 
 {% block main %}
+<style>
+.course-grids .metas{
+  position: relative;
+  color: #c1c1c1;
+  padding:10px;
+  text-align:left;
+}
+
+.course-grids .course-price-widget{
+	float:right;
+}
+</style>
 	<div class="panel panel-default panel-col">
 	  <div class="panel-heading">{{'我的课程'|trans}}</span></div>
   	<div class="panel-body">
   		{% include 'TopxiaWebBundle:MyCourse:nav-pill.html.twig' %}
 
-			<ul class="course-grids course-list">
+			<ul class="course-grids">
 			  {% for courseFavorite in courseFavorites if courseFavorite %}
-					{#{{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-					{{ web_macro.paginator(paginator) }}#}
+					
 					{% set mode = 'default' %}
 					{% if courseFavorite.type == 'course' %}
 	          {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
