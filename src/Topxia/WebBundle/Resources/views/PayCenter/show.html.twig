@@ -30,7 +30,7 @@
         {% set activePayment = order.payment %}
         {% for payment,options in payments %}
           {% if (activePayment == 'none' and not is_micro_messenger()) 
-            or (is_micro_messenger() and activePayment in ['alipay','none'] and not payment == 'alipay') %}
+            or (is_micro_messenger() and (activePayment == 'none' or activePayment == 'alipay') and not payment == 'alipay') %}
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
