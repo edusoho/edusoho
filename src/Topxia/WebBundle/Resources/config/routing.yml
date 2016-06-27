@@ -945,10 +945,12 @@ course_manage_testpaper_update:
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+    methods: [POST]
 
 course_manage_testpaper_deletes:
     pattern: /course/{courseId}/manage/testpaper/deletes
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+    methods: [POST]
 
 course_manage_testpaper_publish:
     pattern: /course/{courseId}/manage/testpaper/{id}/publish
@@ -1683,6 +1685,7 @@ group_member:
 group_member_delete:
     pattern:  /group/member/delete/{id}
     defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
+    methods: [POST]
 group_set_admin:
     pattern:  /group/set/admin/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
