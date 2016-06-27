@@ -29,11 +29,12 @@
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% set activePayment = order.payment %}
         {% for payment,options in payments %}
-          {% if not (payment == 'alipay' and is_micro_messenger()) and not activePayment %}
+          {% if (activePayment == 'none' and not is_micro_messenger()) 
+            or (is_micro_messenger() and activePayment in ['alipay','none'] and not payment == 'alipay') %}
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
-
+        {{dump(activePayment)}}
         <input type="hidden" name="payment" value={{activePayment}}>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
