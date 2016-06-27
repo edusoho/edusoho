@@ -14,7 +14,8 @@ class UpgradeScriptsCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:upgrade-scripts')
-            ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
+            ->addArgument('code', InputArgument::REQUIRED, '主程序的code，不同的产品线有不同的code，默认为：MAIN', 'MAIN')
+            ->addArgument('filePath', InputArgument::REQUIRED, '文件路径，每一行代表的是要升级的版本号')
             ->setDescription('用于命令行中执行指定版本的升级脚本');
     }
 
@@ -22,11 +23,14 @@ class UpgradeScriptsCommand extends BaseCommand
     {
         $this->initServiceKernel();
 
-        $code    = 'MAIN';
-        $version = $input->getArgument('version');
+        $code     = $input->getArgument('code');
+        $filePath = $input->getArgument('filePath');
 
-        $this->executeScript($code, $version);
-        $output->writeln("<info>执行脚本</info>");
+        $file = file($filePath);
+        foreach ($file as $version) {
+            $this->executeScript($code, $version);
+            $output->writeln("<info>执行脚本{$version}</info>");
+        }
 
         $this->removeCache();
         $output->writeln("<info>删除缓存</info>");
