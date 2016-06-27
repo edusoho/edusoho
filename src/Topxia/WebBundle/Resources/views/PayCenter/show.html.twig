@@ -27,14 +27,15 @@
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
+        
         {% set activePayment = order.payment %}
         {% for payment,options in payments %}
-          {% if (activePayment == 'none' and not is_micro_messenger()) 
-            or (is_micro_messenger() and activePayment in ['alipay','none'] and not payment == 'alipay') %}
+          {% if ( not is_micro_messenger() and activePayment == 'none' ) 
+            or (is_micro_messenger() and activePayment in ['none', 'alipay'] and not (payment == 'alipay')) %}
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
-        {{dump(activePayment)}}
+
         <input type="hidden" name="payment" value={{activePayment}}>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
