@@ -1,16 +1,16 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_block_manage' %}
+{% set menu = 'admin_block' %}
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% block main %}
   <ul class="nav nav-pills mbl small">
     <li>
-      <a href="{{ path('admin_block_visual_edit',{blockId:block.id}) }}">编辑</a>
+      <a href="{{ path('admin_block_visual_edit',{blockTemplateId:block.blockTemplateId}) }}">编辑</a>
 
     </li>
     <li class="active">
-      <a href="{{ path('admin_block_visual_edit_history',{blockId:block.id}) }}">历史记录</a>
+      <a href="{{ path('admin_block_visual_edit_history',{blockTemplateId: block.blockTemplateId}) }}">历史记录</a>
     </li>
   </ul>
   {{ web_macro.flash_messages() }}
