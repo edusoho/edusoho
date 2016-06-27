@@ -113,7 +113,7 @@ class OpenCourseAnalysisController extends BaseController
             $this->getRefererLogService()->searchAnalysisRefererLogCount($conditions),
             20
         );
-        $refererloglist = $this->getRefererLogService()->searchAnalysisRefererLoglist(
+        $refererloglist = $this->getRefererLogService()->searchAnalysisDetailList(
             $conditions,
             $groupBy = 'refererUrl',
             $paginator->getOffsetCount(),

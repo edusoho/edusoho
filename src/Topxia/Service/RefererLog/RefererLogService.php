@@ -32,7 +32,7 @@ interface RefererLogService
      */
     public function searchAnalysisDetail($conditions, $groupBy);
 
-    public function searchAnalysisRefererLoglist($conditions, $groupBy, $start, $limit);
+    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
 
     public function searchAnalysisRefererLogCount($conditions);
 

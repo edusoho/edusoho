@@ -47,9 +47,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
     }
 
-    public function searchAnalysisRefererLoglist($conditions, $groupBy, $start, $limit)
+    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
     {
-        return $this->getRefererLogDao()->searchAnalysisRefererLoglist($conditions, $groupBy, $start, $limit);
+        return $this->getRefererLogDao()->searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
     }
 
     public function searchAnalysisRefererLogCount($conditions)
