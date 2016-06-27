@@ -23,12 +23,12 @@ interface RefererLogService
      */
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
     /**
-     * [searchAnalysisRefererLogsDetail 统计单个功课开的的日志的统计信息]
+     * [searchAnalysisDetail 统计单个功课开的的日志的统计信息]
      * @param  [type] $conditions     [description]
      * @param  [type] $groupBy        [description]
      * @return [type] [description]
      */
-    public function searchAnalysisRefererLogsDetail($conditions, $groupBy);
+    public function searchAnalysisDetail($conditions, $groupBy);
 
     public function searchAnalysisRefererLoglist($conditions, $groupBy, $start, $limit);
 

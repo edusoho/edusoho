@@ -26,7 +26,7 @@ class RefererLogServiceTest extends BaseTestCase
     {
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
-        $refererlog       = $this->moocReferelog($_SERVER['HTTP_HOST']);
+        $refererlog       = $this->moocReferelog($course = null, $_SERVER['HTTP_HOST']);
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
@@ -38,11 +38,11 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(2, count($summary));
     }
 
-    public function testsearchAnalysisSummaryList()
+    public function testSearchAnalysisSummaryList()
     {
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
-        $refererlog       = $this->moocReferelog($_SERVER['HTTP_HOST']);
+        $refererlog       = $this->moocReferelog($course = null, $_SERVER['HTTP_HOST']);
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
@@ -54,6 +54,23 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(3, count($refererlist));
     }
 
+    public function testSearchAnalysisDetail()
+    {
+        $course           = $this->createCourse();
+        $refererlog1      = $this->moocReferelog();
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog1);
+        $refererlog2      = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog2);
+        $refererlog3      = $this->moocReferelog($course);
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog3);
+
+        $timeRange  = $this->getTimeRange();
+        $conditions = array_merge($timeRange, array('targetType' => 'course', 'targetId' => $course['id']));
+
+        $refererDetails = $this->getRefererLogService()->searchAnalysisDetail($conditions, 'refererHost');
+        $this->assertEquals(2, count($refererDetails));
+    }
+
     private function createCourse()
     {
         $course = array(
@@ -62,9 +79,10 @@ class RefererLogServiceTest extends BaseTestCase
         return $this->getCourseService()->createCourse($course);
     }
 
-    private function moocReferelog($refererUrl = null)
+    private function moocReferelog($course = null, $refererUrl = null)
     {
-        $course     = $this->createCourse();
+        $course = empty($course) ? $this->createCourse() : $course;
+
         $refererlog = array(
             'targetId'   => $course['id'],
             'targetType' => 'course',

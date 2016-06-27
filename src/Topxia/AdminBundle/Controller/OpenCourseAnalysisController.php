@@ -71,7 +71,7 @@ class OpenCourseAnalysisController extends BaseController
             'startTime'  => $timeRange['startTime'],
             'endTime'    => $timeRange['endTime']
         );
-        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisRefererLogsDetail($conditions, $groupBy = 'refererHost');
+        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisDetail($conditions, $groupBy = 'refererHost');
         $refererlogsDetail = $this->prepareAnalysisDetailDatas($refererlogsDetail);
         $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererHost'));
 
