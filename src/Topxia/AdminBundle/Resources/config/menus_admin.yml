@@ -13,6 +13,12 @@
 #   before:                 //可选
 #   after:                  //可选
 
+# admin_block_visual_edit_history:
+#     name: 历史记录
+#     parent: admin_operation_block
+#     router_params: {'blockTemplateId': 'block.blockTemplateId'}
+#     router_params_context: 1
+
 admin:
     name: 后台
     parent: null
@@ -386,7 +392,7 @@ admin:
                                 admin_block_visual_edit:
                                     name: 编辑
                                     router_params:
-                                        blockId: (block.id)
+                                        blockId: (blockTemplateId:block.blockTemplateId)
                 admin_operation_content:
                     name: 自定义页面管理
                     children:
