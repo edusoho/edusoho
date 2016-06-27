@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     require("jquery.blurr");
+    var Lazyload = require('echo.js');
 
     exports.run = function() {
         $('.follow-btn').on('click', function() {
@@ -20,6 +21,8 @@ define(function(require, exports, module) {
         });
 
         $(".user-center-header").blurr({height:220});
+
+        Lazyload.init();
 
     }
 

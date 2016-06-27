@@ -12,21 +12,20 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function getFavorite($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type = 'course')
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? AND type = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ? : null; 
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ?: null;
     }
 
     public function findCourseFavoritesByUserId($userId, $start, $limit)
     {
-        
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
+        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
     }
 
     public function getFavoriteCourseCountByUserId($userId)
@@ -65,16 +64,16 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function _createSearchQueryBuilder($conditions)
-    {   
+    {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_favorite')
             ->andWhere('courseId = :courseId')
+            ->andWhere('userId = :userId')
             ->andWhere('type = :type');
         return $builder;
     }
-
 }
