@@ -2,8 +2,6 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,8 +12,8 @@ class UpgradeScriptsCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:upgrade-scripts')
-            ->addArgument('code', InputArgument::REQUIRED, '主程序的code，不同的产品线有不同的code，默认为：MAIN', 'MAIN')
             ->addArgument('filePath', InputArgument::REQUIRED, '文件路径，每一行代表的是要升级的版本号')
+            ->addArgument('code', InputArgument::OPTIONAL, '主程序的code，不同的产品线有不同的code，默认为：MAIN', 'MAIN')
             ->setDescription('用于命令行中执行指定版本的升级脚本');
     }
 
@@ -82,21 +80,6 @@ class UpgradeScriptsCommand extends BaseCommand
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
         return $this->getAppDao()->updateApp($app['id'], $newApp);
-    }
-
-    private function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('prod', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
     }
 
     protected function getAppDao()
