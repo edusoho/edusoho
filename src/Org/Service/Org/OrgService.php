@@ -34,8 +34,6 @@ interface OrgService
 
     public function searchOrgs($conditions, $orderBy, $start, $limit);
 
-    public function findOrgsByIds($ids);
-
     /**
      * @param  $id
      * @return orgName1->orgName2->orgName3

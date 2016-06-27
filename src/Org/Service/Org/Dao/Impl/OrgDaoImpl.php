@@ -39,20 +39,6 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         });
     }
 
-    public function findOrgsByIds($ids)
-    {
-        if (empty($ids)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks});";
-
-        // var_dump($sql, $marks, $ids);
-        $org = $this->getConnection()->fetchAll($sql, $ids);
-        return $org;
-    }
-
     public function delete($id)
     {
         $result = $this->getConnection()->delete($this->getTable(), array('id' => $id));
@@ -100,20 +86,20 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         });
     }
 
-   public function searchOrgs($conditions, $orderBy, $start, $limit)
+    public function searchOrgs($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function findOrgsByIds($ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
@@ -131,12 +117,12 @@ class OrgDaoImpl extends BaseDao implements OrgDao
     }
 
     protected function _createSearchQueryBuilder($conditions)
-    {  
+    {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'org')
-                        ->andWhere('id = :id')
-                        ->andWhere('parentId = :parentId')
-                        ->andWhere('depth = :depth');
-        return $builder;    
+            ->from($this->table, 'org')
+            ->andWhere('id = :id')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('depth = :depth');
+        return $builder;
     }
 }

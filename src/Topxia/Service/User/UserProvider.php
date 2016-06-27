@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Service\User;
 
-use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -56,5 +55,4 @@ class UserProvider implements UserProviderInterface
     {
         return ServiceKernel::instance()->createService('Org:Org.OrgService');
     }
-
 }
