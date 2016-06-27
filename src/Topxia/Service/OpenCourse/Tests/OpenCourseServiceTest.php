@@ -116,7 +116,7 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $lessonFields = array(
             'courseId' => $course['id'],
-            'title'    => $course['title'].'的课时',
+            'title'    => $course['title'] . '的课时',
             'type'     => 'open'
         );
         $this->getOpenCourseService()->createLesson($lessonFields);
@@ -131,7 +131,7 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $lessonFields = array(
             'courseId' => $course['id'],
-            'title'    => $course['title'].'的课时',
+            'title'    => $course['title'] . '的课时',
             'type'     => 'open'
         );
         $this->getOpenCourseService()->createLesson($lessonFields);
@@ -316,7 +316,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $result2 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime('+1 day') - 20, 10);
         $this->assertEquals('error_occupied', $result2[0]);
 
-        $result3 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime(date('Y-m-d').' 9:00:00'), 10);
+        $result3 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime(date('Y-m-d') . ' 9:00:00'), 10);
         $this->assertEquals('success', $result3[0]);
     }
 
@@ -419,6 +419,19 @@ class OpenCourseServiceTest extends BaseTestCase
         $member = $this->getOpenCourseService()->getMember($courseMember1['id']);
 
         $this->assertNull($member);
+    }
+
+    public function testGetNextLesson()
+    {
+        $course  = $this->_createOpenCourse();
+        $lesson1 = $this->_createOpenCourseLesson($course);
+        $lesson2 = $this->_createOpenCourseLesson($course);
+
+        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson1['id']);
+        $this->assertArrayEquals($lesson2, $nextLesson);
+
+        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson2['id']);
+        $this->assertEquals(empty($nextLesson), true);
     }
 
     private function _createLiveOpenCourse()
