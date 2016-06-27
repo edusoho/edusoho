@@ -120,12 +120,12 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $totoalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
+        $totalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
 
-        array_walk($refererloglist, function ($data, $key, $totoalCount) use (&$refererloglist) {
-            $refererloglist[$key]['percent']      = round($data['count'] / $totoalCount * 100, 2).'%';
+        array_walk($refererloglist, function ($data, $key, $totalCount) use (&$refererloglist) {
+            $refererloglist[$key]['percent']      = round($data['count'] / $totalCount * 100, 2).'%';
             $refererloglist[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
-        }, $totoalCount);
+        }, $totalCount);
 
         return array($paginator, $refererloglist);
     }
@@ -145,12 +145,12 @@ class OpenCourseAnalysisController extends BaseController
         $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
         $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
 
-        $totoalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $otherTotoalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
-        array_push($analysisDatas, array('count' => $otherTotoalCount, 'refererHost' => '其他'));
-        array_walk($analysisDatas, function ($data, $key, $totoalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent'] = round($data['count'] / $totoalCount * 100, 2).'%';
-        }, $totoalCount);
+        $totalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        array_push($analysisDatas, array('count' => $othertotalCount, 'refererHost' => '其他'));
+        array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
+            $analysisDatas[$key]['percent'] = round($data['count'] / $totalCount * 100, 2).'%';
+        }, $totalCount);
 
         return $analysisDatas;
     }
@@ -165,15 +165,15 @@ class OpenCourseAnalysisController extends BaseController
         $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
         $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
 
-        $totoalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $otherTotoalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
-        $otherOrderTotoalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
+        $totalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $othertotalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        $otherOrdertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
 
-        array_push($analysisDatas, array('count' => $otherTotoalCount, 'orderCount' => $otherOrderTotoalCount, 'refererHost' => '其他'));
-        array_walk($analysisDatas, function ($data, $key, $totoalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent']      = round($data['count'] / $totoalCount * 100, 2).'%';
+        array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererHost' => '其他'));
+        array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
+            $analysisDatas[$key]['percent']      = round($data['count'] / $totalCount * 100, 2).'%';
             $analysisDatas[$key]['orderPercent'] = round($data['orderCount'] / $data['count'] * 100, 2).'%';
-        }, $totoalCount);
+        }, $totalCount);
 
         return $analysisDatas;
     }
