@@ -116,7 +116,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         $randomSeed = (int) rand(0, $max);
         $that       = $this;
         return $this->fetchCached("openCourseId:{$courseId}:randomSeed:{$randomSeed}:num:$num", $courseId, $randomSeed, $num, function ($courseId, $randomSeed, $num) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
             return $that->getConnection()->fetchAll($sql, array($courseId)) ?: array();
         });
     }
