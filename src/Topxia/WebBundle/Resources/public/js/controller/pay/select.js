@@ -59,7 +59,7 @@ define(function(require, exports, module){
 
         $("input[name='payment']").val($('div .active').attr("id"));
 
-        $("#copy").click(function(event){
+        $("#copy").on('mouseenter',function(event){
             var textarea = document.createElement("textarea");
             textarea.style.position = 'fixed';
             textarea.style.top = 0;
