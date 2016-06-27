@@ -106,7 +106,6 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->getOrg($id);
     }
 
-    // TODO: org
     public function findOrgsByIds($ids)
     {
         return $this->getOrgDao()->findOrgsByIds($ids);

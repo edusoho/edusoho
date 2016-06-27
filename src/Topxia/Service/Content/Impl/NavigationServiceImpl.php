@@ -44,6 +44,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->searchNavigations($conditions, $orderBy, $start, $limit);
     }
 
+    // TODO: org
     private function _prepareSearchConditions($conditions)
     {
         $magic = $this->getSettingService()->get('magic');
@@ -56,20 +57,19 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $conditions;
     }
 
-    // TODO: org
     public function getOpenedNavigationsTreeByType($type)
-    {   
-        $user = $this->getCurrentUser();
-        $conditions  = array(
+    {
+        $user       = $this->getCurrentUser();
+        $conditions = array(
             'type'   => $type,
             'isOpen' => 1,
-            'orgId'  => $user['selectedOrgId']   
+            'orgId'  => $user['selectedOrgId']
         );
 
         $count       = $this->searchNavigationCount($conditions);
         $navigations = $this->searchNavigations(
             $conditions,
-            array('sequence','ASC'),
+            array('sequence', 'ASC'),
             0,
             $count
         );
@@ -125,7 +125,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $count       = $this->searchNavigationCount($conditions);
         $navigations = $this->searchNavigations(
             $conditions,
-            array('sequence','ASC'),
+            array('sequence', 'ASC'),
             0,
             $count
         );
@@ -200,7 +200,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $currentOrg = $user['org'];
 
         if (empty($fields['parentId'])) {
-            if(empty($user['org'])){
+            if (empty($user['org'])) {
                 return $fields;
             }
             $fields['orgId']   = $currentOrg['id'];
