@@ -10,7 +10,6 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        print_r($request->getSession()->get('refererLogIds'));
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
@@ -83,18 +82,18 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    private function _addRefererLog($request, $courseId)
+    private function _addRefererLog($request, $course)
     {
         $referer    = $request->headers->get('referer');
         $refererUrl = empty($referer) ? $request->getUri() : $referer;
         $refererlog = array(
-            'targetId'   => $courseId,
-            'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl,
-            'schemeHost' => $request->getSchemeAndHttpHost()
+            'targetId'        => $courseId,
+            'targetType'      => 'openCourse',
+            'refererUrl'      => $refererUrl,
+            'targetInnerType' => $course['type']
         );
 
-        $this->getPrefererLogService()->addRefererLog($refererlog);
+        $this->getRefererLogService()->addRefererLog($refererlog);
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)

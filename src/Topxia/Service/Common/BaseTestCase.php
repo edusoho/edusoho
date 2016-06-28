@@ -45,6 +45,9 @@ class BaseTestCase extends WebTestCase
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $connection = $kernel->getContainer()->get('database_connection');
         $serviceKernel->setConnection(new TestCaseConnection($connection));
+        $serviceKernel->setEnvVariable(array(
+            'host' => 'test.com'
+        ));
         static::$serviceKernel = $serviceKernel;
     }
 
