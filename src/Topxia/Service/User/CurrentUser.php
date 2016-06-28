@@ -162,14 +162,15 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return in_array('web', $this->getPermissions());
     }
 
-    public function getSelectOrgCode()
-    {
-        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
-    }
-
     public function getCurrentOrgCode()
     {
         return $this->orgCode;
+    }
+
+    public function getCurrentOrgId()
+    {
+        $currentOrg = $this->getCurrentOrg();
+        return $currentOrg['id'];
     }
 
     public function getCurrentOrg()
@@ -180,6 +181,17 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function getSelectOrg()
     {
         return isset($this->selectOrg) ? $this->selectOrg : $this->org;
+    }
+
+    public function getSelectOrgCode()
+    {
+        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
+    }
+
+    public function getSelectOrgId()
+    {
+        $selectOrg = $this->getSelectOrg();
+        return $selectOrg['id'];
     }
 
     public function fromArray(array $user)
