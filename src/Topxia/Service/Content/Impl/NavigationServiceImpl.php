@@ -63,7 +63,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $conditions = array(
             'type'   => $type,
             'isOpen' => 1,
-            'orgId'  => $user['selectedOrgId']
+            'orgId'  => isset($user['selectedOrgId']) ? $user['selectedOrgId'] :  $user['orgId']
         );
 
         $count       = $this->searchNavigationCount($conditions);
