@@ -134,7 +134,7 @@ class OpenCourseAnalysisController extends BaseController
             }, $logsGroupByDate))
         );
 
-        $averageWatchNum = empty($watchData['watchNum']) ? 0 : array_sum($watchData['watchNum']) / count($watchData['watchNum']);
+        $averageWatchNum = empty($watchData['watchNum']) ? 0 : number_format(array_sum($watchData['watchNum']) / count($watchData['watchNum']), 2);
 
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:watch.html.twig", array(
             'dateRange'          => $this->getDataInfo($timeRange),
