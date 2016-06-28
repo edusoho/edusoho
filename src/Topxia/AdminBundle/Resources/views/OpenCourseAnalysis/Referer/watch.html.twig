@@ -27,6 +27,22 @@
   </div>
   <div id="line-charts" data-charts-data="{{ watchData }}" style="width: 800px; height: 600px;"></div>
 
+  <div class="well">
+      <div class="row">
+        <div class="col-md-4">
+          <span style="display: table-cell;vertical-align: middle;">公开课总数: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ totalOpenCourseNum }}</span>
+        </div>
+        <div class="col-md-4">
+          <span style="display: table-cell;vertical-align: middle;">总访问量: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ totalWatchNum }}</span>
+        </div>
+        <div class="col-md-4">
+          <span style="display: table-cell;vertical-align: middle;">日均观看次数: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ averageWatchNum }}</span>
+        </div>
+      </div>
+  </div>
 {% endblock %}
 
 {% do load_script('open-course-analysis/watch') %}

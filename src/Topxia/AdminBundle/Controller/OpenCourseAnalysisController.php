@@ -117,11 +117,14 @@ class OpenCourseAnalysisController extends BaseController
             'status' => 'published'
         ));
 
-        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount(array());
+        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount(array(
+            'targetType' => 'openCourse'
+        ));
 
         $conditions = array(
             'startTime' => $startTime,
-            'endTime'   => $endTime
+            'endTime'   => $endTime,
+            'targetType' => 'openCourse'
         );
 
         if(!empty($request->query->get('type'))){
