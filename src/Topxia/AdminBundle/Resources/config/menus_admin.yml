@@ -303,7 +303,7 @@ admin:
                                     router_params:
                                         groupId: group.id
                                     router_params_context: 1
-                                    group: 2
+                                    group: topBtn
                                     mode: modal
                 admin_course_tag:
                     name: '标签管理'
@@ -316,7 +316,7 @@ admin:
                                     name: '新增标签'
                                     router_name: admin_tag_create
                                     mode: modal
-                                    group: 2
+                                    group: topBtn
         admin_operation:
             name: 运营
             children:
@@ -330,7 +330,7 @@ admin:
                                 admin_operation_article_create:
                                     name: '添加资讯'
                                     router_name: admin_article_create
-                                    group: 2
+                                    group: topBtn
                         admin_operation_article_category:
                             name: '栏目管理'
                             router_name: admin_article_category
@@ -339,7 +339,7 @@ admin:
                                     name: '新建栏目'
                                     router_name: admin_article_category_create
                                     mode: modal
-                                    group: 2
+                                    group: topBtn
                 admin_operation_group:
                     name: 小组管理
                     children:
@@ -350,7 +350,7 @@ admin:
                                 admin_operation_group_create:
                                     name: 创建小组
                                     router_name: group_add
-                                    group: 2
+                                    group: topBtn
                                     blank: 1
                         admin_operation_group_thread:
                             name: 话题管理
@@ -370,7 +370,7 @@ admin:
                             children:
                                 admin_discovery_column_create:
                                     name: '添加栏目'
-                                    group: 2
+                                    group: topBtn
                                     mode: modal
                 admin_operation_invite:
                     name: 邀请管理
@@ -419,7 +419,7 @@ admin:
                             children:
                                 admin_batch_notification_create:
                                     name: '创建站内通知'
-                                    group: 2
+                                    group: topBtn
                 admin_announcement:
                     name: '网站公告管理'
                     group: 2
@@ -431,7 +431,7 @@ admin:
                                 admin_announcement_create:
                                     name: '新增公告'
                                     mode: modal
-                                    group: 2
+                                    group: topBtn
         admin_order:
             name: 订单
             children:
