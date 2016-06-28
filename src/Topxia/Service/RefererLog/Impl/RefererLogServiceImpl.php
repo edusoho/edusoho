@@ -57,7 +57,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
-        return $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
+        $analysisSummaryList = $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
+
+        return array_map(function ($referelog) {
+            $referelog['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+            return $referelog;
+        }, $analysisSummaryList);
     }
 
     public function searchAnalysisDetail($conditions, $groupBy)

@@ -46,9 +46,6 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
-            $refererlogDatas[$key]['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
-        });
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
