@@ -76,11 +76,11 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '请先创建课时并发布！');
         }
 
-        $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+        $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $member = $this->_memberOperate($request, $courseId);
 
-        $this->_addRefererLog($request, $courseId);
+        $this->_addRefererLog($request, $course);
 
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
@@ -88,18 +88,19 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    private function _addRefererLog($request, $courseId)
+    private function _addRefererLog($request, $course)
     {
         $referer    = $request->headers->get('referer');
         $refererUrl = empty($referer) ? $request->getUri() : $referer;
         $refererlog = array(
-            'targetId'   => $courseId,
-            'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl,
-            'schemeHost' => $request->getSchemeAndHttpHost()
+            'targetId'        => $course['id'],
+            'targetType'      => 'openCourse',
+            'targetInnerType' => $course['type'],
+            'refererUrl'      => $refererUrl,
+            'schemeHost'      => $request->getSchemeAndHttpHost()
         );
 
-        $this->getPrefererLogService()->addRefererLog($refererlog);
+        $this->getRrefererLogService()->addRefererLog($refererlog);
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -249,7 +250,7 @@ class OpenCourseController extends BaseController
             'times'    => 0,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -457,7 +458,7 @@ class OpenCourseController extends BaseController
         $response = array('success' => true, 'message' => '');
 
         if ($user->isLogin()) {
-            $mobile                 = $request->query->get('value');
+            $mobile = $request->query->get('value');
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
             if ($result != 'success') {
@@ -614,9 +615,9 @@ class OpenCourseController extends BaseController
     private function _getFavoriteNum($courseId)
     {
         $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
-            'courseId' => $courseId,
-            'type'     => 'openCourse'
-        )
+                'courseId' => $courseId,
+                'type'     => 'openCourse'
+            )
         );
 
         return $favoriteNum;
@@ -667,7 +668,7 @@ class OpenCourseController extends BaseController
             $text  = '';
 
             foreach ($texts as $txt) {
-                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
+                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
             }
 
             $text = preg_replace('|<p>\s*</p>|', '', $text);
@@ -812,7 +813,7 @@ class OpenCourseController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    protected function getPrefererLogService()
+    protected function getRrefererLogService()
     {
         return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }

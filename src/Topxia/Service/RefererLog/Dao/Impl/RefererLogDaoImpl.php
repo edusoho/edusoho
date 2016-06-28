@@ -76,6 +76,26 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
+    public function searchRefererLogCount($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('COUNT(*)')
+        ;
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchRefererLogs($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+        ;
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     public function searchAnalysisDetailListCount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
@@ -89,6 +109,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             ->from($this->getTable(), 'r')
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
+            ->andWhere('targetInnerType = :targetInnerType')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 

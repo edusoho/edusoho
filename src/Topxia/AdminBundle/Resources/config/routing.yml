@@ -35,6 +35,10 @@ admin_opencourse_analysis_referer_summary:
     pattern:  /operation/opencourse/analysis/referer
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
 
+admin_open_course_analysis_referer_watch_statistics:
+    path: /operation/opencourse/analysis/watch
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:watch }
+
 admin_opencourse_analysis_referer_summary_list:
     pattern:  /operation/opencourse/analysis/referer/list
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
