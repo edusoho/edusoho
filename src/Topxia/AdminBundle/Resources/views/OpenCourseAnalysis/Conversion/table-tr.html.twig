@@ -1,6 +1,13 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 
-{% set refererLog = refererLogs[course.id]|default(null) %}
+{% set orderCount = refererLog.orderCount|default(0) %}
+{% set hitNum = refererLog.hitNum|default(0) %}
+{% if refererLog.orderCount is null %}
+  {% set orderCount = 0 %}
+{% endif %}
+{% if refererLog.hitNum is null %}
+  {% set hitNum = 0 %}
+{% endif %}
 <tr id="course-tr-{{ course.id }}">
   <td>
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
@@ -10,11 +17,11 @@
   </td>
   
   <td>
-    {% if refererLog %}{{ refererLog.orderCount }} {% else %} 0 {% endif %} 次
+    {{ orderCount }} 次
     <a href="#modal" title="{{ '购买转化详情'|trans }}" data-toggle="modal" data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ '购买转化详情'|trans }}</a>
   </td>
-  <td>{% if refererLog %} {{ refererLog.count }}{% else %} 0 {% endif %} 次</td>
+  <td>{{ hitNum }} 次</td>
   <td>
-    {% if refererLog and refererLog.orderCount and course.hitNum %}{{ (refererLog.orderCount / course.hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
+    {% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
   </td>
 </tr>

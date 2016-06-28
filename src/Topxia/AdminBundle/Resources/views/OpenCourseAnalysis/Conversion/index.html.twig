@@ -13,7 +13,8 @@
 	    </tr>
     </thead>
     <tbody>
-      {% for course in courses %}
+      {% for refererLog in refererLogs %}
+        {% set course = courses[refererLog.targetId]|default(null)%}
         {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Conversion:table-tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">{{ '暂无记录'|trans }}</div></td></tr>

@@ -25,6 +25,8 @@ interface RefererLogService
 
     public function waveRefererLog($id, $field, $diff);
 
+    public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit);
+
     public function searchAnalysisSummaryListCount($conditions);
     /**
      * [searchAnalysisDetail 统计单个功课开的的日志的统计信息]
@@ -48,7 +50,7 @@ interface RefererLogService
      *     '2016-06-21' => logs,
      *     '2016-06-22' => logs,
      * )
-     * @param $conditions array
+     * @param  $conditions array
      * @return mixed
      */
     public function findRefererLogsGroupByDate($conditions);

@@ -72,7 +72,7 @@ class OpenCourseController extends BaseController
         }
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
-        $this->createRefererLog($request, $courseId);
+        $this->createRefererLog($request, $course);
 
         $member = $this->_memberOperate($request, $courseId);
 
@@ -761,14 +761,16 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function createRefererLog($request, $courseId)
+    protected function createRefererLog($request, $course)
     {
         $refererUrl = $request->server->get('HTTP_REFERER');
+        $refererUrl = empty($refererUrl) ? $request->getUri() : $refererUrl;
 
         $fields = array(
-            'targetId'   => $courseId,
+            'targetId'   => $course['id'],
             'targetType' => 'openCourse',
             'refererUrl' => $refererUrl
+            //'targetInnerType' => $course['type']
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);

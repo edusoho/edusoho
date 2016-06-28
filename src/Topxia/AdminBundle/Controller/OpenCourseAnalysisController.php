@@ -234,29 +234,25 @@ class OpenCourseAnalysisController extends BaseController
 
     public function conversionAction(Request $request)
     {
-        $timeRange  = $this->getTimeRange($request->query->all());
-        $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
+        $timeRange = $this->getTimeRange($request->query->all());
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getOpenCourseService()->searchCourseCount(array()),
+            $this->getRefererLogService()->searchAnalysisSummaryListCount(array('targetType' => 'openCourse')),
             10
         );
 
-        $courses = $this->getOpenCourseService()->searchCourses(
-            array(),
-            array('createdTime', 'DESC'),
+        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId(
+            'openCourse',
+            array('hitNum', 'DESC'),
+            $timeRange['startTime'],
+            $timeRange['endTime'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $conditions['targetType'] = 'openCourse';
-        $refererLogs              = $this->getRefererLogService()->searchAnalysisSummaryList(
-            $conditions,
-            'targetId',
-            0, PHP_INT_MAX
-        );
-        $refererLogs = ArrayToolkit::index($refererLogs, 'targetId');
+        $courseIds = ArrayToolkit::column($refererLogs, 'targetId');
+        $courses   = ArrayToolkit::index($this->getOpenCourseService()->findCoursesByIds($courseIds), 'id');
 
         $totalData = $this->getTotalConversionData();
 
@@ -272,7 +268,7 @@ class OpenCourseAnalysisController extends BaseController
     public function conversionResultAction(Request $request, $courseId)
     {
         $timeRange  = $this->getTimeRange($request->query->all());
-        $conditions = array_merge($timeRange, array('refererTargetId' => $courseId));
+        $conditions = array_merge($timeRange, array('sourceTargetId' => $courseId));
 
         $orderLogs = $this->getConversionOrderData($conditions);
 
@@ -350,9 +346,7 @@ class OpenCourseAnalysisController extends BaseController
     {
         $totalData = array();
 
-        $refererSummury = $this->getRefererLogService()->searchAnalysisSummary(array(), '');
-
-        $totalData['visitCount'] = $refererSummury[0]['count'];
+        $totalData['visitCount'] = $this->getRefererLogService()->searchRefererLogCount(array('targetType' => 'openCourse'));
         $totalData['orderCount'] = $this->getOrderRefererLogService()->searchOrderRefererLogCount(array(), '');
 
         return $totalData;
