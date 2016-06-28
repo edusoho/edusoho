@@ -31,9 +31,21 @@ admin_operation_analysis_opencourse:
     pattern:  /operation/opencourse/analysis
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
 
-admin_opencourse_analysis_referer:
+admin_opencourse_analysis_referer_summary:
     pattern:  /operation/opencourse/analysis/referer
-    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:referer }
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
+
+admin_opencourse_analysis_referer_summary_list:
+    pattern:  /operation/opencourse/analysis/referer/list
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
+
+admin_opencourse_analysis_referer_detail:
+    pattern:  /operation/opencourse/{id}/analysis/referer/detail
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detail }
+
+admin_opencourse_analysis_referer_detail_list:
+    pattern:  /operation/opencourse/{id}/analysis/referer/detailList
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detailList }
 
 admin_opencourse_analysis_conversion:
     pattern:  /operation/opencourse/analysis/conversion

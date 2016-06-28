@@ -9,9 +9,15 @@ interface RefererLogDao
 
     public function waveRefererLog($id, $field, $diff);
 
-    public function searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
+    public function searchAnalysisSummary($conditions, $groupBy);
 
-    public function searchRefererLogCount($conditions, $groupBy);
+    public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
-    public function searchAnalysisRefererLogSum($conditions, $groupBy);
+    public function searchAnalysisDetail($conditions, $groupBy);
+
+    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
+
+    public function searchAnalysisDetailListCount($conditions);
+
+    public function searchAnalysisSummaryListCount($conditions);
 }

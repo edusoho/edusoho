@@ -16,10 +16,15 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
+        $user = $this->getCurrentUser();
 
-        $user                        = $this->getCurrentUser();
-        $refererlog['refererHost']   = $this->prepareRefererUrl($refererlog['refererUrl']);
+        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['schemeHost']);
+
+        $refererlog['refererHost']   = $refererHost;
+        $refererlog['refererName']   = $refererName;
         $refererlog['createdUserId'] = $user['id'];
+        unset($refererlog['schemeHost']);
+
         return $this->getRefererLogDao()->addRefererLog($refererlog);
     }
 
@@ -33,21 +38,34 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->waveRefererLog($id, $field, $diff);
     }
 
-    public function searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
+    public function searchAnalysisSummary($conditions, $groupBy)
     {
-        $conditions = $this->prepareConditions($conditions);
-        return $this->getRefererLogDao()->searchRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
+        return $this->getRefererLogDao()->searchAnalysisSummary($conditions, $groupBy);
     }
 
-    public function searchRefererLogCount($conditions, $groupBy)
+    public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
-        $conditions = $this->prepareConditions($conditions);
-        return $this->getRefererLogDao()->searchRefererLogCount($conditions, $groupBy);
+        return $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
     }
 
-    public function searchAnalysisRefererLogSum($conditions, $groupBy)
+    public function searchAnalysisDetail($conditions, $groupBy)
     {
-        return $this->getRefererLogDao()->searchAnalysisRefererLogSum($conditions, $groupBy);
+        return $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
+    }
+
+    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getRefererLogDao()->searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
+    }
+
+    public function searchAnalysisDetailListCount($conditions)
+    {
+        return $this->getRefererLogDao()->searchAnalysisDetailListCount($conditions);
+    }
+
+    public function searchAnalysisSummaryListCount($conditions)
+    {
+        return $this->getRefererLogDao()->searchAnalysisSummaryListCount($conditions);
     }
 
     protected function prepareConditions($conditions)
@@ -60,17 +78,36 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->createDao('RefererLog.RefererLogDao');
     }
 
-    private function prepareRefererUrl($refererUrl)
+    private function prepareRefererUrl($refererUrl, $schemeHost)
     {
+        $refererHost = null;
+        $refererName = null;
+
         $refererMap = array(
-            'baidu.com'        => '百度',
-            'mp.weixin.qq.com' => '微信',
-            'weibo.com'        => '微博'
+            'open/course/explore'  => '公开课列表',
+            'open/course'          => '公开课详情页',
+            'my/courses/favorited' => '收藏页面',
+            $schemeHost            => '首页',
+            'baidu.com'            => '百度',
+            'mp.weixin.qq.com'     => '微信',
+            'weibo.com'            => '微博'
         );
-        $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
-        preg_match($patten, $refererUrl, $matches);
-        $refererHost = $matches[0];
-        //  TODO $refererName = array
-        return $refererHost;
+
+        //站外
+        if (strpos($refererUrl, $schemeHost) === false) {
+            $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
+            preg_match($patten, $refererUrl, $matches);
+            $refererHost = $matches[0];
+        } else {
+            $refererHost = $refererUrl;
+        }
+
+        foreach ($refererMap as $key => $value) {
+            if (strpos($refererUrl, $key) !== false) {
+                $refererName = $value;
+                break;
+            }
+        }
+        return array($refererHost, $refererName);
     }
 }

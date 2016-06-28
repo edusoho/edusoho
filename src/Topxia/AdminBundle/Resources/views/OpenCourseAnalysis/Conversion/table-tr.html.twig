@@ -13,7 +13,7 @@
     {% if refererLog %}{{ refererLog.orderCount }} {% else %} 0 {% endif %} 次
     <a href="#modal" title="{{ '购买转化详情'|trans }}" data-toggle="modal" data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ '购买转化详情'|trans }}</a>
   </td>
-  <td>{% if refererLog %} {{ refererLog.hitNum }}{% else %} 0 {% endif %} 次</td>
+  <td>{% if refererLog %} {{ refererLog.count }}{% else %} 0 {% endif %} 次</td>
   <td>
     {% if refererLog and refererLog.orderCount and course.hitNum %}{{ (refererLog.orderCount / course.hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
   </td>

@@ -1,0 +1,38 @@
+{% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
+{% set nav = 'referer' %}	
+{% block analysis_content %}
+	 <div class="">
+	 	<div  class= "" >
+			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer_summary',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">汇总</a>
+			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer_summary_list',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">明细</a>
+	 	</div>
+
+		<div >
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th width="40%">课程名称</th>
+						<th>访问数</th>
+						<th>转化详情</th>
+						<th>购买转化数</th>
+						<th>购买转化率</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for refererlog in refererlogDatas %}
+						<tr>
+							<th scope="row">{{openCourses[refererlog.targetId].title }}</th>
+							<th>{{refererlog.count}}</th>
+							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererlog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
+							<th>{{refererlog.orderCount}}</th>
+							<th>{{refererlog.percent}}</th>
+						</tr>
+						{% else %} 
+						  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
+       				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		{{web_macro.paginator(paginator)}}
+	</div>
+{% endblock %}

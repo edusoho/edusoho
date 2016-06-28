@@ -163,6 +163,7 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
             ->andWhere('free = :free')
             ->andWhere('userId = :userId')
             ->andWhere('mediaId = :mediaId')
+            ->andWhere('number = :number')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('endTime < :endTimeLessThan')
             ->andWhere('startTime <= :startTimeLessThan')
