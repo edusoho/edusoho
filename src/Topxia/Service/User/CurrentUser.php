@@ -172,6 +172,16 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return $this->orgCode;
     }
 
+    public function getCurrentOrg()
+    {
+        return $this->org;
+    }
+
+    public function getSelectOrg()
+    {
+        return isset($this->selectOrg) ? $this->selectOrg : $this->org;
+    }
+
     public function fromArray(array $user)
     {
         $this->data = $user;
@@ -187,10 +197,9 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     {
         $this->permissions = $permissions;
     }
-    
+
     public function getPermissions()
     {
         return $this->permissions;
     }
-
 }

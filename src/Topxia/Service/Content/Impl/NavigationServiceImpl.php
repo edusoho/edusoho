@@ -51,7 +51,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $conditions['orgId'] = isset($user['selectedOrgId']) ? $user['selectedOrgId'] : $user['orgId'];
+            $conditions['orgId'] = $user->getSelectOrg()->id;
         }
 
         return $conditions;
@@ -63,7 +63,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $conditions = array(
             'type'   => $type,
             'isOpen' => 1,
-            'orgId'  => $user['selectedOrgId']
+            'orgId'  => $user->getSelectOrg()->id
         );
 
         $count       = $this->searchNavigationCount($conditions);
