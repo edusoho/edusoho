@@ -62,7 +62,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchAnalysisDetail($conditions, $groupBy)
     {
-        $AnalysisDetail = $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
+        $analysisDetail = $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
+        return $analysisDetail;
     }
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
@@ -93,8 +94,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function findRefererLogsGroupByDate($conditions)
     {
         $timeRangeRefererLogCount = $this->searchRefererLogCount($conditions);
-        $timeRangeRefererLogs = $this->searchRefererLogs($conditions, array('createdTime', 'ASC'), 0, $timeRangeRefererLogCount);
-        $timeRangeRefererLogs = array_map(function($log){
+        $timeRangeRefererLogs     = $this->searchRefererLogs($conditions, array('createdTime', 'ASC'), 0, $timeRangeRefererLogCount);
+        $timeRangeRefererLogs     = array_map(function ($log) {
             $log['createdTime'] = date("Y-m-d", $log['createdTime']);
             return $log;
         }, $timeRangeRefererLogs);
