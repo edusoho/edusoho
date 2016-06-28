@@ -22,10 +22,13 @@ interface RefererLogService
      * @return [type] [description]
      */
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
-
-    public function searchAnalysisSummaryListCount($conditions);
-
-    public function searchAnalysisDetailListCount($conditions);
+    /**
+     * [searchAnalysisSummaryListCount description]
+     * @param  [type] $conditions     [description]
+     * @param  [type] $field          [description]
+     * @return [type] [description]
+     */
+    public function searchAnalysisSummaryListCount($conditions, $field);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 

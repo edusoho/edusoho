@@ -50,10 +50,10 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchAnalysisSummaryListCount($conditions)
+    public function searchAnalysisSummaryListCount($conditions, $field)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('count(DISTINCT targetId)');
+            ->select("COUNT(DISTINCT {$field})");
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -75,13 +75,6 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             ->setMaxResults($limit)
         ;
         return $builder->execute()->fetchAll() ?: array();
-    }
-
-    public function searchAnalysisDetailListCount($conditions)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('COUNT(DISTINCT refererUrl)');
-        return $builder->execute()->fetchColumn(0);
     }
 
     protected function createQueryBuilder($conditions, $orderBy = null, $groupBy = null)
