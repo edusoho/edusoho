@@ -159,20 +159,7 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $totalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
-
-        array_walk($refererloglist, function ($data, $key, $totalCount) use (&$refererloglist) {
-            $refererloglist[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
-            $refererloglist[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
-        }, $totalCount);
-
         return array($paginator, $refererloglist);
-    }
-
-    private function prepareCountPercent($refererlogDatas)
-    {
-        return $refererlogDatas;
     }
 
     private function prepareAnalysisDetailDatas($refererlogDatas)

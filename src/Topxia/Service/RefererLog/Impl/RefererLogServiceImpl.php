@@ -47,12 +47,11 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
 
         array_push($analysisDatas, array('count' => $othertotalCount, 'refererName' => '其他'));
-        $analysisDatas = array_map(
+        return array_map(
             function ($data) use ($totalCount) {
                 $data['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
                 return $data;
             }, $analysisDatas);
-        return $analysisDatas;
     }
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
@@ -73,7 +72,14 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
     {
-        return $this->getRefererLogDao()->searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
+        $analysisDetailList = $this->getRefererLogDao()->searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
+        $totalCount         = array_sum(ArrayToolkit::column($analysisDetailList, 'count'));
+
+        return array_map(function ($referlog) use ($totalCount) {
+            $referlog['percent']      = empty($totalCount) ? '0%' : round($referlog['count'] / $totalCount * 100, 2).'%';
+            $referlog['orderPercent'] = empty($referlog['count']) ? '0%' : round($referlog['orderCount'] / $referlog['count'] * 100, 2).'%';
+            return $referlog;
+        }, $analysisDetailList);
     }
 
     public function searchAnalysisDetailListCount($conditions)
