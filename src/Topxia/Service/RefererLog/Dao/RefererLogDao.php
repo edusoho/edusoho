@@ -7,7 +7,7 @@ interface RefererLogDao
 
     public function getRefererLogById($id);
 
-    public function searchAnalysisSummary($conditions, $groupBy);
+    public function searchAnalysisSummary($conditions);
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 

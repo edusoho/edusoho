@@ -17,12 +17,11 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }
         $user = $this->getCurrentUser();
 
-        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['schemeHost']);
+        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl']);
 
         $refererlog['refererHost']   = $refererHost;
         $refererlog['refererName']   = $refererName;
         $refererlog['createdUserId'] = $user['id'];
-        unset($refererlog['schemeHost']);
 
         return $this->getRefererLogDao()->addRefererLog($refererlog);
     }
@@ -32,9 +31,28 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->getRefererLogById($id);
     }
 
-    public function searchAnalysisSummary($conditions, $groupBy)
+    public function searchAnalysisSummary($conditions)
     {
-        return $this->getRefererLogDao()->searchAnalysisSummary($conditions, $groupBy);
+        $refererlogDatas = $this->getRefererLogDao()->searchAnalysisSummary($conditions);
+        if (empty($refererlogDatas)) {
+            return array();
+        }
+        //列表显示前六条
+        $length = 6;
+
+        $analysisDatas      = array_slice($refererlogDatas, 0, $length);
+        $otherAnalysisDatas = count($refererlogDatas) > $length ? array_slice($refererlogDatas, $length) : array();
+
+        $totalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+
+        array_push($analysisDatas, array('count' => $othertotalCount, 'refererName' => '其他'));
+        $analysisDatas = array_map(
+            function ($data) use ($totalCount) {
+                $data['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+                return $data;
+            }, $analysisDatas);
+        return $analysisDatas;
     }
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
@@ -44,7 +62,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchAnalysisDetail($conditions, $groupBy)
     {
-        return $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
+        $AnalysisDetail = $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
     }
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
@@ -67,36 +85,45 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->createDao('RefererLog.RefererLogDao');
     }
 
-    private function prepareRefererUrl($refererUrl, $schemeHost)
+    private function prepareRefererUrl($refererUrl)
     {
         $refererHost = null;
         $refererName = null;
 
-        $refererMap = array(
+        $refererMap = $this->getRefererMap();
+        $host       = $this->getKernel()->getEnvVariable('host');
+        //站外
+        if (strpos($refererUrl, $host) === false) {
+            $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
+            preg_match($patten, $refererUrl, $matches);
+            $refererHost = $refererName = $matches[0];
+        } else {
+            $refererHost = $refererName = $refererUrl;
+        }
+        $refererName = $this->arrayFind($refererMap, $refererUrl);
+        return array($refererHost, $refererName);
+    }
+
+    private function arrayFind($array, $existsKey)
+    {
+        foreach ($array as $key => $value) {
+            if (($existsKey == $key) || (strpos($existsKey, $key) !== false)) {
+                return $value;
+            }
+        }
+    }
+
+    private function getRefererMap()
+    {
+        $host = $this->getKernel()->getEnvVariable('host');
+        return array(
             'open/course/explore'  => '公开课列表',
             'open/course'          => '公开课详情页',
             'my/courses/favorited' => '收藏页面',
-            $schemeHost            => '首页',
+            $host                  => '首页',
             'baidu.com'            => '百度',
             'mp.weixin.qq.com'     => '微信',
             'weibo.com'            => '微博'
         );
-
-        //站外
-        if (strpos($refererUrl, $schemeHost) === false) {
-            $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
-            preg_match($patten, $refererUrl, $matches);
-            $refererHost = $matches[0];
-        } else {
-            $refererHost = $refererUrl;
-        }
-
-        foreach ($refererMap as $key => $value) {
-            if (strpos($refererUrl, $key) !== false) {
-                $refererName = $value;
-                break;
-            }
-        }
-        return array($refererHost, $refererName);
     }
 }

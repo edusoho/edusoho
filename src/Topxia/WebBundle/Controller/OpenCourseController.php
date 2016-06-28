@@ -95,8 +95,7 @@ class OpenCourseController extends BaseController
         $refererlog = array(
             'targetId'   => $courseId,
             'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl,
-            'schemeHost' => $request->getSchemeAndHttpHost()
+            'refererUrl' => $refererUrl
         );
 
         $this->getPrefererLogService()->addRefererLog($refererlog);
