@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Doctrine\DBAL\Driver\PDOConnection;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +19,12 @@ class OpenCourseAnalysisController extends BaseController
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
         //根据refererHost分组统计数据总数
-        $refererlogDatas        = $this->getRefererLogService()->searchAnalysisSummary($conditions, $groupBy = 'refererHost');
-        $refererlogAnalysisList = $this->prepareAnalysisDatas($refererlogDatas);
-        $analysisDataNames      = json_encode(ArrayToolkit::column($refererlogAnalysisList, 'refererHost'));
+        $refererlogDatas   = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $analysisDataNames = json_encode(ArrayToolkit::column($refererlogDatas, 'refererName'));
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:index.html.twig', array(
             'dateRange'               => $this->getDataInfo($timeRange),
-            'refererlogAnalysisList'  => $refererlogAnalysisList,
-            'refererlogAnalysisDatas' => json_encode($refererlogAnalysisList),
+            'refererlogAnalysisList'  => $refererlogDatas,
+            'refererlogAnalysisDatas' => json_encode($refererlogDatas),
             'analysisDataNames'       => $analysisDataNames
         ));
     }
@@ -37,7 +35,7 @@ class OpenCourseAnalysisController extends BaseController
         $timeRange  = $this->getTimeRange($query);
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
-        $paginator       = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions),
             20
@@ -49,7 +47,7 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
         array_walk($refererlogDatas, function ($referelog, $key) use (&$refererlogDatas) {
-            $refererlogDatas[$key]['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2) . '%';
+            $refererlogDatas[$key]['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
         });
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
@@ -66,8 +64,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $timeRange         = $this->getTimeRange($request->query->all());
-        $conditions        = array(
+        $timeRange  = $this->getTimeRange($request->query->all());
+        $conditions = array(
             'targetType' => 'openCourse',
             'targetId'   => $id,
             'startTime'  => $timeRange['startTime'],
@@ -122,12 +120,12 @@ class OpenCourseAnalysisController extends BaseController
         ));
 
         $conditions = array(
-            'startTime' => $startTime,
-            'endTime'   => $endTime,
+            'startTime'  => $startTime,
+            'endTime'    => $endTime,
             'targetType' => 'openCourse'
         );
 
-        if(!empty($request->query->get('type'))){
+        if (!empty($request->query->get('type'))) {
             $conditions['targetInnerType'] = $request->query->get('type');
         }
 
@@ -153,7 +151,7 @@ class OpenCourseAnalysisController extends BaseController
 
     private function getDetailList($conditions)
     {
-        $paginator      = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->searchAnalysisDetailListCount($conditions),
             20
@@ -168,8 +166,8 @@ class OpenCourseAnalysisController extends BaseController
         $totalCount = array_sum(ArrayToolkit::column($refererloglist, 'count'));
 
         array_walk($refererloglist, function ($data, $key, $totalCount) use (&$refererloglist) {
-            $refererloglist[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2) . '%';
-            $refererloglist[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2) . '%';
+            $refererloglist[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $refererloglist[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
         }, $totalCount);
 
         return array($paginator, $refererloglist);
@@ -178,26 +176,6 @@ class OpenCourseAnalysisController extends BaseController
     private function prepareCountPercent($refererlogDatas)
     {
         return $refererlogDatas;
-    }
-
-    private function prepareAnalysisDatas($refererlogDatas)
-    {
-        if (empty($refererlogDatas)) {
-            return array();
-        }
-        $lenght = 6;
-
-        $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
-        $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
-
-        $totalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
-        array_push($analysisDatas, array('count' => $othertotalCount, 'refererHost' => '其他'));
-        array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2) . '%';
-        }, $totalCount);
-
-        return $analysisDatas;
     }
 
     private function prepareAnalysisDetailDatas($refererlogDatas)
@@ -216,8 +194,8 @@ class OpenCourseAnalysisController extends BaseController
 
         array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererHost' => '其他'));
         array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2) . '%';
-            $analysisDatas[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2) . '%';
+            $analysisDatas[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $analysisDatas[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
         }, $totalCount);
 
         return $analysisDatas;
@@ -231,8 +209,8 @@ class OpenCourseAnalysisController extends BaseController
             'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
-            'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
-            'lastWeekEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
+            'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
+            'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
             'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 30 * 24 * 3600),
             'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())))

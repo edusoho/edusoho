@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 			var optionDatas = [];
 			datas.forEach(function(element, index, array) {
 				optionDatas.push({
-					name: element.refererHost,
+					name: element.refererName,
 					value: element.count
 				})
 			}, optionDatas);

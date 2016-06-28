@@ -93,11 +93,10 @@ class OpenCourseController extends BaseController
         $referer    = $request->headers->get('referer');
         $refererUrl = empty($referer) ? $request->getUri() : $referer;
         $refererlog = array(
-            'targetId'        => $course['id'],
+            'targetId'        => $courseId,
             'targetType'      => 'openCourse',
-            'targetInnerType' => $course['type'],
             'refererUrl'      => $refererUrl,
-            'schemeHost'      => $request->getSchemeAndHttpHost()
+            'targetInnerType' => $course['type']
         );
 
         $this->getRrefererLogService()->addRefererLog($refererlog);
@@ -250,7 +249,7 @@ class OpenCourseController extends BaseController
             'times'    => 0,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -458,7 +457,7 @@ class OpenCourseController extends BaseController
         $response = array('success' => true, 'message' => '');
 
         if ($user->isLogin()) {
-            $mobile = $request->query->get('value');
+            $mobile                 = $request->query->get('value');
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
             if ($result != 'success') {
@@ -615,9 +614,9 @@ class OpenCourseController extends BaseController
     private function _getFavoriteNum($courseId)
     {
         $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
-                'courseId' => $courseId,
-                'type'     => 'openCourse'
-            )
+            'courseId' => $courseId,
+            'type'     => 'openCourse'
+        )
         );
 
         return $favoriteNum;
@@ -668,7 +667,7 @@ class OpenCourseController extends BaseController
             $text  = '';
 
             foreach ($texts as $txt) {
-                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
+                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
             }
 
             $text = preg_replace('|<p>\s*</p>|', '', $text);
