@@ -88,15 +88,8 @@ class MyCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        /*$userIds = array();
-        foreach ($courses as $favoriteCourse) {
-        $userIds = array_merge($userIds, $favoriteCourse['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);*/
-
         return $this->render('TopxiaWebBundle:MyCourse:favorited.html.twig', array(
             'courseFavorites' => $courseFavorites,
-            //'users'     => $users,
             'paginator'       => $paginator
         ));
     }
