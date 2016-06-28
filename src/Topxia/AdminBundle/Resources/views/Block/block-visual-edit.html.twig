@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Block:block-visual-layout.html.twig' %}
 
-{% set menu = 'admin_block' %}
+{% set menu = menu|default('admin_block') %}
 {% set currentPage = 'admin_block_visual_edit' %}
 
 {% block page_title %} 编辑内容 {% endblock %}

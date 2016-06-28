@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Block:block-visual-layout.html.twig' %}
 
-{% set menu = 'admin_block' %}
+{% set menu = menu|default('admin_block') %}
 {% set currentPage = 'admin_block_visual_edit_history' %}
 {% block page_title %} 历史记录 {% endblock %}
 

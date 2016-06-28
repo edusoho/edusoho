@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_block' %}
+{% set menu = menu|default('admin_block') %}
 
 {% set script_controller = 'block/list' %}
 {% block main %}
