@@ -19,7 +19,7 @@ class OpenCourseAnalysisController extends BaseController
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
         //根据refererHost分组统计数据总数
-        $refererlogDatas = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $refererlogDatas   = $this->getRefererLogService()->searchAnalysisSummary($conditions);
         $analysisDataNames = json_encode(ArrayToolkit::column($refererlogDatas, 'refererName'));
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:index.html.twig', array(
             'dateRange'               => $this->getDataInfo($timeRange),
@@ -34,7 +34,8 @@ class OpenCourseAnalysisController extends BaseController
         $query      = $request->query->all();
         $timeRange  = $this->getTimeRange($query);
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
-        $paginator  = new Paginator(
+
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions),
             20
@@ -102,6 +103,49 @@ class OpenCourseAnalysisController extends BaseController
             'paginator'      => $paginator,
             'refererloglist' => $refererloglist,
             'targetId'       => $id
+        ));
+    }
+
+    public function watchAction(Request $request)
+    {
+        $timeRange          = $this->getTimeRange($request->query->all());
+        $startTime          = $timeRange['startTime'];
+        $endTime            = $timeRange['endTime'];
+        $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount(array(
+            'status' => 'published'
+        ));
+
+        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount(array(
+            'targetType' => 'openCourse'
+        ));
+
+        $conditions = array(
+            'startTime'  => $startTime,
+            'endTime'    => $endTime,
+            'targetType' => 'openCourse'
+        );
+
+        if (!empty($request->query->get('type'))) {
+            $conditions['targetInnerType'] = $request->query->get('type');
+        }
+
+        $logsGroupByDate = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
+
+        $watchData = array(
+            'date'     => array_keys($logsGroupByDate),
+            'watchNum' => array_values(array_map(function ($logs) {
+                return count($logs);
+            }, $logsGroupByDate))
+        );
+
+        $averageWatchNum = empty($watchData['watchNum']) ? 0 : array_sum($watchData['watchNum']) / count($watchData['watchNum']);
+
+        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:watch.html.twig", array(
+            'dateRange'          => $this->getDataInfo($timeRange),
+            'totalOpenCourseNum' => $totalOpenCourseNum,
+            'totalWatchNum'      => $totalWatchNum,
+            'watchData'          => json_encode($watchData),
+            'averageWatchNum'    => $averageWatchNum
         ));
     }
 

@@ -76,11 +76,11 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '请先创建课时并发布！');
         }
 
-        $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+        $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $member = $this->_memberOperate($request, $courseId);
 
-        $this->_addRefererLog($request, $courseId);
+        $this->_addRefererLog($request, $course);
 
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
@@ -88,17 +88,18 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    private function _addRefererLog($request, $courseId)
+    private function _addRefererLog($request, $course)
     {
         $referer    = $request->headers->get('referer');
         $refererUrl = empty($referer) ? $request->getUri() : $referer;
         $refererlog = array(
-            'targetId'   => $courseId,
-            'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl
+            'targetId'        => $courseId,
+            'targetType'      => 'openCourse',
+            'refererUrl'      => $refererUrl,
+            'targetInnerType' => $course['type']
         );
 
-        $this->getPrefererLogService()->addRefererLog($refererlog);
+        $this->getRrefererLogService()->addRefererLog($refererlog);
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -811,7 +812,7 @@ class OpenCourseController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    protected function getPrefererLogService()
+    protected function getRrefererLogService()
     {
         return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
