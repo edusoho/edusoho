@@ -303,7 +303,7 @@ admin:
                                     router_params:
                                         groupId: group.id
                                     router_params_context: 1
-                                    group: 2
+                                    group: topBtn
                                     mode: modal
                 admin_course_tag:
                     name: '标签管理'
@@ -316,7 +316,7 @@ admin:
                                     name: '新增标签'
                                     router_name: admin_tag_create
                                     mode: modal
-                                    group: 2
+                                    group: topBtn
         admin_operation:
             name: 运营
             children:
@@ -330,7 +330,7 @@ admin:
                                 admin_operation_article_create:
                                     name: '添加资讯'
                                     router_name: admin_article_create
-                                    group: 2
+                                    group: topBtn
                         admin_operation_article_category:
                             name: '栏目管理'
                             router_name: admin_article_category
@@ -339,7 +339,7 @@ admin:
                                     name: '新建栏目'
                                     router_name: admin_article_category_create
                                     mode: modal
-                                    group: 2
+                                    group: topBtn
                 admin_operation_group:
                     name: 小组管理
                     children:
@@ -350,11 +350,63 @@ admin:
                                 admin_operation_group_create:
                                     name: 创建小组
                                     router_name: group_add
-                                    group: 2
+                                    group: topBtn
                                     blank: 1
                         admin_operation_group_thread:
                             name: 话题管理
                             router_name: admin_groupThread
+                admin_operation_invite:
+                    name: 邀请管理
+                    children:
+                        admin_operation_invite_manage:
+                            name: 邀请管理
+                            router_name: admin_invite
+                        admin_operation_invite_coupon:
+                            name: 奖励查询
+                            router_name: admin_invite_coupon
+                admin_announcement:
+                    name: '网站公告管理'
+                    group: 2
+                    children:
+                        admin_announcement_manage:
+                            name: '网站公告管理'
+                            router_name: admin_announcement
+                            children:
+                                admin_announcement_create:
+                                    name: '新增公告'
+                                    mode: modal
+                                    group: topBtn
+                admin_operation_notification:
+                    name: '全站站内通知'
+                    group: 2
+                    children:
+                        admin_batch_notification:
+                            name: '全站站内通知'
+                            children:
+                                admin_batch_notification_create:
+                                    name: '创建站内通知'
+                                    group: topBtn
+                admin_block_manage:
+                    name: 编辑区管理
+                    group: 2
+                    children:
+                        admin_block:
+                            name: 编辑区管理
+                            router_params:
+                                category: all
+                            children:
+                                admin_block_visual_edit:
+                                    name: 编辑
+                                    router_params:
+                                        blockId: (blockTemplateId:block.blockTemplateId)
+                admin_operation_content:
+                    name: 自定义页面管理
+                    group: 2
+                    children:
+                        admin_content:
+                            name: 自定义页面管理
+                            router_params:
+                                type: page
                 admin_operation_mobile:
                     name: '移动端内容管理'
                     group: 2
@@ -370,36 +422,8 @@ admin:
                             children:
                                 admin_discovery_column_create:
                                     name: '添加栏目'
-                                    group: 2
+                                    group: topBtn
                                     mode: modal
-                admin_operation_invite:
-                    name: 邀请管理
-                    children:
-                        admin_operation_invite_manage:
-                            name: 邀请管理
-                            router_name: admin_invite
-                        admin_operation_invite_coupon:
-                            name: 奖励查询
-                            router_name: admin_invite_coupon
-                admin_block_manage:
-                    name: 编辑区管理
-                    children:
-                        admin_block:
-                            name: 编辑区管理
-                            router_params:
-                                category: all
-                            children:
-                                admin_block_visual_edit:
-                                    name: 编辑
-                                    router_params:
-                                        blockId: (blockTemplateId:block.blockTemplateId)
-                admin_operation_content:
-                    name: 自定义页面管理
-                    children:
-                        admin_content:
-                            name: 自定义页面管理
-                            router_params:
-                                type: page
                 admin_operation_analysis_register:
                     name: 数据统计
                     group: 3
@@ -410,28 +434,6 @@ admin:
                                 tab: trend
                                 analysisDateType: register
                             router_name: admin_operation_analysis_register
-                admin_operation_notification:
-                    name: '全站站内通知'
-                    group: 2
-                    children:
-                        admin_batch_notification:
-                            name: '全站站内通知'
-                            children:
-                                admin_batch_notification_create:
-                                    name: '创建站内通知'
-                                    group: 2
-                admin_announcement:
-                    name: '网站公告管理'
-                    group: 2
-                    children:
-                        admin_announcement_manage:
-                            name: '网站公告管理'
-                            router_name: admin_announcement
-                            children:
-                                admin_announcement_create:
-                                    name: '新增公告'
-                                    mode: modal
-                                    group: 2
         admin_order:
             name: 订单
             children:
