@@ -111,7 +111,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             return $log;
         }, $timeRangeRefererLogs);
 
-        return ArrayToolkit::group($timeRangeRefererLogs, 'createdTime');
+        return ArrayToolkit::group($timeRangeRefererLogs, 'groupBy');
     }
 
     protected function getRefererLogDao()
