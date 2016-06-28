@@ -25,8 +25,6 @@ interface RefererLogService
 
     public function searchAnalysisSummaryListCount($conditions);
 
-    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
-
     public function searchAnalysisDetailListCount($conditions);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);

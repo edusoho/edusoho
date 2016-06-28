@@ -11,8 +11,6 @@ interface RefererLogDao
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
-    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
-
     public function searchAnalysisDetailListCount($conditions);
 
     public function searchAnalysisSummaryListCount($conditions);

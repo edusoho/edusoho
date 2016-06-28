@@ -40,23 +40,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
         $analysisSummaryList = $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
-
-        return array_map(function ($referelog) {
-            $referelog['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+        $totalCount          = array_sum(ArrayToolkit::column($analysisSummaryList, 'count'));
+        return array_map(function ($referelog) use ($totalCount) {
+            $referelog['percent']      = empty($totalCount) ? '0%' : round($referelog['count'] / $totalCount * 100, 2).'%';
+            $referelog['orderPercent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
             return $referelog;
         }, $analysisSummaryList);
-    }
-
-    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
-    {
-        $analysisDetailList = $this->getRefererLogDao()->searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
-        $totalCount         = array_sum(ArrayToolkit::column($analysisDetailList, 'count'));
-
-        return array_map(function ($referlog) use ($totalCount) {
-            $referlog['percent']      = empty($totalCount) ? '0%' : round($referlog['count'] / $totalCount * 100, 2).'%';
-            $referlog['orderPercent'] = empty($referlog['count']) ? '0%' : round($referlog['orderCount'] / $referlog['count'] * 100, 2).'%';
-            return $referlog;
-        }, $analysisDetailList);
     }
 
     public function searchAnalysisDetailListCount($conditions)
