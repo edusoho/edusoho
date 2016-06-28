@@ -33,25 +33,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function searchAnalysisSummary($conditions)
     {
-        $refererlogDatas = $this->getRefererLogDao()->searchAnalysisSummary($conditions);
-        if (empty($refererlogDatas)) {
-            return array();
-        }
-        //列表显示前六条
-        $length = 6;
-
-        $analysisDatas      = array_slice($refererlogDatas, 0, $length);
-        $otherAnalysisDatas = count($refererlogDatas) > $length ? array_slice($refererlogDatas, $length) : array();
-
-        $totalCount      = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
-
-        array_push($analysisDatas, array('count' => $othertotalCount, 'refererName' => '其他'));
-        return array_map(
-            function ($data) use ($totalCount) {
-                $data['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
-                return $data;
-            }, $analysisDatas);
+        $analysisSummary = $this->getRefererLogDao()->searchAnalysisSummary($conditions);
+        return $this->prepareAnalysisSummary($analysisSummary);
     }
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
@@ -62,12 +45,6 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             $referelog['percent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
             return $referelog;
         }, $analysisSummaryList);
-    }
-
-    public function searchAnalysisDetail($conditions, $groupBy)
-    {
-        $analysisDetail = $this->getRefererLogDao()->searchAnalysisDetail($conditions, $groupBy);
-        return $analysisDetail;
     }
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit)
@@ -111,12 +88,35 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             return $log;
         }, $timeRangeRefererLogs);
 
-        return ArrayToolkit::group($timeRangeRefererLogs, 'groupBy');
+        return ArrayToolkit::group($timeRangeRefererLogs, 'createdTime');
     }
 
     protected function getRefererLogDao()
     {
         return $this->createDao('RefererLog.RefererLogDao');
+    }
+
+    private function prepareAnalysisSummary($refererlogDatas)
+    {
+        if (empty($refererlogDatas)) {
+            return array();
+        }
+        $lenght = 6;
+
+        $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
+        $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
+
+        $totalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $othertotalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        $otherOrdertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
+
+        array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererName' => '其他'));
+
+        return array_map(function ($data) use ($totalCount) {
+            $data['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $data['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
+            return $data;
+        }, $analysisDatas);
     }
 
     private function prepareRefererUrl($refererUrl)

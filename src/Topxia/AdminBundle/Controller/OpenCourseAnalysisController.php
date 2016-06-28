@@ -68,9 +68,8 @@ class OpenCourseAnalysisController extends BaseController
             'startTime'  => $timeRange['startTime'],
             'endTime'    => $timeRange['endTime']
         );
-        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisDetail($conditions, $groupBy = 'refererHost');
-        $refererlogsDetail = $this->prepareAnalysisDetailDatas($refererlogsDetail);
-        $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererHost'));
+        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererName'));
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
@@ -160,29 +159,6 @@ class OpenCourseAnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
         return array($paginator, $refererloglist);
-    }
-
-    private function prepareAnalysisDetailDatas($refererlogDatas)
-    {
-        if (empty($refererlogDatas)) {
-            return array();
-        }
-        $lenght = 6;
-
-        $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
-        $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
-
-        $totalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $othertotalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
-        $otherOrdertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
-
-        array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererHost' => '其他'));
-        array_walk($analysisDatas, function ($data, $key, $totalCount) use (&$analysisDatas) {
-            $analysisDatas[$key]['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
-            $analysisDatas[$key]['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
-        }, $totalCount);
-
-        return $analysisDatas;
     }
 
     protected function getDataInfo($timeRange)

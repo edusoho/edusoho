@@ -33,9 +33,8 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
     {
         $orderBy = array('count', 'DESC');
         $groupBy = 'refererName';
-
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select('COUNT(id) as count , r.refererName');
+            ->select('refererName, count(targetid) as count, sum(ordercount) as orderCount');
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -48,14 +47,6 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ?: array();
-    }
-
-    public function searchAnalysisDetail($conditions, $groupBy)
-    {
-        $orderBy = array('count', 'DESC');
-        $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select('refererHost, count(targetid) as count, sum(ordercount) as orderCount');
         return $builder->execute()->fetchAll() ?: array();
     }
 

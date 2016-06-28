@@ -24,13 +24,6 @@ interface RefererLogService
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
     public function searchAnalysisSummaryListCount($conditions);
-    /**
-     * [searchAnalysisDetail 统计单个功课开的的日志的统计信息]
-     * @param  [type] $conditions     [description]
-     * @param  [type] $groupBy        [description]
-     * @return [type] [description]
-     */
-    public function searchAnalysisDetail($conditions, $groupBy);
 
     public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
 
@@ -46,7 +39,7 @@ interface RefererLogService
      *     '2016-06-21' => logs,
      *     '2016-06-22' => logs,
      * )
-     * @param $conditions array
+     * @param  $conditions array
      * @return mixed
      */
     public function findRefererLogsGroupByDate($conditions);
