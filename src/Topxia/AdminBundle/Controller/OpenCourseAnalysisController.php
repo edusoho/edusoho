@@ -64,6 +64,13 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
+        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
+            'targetId' => $id
+        ));
+    }
+
+    public function detailGraphAction(Request $request, $id)
+    {
         $timeRange  = $this->getTimeRange($request->query->all());
         $conditions = array(
             'targetType' => 'openCourse',
@@ -77,7 +84,7 @@ class OpenCourseAnalysisController extends BaseController
 
         list($paginator, $refererloglist) = $this->getDetailList($conditions);
 
-        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
+        return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail-graph.html.twig", array(
             'refererlogsDetail'     => $refererlogsDetail,
             'refererlogDetailDatas' => json_encode($refererlogsDetail),
             'refererlogNames'       => $refererlogNames,
@@ -248,7 +255,8 @@ class OpenCourseAnalysisController extends BaseController
 
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Conversion:result-modal.html.twig', array(
             'orderLogs' => $orderLogs,
-            'dateRange' => $this->getDataInfo($timeRange)
+            'dateRange' => $this->getDataInfo($timeRange),
+            'targetId'  => $courseId
         ));
     }
 

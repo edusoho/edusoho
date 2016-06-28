@@ -1,4 +1,8 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% set showPaginator = showPaginator|default(1) %}
+{% set showRefererHost = showRefererHost|default(0) %}
+
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -12,7 +16,9 @@
 	<tbody>
 		{% for refererlog in refererloglist %}
 			<tr>
-				<th scope="row">{{refererlog.refererUrl}}</th>
+				<th scope="row">
+					{% if showRefererHost %}{{ refererlog.refererHost }} {% else %}{{refererlog.refererUrl}}{% endif %}
+				</th>
 				<th>{{refererlog.count}}</th>
 				<th>{{refererlog.percent}}</th>
 				<th>{{refererlog.orderCount}}</th>
@@ -23,5 +29,8 @@
 		{% endfor %}
 	</tbody>
 </table>
-{{web_macro.paginator(paginator)}}
-<input id="pageinator-url"  type="hidden" value="{{path('admin_opencourse_analysis_referer_detail_list',{id:targetId})}}">
+
+{% if showPaginator %}
+	{{web_macro.paginator(paginator)}}
+	<input id="pageinator-url"  type="hidden" value="{{path('admin_opencourse_analysis_referer_detail_list',{id:targetId})}}">
+{% endif %}
