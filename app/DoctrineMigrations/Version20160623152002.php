@@ -16,12 +16,12 @@ class Version20160623152002 extends AbstractMigration
     public function up(Schema $schema)
     {
         $table = $schema->getTable('order_referer_log');
-        if ($table->hasColumn('refererTargertId')) {
-            $this->addSql("ALTER TABLE `order_referer_log` ADD `refererTargertId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '来源ID' AFTER  `orderId`;");
+        if ($table->hasColumn('sourceTargertId')) {
+            $this->addSql("ALTER TABLE `order_referer_log` ADD `sourceTargertId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '来源ID' AFTER  `orderId`;");
         }
         $table = $schema->getTable('order_referer_log');
-        if ($table->hasColumn('refererTargertType')) {
-            $this->addSql("ALTER TABLE `order_referer_log` ADD `refererTargertType` varchar(64) NOT NULL DEFAULT ''  COMMENT '来源类型' AFTER  `refererTargertId`;");
+        if ($table->hasColumn('sourceTargertType')) {
+            $this->addSql("ALTER TABLE `order_referer_log` ADD `sourceTargertType` varchar(64) NOT NULL DEFAULT ''  COMMENT '来源类型' AFTER  `sourceTargertId`;");
         }
     }
 

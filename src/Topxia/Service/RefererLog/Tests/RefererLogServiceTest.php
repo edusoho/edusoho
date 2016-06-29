@@ -113,6 +113,47 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(2, count($groupedLogs[$date]));
     }
 
+    public function testWaveRefererLog()
+    {
+        $refererlog1       = $this->moocReferelog();
+        $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
+
+        $refererLog = $this->getRefererLogService()->waveRefererLog($createRefererLog1['id'], 'orderCount', 1);
+
+        $this->assertEquals($createRefererLog1['orderCount'] + 1, $refererLog['orderCount']);
+    }
+
+    public function testFindRefererLogsGroupByTargetId()
+    {
+        $refererlog1 = array(
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'refererUrl' => 'http://demo.edusoho.com/course/explore'
+        );
+        $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
+
+        $refererlog2 = array(
+            'targetId'   => 1,
+            'targetType' => 'openCourse',
+            'refererUrl' => 'http://demo.edusoho.com/open/course/explore'
+        );
+        $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
+
+        $refererlog3 = array(
+            'targetId'   => 1,
+            'targetType' => 'openCourse',
+            'refererUrl' => 'http://demo.edusoho.com'
+        );
+        $createRefererLog3 = $this->getRefererLogService()->addRefererLog($refererlog3);
+
+        $startTime   = strtotime(date('Y-m-d', strtotime('-1 day', time())));
+        $endTime     = strtotime(date('Y-m-d', time()).' 23:59:59');
+        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId('openCourse', array('hitNum', 'DESC'), $startTime, $endTime, 0, 10);
+
+        $this->assertEquals(1, count($refererLogs));
+        $this->assertEquals(2, $refererLogs[0]['hitNum']);
+    }
+
     private function createCourse()
     {
         $course = array(
