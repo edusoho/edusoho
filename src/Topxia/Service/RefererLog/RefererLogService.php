@@ -27,18 +27,13 @@ interface RefererLogService
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit);
 
-    public function searchAnalysisSummaryListCount($conditions);
     /**
-     * [searchAnalysisDetail 统计单个功课开的的日志的统计信息]
+     * [searchAnalysisSummaryListCount description]
      * @param  [type] $conditions     [description]
-     * @param  [type] $groupBy        [description]
+     * @param  [type] $field          [description]
      * @return [type] [description]
      */
-    public function searchAnalysisDetail($conditions, $groupBy);
-
-    public function searchAnalysisDetailList($conditions, $groupBy, $start, $limit);
-
-    public function searchAnalysisDetailListCount($conditions);
+    public function searchAnalysisSummaryListCount($conditions, $field);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 

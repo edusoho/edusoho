@@ -34,8 +34,10 @@ class RefererLogServiceTest extends BaseTestCase
         $timeRange  = $this->getTimeRange();
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
-        $summary = $this->getRefererLogService()->searchAnalysisSummary($conditions, 'refererHost');
-        $this->assertEquals(2, count($summary));
+        $summary = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+
+        $this->assertEquals(3, count($summary));
+        $this->assertEquals(0, $summary[2]['count']);
     }
 
     public function testSearchAnalysisSummaryList()
@@ -66,68 +68,10 @@ class RefererLogServiceTest extends BaseTestCase
         $timeRange  = $this->getTimeRange();
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
-        $refererCount = $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions);
+        $refererCount = $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'targetId');
         $this->assertEquals(3, $refererCount);
-    }
-
-    public function testSearchAnalysisDetail()
-    {
-        $course           = $this->createCourse();
-        $refererlog1      = $this->moocReferelog();
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog1);
-        $refererlog2      = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog2);
-        $refererlog3      = $this->moocReferelog($course);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog3);
-
-        $timeRange  = $this->getTimeRange();
-        $conditions = array_merge($timeRange, array('targetType' => 'course', 'targetId' => $course['id']));
-
-        $refererDetails = $this->getRefererLogService()->searchAnalysisDetail($conditions, 'refererHost');
-        $this->assertEquals(2, count($refererDetails));
-    }
-
-    public function testSearchAnalysisDetailList()
-    {
-        $course           = $this->createCourse();
-        $refererlog1      = $this->moocReferelog();
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog1);
-        $refererlog2      = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog2);
-        $refererlog3      = $this->moocReferelog($course);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog3);
-        $refererlog4      = $this->moocReferelog($course);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog4);
-        $timeRange        = $this->getTimeRange();
-        $conditions       = array_merge($timeRange, array('targetType' => 'course', 'targetId' => $course['id']));
-
-        $refererDetailList = $this->getRefererLogService()->searchAnalysisDetailList($conditions, 'refererUrl', 0, 5);
-
-        $referercount = 0;
-        array_walk($refererDetailList, function ($refererDetail) use (&$referercount) {
-            $referercount += $refererDetail['count'];
-        });
-        $this->assertEquals(2, count($refererDetailList));
-        $this->assertEquals(3, $referercount);
-    }
-
-    public function testSearchAnalysisDetailListCount()
-    {
-        $course           = $this->createCourse();
-        $refererlog1      = $this->moocReferelog();
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog1);
-        $refererlog2      = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog2);
-        $refererlog3      = $this->moocReferelog($course);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog3);
-        $refererlog4      = $this->moocReferelog($course);
-        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog4);
-        $timeRange        = $this->getTimeRange();
-        $conditions       = array_merge($timeRange, array('targetType' => 'course', 'targetId' => $course['id']));
-
-        $refererDetailCount = $this->getRefererLogService()->searchAnalysisDetailListCount($conditions, 'refererUrl');
-
-        $this->assertEquals(2, $refererDetailCount);
+        $refererCount = $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'refererUrl');
+        $this->assertEquals(2, $refererCount);
     }
 
     public function testSearchRefererLogs()
@@ -154,6 +98,19 @@ class RefererLogServiceTest extends BaseTestCase
         $count = $this->getRefererLogService()->searchRefererLogCount(array());
 
         $this->assertEquals(count(array($createRefererLog1, $createRefererLog2)), $count);
+    }
+
+    public function testFindRefererLogsGroupByDate()
+    {
+        $course            = $this->createCourse();
+        $date              = date('Y-m-d', time());
+        $refererlog1       = $this->moocReferelog();
+        $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
+        $refererlog2       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
+        $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
+        $groupedLogs       = $this->getRefererLogService()->findRefererLogsGroupByDate(array());
+
+        $this->assertEquals(2, count($groupedLogs[$date]));
     }
 
     private function createCourse()

@@ -5,7 +5,9 @@
 {% block title %}转化详情{% endblock %}
 
 {% block body %}
+
 	{{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:targetId})) }}
+
 {% endblock %}
 
 {% block footer %}

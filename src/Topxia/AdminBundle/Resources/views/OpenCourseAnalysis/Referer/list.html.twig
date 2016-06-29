@@ -25,7 +25,7 @@
 							<th>{{refererlog.count}}</th>
 							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererlog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
 							<th>{{refererlog.orderCount}}</th>
-							<th>{{refererlog.percent}}</th>
+							<th>{{refererlog.orderPercent}}</th>
 						</tr>
 						{% else %} 
 						  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
