@@ -53,7 +53,7 @@ define(function(require, exports, module) {
                 xpos: 0,
                 ypos: 0,
                 xrepeat: 0,
-                opacity: 0.5,
+                opacity: 0.5
             },
             pluck: {
                 timelimit: timelimit,
@@ -64,22 +64,26 @@ define(function(require, exports, module) {
         });
 
         var messenger = new Messenger({
-            name: 'parent',
+            name: 'child',
             project: 'PlayerProject',
             type: 'child'
         });
 
+        //为了不把播放器对象暴露到其他js中，所以把设置操作message过来
+        messenger.on('setPlayerPause', function() {
+            player.pause();
+        });
+
+        messenger.on('setPlayerPlay', function() {
+            player.play();
+        });
+
         player.on('timeupdate', function(data) {
-            messenger.sendToParent("timechange", {pause: true});
-            console.log(data.currentTime);
+            messenger.sendToParent("timechange", {pause: false, currentTime: data.currentTime});
         });
 
-        player.on('anwsered', function(data) {
-            console.log('anwsered', data);
-        });
-
-        // player.on("timechange", function(e){
-
+        // player.on('anwsered', function(data) {
+        //     console.log('anwsered', data);
         // });
 
         // player.on("firstplay", function(){
@@ -87,15 +91,7 @@ define(function(require, exports, module) {
         // });
         
         player.on("ready", function(){
-            messenger.sendToParent("ready", {pause: true});
-            player.play();
-        });
-        player.on("onMarkerReached",function(markerId,questionId){
-            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
-        });
-
-        player.on("timechange", function(){
-            messenger.sendToParent("timechange", {pause: true});
+            messenger.sendToParent("ready", {pause: false});
         });
 
         player.on("paused", function(){
