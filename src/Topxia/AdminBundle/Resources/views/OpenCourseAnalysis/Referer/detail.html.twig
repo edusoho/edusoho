@@ -7,13 +7,16 @@
 {% block body %}
 
 	{{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:targetId})) }}
-
+	
+	<div class="row form-group referer-log-list">
+		{% include 'TopxiaAdminBundle:OpenCourseAnalysis/Parts:referer-detail-list.html.twig' with {refererloglist:refererloglist} %}
+	</div>
 {% endblock %}
 
 {% block footer %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
 {% endblock %}
 
-{#} {% block script %}
+{% block script %}
     <script>app.load('open-course-analysis/detail')</script>
-{% endblock %} #}
+{% endblock %}

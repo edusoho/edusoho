@@ -75,8 +75,8 @@ class OrderRefererLogDaoImpl extends BaseDao implements OrderRefererLogDao
             ->andWhere('refererLogId IN (:refererLogIds)')
             ->andWhere('targetId = :targetId')
             ->andWhere('targetType = :targetType')
-            ->andWhere('refererTargetId = :refererTargetId')
-            ->andWhere('refererTargetType = :refererTargetType')
+            ->andWhere('sourceTargetId = :sourceTargetId')
+            ->andWhere('sourceTargetType = :sourceTargetType')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 

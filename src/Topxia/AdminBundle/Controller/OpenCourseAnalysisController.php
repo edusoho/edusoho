@@ -31,21 +31,10 @@ class OpenCourseAnalysisController extends BaseController
 
     public function summaryListAction(Request $request)
     {
-        $query      = $request->query->all();
-        $timeRange  = $this->getTimeRange($query);
-        $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
+        $query     = $request->query->all();
+        $timeRange = $this->getTimeRange($query);
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'targetId'),
-            20
-        );
-        $refererlogDatas = $this->getRefererLogService()->searchAnalysisSummaryList(
-            $conditions,
-            $groupBy = 'targetId',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        list($refererlogDatas, $paginator) = $this->getRefererLogData($request, $timeRange, array('hitNum', 'DESC'));
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
@@ -61,8 +50,20 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
+        $timeRange  = $this->getTimeRange($request->query->all());
+        $conditions = array(
+            'targetType' => 'openCourse',
+            'targetId'   => $id,
+            'startTime'  => $timeRange['startTime'],
+            'endTime'    => $timeRange['endTime']
+        );
+
+        list($paginator, $refererloglist) = $this->getDetailList($conditions);
+
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
-            'targetId' => $id
+            'paginator'      => $paginator,
+            'refererloglist' => $refererloglist,
+            'targetId'       => $id
         ));
     }
 
@@ -78,14 +79,10 @@ class OpenCourseAnalysisController extends BaseController
         $refererlogsDetail = $this->getRefererLogService()->searchAnalysisSummary($conditions);
         $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererName'));
 
-        list($paginator, $refererloglist) = $this->getDetailList($conditions);
-
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail-graph.html.twig", array(
             'refererlogsDetail'     => $refererlogsDetail,
             'refererlogDetailDatas' => json_encode($refererlogsDetail),
             'refererlogNames'       => $refererlogNames,
-            'paginator'             => $paginator,
-            'refererloglist'        => $refererloglist,
             'targetId'              => $id
         ));
     }
@@ -196,20 +193,11 @@ class OpenCourseAnalysisController extends BaseController
     {
         $timeRange = $this->getTimeRange($request->query->all());
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getRefererLogService()->searchAnalysisSummaryListCount(array('targetType' => 'openCourse')),
-            10
+        $conditions = array(
+            'startTime' => $timeRange['startTime'],
+            'endTime'   => $timeRange['endTime']
         );
-
-        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId(
-            'openCourse',
-            array('hitNum', 'DESC'),
-            $timeRange['startTime'],
-            $timeRange['endTime'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        list($refererLogs, $paginator) = $this->getRefererLogData($request, $conditions, array('orderCount', 'DESC'));
 
         $courseIds = ArrayToolkit::column($refererLogs, 'targetId');
         $courses   = ArrayToolkit::index($this->getOpenCourseService()->findCoursesByIds($courseIds), 'id');
@@ -237,6 +225,32 @@ class OpenCourseAnalysisController extends BaseController
             'dateRange' => $this->getDataInfo($timeRange),
             'targetId'  => $courseId
         ));
+    }
+
+    protected function getRefererLogData(Request $request, $conditions, $orderBy)
+    {
+        $conditions['targetType'] = 'openCourse';
+        $startTime                = $conditions['startTime'];
+        $endTime                  = $conditions['endTime'];
+        unset($conditions['startTime']);
+        unset($conditions['endTime']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, 'targetId'),
+            10
+        );
+
+        $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId(
+            'openCourse',
+            $orderBy,
+            $startTime,
+            $endTime,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return array($refererLogs, $paginator);
     }
 
     protected function getConversionOrderData($conditions)

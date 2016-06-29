@@ -18,7 +18,7 @@
             -
           {% endif %}
         </td>
-        <td>{{ orderLog.targetType }}</td>
+        <td>{{ dict_text('targetName', orderLog.targetType) }}</td>
         <td>{{ orderLog.buyNum }}</td>
         <td>
           {% if orderLog.targetType == 'vip'%} - {% else %}{{ target.price }}{% endif %}

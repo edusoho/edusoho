@@ -19,13 +19,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for refererlog in refererlogDatas %}
+					{% for refererLog in refererlogDatas %}
+						{% set orderCount = refererLog.orderCount|default(0) %}
+						{% set hitNum = refererLog.hitNum|default(0) %}
+						{% if refererLog.orderCount is null %}
+						  {% set orderCount = 0 %}
+						{% endif %}
+						{% if refererLog.hitNum is null %}
+						  {% set hitNum = 0 %}
+						{% endif %}
+
 						<tr>
-							<th scope="row">{{openCourses[refererlog.targetId].title }}</th>
-							<th>{{refererlog.count}}</th>
-							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererlog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
-							<th>{{refererlog.orderCount}}</th>
-							<th>{{refererlog.orderPercent}}</th>
+							<th scope="row">{{openCourses[refererLog.targetId].title }}</th>
+							<th>{{ hitNum }}</th>
+							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
+							<th>{{ orderCount }}</th>
+							<th>
+								{% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
+							</th>
 						</tr>
 						{% else %} 
 						  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>

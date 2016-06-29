@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% set showPaginator = showPaginator|default(1) %}
-{% set showRefererHost = showRefererHost|default(0) %}
+{% set showRefererName = showRefererName|default(0) %}
 
 <table class="table table-hover">
 	<thead>
@@ -17,7 +17,7 @@
 		{% for refererlog in refererloglist %}
 			<tr>
 				<th scope="row">
-					{% if showRefererHost %}{{ refererlog.refererHost }} {% else %}{{refererlog.refererUrl}}{% endif %}
+					{% if showRefererName %}{{ refererlog.refererName }} {% else %}{{refererlog.refererUrl}}{% endif %}
 				</th>
 				<th>{{refererlog.count}}</th>
 				<th>{{refererlog.percent}}</th>
