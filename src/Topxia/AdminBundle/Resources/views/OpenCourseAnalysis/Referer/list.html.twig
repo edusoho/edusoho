@@ -13,7 +13,6 @@
 					<tr>
 						<th width="40%">课程名称</th>
 						<th>访问数</th>
-						<th>转化详情</th>
 						<th>购买转化数</th>
 						<th>购买转化率</th>
 					</tr>
@@ -31,9 +30,11 @@
 
 						<tr>
 							<th scope="row">{{openCourses[refererLog.targetId].title }}</th>
-							<th>{{ hitNum }}</th>
-							<th><a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a></th>
-							<th>{{ orderCount }}</th>
+							<th>
+								{{ hitNum }} 次
+								<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime})}}">来源和转化详情</a>
+							</th>
+							<th>{{ orderCount }} 次</th>
 							<th>
 								{% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
 							</th>
