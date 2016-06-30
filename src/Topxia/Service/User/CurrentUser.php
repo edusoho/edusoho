@@ -182,19 +182,9 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     {
         return isset($this->selectOrg) ? $this->selectOrg : $this->org;
     }
-    public function getSelectOrg()
-    {
-        return isset($this->selectOrg) ? $this->selectOrg : $this->org;
-    }
     public function getSelectOrgCode()
     {
         return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
-    }
-
-    public function getSelectOrgId()
-    {
-        $selectOrg = $this->getSelectOrg();
-        return $selectOrg['id'];
     }
     public function getSelectOrgId()
     {
