@@ -767,9 +767,9 @@ class OpenCourseController extends BaseController
         $refererUrl = empty($refererUrl) ? $request->getUri() : $refererUrl;
 
         $fields = array(
-            'targetId'   => $course['id'],
-            'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl
+            'targetId'        => $course['id'],
+            'targetType'      => 'openCourse',
+            'refererUrl'      => $refererUrl,
             'targetInnerType' => $course['type']
         );
 
