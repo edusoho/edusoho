@@ -112,15 +112,14 @@ class EduCloudController extends BaseController
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
-        if (isset($overview['service']['storage']['startMonth']) 
-            && isset($overview['service']['storage']['endMonth']) 
-            && $overview['service']['storage']['startMonth'] 
+        if (isset($overview['service']['storage']['startMonth'])
+            && isset($overview['service']['storage']['endMonth'])
+            && $overview['service']['storage']['startMonth']
             && $overview['service']['storage']['endMonth']) {
-
             $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
 
-            $endMonthFormated = $this->dateFormat($videoInfo['endMonth']);
-            $overview['service']['storage']['endMonth']   = strtotime($endMonthFormated.'-'.$this->monthDays($endMonthFormated));
+            $endMonthFormated                           = $this->dateFormat($videoInfo['endMonth']);
+            $overview['service']['storage']['endMonth'] = strtotime($endMonthFormated.'-'.$this->monthDays($endMonthFormated));
         }
 
         $notices = $eduSohoOpenClient->getNotices();
@@ -148,6 +147,7 @@ class EduCloudController extends BaseController
         $default        = array(
             'upload_mode'                 => 'local',
             'cloud_bucket'                => '',
+            'support_mobile'              => 0,
             'video_quality'               => 'low',
             'video_audio_quality'         => 'low',
             'video_watermark'             => 0,
@@ -289,7 +289,7 @@ class EduCloudController extends BaseController
             $smsStatus['sms_enabled']     = 1;
             $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
 
-            if (isset($status['error']) && $status['error'] == '不存在短信账号' || $status['status'] !=='used') {
+            if (isset($status['error']) && $status['error'] == '不存在短信账号' || $status['status'] !== 'used') {
                 $info   = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
                 $status = $api->get('/me/sms_account');
             }
@@ -697,7 +697,7 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    protected function dateFormat($time) 
+    protected function dateFormat($time)
     {
         return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));
     }
