@@ -129,7 +129,7 @@ define(function(require, exports, module) {
             var self = this;
 
             messenger.on("ready", function () {
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                var player = self._getPlayer();
                 self.set('player', player);
             });
 
@@ -182,6 +182,11 @@ define(function(require, exports, module) {
                 player.play();
                 this.get('adView').hide();
             }
+        },
+
+        _getPlayer: function () {
+            return window.frames["viewerIframe"].window.BalloonPlayer ||
+                    window.frames["viewerIframe"].window.player;
         }
     });
 
