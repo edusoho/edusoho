@@ -41,12 +41,12 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name=wxpay_account]',
                     required: true,
-                    errormessageRequired: '商户号'
+                    errormessageRequired: '请输入商户号'
                 });
                 validator.addItem({
                     element: '[name=wxpay_secret]',
                     required: true,
-                    errormessageRequired: '商户平台Key'
+                    errormessageRequired: '请输入商户平台Key'
                 });
             } else {
                 validator.removeItem('[name="wxpay_key"]');
