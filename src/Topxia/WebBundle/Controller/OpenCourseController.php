@@ -82,20 +82,6 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    private function _addRefererLog($request, $course)
-    {
-        $referer    = $request->headers->get('referer');
-        $refererUrl = empty($referer) ? $request->getUri() : $referer;
-        $refererlog = array(
-            'targetId'        => $courseId,
-            'targetType'      => 'openCourse',
-            'refererUrl'      => $refererUrl,
-            'targetInnerType' => $course['type']
-        );
-
-        $this->getRefererLogService()->addRefererLog($refererlog);
-    }
-
     public function lessonShowAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
