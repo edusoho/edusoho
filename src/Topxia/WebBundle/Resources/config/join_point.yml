@@ -1,0 +1,15 @@
+importer:
+  course-member: Topxia\Service\Importer\CourseMemberImporter
+  classroom-member: Topxia\Service\Importer\ClassroomMemberImporter
+
+order:
+  course: Topxia\Service\Order\OrderProcessor\CourseOrderProcessor
+  classroom: Topxia\Service\Order\OrderProcessor\ClassroomOrderProcessor
+  vip: Topxia\Service\Order\OrderProcessor\VipOrderProcessor
+  groupSell: Topxia\Service\Order\OrderProcessor\GroupSellOrderProcessor
+
+order_target_type:
+  course: TopxiaWebBundle:Order:order-course.html.twig
+  classroom: TopxiaWebBundle:Order:classroom.html.twig
+  vip: TopxiaWebBundle:Order:vip.html.twig
+  groupSell: GroupSellBundle:GroupSell:Order/group_sell.html.twig

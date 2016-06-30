@@ -1,22 +1,22 @@
 <?php
 namespace Topxia\Service\Order\OrderProcessor;
 
+use Topxia\Common\JoinPointToolkit;
 use Topxia\Service\Order\OrderProcessor\OrderProcessor;
 
 class OrderProcessorFactory
 {
 
-	public static function create($target)
+	public static function create($type)
     {
-    	if(empty($target)) {
-    		throw new \Exception("订单类型不存在");
-    	}
+			$map = JoinPointToolkit::load('order');
 
-    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'OrderProcessor';
+			if (!array_key_exists($type, $map)) {
+					throw new NotFoundException('订单类型不存在: ' . $type);
+			}
 
-    	return new $class();
+			$class = $map[$type];
+			return new $class();
     }
 
 }
-
-
