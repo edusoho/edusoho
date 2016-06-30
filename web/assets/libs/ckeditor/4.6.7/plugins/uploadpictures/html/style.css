@@ -1,12 +1,4 @@
-.webuploader-container {
-  position: relative;
-}
-.webuploader-element-invisible {
-  position: absolute !important;
-  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-  clip: rect(1px,1px,1px,1px);
-}
-.webuploader-pick {
+.ckeditor-balloon-uploader .webuploader-pick {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -18,7 +10,7 @@
   border: 1px solid #ccc;
   overflow: hidden;
 }
-.webuploader-pick-hover {
+.ckeditor-balloon-uploader .webuploader-pick-hover {
   background: #e6e6e6;
   border-color: #adadad;
 }
