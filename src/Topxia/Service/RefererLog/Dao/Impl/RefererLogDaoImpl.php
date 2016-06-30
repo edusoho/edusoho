@@ -106,6 +106,9 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     protected function createQueryBuilder($conditions, $orderBy = null, $groupBy = null)
     {
+        if(!empty($conditions['endTime'])){
+            $conditions['endTime'] += 24*3600;
+        }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->getTable(), 'r')
             ->andWhere('targetType = :targetType')
