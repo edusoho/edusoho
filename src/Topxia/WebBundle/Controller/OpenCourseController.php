@@ -775,8 +775,9 @@ class OpenCourseController extends BaseController
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
 
-        if (!empty($request->getSession()->get('refererLogIds'))) {
-            $refererLogIds   = unserialize($request->getSession()->get('refererLogIds'));
+        $refererLogIds = $request->getSession()->get('refererLogIds');
+        if (!empty($refererLogIds)) {
+            $refererLogIds   = unserialize($refererLogIds);
             $refererLogIds[] = $refererLog['id'];
         } else {
             $refererLogIds = array($refererLog['id']);
