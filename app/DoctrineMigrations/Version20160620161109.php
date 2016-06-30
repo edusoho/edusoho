@@ -17,15 +17,15 @@ class Version20160620161109 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $table = $schema->getTable('referer_log');
-        if ($table->hasColumn('refererUrl')) {
+        if ($table->hasColumn('sourceUrl')) {
             $this->addSql("ALTER TABLE `referer_log` CHANGE `sourceUrl` `refererUrl` text NOT NULL  COMMENT '访问来源Url';");
         }
 
-        if ($table->hasColumn('refererHost')) {
+        if ($table->hasColumn('sourceHost')) {
             $this->addSql("ALTER TABLE `referer_log` CHANGE `sourceHost` `refererHost` VARCHAR(80)  NOT NULL COMMENT '访问来源HOST';");
         }
 
-        if ($table->hasColumn('refererName')) {
+        if ($table->hasColumn('sourceName')) {
             $this->addSql("ALTER TABLE `referer_log` CHANGE `sourceName` `refererName` VARCHAR(64)  DEFAULT NUll  COMMENT '访问来源站点名称';");
         }
 
