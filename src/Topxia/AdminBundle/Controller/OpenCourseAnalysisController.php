@@ -125,8 +125,9 @@ class OpenCourseAnalysisController extends BaseController
             'targetType' => 'openCourse'
         );
 
-        if (!empty($request->query->get('type'))) {
-            $conditions['targetInnerType'] = $request->query->get('type');
+        $type = $request->query->get('type');
+        if (!empty($type)) {
+            $conditions['targetInnerType'] = $type;
         }
 
         $logsGroupByDate = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
