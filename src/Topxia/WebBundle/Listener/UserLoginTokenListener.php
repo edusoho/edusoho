@@ -39,7 +39,7 @@ class UserLoginTokenListener
         $auth  = $this->getSettingService()->get('auth');
         $route = $request->get('_route');
 
-        $refererLogIds = $request->getSession()->get('refererLogIds');
+        //$refererLogIds = $request->getSession()->get('refererLogIds');
 
         if ($auth
             && $auth['register_mode'] != 'mobile'
@@ -88,8 +88,8 @@ class UserLoginTokenListener
             return;
         }
 
-        $request->getSession()->set('refererLogIds', $refererLogIds);
-        $user['refererLogIds'] = $refererLogId;
+        //$request->getSession()->set('refererLogIds', $refererLogIds);
+        //$user['refererLogIds'] = $refererLogId;
 
         if ($userLoginToken != $user['loginSessionId']) {
             $request->getSession()->invalidate();

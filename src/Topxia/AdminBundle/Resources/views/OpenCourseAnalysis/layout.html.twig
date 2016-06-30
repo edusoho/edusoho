@@ -23,13 +23,11 @@
 		</form>
 	{% endblock form %}
 
-	{% block top %}
-		<div class="btn-group mbm" role="group" aria-label="...">
-		   <a class="btn btn-default {% if nav  == 'referer' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_summary')}}" role="button">来源分析</a>
-		   <a class="btn btn-default {% if nav == 'conversion' %}active{% endif %}" href="{{path('admin_opencourse_analysis_conversion')}}" role="button">购买转化分析</a>
-		   <a class="btn btn-default {% if nav|default('') == 'watch' %}active{% endif %}" href="{{path('admin_open_course_analysis_referer_watch_statistics')}}" role="button">观看统计</a>
-		</div>
-	{% endblock %}
+	<div class="btn-group mbm" role="group" aria-label="...">
+	  <a class="btn btn-default {% if nav  == 'referer' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_summary')}}" role="button">来源分析</a>
+	  <a class="btn btn-default {% if nav == 'conversion' %}active{% endif %}" href="{{path('admin_opencourse_analysis_conversion')}}" role="button">购买转化分析</a>
+	  <a class="btn btn-default {% if nav|default('') == 'watch' %}active{% endif %}" href="{{path('admin_open_course_analysis_referer_watch_statistics')}}" role="button">观看统计</a>
+	</div>
 
 	{% block analysis_content %}
 

@@ -10,6 +10,8 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
+        //print_r(unserialize($request->getSession()->get('refererLogIds')));
+        //print_r(unserialize($request->cookies->get('refererLogIds')));
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
@@ -761,15 +763,19 @@ class OpenCourseController extends BaseController
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
 
-        $refererLogIds = $request->getSession()->get('refererLogIds');
-        if (!empty($refererLogIds)) {
-            $refererLogIds   = unserialize($refererLogIds);
+        //!empty($request->getSession()->get('refererLogIds'))
+        $refererLogIds = $request->cookies->get('refererLogIds');
+        if (!empty($request->cookies->get('refererLogIds'))) {
+            //$refererLogIds   = unserialize($request->getSession()->get('refererLogIds'));
+            $refererLogIds   = unserialize($request->cookies->get('refererLogIds'));
             $refererLogIds[] = $refererLog['id'];
         } else {
             $refererLogIds = array($refererLog['id']);
         }
 
-        $request->getSession()->set("refererLogIds", serialize($refererLogIds));
+        setCookie('refererLogIds', serialize($refererLogIds), 24 * 3600);
+        //$request->cookies->set('refererLogIds', serialize($refererLogIds));
+        //$request->getSession()->set("refererLogIds", serialize($refererLogIds));
     }
 
     protected function getOpenCourseService()
