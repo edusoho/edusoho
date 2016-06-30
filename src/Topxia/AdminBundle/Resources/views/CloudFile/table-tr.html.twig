@@ -43,7 +43,10 @@
     </td>
 
     <td class="text-center">
-      {{ dict_text('fileType', cloudFile.type) }}
+      <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
+      {% if cloudFile.mcStatus|default('no') == 'yes' %}
+        <div class="label label-info mtm">已生成MP4</div>
+      {% endif %}
     </td>
     <td class="text-center">
       {{ cloudFile.fileSize|file_size }}

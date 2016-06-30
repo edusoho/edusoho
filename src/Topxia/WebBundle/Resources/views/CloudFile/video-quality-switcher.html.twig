@@ -17,7 +17,7 @@
       音质：
         {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, setting('storage.video_audio_quality', 'normal')) }}
     </div>
-
+    <input type="hidden" name="support_mobile" value="{{ setting('storage.support_mobile', 0) }}" />
     <div class="quality-actions">
       <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
       <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>

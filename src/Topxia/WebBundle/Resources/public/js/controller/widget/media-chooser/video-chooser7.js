@@ -19,11 +19,11 @@ define(function(require, exports, module) {
         },
 
         getProcess: function() {
-            var quality = {
+            return {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
-                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val()
+                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val(),
+                supportMobile: $('.video-quality-switcher').find('input[name=support_mobile]').val()
             };
-            return quality;
         },
 
     	events: {
