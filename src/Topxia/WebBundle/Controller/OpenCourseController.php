@@ -770,7 +770,7 @@ class OpenCourseController extends BaseController
             'targetId'   => $course['id'],
             'targetType' => 'openCourse',
             'refererUrl' => $refererUrl
-            //'targetInnerType' => $course['type']
+            'targetInnerType' => $course['type']
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
