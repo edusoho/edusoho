@@ -1082,7 +1082,7 @@ CREATE TABLE `user` (
   `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
   `nickname` varchar(64) NOT NULL COMMENT '用户名',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头衔',
   `tags` varchar(255) NOT NULL DEFAULT '' COMMENT '标签',
   `type` varchar(32) NOT NULL COMMENT 'default默认为网站注册, weibo新浪微薄登录',
   `point` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
