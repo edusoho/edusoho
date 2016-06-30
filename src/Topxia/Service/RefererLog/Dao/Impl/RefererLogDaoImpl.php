@@ -61,7 +61,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         $orderBy = array('count', 'DESC');
         $groupBy = 'refererName';
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select('refererName, count(targetid) as count, sum(ordercount) as orderCount');
+            ->select('refererName, count(targetId) as count, sum(orderCount) as orderCount');
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -70,7 +70,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         $this->filterStartLimit($start, $limit);
         $orderBy = array('count', 'DESC');
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select("{$groupBy}, count(id) as count , sum(ordercount) as orderCount")
+            ->select("{$groupBy}, count(id) as count , sum(orderCount) as orderCount")
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
@@ -106,8 +106,8 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     protected function createQueryBuilder($conditions, $orderBy = null, $groupBy = null)
     {
-        if(!empty($conditions['endTime'])){
-            $conditions['endTime'] += 24*3600;
+        if (!empty($conditions['endTime'])) {
+            $conditions['endTime'] += 24 * 3600;
         }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->getTable(), 'r')
