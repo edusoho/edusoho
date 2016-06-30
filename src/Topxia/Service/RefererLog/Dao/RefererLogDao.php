@@ -11,11 +11,11 @@ interface RefererLogDao
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit);
 
-    public function searchAnalysisSummary($conditions);
+    public function analysisSummary($conditions);
 
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
-    public function searchAnalysisSummaryListCount($conditions, $field);
+    public function countDitinctLogsByField($conditions, $field);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 

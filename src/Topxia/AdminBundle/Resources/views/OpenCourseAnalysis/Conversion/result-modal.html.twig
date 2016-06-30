@@ -4,13 +4,13 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  查询结果&nbsp;&nbsp;{{ dateRange.startTime }} - {{ dateRange.endTime }}
+  {{ course.title }}查询结果&nbsp;&nbsp;{{ app.request.get('startTime') }} - {{ app.request.get('endTime') }}
 {% endblock %}
 {% block body %}
   {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Conversion:order-list.html.twig' %}
 
   <!-- 以下是来源详情 -->
-  {{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:targetId })) }}
+  {{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:course.id })) }}
 {% endblock %}
 
 {% block footer %}

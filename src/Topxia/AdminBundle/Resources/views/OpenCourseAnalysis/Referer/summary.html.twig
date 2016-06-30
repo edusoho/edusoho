@@ -3,10 +3,7 @@
 {% set nav = 'referer' %}	
 {% block analysis_content %}
 	 <div class="">
-	 	<div  class= "" >
-			<a class="btn btn-default active" href="{{path('admin_opencourse_analysis_referer_summary',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">汇总</a>
-			<a class="btn btn-default" href="{{path('admin_opencourse_analysis_referer_summary_list',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">明细</a>
-	 	</div>
+	 	{% include 'TopxiaAdminBundle:OpenCourseAnalysis/Referer:summary-tab.html.twig' %}
 
 		<div  class= "col-md-5" id="echats-pie" style="height: 300px; width: 500px;"></div>
 		<div  class= "col-md-5">

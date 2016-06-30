@@ -3,7 +3,7 @@
 {% set nav = nav|default(null) %} 
 
 {% do load_script('open-course-analysis/index') %}
-{% set menu = 'admin_operation_analysis_opencourse' %}
+{% set menu = 'admin_opencourse_analysis' %}
 
 {% block main %}
 	
@@ -26,7 +26,7 @@
 	<div class="btn-group mbm" role="group" aria-label="...">
 	  <a class="btn btn-default {% if nav  == 'referer' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_summary')}}" role="button">来源分析</a>
 	  <a class="btn btn-default {% if nav == 'conversion' %}active{% endif %}" href="{{path('admin_opencourse_analysis_conversion')}}" role="button">购买转化分析</a>
-	  <a class="btn btn-default {% if nav|default('') == 'watch' %}active{% endif %}" href="{{path('admin_open_course_analysis_referer_watch_statistics')}}" role="button">观看统计</a>
+	  <a class="btn btn-default {% if nav|default('') == 'watch' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_watch_statistics')}}" role="button">观看统计</a>
 	</div>
 
 	{% block analysis_content %}

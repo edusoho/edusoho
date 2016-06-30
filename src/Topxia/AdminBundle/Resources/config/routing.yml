@@ -27,36 +27,36 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
-admin_operation_analysis_opencourse:
-    pattern:  /operation/opencourse/analysis
+admin_opencourse_analysis:
+    pattern:  /opencourse/analysis
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
 
 admin_opencourse_analysis_referer_summary:
-    pattern:  /operation/opencourse/analysis/referer
+    pattern:  /opencourse/analysis/referer/summary
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
 
-admin_open_course_analysis_referer_watch_statistics:
-    path: /operation/opencourse/analysis/watch
+admin_opencourse_analysis_referer_watch_statistics:
+    path: /opencourse/analysis/watch
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:watch }
 
 admin_opencourse_analysis_referer_summary_list:
-    pattern:  /operation/opencourse/analysis/referer/list
+    pattern:  /opencourse/analysis/referer/list
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
 
 admin_opencourse_analysis_referer_detail:
-    pattern:  /operation/opencourse/{id}/analysis/referer/detail
+    pattern:  /opencourse/{id}/analysis/referer/detail
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detail }
 
 admin_opencourse_analysis_referer_detail_list:
-    pattern:  /operation/opencourse/{id}/analysis/referer/detailList
+    pattern:  /opencourse/{id}/analysis/referer/detailList
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detailList }
 
 admin_opencourse_analysis_conversion:
-    pattern:  /operation/opencourse/analysis/conversion
+    pattern:  opencourse/analysis/conversion
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
 
 admin_opencourse_analysis_conversion_result:
-    pattern:  /operation/opencourse/{courseId}/analysis/conversion/result
+    pattern:  /opencourse/{courseId}/analysis/conversion/result
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversionResult }
 
 

@@ -56,7 +56,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $this->getConnection()->fetchAll($sql, array($targetType, $targetType, $startTime, $endTime));
     }
 
-    public function searchAnalysisSummary($conditions)
+    public function analysisSummary($conditions)
     {
         $orderBy = array('count', 'DESC');
         $groupBy = 'refererName';
@@ -77,7 +77,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchAnalysisSummaryListCount($conditions, $field)
+    public function countDitinctLogsByField($conditions, $field)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");

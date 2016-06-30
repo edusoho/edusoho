@@ -42,9 +42,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit);
     }
 
-    public function searchAnalysisSummary($conditions)
+    public function analysisSummary($conditions)
     {
-        $analysisSummary = $this->getRefererLogDao()->searchAnalysisSummary($conditions);
+        $analysisSummary = $this->getRefererLogDao()->analysisSummary($conditions);
         return $this->prepareAnalysisSummary($analysisSummary);
     }
 
@@ -64,9 +64,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->searchAnalysisDetailListCount($conditions);
     }
 
-    public function searchAnalysisSummaryListCount($conditions, $field)
+    public function countDitinctLogsByField($conditions, $field)
     {
-        return $this->getRefererLogDao()->searchAnalysisSummaryListCount($conditions, $field);
+        return $this->getRefererLogDao()->countDitinctLogsByField($conditions, $field);
     }
 
     protected function prepareConditions($conditions)

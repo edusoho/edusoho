@@ -22,7 +22,7 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals($refererLog['id'], $createRefererLog['id']);
     }
 
-    public function testSearchAnalysisSummary()
+    public function testAnalysisSummary()
     {
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
@@ -34,7 +34,7 @@ class RefererLogServiceTest extends BaseTestCase
         $timeRange  = $this->getTimeRange();
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
-        $summary = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $summary = $this->getRefererLogService()->analysisSummary($conditions);
 
         $this->assertEquals(3, count($summary));
         $this->assertEquals(0, $summary[2]['count']);
@@ -56,7 +56,7 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(2, count($refererlist));
     }
 
-    public function testSearchAnalysisSummaryListCount()
+    public function testCountDitinctLogsByField()
     {
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
@@ -68,9 +68,9 @@ class RefererLogServiceTest extends BaseTestCase
         $timeRange  = $this->getTimeRange();
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
-        $refererCount = $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'targetId');
+        $refererCount = $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'targetId');
         $this->assertEquals(3, $refererCount);
-        $refererCount = $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'refererUrl');
+        $refererCount = $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'refererUrl');
         $this->assertEquals(2, $refererCount);
     }
 

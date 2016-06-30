@@ -12,7 +12,7 @@ interface RefererLogService
      * @param  [type] $groupBy        [description]
      * @return [type] [description]
      */
-    public function searchAnalysisSummary($conditions);
+    public function analysisSummary($conditions);
     /**
      * [searchAnalysisSummaryList 统计公开课的列表信息]
      * @param  [type] $conditions     [description]
@@ -33,7 +33,7 @@ interface RefererLogService
      * @param  [type] $field          [description]
      * @return [type] [description]
      */
-    public function searchAnalysisSummaryListCount($conditions, $field);
+    public function countDitinctLogsByField($conditions, $field);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 

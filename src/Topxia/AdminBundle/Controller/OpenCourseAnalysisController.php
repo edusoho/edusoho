@@ -19,9 +19,9 @@ class OpenCourseAnalysisController extends BaseController
         $conditions = array_merge($timeRange, array('targetType' => 'openCourse'));
 
         //根据refererHost分组统计数据总数
-        $refererlogDatas   = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $refererlogDatas   = $this->getRefererLogService()->analysisSummary($conditions);
         $analysisDataNames = json_encode(ArrayToolkit::column($refererlogDatas, 'refererName'));
-        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:index.html.twig', array(
+        return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Referer:summary.html.twig', array(
             'dateRange'               => $this->getDataInfo($timeRange),
             'refererlogAnalysisList'  => $refererlogDatas,
             'refererlogAnalysisDatas' => json_encode($refererlogDatas),
@@ -50,6 +50,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
+        $course = $this->getOpenCourseService()->getCourse($id);
+
         $timeRange  = $this->getTimeRange($request->query->all());
         $conditions = array(
             'targetType' => 'openCourse',
@@ -63,7 +65,7 @@ class OpenCourseAnalysisController extends BaseController
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail.html.twig", array(
             'paginator'      => $paginator,
             'refererloglist' => $refererloglist,
-            'targetId'       => $id
+            'course'         => $course
         ));
     }
 
@@ -76,7 +78,7 @@ class OpenCourseAnalysisController extends BaseController
             'startTime'  => $timeRange['startTime'],
             'endTime'    => $timeRange['endTime']
         );
-        $refererlogsDetail = $this->getRefererLogService()->searchAnalysisSummary($conditions);
+        $refererlogsDetail = $this->getRefererLogService()->analysisSummary($conditions);
         $refererlogNames   = json_encode(ArrayToolkit::column($refererlogsDetail, 'refererName'));
 
         return $this->render("TopxiaAdminBundle:OpenCourseAnalysis/Referer:detail-graph.html.twig", array(
@@ -154,7 +156,7 @@ class OpenCourseAnalysisController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, $field = 'refererUrl'),
+            $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'refererUrl'),
             20
         );
         $refererloglist = $this->getRefererLogService()->searchAnalysisSummaryList(
@@ -216,6 +218,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function conversionResultAction(Request $request, $courseId)
     {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
         $timeRange  = $this->getTimeRange($request->query->all());
         $conditions = array_merge($timeRange, array('sourceTargetId' => $courseId));
 
@@ -223,8 +227,7 @@ class OpenCourseAnalysisController extends BaseController
 
         return $this->render('TopxiaAdminBundle:OpenCourseAnalysis/Conversion:result-modal.html.twig', array(
             'orderLogs' => $orderLogs,
-            'dateRange' => $this->getDataInfo($timeRange),
-            'targetId'  => $courseId
+            'course'    => $course
         ));
     }
 
@@ -238,7 +241,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->searchAnalysisSummaryListCount($conditions, 'targetId'),
+            $this->getRefererLogService()->countDitinctLogsByField($conditions, 'targetId'),
             10
         );
 
