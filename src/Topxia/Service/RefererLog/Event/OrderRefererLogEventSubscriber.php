@@ -20,18 +20,30 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $container = $kernel->getContainer();
 
-        $refererLogIds = unserialize($container->get('request')->cookies->get('refererLogIds'));
+        $refererLogToken = $container->get('request')->cookies->get('refererLogToken');
 
         $order = $event->getSubject();
 
-        if (empty($refererLogIds)) {
+        if (empty($refererLogToken)) {
             return false;
         }
 
-        foreach ($refererLogIds as $key => $refererLogId) {
-            $refererLog = $this->getRefererLogService()->getRefererLogById($refererLogId);
-            $fields     = array(
-                'refererLogId'     => $refererLogId,
+        $refererLogs = $this->getRefererLogService()->searchRefererLogs(
+            array(
+                'token' => $refererLogToken,
+                'ip'    => $container->get('request')->getClientIp()
+            ),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$refererLogs) {
+            return false;
+        }
+
+        foreach ($refererLogs as $key => $refererLog) {
+            $fields = array(
+                'refererLogId'     => $refererLog['id'],
                 'orderId'          => $order['id'],
                 'sourceTargetId'   => $refererLog['targetId'],
                 'sourceTargetType' => $refererLog['targetType'],
@@ -42,7 +54,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
             $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
-            $this->getRefererLogService()->waveRefererLog($refererLogId, 'orderCount', 1);
+            $this->getRefererLogService()->waveRefererLog($refererLog['id'], 'orderCount', 1);
         }
     }
 
