@@ -18,24 +18,43 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
     {
         global $kernel;
 
-        $container    = $kernel->getContainer();
-        $session      = $container->get('request')->getSession();
-        $refererLogId = $session->get('refererLogId');
+        $container = $kernel->getContainer();
+
+        $refererLogToken = unserialize($container->get('request')->cookies->get('refererLogToken'));
 
         $order = $event->getSubject();
 
-        if ($refererLogId) {
+        if (empty($refererLogToken)) {
+            return false;
+        }
+
+        $refererLogs = $this->getRefererLogService()->searchRefererLogs(
+            array(
+                'token' => $refererLogToken,
+                'ip'    => $container->get('request')->getClientIp()
+            ),
+            array('createdTime'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$refererLogs) {
+            return false;
+        }
+
+        foreach ($refererLogs as $key => $refererLog) {
             $fields = array(
-                'refererLogId'  => $refererLogId,
-                'orderId'       => $order['id'],
-                'targetType'    => $order['targetType'],
-                'targetId'      => $order['targetId'],
-                'createdUserId' => $order['userId']
+                'refererLogId'     => $refererLog['id'],
+                'orderId'          => $order['id'],
+                'sourceTargetId'   => $refererLog['targetId'],
+                'sourceTargetType' => $refererLog['targetType'],
+                'targetType'       => $order['targetType'],
+                'targetId'         => $order['targetId'],
+                'createdUserId'    => $order['userId']
             );
 
             $refererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
-            $this->getRefererLogService()->waveRefererLog($refererLogId, 'orderCount', 1);
+            $this->getRefererLogService()->waveRefererLog($refererLog['id'], 'orderCount', 1);
         }
     }
 

@@ -4,12 +4,15 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
+        var_dump($request->cookies->get('refererLogToken'));
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
@@ -72,14 +75,17 @@ class OpenCourseController extends BaseController
         }
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
-        $this->createRefererLog($request, $courseId);
 
         $member = $this->_memberOperate($request, $courseId);
 
-        return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+        $response = $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
             'lessonId' => $lessonId
         ));
+
+        $this->createRefererLog($request, $response, $course);
+
+        return $response;
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -702,18 +708,41 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function createRefererLog($request, $courseId)
+    protected function createRefererLog(Request $request, Response $response, $course)
     {
         $refererUrl = $request->server->get('HTTP_REFERER');
 
+        $refererLogToken = $this->getRefererLogToken($request, $response);
+
         $fields = array(
-            'targetId'   => $courseId,
-            'targetType' => 'openCourse',
-            'refererUrl' => $refererUrl
+            'targetId'        => $course['id'],
+            'targetType'      => 'openCourse',
+            'refererUrl'      => $refererUrl,
+            'targetInnerType' => $course['type'],
+            'token'           => $refererLogToken,
+            'ip'              => $request->getClientIp()
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $request->getSession()->set("refererLogId", $refererLog['id']);
+
+        return $refererLog;
+    }
+
+    protected function getRefererLogToken(Request $request, Response $response)
+    {
+        $refererLogToken = $request->cookies->get('refererLogToken');
+
+        if (empty($refererLogToken)) {
+            $refererLogToken = 'refererLog/'.date('Y-m-d');
+
+            $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
+
+            //setCookie('refererLogToken', $refererLogToken); //, time() + $expire
+            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken));
+            $response->send();
+        }
+
+        return $refererLogToken;
     }
 
     protected function getOpenCourseService()
