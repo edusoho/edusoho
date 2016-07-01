@@ -116,6 +116,8 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             ->andWhere('targetId IN (:targetIds)')
             ->andWhere('targetInnerType = :targetInnerType')
             ->andWhere('createdTime >= :startTime')
+            ->andWhere('token = :token')
+            ->andWhere('ip = :ip')
             ->andWhere('createdTime <= :endTime');
 
         for ($i = 0; $i < count($orderBy); $i = $i + 2) {
