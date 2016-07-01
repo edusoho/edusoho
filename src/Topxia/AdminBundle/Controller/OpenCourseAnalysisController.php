@@ -187,9 +187,9 @@ class OpenCourseAnalysisController extends BaseController
     protected function getTimeRange($fields)
     {
         if (empty($fields['startTime']) && empty($fields['endTime'])) {
-            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time())));
+            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));
         }
-        return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'])));
+        return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'].' 23:59:59')));
     }
 
     public function conversionAction(Request $request)
