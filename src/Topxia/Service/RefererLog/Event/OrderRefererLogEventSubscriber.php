@@ -20,7 +20,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $container = $kernel->getContainer();
 
-        $refererLogToken = unserialize($container->get('request')->cookies->get('refererLogToken'));
+        $refererLogToken = $container->get('request')->cookies->get('refererLogToken');
 
         $order = $event->getSubject();
 
@@ -33,7 +33,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
                 'token' => $refererLogToken,
                 'ip'    => $container->get('request')->getClientIp()
             ),
-            array('createdTime'),
+            array('createdTime', 'DESC'),
             0, PHP_INT_MAX
         );
 

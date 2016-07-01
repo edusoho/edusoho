@@ -12,7 +12,6 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        var_dump($request->cookies->get('refererLogToken'));
         return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
     }
 
@@ -78,10 +77,12 @@ class OpenCourseController extends BaseController
 
         $member = $this->_memberOperate($request, $courseId);
 
-        $response = $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+        $content = $this->renderView("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course'   => $course,
             'lessonId' => $lessonId
         ));
+
+        $response = new Response($content);
 
         $this->createRefererLog($request, $response, $course);
 
@@ -779,12 +780,11 @@ class OpenCourseController extends BaseController
         $refererLogToken = $request->cookies->get('refererLogToken');
 
         if (empty($refererLogToken)) {
-            $refererLogToken = 'refererLog/'.date('Y-m-d');
+            $refererLogToken = 'refererLog/'.time();
 
             $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
 
-            //setCookie('refererLogToken', $refererLogToken); //, time() + $expire
-            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken));
+            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken, time() + $expire));
             $response->send();
         }
 
