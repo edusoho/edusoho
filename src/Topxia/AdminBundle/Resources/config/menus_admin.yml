@@ -95,7 +95,7 @@ admin_operation_analysis_register:
     router_params: { tab: trend , analysisDateType:register }
     after: admin_operation_content
     group: 3
-admin_operation_analysis_opencourse:
+admin_opencourse_analysis:
     name: 公开课数据统计
     parent: admin_operation
     after: admin_operation_analysis_register

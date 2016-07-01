@@ -52,7 +52,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
                 'createdUserId'    => $order['userId']
             );
 
-            $refererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
+            $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
             $this->getRefererLogService()->waveRefererLog($refererLog['id'], 'orderCount', 1);
         }

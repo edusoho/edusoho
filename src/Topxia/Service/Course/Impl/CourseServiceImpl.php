@@ -121,6 +121,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->searchCourseCount($conditions);
     }
 
+    public function findRandomCourses($conditions, $num)
+    {
+        $count = $this->searchCourseCount($conditions);
+        $max   = $count - $num - 1;
+        if ($max < 0) {
+            $max = 0;
+        }
+        $offset = rand(0, $max);
+        return $this->searchCourses($conditions, 'default', $offset, $num);
+    }
+
     protected function _prepareCourseConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -769,7 +780,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
-        return $this->getFavoriteDao()->searchCourseFavoriteCount($conditions, $orderBy, $start, $limit);
+        return $this->getFavoriteDao()->searchCourseFavorites($conditions, $orderBy, $start, $limit);
     }
 
     public function analysisCourseDataByTime($startTime, $endTime)

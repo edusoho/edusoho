@@ -24,7 +24,8 @@ define(function(require, exports, module) {
     		var that = this;
     		var player = VideoJS(this.element.attr("id"), {
 				techOrder: techOrder,
-				autoplay: false
+				autoplay: false,
+				loop: false
     		});
 			player.dimensions('100%', '100%');
 			player.src(this.get("url"));
@@ -64,6 +65,8 @@ define(function(require, exports, module) {
 
 			this.set("player", player);
 
+			window.player = this;
+
 			LocalVideoPlayer.superclass.setup.call(this);
     	},
 
@@ -84,9 +87,10 @@ define(function(require, exports, module) {
 		        return ;
 		    }
 		    var player = this.get("player");
-
-		    player.currentTime(0);
-		    player.pause();
+			player.currentTime(0);
+			/* 播放器重置时间后马上暂停没用, 延时100毫秒再执行暂停 */
+			var _ = require('underscore');
+			_.delay(_.bind(player.pause, player), 100);
         },
 
         getCurrentTime: function() {

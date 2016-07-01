@@ -71,6 +71,10 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     {
         $seq = 1;
 
+        if (empty($recommendIds)) {
+            return;
+        }
+
         foreach ($recommendIds as $key => &$recommendId) {
             $this->getRecommendedCourseDao()->updateRecommendedCourse($recommendId, array('seq' => $seq));
             $seq++;
@@ -95,7 +99,6 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     protected function addRecommendeds($recommendCourseIds, $openCourseId, $type)
     {
         foreach ($recommendCourseIds as $key => $courseId) {
-            $course      = $this->getTypeCourseService($type)->getCourse($openCourseId);
             $recommended = array(
                 'recommendCourseId' => $courseId,
                 'openCourseId'      => $openCourseId,
@@ -130,6 +133,16 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
 
         return $courses;
+    }
+
+    public function findRandomRecommendCourses($courseId, $num = 3)
+    {
+        if ($num < 0) {
+            throw $this->createServiceException('num must be a unsigned int');
+        }
+        $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
+        $courseIds        = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
+        return $this->getTypeCourseService('course')->findCoursesByIds($courseIds);
     }
 
     protected function getTypeCourseService($type)

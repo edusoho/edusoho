@@ -27,13 +27,38 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
-admin_operation_analysis_opencourse:
-    pattern:  /operation/opencourse/analysis
+admin_opencourse_analysis:
+    pattern:  /opencourse/analysis
     defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
 
-admin_opencourse_analysis_referer:
-    pattern:  /operation/opencourse/analysis/referer
-    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:referer }
+admin_opencourse_analysis_referer_summary:
+    pattern:  /opencourse/analysis/referer/summary
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
+
+admin_opencourse_analysis_referer_watch_statistics:
+    path: /opencourse/analysis/watch
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:watch }
+
+admin_opencourse_analysis_referer_summary_list:
+    pattern:  /opencourse/analysis/referer/list
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
+
+admin_opencourse_analysis_referer_detail:
+    pattern:  /opencourse/{id}/analysis/referer/detail
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detail }
+
+admin_opencourse_analysis_referer_detail_list:
+    pattern:  /opencourse/{id}/analysis/referer/detailList
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detailList }
+
+admin_opencourse_analysis_conversion:
+    pattern:  opencourse/analysis/conversion
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
+
+admin_opencourse_analysis_conversion_result:
+    pattern:  /opencourse/{courseId}/analysis/conversion/result
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversionResult }
+
 
 admin_content:
     pattern:  /content

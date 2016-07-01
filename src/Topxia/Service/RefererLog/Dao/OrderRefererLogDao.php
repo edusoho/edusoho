@@ -12,8 +12,8 @@ interface OrderRefererLogDao
 
     public function deleteOrderRefererLog($id);
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit);
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
 
-    public function searchOrderRefererLogCount($conditions);
+    public function searchOrderRefererLogCount($conditions, $groupBy);
 
 }

@@ -34,45 +34,59 @@ class OrderRefererLogDaoImpl extends BaseDao implements OrderRefererLogDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit)
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
     {
         $this->filterStartLimit($start, $limit);
-        $this->checkOrderBy($orderBy, array('createdTime'));
 
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
+        $seachFields = '*';
+        if (!empty($groupBy)) {
+            $seachFields = 'id,orderId,targetId,targetType,COUNT(id) AS buyNum';
+        }
+
+        $builder = $this->_createSearchQueryBuilder($conditions, $orderBy, $groupBy)
+            ->select($seachFields)
             ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
+            ->setMaxResults($limit);
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchOrderRefererLogCount($conditions)
+    public function searchOrderRefererLogCount($conditions, $groupBy)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createSearchQueryBuilder($conditions, array('createdTime', 'DESC'), $groupBy)
             ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions, $orderBy, $groupBy)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || is_null($value)) {
                 return false;
             }
-
             return true;
-        }
+        });
 
-        );
-
-        $builder = $this->createDynamicQueryBuilder($conditions)
+        $builder = $this->createDynamicQueryBuilder($conditions, $orderBy, $groupBy)
             ->from($this->table, $this->table)
             ->andWhere("id IN ( :ids )")
             ->andWhere('refererLogId = :refererLogId')
+            ->andWhere('refererLogId IN (:refererLogIds)')
             ->andWhere('targetId = :targetId')
-            ->andWhere('targetType = :targetType');
+            ->andWhere('targetType = :targetType')
+            ->andWhere('sourceTargetId = :sourceTargetId')
+            ->andWhere('sourceTargetType = :sourceTargetType')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime');
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+
+        if (!empty($groupBy)) {
+            $builder->groupBy($groupBy);
+        }
 
         return $builder;
     }

@@ -100,7 +100,6 @@ class UserController extends BaseController
         $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
 
         if (!empty($classroomIds)) {
-
             $conditions = array(
                 'status'       => 'published',
                 'showable'     => '1',
@@ -132,14 +131,13 @@ class UserController extends BaseController
             }
 
             $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
-
         } else {
             $paginator = new Paginator(
                 $this->get('request'),
                 0,
                 20
             );
-            $members   = array();
+            $members = array();
         }
 
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
@@ -161,7 +159,7 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         if (empty($classroomIds)) {
@@ -170,7 +168,7 @@ class UserController extends BaseController
                 0,
                 20
             );
-            $members   = array();
+            $members    = array();
             $classrooms = array();
         } else {
             $conditions = array(
@@ -220,23 +218,28 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
-        $paginator            = new Paginator(
+
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserFavoritedCourseCount($user['id']),
+            $this->getCourseService()->searchCourseFavoriteCount($conditions),
             20
         );
 
-        $courses = $this->getCourseService()->findUserFavoritedCourses(
-            $user['id'],
+        $courseFavorites = $this->getCourseService()->searchCourseFavorites(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
-            'user'      => $user,
-            'courses'   => $courses,
-            'paginator' => $paginator,
-            'type'      => 'favorited'
+        return $this->render('TopxiaWebBundle:User:courses_favorited.html.twig', array(
+            'user'            => $user,
+            'courseFavorites' => $courseFavorites,
+            'paginator'       => $paginator,
+            'type'            => 'favorited'
         ));
     }
 
@@ -250,12 +253,12 @@ class UserController extends BaseController
         $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $owners               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
+        $owners = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $members              = array_merge($admins, $owners);
-        $groupIds             = ArrayToolkit::column($members, 'groupId');
-        $adminGroups          = $this->getGroupService()->getGroupsByids($groupIds);
+        $members     = array_merge($admins, $owners);
+        $groupIds    = ArrayToolkit::column($members, 'groupId');
+        $adminGroups = $this->getGroupService()->getGroupsByids($groupIds);
 
         $paginator = new Paginator(
             $this->get('request'),
