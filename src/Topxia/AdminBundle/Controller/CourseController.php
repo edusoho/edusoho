@@ -19,6 +19,11 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
+        if ($filter == 'vip') {
+            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions["parentId"]              = 0;
+        }
+
         if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
             unset($conditions["categoryId"]);
         }
@@ -302,7 +307,7 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions                = $request->query->all();
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
@@ -343,7 +348,6 @@ class CourseController extends BaseController
 
     public function dataAction(Request $request, $filter)
     {
-
         $conditions = $request->query->all();
 
         if ($filter == 'normal') {
