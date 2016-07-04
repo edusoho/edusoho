@@ -23,6 +23,7 @@
     {% endif %}
 
   </td>
+  <td>{{ course.originPrice }}</td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
     {% if  course.serializeMode =="none" %}
