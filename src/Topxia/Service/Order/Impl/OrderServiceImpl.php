@@ -122,10 +122,14 @@ class OrderServiceImpl extends BaseService implements OrderService
             }
 
             if ($this->canOrderPay($order)) {
-                $this->getOrderDao()->updateOrder($order['id'], array(
+                $payFields = array(
                     'status'   => 'paid',
                     'paidTime' => $payData['paidTime']
-                ));
+                );
+
+                !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
+
+                $this->getOrderDao()->updateOrder($order['id'], $payFields);
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
                 $success = true;
             } else {

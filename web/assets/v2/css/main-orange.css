@@ -2998,7 +2998,7 @@ fieldset[disabled] a.btn {
   max-width: 100% !important;
   height: auto !important;
 }
-table td {
+.table td {
   word-wrap: break-word;
   word-break: break-all;
 }
@@ -7646,7 +7646,8 @@ textarea {
   border: none;
 }
 .bar-message > li .notification-footer {
-  display: none;
+  margin-top: 5px;
+  color: #919191;
 }
 .bar-message > li > i {
   position: absolute;

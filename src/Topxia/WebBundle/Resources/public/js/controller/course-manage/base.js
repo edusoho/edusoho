@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-    require('./header').run();
 
     require('../widget/category-select').run('course');
 

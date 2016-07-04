@@ -421,7 +421,7 @@ admin_setting_mobile:
     name: 移动端设置
     parent: admin_system
 admin_optimize:
-    name: 优化和备份
+    name: 系统优化
     parent: admin_system
     group: 2
 admin_jobs:

@@ -40,8 +40,9 @@
   {% endif %}
 
   {% if item.type == 'testpaper' %}
-    {% set endTime = (testpapers[item.mediaId].limitedTime * 60) + item.testStartTime %}
-    {% if item.testStartTime|default(null) and item.testMode == 'realTime' %}
+    
+    {% if item.testStartTime|default(null) and item.testMode == 'realTime' and testpapers[item.mediaId]|default(null) %}
+      {% set endTime = (testpapers[item.mediaId].limitedTime * 60) + item.testStartTime %}
       <span class="color-gray course-type ">
         {% if date().timestamp < item.testStartTime %}
             {{'考试倒计时'|trans}}:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>

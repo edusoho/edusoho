@@ -23,9 +23,9 @@ class GenerateUsersCommand extends BaseCommand
         $index = $input->getArgument('index');
         $start = $input->getArgument('start', 0);
 
-        for ($i = $start; $start < $index; $i++) {
+        for ($i = $start; $i < $index; $i++) {
             $user             = array();
-            $user['nickname'] = 'test_generate_'.$i;
+            $user['nickname'] = 'test_'.$i;
             $user['password'] = 'abcde';
             $user['email']    = $user['nickname'].'@edusoho.com';
             $this->getUserService()->register($user);
