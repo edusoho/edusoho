@@ -180,6 +180,7 @@
 
 </style>
 
+{% set lesson = lesson|default(null) %}
 <div id="media-choosers">
 
   <div class="file-chooser" id="video-chooser" style="display:none;"
@@ -262,7 +263,7 @@
 
         <div class="tab-pane" id="video-chooser-import-pane">
           <div class="input-group">
-            <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" >
+            <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" {% if lesson %} value="{{ lesson.mediaUri }}"{% endif %}>
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
             </span>
