@@ -250,7 +250,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             unset($conditions['targetPrefix']);
         }
 
-        if (!$conditions['type']) {
+        if (isset($conditions['type']) && $conditions['type'] == '0') {
             unset($conditions['type']);
         }
 
