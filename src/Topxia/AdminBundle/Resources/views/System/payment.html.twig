@@ -142,7 +142,7 @@
 
   <fieldset>
     <legend>网银支付</legend>
-    {% if payment.heepay_enabled|default(false) %}
+    {% if setting('magic.quickpay', false) %}
       <div class="form-group">
         <div class="col-md-3 control-label">
           <label>接口状态</label>
@@ -181,7 +181,7 @@
 
   <fieldset>
     <legend>快捷支付</legend>
-    {% if payment.quickpay_enabled|default(false) %}
+    {% if setting('magic.quickpay', false) %}
       <div class="form-group">
         <div class="col-md-3 control-label">
           <label>接口状态</label>
