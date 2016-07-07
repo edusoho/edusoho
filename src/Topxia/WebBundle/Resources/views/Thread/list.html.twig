@@ -5,7 +5,7 @@
     {% set author = users[thread.userId] %}
     {% include 'TopxiaWebBundle:Thread/Part:list-item.html.twig' %}
   {% else %}
-    <div class="empty">暂无话题</div>
+    <div class="empty">{{'暂无话题'|trans}}</div>
   {% endfor %}
 </div>
 

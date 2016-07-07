@@ -46,11 +46,13 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('fill_question_stem_html', array($this, 'fillQuestionStemHtmlFilter')),
             new \Twig_SimpleFilter('get_course_id', array($this, 'getCourseidFilter')),
             new \Twig_SimpleFilter('purify_html', array($this, 'getPurifyHtml')),
+            new \Twig_SimpleFilter('purify_and_trim_html', array($this, 'getPurifyAndTrimHtml')),
             new \Twig_SimpleFilter('file_type', array($this, 'getFileType')),
             new \Twig_SimpleFilter('at', array($this, 'atFilter')),
             new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
-            new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp'))
+            new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
+            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter'))
         );
     }
 
@@ -109,7 +111,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
-            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists'))
+            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
+            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
         );
     }
 
@@ -167,6 +170,11 @@ class WebExtension extends \Twig_Extension
     {
         $content = str_replace(" ", "&nbsp;", $content);
         return $content;
+    }
+
+    public function isMicroMessenger()
+    {
+        return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     public function getFingerprint()
@@ -365,7 +373,9 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'materiallib';
         $names[] = 'sensitiveword';
+        $names[] = 'org';
 
         $paths = array(
             'common' => 'common',
@@ -425,7 +435,7 @@ class WebExtension extends \Twig_Extension
             $location = ConvertIpToolkit::convertIp($ip);
 
             if ($location === 'INNA') {
-                return '未知区域';
+                return $this->getServiceKernel()->trans('未知区域');
             }
 
             return $location;
@@ -452,27 +462,27 @@ class WebExtension extends \Twig_Extension
         $diff = time() - $time;
 
         if ($diff < 0) {
-            return '未来';
+            return $this->getServiceKernel()->trans('未来');
         }
 
         if ($diff == 0) {
-            return '刚刚';
+            return $this->getServiceKernel()->trans('刚刚');
         }
 
         if ($diff < 60) {
-            return $diff.'秒前';
+            return $diff.$this->getServiceKernel()->trans('秒前');
         }
 
         if ($diff < 3600) {
-            return round($diff / 60).'分钟前';
+            return round($diff / 60).$this->getServiceKernel()->trans('分钟前');
         }
 
         if ($diff < 86400) {
-            return round($diff / 3600).'小时前';
+            return round($diff / 3600).$this->getServiceKernel()->trans('小时前');
         }
 
         if ($diff < 2592000) {
-            return round($diff / 86400).'天前';
+            return round($diff / 86400).$this->getServiceKernel()->trans('天前');
         }
 
         if ($diff < 31536000) {
@@ -488,18 +498,18 @@ class WebExtension extends \Twig_Extension
         $remain     = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
-            return $remainTime['second'] = '0分钟';
+            return $remainTime['second'] = $this->getServiceKernel()->trans('0分钟');
         }
 
         if ($remain <= 3600 && empty($timeType)) {
-            return $remainTime['minutes'] = round($remain / 60).'分钟';
+            return $remainTime['minutes'] = round($remain / 60).$this->getServiceKernel()->trans('分钟');
         }
 
         if ($remain < 86400 && empty($timeType)) {
-            return $remainTime['hours'] = round($remain / 3600).'小时';
+            return $remainTime['hours'] = round($remain / 3600).$this->getServiceKernel()->trans('小时');
         }
 
-        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).'天';
+        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).$this->getServiceKernel()->trans('天');
 
         if (!empty($timeType)) {
             return $remainTime[$timeType];
@@ -545,15 +555,15 @@ class WebExtension extends \Twig_Extension
         $seconds = $value - $minutes * 60;
 
         if ($minutes === 0) {
-            return $seconds.'秒';
+            return $seconds.$this->getServiceKernel()->trans('秒');
         }
 
-        return "{$minutes}分钟{$seconds}秒";
+        return $this->getServiceKernel()->trans('%minutes%分钟%seconds%秒', array('%minutes%' => $minutes, '%seconds%' => $seconds));
     }
 
     public function timeRangeFilter($start, $end)
     {
-        $range = date('Y年n月d日 H:i', $start).' - ';
+        $range = date('Y-n-d H:i', $start).' - ';
 
         if ($this->container->get('topxia.timemachine')->inSameDay($start, $end)) {
             $range .= date('H:i', $end);
@@ -613,7 +623,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'p':
-                    $text .= $this->mb_trim($names['province'], '省');
+                    $text .= $this->mb_trim($names['province'], $this->getServiceKernel()->trans('省'));
                     break;
 
                 case 'C':
@@ -621,7 +631,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'c':
-                    $text .= $this->mb_trim($names['city'], '市');
+                    $text .= $this->mb_trim($names['city'], $this->getServiceKernel()->trans('市'));
                     break;
 
                 case 'D':
@@ -888,6 +898,28 @@ class WebExtension extends \Twig_Extension
         return sprintf('%.1f', $currentValue).$currentUnit;
     }
 
+    public function numberFilter($number)
+    {
+        if ($number <= 1000) {
+            return $number;
+        }
+
+        $currentValue = $currentUnit = null;
+        $unitExps     = array('千' => 3, '万' => 4, '亿' => 8);
+
+        foreach ($unitExps as $unit => $exp) {
+            $divisor      = pow(10, $exp);
+            $currentUnit  = $unit;
+            $currentValue = $number / $divisor;
+
+            if ($currentValue < 10) {
+                break;
+            }
+        }
+
+        return sprintf('%.0f', $currentValue).$currentUnit;
+    }
+
     public function loadObject($type, $id)
     {
         $kernel = ServiceKernel::instance();
@@ -1128,40 +1160,22 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if ($coinSettings['coin_enabled'] == 1 && $coinSettings['price_type'] == 'coin') {
-            if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
-                $default = "无";
-            } else {
-                if ($order['amount'] > 0) {
-                    if ($order['payment'] == 'wxpay') {
-                        $default = "微信支付";
-                    } elseif ($order['payment'] == 'heepay') {
-                        $default = "网银支付";
-                    } elseif ($order['payment'] == 'quickpay') {
-                        $default = "快捷支付";
-                    } else {
-                        $default = "支付宝";
-                    }
-                }
-
-                $default = "余额支付";
-            }
-        }
-
         if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
-                $default = "余额支付";
+                $default = '余额支付';
             } else {
                 if ($order['amount'] == 0) {
-                    $default = "无";
+                    $default = $this->getServiceKernel()->trans('无');
                 } elseif ($order['payment'] == 'wxpay') {
-                    $default = "微信支付";
+                    $default = '微信支付';
                 } elseif ($order['payment'] == 'heepay') {
-                    $default = "网银支付";
+                    $default = '网银支付';
                 } elseif ($order['payment'] == 'quickpay') {
-                    $default = "快捷支付";
+                    $default = '快捷支付';
+                } elseif ($order['payment'] == 'outside') {
+                    $default = '站外支付';
                 } else {
-                    $default = "支付宝";
+                    $default = '支付宝';
                 }
             }
         }
@@ -1275,6 +1289,18 @@ class WebExtension extends \Twig_Extension
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
         return ($head.'************'.$tail);
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    public function getPurifyAndTrimHtml($html)
+    {
+        $html = strip_tags($html, '');
+
+        return preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $html);
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

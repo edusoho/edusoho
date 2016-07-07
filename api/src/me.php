@@ -2,6 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 $api = $app['controllers_factory'];
 
@@ -20,6 +21,7 @@ $api->get('/', function (Request $request) {
     $user = is_array($user) ? $user : $user->toArray();
     return filter($user, 'me');
 }
+
 );
 
 //获得当前用户的关注者
@@ -39,6 +41,7 @@ $api->get('/followers', function (Request $request) {
     $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
     return $follwers;
 }
+
 );
 
 //获得当前用户关注的人
@@ -58,6 +61,7 @@ $api->get('/followings', function (Request $request) {
     $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
     return $follwings;
 }
+
 );
 
 //获得当前用户虚拟币账户信息
@@ -71,6 +75,7 @@ $api->get('/accounts', function () {
 
     return $accounts;
 }
+
 );
 
 /*
@@ -114,6 +119,7 @@ $api->get('/coursethreads', function (Request $request) {
         'total' => $total
     );
 }
+
 );
 
 /*
@@ -145,6 +151,7 @@ $api->get('/blacklists', function () {
     $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
     return filters($blacklists, 'blacklist');
 }
+
 );
 
 /*
@@ -175,6 +182,7 @@ $api->get('/friends', function (Request $request) {
         'total' => $count
     );
 }
+
 );
 
 /*
@@ -227,6 +235,45 @@ $api->get('/notifications', function (Request $request) {
         'total' => $count
     );
 }
+
+);
+
+/*
+## 获取登录im的token
+GET /im/login
+
+[支持分页](global-parameter.md)
+
+ ** 参数 **
+
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| type | string | 否 | 类型,未传则取全部类型 |
+
+`type`的值有：
+
+ * user-follow : 关注好友
+
+ ** 响应 **
+
+```
+{
+"data": "{friend-list}"
+"total": "{totalCount}"
+}
+```
+
+ */
+
+$api->get('/im/login', function (Request $request) {
+    $user = getCurrentUser();
+    $message = array(
+        'clientId'   => $user['id'],
+        'clientName' => $user['nickname']
+    );
+    return CloudAPIFactory::create('leaf')->get('/im/login', $message);
+}
+
 );
 
 return $api;

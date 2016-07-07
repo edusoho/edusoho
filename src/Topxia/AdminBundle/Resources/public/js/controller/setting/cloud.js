@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
-    var UploadPanel = require('edusoho.uploadpanel');
+    var BatchUploader = require('../../../../topxiaweb/js/controller/uploader/batch-uploader');
 
     exports.run = function() {
 
@@ -80,55 +80,43 @@ define(function(require, exports, module) {
         });
 
        if ($('.upload-mode').length >0 ) {
-            var uploadPanel = new UploadPanel({
-                element: "#upload-panel"
-            });
- 
-            uploadPanel.on("preUpload", function(uploader, file) {
-                var data = {};
-                var self=this;
-                if (this.qualitySwitcher) {
-                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    if (this.element.data('hlsEncrypted')) {
-                        data.convertor = 'HLSEncryptedVideo';
-                    } else {
-                        data.convertor = 'HLSVideo';
-                    }
-                }
-                data.lazyConvert = 1;
+            var $el = $('#balloon-uploader');
 
-                $.ajax({
-                    url: this.element.data('paramsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: data, 
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        uploader.setUploadURL(response.url);
-                        uploader.setPostParams(response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger(Translator.trans('请求上传授权码失败！'));
-                    }
-                });
-            })
 
-            uploadPanel.on('change', function(media){
-                if (media) {
-                    this.element.find('[data-role=placeholder]').html(media.name);
-                    this.element.find(".file-chooser-main").hide();
-                    this.element.find(".file-chooser-bar").show();
-                    this.get('uploaderProgressbar').reset().hide();
+            if(!$el.is(":hidden")){
+                initUploader()
+                $el.data('init', true);
+            }
+
+            $(".edit-btn",".head-leader-edit").on('click', function(){
+                $(".file-chooser-main").show();
+                $(".head-leader-edit").hide();
+
+                if(!$el.data('init')){
+                    initUploader();
                 }
             });
+        }
 
-            $(".edit-btn", "#upload-panel").on('click', function(){
-                var uploadPanel = $("#upload-panel");
-                uploadPanel.find(".file-chooser-main").show();
-                uploadPanel.find(".file-chooser-bar").hide();
+        function initUploader()
+        {
+            var $el = $('#balloon-uploader');
+            var uploader = new BatchUploader({
+                element: $el,
+                initUrl: $el.data('initUrl'),
+                finishUrl: $el.data('finishUrl'),
+                uploadAuthUrl: $el.data('uploadAuthUrl'),
+                multi: false
             });
-    }
+
+            uploader.on('file.uploaded', function(file){
+                if (file) {
+                    $(".head-leader-edit").find('[data-role=placeholder]').html(file.name);
+                    $(".file-chooser-main").hide();
+                    $(".head-leader-edit").show();
+                }
+            });
+        }
     }
 
 })

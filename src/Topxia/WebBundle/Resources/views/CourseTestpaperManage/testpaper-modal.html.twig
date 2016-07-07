@@ -4,7 +4,7 @@
 {% set modal_class= "modal-lg" %}
 
 {% block title %}
-  {% if lesson %}{{'编辑试卷课时'|trans}}{{ lesson.number }}{% else %}{{'添加试卷课时'|trans}}{% endif %}
+  {% if lesson %}{{'编辑试卷课时%number%'|trans({'%number%': lesson.number })}}{% else %}{{'添加试卷课时'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -42,7 +42,7 @@
       </div>
       {#
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">实时考试</label></div>
+        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">{{'实时考试'|trans}}</label></div>
         <div class="col-md-9 controls radios">
           {{ radios('testMode', {'normal':'关闭', 'realTime':'开启'}, lesson.testMode|default('normal')) }}
           <input type="hidden" id="real-time-testpaper" value="{{ lesson.testMode|default('normal') }}">
@@ -51,7 +51,7 @@
 
       <div class="form-group " id="testpaper-start-time-div" style="display: none">
         <div class="col-md-2 control-label">
-          <label>开始时间</label>
+          <label>{{'开始时间'|trans}}</label>
         </div>
         <div class="col-md-9 controls">
           <input id="lesson-testpaper-start-time-field" class="form-control" type="text" name="testStartTime" value="{% if lesson.testStartTime|default(null) %} {{ lesson.testStartTime|date('Y-m-d H:i') }}{% endif %}">
@@ -83,7 +83,7 @@
     <script>app.load('course-manage/lesson-testpaper-modal')</script>
 
   {% else %}
-    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    <div class="empty">{{'尚未创建试卷，请先'|trans}}<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">{{'创建试卷'|trans}}</a>。</div>
   {% endif %}
 
 {% endblock %}

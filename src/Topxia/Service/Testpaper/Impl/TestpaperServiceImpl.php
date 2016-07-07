@@ -83,7 +83,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         if ($mode == 'create') {
             if (!ArrayToolkit::requireds($fields, array('name', 'pattern', 'target'))) {
-                throw $this->createServiceException('缺少必要字段！');
+                throw $this->createServiceException($this->getKernel()->trans('缺少必要字段！'));
             }
 
             $filtedFields['name']          = $fields['name'];
@@ -129,7 +129,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         if (!in_array($testpaper['status'], array('closed', 'draft'))) {
-            throw $this->createServiceException('试卷状态不合法!');
+            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
         $testpaper = array(
@@ -149,7 +149,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createAccessDeniedException('试卷状态不合法!');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
         }
 
         $testpaper = array(
@@ -314,7 +314,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))) {
                 $questions[$item['questionId']] = array(
                     'isDeleted' => true,
-                    'stem'      => '此题已删除',
+                    'stem'      => $this->getKernel()->trans('此题已删除'),
                     'score'     => 0,
                     'answer'    => ''
                 );
@@ -488,17 +488,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $userId = $this->getCurrentUser()->id;
 
         if (empty($userId)) {
-            throw $this->createServiceException("当前用户不存在!");
+            throw $this->createServiceException($this->getKernel()->trans('当前用户不存在!'));
         }
 
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($id);
 
         if ($testpaperResult['userId'] != $userId) {
-            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
         }
 
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException("已经交卷的试卷不能更改答案!");
+            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能更改答案!'));
         }
 
         $items = $this->getTestpaperItems($testpaperResult['testId']);
@@ -662,7 +662,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $keys = explode('_', $key);
 
             if (!is_numeric($keys[1])) {
-                throw $this->createServiceException('得分必须为数字！');
+                throw $this->createServiceException($this->getKernel()->trans('得分必须为数字！'));
             }
 
             $testResults[$keys[1]][$keys[0]] = $value;
@@ -720,11 +720,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($id);
 
         if ($testpaperResult['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
         }
 
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException("已经交卷的试卷不能更改答案!");
+            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能更改答案!'));
         }
 
         //已经有记录的
@@ -792,7 +792,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
         if (count($items) != count($questions)) {
-            throw $this->createServiceException('数据缺失');
+            throw $this->createServiceException($this->getKernel()->trans('数据缺失'));
         }
 
         $types      = array();
@@ -824,7 +824,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (empty($existItems[$item['questionId']])) {
                 $item['questionType'] = $question['type'];
                 $item['parentId']     = $question['parentId'];
-                // @todo, wellming.
+
+// @todo, wellming.
 
                 if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
                     $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
@@ -874,7 +875,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $paper = $this->getTestpaperDao()->getTestpaper($id);
 
         if (!$paper) {
-            throw $this->createServiceException('试卷不存在');
+            throw $this->createServiceException($this->getKernel()->trans('试卷不存在'));
         }
 
         $user = $this->getCurrentUser();
@@ -889,7 +890,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $targetId = explode('/', $target[1]);
             $member   = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
 
-            // @todo: 这个是有问题的。
+// @todo: 这个是有问题的。
 
             if ($member['role'] == 'teacher') {
                 return $user['id'];
@@ -913,19 +914,27 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function canLookTestpaper($resultId)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
         $paperResult = $this->getTestpaperResult($resultId);
 
         if (!$paperResult) {
-            throw $this->createNotFoundException('试卷不存在!');
+            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
         }
 
         $paper = $this->getTestpaperDao()->getTestpaper($paperResult['testId']);
 
         if (!$paper) {
-            throw $this->createNotFoundException('试卷不存在!');
+            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
         }
 
-        $user = $this->getCurrentUser();
+        if (($paperResult['status'] == 'doing' || $paper['status'] == 'paused') && ($paperResult['userId'] != $user['id'])) {
+            throw $this->createNotFoundException('无权查看此试卷');
+        }
 
         if ($user->isAdmin()) {
             return $user['id'];
@@ -982,7 +991,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $lesson = $this->getCourseService()->getLesson($lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException('课时不存在!');
+            throw $this->createNotFoundException($this->getKernel()->trans('课时不存在!'));
         }
 
         $target = 'course-'.$lesson['courseId'].'/lesson-'.$lesson['id'];

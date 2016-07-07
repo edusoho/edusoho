@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-
+        require('orgbundle/controller/org/org-tree-select').run();
         var $modal = $('#user-create-form').parents('.modal');
-        
+
         var validator = new Validator({
             element: '#user-create-form',
             autoSubmit: false,
@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element: '[name="emailOrMobile"]',
-            required: true, 
+            required: true,
             rule: 'email_or_mobile email_or_mobile_remote'
         });
 

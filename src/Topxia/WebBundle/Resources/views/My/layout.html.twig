@@ -1,6 +1,12 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{'我的学习'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}
+  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib'] %}
+    {{'我的教学'|trans}} - {{ parent() }}
+  {% else %}
+    {{'我的学习'|trans}} - {{ parent() }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -28,7 +34,7 @@
 
 
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{path('my_teaching_classrooms')}}">{{'所教'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}
+              <a href="{{path('my_teaching_classrooms')}}">{{'所教%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
               </a>
            </li>
 
@@ -52,11 +58,9 @@
             </li>
           {% endif %}
 
-          {% if is_plugin_installed('MaterialLib') %}
-            <li class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}">
-              <a href="{{path('material_lib_browsing') }}">{{'教学资料库'|trans}}</a>
-            </li>
-          {% endif %}
+          <li class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}">
+            <a href="{{path('material_lib_browsing') }}">{{'教学资料库'|trans}}</a>
+          </li>
         </ul>
       {% endif %}
 
@@ -68,7 +72,7 @@
 
 
           <li class="list-group-item {% if side_nav == 'my-classroom' %} active {% endif %}">
-            <a href="{{path('my_classrooms')}}">我的{{ setting('classroom.name')|default("班级") }}</a>
+            <a href="{{path('my_classrooms')}}">{{'我的%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a>
           </li>
 
 

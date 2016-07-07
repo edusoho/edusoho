@@ -97,8 +97,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         return array_map(function ($lessonMaterial) use ($newFiles) {
             $lessonMaterial['createdTime'] = date('c', $lessonMaterial['createdTime']);
-            $field = $lessonMaterial['fileId'];
-            $lessonMaterial['fileMime'] = $newFiles[$field]['type'];
+            $field                         = $lessonMaterial['fileId'];
+            $lessonMaterial['fileMime']    = $newFiles[$field]['type'];
             return $lessonMaterial;
         }, $lessonMaterials);
     }
@@ -205,14 +205,18 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $course  = $this->controller->getCourseService()->getCourse($courseId);
         $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
         $lessons = $this->controller->filterItems($lessons);
-
         if ($user->isLogin()) {
             $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
         } else {
             $learnStatuses = null;
         }
-
-        $files   = $this->getUploadFiles($courseId);
+        // $files = $this->getUploadFiles($courseId);
+        $fileIds = ArrayToolkit::column($lessons, 'mediaId');
+        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+        $files = array_map(function ($file) {
+            $file['convertParams'] = null; //过滤convertParams防止移动端报错
+            return $file;
+        }, $files);
         $lessons = $this->filterLessons($lessons, $files);
         return array(
             "lessons" => array_values($lessons),
@@ -252,7 +256,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime', 'DESC'),
             0,
             100
         );
@@ -260,9 +264,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $uploadFiles = array();
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2']        = json_decode($file['metas2'], true) ?: array();
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
             unset($file["metas"]);
             unset($file["metas2"]);
             unset($file["hashId"]);
@@ -413,14 +414,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($mediaSource == 'self') {
-            $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-
-                    $lesson['mediaConvertStatus'] = $file['convertStatus'];
+                    $lesson['mediaConvertStatus'] = $file['status'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
@@ -482,8 +480,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         }
 
                         if ($key) {
-                            $url                = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
+                            $result             = $this->controller->getMaterialLibService()->player($file['globalId']);
+                            $lesson['mediaUri'] = $result['url'];
                         } else {
                             $lesson['mediaUri'] = '';
                         }
@@ -494,9 +492,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'youku') {
+        } elseif ($mediaSource == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -504,9 +500,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'tudou') {
+        } elseif ($mediaSource == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -549,7 +543,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getPPTLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_ppt', '获取ppt课时失败!');
@@ -564,16 +558,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        $ppt = $this->controller->getMaterialLibService()->player($file['globalId']);
 
-        $ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-
-        if (isset($ppt["error"])) {
+        if (isset($ppt["convertStatus"])) {
             $ppt = array();
         }
 
-        $lesson['content'] = $ppt;
+        $lesson['content'] = $ppt['images'];
 
         return $lesson;
     }
@@ -620,7 +611,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
@@ -634,20 +625,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $swfUri = $url['url'];
+        $file = $this->controller->getMaterialLibService()->player($file['globalId']);
 
         $content = $lesson['content'];
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
         $render  = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $pdfUri,
-            'swfUri' => $swfUri,
+            'pdfUri' => $file['pdf'],
+            'swfUri' => $file['swf'],
             'title'  => $lesson['title']
         ));
 
@@ -661,9 +645,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $storage = $this->controller->getSettingService()->get("storage");
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            $file                  = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
-            $file["convertParams"] = json_decode($file["convertParams"], true);
-            $file["metas2"]        = json_decode($file["metas2"], true);
+            $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
             return $file;
         }
 

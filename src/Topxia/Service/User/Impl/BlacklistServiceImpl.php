@@ -21,7 +21,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function findBlacklistsByUserId($userId)
     {
         if (!$this->canTakeBlacklist($userId)) {
-            throw $this->createAccessDeniedException('您没有权限');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您没有权限'));
         }
         return $this->getBlacklistDao()->findBlacklistsByUserId($userId);
     }
@@ -29,21 +29,21 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function addBlacklist($blacklist)
     {
         if (!ArrayToolkit::requireds($blacklist, array('userId','blackId'))) {
-            throw $this->createServiceException('缺少必要字段，添加黑名单失败！');
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，添加黑名单失败！'));
         }
 
         if (!$this->canTakeBlacklist($blacklist['userId'])) {
-            throw $this->createAccessDeniedException('您没有权限');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您没有权限'));
         }
 
         $blackUser = $this->getUserService()->getUser($blacklist['blackId']);
         if (empty($blackUser)) {
-            throw $this->createNotFoundException('被拉黑用户不存在');
+            throw $this->createNotFoundException($this->getKernel()->trans('被拉黑用户不存在'));
         }
 
         $black = $this->getBlacklistByUserIdAndBlackId($blacklist['userId'], $blackUser['id']);
         if (!empty($black)) {
-            throw $this->createServiceException('不能重复添加黑名单！');
+            throw $this->createServiceException($this->getKernel()->trans('不能重复添加黑名单！'));
         }
 
         $blacklist['createdTime'] = time();
@@ -54,11 +54,11 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     public function deleteBlacklistByUserIdAndBlackId($userId, $blackId)
     {
         if (!$this->canTakeBlacklist($userId)) {
-            throw $this->createAccessDeniedException('您没有权限');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您没有权限'));
         }
         $black = $this->getBlacklistByUserIdAndBlackId($userId, $blackId);
         if (empty($black)) {
-            throw $this->createNotFoundException('该黑名单不存在');
+            throw $this->createNotFoundException($this->getKernel()->trans('该黑名单不存在'));
         }
 
         return $this->getBlacklistDao()->deleteBlacklistByUserIdAndBlackId($userId, $blackId);
@@ -68,7 +68,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
     {
         $owner = $this->getUserService()->getUser($userId);
         if (empty($owner['id'])) {
-            throw $this->createNotFoundException('黑名单拥有者用户不存在');
+            throw $this->createNotFoundException($this->getKernel()->trans('黑名单拥有者用户不存在'));
         }
         $user = $this->getCurrentUser();
         if ($user['id'] == $userId || $user->isAdmin()) {

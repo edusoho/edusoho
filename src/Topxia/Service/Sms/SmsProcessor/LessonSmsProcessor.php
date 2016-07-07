@@ -57,7 +57,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $lesson             = $this->getCourseService()->getLesson($targetId);
 
         if (empty($lesson)) {
-            throw new \RuntimeException('课时不存在');
+            throw new \RuntimeException($this->getKernel()->trans('课时不存在'));
         }
 
         $originUrl = $hostName;
@@ -81,19 +81,19 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $to         = $this->getUsersMobile($studentIds);
 
         $lesson['title']            = StringToolkit::cutter($lesson['title'], 20, 15, 4);
-        $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
+        $parameters['lesson_title'] = $this->getKernel()->trans('课时：').'《'.$lesson['title'].'》';
 
         if ($lesson['type'] == 'live') {
             $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         }
 
         $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
-        $parameters['course_title'] = '课程：《'.$course['title'].'》';
+        $parameters['course_title'] = $this->getKernel()->trans('课程：').'《'.$course['title'].'》';
 
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('发布');
         } else {
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('预告');
         }
 
         $parameters['url'] = $url;
@@ -141,5 +141,9 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

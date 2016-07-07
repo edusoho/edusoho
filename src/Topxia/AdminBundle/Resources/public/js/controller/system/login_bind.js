@@ -6,9 +6,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var validator = new Validator({
-                element: '#login_bind-form'
-            });
-        
+            element: '#login_bind-form',
+        });
+
         validator.addItem({
             element: '[name=temporary_lock_allowed_times]',
             rule: 'integer'
@@ -19,27 +19,39 @@ define(function(require, exports, module) {
             rule: 'integer'
         });
 
-        var hideOrShowTimeAndMinutes = function (){
-          if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1 ){
-            $('#times_and_minutes').show();
-          }else if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 0 ){
-            $('#times_and_minutes').hide();
-          };
-        };
-        hideOrShowTimeAndMinutes();
-        $('[name=temporary_lock_enabled]').change(function (){
-           hideOrShowTimeAndMinutes();
+        validator.addItem({
+            element: '[name=verify_code]',
+            rule: 'htmlTag'
         });
 
-       
-        $('[name=enabled]').change(function (){
-           if ( $('[name=enabled]').filter(':checked').attr("value") == 1 ){
-            $('#third_login').show();
-          }else if ( $('[name=enabled]').filter(':checked').attr("value") == 0 ){
-            $('#third_login').hide();
-          };
+        Validator.addRule("htmlTag", function(options) {
+            var value = $(options.element).val();
+            var illegalMatch = value.match(/>\s*\w{1,}|^\w{1,}\s*</gm);
+            var legalMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
+            return (illegalMatch == null ) && (legalMatch && legalMatch.length >0 )
+        }, "{{display}}应该为HTML meta标签");
+
+        var hideOrShowTimeAndMinutes = function() {
+            if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1) {
+                $('#times_and_minutes').show();
+            } else if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 0) {
+                $('#times_and_minutes').hide();
+            };
+        };
+        hideOrShowTimeAndMinutes();
+        $('[name=temporary_lock_enabled]').change(function() {
+            hideOrShowTimeAndMinutes();
         });
-        
+
+
+        $('[name=enabled]').change(function() {
+            if ($('[name=enabled]').filter(':checked').attr("value") == 1) {
+                $('#third_login').show();
+            } else if ($('[name=enabled]').filter(':checked').attr("value") == 0) {
+                $('#third_login').hide();
+            };
+        });
+
 
         $('[data-role=oauth2-setting]').each(function() {
             var type = $(this).data('type');
@@ -64,7 +76,7 @@ define(function(require, exports, module) {
 
         $('#help').popover({
             html: true,
-            container:"body",
+            container: "body",
             template: '<div class="popover help-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
         });
 

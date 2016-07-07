@@ -19,7 +19,7 @@
       {{'加入学习'|trans}}
     {% else %}
       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-        {% if course.coinPrice > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
+        {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
       {% else %}
         {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
       {% endif %}

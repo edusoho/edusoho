@@ -22,6 +22,13 @@ define(function(require, exports, module) {
 
 	};
 
+	exports.loadScript = function(scripts) {
+		for(var index in scripts) {
+			exports.load(scripts[index]);
+		}
+		
+	}
+
 	$('.shortcuts').on('click', '.shortcut-add', function() {
 		Notify.success(Translator.trans('已添加当前页面为常用链接！'));
 
@@ -49,6 +56,10 @@ define(function(require, exports, module) {
 
 	if (app.controller) {
 		exports.load(app.controller);
+	}
+
+	if (app.scripts) {
+		exports.loadScript(app.scripts);
 	}
 
 	$(document).ajaxSend(function(a, b, c) {

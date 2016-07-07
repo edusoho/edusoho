@@ -48,7 +48,8 @@ define(function(require, exports, module) {
                     plugins = $.extend(plugins, {
                         fingerprint: {
                             html: self.get('fingerprint'),
-                            duration: 5000
+                            duration: 100,
+                            frequency: 10000
                         }
                     })
                 }
@@ -148,7 +149,7 @@ define(function(require, exports, module) {
                         self.isPlaying() && player.pause();
                         player.currentTime(timelimit);
                         player.pluck({
-                            text: "免费试看结束，购买后可完整观看",
+                            text: Translator.trans('免费试看结束，购买后可完整观看'),
                             display:true
                         });
                     }

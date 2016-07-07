@@ -2,6 +2,7 @@
 {% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% set target = 'normal_index' %}
 <tr id="course-tr-{{ course.id }}">
+  {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
   <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
@@ -23,6 +24,7 @@
     {% endif %}
 
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
     {% if  course.serializeMode =="none" %}
     <span class="text-info">非连载课程</span>

@@ -5,14 +5,14 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        Validator.addRule('star', /^[1-5]$/, '请打分');
+        Validator.addRule('star', /^[1-5]$/, Translator.trans('请打分'));
 
         var $form = $('#review-form');
 
         if ($form.length > 0) {
             $form.find('.rating-btn').raty({
                 path: $form.find('.rating-btn').data('imgPath'),
-                hints: ['很差', '较差', '还行', '推荐', '力荐'],
+                hints: [Translator.trans('很差'), Translator.trans('较差'), Translator.trans('还行'), Translator.trans('推荐'), Translator.trans('力荐')],
                 score: function() {
                     return $(this).attr('data-rating');
                 },
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
                 element: $form.find('[name=rating]'),
                 required: true,
                 rule: 'star',
-                errormessageRequired: '请打分'
+                errormessageRequired: Translator.trans('请打分')
             });
 
             validator.addItem({
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                $form.find('[type=submit]').button('loading');
+                $form.find('.js-btn-save').button('loading');
 
                 $.post($form.attr('action'), $form.serialize(), function(json) {
                     $form.find('.text-success').fadeIn('fast', function(){
@@ -52,6 +52,10 @@ define(function(require, exports, module) {
                     });
                 }, 'json');
 
+            });
+
+            $form.find('.js-btn-save').on("click", function(){
+                $form.submit();
             });
 
 

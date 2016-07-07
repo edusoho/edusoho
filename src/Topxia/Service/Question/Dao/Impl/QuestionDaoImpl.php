@@ -188,7 +188,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $fields = array('finishedTimes', 'passedTimes');
 
         if (!in_array($status, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $status, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans("%status%字段不允许增减，只有%fields%才被允许增减",array('%status%'=>$status,'%fields%'=>implode(',', $fields)))));
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
@@ -260,6 +260,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
                         ->andWhere('type = :type')
                         ->andWhere('stem LIKE :stem')
                         ->andWhere("type IN ( :types )")
+                        ->andwhere("subCount <> :subCount")
                         ->andWhere("id NOT IN ( :excludeIds ) ");
 
         if (isset($conditions['excludeUnvalidatedMaterial']) && ($conditions['excludeUnvalidatedMaterial'] == 1)) {
@@ -267,5 +268,10 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }
 
         return $builder;
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

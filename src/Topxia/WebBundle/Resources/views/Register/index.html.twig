@@ -17,7 +17,7 @@
         {{ web_macro.flash_messages() }}
 
         {% if inviteCode != null  %}
-          <div class="alert alert-info alert-sm">您正在通过<span class="color-gray mhs">{{ inviteUser['nickname'] }}</span>的邀请注册。</div>
+          <div class="alert alert-info alert-sm">{{'您正在通过'|trans}}<span class="color-gray mhs">{{ inviteUser['nickname'] }}</span>{{'的邀请注册。'|trans}}</div>
         {% endif %}
 
         {% if setting('auth.register_mode') == 'email' %}
@@ -49,7 +49,7 @@
         <div class="form-group mbl">
           <label class="control-label required" for="register_nickname">{{'用户名'|trans}}</label>
           <div class="controls">
-            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字'|trans}}">
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'中、英文均可，最长18个英文或9个汉字'|trans}}">
             <p class="help-block"></p>
           </div>
         </div>
@@ -66,11 +66,12 @@
             <div class="controls row">
               <div class = "col-xs-7">
                 <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+                <p class="help-block"></p>
               </div>
               <div class="col-xs-5">
                 <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'看不清，点击换一张'|trans}}" style="cursor:pointer;height:40px;width:100%">
               </div>
-              <div class="col-md-12 help-block"></div>
+              
             </div>
           </div>
         {% endif %}
@@ -104,7 +105,7 @@
           <div class="form-group mbl">
             <div class="controls">
               <label>
-                <input type="checkbox" id="user_terms" checked="checked"> 我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+                <input type="checkbox" id="user_terms" checked="checked"> {{'我已阅读并同意'|trans}}<a href="{{ path('user_terms') }}" target="_blank">《{{'服务协议'|trans}}》</a>
               </label>
             </div>
           </div>
@@ -119,7 +120,7 @@
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         {% if app.request.get('inviteCode', '') %}
-        <input type="hidden" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
+        <input type="hidden" id="invite_code" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
         {% endif %}
 
       </form>
@@ -127,7 +128,7 @@
       {% if setting('login_bind.enabled') %}
         <div class="social-login">
           <span>
-            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path,inviteCode:inviteCode|default('')})) }}
           </span>
           <div class="line"></div>
         </div>

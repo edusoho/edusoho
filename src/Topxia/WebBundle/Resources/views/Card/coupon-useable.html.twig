@@ -8,7 +8,11 @@
   {% endif %}
 
   {% if cardDetail.targetType == "classroom" %}
+    {% if cardDetail.targetId == 0 %}
     <p class="title">{{'可用于抵扣全站班级'|trans}}</p>
+    {% else %}
+    <p class="title">{{'可用于抵扣指定班级'|trans}}</p>
+    {% endif %}
   {% endif %}
 
   {% if cardDetail.targetType == "vip" %}
@@ -28,12 +32,13 @@
     {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}<a href="{{ path('course_show',{ id : cardDetail.targetId }) }}">{{'去购买课程'|trans}} ></a>
     {% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}<a href="{{ path('course_explore') }}">{{'去购买课程'|trans}} ></a>
     {% elseif cardDetail.targetType == "vip" %}<a href="{{ path('vip') }}">{{'去开通会员'|trans}} ></a>
-    {% elseif cardDetail.targetType == "classroom" %}<a href="{{ path('classroom_explore') }}">{{'去购买班级'|trans}} ></a>
+    {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}<a href="{{ path('classroom_explore') }}">{{'去购买班级'|trans}} ></a>
+    {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}<a href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}">{{'去购买班级'|trans}} ></a>
     {% else %}<a href="{{ path('course_explore') }}">{{'去消费'|trans}} ></a>
     {% endif %}
   </p>
-  <p>{{'有效期截止：'|trans}}<span>{{ (cardDetail.deadline)|date('Y') }}{{'年'|trans}}{{ (cardDetail.deadline)|date('n') }}{{'月'|trans}}{{ (cardDetail.deadline)|date('d') }}{{'日'|trans}}</span></p>
+  <p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
   {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
-    <p>{{'使用条件：'|trans}}<span>满{{ (cardDetail.fullDiscountPrice) }}可用</span></p>
+    <p>{{'使用条件：'|trans}}<span>{{'满%fullDiscountPrice%'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('可用'|trans)})}}</span></p>
   {% endif %}
 </div>

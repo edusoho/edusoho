@@ -19,7 +19,7 @@
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% endif %}
       	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
-        data-price-type = "{{priceType|default('RMB')}}" data-cash-model='{{setting('coin.cash_model')}}'/>
+        data-price-type = "{{priceType|default('RMB')}}" data-cash-model='{{setting('coin.cash_model')|default('none')}}'/>
         <input type="hidden" name="targetType" value="{{targetType}}"/>
         <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
         <input type="hidden" name="targetId" value="{{targetId}}"/>
@@ -44,22 +44,26 @@
         </div>
 
         {% if targetType in ['course','vip','classroom'] %}
-        <div class="order-detail-bg">
+          <div class="order-detail-bg">
 
-          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
+            {% if (is_plugin_installed("Coupon") and setting('coupon.enabled')) 
+                or setting('invite.invite_code_setting')|default(false) 
+            %}
+              {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
+            {% endif %}
 
-          {% if setting('coin.coin_enabled') %}
-          	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
-          {% endif %}
+            {% if setting('coin.coin_enabled') %}
+            	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
+            {% endif %}
 
-        </div>
+          </div>
         {% endif %}
 
         <div class="form-group">
           <div class="total-price">
             {{'应付金额：'|trans}}
             {% if priceType|default('RMB') == "Coin" %}
-              <span role="pay-coin">0</span> {{setting("coin.coin_name")}} ÷ {{'汇率'|trans}}({{cashRate|default(1)}}) = <span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb"></span> {{'元'|trans}}
+              <span role="pay-coin">0</span> {{'%coin_name% ÷ 汇率(%cashRate%) = '|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb"></span> {{'元'|trans}}
             {% else %}
               <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
             {% endif %}

@@ -3,7 +3,7 @@
     {{ render(controller('ClassroomBundle:Classroom:dashboard',{classroom:classroom, nav:nav, member:member})) }}
     {% if courses is empty %}
       <ul class="media-list">
-        <li class="mvl tac text-muted">暂无课程内容</li>
+        <li class="mvl tac text-muted">{{'暂无课程内容'|trans}}</li>
       </ul>
     {% else %}
       <div class="class-content">
@@ -23,37 +23,37 @@
                 <a href="{{path('course_show',{id:course.id})}}" target="_blank">{{course.title}}</a>
               </h4>
               <div class="metas">
-                <span class="period">{{course.lessonNum}}课时</span>
+                <span class="period">{{'%lessonNum%课时'|trans({'%lessonNum%':course.lessonNum})}}</span>
                 <span class="price">
                 {% if courseMembers[course.id] and not member and setting('classroom.discount_buy') %}
-                已购买
+                {{'已购买'|trans}}
                 {% else %}
                   {% if member and not 'auditor' in member.role %}
                     {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
-                    未学
+                    {{'未学'|trans}}
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
-                    <span class="text-success">已学完</span>
+                    <span class="text-success">{{'已学完'|trans}}</span>
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum < course.lessonNum %}
-                    <span class="text-info">学习中</span>
+                    <span class="text-info">{{'学习中'|trans}}</span>
                     {% else %}
-                    未学
+                    {{'未学'|trans}}
                     {% endif %} 
 
 
                   {% elseif courseMembers[course.id] and member and 'auditor' in member.role  and setting('classroom.discount_buy') %}
-                  已购买
+                  {{'已购买'|trans}}
                   {% else %}
                       {% if setting('coin.coin_enabled') and setting('coin. price_type') == 'Coin' %}
 
                         {% if course.price * setting('coin.cash_rate') > 0 %}
                         {{course.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}} 
-                        {% else %}免费{% endif %}
+                        {% else %}{{'免费'|trans}}{% endif %}
 
                       {% else %}
 
                         {% if course.price > 0 %}
-                           {{ course.price }}元 
-                        {% else %}免费{% endif %}
+                           {{ course.price }}{{'元'|trans}} 
+                        {% else %}{{'免费'|trans}}{% endif %}
 
                       {% endif %}
 

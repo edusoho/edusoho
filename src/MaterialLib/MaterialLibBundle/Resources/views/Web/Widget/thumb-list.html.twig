@@ -1,0 +1,26 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+<div class="row">
+{% for uploadFile in files %}
+   {% include 'MaterialLibBundle:Web/Widget:thumb-item.html.twig' with {uploadFile:uploadFile} %}
+{% else %}
+   <div class="empty">无文件记录</div>
+{% endfor %}
+</div>
+{% if paginator.lastPage > 1 %}
+<nav class=" {{ class|default('text-center') }}">
+  <ul class="pagination">
+    {% if paginator.currentPage != paginator.firstPage %}
+      <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
+      <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+    {% endif %}
+    {% for page in paginator.pages %}
+      <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if paginator.currentPage != paginator.lastPage %}
+      <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">尾页</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

@@ -24,8 +24,8 @@
      <div style="float:right;" class="text-muted mrm mls">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
             <span class="course-price" style="display:inline">
-              {% if course.coinPrice > 0 %}
-                 {{'价格：'|trans}} {{ course.coinPrice }}{{setting('coin.coin_name')}}
+              {% if course.price > 0 %}
+                 {{'价格：'|trans}} {{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
               {% else %}
                 {{'免费'|trans}}
               {% endif %}
@@ -33,7 +33,7 @@
         {% else %}
           <span class="course-price">
             {% if course.price > 0 %}
-               {{'价格：'|trans}} {{ course.price }}{{'元'|trans}}
+               {{'价格 : %price%元'|trans({'%price%': course.price })}}
             {% else %}
               {{'免费'|trans}}
             {% endif %}
@@ -42,7 +42,7 @@
 
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员'|trans)}}</span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{'%user_name%'|trans({'%user_name%': default.user_name|default('学员'|trans)})}}</span>
         {% endif %}
 
         </div>
@@ -67,8 +67,8 @@
         {% set lesson = course.lesson|default(null) %}
         {% if lesson %}
           <div class="live-course-lesson mbm">
-            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+            <span class="text-success fsm mrm">{{'%startTime%'|trans({'%startTime%': lesson.startTime|date('n月j日 H:i'|trans)}) }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted fsm mrm">{{'第%number%'|trans({'%number%': lessom.number|default(课时|trans)})}}</span>
           </div>
         {% endif %}
       {% else %}

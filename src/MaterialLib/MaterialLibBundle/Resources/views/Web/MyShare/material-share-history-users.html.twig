@@ -1,0 +1,47 @@
+
+<div>
+<tr>
+    <th width="50%"class="text-center">昵称</th>
+    <th width="30%" class="text-center">时间</th>
+    <th width="20%"class="text-center">操作</th>
+</tr>
+
+
+{% for history in shareHistories %}
+    <tr class="share-history-record" data-role="item">
+        <td class="text-center">
+            将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+        </td>
+        <td class="text-center">{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
+        <td class="text-center">
+            {% if history['isActive'] == '1' %}
+                <div class="pull-right">
+                    <a data-url="{{ path('material_lib_cancel_sharing') }}" targetUserId="{{ history['targetUserId'] }}" class="btn btn-default btn-sm cancel-share-btn">取消分享</a>
+                </div>
+            {% endif %}
+        </td>
+    </tr>
+{% else %}
+    <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
+{% endfor %}
+</div>
+<input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+    {% if paginator.lastPage > 1 %}
+    <nav class=" {{ class|default('text-center') }}">
+      <ul class="pagination" data-url="{{ path('material_lib_my_sharing_users') }}">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
+          <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">尾页</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+

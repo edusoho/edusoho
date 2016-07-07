@@ -38,7 +38,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-name-field',
             required: true,
-            rule: 'remote'
+            rule: 'minlength{min:1} maxlength{max:10} remote'
         });
 
         $('body').on('click', '#live', function(){

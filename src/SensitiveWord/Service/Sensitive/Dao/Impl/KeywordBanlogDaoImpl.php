@@ -87,7 +87,7 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao {
                 $conditions['keywordName'] = "%{$conditions['keyword']}%";
             }
         }
-        // var_dump($conditions['userId']);exit();
+
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'keyword_banlog')
             ->andWhere('id = :id')

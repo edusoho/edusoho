@@ -26,7 +26,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "this_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week');
                 $endTime   = strtotime('Monday this week');
             } else {
@@ -36,7 +36,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "last_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
                 $endTime   = strtotime('Monday this week') - (7 * 24 * 60 * 60);
             } else {
@@ -104,9 +104,9 @@ class DefaultController extends BaseController
 
     public function inspectAction(Request $request)
     {
-        $inspectList = array();
-        $inspectList = array($this->addInspectRole('host', $this->hostInspect($request)));
-
+        $inspectList = array(
+            $this->addInspectRole('host', $this->hostInspect($request))
+        );
         $inspectList = array_filter($inspectList);
         return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
             'inspectList' => $inspectList
@@ -127,14 +127,14 @@ class DefaultController extends BaseController
         $currentHost        = $request->server->get('HTTP_HOST');
         $siteSetting        = $this->getSettingService()->get('site');
         $settingUrl         = $this->generateUrl('admin_setting_site');
-        $fliter             = array('http://', 'https://');
+        $filter             = array('http://', 'https://');
         $siteSetting['url'] = rtrim($siteSetting['url']);
         $siteSetting['url'] = rtrim($siteSetting['url'], '/');
 
-        if ($currentHost != str_replace($fliter, "", $siteSetting['url'])) {
+        if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
-                'status'       => 'fail',
-                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'status'       => 'warning',
+                'errorMessage' => $this->getServiceKernel()->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl
@@ -185,12 +185,12 @@ class DefaultController extends BaseController
         $apps          = array();
         $systemVersion = "";
         $error         = "";
-        $apps          = $this->getAppService()->checkAppUpgrades();
+
+        $apps = $this->getAppService()->checkAppUpgrades();
 
         $appsAll = $this->getAppService()->getCenterApps();
 
-        $codes = ArrayToolkit::column($appsAll, 'code');
-
+        $codes         = ArrayToolkit::column($appsAll, 'code');
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         $unInstallAppCount = count($appsAll) - count($installedApps);
@@ -212,13 +212,17 @@ class DefaultController extends BaseController
         $api              = CloudAPIFactory::create('leaf');
         $liveCourseStatus = $api->get('/lives/account');
 
+        $rootApi             = CloudAPIFactory::create('root');
+        $mobileCustomization = $rootApi->get('/customization/mobile/info');
+
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
-            "apps"              => $apps,
-            "error"             => $error,
-            "mainAppUpgrade"    => $mainAppUpgrade,
-            "app_count"         => $appCount,
-            "unInstallAppCount" => $unInstallAppCount,
-            "liveCourseStatus"  => $liveCourseStatus
+            "apps"                => $apps,
+            "error"               => $error,
+            "mainAppUpgrade"      => $mainAppUpgrade,
+            "app_count"           => $appCount,
+            "unInstallAppCount"   => $unInstallAppCount,
+            "liveCourseStatus"    => $liveCourseStatus,
+            "mobileCustomization" => $mobileCustomization
         ));
     }
 
@@ -474,7 +478,7 @@ class DefaultController extends BaseController
     public function weekday($time)
     {
         if (is_numeric($time)) {
-            $weekday = array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+            $weekday = array($this->getServiceKernel()->trans('星期日'), $this->getServiceKernel()->trans('星期一'), $this->getServiceKernel()->trans('星期二'), $this->getServiceKernel()->trans('星期三'), $this->getServiceKernel()->trans('星期四'), $this->getServiceKernel()->trans('星期五'), $this->getServiceKernel()->trans('星期六'));
             return $weekday[date('w', $time)];
         }
 

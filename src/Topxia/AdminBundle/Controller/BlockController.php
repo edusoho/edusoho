@@ -176,7 +176,7 @@ class BlockController extends BaseController
                 'data' => $data,
                 'content' => $html
             ));
-            $this->setFlashMessage('success', '保存成功!');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功!'));
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
@@ -192,8 +192,8 @@ class BlockController extends BaseController
         foreach ($block['meta']['items'] as $key => &$item) {
             $item['default'] = $block['data'][$key];
         }
-       
-        return new Response('<pre>' . StringToolkit::jsonPettry(json_encode($block['meta'], JSON_UNESCAPED_UNICODE)) . '</pre>');
+        
+        return new Response('<pre>' . StringToolkit::jsonPettry(StringToolkit::jsonEncode($block['meta'])) . '</pre>');    
     }
 
     public function visualHistoryAction(Request $request, $blockId)
@@ -257,9 +257,9 @@ class BlockController extends BaseController
         $code = $request->query->get('value');
         $blockByCode = $this->getBlockService()->getBlockByCode($code);
         if (empty($blockByCode)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => '此编码可以使用'));
+            return $this->createJsonResponse(array('success' => true, 'message' => $this->getServiceKernel()->trans('此编码可以使用')));
         }
-        return $this->createJsonResponse(array('success' => false, 'message' => '此编码已存在,不允许使用'));
+        return $this->createJsonResponse(array('success' => false, 'message' => $this->getServiceKernel()->trans('此编码已存在,不允许使用')));
     }
 
     public function checkBlockCodeForEditAction(Request $request, $id)
@@ -271,7 +271,7 @@ class BlockController extends BaseController
         } elseif ($id == $blockByCode['id']){
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
         } elseif ($id != $blockByCode['id']){
-            return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));
+            return $this->createJsonResponse(array('success' => false, 'message' => $this->getServiceKernel()->trans('不允许设置为已存在的其他编码值')));
         }
     }
 
@@ -281,7 +281,7 @@ class BlockController extends BaseController
         if ($request->getMethod() == 'POST') {
             $file = $request->files->get('file');
             if (!FileToolkit::isImageFile($file)) {
-                throw $this->createAccessDeniedException('图片格式不正确！');
+                throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
             }
 
             $filename = 'block_picture_' . time() . '.' . $file->getClientOriginalExtension();
@@ -312,7 +312,7 @@ class BlockController extends BaseController
     {
         $history = $this->getBlockService()->getBlockHistory($historyId);
         $this->getBlockService()->recovery($blockId, $history);
-        $this->setFlashMessage('success', '恢复成功!');
+        $this->setFlashMessage('success', $this->getServiceKernel()->trans('恢复成功!'));
         return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockId' => $blockId)));
     }
 

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             });
 
             if (ids.length == 0) {
-                Notify.danger('未选中任何' + name);
+                Notify.danger(Translator.trans('未选中任何') + name);
                 return ;
             }
 

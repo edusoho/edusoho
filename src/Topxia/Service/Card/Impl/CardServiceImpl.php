@@ -11,7 +11,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function addCard($card)
     {
         if (!ArrayToolkit::requireds($card, array('cardType', 'cardId', 'deadline', 'userId'))) {
-            throw $this->createServiceException('缺少必要字段，新创建卡失败！');
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，新创建卡失败！'));
         }
 
         $card['createdTime'] = time();
@@ -44,10 +44,11 @@ class CardServiceImpl extends BaseService implements CardService
         return $this->getCardDao()->updateCardByCardIdAndCardType($cardId, $cardType, $fields);
     }
 
-    // public function searchCards($conditions,$sort,$start,$limit)
-    // {
-
-    // }
+    public function searchCards($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareRecordConditions($conditions);
+        return $this->getCardDao()->searchCards($conditions, $orderBy, $start, $limit);
+    }
 
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
@@ -70,6 +71,12 @@ class CardServiceImpl extends BaseService implements CardService
         $limit       = count($ids);
         $cardsDetail = $processor->getCardDetailsByCardIds($ids);
         return $cardsDetail;
+    }
+
+    public function findCardsByCardIds($cardIds)
+    {
+        $cards = $this->getCardDao()->findCardsByCardIds($cardIds);
+        return ArrayToolkit::index($cards, 'cardId');
     }
 
     public function sortArrayByField(array $array, $field)
@@ -101,6 +108,38 @@ class CardServiceImpl extends BaseService implements CardService
         return $array;
     }
 
+    private function _prepareRecordConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+
+        );
+
+        if (array_key_exists('nickname', $conditions)) {
+            if ($conditions['nickname']) {
+                $users                 = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                $conditions['userIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
+            }
+        }
+
+        if (isset($conditions['startDateTime'])) {
+            $conditions['reciveStartTime'] = $conditions['startDateTime'];
+            unset($conditions['startDateTime']);
+        }
+
+        if (isset($conditions['endDateTime'])) {
+            $conditions['reciveEndTime'] = $conditions['endDateTime'];
+            unset($conditions['endDateTime']);
+        }
+
+        return $conditions;
+    }
+
     protected function getCardDao()
     {
         return $this->createDao('Card.CardDao');
@@ -109,5 +148,10 @@ class CardServiceImpl extends BaseService implements CardService
     protected function getDetailProcessor($cardType)
     {
         return DetailFactory::create($cardType);
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

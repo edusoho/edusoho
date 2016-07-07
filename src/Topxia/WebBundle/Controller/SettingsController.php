@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
@@ -26,6 +26,7 @@ class SettingsController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
+
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('基础信息保存成功。'));
             } else {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('不能修改已绑定的手机。'));
@@ -41,7 +42,6 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile'    => $profile,
             'fields'     => $fields,
@@ -52,23 +52,37 @@ class SettingsController extends BaseController
 
     public function approvalSubmitAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user              = $this->getCurrentUser();
+        $profile           = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
 
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
 
+            if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
+                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
+            }
+
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            $this->setFlashMessage('success', '实名认证提交成功！');
-            return $this->redirect($this->generateUrl('settings'));
+            // $this->setFlashMessage('success', '实名认证提交成功！');
+            return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+            'profile' => $profile
         ));
     }
 
@@ -86,12 +100,12 @@ class SettingsController extends BaseController
             $nickname = $request->request->get('nickname');
 
             if ($this->getSensitiveService()->scanText($nickname)) {
-                $this->setFlashMessage('danger', '用户名中含有敏感词，更新失败！');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户名中含有敏感词，更新失败！'));
                 return $this->redirect($this->generateUrl('settings'));
             }
 
             $this->getAuthService()->changeNickname($user['id'], $nickname);
-            $this->setFlashMessage('success', '用户名修改成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户名修改成功！'));
             return $this->redirect($this->generateUrl('settings'));
         }
 
@@ -124,8 +138,8 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('avatar', 'file')
-                     ->getForm();
+            ->add('avatar', 'file')
+            ->getForm();
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 
@@ -136,12 +150,13 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
+        $goto       = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form'          => $form->createView(),
             'user'          => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
-            'fromCourse'    => $fromCourse
+            'fromCourse'    => $fromCourse,
+            'goto'          => $goto
         ));
     }
 
@@ -157,8 +172,33 @@ class SettingsController extends BaseController
 
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-
+        $goto                                        = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize,
+            'goto'        => $goto
+
+        ));
+    }
+
+    public function avatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
+            $user   = $this->getUserService()->getUser($currentUser['id']);
+            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+            return $this->createJsonResponse(array(
+                'status' => 'success',
+                'avatar' => $avatar));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop-modal.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
@@ -176,20 +216,12 @@ class SettingsController extends BaseController
         $url = $this->getAuthService()->getPartnerAvatar($currentUser['id'], 'big');
 
         if (empty($url)) {
-            $this->setFlashMessage('danger', '获取论坛头像地址失败！');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('获取论坛头像地址失败！'));
             return $this->createJsonResponse(true);
         }
 
-        $avatar = $this->fetchAvatar($url);
-
-        if (empty($avatar)) {
-            $this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
-            return $this->createJsonResponse(true);
-        }
-
-        $imgUrl = $request->request->get('imgUrl');
-        $file   = new File($this->downloadImg($imgUrl));
-
+        $imgUrl    = $request->request->get('imgUrl');
+        $file      = new File($this->downloadImg($imgUrl));
         $groupCode = "tmp";
         $imgs      = array(
             'large'  => array("200", "200"),
@@ -256,7 +288,7 @@ class SettingsController extends BaseController
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile  = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-        && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+            && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
         $itemScore     = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
@@ -281,15 +313,20 @@ class SettingsController extends BaseController
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
         if ($hasPayPassword) {
-            $this->setFlashMessage('danger', '不能直接设置新支付密码。');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('不能直接设置新支付密码。'));
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -298,11 +335,11 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    $this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('当前用户登录密码不正确，请重试！'));
                     return $this->redirect($this->generateUrl('settings_pay_password'));
                 } else {
                     $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('新支付密码设置成功，您可以在此重设密码。'));
                 }
 
                 return $this->redirect($this->generateUrl('settings_reset_pay_password'));
@@ -321,14 +358,14 @@ class SettingsController extends BaseController
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
         if ($hasPayPassword) {
-            return $this->createJsonResponse('不能直接设置新支付密码。');
+            return $this->createJsonResponse($this->getServiceKernel()->trans('不能直接设置新支付密码。'));
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -337,10 +374,10 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
+                    return $this->createJsonResponse(array('ACK' => 'fail', 'message' => $this->getServiceKernel()->trans('当前用户登录密码不正确，请重试！')));
                 } else {
                     $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
+                    return $this->createJsonResponse(array('ACK' => 'success', 'message' => $this->getServiceKernel()->trans('新支付密码设置成功！')));
                 }
             }
         }
@@ -350,16 +387,58 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function setPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!empty($user['password'])) {
+            throw new \RuntimeException("登录密码已设置，请勿重复设置");
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                $form = $this->createFormBuilder()
+                    ->add('currentUserLoginPassword', 'password')
+                    ->add('newPayPassword', 'password')
+                    ->add('confirmPayPassword', 'password')
+                    ->getForm();
+
+                return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array(
+                    'form' => $form->createView()
+                ));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:password-modal.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
     public function resetPayPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     // ->add('currentUserLoginPassword','password')
-                     ->add('oldPayPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+        // ->add('currentUserLoginPassword','password')
+            ->add('oldPayPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
+
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -368,10 +447,10 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']))) {
-                    $this->setFlashMessage('danger', '支付密码不正确，请重试！');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('支付密码不正确，请重试！'));
                 } else {
                     $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '重置支付密码成功。');
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('重置支付密码成功。'));
                 }
 
                 return $this->redirect($this->generateUrl('settings_reset_pay_password'));
@@ -409,10 +488,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('payPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->add('currentUserLoginPassword', 'password')
-                     ->getForm();
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -421,7 +500,7 @@ class SettingsController extends BaseController
                 $data = $form->getData();
 
                 if ($data['payPassword'] != $data['confirmPayPassword']) {
-                    $this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('两次输入的支付密码不一致。'));
                     return $this->updatePayPasswordReturn($form, $token);
                 }
 
@@ -430,7 +509,7 @@ class SettingsController extends BaseController
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
                     return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
                 } else {
-                    $this->setFlashMessage('danger', '用户登录密码错误。');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户登录密码错误。'));
                 }
             }
         }
@@ -458,15 +537,15 @@ class SettingsController extends BaseController
         $verifiedMobile       = $user['verifiedMobile'];
         $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
         $canSmsFind           = ($hasVerifiedMobile) &&
-        ($this->setting('cloud_sms.sms_enabled') == '1') &&
-        ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
+            ($this->setting('cloud_sms.sms_enabled') == '1') &&
+            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
         if ((!$hasSecurityQuestions) && ($canSmsFind)) {
             return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
         }
 
         if (!$hasSecurityQuestions) {
-            $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还没有安全问题，请先设置。'));
             return $this->forward('TopxiaWebBundle:Settings:securityQuestions');
         }
 
@@ -480,11 +559,11 @@ class SettingsController extends BaseController
                 $answer, $userSecureQuestion['securityAnswerSalt'], $userSecureQuestion['securityAnswer']);
 
             if (!$isAnswerRight) {
-                $this->setFlashMessage('danger', '回答错误。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('回答错误。'));
                 return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
-            $this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('回答正确，你可以开始更新支付密码。'));
             return $this->setPayPasswordPage($request, $user['id']);
         }
 
@@ -507,14 +586,14 @@ class SettingsController extends BaseController
         $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
 
         if (!$hasVerifiedMobile) {
-            $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还没有绑定手机，请先绑定。'));
             return $this->redirect($this->generateUrl('settings_bind_mobile', array(
             )));
         }
 
         if ($request->getMethod() == 'POST') {
             if ($currentUser['verifiedMobile'] != $request->request->get('mobile')) {
-                $this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您输入的手机号，不是已绑定的手机'));
                 SmsToolkit::clearSmsSession($request, $scenario);
                 goto response;
             }
@@ -522,10 +601,10 @@ class SettingsController extends BaseController
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
             if ($result) {
-                $this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('验证通过，你可以开始更新支付密码。'));
                 return $this->setPayPasswordPage($request, $currentUser['id']);
             } else {
-                $this->setFlashMessage('danger', '验证错误。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('验证错误。'));
             }
         }
 
@@ -563,20 +642,25 @@ class SettingsController extends BaseController
         $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
+
         if ($request->getMethod() == 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-                $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您的登录密码错误，不能设置安全问题。'));
                 return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
             }
 
             if ($hasSecurityQuestions) {
-                throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('您已经设置过安全问题，不可再次修改。'));
             }
 
             if ($request->request->get('question-1') == $request->request->get('question-2')
                 || $request->request->get('question-1') == $request->request->get('question-3')
                 || $request->request->get('question-2') == $request->request->get('question-3')) {
-                throw new \RuntimeException('2个问题不能一样。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('2个问题不能一样。'));
             }
 
             $fields = array(
@@ -588,7 +672,7 @@ class SettingsController extends BaseController
                 'securityAnswer3'   => $request->request->get('answer-3')
             );
             $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $this->setFlashMessage('success', '安全问题设置成功。');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('安全问题设置成功。'));
             $hasSecurityQuestions = true;
             $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         }
@@ -623,11 +707,18 @@ class SettingsController extends BaseController
             return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array());
         }
 
+        $user = $this->getCurrentUser();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
+
         if ($request->getMethod() == 'POST') {
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-                $this->setFlashMessage('danger', '您的登录密码错误');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您的登录密码错误'));
                 SmsToolkit::clearSmsSession($request, $scenario);
                 return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
             }
@@ -639,10 +730,10 @@ class SettingsController extends BaseController
                 $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
                 $setMobileResult = 'success';
-                $this->setFlashMessage('success', '绑定成功');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('绑定成功'));
             } else {
                 $setMobileResult = 'fail';
-                $this->setFlashMessage('danger', '绑定失败，原短信失效');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('绑定失败，原短信失效'));
             }
         }
 
@@ -658,12 +749,12 @@ class SettingsController extends BaseController
             $passwordRight = $this->getUserService()->verifyPassword($currentUser['id'], $password);
 
             if ($passwordRight) {
-                $response = array('success' => true, 'message' => '密码正确');
+                $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('密码正确'));
             } else {
-                $response = array('success' => false, 'message' => '密码错误');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('密码错误'));
             }
         } else {
-            $response = array('success' => false, 'message' => '密码不能为空');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('密码不能为空'));
         }
 
         return $this->createJsonResponse($response);
@@ -678,10 +769,15 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentPassword', 'password')
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('currentPassword', 'password')
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -690,10 +786,10 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-                    $this->setFlashMessage('danger', '当前密码不正确，请重试！');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('当前密码不正确，请重试！'));
                 } else {
                     $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-                    $this->setFlashMessage('success', '密码修改成功。');
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('密码修改成功。'));
                 }
 
                 return $this->redirect($this->generateUrl('settings_password'));
@@ -716,9 +812,9 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('password', 'password')
-                     ->add('email', 'text')
-                     ->getForm();
+            ->add('password', 'password')
+            ->add('email', 'text')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -728,47 +824,43 @@ class SettingsController extends BaseController
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
-                    $this->setFlashMessage('danger', '密码不正确，请重试。');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('密码不正确，请重试。'));
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
-                    $this->setFlashMessage('danger', '新邮箱，不能跟当前邮箱一样。');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('新邮箱，不能跟当前邮箱一样。'));
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
-                    $this->setFlashMessage('danger', '新邮箱已经被注册，请换一个试试。');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('新邮箱已经被注册，请换一个试试。'));
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $normalMail = array(
-                        'to'    => $data['email'],
-                        'title' => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
-                        'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
-                            'user'  => $user,
-                            'token' => $token
-                        ))
+                    $site        = $this->setting('site', array());
+                    $mailOptions = array(
+                        'to'       => $data['email'],
+                        'template' => 'email_reset_email',
+                        'params'   => array(
+                            'sitename'  => $site['name'],
+                            'siteurl'   => $site['url'],
+                            'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                            'nickname'  => $user['nickname']
+                        )
                     );
-                    $cloudMail = array(
-                        'to'        => $data['email'],
-                        'template'  => 'email_reset_email',
-                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                        'nickname'  => $user['nickname']
-                    );
-                    $mail = new Mail($normalMail, $cloudMail);
-                    $this->sendEmail($mail);
+                    $mail = MailFactory::create($mailOptions);
+                    $mail->send();
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
-                    $this->getLogService()->error('setting', 'email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
+                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
-
                 return $this->redirect($this->generateUrl('settings_email'));
             }
         }
@@ -782,21 +874,26 @@ class SettingsController extends BaseController
 
     public function emailVerifyAction()
     {
-        $user  = $this->getCurrentUser();
-        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-
+        $user      = $this->getCurrentUser();
+        $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $site      = $this->setting('site', array());
         try {
-            $this->sendEmail(
-                $user['email'],
-                "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
-                $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
-                    'user'  => $user,
-                    'token' => $token
-                ))
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_verify_email',
+                'params'   => array(
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname'],
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
+                )
             );
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
-            $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
+            $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
             $this->setFlashMessage('danger', "邮箱验证邮件发送失败，请联系管理员。");
         }
 
@@ -853,14 +950,14 @@ class SettingsController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($type, $user->id);
 
         if (!empty($bind)) {
-            $this->setFlashMessage('danger', '您已经绑定了该第三方网站的帐号，不能重复绑定!');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您已经绑定了该第三方网站的帐号，不能重复绑定!'));
             goto response;
         }
 
         $code = $request->query->get('code');
 
         if (empty($code)) {
-            $this->setFlashMessage('danger', '您取消了授权/授权失败，请重试绑定!');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您取消了授权/授权失败，请重试绑定!'));
             goto response;
         }
 
@@ -868,19 +965,19 @@ class SettingsController extends BaseController
         try {
             $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
-            $this->setFlashMessage('danger', '授权失败，请重试绑定!');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('授权失败，请重试绑定!'));
             goto response;
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         if (!empty($bind)) {
-            $this->setFlashMessage('danger', '该第三方帐号已经被其他帐号绑定，不能重复绑定!');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('该第三方帐号已经被其他帐号绑定，不能重复绑定!'));
             goto response;
         }
 
         $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
-        $this->setFlashMessage('success', '帐号绑定成功!');
+        $this->setFlashMessage('success', $this->getServiceKernel()->trans('帐号绑定成功!'));
 
         response:
         return $this->redirect($this->generateUrl('settings_binds'));
@@ -901,6 +998,31 @@ class SettingsController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Settings:setup.html.twig');
+    }
+
+    public function setupPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $form = $this->createFormBuilder()
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $targetPath = $this->getTargetPath($request);
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                return $this->redirect($targetPath);
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:setup-password.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
     public function setupCheckNicknameAction(Request $request)
@@ -948,15 +1070,15 @@ class SettingsController extends BaseController
         $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
-            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录系统参数尚未配置，请先配置。'));
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' => $type)));
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException("第三方登录({$type})未开启");
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)未开启', array('%type%' => $type)));
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
@@ -983,6 +1105,11 @@ class SettingsController extends BaseController
     protected function getSensitiveService()
     {
         return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function downloadImg($url)

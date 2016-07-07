@@ -40,7 +40,7 @@
             {% if lesson %}
               <span class="live-course-lesson metas">
                 <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                <span class="text-muted mrm">{{'第%number%'|trans({'%number%': lessom.number|default(课时|trans)})}}</span>
               </span>
             {% endif %}
           {% endif %}
@@ -49,16 +49,16 @@
             <span class="price-col">
               <span class="meta-label">{{'价格'|trans}}</span>
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}</span>
+              <span class="price-num" style="display:inline " >{% if course.price > 0 %}{{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% else %}
-              <span class="price-num">{% if course.price > 0 %}{{ course.price }}{{'元'|trans}}{% else %}{{'免费'|trans}}{% endif %}</span>
+              <span class="price-num">{% if course.price > 0 %}{{'%price%元'|trans({'%price%': course.price}) }}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% endif %}
             </span>
 
             {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <span class="student-col">
-              <span class="meta-label">{{setting('default.user_name', '学员'|trans)}}</span>
-              <span class="student-num">{{ course.studentNum }}{{'人'|trans}}</span>
+              <span class="meta-label">{{'%user_name%'|trans({'%user_name%': default.user_name|default('学员'|trans)})}}</span>
+              <span class="student-num">{{'%studentNum%人'|trans({'%studentNum%': course.studentNum })}}</span>
             </span>
             {% endif %}
 
@@ -108,7 +108,7 @@
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
               </div>
-              {{'学习总时长'|trans}}:{{course.learnTime}}
+              {{'学习总时长:%learnTime%'|trans({'%learnTime%': course.learnTime})}}
               <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
             {% else %}
               <div class="progress">

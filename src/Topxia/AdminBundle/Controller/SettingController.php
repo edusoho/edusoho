@@ -17,8 +17,8 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
-            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新PostNumSetting设置'), $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $setting = $this->getSettingService()->get('post_num_rules', array());
@@ -63,17 +63,13 @@ class SettingController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
 
-            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if (array_key_exists('ver', $mobile) && $mobile['ver']) {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        } else {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");
-        }
+        $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
 
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
@@ -90,7 +86,7 @@ class SettingController extends BaseController
         $file   = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename  = 'mobile_picture'.time().'.'.$file->getExtension();
@@ -103,7 +99,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片', array('%type%' => $type)), array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],
@@ -120,7 +116,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片', array('%type%' => $type)));
 
         return $this->createJsonResponse(true);
     }
@@ -131,7 +127,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -150,7 +146,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('logo' => $site['logo']));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新站点LOGO'), array('logo' => $site['logo']));
 
         $response = array(
             'path' => $site['logo'],
@@ -174,7 +170,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', "移除站点LOGO");
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除站点LOGO'));
 
         return $this->createJsonResponse(true);
     }
@@ -185,7 +181,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -204,7 +200,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', "更新直播LOGO", array('live_logo' => $site['live_logo']));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新直播LOGO'), array('live_logo' => $site['live_logo']));
 
         $response = array(
             'path' => $site['live_logo'],
@@ -228,7 +224,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', "移除直播LOGO");
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除直播LOGO'));
 
         return $this->createJsonResponse(true);
     }
@@ -239,7 +235,7 @@ class SettingController extends BaseController
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($objectFile)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $file   = $this->getFileService()->getFile($fileId);
@@ -261,7 +257,7 @@ class SettingController extends BaseController
         //浏览器图标覆盖默认图标
         copy($this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
-        $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新浏览器图标'), array('favicon' => $site['favicon']));
 
         $response = array(
             'path' => $site['favicon'],
@@ -285,7 +281,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', "移除站点浏览器图标");
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除站点浏览器图标'));
 
         return $this->createJsonResponse(true);
     }
@@ -321,8 +317,8 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mailer', $mailer);
             $mailerWithoutPassword             = $mailer;
             $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailerWithoutPassword);
-            $this->setFlashMessage('success', '电子邮件设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新邮件服务器设置'), $mailerWithoutPassword);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('电子邮件设置已保存！'));
         }
 
         $status = $this->checkMailerStatus();
@@ -364,27 +360,27 @@ class SettingController extends BaseController
             if (isset($defaultSetting['user_name'])) {
                 $defaultSetting['user_name'] = $defaultSetting['user_name'];
             } else {
-                $defaultSetting['user_name'] = '学员';
+                $defaultSetting['user_name'] = $this->getServiceKernel()->trans('学员');
             }
 
             if (isset($defaultSetting['chapter_name'])) {
                 $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
             } else {
-                $defaultSetting['chapter_name'] = '章';
+                $defaultSetting['chapter_name'] = $this->getServiceKernel()->trans('章');
             }
 
             if (isset($defaultSetting['part_name'])) {
                 $defaultSetting['part_name'] = $defaultSetting['part_name'];
             } else {
-                $defaultSetting['part_name'] = '节';
+                $defaultSetting['part_name'] = $this->getServiceKernel()->trans('节');
             }
 
             $default        = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
-            $this->setFlashMessage('success', '系统默认设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新系统默认设置'), $defaultSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('系统默认设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
@@ -400,13 +396,13 @@ class SettingController extends BaseController
             'defaultCoursePicture'         => 0,
             'defaultAvatarFileName'        => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent'          => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent'           => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent'            => '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！',
-            'classroomShareContent'        => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'user_name'                    => '学员',
-            'chapter_name'                 => '章',
-            'part_name'                    => '节'
+            'articleShareContent'          => $this->getServiceKernel()->trans('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'),
+            'courseShareContent'           => $this->getServiceKernel()->trans('我正在学习{{course}}，收获巨大哦，一起来学习吧！'),
+            'groupShareContent'            => $this->getServiceKernel()->trans('我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！'),
+            'classroomShareContent'        => $this->getServiceKernel()->trans('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'),
+            'user_name'                    => $this->getServiceKernel()->trans('学员'),
+            'chapter_name'                 => $this->getServiceKernel()->trans('章'),
+            'part_name'                    => $this->getServiceKernel()->trans('节')
         );
 
         return $default;
@@ -425,12 +421,12 @@ class SettingController extends BaseController
             $data       = $request->request->all();
             $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
             $this->getSettingService()->set('blacklist_ip', $ips);
-            $this->getLogService()->info('system', 'update_settings', "更新IP黑名单", $ips);
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新IP黑名单'), $ips);
 
             $ips        = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] = join("\n", $ips['ips']);
 
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
@@ -454,8 +450,8 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $customerServiceSetting = $request->request->all();
             $this->getSettingService()->set('customerService', $customerServiceSetting);
-            $this->getLogService()->info('system', 'customerServiceSetting', "客服管理设置", $customerServiceSetting);
-            $this->setFlashMessage('success', '客服管理设置已保存！');
+            $this->getLogService()->info('system', 'customerServiceSetting', $this->getServiceKernel()->trans('客服管理设置'), $customerServiceSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服管理设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
@@ -495,22 +491,22 @@ class SettingController extends BaseController
 
             if ($setting['mode'] == 'discuz') {
                 if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans("配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。", array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', "用户中心设置", $setting);
-            $this->setFlashMessage('success', '用户中心设置已保存！');
+            $this->getLogService()->info('system', 'setting_userCenter', $this->getServiceKernel()->trans('用户中心设置'), $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户中心设置已保存！'));
         }
 
         if (file_exists($discuzConfigPath)) {
@@ -542,7 +538,7 @@ class SettingController extends BaseController
 
         $default = array(
             'welcome_message_enabled'  => '0',
-            'welcome_message_body'     => '{{nickname}},欢迎加入课程{{course}}',
+            'welcome_message_body'     => $this->getServiceKernel()->trans('{{nickname}},欢迎加入课程{{course}}'),
             'buy_fill_userinfo'        => '0',
             'teacher_modify_price'     => '1',
             'teacher_search_order'     => '0',
@@ -576,8 +572,8 @@ class SettingController extends BaseController
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
-            $this->setFlashMessage('success', '课程设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $courseSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -614,8 +610,8 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
-            $this->setFlashMessage('success', '题库设置已保存！');
+            $this->getLogService()->info('system', 'questions_settings', $this->getServiceKernel()->trans('更新题库设置'), $questionsSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题库设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
@@ -627,7 +623,7 @@ class SettingController extends BaseController
         $setting     = $this->getSettingService()->get('user_partner', array());
 
         if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
-            return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('未开启用户中心，不能同步管理员帐号！'));
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
@@ -643,7 +639,7 @@ class SettingController extends BaseController
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
 
             if (empty($partnerUser)) {
-                $this->setFlashMessage('danger', '用户名或密码不正确。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户名或密码不正确。'));
                 goto response;
             } else {
                 $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
@@ -653,7 +649,7 @@ class SettingController extends BaseController
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);
 
-                $this->setFlashMessage('success', '管理员帐号同步成功。');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('管理员帐号同步成功。'));
 
                 return $this->redirect($this->generateUrl('admin_setting_user_center'));
             }

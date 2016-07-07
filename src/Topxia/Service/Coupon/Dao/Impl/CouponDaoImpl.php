@@ -48,14 +48,41 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function findCouponsByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
+    }
+
+
     public function searchCoupons($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
+        if(!empty($orderBy)) {
+            $length = count($orderBy)/2;
+            for ($i=0; $i < $length; $i++) { 
+                $index = $i*2;
+                $builder->orderBy($orderBy[$index], $orderBy[$index+1]);
+            }
+        }
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -130,7 +157,8 @@ class CouponDaoImpl extends BaseDao implements CouponDao
                         ->andWhere('createdTime < :endDateTime')
                         ->andWhere('code LIKE :codeLike')
                         ->andWhere('orderTime >= :useStartDateTime')
-                        ->andWhere('orderTime < :useEndDateTime');
+                        ->andWhere('orderTime < :useEndDateTime')
+                        ->andWhere('id IN ( :ids)');
 
         return $builder;
     }

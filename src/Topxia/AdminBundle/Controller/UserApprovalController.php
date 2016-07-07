@@ -11,20 +11,16 @@ class UserApprovalController extends BaseController
 {
     public function approvalsAction(Request $request, $approvalStatus)
     {
-        $fields = $request->query->all();
-
+        $fields     = $request->query->all();
+        $user       = $this->getCurrentUser();
         $conditions = array(
             'roles'          => '',
             'keywordType'    => '',
             'keyword'        => '',
             'approvalStatus' => $approvalStatus
         );
-
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
+        $conditions = $this->fillOrgCode($conditions);
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
@@ -43,9 +39,12 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus
         );
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+        if (!empty($conditions['startDateTime'])) {
             $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovalTime']   = strtotime($conditions['endDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         }
 
         $userApprovalcount = 0;
@@ -95,7 +94,7 @@ class UserApprovalController extends BaseController
                     $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
 
                     if (!empty($approval)) {
-                        $this->getTeacherAuditService()->rejectApproval($user['id'], '教师资格申请因实名认证未通过而失败');
+                        $this->getTeacherAuditService()->rejectApproval($user['id'], $this->getServiceKernel()->trans('教师资格申请因实名认证未通过而失败'));
                     }
                 }
 
@@ -155,13 +154,13 @@ class UserApprovalController extends BaseController
 
     public function cancelAction(Request $request, $id)
     {
-        $this->getUserService()->rejectApproval($id, '管理员撤销');
+        $this->getUserService()->rejectApproval($id, $this->getServiceKernel()->trans('管理员撤销'));
 
         if ($this->isPluginInstalled('TeacherAudit')) {
             $approval = $this->getTeacherAuditService()->getApprovalByUserId($id);
 
             if (!empty($approval)) {
-                $this->getTeacherAuditService()->rejectApproval($id, '管理员撤销');
+                $this->getTeacherAuditService()->rejectApproval($id, $this->getServiceKernel()->trans('管理员撤销'));
             }
         }
 
