@@ -1,6 +1,5 @@
 <?php
 
-use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -43,6 +42,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function batchUpdate($index)
     {
+        if (!$this->isFieldExist('announcement', 'copyId')) {
+            $this->getConnection()->exec("ALTER TABLE announcement ADD copyId INT(11) NOT NULL DEFAULT '0' COMMENT '复制的公告ID';");
+        }
+
         if ($index === 0) {
             return array(
                 'index'    => 1,
@@ -55,7 +58,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'storage'  => 'cloud',
             'globalId' => 0
         );
-        $total   = $this->getUploadFileService()->searchFileCount($conditions);
+        $total = $this->getUploadFileService()->searchFileCount($conditions);
 
         $maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
 
