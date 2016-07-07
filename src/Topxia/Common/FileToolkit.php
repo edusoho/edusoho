@@ -868,8 +868,8 @@ class FileToolkit
             'movie'       => 'video/x-sgi-movie',
             'smv'         => 'video/x-smv',
             'ice'         => 'x-conference/x-cooltalk',
-            'mpg'         => 'video/mpeg'
-
+            'mpg'         => 'video/mpeg',
+            'mp3'         => 'audio/mpeg'
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
