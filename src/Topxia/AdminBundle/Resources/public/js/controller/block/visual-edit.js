@@ -12,6 +12,9 @@ define(function(require, exports, module) {
             var selector = $(".poster-btn");
             initFirstTab(selector);
             bindSortPoster();
+        }
+
+        if($('.colorpicker-input').length>0 ){
             $('.colorpicker-input').colorpicker();
         }
 
