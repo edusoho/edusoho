@@ -3,8 +3,8 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class Courses extends BaseResource
 {
@@ -16,16 +16,16 @@ class Courses extends BaseResource
         $limit = $request->query->get('limit', 20);
 
         if (isset($conditions['cursor'])) {
-            $conditions['status'] = 'published';
-            $conditions['parentId'] = 0;
+            $conditions['status']         = 'published';
+            $conditions['parentId']       = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $courses = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
-            $courses = $this->assemblyCourses($courses);
-            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $courses                      = $this->assemblyCourses($courses);
+            $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
 
             return $this->wrap($this->filter($courses), $next);
         } else {
-            $total = $this->getCourseService()->searchCourseCount($conditions);
+            $total   = $this->getCourseService()->searchCourseCount($conditions);
             $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
 
             return $this->wrap($this->filter($courses), $total);
@@ -34,7 +34,7 @@ class Courses extends BaseResource
 
     public function discoveryColumn(Application $app, Request $request)
     {
-        $result = $request->query->all();
+        $result                   = $request->query->all();
         $conditions['categoryId'] = $result['categoryId'];
 
         if ($result['orderType'] == 'hot') {
@@ -54,16 +54,18 @@ class Courses extends BaseResource
             $result['showCount'] = 6;
         }
 
-        $conditions['status'] = 'published';
-        $total = $this->getCourseService()->searchCourseCount($conditions);
+        $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
+
+        $total   = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $result['showCount']);
         $courses = $this->filter($courses);
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
-            $userIds = $courses[$key]['teacherIds'];
-            $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
-            $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
+            $userIds                      = $courses[$key]['teacherIds'];
+            $courses[$key]['teachers']    = $this->getUserService()->findUsersByIds($userIds);
+            $courses[$key]['teachers']    = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
         }
 
         return $this->wrap($courses, min($result['showCount'], $total));
@@ -83,7 +85,7 @@ class Courses extends BaseResource
         $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
-        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($courses as &$course) {
             $courseTags = array();
@@ -95,8 +97,8 @@ class Courses extends BaseResource
                     continue;
                 }
                 $courseTags[] = array(
-                    'id' => $tagId,
-                    'name' => $tags[$tagId]['name'],
+                    'id'   => $tagId,
+                    'name' => $tags[$tagId]['name']
                 );
             }
             $course['tags'] = $courseTags;
@@ -105,8 +107,8 @@ class Courses extends BaseResource
         foreach ($courses as &$course) {
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
-                    'id' => $categories[$course['categoryId']]['id'],
-                    'name' => $categories[$course['categoryId']]['name'],
+                    'id'   => $categories[$course['categoryId']]['id'],
+                    'name' => $categories[$course['categoryId']]['name']
                 );
             } else {
                 $course['category'] = array();
