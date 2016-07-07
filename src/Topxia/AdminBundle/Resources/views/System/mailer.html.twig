@@ -27,22 +27,7 @@
     </div>
   {% else %}
     {{ web_macro.flash_messages() }}
-    {#{% if status == "" and setting('copyright.thirdCopyright',0) == 0 %}
-    <div id="email-status" class="email-status">
-      <p>尚未启用邮件服务，您可以选择以下任意一种邮件服务方式:</p>
-      <p><a href="{{path('admin_edu_cloud_email')}}"><button class=" btn btn-primary btn-lg"  >EduSoho云邮件服务</button></a><span style="margin-left:20px" class="label label-warning">免费公测中</span></p>
-      <p ><span class="text-muted">提供优质的邮件发送通道，保证邮件发送的稳定可靠。无需复杂配置，开通即可使用。
-      无每日发送数量限制。</span></p>
-      <p><button id="email"class=" btn btn-default btn-lg">第三方邮件服务</button></p>
-      <p ><span class="text-center text-muted">使用第三方邮件发送服务，缺乏稳定性保障。需要配置SMTP服务。有每日发送数量限制。</span></p>
-    </div>
-    {% elseif status == "cloud_email" and setting('copyright.thirdCopyright',0) == 0 %}
-    <span class="text" style="margin-right:15px;">已使用云邮件服务</span><a href="{{path('admin_edu_cloud_email')}}"><button class="btn btn-primary">了解详情</button></a>
-    {% endif %}#}
     <form class="form-horizontal" method="post" id="mailer-form" {#hidden="hidden"#}novalidate>
-      {#{% if setting('copyright.thirdCopyright',0) == 0 %}
-      <span>EduSoho云邮件服务提供优质的邮件发送通道，保证邮件发送的稳定可靠。无需复杂配置，开通即可使用。无发送数量限制。低至0.06元/封。</span><p><a href="{{path('admin_edu_cloud_email')}}">立即接入</a></p>
-      {% endif %}#}
       <div class="row form-group">
         <div class="col-md-3 control-label">
           <label >邮件发送</label>
@@ -90,7 +75,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="password" id="password" name="password" class="form-control" value="{{mailer.password}}">
-          <p class="help-block">smtp密码：即邮箱密码</p>
+          <p class="help-block">smtp密码：即邮箱密码/客户端授权密码</p>
         </div>
       </div>
      <p></p>

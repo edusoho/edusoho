@@ -9,5 +9,6 @@
     {% if not hide_footer|default(false) %}
       <div class="modal-footer">{% block footer %}{% endblock %}</div>
     {% endif %}
+    {% block script %}{% endblock %}
   </div>
 </div>

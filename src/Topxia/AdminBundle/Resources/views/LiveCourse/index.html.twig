@@ -11,6 +11,7 @@
   {% include 'TopxiaAdminBundle:LiveCourse:tab.html.twig' %}
   <br>
   <form id="message-search-form" class="form-inline well well-sm mtl" action=" {{ path('admin_live_course', {status:status}) }}" method="get" novalidate>
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
     <div class="form-group">
       <select class="form-control" name="keywordType">
         {{ select_options({courseTitle:'课程名', lessonTitle: '课时名'}, app.request.get('keywordType')) }}
@@ -32,6 +33,7 @@
     <thead>
     <tr>
       <th width="45%">课时</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>直播开始时间</th>
       <th>直播时长(分)</th>
       <th>最大参与人数</th>

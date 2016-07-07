@@ -1,0 +1,5 @@
+<div class="btn-group mbm">
+	<a href=" {{ url('admin_invite_coupon', {filter: 'invited'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'invited'%}btn-primary{% endif %}">注册奖励</a>
+
+	<a href=" {{ url('admin_invite_coupon', {filter: 'invite'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'invite' %}btn-primary{% endif %}">邀请奖励</a>
+</div>

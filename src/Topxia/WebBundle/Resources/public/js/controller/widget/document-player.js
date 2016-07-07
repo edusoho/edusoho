@@ -144,6 +144,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var swfobject = require('swfobject');
+    var docPlayer;
     window.onmessage=function(e){  
         if(e == null || e == undefined ){
             return;
@@ -152,7 +153,7 @@ define(function(require, exports, module) {
         if(typeof(isPageFullScreen) != "boolean"){
             return ;
         }
-        var docContent = document.getElementById("lesson-document-content");
+        var docContent = document.getElementById(docPlayer);
         if (isPageFullScreen) {
           docContent.removeAttribute("style");
         }else{
@@ -180,7 +181,7 @@ define(function(require, exports, module) {
 
         setup: function() {
             var self = this;
-
+            docPlayer = $(this.element).attr("id");
             self.init(this.element);
 
         },
@@ -189,7 +190,6 @@ define(function(require, exports, module) {
 
             if (this.isSupportHtml5() && !this.isIE9()) {
                 this.initPDFJSViewer($thiz);
-           
             }else{
                 this.initSwfViewer($thiz);
             }

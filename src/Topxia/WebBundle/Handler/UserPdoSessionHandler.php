@@ -70,7 +70,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     const LOCK_TRANSACTIONAL = 2;
 
-    const MAX_LIFE_TIME = 1800;
+    const MAX_LIFE_TIME = 86400;
 
     /**
      * @var \PDO|null PDO instance or null when not connected yet

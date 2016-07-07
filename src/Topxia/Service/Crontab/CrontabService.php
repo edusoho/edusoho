@@ -22,4 +22,8 @@ interface CrontabService
     public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId);
 
     public function updateJob($id, $fields);
+
+    public function searchJobs($conditions, $sort, $start, $limit);
+
+    public function searchJobsCount($conditions);
 }

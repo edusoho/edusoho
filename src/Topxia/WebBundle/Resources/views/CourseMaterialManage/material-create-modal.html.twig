@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'上传课程文件'|trans}}{% endblock %}
+{% block body %}
+
+{% set showCourseMaterialPane = 0 %}
+{% set showLinkPane = 0 %}
+
+<form id="course-material-form" class="form-horizontal" action="{{ path('course_manage_material_upload', {courseId:course.id, lessonId:0}) }}" enctype="multipart/form-data" method="post">
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
+      {% include 'TopxiaWebBundle:CourseMaterialManage:file-chooser.html.twig' %}
+      <input type="hidden" name="fileId">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls">
+      <button class="btn btn-primary" id="material-upload-btn" type="submit">{{'添加'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<script>app.load('course-manage/material-modal')</script>
+
+{% endblock %}
+
+{% set hide_footer = true %}

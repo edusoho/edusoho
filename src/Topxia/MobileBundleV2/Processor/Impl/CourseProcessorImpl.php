@@ -12,7 +12,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
     public function getVersion()
     {
-        var_dump("CourseProcessorImpl->getVersion");
         return $this->formData;
     }
 
@@ -776,14 +775,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $progress = array(0, 0, 0, 0, 0);
 
         foreach ($reviews as $key => $review) {
-            $rating = $review["rating"] < 1 ? 1 : $review["rating"];
-            $progress[$review["rating"] - 1]++;
+            if ($review["rating"] < 1) {
+                continue;
+            }
+            $progress[$review["rating"]-1]++;
         }
 
         return array(
             "info"     => array(
-                "ratingNum" => $course["ratingNum"],
-                "rating"    => $course["rating"]
+                "ratingNum" => empty($course["ratingNum"]) ? 0 : $course["ratingNum"],
+                "rating"    => empty($course["rating"]) ? 0 : $course["rating"]
             ),
             "progress" => $progress
         );
@@ -1431,6 +1432,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         if (!empty($courses)) {
             foreach ($lessons as $key => &$lesson) {
+                if (empty($courses[$lesson['courseId']])) {
+                    continue;
+                }
                 $newCourses[$key]                    = $courses[$lesson['courseId']];
                 $newCourses[$key]["liveLessonTitle"] = $lesson["title"];
                 $newCourses[$key]["liveStartTime"]   = date("c", $lesson["startTime"]);

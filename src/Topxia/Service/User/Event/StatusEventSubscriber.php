@@ -23,7 +23,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
 
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['id'], $post['userId']);
+            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom[0], $post['userId']);
         } else {
             $isTeacher = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']);
         }

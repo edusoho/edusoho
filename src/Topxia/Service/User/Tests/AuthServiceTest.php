@@ -120,7 +120,8 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
             'password'      => '123456',
-            'emailOrMobile' => '18989492142'
+            'emailOrMobile' => '18989492142',
+            'nickname'      => 'testuser',
         ));
         $this->assertNotNull($user);
         $this->getSettingService()->delete('auth');
@@ -187,7 +188,8 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
             'password' => '123456',
-            'mobile'   => '18989492142'
+            'mobile'   => '18989492142',
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkMobile('18989492142');
         $this->assertEquals('error_duplicate', $result[0]);
@@ -209,7 +211,8 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
             'password'      => '123456',
-            'emailOrMobile' => '18989492142'
+            'emailOrMobile' => '18989492142',
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkEmailOrMobile('18989492142');
         $this->assertEquals('error_duplicate', $result[0]);
@@ -223,7 +226,8 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
             'password'      => '123456',
-            'emailOrMobile' => 'test@edusoho.com'
+            'emailOrMobile' => 'test@edusoho.com',
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkEmailOrMobile('test@edusoho.com');
         $this->assertEquals('error_duplicate', $result[0]);

@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set script_controller = 'mobile/index' %}
+{% set isEsApp = (mobileCode == 'edusohov3') %}
 
 {% block title %}{{'移动学习'|trans}} - {{ parent() }}{% endblock %}
 
@@ -14,55 +15,71 @@
           {% if setting('mobile.appcover') %}
           <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
           {% else %}
-          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
+          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.jpg")}}" alt="">
           {% endif %}
         </div>
         <div class="mobile-content">
-          <div class="title">{{mobile.appname|default('阔知学堂'|trans)}}</div>
-          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地'|trans)}}</div>
-          <div class="label-mobile">{% if mobile.appname|default() %}{{'仅需一步，轻松搞定！'|trans}}{% else %}{{'仅需两步，轻松搞定！'|trans}} {% endif %}</div>
-          <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">{{'立即下载体验'|trans}}<i class="es-icon es-icon-keyboardarrowdown"></i></a>
+          <div class="title">
+            {% if setting('mobile.applogo') %}
+              <img src="{{asset(setting('mobile.applogo'))}}" alt="">
+            {% else %}
+              <img src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
+            {% endif %}
+            
+            {% if not isEsApp %}
+              {{mobile.appname|default('阔知学堂'|trans)}}
+            {% else %}
+              阔知学堂
+            {% endif %}
+          </div>
+          <div class="subtitle">
+            {% if not isEsApp %}
+              {{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}
+            {% else %}
+               将学校装进口袋，移动学习，随时随地。
+            {% endif %}
+          </div>
+          <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">{{'下载APP'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
+
+          {% if isEsApp %}
+          <a class="btn-mobile" href="javascript:;" data-url=".mobile-third">{{'登录网校'|trans}}<i class="es-icon es-icon-phone1"></i></a>
+          {% endif %}
         </div>
       </div>
     </div>
     <div class=" mobile-second">
       <div class="container">
         <div class="step">
-          {% if mobile.appname|default() == '' %}<span class="member">1</span>{% endif %}
-          {{'扫描二维码，下载手机APP。'|trans}}
+          {% if mobileCode == 'edusohov3' %}<span class="member">1</span>{{'第一步:'|trans}}{% endif %} {{'扫描二维码，下载手机APP。'|trans}}
         </div>
-        <div class="mobile-content row">
-          <div class="col-md-4 col-sm-6 col-xs-6">
-          {% if setting('mobile.applogo') %}
-          <img class="img-one" style="width:120px;height:120px" src="{{asset(setting('mobile.applogo'))}}" alt="">
-          {% else %}
-          <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
-          {% endif %}
+        <div class="row">
+          <div class="col-sm-6 text-center">
+            <img class="qrcode" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
           </div>
-          <div class="col-md-4 col-sm-6 col-xs-6">
-            <img class="img-two" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
-          </div>
-          <div class="col-md-4">
+          <div class="col-sm-6 text-center">
             <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>Android {{'客户端'|trans}}</a>
             <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>iPhone{{'客户端'|trans}}</a>
           </div>
         </div>
       </div>
     </div>
-    {% if mobile.appname|default() == ''%}
+    {% if isEsApp %}
     <div class="js-mobile-item mobile-third">
       <div class="container">
         <div class="step">
-          <span class="member">2</span> {{'打开阔知学堂APP，扫描网校二维码。'|trans}}
+          <span class="member">2</span>{{'第二步: 打开阔知学堂APP，扫描网校二维码。'|trans}}
         </div>
-        <div class="qrcode">
-          <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
-          <p>{{'扫一扫登录客户端'|trans}}</p>
+        <div class="row">
+          <div class="col-sm-6 text-center">
+            <img class="thumb" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+          </div>
+          <div class="col-sm-6 text-center">
+            <div class="qrcode">
+              <p>{{'扫一扫登录客户端'|trans}}</p>
+              <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
+            </div>
+          </div>
         </div>
-        <img class="img-two hidden-xs" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
-      </div>
-      <div class="mobile-footer hidden-xs">
-        <div class="container"><img src="{{asset("assets/v2/img/mobile/phone_gui_shadow.png")}}" alt=""></div>
       </div>
     </div>
     {% endif %}

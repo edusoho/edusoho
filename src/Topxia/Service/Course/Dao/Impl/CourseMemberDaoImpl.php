@@ -38,8 +38,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? and userId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
         }
 
         );
@@ -62,7 +62,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $this->filterStartLimit($start, $limit);
 
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
         $sql .= " AND m.role =  ? AND m.courseId = c.id ";
 
         if ($onlyPublished) {
@@ -79,7 +79,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $this->filterStartLimit($start, $limit);
 
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
         $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
 
         if ($onlyPublished) {
@@ -93,7 +93,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function getMembersByCourseIds($courseIds)
     {
-        $marks         = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks         = str_repeat('?,', count($courseIds) - 1) . '?';
         $sql           = "SELECT * FROM `course_member` WHERE courseId IN ({$marks})";
         $courseMembers = $this->getConnection()->fetchAll($sql, $courseIds);
         return $courseMembers;
@@ -105,7 +105,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
-            $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+            $sql .= " JOIN  " . CourseDao::TABLENAME . " AS c ON m.userId = ? ";
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";
 
             if ($onlyPublished) {
@@ -124,7 +124,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
-            $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+            $sql .= " JOIN  " . CourseDao::TABLENAME . " AS c ON m.userId = ? ";
             $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
 
             if ($onlyPublished) {
@@ -143,7 +143,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:type:{$type}:isLearned:{$isLearned}", $userId, $role, $type, $isLearned, function ($userId, $role, $type, $isLearned) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
-            $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+            $sql .= " JOIN  " . CourseDao::TABLENAME . " AS c ON m.userId = ? ";
             $sql .= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
 
             return $that->getConnection()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
@@ -157,7 +157,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $this->filterStartLimit($start, $limit);
 
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  ' . CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
         $sql .= " AND c.type =  ? AND m.courseId = c.id AND m.isLearned = ? AND m.role = ?";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -170,7 +170,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT m.* FROM {$that->getTable()} m ";
-            $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+            $sql .= ' JOIN  ' . CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";
 
             if ($onlyPublished) {
@@ -208,9 +208,29 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+        if($role == 'student') {
+            return $this->findStudentsByCourseId($courseId, $start, $limit);
+        }
+
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:role:{$role}:start:{$start}:limit:{$limit}", $courseId, $role, $start, $limit, function ($courseId, $role, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($courseId, $role));
+        });
+    }
+
+    protected function findStudentsByCourseId($courseId, $start, $limit)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:role:student:start:{$start}:limit:{$limit}", $courseId, $start, $limit, function ($courseId, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = 'student' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($courseId));
+        });
     }
 
     public function findMemberCountByCourseIdAndRole($courseId, $role)
@@ -242,7 +262,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -250,10 +270,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -261,10 +281,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit)
-                        ->orderBy('createdTime', 'ASC');
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy('createdTime', 'ASC');
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -280,12 +300,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $builder = $this->_createSearchQueryBuilder($conditions);
 
         if (isset($conditions['unique'])) {
+            $builder->select('*');
+            $builder->orderBy($orderBy[0], $orderBy[1]);
+            $builder->from('(' . $builder->getSQL() . ')', $this->getTable());
             $builder->select('DISTINCT userId');
+            $builder->resetQueryPart('where');
+            $builder->resetQueryPart('orderBy');
         } else {
             $builder->select('userId');
+            $builder->orderBy($orderBy[0], $orderBy[1]);
         }
 
-        $builder->orderBy($orderBy[0], $orderBy[1]);
+
         $builder->setFirstResult($start);
         $builder->setMaxResults($limit);
 
@@ -344,7 +370,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
         $sql   = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->getConnection()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
@@ -364,17 +390,17 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'course_member')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('isLearned = :isLearned')
-                        ->andWhere('noteNum > :noteNumGreaterThan')
-                        ->andWhere('role = :role')
-                        ->andWhere('createdTime >= :startTimeGreaterThan')
-                        ->andWhere('createdTime < :startTimeLessThan')
-                        ->andWhere('courseId IN (:courseIds)')
-                        ->andWhere('userId IN (:userIds)')
-                        ->andWhere('classroomId = :classroomId');
+            ->from($this->table, 'course_member')
+            ->andWhere('userId = :userId')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('isLearned = :isLearned')
+            ->andWhere('noteNum > :noteNumGreaterThan')
+            ->andWhere('role = :role')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('courseId IN (:courseIds)')
+            ->andWhere('userId IN (:userIds)')
+            ->andWhere('classroomId = :classroomId');
         return $builder;
     }
 }

@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
@@ -68,7 +69,9 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay', 'coin'))) {
+        $payment = ExtensionManager::instance()->getDataDict('payment');
+        $payment = array_keys($payment);
+        if (!in_array($order['payment'], $payment)) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 
@@ -87,7 +90,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
 
-        if (intval($order['amount'] * 100) == 0) {
+        if (intval($order['amount'] * 100) == 0 && $order['payment'] != 'outside') {
             $order['payment'] = 'none';
         }
 
@@ -119,10 +122,14 @@ class OrderServiceImpl extends BaseService implements OrderService
             }
 
             if ($this->canOrderPay($order)) {
-                $this->getOrderDao()->updateOrder($order['id'], array(
+                $payFields = array(
                     'status'   => 'paid',
                     'paidTime' => $payData['paidTime']
-                ));
+                );
+
+                !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
+
+                $this->getOrderDao()->updateOrder($order['id'], $payFields);
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
                 $success = true;
             } else {
@@ -158,7 +165,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw new \InvalidArgumentException();
         }
 
-        return in_array($order['status'], array('created'));
+        return in_array($order['status'], array('created', 'cancelled'));
     }
 
     public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status)
@@ -267,9 +274,10 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payment = $this->getSettingService()->get("payment");
 
-        if (isset($payment["enable"]) && $payment["enable"] == 1
-            && isset($payment[$order["payment"]."_enable"]) && $payment[$order["payment"]."_enable"] == 1
-            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1) {
+        if (isset($payment["enabled"]) && $payment["enabled"] == 1
+            && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
+            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
+        ) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 
@@ -388,7 +396,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             'reasonType'     => empty($reason['type']) ? 'other' : $reason['type'],
             'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
             'updatedTime'    => time(),
-            'createdTime'    => time()
+            'createdTime'    => time(),
+            'operator'       => 0
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
@@ -442,6 +451,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
+                'operator'     => $user->id,
                 'actualAmount' => $actualAmount,
                 'updatedTime'  => time()
             ));
@@ -454,6 +464,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'      => 'failed',
+                'operator'    => $user->id,
                 'updatedTime' => time()
             ));
 
@@ -464,7 +475,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
 
-        $this->getLogService()->info('course_order', 'andit_refund', "审核退款申请#{$refund['id']}");
+        $this->getLogService()->info('order', 'andit_refund', "审核退款申请#{$refund['id']}");
 
         return $pass;
     }
@@ -499,13 +510,14 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $this->getOrderRefundDao()->updateRefund($refund['id'], array(
             'status'      => 'cancelled',
+            'operator'    => $user->id,
             'updatedTime' => time()
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => 'paid'
         ));
-
+        $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 

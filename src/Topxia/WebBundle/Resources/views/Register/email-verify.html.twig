@@ -25,6 +25,12 @@
         <li>稍等几分钟，若仍旧没收到确认信，那就<a id="resend-email" class="text-muted" href="javascript:" data-url="{{ path('register_email_send', {id:user.id, hash:hash}) }}">重发</a>一封吧！</li>
       </ul>
     </div>
+
+    <div class="alert">
+      <h5>{{'原邮箱已失效？'|trans}}</h5>
+      <a class="btn btn-primary" href="{{ path('register_reset_email', {id: user.id, hash: hash}) }}">{{ '重新绑定'|trans }}</a>
+    </div>
+
     <p class="mtl">
       {{'完成验证后，你还可以：'|trans}}
       <ul>

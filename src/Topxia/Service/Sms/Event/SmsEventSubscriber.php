@@ -145,24 +145,24 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
-                'name'       => "SmsSendOneDayJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 24 * 60 * 60,
-                'jobClass'   => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "SmsSendOneDayJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
+                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'       => "SmsSendOneHourJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 60 * 60,
-                'jobClass'   => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "SmsSendOneHourJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
+                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

@@ -63,6 +63,60 @@ class ChaosThreadsPosts extends BaseResource
         return $this->filter($post);
     }
 
+    public function getThreadPosts(Application $app, Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $start       = $request->query->get('start', 0);
+        $limit       = $request->query->get('limit', 10);
+        $conditions  = array(
+            'userId' => $currentUser['id']
+        );
+
+        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions,'threadId');
+        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        
+        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions,'createdTime',$start,$limit,'threadId');
+        if(empty($posts)){
+            return array();
+        }
+
+        $courseIds = ArrayToolkit::column($posts, "courseId");
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $course  = ArrayToolkit::index($courses,"id");
+        
+        foreach ($posts as $key => &$post) 
+        {       
+            $thread = $this->getCourseThreadService()->getThread(null,$post['threadId']);
+            if($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])){
+                unset($posts[$key]);
+                continue;
+            }                             
+            $course = $courses[$post['courseId']];            
+            $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
+            $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+            $course['largePicture']  = $this->getFileUrl($course['largePicture']);
+            $post['type']            = $thread['type'];
+            $post['title']           = $thread['title'];
+            $post['course']          = $this->filterCourse($course);   
+        }
+
+        return array_values($posts);
+    }
+
+    protected function filterCourse($course){
+        $keys = array(
+            'id',
+            'type',
+            'title',
+            'userId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'createdTime'
+        );
+        return ArrayToolkit::parts($course,$keys);
+    }
+
     public function filter(&$res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
@@ -82,5 +136,10 @@ class ChaosThreadsPosts extends BaseResource
     protected function getGroupThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

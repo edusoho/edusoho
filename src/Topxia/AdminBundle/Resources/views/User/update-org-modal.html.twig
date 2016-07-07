@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}编辑用户所属组织{% endblock %}
+{% block body %}
+
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_org_update', {id:user.id}) }}">
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: org.orgCode|default(null), modal: 'modal'} %}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/update-org-modal')</script>
+{% endblock %}

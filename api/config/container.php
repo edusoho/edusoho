@@ -13,6 +13,7 @@ $resources = array(
     'CourseMembership',
     'LessonLiveTickets',
     'LessonLiveTicket',
+    'LessonReplay',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',

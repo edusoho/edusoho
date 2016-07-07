@@ -11,7 +11,6 @@ class ArticleDaoImplTest extends BaseTestCase
     public function testFindPublishedArticlesByTagIdsAndCount()
     {
        $articles = $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount(array(1, 2, 4, 3), 10);
-       //var_dump($articles);
     }
 
     protected function getArticleDao()

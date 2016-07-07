@@ -36,7 +36,8 @@ define(function(require, exports, module) {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
             }
         }else if(fileType == 'audio'){
-            html += '<audio id="lesson-player" width="500" height="50">';
+            videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
+            html += '<audio id="lesson-player" width="90%" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
         }

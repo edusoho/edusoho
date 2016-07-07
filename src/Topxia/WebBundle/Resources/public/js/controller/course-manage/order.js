@@ -6,8 +6,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        require('./header').run();
-
         $("#startDate").datetimepicker({
             language: 'zh-CN',
             autoclose: true

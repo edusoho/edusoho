@@ -3,6 +3,8 @@
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'index' %}
 
+{% set consultDisplay = true %}
+
 {% block content %}
 
   <div class="es-row-wrap container-gap">
@@ -13,6 +15,7 @@
     </div>
     
     <ul class="homepage-category-nav">
+      {% set categories = data('Categories', {parentId:0, group:'course'}) %}
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
@@ -21,8 +24,6 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
-
-       
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           {% if classrooms %}
           <div class="es-box">
@@ -31,7 +32,7 @@
               <h2>{{'推荐%classroomName%'|trans({'%classroomName%': setting('classroom.name')|default('班级'|trans)}) }}</h2>
             </div>
             <div class="es-box-body">
-              <ul class="home-class-list">
+              <ul class="home-class-list clearfix">
                 {% for classroom in classrooms %}
                   {% set teachers = classroom.users|default(null) %}
                   {% if loop.index <= 5%}
@@ -48,7 +49,7 @@
                             <span class="class-teacher">
                               <i class="fa fa-user"></i>
                               {% for teacher in teachers %}
-                                {% if loop.index <= 5%}
+                                {% if loop.index <= 1 %}
                                 <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                                  {% endif %}
                               {% endfor %}
@@ -199,7 +200,7 @@
               <ul class="row teacher-grids">
                 {% for teacher in teachers %}
                   {% if teacher %}
-                    <li class="col-sm-6 col-md-4">
+                    <li class="col-xs-6  col-sm-6 col-md-4">
                       <div class="teachers-item">
                         <a href="{{ path('user_show', {id:teacher.id}) }}">
                          <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
@@ -226,32 +227,30 @@
                 <h2>{{'会员专区'|trans}}</h2>
               </div>
               <div class="es-box-body">
-                <ul class="row vip-lists">
+                <ul class="vip-lists">
                   {% for level in levels %}
                     {% if level %}
-                      <li class="col-sm-12">
-                        <div class="vip-item">
-                          <div class="row">
-                            <div class="col-sm-4 col-md-4">
-                              <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                                <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
-                              </a>
-                            </div>
-                            <div class="col-sm-5 col-md-5">
-                              <h3>{{ level.name }}</h3>
-                              <p>{{ level.description|plain_text(40) }}</p>
-                            </div>
-                            <div class="vip-price col-sm-3 col-md-3">
-                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                                <h4> {{ set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
-                               {% else %}
-                                  <h4>¥&nbsp;{{ level.monthPrice }}</h4>
-                               {% endif %}
-                              <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">{{'立即购买'|trans}}</a></h4>
-                            </div>
+                      <li class="vip-item">
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                              <img class="img-responsive" src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                            </a>
                           </div>
-                        </div>      
-                      </li>
+                          <div class="col-sm-6">
+                            <h3>{{ level.name }}</h3>
+                            <p>{{ level.description|plain_text(40) }}</p>
+                          </div>
+                          <div class="vip-price col-sm-3">
+                             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                              <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name', '虚拟币')}}</h4>
+                             {% else %}
+                                <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                             {% endif %}
+                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                          </div>
+                        </div>
+                      </li>      
                     {% endif %}
                   {% endfor %}
                 </ul>
@@ -411,7 +410,7 @@
 {% macro course_grids(courses) %}
   {% set mode = mode|default('default') %}
   {% if courses %}
-  <ul class="course-grids">
+  <ul class="course-grids clearfix">
     {% for course in courses %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">

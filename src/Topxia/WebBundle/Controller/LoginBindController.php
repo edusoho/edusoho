@@ -22,8 +22,13 @@ class LoginBindController extends BaseController
             }
         }
 
+        $inviteCode  = $request->query->get('inviteCode', null);
         $client      = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+
+        if ($inviteCode) {
+            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+        }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -38,6 +43,7 @@ class LoginBindController extends BaseController
     public function callbackAction(Request $request, $type)
     {
         $code        = $request->query->get('code');
+        $inviteCode  = $request->query->get('inviteCode');
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
@@ -62,13 +68,16 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
+            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type, 'inviteCode' => $inviteCode)));
         }
     }
 
     public function chooseAction(Request $request, $type)
     {
-        $token       = $request->getSession()->get('oauth_token');
+        $token      = $request->getSession()->get('oauth_token');
+        $inviteCode = $request->query->get('inviteCode', '');
+        $inviteUser = $inviteCode ? $inviteUser = $this->getUserService()->getUserByInviteCode($inviteCode) : array();
+
         $client      = $this->createOAuthClient($type);
         $clientMetas = OAuthClientFactory::clients();
         $clientMeta  = $clientMetas[$type];
@@ -93,6 +102,7 @@ class LoginBindController extends BaseController
 
         $name = $this->mateName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+            'inviteUser'     => $inviteUser,
             'oauthUser'      => $oauthUser,
             'type'           => $type,
             'name'           => $name,
@@ -201,9 +211,12 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
+        if (!empty($oauthUser['avatar'])) {
+            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser['avatar']);
+        }
+
         $redirectUrl = $this->generateUrl('register_success', array(
-            'userId' => $user['id'],
-            'goto'   => $this->getTargetPath($request)
+            'goto' => $this->getTargetPath($request)
         ));
         $response = array('success' => true, '_target_path' => $redirectUrl);
 
@@ -274,6 +287,10 @@ class LoginBindController extends BaseController
         if (isset($setData['mobile']) && !empty($setData['mobile'])) {
             $registration['mobile']        = $setData['mobile'];
             $registration['emailOrMobile'] = $setData['mobile'];
+        }
+
+        if (isset($setData['invite_code']) && !empty($setData['invite_code'])) {
+            $registration['invite_code'] = $setData['invite_code'];
         }
 
         $user = $this->getAuthService()->register($registration, $type);
@@ -371,19 +388,19 @@ class LoginBindController extends BaseController
     {
         switch ($type) {
             case 'weixinweb':
-                return '微信创建新账号';
+                return '微信注册帐号';
                 break;
             case 'weixinmob':
-                return '微信创建新账号';
+                return '微信注册帐号';
                 break;
             case 'weibo':
-                return '微博创建新账号';
+                return '微博注册帐号';
                 break;
             case 'qq':
-                return 'QQ创建新账号';
+                return 'QQ注册账号';
                 break;
             case 'renren':
-                return '人人创建新账号';
+                return '人人注册账号';
                 break;
             default:
                 return '';

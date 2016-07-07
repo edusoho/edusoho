@@ -13,6 +13,8 @@ interface CouponService
 
     public function findCouponsByBatchId($batchId, $start, $limit);
 
+    public function findCouponsByIds(array $ids);
+
     public function searchCoupons(array $conditions, $orderBy, $start, $limit);
 
     public function searchCouponsCount(array $conditions);

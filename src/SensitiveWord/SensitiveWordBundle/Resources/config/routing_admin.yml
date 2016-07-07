@@ -9,6 +9,7 @@ admin_keyword_create:
 admin_keyword_delete:
     pattern:  /keyword/{id}/delete
     defaults: { _controller: SensitiveWordBundle:Sensitive:delete }
+    methods:  [POST]
 
 admin_keyword_change:
     pattern:  /keyword/{id}/change

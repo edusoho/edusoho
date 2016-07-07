@@ -15,9 +15,10 @@ class UpgradeCommand extends BaseCommand
 {
 	protected function configure()
 	{
-		$this->setName ( 'topxia:upgrade')
+		$this->setName ( 'util:upgrade')
 			->addArgument('code', InputArgument::REQUIRED, '主程序code')
-			->addArgument('version', InputArgument::REQUIRED, '要升级的版本号');
+			->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
+            ->setDescription('用于命令行中执行指定版本的升级包');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)

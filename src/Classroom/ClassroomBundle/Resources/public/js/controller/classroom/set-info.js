@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('es-ckeditor');
 
+    require('/bundles/topxiaweb/js/controller/widget/category-select').run();
 
     exports.run = function() {
 
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
         });*/
 
         var editor_classroom_about = CKEDITOR.replace('about', {
+            allowedContent: true,
             toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')

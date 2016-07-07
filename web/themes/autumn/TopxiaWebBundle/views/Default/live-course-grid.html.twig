@@ -1,24 +1,24 @@
-{% if (course.discountId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
+{% if (course.discountId > 0) and ((course.price != course.originPrice)) %}
   <li class="autumn-grid autumn-course-grid">
     <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
       {% if course.status == 'draft' %}
-        <span class="label  label-warning course-status">未发布</span>
+        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
       {% elseif course.status == 'closed' %}
-        <span class="label label-danger course-status">已关闭</span>
+        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
       {% endif %} 
 
       {% if course.serializeMode == 'serialize' %}
-        <span class="label label-success series-mode-label">更新中</span>
+        <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode == 'finished' %}
-        <span class="label label-warning series-mode-label">已完结</span>
+        <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
       {% endif %}
 
       {% if course.type == 'live' %}
         {% set lesson = course['lesson']|default(null) %}
         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-          <span class="label label-warning series-mode-label">正在直播中</span>
+          <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
         {% else %}
-          <span class="label label-success series-mode-label">直播</span>
+          <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
         {% endif %}
       {% endif %}
     </a>
@@ -28,12 +28,13 @@
     <div class="mll">  
       {% if setting('course.coursesPrice') == 0 %}
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-          <span class="price-show">{% if course.coinPrice > 0 %}折后价：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+          <span class="price-show">{% if course.price > 0 %}{{'折后价：'|trans}}{{ course.price * setting('coin.cash_rate') }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}
           </span>
-          <span class="origin-price">原价：<del>{{ course.originCoinPrice }}{{setting('coin.coin_name')}}</del></span>
+          <span class="origin-price">{{'原价：'|trans}}<del>{{ course.originPrice * setting('coin.cash_rate')}}
+          {{setting('coin.coin_name')}}</del></span>
         {% else %}
-          <span class="price-show">{% if course.price > 0 %}折后价：{{ course.price }}元{% else %}免费{% endif %}</span>&nbsp;&nbsp;
-          <span class="origin-price">原价：<del>{{ course.originPrice }}元</del></span>
+          <span class="price-show">{% if course.price > 0 %}{{'折后价：'|trans}}{{ '%coursePrice%元'|trans({'%coursePrice%': course.price})}}{% else %}{{'免费'|trans}}{% endif %}</span>&nbsp;&nbsp;
+          <span class="origin-price">{{'原价：'|trans}}<del>{{ '%courseOriginPrice%元'|trans({'%courseOriginPrice%': course.originPrice})}}</del></span>
         {% endif %}
       {% endif %}
     </div>
@@ -41,23 +42,23 @@
     <div class="course-metas">
 
       <span class="teachers">
-         主讲:
+         {{'主讲:'|trans}}
         {% for teacher in course.teachers %}
          {{ web_macro.user_link(teacher, 'text-muted') }}
         {% endfor %}
       </span>
       <span class="label label-danger">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            {% if course.coinPrice > 0 %}
-                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-            {% else %}
-                免
-            {% endif %}
-        {% else %}
             {% if course.price > 0 %}
                 {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
             {% else %}
-                免
+                {{'免'|trans}}
+            {% endif %}
+        {% else %}
+            {% if course.price > 0 %}
+                {{ '%discount%折'|trans({'%discount%': (course.price/course.originPrice * 10)|round(1, 'common')}) }}
+            {% else %}
+                {{'免'|trans}}
             {% endif %}
         {% endif %}  
       </span>
@@ -67,23 +68,23 @@
   <li class="autumn-grid autumn-course-grid">
     <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
       {% if course.status == 'draft' %}
-        <span class="label  label-warning course-status">未发布</span>
+        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
       {% elseif course.status == 'closed' %}
-        <span class="label label-danger course-status">已关闭</span>
+        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
       {% endif %} 
 
       {% if course.serializeMode == 'serialize' %}
-        <span class="label label-success series-mode-label">更新中</span>
+        <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode == 'finished' %}
-        <span class="label label-warning series-mode-label">已完结</span>
+        <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
       {% endif %}
 
       {% if course.type == 'live' %}
         {% set lesson = course['lesson']|default(null) %}
         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-          <span class="label label-warning series-mode-label">正在直播中</span>
+          <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
         {% else %}
-          <span class="label label-success series-mode-label">直播</span>
+          <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
         {% endif %}
       {% endif %}
     </a>
@@ -93,10 +94,10 @@
     <div class="mll">  
       {% if setting('course.coursesPrice') == 0 %}
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
           </span>
         {% else %}
-          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
+          <span class="price-show">{% if course.price > 0 %}{{'价格：'|trans}}{{ '%coursePrice%元'|trans({'%coursePrice%': course.price})}}{% else %}{{'免费'|trans}}{% endif %}
           </span>
         {% endif %}
       {% endif %}
@@ -104,7 +105,7 @@
 
     <div class="course-metas">
       <span class="teachers">
-         主讲:
+         {{'主讲:'|trans}}
         {% for teacher in course.teachers %}
          {{ web_macro.user_link(teacher, 'text-muted') }}
         {% endfor %}

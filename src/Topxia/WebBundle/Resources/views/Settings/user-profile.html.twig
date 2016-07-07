@@ -1,0 +1,74 @@
+{#课程创建前需要用户完成一下字段#}
+{% do load_script('settings/user-profile')  %}
+<div class="alert alert-info">
+  <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
+  <ol>
+    <li>{{'设置头像。'|trans}}
+      {% if app.user.largeAvatar %}
+        <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
+      {% else %}
+        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
+      {% endif %}
+    <li>{{'设置头衔 、自我介绍。'|trans}}
+      {% if app.user.title and userProfile.about %}
+        <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
+      {% else %}
+        <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>
+      {% endif %}
+    </li>
+  </ol>
+</div>
+
+<form id="user-profile-form" class="form-horizontal" method="post" action="{{path('settings')}}">
+  {{ web_macro.flash_messages() }}
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_avatar"><b>{{'用户头像'|trans}}</b></label>
+    <div class="controls col-md-8 controls">
+      <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+      <input id="profile_avatar" type="hidden"  value="{{ app.user.largeAvatar }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+    </div>
+    <div class="controls col-md-8 controls">
+      {{'<p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>'|trans|raw}}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label"></div>
+    <div class="controls col-md-8 controls">
+      <a id="upload-picture-btn"
+      class="btn btn-primary"
+      data-upload-token="{{ upload_token('tmp', 'image') }}"
+      data-goto-url="{{path('settings_avatar_crop_modal')}}"
+      >{{'上传新头像'|trans}}</a>
+    </div>
+  </div>
+
+  {% set user = data('UserandProfiles',{userId:app.user.id })%}
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_title">{{'头衔'|trans}}</label>
+    <div class="col-md-8 controls">
+      <input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{user.title}}">
+      <div class="help-block" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_about">{{'自我介绍'|trans}}</label>
+    <div class="col-md-8 controls">
+      <textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{user.profiles.about}}</textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7 col-md-offset-2">
+      <button id="profile-save-btn" data-submiting-text="{{'正在保存'|trans}}" type="submit" class="btn btn-primary">{{'保存'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
