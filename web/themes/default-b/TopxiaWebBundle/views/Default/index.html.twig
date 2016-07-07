@@ -19,7 +19,7 @@
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
-      <li><a href="{{ path('course_explore') }}">更多</a></li>
+      <li><a href="{{ path('course_explore') }}">{{'更多'|trans}}</a></li>
     </ul>
 
     <div class="row row-9-3">
@@ -28,8 +28,8 @@
           {% if classrooms %}
           <div class="es-box">
             <div class="es-box-heading">
-              <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-              <h2>推荐{{ setting('classroom.name')|default("班级") }}</h2>
+              <a class="pull-right" href="{{ path('classroom_explore') }}">{{'更多'|trans}}&gt;</a>
+              <h2>{{'推荐%classroomName%'|trans({'%classroomName%': setting('classroom.name')|default('班级'|trans)}) }}</h2>
             </div>
             <div class="es-box-body">
               <ul class="home-class-list clearfix">
@@ -61,18 +61,18 @@
                               {% if classroom.price > 0 %}
                                {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
                               {% else %}
-                                免费
+                                {{'免费'|trans}}
                               {% endif %}
                             {% else %}
                               {% if classroom.price > 0 %}
-                                {{ classroom.price }}元
+                                {{ '%classroomPrice%元'|trans({'%classroomPrice%': classroom.price})}}
                               {% else %}
-                                免费
+                                {{'免费'|trans}}
                               {% endif %}
                             {% endif %}
                           </span>
                         </div>
-                        <div class="course-num">共{{classroom.courseNum}}课程</div>
+                        <div class="course-num">{{'共%classroomCourseNum%课程'|trans({'%classroomCourseNum%': classroom.courseNum})}}</div>
                       </div>
                     </li>
                   {% endif %}
@@ -89,7 +89,7 @@
           <div class="es-box">
             <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
-              <h2>推荐课程</h2>
+              <h2>{{'推荐课程'|trans}}</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}         
@@ -103,7 +103,7 @@
           <div class="es-box">
             <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
-              <h2>最新课程</h2>
+              <h2>{{'最新课程'|trans}}</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
@@ -117,8 +117,8 @@
           {% if recentLiveCourses %}
             <div class="es-box">
               <div class="es-box-heading">
-                <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
-                <h2>最新直播</h2>
+                <a class="pull-right" href="{{ path('live_course_explore') }}">{{'更多'|trans}}&gt;</a>
+                <h2>{{'最新直播'|trans}}</h2>
               </div>
               <div class="es-box-body">
                 {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
@@ -132,8 +132,8 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
-              <h2>最新资讯</h2>
+              <a class="pull-right" href="{{ path('article_show') }}">{{'更多'|trans}}&gt;</a>
+              <h2>{{'最新资讯'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <ul class="row">
@@ -155,7 +155,7 @@
         {% if threads %}
           <div class="es-box topic">
             <div class="es-box-heading">
-              <h2>课程讨论</h2>
+              <h2>{{'课程讨论'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <ul class="row">
@@ -176,8 +176,8 @@
 
                         <p class="topic-bottom">
                           <span>{{ web_macro.user_link(latestPostUser) }}  </span>
-              {{ thread.latestPostTime|smart_time }}回复
-                          <span class="pull-right">共 {{ thread.postNum }} 个回复</span>
+              {{ thread.latestPostTime|smart_time }}{{'回复'|trans}}
+                          <span class="pull-right">{{'共%threadPostNum%个回复'|trans({'%threadPostNum%': thread.postNum})}}</span>
                         </p>
                       </div>
                     </li>
@@ -193,8 +193,8 @@
         {% if teachers %}
           <div class="es-box teachers">
             <div class="es-box-heading">
-              <h2>讲师团</h2>
-              <a class="pull-right" href="{{ path('teacher') }}">更多&gt;</a>
+              <h2>{{'讲师团'|trans}}</h2>
+              <a class="pull-right" href="{{ path('teacher') }}">{{'更多'|trans}}&gt;</a>
             </div>
             <div class="es-box-body">
               <ul class="row teacher-grids">
@@ -223,8 +223,8 @@
           {% if levels %}
             <div class="es-box vip">
               <div class="es-box-heading">
-                <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
-                <h2>会员专区</h2>
+                <a class="pull-right" href="{{ path('vip') }}">{{'更多'|trans}}&gt;</a>
+                <h2>{{'会员专区'|trans}}</h2>
               </div>
               <div class="es-box-body">
                 <ul class="vip-lists">
@@ -264,7 +264,7 @@
           {% set groups = data('HotGroup', {'count':15}) %}
           {% if groups %}
             <div class="es-box hot-group">
-              <div class="es-box-heading"><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a><h2>最热小组</h2></div>
+              <div class="es-box-heading"><a href="{{path('group_search_group')}}" class="pull-right">{{'更多'|trans}}&gt;</a><h2>{{'最热小组'|trans}}</h2></div>
               <div class="es-box-body">
                  <ul class="list-unstyled">
                   {% for group in groups %}
@@ -282,8 +282,8 @@
                               <div class="media-body">
                                 <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
                                 <div class="text-muted text-normal">
-                                  {{group.memberNum}}个成员&nbsp;
-                                  {{group.threadNum}}个话题
+                                  {{'%groupMemberNum%个成员'|trans({'%groupMemberNum%': group.memberNum})}}&nbsp;
+                                  {{'%groupThreadNum%个话题'|trans({'%groupThreadNum%': group.threadNum})}}
                                 </div>
                               </div> 
                             </div>
@@ -309,7 +309,7 @@
         {% if tags %}
           <div class="es-box teachers">
             <div class="es-box-heading">
-              <h2>热门标签</h2>
+              <h2>{{'热门标签'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <div class="tag-list">
@@ -328,7 +328,7 @@
         {% if coursesRank %}
           <div class="es-box courses-rank">
             <div class="es-box-heading">
-              <h2>课程排行</h2>
+              <h2>{{'课程排行'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">
@@ -354,7 +354,7 @@
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">
-              <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态</h2>
+              <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'动态'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">
@@ -379,7 +379,7 @@
           {% set hotThreads = data('HotThreads', {'count':11}) %}
           {% if hotThreads %}
             <div class="es-box hot-threads">
-              <div class="es-box-heading"><h2>最热话题</h2></div>
+              <div class="es-box-heading"><h2>{{'最热话题'|trans}}</h2></div>
               <div class="es-box-body">
                 <ul class="text-list">
                   {% for thread in hotThreads %}
@@ -416,22 +416,22 @@
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
           {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive thumb', '') }}
           {% if course.status == 'draft' %}
-            <span class="label  label-warning course-status">未发布</span>
+            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
           {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">已关闭</span>
+            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
           {% endif %} 
           {% if course.serializeMode=='serialize' %}
-            <span class="label label-success series-mode-label">更新中</span>
+            <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
           {% elseif course.serializeMode=='finished' %}
-            <span class="label label-warning series-mode-label">已完结</span>
+            <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
           {% endif %}
 
           {% if course.type == 'live' %}
             {% set lesson = course['lesson']|default(null) %}
             {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-              <span class="label label-warning series-mode-label">正在直播中</span>
+              <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
             {% else %}
-              <span class="label label-success series-mode-label">直播</span>
+              <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
             {% endif %}
           {% endif %}
 
@@ -442,8 +442,8 @@
               {% set lesson = course['lesson']|default(null) %}
               {% if lesson %}
                 <span class="live-course-lesson metas">
-                  <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                  <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                  <span class="text-success mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                  <span class="text-muted mrm">{{'第%lessonNumber%课时'|trans({'%lessonNumber%': lesson.number})}}</span>
                 </span>
               {% endif %}
             {% endif %}
@@ -457,12 +457,12 @@
 
               <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
-                  <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+                  <span class="meta-label"><strong>{{ course.ratingNum }}</strong> {{'评价'|trans}}</span>
                   <span class="review-rating">
                     <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
                   </span>
                 {% else %}
-                  <span class="meta-label">无评价</span>
+                  <span class="meta-label">{{'无评价'|trans}}</span>
                   <span class="review-rating">
                     <span class="stars-0">&nbsp;</span>
                   </span>
@@ -471,8 +471,8 @@
 
               {% if setting('course.show_student_num_enabled', '1') == 1  %}
               <span class="student-col">
-                <span class="meta-label">学生</span>
-                <span class="student-num">{{ course.studentNum }}人</span>
+                <span class="meta-label">{{'学生'|trans}}</span>
+                <span class="student-num">{{ '%courseTtudentNum%人'|trans({'%courseTtudentNum%': course.studentNum})}}</span>
               </span>
               {% endif %}
 
@@ -496,28 +496,28 @@
                 <div class="progress">
                   <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
                 </div>
-                <div class="action"><span class="btn btn-default btn-sm">查看课程</span></div>
+                <div class="action"><span class="btn btn-default btn-sm">{{'查看课程'|trans}}</span></div>
               {% else %}
                 <div class="progress">
                   <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>
                 </div>
-                <div class="action"><span class="btn btn-primary btn-sm">继续学习</span></div>
+                <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
               {% endif %}
             </div>
             {% if course.status == 'draft' %}
-              <span class="label  label-warning course-status">未发布</span>
+              <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
             {% elseif course.status == 'closed' %}
-              <span class="label label-danger course-status">已关闭</span>
+              <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
             {% endif %}       
           {% endif %}
 
           {% if mode == 'teach' %}
             {% if course.status == 'published' %}
-              <span class="label label-success course-status">已发布</span>
+              <span class="label label-success course-status">{{'已发布'|trans}}</span>
             {% elseif course.status == 'draft' %}
-              <span class="label  label-warning course-status">未发布</span>
+              <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
             {% elseif course.status == 'closed' %}
-              <span class="label label-danger course-status">已关闭</span>
+              <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
             {% endif %}
           {% endif %}
 
@@ -526,6 +526,6 @@
     {% endfor %}
   </ul>
   {% else %}
-    <div class="empty">暂无课程。</div>
+    <div class="empty">{{'暂无课程。'|trans}}</div>
   {% endif %}
 {% endmacro %}
