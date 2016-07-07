@@ -15,17 +15,7 @@ class Version20160706172928 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if ($schema->hasTable('announcement')) {
-            $table = $schema->getTable('announcement');
-            if (!$table->hasColumn('copyId')) {
-                $table->addColumn('copyId', Type::INTEGER, array(
-                    'length'  => 10,
-                    'notnull' => true,
-                    'default' => '0',
-                    'comment' => '复制的公告ID'
-                ));
-            }
-        }
+        $this->addSql("ALTER TABLE announcement ADD copyId INT(11) NOT NULL DEFAULT '0' COMMENT '复制的公告ID';");
     }
 
     /**
