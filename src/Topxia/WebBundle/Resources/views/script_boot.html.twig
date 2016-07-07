@@ -17,6 +17,7 @@
   {% endif %}
 
   var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
 
   app.config = {{
     {
@@ -54,6 +55,7 @@
 {% if setting('cdn.enabled') %} {% set cdnUrl = setting('cdn.url') %} {% else %} {% set cdnUrl = '' %} {% endif %}
 <script src="{{ cdnUrl }}{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
 <script src="{{ cdnUrl }}{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}"></script>
+<script src="{{ cdnUrl }}{{ asset('assets/libs/seajs/seajs-text/1.1.1/seajs-text.min.js') }}"></script>
 <script src="{{ cdnUrl }}{{ asset('assets/libs/seajs-global-config.js') }}"></script>
 <script src="{{ cdnUrl }}{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
 <script src="{{ url('bazinga_jstranslation_js') }}"></script>

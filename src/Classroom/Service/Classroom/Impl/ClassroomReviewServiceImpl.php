@@ -75,13 +75,13 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $userId = $this->getCurrentUser()->id;
 
         if (empty($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级(#%classroomId%)不存在，评价失败！',array('%classroomId%'=>$fields['classroomId'])));
+            throw $this->createServiceException($this->getKernel()->trans('班级(#%classroomId%)不存在，评价失败！', array('%classroomId%' => $fields['classroomId'])));
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在,评价失败!',array('%userId%'=>$fields['userId'])));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在,评价失败!', array('%userId%' => $fields['userId'])));
         }
 
         $review = $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($user['id'], $classroom['id']);
@@ -125,14 +125,14 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！',array('%id%'=>$id)));
+            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
         }
 
         $this->getClassroomReviewDao()->deleteReview($id);
 
         $this->calculateClassroomRating($review['classroomId']);
 
-        $this->getLogService()->info('classroom_review', 'delete', $this->getKernel()->trans('删除评价#%id%',array('%id%'=>$id)));
+        $this->getLogService()->info('classroom', 'delete_review', $this->getKernel()->trans('删除评价#%id%', array('%id%' => $id)));
     }
 
     protected function getClassroomReviewDao()

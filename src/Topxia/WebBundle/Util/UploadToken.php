@@ -23,7 +23,7 @@ class UploadToken
         if (empty($token)) {
             return null;
         }
-
+        
         list($userId, $group, $type, $deadline, $sign) =  explode('|', $token);
 
         if ($deadline < time()) {

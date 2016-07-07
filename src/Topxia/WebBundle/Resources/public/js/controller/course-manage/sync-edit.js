@@ -13,7 +13,6 @@ define(function(require, exports, module) {
 	      	if (error) {
 	            return ;
 	       	}
-	       	console.log($form.serialize());
 	        $.post($form.attr('action'), $form.serialize(), function(html){
 	            window.location.href = html;
                 $modal.modal('hide');

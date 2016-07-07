@@ -29,6 +29,7 @@ class CourseOrderController extends OrderController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
+
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
@@ -122,7 +123,14 @@ class CourseOrderController extends OrderController
         ));
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
 
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
         //判断用户是否为VIP
         $vipStatus = $courseVip = null;
 
@@ -144,7 +152,7 @@ class CourseOrderController extends OrderController
         $coinEnable    = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
         //$userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
 
-        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0)
+        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['price'] == 0)
             || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0) || $vipStatus == 'ok') {
             $data['price']  = 0;
             $data['remark'] = '';
@@ -253,7 +261,7 @@ class CourseOrderController extends OrderController
             }
         } else
         if ($coursePriceShowType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $totalPrice = $course["price"];
 
             if ($hasPayPassword && $totalPrice * 100 > $accountCash * 100) {
                 $coinPayAmount = $accountCash;

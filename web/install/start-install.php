@@ -179,14 +179,7 @@ function install_step3($init_data = 0)
         }
 
         $admin = $init->initAdmin($_POST);
-
-        $init->initSiteSettings($_POST);
-
         if (empty($init_data)) {
-            $init->initRegisterSetting($admin);
-            $init->initMailerSetting($_POST['sitename']);
-            $init->initPaymentSetting();
-            $init->initStorageSetting();
             $init->initTag();
             $init->initCategory();
             $init->initFile();
@@ -194,10 +187,9 @@ function install_step3($init_data = 0)
             $init->initNavigations();
             $init->initBlocks();
             $init->initThemes();
-            $init->initRefundSetting();
-            $init->initArticleSetting();
-            $init->initDefaultSetting();
+            $init->initSetting($admin);
             $init->initCrontabJob();
+            $init->initOrg();
         } else {
             $init->deleteKey();
             $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
@@ -426,9 +418,10 @@ class SystemInit
 {
     public function initAdmin($user)
     {
-        $user              = $user              = $this->getUserService()->register($user);
-        $user['roles']     = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
-        $user['currentIp'] = '127.0.0.1';
+        $user['emailVerified'] = 1;
+        $user                  = $user                  = $this->getUserService()->register($user);
+        $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
+        $user['currentIp']     = '127.0.0.1';
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -436,43 +429,6 @@ class SystemInit
 
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
         return $this->getUserService()->getUser($user['id']);
-    }
-
-    public function initDefaultSetting()
-    {
-        $settingService = $this->getSettingService();
-
-        $defaultSetting                 = array();
-        $defaultSetting['user_name']    = '学员';
-        $defaultSetting['chapter_name'] = '章';
-        $defaultSetting['part_name']    = '节';
-
-        $default        = $settingService->get('default', array());
-        $defaultSetting = array_merge($default, $defaultSetting);
-
-        $settingService->set('default', $defaultSetting);
-
-        $setting = array(
-            'rules' => array(
-                'thread'            => array(
-                    'fiveMuniteRule' => array(
-                        'interval' => 300,
-                        'postNum'  => 100
-                    )
-                ),
-                'threadLoginedUser' => array(
-                    'fiveMuniteRule' => array(
-                        'interval' => 300,
-                        'postNum'  => 50
-                    )
-                )
-            )
-        );
-        $settingService->set('post_num_rules', $setting);
-
-        $settingService->get('developer', array());
-        $developer['cloud_api_failover'] = 1;
-        $settingService->set('developer', $developer);
     }
 
     public function deleteKey()
@@ -521,53 +477,7 @@ class SystemInit
         return $keys;
     }
 
-    public function initRefundSetting()
-    {
-        $setting = array(
-            'maxRefundDays'       => 10,
-            'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-            'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
-        );
-        $setting = $this->getSettingService()->set('refund', $setting);
-    }
-
-    public function initArticleSetting()
-    {
-        $setting = array(
-            'name' => '资讯频道', 'pageNums' => 20
-        );
-        $setting = $this->getSettingService()->set('article', $setting);
-    }
-
-    public function initSiteSettings($settings)
-    {
-        $default = array(
-            'name'              => $settings['sitename'],
-            'slogan'            => '',
-            'url'               => '',
-            'logo'              => '',
-            'seo_keywords'      => '',
-            'seo_description'   => '',
-            'master_email'      => $settings['email'],
-            'icp'               => '',
-            'analytics'         => '',
-            'status'            => 'open',
-            'closed_note'       => '',
-            'homepage_template' => 'less'
-        );
-
-        $this->getSettingService()->set('site', $default);
-    }
-
-    public function initDeveloperSetting()
-    {
-        $developer                       = $this->getSettingService()->get('developer', array());
-        $developer['cloud_api_failover'] = 1;
-        $this->getSettingService()->set('developer', $developer);
-    }
-
-    public function initRegisterSetting($user)
+    public function initSetting($user)
     {
         $emailBody = <<<'EOD'
 Hi, {{nickname}}
@@ -587,57 +497,105 @@ Hi, {{nickname}}
 (这是一封自动产生的email，请勿回复。)
 EOD;
 
-        $default = array(
-            'register_mode'          => 'email',
-            'email_activation_title' => '请激活您的{{sitename}}账号',
-            'email_activation_body'  => trim($emailBody),
-            'welcome_enabled'        => 'opened',
-            'welcome_sender'         => $user['nickname'],
-            'welcome_methods'        => array(),
-            'welcome_title'          => '欢迎加入{{sitename}}',
-            'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+        $settings = array(
+            'refund'         => array(
+                'maxRefundDays'       => 10,
+                'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+                'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
+                'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
+            ),
+            'article'        => array(
+                'name' => '资讯频道', 'pageNums' => 20
+            ),
+            'site'           => array(
+                'name'              => $_POST['sitename'],
+                'slogan'            => '',
+                'url'               => '',
+                'logo'              => '',
+                'seo_keywords'      => '',
+                'seo_description'   => '',
+                'master_email'      => $_POST['email'],
+                'icp'               => '',
+                'analytics'         => '',
+                'status'            => 'open',
+                'closed_note'       => '',
+                'homepage_template' => 'less'
+            ),
+            'developer'      => array('cloud_api_failover' => 1),
+            'auth'           => array(
+                'register_mode'          => 'email',
+                'email_activation_title' => '请激活您的{{sitename}}账号',
+                'email_activation_body'  => trim($emailBody),
+                'welcome_enabled'        => 'opened',
+                'welcome_sender'         => $user['nickname'],
+                'welcome_methods'        => array(),
+                'welcome_title'          => '欢迎加入{{sitename}}',
+                'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+            ),
+            'mailer'         => array(
+                'enabled'  => 0,
+                'host'     => 'smtp.example.com',
+                'port'     => '25',
+                'username' => 'user@example.com',
+                'password' => '',
+                'from'     => 'user@example.com',
+                'name'     => $_POST['sitename']
+            ),
+            'payment'        => array(
+                'enabled'        => 0,
+                'bank_gateway'   => 'none',
+                'alipay_enabled' => 0,
+                'alipay_key'     => '',
+                'alipay_secret'  => ''
+            ),
+            'storage'        => array(
+                'upload_mode'      => 'local',
+                'cloud_access_key' => '',
+                'cloud_secret_key' => '',
+                'cloud_api_server' => 'http://api.edusoho.net',
+                'cloud_bucket'     => ''
+            ),
+            'post_num_rules' => array(
+                'rules' => array(
+                    'thread'            => array(
+                        'fiveMuniteRule' => array(
+                            'interval' => 300,
+                            'postNum'  => 100
+                        )
+                    ),
+                    'threadLoginedUser' => array(
+                        'fiveMuniteRule' => array(
+                            'interval' => 300,
+                            'postNum'  => 50
+                        )
+                    )
+                )
+            ),
+            'default'        => array(
+                'user_name'    => '学员',
+                'chapter_name' => '章',
+                'part_name'    => '节'
+            ),
+            'coin'           => array(
+                'coin_enabled'        => 0,
+                'cash_model'          => 'none',
+                'cash_rate'           => 1,
+                'coin_name'           => '虚拟币',
+                'coin_content'        => '',
+                'coin_picture'        => '',
+                'coin_picture_50_50'  => '',
+                'coin_picture_30_30'  => '',
+                'coin_picture_20_20'  => '',
+                'coin_picture_10_10'  => '',
+                'charge_coin_enabled' => ''
+            )
         );
 
-        $this->getSettingService()->set('auth', $default);
-    }
-
-    public function initMailerSetting($sitename)
-    {
-        $default = array(
-            'enabled'  => 0,
-            'host'     => 'smtp.example.com',
-            'port'     => '25',
-            'username' => 'user@example.com',
-            'password' => '',
-            'from'     => 'user@example.com',
-            'name'     => $sitename
-        );
-        $this->getSettingService()->set('mailer', $default);
-    }
-
-    public function initPaymentSetting()
-    {
-        $default = array(
-            'enabled'        => 0,
-            'bank_gateway'   => 'none',
-            'alipay_enabled' => 0,
-            'alipay_key'     => '',
-            'alipay_secret'  => ''
-        );
-        $this->getSettingService()->set('payment', $default);
-    }
-
-    public function initStorageSetting()
-    {
-        $default = array(
-            'upload_mode'      => 'local',
-            'cloud_access_key' => '',
-            'cloud_secret_key' => '',
-            'cloud_api_server' => 'http://api.edusoho.net',
-            'cloud_bucket'     => ''
-        );
-
-        $this->getSettingService()->set('storage', $default);
+        foreach ($settings as $key => $value) {
+            $setting = $this->getSettingService()->get($key, array());
+            $setting = array_merge($value, $setting);
+            $this->getSettingService()->set($key, $setting);
+        }
     }
 
     public function initTag()
@@ -876,6 +834,15 @@ EOD;
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
+    public function initOrg()
+    {
+        $org = array(
+            'name' => '全站',
+            'code' => 'FullSite'
+        );
+        $this->getOrgService()->createOrg($org);
+    }
+
     public function initLockFile()
     {
         file_put_contents(__DIR__.'/../../app/data/install.lock', '');
@@ -924,6 +891,11 @@ EOD;
     protected function getNavigationService()
     {
         return ServiceKernel::instance()->createService('Content.NavigationService');
+    }
+
+    protected function getOrgService()
+    {
+        return ServiceKernel::instance()->createService('Org:Org.OrgService');
     }
 
     protected function postRequest($url, $params)

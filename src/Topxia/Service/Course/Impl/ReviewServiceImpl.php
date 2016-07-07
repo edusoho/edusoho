@@ -80,7 +80,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function saveReview($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'))) {
+        if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'), true)) {
             throw $this->createServiceException('参数不正确，评价失败！');
         }
 
@@ -134,7 +134,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $this->calculateCourseRating($review['courseId']);
 
-        $this->getLogService()->info('review', 'delete', "删除评价#{$id}");
+        $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
     }
 
     protected function calculateCourseRating($courseId)

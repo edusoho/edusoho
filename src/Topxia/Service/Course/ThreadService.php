@@ -21,7 +21,7 @@ interface ThreadService
     public function searchThreadCountInCourseIds($conditions);
 
     public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
-
+    
     /**
      * 创建话题
      */
@@ -60,6 +60,10 @@ interface ThreadService
      * @return array   获得的话题回帖列表。
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
+
+    public function searchThreadPosts($conditions,$sort, $start, $limit,$groupBy);
+
+    public function searchThreadPostsCount($conditions,$groupBy);
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId);
 

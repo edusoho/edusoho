@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}<span class="text-muted">资料预览</span>{% endblock %}
+
+{% block body %}
+    {% if file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
+    <div id="material-preview-player"
+        style="height:100%;overflow:hidden;"
+        data-url="{{path('material_lib_file_player', {fileId: file.id})}}">
+    </div>
+    {% else %}
+    <div class="text-center">
+      {{'该文件暂不支持预览'|trans}}
+    </div>
+    {% endif %}
+
+  <script>app.load('materiallibbundle/controller/material-lib/preview')</script>
+{% endblock %}
+
+{% block footer %}
+	<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

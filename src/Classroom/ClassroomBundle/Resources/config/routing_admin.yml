@@ -29,10 +29,6 @@ admin_classroom_order:
     path:     /classroom/order
     defaults: { _controller: ClassroomBundle:ClassroomOrderAdmin:manage }
 
-admin_classroom_order_refunds:
-    path:     /classroom/order/refunds
-    defaults: { _controller: ClassroomBundle:ClassroomOrderAdmin:refunds }
-
 admin_classroom_thread:
     path:     /classroom/thread
     defaults: { _controller: ClassroomBundle:ClassroomThreadAdmin:index }
@@ -71,3 +67,7 @@ admin_classroom_review_batch_delete:
     pattern:  /classroom/review/batch_delete
     defaults: { _controller: ClassroomBundle:ClassroomReview:batchDelete }
     methods: [POST]
+
+admin_classroom_chooser:
+    pattern: /classroom/chooser
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:chooser }    

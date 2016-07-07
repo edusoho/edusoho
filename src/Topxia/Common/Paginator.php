@@ -21,6 +21,7 @@ class Paginator {
         $this->setPerPageCount($perPage);
 
         $page = (int) $request->query->get('page');
+
         $maxPage = ceil($total / $perPage) ? : 1;
         $this->setCurrentPage($page <= 0 ? 1 : ($page > $maxPage ? $maxPage : $page));
 
@@ -125,5 +126,20 @@ class Paginator {
             $pages = array_merge($pages, range($this->getCurrentPage() + 1, $end));
         }
         return $pages;
+    }
+
+    public static function toArray(Paginator $paginator)
+    {
+         return array(
+            'firstPage' => $paginator->getFirstPage(),
+            'currentPage'=> $paginator->getCurrentPage(),
+            'firstPageUrl' => $paginator->getPageUrl($paginator->getFirstPage()),
+            'previousPageUrl' => $paginator->getPageUrl($paginator->getPreviousPage()),
+            'pages' => $paginator->getPages(),
+            'pageUrls' => array_map(function ($page) use($paginator){ return $paginator->getPageUrl($page);}, $paginator->getPages()),
+            'lastPageUrl' => $paginator->getPageUrl($paginator->getLastPage()),
+            'lastPage' => $paginator->getLastPage(),
+            'nextPageUrl' => $paginator->getPageUrl($paginator->getNextPage()),
+        );
     }
 }

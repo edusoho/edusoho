@@ -5,13 +5,13 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Common\ExtensionManager;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 	public function getVersion() {
-		var_dump($this->request->get("name"));
 		return $this->formData;
 	}
 
@@ -296,7 +296,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		$limit = (int) $this->getParam("limit", 10);
 
 		$total = $this->getNotificationService()->getUserNotificationCount($user['id']);
-		$this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
+		//$this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
 		$notifications = $this->getNotificationService()->findUserNotifications(
 			$user['id'],
 			$start,
@@ -317,10 +317,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 	private function coverNotifyContent($notification) {
 		$message = "";
 		$type = $notification['type'];
-
-		$message = $this->controller->render("TopxiaWebBundle:Notification:item-" . $type . ".html.twig", array(
-			"notification" => $notification,
-		))->getContent();
+		$manager = ExtensionManager::instance();
+        $message = $manager->renderNotification($notification);
 
 		$message = preg_replace_callback('/<div class=\"([\\w-]+)\">([^>]*)<\/div>/', function ($matches) {
 			$content = $matches[2];
@@ -477,11 +475,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 				return $this->createErrorResponse('password_invalid', '密码格式不正确');
 			}
 			$registTypeName = $auth['register_mode'] == "email" ? "email" : "emailOrMobile";
-			$user = $this->controller->getAuthService()->register(array(
-				$registTypeName => $email,
-				'nickname' => $nickname,
-				'password' => $password,
-			));
+			try {
+				$user = $this->controller->getAuthService()->register(array(
+					$registTypeName => $email,
+					'nickname' => $nickname,
+					'password' => $password,
+					'createdIp' => $this->request->getClientIp(),
+				));
+			} catch (\Exception $e) {
+				return $this->createErrorResponse('register_invalid', $e->getMessage());
+			}
+			
 		} else {
 			if (!$this->checkPhoneNum($phoneNumber)) {
 				return $this->createErrorResponse('phone_invalid', '手机号格式不正确');
@@ -495,11 +499,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 				list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
 				if ($result) {
 					$registTypeName = $auth['register_mode'] == "mobile" ? "mobile" : "emailOrMobile";
-					$user = $this->controller->getAuthService()->register(array(
-						$registTypeName => $sessionField['to'],
-						'nickname' => $nickname,
-						'password' => $password,
-					));
+					try {
+						$user = $this->controller->getAuthService()->register(array(
+							$registTypeName => $sessionField['to'],
+							'nickname' => $nickname,
+							'password' => $password,
+							'createdIp' => $this->request->getClientIp(),
+						));
+					} catch (\Exception $e) {
+						return $this->createErrorResponse('register_invalid', $e->getMessage());
+					}
 
 					$this->clearSmsSession($this->request, 'sms_registration');
 				} else {
@@ -602,6 +611,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		$site = $this->controller->getSettingService()->get('site', array());
 
 		if ($user != null) {
+			if ($user['locked']) {
+				return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
+			}
 			$userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
 			$userProfile = $this->filterUserProfile($userProfile);
 			$user = array_merge($user, $userProfile);
@@ -643,6 +655,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 			return $this->createErrorResponse('password_error', '帐号密码不正确');
 		}
 
+		if ($user['locked']) {
+			return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
+		}
 		$token = $this->controller->createToken($user, $this->request);
 
 		$userProfile = $this->controller->getUserService()->getUserProfile($user['id']);

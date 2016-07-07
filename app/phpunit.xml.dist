@@ -35,6 +35,9 @@
                 <directory>../src/Classroom/Service/Classroom/Tests</directory>
                 <file>../src/Classroom/Service/*/*Service.php</file>
                 <file>../src/Classroom/Service/*/Dao/*Dao.php</file>
+                <file>../src/Topxia/Service/**/module_config.php</file>
+                <directory>../src/Topxia/Service/Util/Phpsec</directory>
+                <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
             <directory>../src/Topxia/Common</directory>

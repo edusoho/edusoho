@@ -1,9 +1,9 @@
 <?php
 namespace Classroom\ClassroomBundle\Controller\Course;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
 
 class NoteController extends BaseController
 {
@@ -12,36 +12,38 @@ class NoteController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds        = ArrayToolkit::column($classroomCourses, 'id');
+        $courses          = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $user = $this->getCurrentUser();
 
+        $classroomSetting = $this->setting('classroom', array());
+        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服',array('%name%'=>$classroomSetting['name'])),'',3,$this->generateUrl('homepage'));
+        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-        if(!$classroom){
+        if (!$classroom) {
             $classroomDescription = array();
+        } else {
+            $classroomDescription = $classroom['about'];
+            $classroomDescription = strip_tags($classroomDescription, '');
+            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
-        else{
-        $classroomDescription = $classroom['about'];
-        $classroomDescription = strip_tags($classroomDescription,'');
-        $classroomDescription = preg_replace("/ /","",$classroomDescription);
-    }
         return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
-            'layout' => $layout,
-            'filters' => $this->getNoteSearchFilters($request),
-            'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
-            'classroom' => $classroom,
-            'courseIds' => $courseIds,
-            'courses' => $courses,
-            'member' => $member,
+            'layout'               => $layout,
+            'filters'              => $this->getNoteSearchFilters($request),
+            'canLook'              => $this->getClassroomService()->canLookClassroom($classroom['id']),
+            'classroom'            => $classroom,
+            'courseIds'            => $courseIds,
+            'courses'              => $courses,
+            'member'               => $member,
             'classroomDescription' => $classroomDescription
         ));
     }
@@ -51,7 +53,7 @@ class NoteController extends BaseController
         $filters = array();
 
         $filters['courseId'] = $request->query->get('courseId', '');
-        $filters['sort'] = $request->query->get('sort');
+        $filters['sort']     = $request->query->get('sort');
 
         if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
             $filters['sort'] = 'latest';

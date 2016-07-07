@@ -48,7 +48,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $classroomSetting    = $this->getSettingService()->get('classroom');
             $classroomName       = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getKernel()->trans('班级');
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买%classroomName%《%title%》',array('%classroomName%'=>$classroomName,'%title%'=>$classroom['title']));
+            $order['title']      = $this->getKernel()->trans('购买%classroomName%《%title%》', array('%classroomName%' => $classroomName, '%title%' => $classroom['title']));
             $order['targetType'] = 'classroom';
             $order['targetId']   = $classroom['id'];
             $order['payment']    = $info['payment'];
@@ -120,8 +120,8 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是%name%学员，支付宝支付成功。',array('%name%'=>$classroomSetting['name'])), $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", $this->getKernel()->trans('当前用户已经是%name%学员，支付宝支付成功。',array('%name%'=>$classroomSetting['name'])), $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是%name%学员，支付宝支付成功。', array('%name%' => $classroomSetting['name'])), $order);
+            $this->getLogService()->warning("classroom_order", "pay_success", $this->getKernel()->trans('当前用户已经是%name%学员，支付宝支付成功。', array('%name%' => $classroomSetting['name'])), $order);
         }
 
         return;
@@ -157,7 +157,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $classroomSetting         = $this->getSettingService()->get('classroom');
             $classroomSetting['name'] = empty($classroomSetting['name']) ? $this->getKernel()->trans('班级') : $classroomSetting['name'];
 
-            $adminmessage = $this->getKernel()->trans('用户%nickname%申请退款',array('%nickname%'=>$user['nickname']))."<a href='{$classroomUrl}'>{$classroom['title']}</a>".$this->getKernel()->trans('%name%，请审核。',array('%name%'=>$classroomSetting['name']));
+            $adminmessage = $this->getKernel()->trans('用户%nickname%申请退款', array('%nickname%' => $user['nickname']))."<a href='{$classroomUrl}'>{$classroom['title']}</a>".$this->getKernel()->trans('%name%，请审核。', array('%name%' => $classroomSetting['name']));
             $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
             $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id', 'DESC'), 0, $adminCount);
 

@@ -23,7 +23,12 @@ define(function(require, exports, module) {
             });
         });
 
-
+        $("#refund-coin-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#refund-coin-tips-html").html()
+        });
 
         $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function() {
             

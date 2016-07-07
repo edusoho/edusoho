@@ -27,6 +27,6 @@
     {{ form_rest(form) }}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="reviewDiv"></div>
-    <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form" style="float:right;">{{'保存'|trans}}</button><br>
+    <a href="javascript:;" class="btn btn-primary js-btn-save" data-toggle="form-submit" data-target="#review-form" style="float:right;">保存</button><br>
   </form>
 </div>

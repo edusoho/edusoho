@@ -19,7 +19,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
+            $sql       = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
             $classroom = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $classroom ? $that->createSerializer()->unserialize($classroom, $that->getSerializeFields()) : null;
@@ -38,10 +38,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit)
-                        ->addOrderBy($orderBy[0], $orderBy[1]);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->addOrderBy($orderBy[0], $orderBy[1]);
 
         $classrooms = $builder->execute()->fetchAll();
 
@@ -69,7 +69,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
-                        ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -80,21 +80,28 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             $conditions['title'] = "%{$conditions['title']}%";
         }
 
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] .= "%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('status = :status')
-                        ->andWhere('title like :title')
-                        ->andWhere('price > :price_GT')
-                        ->andWhere('price = :price')
-                        ->andWhere('private = :private')
-                        ->andWhere('categoryId IN (:categoryIds)')
-                        ->andWhere('id IN (:classroomIds)')
-                        ->andWhere('recommended = :recommended')
-                        ->andWhere('showable = :showable')
-                        ->andWhere('buyable = :buyable')
-                        ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-                        ->andWhere('vipLevelId = :vipLevelId')
-                        ->andWhere('vipLevelId IN ( :vipLevelIds )');
+            ->from($this->table, $this->table)
+            ->andWhere('status = :status')
+            ->andWhere('title like :title')
+            ->andWhere('price > :price_GT')
+            ->andWhere('price = :price')
+            ->andWhere('private = :private')
+            ->andWhere('categoryId IN (:categoryIds)')
+            ->andWhere('categoryId =:categoryId')
+            ->andWhere('id IN (:classroomIds)')
+            ->andWhere('recommended = :recommended')
+            ->andWhere('showable = :showable')
+            ->andWhere('buyable = :buyable')
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
 
         return $builder;
     }

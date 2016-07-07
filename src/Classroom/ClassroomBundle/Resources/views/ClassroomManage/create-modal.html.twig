@@ -23,14 +23,19 @@
         <label for="buy-price">{{'购买价格'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="buy-price" name="price" value="0" class="form-control">
+        <div class="input-group">
+          <input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+          <div class="input-group-addon">{{ '元'|trans }}</div>
+        </div>
         <div class="help-block">
-          {{'本课程的价格为'|trans}}                         
-                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                             {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                          {% else %}
-                              {{ classroom.price }}{{'元'|trans}}
-                          {% endif %}
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            {% set price = classroom.price * setting('coin.cash_rate') %}
+            {% set price_unit = setting('coin.coin_name') %}
+          {% else %}
+            {% set price = classroom.price %}
+            {% set price_unit = '元'|trans %}
+          {% endif %}
+          本{{ setting('classroom.name', '班级') }}的价格为{{ price }}{{ price_unit }}
         </div>
       </div>
     </div>

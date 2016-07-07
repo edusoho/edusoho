@@ -8,7 +8,7 @@
     {% for breadcrumb in breadcrumbs %}
       <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
     {% endfor %}
-    <li class="active">{{ course.title }}</li>
+    <li class="active">{{ course.title|raw }}</li>
   </ol>
   {% if member and member.locked %}
   <div class="alert alert-warning">

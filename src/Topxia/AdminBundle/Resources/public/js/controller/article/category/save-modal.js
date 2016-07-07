@@ -4,6 +4,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 	require('common/validator-rules').inject(Validator);
     
+    require('../../widget/category-select').run('article');
+
 	exports.run = function() {
         var $form = $('#category-form');
 		var $modal = $form.parents('.modal');
@@ -19,8 +21,9 @@ define(function(require, exports, module) {
                 $('#category-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
-                    $table.find('tbody').replaceWith(html);
+                    // $table.find('tbody').replaceWith(html);
                     Notify.success('保存栏目成功！');
+                    window.location.reload();
 				}).fail(function() {
                     Notify.danger("添加栏目失败，请重试！");
                 });
@@ -46,12 +49,6 @@ define(function(require, exports, module) {
             rule: 'integer remote'
         });
 
-        validator.addItem({
-            element: '#category-weight-field',
-            required: true,
-            rule: 'integer'
-        });
-
         $modal.find('.delete-category').on('click', function() {
             if (!confirm('真的要删除该栏目吗？')) {
                 return ;
@@ -62,8 +59,8 @@ define(function(require, exports, module) {
                 if (response.status == 'error') {
                     Notify.danger(response.message);
                 } else {
-                    window.location.reload();
                     Notify.success(response.message);
+                    window.location.reload();
                 }
                 
             }, 'json').error(function(error) {

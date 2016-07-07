@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ article.title }} - {% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{{ article.title }} - {% if category.seoTitle|default() %}{{ category.seoTitle }}{% else %}{{ category.name|default() }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% block keywords %}{{ seoKeyword }}{% endblock %}
 

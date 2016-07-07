@@ -13,4 +13,7 @@ interface InviteRecordService
 
     public function addInviteRewardRecordToInviteUser($invitedUserId, $fields);
 
+    public function searchRecordCount($conditions);
+
+    public function searchRecords($conditions, $orderBy, $start, $limit);
 }

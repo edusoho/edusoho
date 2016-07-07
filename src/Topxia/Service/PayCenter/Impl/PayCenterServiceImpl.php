@@ -25,7 +25,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     public function pay($payData)
     {
+        $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 进入支付处理流程");
+
         if ($payData['status'] != 'success') {
+            $this->getLogger('PayCenter')->info("订单号：{$payData['sn']} 的订单状态为：{$payData['status']}，不能进入支付成功流程");
             return array(false, array());
         }
 
@@ -37,18 +40,23 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
             if ($order["status"] == "paid") {
                 $connection->rollback();
+                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 的订单状态为已支付，不能进入支付成功流程");
                 return array(true, $order);
             }
 
-            if ($order["status"] == "created") {
-                $outflow = $this->proccessCashFlow($order);
+            if (in_array($order["status"], array('created', 'cancelled'))) {
+                $order['payment'] = $payData['payment'];
+                $outflow          = $this->proccessCashFlow($order);
+                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 账单处理成功");
 
                 if ($outflow) {
                     $this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
+                    $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 更新订单的支付流水号");
                     list($success, $order) = $this->processOrder($payData, false);
                 } else {
                     $order   = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
                     $success = false;
+                    $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 余额不足扣款不成功");
                 }
             } else {
                 $success = false;
@@ -78,23 +86,25 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             if ($lock) {
                 $connection->beginTransaction();
             }
-
             list($success, $order) = $this->getOrderService()->payOrder($payData);
+            $this->getLogger('PayCenter')->info("订单号：{$payData["sn"]} 更改订单状态为已经支付");
 
             if ($order["coupon"]) {
                 $this->useCoupon($order);
+                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 标识优惠码为使用状态");
             }
 
             $processor = OrderProcessorFactory::create($order["targetType"]);
 
             if ($order['status'] == 'paid' && $processor) {
                 $processor->doPaySuccess($success, $order);
+                $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 把下单者加入学习");
             }
 
             if ($lock) {
                 $connection->commit();
             }
-
+            $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 订单支付处理完毕");
             return array($success, $order);
         } catch (\Exception $e) {
             if ($lock) {

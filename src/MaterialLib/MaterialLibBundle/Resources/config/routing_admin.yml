@@ -1,0 +1,27 @@
+# admin_material_lib:
+#     pattern:  /materiallib
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:index }
+#
+# admin_material_lib_manage:
+#     pattern:  /materiallib/manage
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:manage }
+#
+# admin_material_lib_render_table:
+#     pattern:  /materiallib/table/render
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:render }
+#
+# admin_material_detail:
+#     pattern:  /materiallib/{globalId}/detail
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:detail }
+#
+# admin_material_play:
+#     pattern:  /materiallib/{globalId}/play
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:play }
+#
+# admin_material_lib_stats:
+#     pattern:  /materiallib/stats
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:stats }
+#
+# admin_material_reconvert:
+#     pattern: /materiallib/{globalId}/reconvert
+#     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:reconvert }

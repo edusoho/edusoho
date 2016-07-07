@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Common;
 
+use Mockery;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,12 +29,6 @@ class BaseTestCase extends WebTestCase
         static::$kernel->boot();
     }
 
-    /**
-     * 每个testXXX执行之前，都会执行此函数，净化数据库。
-     *
-     * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
-     */
-
     protected function setServiceKernel()
     {
         if (static::$serviceKernel) {
@@ -50,17 +45,6 @@ class BaseTestCase extends WebTestCase
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $connection = $kernel->getContainer()->get('database_connection');
         $serviceKernel->setConnection(new TestCaseConnection($connection));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 1,
-            'nickname'  => 'admin',
-            'email'     => 'admin@admin.com',
-            'password'  => 'admin',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-
         static::$serviceKernel = $serviceKernel;
     }
 
@@ -69,6 +53,11 @@ class BaseTestCase extends WebTestCase
         return static::$serviceKernel;
     }
 
+    /**
+     * 每个testXXX执行之前，都会执行此函数，净化数据库。
+     *
+     * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
+     */
     public function setUp()
     {
         $this->setServiceKernel();
@@ -83,13 +72,62 @@ class BaseTestCase extends WebTestCase
             $this->emptyAppDatabase(false);
         }
 
-        static::$serviceKernel->createService('User.UserService')->register(array(
-            'nickname' => 'admin',
-            'email'    => 'admin@admin.com',
-            'password' => 'admin',
-            'loginIp'  => '127.0.0.1',
-            'roles'    => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
+        $this->initCurrentUser();
+    }
+
+    protected function initCurrentUser()
+    {
+        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $userService = static::$serviceKernel->createService('User.UserService');
+
+        $user = $userService->register(array(
+            'nickname'  => 'admin',
+            'email'     => 'admin@admin.com',
+            'password'  => 'admin',
+            'createdIp' => '127.0.0.1',
+            'orgCode'   => '1.',
+            'orgId'     => '1'
         ));
+
+        $currentUser       = new CurrentUser();
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
+        $userService->changeUserRoles($user['id'], $roles);
+        $user              = $userService->getUser($user['id']);
+        $user['currentIp'] = $user['createdIp'];
+        $currentUser->fromArray($user);
+        static::$serviceKernel->setCurrentUser($currentUser);
+    }
+
+    /**
+     * mock对象
+     * @param $name                                       mock的类名
+     * @param $params,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     */
+
+    protected function mock($objectName, $params = array())
+    {
+        $newService = explode('.', $objectName);
+        $mockObject = Mockery::mock($newService[1]);
+
+        foreach ($params as $key => $param) {
+            $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+        }
+
+        $pool              = array();
+        $pool[$objectName] = $mockObject;
+        $this->setPool($pool);
+    }
+
+    protected function setPool($object)
+    {
+        $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+        $pool             = $reflectionObject->getProperty("pool");
+        $pool->setAccessible(true);
+        $value   = $pool->getValue(static::$serviceKernel);
+        $objects = array_merge($value, $object);
+        $pool->setValue(static::$serviceKernel, $objects);
     }
 
     protected function flushPool()
@@ -133,10 +171,15 @@ class BaseTestCase extends WebTestCase
             $tableNames = array_unique($tableNames);
         }
 
+        $tableWhiteList = array(
+            'migration_versions',
+            'file_group'
+        );
+
         $sql = '';
 
         foreach ($tableNames as $tableName) {
-            if ($tableName == 'migration_versions') {
+            if (in_array($tableName, $tableWhiteList)) {
                 continue;
             }
 

@@ -4,9 +4,9 @@
 
   <div class="tab-header">
     <ul class="clearfix">
-      <li class="{% if category == '' %}active{% endif %}"><a href="{{ path(path, {category:'',fliter:fliter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
+      <li class="{% if category == '' %}active{% endif %}"><a href="{{ path(path, {category:'',filter:filter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
       {% for cateogory in rootCategories %}
-        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {category:cateogory.code,fliter:fliter,orderBy:orderBy}) }}">{{ cateogory.name }}</a></li>
+        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {category:cateogory.code,filter:filter,orderBy:orderBy}) }}">{{ cateogory.name }}</a></li>
       {% endfor %}
     </ul>
   </div>
@@ -18,9 +18,9 @@
         <ul class="clearfix">
           {% for c in cs %}
             {% if loop.index == 1 %}
-              <li class="all"><a href="{{ path(path, {category:nextCode,fliter:fliter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
+              <li class="all"><a href="{{ path(path, {category:nextCode,filter:filter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
             {% endif %}
-            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path(path, {category:c.code,fliter:fliter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
+            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path(path, {category:c.code,filter:filter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
           {% endfor %}
         </ul>
       {% endfor %}

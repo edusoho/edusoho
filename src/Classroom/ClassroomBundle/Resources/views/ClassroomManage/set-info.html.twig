@@ -33,19 +33,6 @@
         </div>
       </div>
 
-     {# 先隐藏了到时候再说
-      <div class="row form-group">
-        <div class="col-md-2 control-label">
-          <label >课程说明</label>
-        </div>
-        <div class="controls col-md-8">
-          <textarea name="description" rows="10" class="form-control" 
-          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
-          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
-          id="description">{{classroom.description}}</textarea>
-        </div>
-      </div> #}
-
       <div class="row form-group">
         <div class="col-md-2 control-label">
           <label >{{'%name%展示'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</label>
@@ -88,6 +75,8 @@
         </div>
       </div>
 
+     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
+    
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">

@@ -22,23 +22,25 @@
       {% endif %}
     {% endif %}
   </a>
-  <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-  <div class="course-about">{{ course.about|plain_text(60) }}</div>
-  
-  <div class="course-price-info">  
-    {% if setting('course.coursesPrice') == 0 %}
-      {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
-    {% endif %}
-  </div>
+  <div class="course-body">
+    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+    <div class="course-about">{{ course.about|plain_text(60) }}</div>
+    
+    <div class="course-price-info">  
+      {% if setting('course.coursesPrice') == 0 %}
+        {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+      {% endif %}
+    </div>
 
-  <div class="course-metas">
-    <span class="teachers">
-       主讲:
-      {% for teacher in course.teachers %}
-       {% if loop.index <= 1 %}
-        {{ web_macro.user_link(teacher, 'text-muted') }}
-       {% endif %}
-      {% endfor %}
-    </span>
-  </div>
+    <div class="course-metas">
+      <span class="teachers">
+         主讲:
+        {% for teacher in course.teachers %}
+         {% if loop.index <= 1 %}
+          {{ web_macro.user_link(teacher, 'text-muted') }}
+         {% endif %}
+        {% endfor %}
+      </span>
+    </div>
+  </div>  
 </li>

@@ -17,33 +17,7 @@ class CourseStudentManageController extends BaseController
         $condition = array();
 
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            if (SimpleValidator::email($fields['keyword'])) {
-                $condition['email'] = $fields['keyword'];
-                $user               = $this->getUserService()->getUserByEmail($condition['email']);
-
-                $condition['userId'] = $user ? $user['id'] : -1;
-                unset($condition['email']);
-            } elseif (SimpleValidator::mobile($fields['keyword'])) {
-                $condition['mobile'] = $fields['keyword'];
-                $userIds             = array();
-                $mobileVerifiedUser  = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
-                $profileUsers        = $this->getUserService()->searchUserProfiles(array('tel' => $condition['mobile']), array('id', 'DESC'), 0, PHP_INT_MAX);
-                $mobileNameUser      = $this->getUserService()->getUserByNickname($condition['mobile']);
-                $userIds             = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-                $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-                $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-                $userIds = array_unique($userIds);
-
-                $condition['userIds'] = $userIds ? $userIds : -1;
-                unset($condition['mobile']);
-            } else {
-                $condition['nickname'] = $fields['keyword'];
-                $user                  = $this->getUserService()->getUserByNickname($condition['nickname']);
-                $condition['userId']   = $user ? $user['id'] : -1;
-                unset($condition['nickname']);
-            }
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('courseId' => $course['id'], 'role' => 'student'));
@@ -74,7 +48,7 @@ class CourseStudentManageController extends BaseController
         $courseSetting              = $this->getSettingService()->get('course', array());
         $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1 : 0;
         $default                    = $this->getSettingService()->get('default', array());
-        return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseStudentManage:student.html.twig', array(
             'course'                     => $course,
             'students'                   => $students,
             'users'                      => $users,
@@ -83,7 +57,49 @@ class CourseStudentManageController extends BaseController
             'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
             'paginator'                  => $paginator,
             'canManage'                  => $this->getCourseService()->canManageCourse($course['id']),
-            'default'                    => $default
+            'default'                    => $default,
+            'role'                       => 'student'
+        ));
+    }
+
+    public function refundRecordAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $fields    = $request->query->all();
+        $condition = array();
+
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        }
+
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'course';
+        $condition['status'] = 'success';
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchRefundCount($condition),
+            20
+        );
+
+        $refunds = $this->getOrderService()->searchRefunds(
+            $condition, 
+            'createdTime',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($refunds as $key => $refund) {
+            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
+
+            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
+        }
+        return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
+            'course'                     => $course,
+            'refunds'                   => $refunds,
+            'paginator'                  => $paginator,
+            'role'                       => ''
         ));
     }
 
@@ -125,6 +141,22 @@ class CourseStudentManageController extends BaseController
         } else {
             $course = $this->getCourseService()->tryAdminCourse($courseId);
         }
+
+        $condition = array(
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'userId' => $userId,
+            'status' => 'paid'
+            );
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        foreach ($orders as $key => $value) {
+            $order = $value;
+        }
+        $reason = array(
+            'type' => 'other',
+            'note' => '手动移除'
+            );
+        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
         $this->getCourseService()->removeStudent($courseId, $userId);
 
@@ -387,6 +419,35 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
+    private function getUserIds($keyword)
+    {
+        $userIds = array();
+
+        if (SimpleValidator::email($keyword)) {
+            $user = $this->getUserService()->getUserByEmail($keyword);
+
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        } elseif (SimpleValidator::mobile($keyword)) {
+            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id', 'DESC'), 0, PHP_INT_MAX);
+            $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
+            $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
+
+            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
+
+            $userIds = array_unique($userIds);
+
+            $userIds = $userIds ? $userIds : null;
+            return $userIds;
+        } else {
+            $user      = $this->getUserService()->getUserByNickname($keyword);
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        }
+    }
+    
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {

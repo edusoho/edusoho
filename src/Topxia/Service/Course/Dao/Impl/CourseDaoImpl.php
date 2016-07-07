@@ -106,10 +106,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         if ($orderBy[0] == 'recommendedSeq') {
             $builder->addOrderBy('recommendedTime', 'DESC');
@@ -121,7 +121,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function searchCourseCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -174,7 +174,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function clearCourseDiscountPrice($discountId)
     {
         $currentTime = time();
-        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, discountId = 0, discount = 10 WHERE discountId = ?";
         $result      = $this->getConnection()->executeQuery($sql, array($discountId));
         $this->clearCached();
         return $result;
@@ -197,44 +197,55 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
-        if (empty($conditions['status']) || $conditions['status'] == "") {
+        if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
 
+        if (empty($conditions['categoryIds'])) {
+            unset($conditions['categoryIds']);
+        }
+
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] .= "%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'course')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('status = :status')
-                        ->andWhere('type = :type')
-                        ->andWhere('price = :price')
-                        ->andWhere('price > :price_GT')
-                        ->andWhere('originPrice > :originPrice_GT')
-                        ->andWhere('originPrice = :originPrice')
-                        ->andWhere('coinPrice > :coinPrice_GT')
-                        ->andWhere('coinPrice = :coinPrice')
-                        ->andWhere('originCoinPrice > :originCoinPrice_GT')
-                        ->andWhere('originCoinPrice = :originCoinPrice')
-                        ->andWhere('title LIKE :titleLike')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('recommended = :recommended')
-                        ->andWhere('tags LIKE :tagsLike')
-                        ->andWhere('startTime >= :startTimeGreaterThan')
-                        ->andWhere('startTime < :startTimeLessThan')
-                        ->andWhere('rating > :ratingGreaterThan')
-                        ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-                        ->andWhere('vipLevelId = :vipLevelId')
-                        ->andWhere('createdTime >= :startTime')
-                        ->andWhere('createdTime <= :endTime')
-                        ->andWhere('categoryId = :categoryId')
-                        ->andWhere('smallPicture = :smallPicture')
-                        ->andWhere('categoryId IN ( :categoryIds )')
-                        ->andWhere('vipLevelId IN ( :vipLevelIds )')
-                        ->andWhere('parentId = :parentId')
-                        ->andWhere('parentId > :parentId_GT')
-                        ->andWhere('parentId IN ( :parentIds )')
-                        ->andWhere('id NOT IN ( :excludeIds )')
-                        ->andWhere('id IN ( :courseIds )')
-                        ->andWhere('locked = :locked');
+            ->from($this->table, 'course')
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('status = :status')
+            ->andWhere('type = :type')
+            ->andWhere('price = :price')
+            ->andWhere('price > :price_GT')
+            ->andWhere('originPrice > :originPrice_GT')
+            ->andWhere('originPrice = :originPrice')
+            ->andWhere('coinPrice > :coinPrice_GT')
+            ->andWhere('coinPrice = :coinPrice')
+            ->andWhere('originCoinPrice > :originCoinPrice_GT')
+            ->andWhere('originCoinPrice = :originCoinPrice')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('userId = :userId')
+            ->andWhere('recommended = :recommended')
+            ->andWhere('tags LIKE :tagsLike')
+            ->andWhere('startTime >= :startTimeGreaterThan')
+            ->andWhere('startTime < :startTimeLessThan')
+            ->andWhere('rating > :ratingGreaterThan')
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('categoryId = :categoryId')
+            ->andWhere('smallPicture = :smallPicture')
+            ->andWhere('categoryId IN ( :categoryIds )')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('parentId > :parentId_GT')
+            ->andWhere('parentId IN ( :parentIds )')
+            ->andWhere('id NOT IN ( :excludeIds )')
+            ->andWhere('id IN ( :courseIds )')
+            ->andWhere('locked = :locked')
+            ->andWhere('lessonNum > :lessonNumGT')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
 
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];
