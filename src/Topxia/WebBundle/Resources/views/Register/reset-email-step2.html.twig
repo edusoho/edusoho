@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'user/email-reset' %}
+
+{% block title %}{{ '邮箱重置'|trans }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+  <div class="es-section login-section">
+    <div class="login-main">
+      <form id="reset-email-form" method="post" action="{{ path('register_reset_email_verify') }}">
+        {{ web_macro.flash_messages() }}
+        <div class="form-group mbl">
+          <label class="control-label required" for="reset_email">{{ '新邮箱地址:'|trans }}</label>
+          <div class="controls">
+            <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
+                   data-url="{{ path('register_email_check') }}" placeholder="{{ '请输入新的邮箱地址'|trans }}" data-display="Email">
+            <p class="help-block"></p>
+          </div>
+        </div>
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="form-group mbl">
+          <div class="controls text-right">
+            <a href="{{ path('login') }}" class="btn btn-link btn-lg">{{ '取消'|trans }}</a>
+            <button type="submit" id="next-btn" data-submiting-text="{{ '正在提交'|trans }}"
+                    class="btn btn-primary btn-lg">{{ '验证'|trans }}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

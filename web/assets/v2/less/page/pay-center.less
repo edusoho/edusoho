@@ -52,6 +52,13 @@
       display: block;
     }
   }
+  &.disabled {
+    .opacity(0.2);
+    cursor: default;
+    &:hover {
+      border-color: @gray-lighter;
+    }
+  }
   .icon {
     display: none;
     background: url('@{img-src}old/pay_check_status.png') no-repeat;

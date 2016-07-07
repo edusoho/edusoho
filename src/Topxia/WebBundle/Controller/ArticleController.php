@@ -33,8 +33,8 @@ class ArticleController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         $featuredConditions = array(
-            'status'     => 'published',
-            'featured'   => 1
+            'status'   => 'published',
+            'featured' => 1
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
@@ -49,7 +49,6 @@ class ArticleController extends BaseController
         foreach ($featuredArticles as $key => $value) {
             $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
-
 
         $promotedConditions = array(
             'status'   => 'published',
@@ -198,10 +197,6 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $conditions = array(
-            'targetType' => 'article'
-        );
-
-        $conditions = array(
             'targetId'   => $id,
             'targetType' => 'article'
         );
@@ -213,15 +208,7 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 10);
-
-        $sameTagArticles = array();
-
-        foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
-                $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
-            }
-        }
+        $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
 
         $user = $this->getCurrentUser();
 
@@ -269,7 +256,7 @@ class ArticleController extends BaseController
             $user = $this->getCurrentUser();
 
             if (!$user->isLogin()) {
-                $this->createAccessDeniedException('用户没有登录,不能评论!');
+                throw $this->createAccessDeniedException('用户没有登录,不能评论!');
             }
 
             $post = $this->getThreadService()->createPost($post);
@@ -387,7 +374,7 @@ class ArticleController extends BaseController
         $tag = $this->getTagService()->getTagByName($name);
 
         if (empty($tag)) {
-            $this->createAccessDeniedException('标签不存在!');
+            throw $this->createAccessDeniedException('标签不存在!');
         }
 
         $conditions = array(

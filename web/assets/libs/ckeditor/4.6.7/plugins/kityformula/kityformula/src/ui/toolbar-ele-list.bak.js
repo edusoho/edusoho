@@ -447,7 +447,7 @@ define( function ( require ) {
                     key: "%",
                     img: "baifenhao"
                 },
-                "circ", "exists", /*"nexists",*/ "in", "ni", "gets", "uparrow", "to", "downarrow",
+                "circ", "exists", "nexists", "in", "ni", "gets", "uparrow", "to", "downarrow",
                 "leftrightarrow", "therefore", "because", {
                     key: "+",
                     img: "plus"
@@ -455,7 +455,7 @@ define( function ( require ) {
                     key: "-",
                     img: "minus"
                 },
-                "neg", "ast", "cdot", "vdots", "ddots", "aleph", /*"beth",*/ "blacksquare"
+                "neg", "ast", "cdot", "vdots", "ddots", "aleph", "beth", "blacksquare"
 
             ],
             configList = config[ 2 ].options.box.group[ 0 ].items;
@@ -524,7 +524,7 @@ define( function ( require ) {
                     "gneqq", "nprec", "nsucc", "notin", "nsubseteq", "nsupseteq",
                     "subsetneq", "supsetneq", "lnsim", "gnsim", "precnsim",
                     "succnsim", "ntriangleleft", "ntriangleright", "ntrianglelefteq",
-                    "ntrianglerighteq", "nmid", "nparallel", "nvdash"/*, {
+                    "ntrianglerighteq", "nmid", "nparallel", "nvdash", {
                         key: "\\nVdash",
                         img: "nvdash-1"
                     }, {
@@ -533,7 +533,7 @@ define( function ( require ) {
                     }, {
                         key: "\\nVDash",
                         img: "nvdash-3"
-                    }, "nexists"*/
+                    }, "nexists"
                 ]
             } ],
             greekConfigList = config[ 2 ].options.box.group[ 2 ].items;
@@ -552,8 +552,8 @@ define( function ( require ) {
     ( function () {
 
         var list = [
-                "aleph", /*"beth", "daleth", "gimel", "complement",*/ "ell", /*"eth",*/ "hbar",
-                /*"hslash", "mho",*/ "partial", "wp", /*"circledS", "Bbbk", "Finv", "Game",*/
+                "aleph", "beth", "daleth", "gimel", "complement", "ell", "eth", "hbar",
+                "hslash", "mho", "partial", "wp", "circledS", "Bbbk", "Finv", "Game",
                 "Im", "Re"
             ],
             configList = config[ 2 ].options.box.group[ 3 ].items;
@@ -612,10 +612,10 @@ define( function ( require ) {
                     key: "\\nLeftrightarrow",
                     img: "u-nleftrightarrow"
                 }, "leftharpoonup", "leftharpoondown", "rightharpoonup",
-                "rightharpoondown", /*"upharpoonleft", "upharpoonright", "downharpoonleft",
-                "downharpoonright", "leftrightharpoons",*/ "rightleftharpoons", "leftleftarrows",
+                "rightharpoondown", "upharpoonleft", "upharpoonright", "downharpoonleft",
+                "downharpoonright", "leftrightharpoons", "rightleftharpoons", "leftleftarrows",
                 "rightrightarrows", "upuparrows", "downdownarrows", "leftrightarrows",
-                "rightleftarrows", /*"looparrowleft", "looparrowright", "leftarrowtail",
+                "rightleftarrows", "looparrowleft", "looparrowright", "leftarrowtail",
                 "rightarrowtail",
                 {
                     key: "\\Lsh",
@@ -631,7 +631,7 @@ define( function ( require ) {
                     img: "u-rrightarrow"
                 }, "curvearrowleft",
                 "curvearrowright", "circlearrowleft", "circlearrowright", "multimap",
-                "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"*/
+                "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"
             ],
             configList = config[ 2 ].options.box.group[ 4 ].items;
 

@@ -2,16 +2,16 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MobileBaseController extends BaseController
 {
     const MOBILE_MODULE = 'mobile';
-    const TOKEN_TYPE = 'mobile_login';
+    const TOKEN_TYPE    = 'mobile_login';
 
     protected $result = array();
 
@@ -19,8 +19,8 @@ class MobileBaseController extends BaseController
     {
         $result = array(
             'mobileVersion' => 1,
-            'url' => $request->getSchemeAndHttpHost()
-            );
+            'url'           => $request->getSchemeAndHttpHost()
+        );
 
         return $this->createJson($request, $result);
     }
@@ -28,6 +28,7 @@ class MobileBaseController extends BaseController
     public function createJson(Request $request, $data)
     {
         $callback = $request->query->get('callback');
+
         if ($callback) {
             return $this->createJsonP($request, $callback, $data);
         } else {
@@ -80,13 +81,15 @@ class MobileBaseController extends BaseController
 
     public function setCurrentUser($userId, $request)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user        = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
+
         if ($user) {
             $user['currentIp'] = $request->getClientIp();
         } else {
             $user = array('id' => 0);
         }
+
         $currentUser = $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
     }
@@ -95,15 +98,18 @@ class MobileBaseController extends BaseController
     {
         $token = $this->getToken($request);
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
+
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
+
         return $token;
     }
 
     public function getToken($request)
     {
         $token = $request->headers->get('token', '');
+
         if (empty($token) && $request->getMethod() == "GET") {
             $token = $request->query->get('token', '');
         }
@@ -119,6 +125,7 @@ class MobileBaseController extends BaseController
     {
         $token = $this->getToken($request);
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
+
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
@@ -135,17 +142,20 @@ class MobileBaseController extends BaseController
     public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
+
         if ($token) {
             $this->setCurrentUser($user['id'], $request);
         }
+
         return $token;
     }
 
-    public function simpleUser($user) 
+    public function simpleUser($user)
     {
         if (empty($user)) {
             return null;
         }
+
         $users = $this->simplifyUsers(array($user));
         return current($users);
     }
@@ -159,14 +169,15 @@ class MobileBaseController extends BaseController
         $controller = $this;
 
         $simplifyUsers = array();
+
         foreach ($users as $key => $user) {
-            $simplifyUsers[$key] = array (
-                'id' => $user['id'],
-                'nickname' => $user['nickname'],
-                'title' => $user['title'],
+            $simplifyUsers[$key] = array(
+                'id'        => $user['id'],
+                'nickname'  => $user['nickname'],
+                'title'     => $user['title'],
                 'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
-                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'follower'  => $controller->getUserService()->findUserFollowerCount($user['id']),
+                'avatar'    => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true)
             );
         }
 
@@ -183,10 +194,10 @@ class MobileBaseController extends BaseController
         }
 
         $userIds = ArrayToolkit::column($reviews, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         $self = $this;
-        return array_map(function($review) use ($self, $users) {
+        return array_map(function ($review) use ($self, $users) {
             $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
             unset($review['userId']);
 
@@ -205,26 +216,31 @@ class MobileBaseController extends BaseController
 
         return current($courses);
     }
-    
+
     public function getCoinSetting()
     {
         $coinSetting = $this->setting("coin");
+
         if (empty($coinSetting)) {
             return null;
         }
+
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+
         if (empty($coinEnabled)) {
             return null;
         }
+
         $cashRate = 1;
+
         if (isset($coinSetting["cash_rate"])) {
             $cashRate = $coinSetting["cash_rate"];
         }
-        
+
         $coin = array(
-            "cashRate"=>$cashRate,
-            "priceType"=>isset($coinSetting["price_type"]) ? $coinSetting["price_type"] : "RMB",
-            "name"=>isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币"
+            "cashRate"  => $cashRate,
+            "priceType" => isset($coinSetting["price_type"]) ? $coinSetting["price_type"] : "RMB",
+            "name"      => isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币"
         );
 
         return $coin;
@@ -237,31 +253,37 @@ class MobileBaseController extends BaseController
         }
 
         $teacherIds = array();
+
         foreach ($courses as $course) {
-            $teacherIds = array_merge($teacherIds, $course['teacherIds']);
+            if (isset($course['teacherIds']) && !empty($course['teacherIds'])) {
+                $teacherIds = array_merge($teacherIds, $course['teacherIds']);
+            }
         }
+
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $teachers = $this->simplifyUsers($teachers);
 
         $coinSetting = $this->getCoinSetting();
-        $self = $this;
-        $container = $this->container;
-        return array_map(function($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png', true);
+        $self        = $this;
+        $container   = $this->container;
+        return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
+            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['middlePicture'], 'course.png', true);
-            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png', true);
-            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-            $course['createdTime'] = date("c", $course['createdTime']);
+            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png', true);
+            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['createdTime']   = date("c", $course['createdTime']);
 
             $course['teachers'] = array();
+
             foreach ($course['teacherIds'] as $teacherId) {
                 if (isset($teachers[$teacherId])) {
                     $course['teachers'][] = $teachers[$teacherId];
                 }
             }
+
             unset($course['teacherIds']);
             $course["priceType"] = $coinSetting["priceType"];
-            $course['coinName'] = $coinSetting["name"];
+            $course['coinName']  = $coinSetting["name"];
             return $course;
         }, $courses);
     }
@@ -269,12 +291,11 @@ class MobileBaseController extends BaseController
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+        $html    = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
             return "src=\"{$baseUrl}/{$matches[1]}\"";
         }, $html);
 
         return $html;
-
     }
 
     public function filterUser($user)
@@ -282,27 +303,28 @@ class MobileBaseController extends BaseController
         if (empty($user)) {
             return null;
         }
-        
+
         $users = $this->filterUsers(array(
             $user
         ));
-        
+
         return current($users);
     }
-    
+
     public function filterItems($items)
     {
         if (empty($items)) {
             return array();
         }
 
-        $self = $this;
+        $self      = $this;
         $container = $this->container;
 
-        return array_map(function($item) use ($self, $container) {
+        $items = array_map(function ($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
+
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
-                $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+                $item['length'] = $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = "";
             }
@@ -310,11 +332,17 @@ class MobileBaseController extends BaseController
             if (empty($item['content'])) {
                 $item['content'] = "";
             }
+
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
+
+            if (isset($item['status']) && $item['status'] != 'published') {
+                return false;
+            }
 
             return $item;
         }, $items);
 
+        return array_filter($items);
     }
 
     public function coverPath($path, $coverPath)
@@ -327,34 +355,33 @@ class MobileBaseController extends BaseController
         if (empty($users)) {
             return array();
         }
-        
+
         $container = $this->container;
 
         $controller = $this;
-        return array_map(function($user) use ($container, $controller)
-        {
+        return array_map(function ($user) use ($container, $controller) {
             $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
             $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
-            
-            
+
             if ($controller->setting('vip.enabled')) {
-                $vip = $controller->getVipService()->getMemberByUserId($user['id']);
+                $vip         = $controller->getVipService()->getMemberByUserId($user['id']);
                 $user["vip"] = $vip;
             }
-            $userProfile = $controller->getUserService()->getUserProfile($user['id']);
+
+            $userProfile       = $controller->getUserService()->getUserProfile($user['id']);
             $user['signature'] = $userProfile['signature'];
-            if(isset($user['about']))
-            {
+
+            if (isset($user['about'])) {
                 $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
             }
 
             $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
-            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+            $user['follower']  = $controller->getUserService()->findUserFollowerCount($user['id']);
 
-            $user['email'] = "****";
-            $user['mobile'] = "****";
+            $user['email']          = "****";
+            $user['mobile']         = "****";
             $user['verifiedMobile'] = "****";
             unset($user['password']);
             unset($user['payPasswordSalt']);
@@ -373,57 +400,60 @@ class MobileBaseController extends BaseController
             unset($user['tags']);
             unset($user['point']);
             unset($user['coin']);
-            
+
             return $user;
         }, $users);
     }
 
-    public function filterLiveCourses($user, $start, $limit){
+    public function filterLiveCourses($user, $start, $limit)
+    {
         $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
-        
-        $tempCourses = array();
+
+        $tempCourses   = array();
         $tempCourseIds = array();
-        foreach ($courses as $key => $course) {  
-            if(!strcmp($course["type"],"live"))
-            {
+
+        foreach ($courses as $key => $course) {
+            if (!strcmp($course["type"], "live")) {
                 $tempCourses[$course["id"]] = $course;
-                $tempCourseIds[] = $course["id"];
+                $tempCourseIds[]            = $course["id"];
             }
         }
 
-        $tempLiveLessons = array();
+        $tempLiveLessons   = array();
         $tempCourseIdIndex = 0;
-        $tempLessons = array();
-        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
-        {
+        $tempLessons       = array();
+
+        for ($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++) {
             $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
-            if(isset($tempLiveLessons)){
+
+            if (isset($tempLiveLessons)) {
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
             }
         }
 
-        $nowTime = time();
+        $nowTime     = time();
         $liveLessons = array();
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
 
-        foreach($tempCourses as $key => $value){
-            if(isset($liveLessons[$key])){
+        foreach ($tempCourses as $key => $value) {
+            if (isset($liveLessons[$key])) {
                 $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
-                $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
-                $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
-            }else{
+                $tempCourses[$key]["liveStartTime"]   = date("c", $liveLessons[$key]["startTime"]);
+                $tempCourses[$key]["liveEndTime"]     = date("c", $liveLessons[$key]["endTime"]);
+            } else {
                 $tempCourses[$key]["liveLessonTitle"] = "";
-                $tempCourses[$key]["liveStartTime"] = "";
-                $tempCourses[$key]["liveEndTime"] = "";
+                $tempCourses[$key]["liveStartTime"]   = "";
+                $tempCourses[$key]["liveEndTime"]     = "";
             }
         }
 
         return $tempCourses;
     }
 
-    public function filterOneLiveCourseByDESC($user){
+    public function filterOneLiveCourseByDESC($user)
+    {
         $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
 
         $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
@@ -448,11 +478,11 @@ class MobileBaseController extends BaseController
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } else {
             if (!empty($params)) {
-                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
 
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -483,7 +513,7 @@ class MobileBaseController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
-    
+
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -499,7 +529,7 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    public function getMemberDao ()
+    public function getMemberDao()
     {
         return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
@@ -559,11 +589,18 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    public function getNoteService(){
+    public function getNoteService()
+    {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    public function getEduCloudService(){
+    public function getEduCloudService()
+    {
         return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }
+
+    public function getMaterialLibService()
+    {
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }

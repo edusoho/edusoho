@@ -116,8 +116,7 @@
       <div id="qq-group-property-tips-html" style="display:none;">
         <div style="width:250px;">
           <span style="color:blue;">如何获取在线咨询链接？</span><br>
-          1，访问<a target="_blank" href="http://qun.qq.com/join.html">http://qun.qq.com/join.html</a>获取QQ群直接加入网页代码。 <br>
-          2，一键加群代码只在侧边栏有效<br>
+          访问<a target="_blank" href="http://qun.qq.com/join.html">http://qun.qq.com/join.html</a>获取QQ群直接加入网页代码。
         </div>
       </div>
     </legend>
@@ -188,7 +187,7 @@
       </div>
       <div class="col-md-8 controls">
         <div id="consult-container">{% if consult.webchatURI %}<img src="{{ asset(consult.webchatURI) }}">{% endif %}</div>
-        <button class="btn btn-default btn-sm" id="consult-upload" data-upload-token="{{ upload_token('system', 'image') }}"type="button" data-goto-url="{{ path('admin_setting_consult_upload') }}">上传</button>
+        <a href="javascript:;" class="btn btn-default btn-sm" id="consult-upload" data-upload-token="{{ upload_token('system', 'image') }}"type="button" data-goto-url="{{ path('admin_setting_consult_upload') }}">上传</a>
         <button class="btn btn-default btn-sm" id="consult-webchat-del" type="button" data-url="{{ path('admin_setting_consult_webchat_delete') }}" {% if not consult.webchatURI %}style="display:none;"{% endif %}>删除</button>        
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="webchatURI" value="{{ consult.webchatURI }}">

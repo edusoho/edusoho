@@ -46,6 +46,7 @@ seajs.config({
         'json': 'gallery/json/1.0.3/json',
         "handlebars": "gallery/handlebars/1.0.2/handlebars",
         "backbone": "gallery/backbone/1.0.0/backbone",
+        "underscore": "gallery/underscore/1.8.3/underscore",
         "swfobject": "gallery/swfobject/2.2.0/swfobject.js",
         'moment': 'gallery/moment/2.5.1/moment',
         'morris': 'gallery/morris/0.5.0/morris',
@@ -53,23 +54,30 @@ seajs.config({
         'video-js': 'gallery2/video-js/4.2.1/video-js',
         'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
         'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
+        'webuploader2': 'webuploader/0.1.5/webuploader',
+        'filesize': 'filesize/3.1.2/index',
         'screenfull': 'screenfull/2.0.0/screenfull',
         'ckeditor': 'ckeditor/4.6.7/ckeditor',
         'es-ckeditor': 'common/es-ckeditor',
         'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
-        'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
-        'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
-        'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
+        'edusoho.selecttree': 'edusoho/ztree/0.0.1/select-tree.js',
+        'edusoho.mimetypes': 'edusoho/mimetypes/0.0.1/mime-types',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
         'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
-        'video-player': 'balloon-video-player/1.3.0/index'
+        'video-player': 'balloon-video-player/1.3.0/index',
+        'echarts': 'echarts/3.1.2/echarts.min.js',
+        'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
+        'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
+        'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
+        'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
     },
 
     // 预加载项
@@ -85,7 +93,9 @@ seajs.config({
 
     charset: 'utf-8',
 
-    debug: app.debug
+    debug: app.debug,
+
+    plugins: ['text']
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;

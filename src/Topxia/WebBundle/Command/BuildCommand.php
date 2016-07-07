@@ -113,8 +113,9 @@ class BuildCommand extends BaseCommand
         $this->filesystem->chmod("{$this->distDirectory}/app/data/backup", 0777);
         $this->filesystem->chmod("{$this->distDirectory}/app/logs", 0777);
 
-        // $this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
-        // $this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
+// $this->filesystem->remove("{$this->distDirectory}/app/config/config_dev.yml");
+
+// $this->filesystem->remove("{$this->distDirectory}/app/config/config_test.yml");
         // $this->filesystem->remove("{$this->distDirectory}/app/config/routing_dev.yml");
         $this->filesystem->remove("{$this->distDirectory}/app/config/routing_plugins.yml");
         $this->filesystem->touch("{$this->distDirectory}/app/config/routing_plugins.yml");
@@ -147,8 +148,10 @@ class BuildCommand extends BaseCommand
         $this->output->writeln('build doc/ .');
 
         $this->filesystem->mkdir("{$this->distDirectory}/doc");
-        // $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
-        // $this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
+
+// $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
+
+// $this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
         // $this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
     }
 
@@ -208,6 +211,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
 
         $directories = array(
+            'asm89',
             'composer',
             'silex/silex/src',
             'pimple/pimple/lib',
@@ -344,7 +348,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword');
+        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword','materiallib','org');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {

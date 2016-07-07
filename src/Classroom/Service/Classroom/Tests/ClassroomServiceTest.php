@@ -59,7 +59,9 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'test1'
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+
         $this->getClassroomService()->publishClassroom($classroom['id']);
+
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
         $user        = $this->createUser();
@@ -102,8 +104,6 @@ class ClassroomServiceTest extends BaseTestCase
         $conditions = array('status' => 'draft', 'showable' => 1, 'buyable' => 1);
         $result     = $this->getClassroomService()->searchClassroomsCount($conditions);
         $this->assertEquals(3, $result);
-        $result = $this->getClassroomService()->searchClassroomsCount(array('classroomIds' => array()));
-        $this->assertEquals(0, $result);
     }
 
     public function testRecommendClassroom()

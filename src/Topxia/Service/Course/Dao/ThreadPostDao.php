@@ -15,6 +15,10 @@ interface ThreadPostDao
 
 	public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit);
 
+	public function searchThreadPosts($conditions,$orderBy, $start, $limit,$groupBy);
+
+	public function searchThreadPostsCount($conditions,$groupBy);
+
 	public function addPost(array $fields);
 
 	public function updatePost($id, array $fields);
@@ -22,4 +26,5 @@ interface ThreadPostDao
 	public function deletePost($id);
 
 	public function deletePostsByThreadId($threadId);
+
 }

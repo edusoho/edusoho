@@ -47,7 +47,9 @@
             {% else %}
               <div class="form-group">
                 <div class="controls">
-                  <input type="text" id="cash{{item.id}}" class="form-control cashPrice" style="width:40%;" value="{% if item.originCoinPrice > 0 %}{{ item.originCoinPrice }}{% endif %}" name="item-cash[{{item.id}}]"/>
+                    {% if item.originPrice > 0 %}
+                      {{ item.originPrice * set.cash_rate}}
+                    {% endif %}
                 </div>
               </div>
             {% endif %}

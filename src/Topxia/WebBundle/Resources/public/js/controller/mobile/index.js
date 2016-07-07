@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
         $(".es-mobile .btn-mobile").click(function(){
             $('html,body').animate({
-                scrollTop: $($(this).attr('data-url')).offset().top + 100
+                scrollTop: $($(this).attr('data-url')).offset().top + 50
             },300);
         });
 

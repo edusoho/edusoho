@@ -108,11 +108,15 @@ GET /lessons/{id}/replay
         "provider": "soooner",
         "liveClassroomId": "",
         "exStr": "",
-    }
+    },
+    "nonsupport": true
 }
 ```
 
 目前sdk，只会出现在光慧直播，且请求参数`device`为`android`或`iphone`) 存在。
+
+如果不支持在当前设备播放，就会出现`nonsupport`，比如三芒的回放暂不支持在移动端播放。
+
 ```
 
 

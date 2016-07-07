@@ -1,0 +1,8 @@
+
+admin_cloud_file_manage:
+    name: 资源管理
+    parent: admin_cloud_file
+
+# admin_material_lib_stats:
+#     name: 数据统计
+#     parent: admin_material_lib

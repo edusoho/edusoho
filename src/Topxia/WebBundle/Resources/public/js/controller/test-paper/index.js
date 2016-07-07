@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     
     exports.run = function() {
 
-        require('../course-manage/header').run();
 
         var $container = $('#quiz-table-container');
         require('../../util/batch-select')($container);

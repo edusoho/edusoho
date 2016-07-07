@@ -3,9 +3,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
-        require('./header').run();
-
+        
         var $list = $("#course-student-list");
 
         $list.on('click', '.student-remove', function(){
@@ -27,6 +25,13 @@ define(function(require, exports, module) {
 
 
 
+        $("#refund-coin-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#refund-coin-tips-html").html()
+        });
+        
         $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function() {
             
             var $this = $(this);

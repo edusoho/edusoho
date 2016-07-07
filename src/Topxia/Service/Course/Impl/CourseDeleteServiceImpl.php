@@ -31,11 +31,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     public function deleteLessonResult($lessonId)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($lessonId);
-        $status = 'reviewing';
-        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'],$status);
+        $status    = 'reviewing';
+        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'], $status);
         return true;
     }
-    
+
     protected function deleteQuestions($course)
     {
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$course['id']}"));
@@ -51,7 +51,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $questionLog = "删除课程《{$course['title']}》(#{$course['id']})的问题";
-            $this->getLogService()->info('question', 'delete', $questionLog);
+            $this->getLogService()->info('course', 'delete_question', $questionLog);
         }
 
         return $count;
@@ -76,7 +76,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $testpaperLog = "删除课程《{$course['title']}》(#{$course['id']})的试卷";
-            $this->getLogService()->info('testpaper', 'delete', $testpaperLog);
+            $this->getLogService()->info('course', 'delete_testpaper', $testpaperLog);
         }
 
         return $count;
@@ -100,7 +100,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $materialLog = "删除课程《{$course['title']}》(#{$course['id']})的课时资料";
-            $this->getLogService()->info('material', 'delete', $materialLog);
+            $this->getLogService()->info('course', 'delete_material', $materialLog);
         }
 
         return $count;
@@ -120,7 +120,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $chapterLog = "删除课程《{$course['title']}》(#{$course['id']})的课时章/节";
-            $this->getLogService()->info('chapter', 'delete', $chapterLog);
+            $this->getLogService()->info('course', 'delete_chapter', $chapterLog);
         }
 
         return $count;
@@ -140,7 +140,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $draftLog = "删除课程《{$course['title']}》(#{$course['id']})的草稿";
-            $this->getLogService()->info('draft', 'delete', $draftLog);
+            $this->getLogService()->info('course', 'delete_draft', $draftLog);
         }
 
         return $count;
@@ -172,7 +172,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             //删除定时任务
 
             $lessonLog = "删除课程《{$course['title']}》(#{$course['id']})的课时";
-            $this->getLogService()->info('lesson', 'delete', $lessonLog);
+            $this->getLogService()->info('course', 'delete_lesson', $lessonLog);
         }
 
         return $count;
@@ -191,8 +191,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $count += $result;
             }
 
-            $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时时长";
-            $this->getLogService()->info('lessonLearn', 'delete', $lessonLearnLog);
+            $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时学习记录";
+            $this->getLogService()->info('course', 'delete_lessonLearn', $lessonLearnLog);
         }
 
         return $count;
@@ -212,7 +212,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播";
-            $this->getLogService()->info('LessonReplay', 'delete', $LessonReplayLog);
+            $this->getLogService()->info('course', 'delete_lessonReplay', $LessonReplayLog);
         }
 
         return $count;
@@ -231,8 +231,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $count += $result;
             }
 
-            $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的播放时长";
-            $this->getLogService()->info('lessonView', 'delete', $lessonViewLog);
+            $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的浏览记录";
+            $this->getLogService()->info('course', 'delete_lessonView', $lessonViewLog);
         }
 
         return $count;
@@ -318,7 +318,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $favoriteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程收藏";
-            $this->getLogService()->info('favorite', 'delete', $favoriteLog);
+            $this->getLogService()->info('course', 'delete_favorite', $favoriteLog);
         }
 
         return $count;
@@ -339,7 +339,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $noteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程笔记";
-            $this->getLogService()->info('note', 'delete', $noteLog);
+            $this->getLogService()->info('course', 'delete_note', $noteLog);
         }
 
         return $count;
@@ -360,7 +360,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $threadLog = "删除课程《{$course['title']}》(#{$course['id']})的话题";
-            $this->getLogService()->info('thread', 'delete', $threadLog);
+            $this->getLogService()->info('course', 'delete_thread', $threadLog);
         }
 
         return $count;
@@ -380,7 +380,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $reviewLog = "删除课程《{$course['title']}》(#{$course['id']})的评价";
-            $this->getLogService()->info('review', 'delete', $reviewLog);
+            $this->getLogService()->info('course', 'delete_review', $reviewLog);
         }
 
         return $count;
@@ -400,7 +400,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $announcementLog = "删除课程《{$course['title']}》(#{$course['id']})的公告";
-            $this->getLogService()->info('announcement', 'delete', $announcementLog);
+            $this->getLogService()->info('course', 'delete_announcement', $announcementLog);
         }
 
         return $count;
@@ -420,7 +420,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $statusLog = "删除课程《{$course['title']}》(#{$course['id']})的动态";
-            $this->getLogService()->info('status', 'delete', $statusLog);
+            $this->getLogService()->info('course', 'delete_status', $statusLog);
         }
 
         return $count;
@@ -440,7 +440,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }
 
             $memberLog = "删除课程《{$course['title']}》(#{$course['id']})的成员";
-            $this->getLogService()->info('member', 'delete', $memberLog);
+            $this->getLogService()->info('course', 'delete_member', $memberLog);
         }
 
         return $count;

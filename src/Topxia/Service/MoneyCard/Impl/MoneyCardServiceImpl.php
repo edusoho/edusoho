@@ -122,7 +122,7 @@ class MoneyCardServiceImpl extends BaseService
         }
 
         $this->getMoneyCardDao()->addMoneyCard($moneyCards);
-        $this->getLogService()->info('money_card_batch', 'create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
+        $this->getLogService()->info('money_card', 'batch_create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
 
         return $batch;
     }
@@ -199,7 +199,6 @@ class MoneyCardServiceImpl extends BaseService
         $batch     = $this->getBatch($moneyCard['batchId']);
         $this->getMoneyCardDao()->deleteMoneyCard($id);
         $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
-
         if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
@@ -207,13 +206,16 @@ class MoneyCardServiceImpl extends BaseService
 
             $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
-
         $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+
         // if ($moneyCard['cardStatus'] != 'recharged') {
+
         //     $this->getMoneyCardDao()->deleteMoneyCard($id);
 
         //     $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+
         // } else {
+
         //     throw $this->createServiceException('不能删除已经充值的充值卡！');
         // }
     }
@@ -265,7 +267,7 @@ class MoneyCardServiceImpl extends BaseService
         );
 
         $batch = $this->updateBatch($batch['id'], array('batchStatus' => 'invalid'));
-        $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
+        $this->getLogService()->info('money_card', 'batch_lock', "作废了批次为{$batch['id']}的充值卡");
 
         return $batch;
     }
@@ -310,7 +312,7 @@ class MoneyCardServiceImpl extends BaseService
         }
 
         $batch = $this->updateBatch($batch['id'], array('batchStatus' => 'normal'));
-        $this->getLogService()->info('money_card_batch', 'unlock', "启用了批次为{$batch['id']}的充值卡");
+        $this->getLogService()->info('money_card', 'batch_unlock', "启用了批次为{$batch['id']}的充值卡");
 
         return $batch;
     }
@@ -340,7 +342,7 @@ class MoneyCardServiceImpl extends BaseService
             }
         }
 
-        $this->getLogService()->info('money_card_batch', 'delete', "删除了批次为{$id}的充值卡");
+        $this->getLogService()->info('money_card', 'batch_delete', "删除了批次为{$id}的充值卡");
     }
 
     protected function makeRands($median, $number, $cardPrefix, $passwordLength)
@@ -419,15 +421,20 @@ class MoneyCardServiceImpl extends BaseService
         }
 
         return $password;
-        //NEED TO CHECK Unique
 
-        // $cardIds[$id] = $this->makePassword($passwordLength);
+//NEED TO CHECK Unique
 
-        // $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
-        // $password = chr(rand(97, 122));
-        // for ($j=0; $j < ((int)$length)-1; $j++) {
-        //         $password .= $pattern[mt_rand(0, 35)];
-        //     }
+// $cardIds[$id] = $this->makePassword($passwordLength);
+
+// $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
+
+// $password = chr(rand(97, 122));
+
+// for ($j=0; $j < ((int)$length)-1; $j++) {
+
+//         $password .= $pattern[mt_rand(0, 35)];
+
+//     }
 
         // return $password;
     }

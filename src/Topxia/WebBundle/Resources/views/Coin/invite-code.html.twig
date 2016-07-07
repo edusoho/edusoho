@@ -15,13 +15,24 @@
     <a  class="btn btn-primary btn-sm pull-right" href="#modal" data-toggle="modal" data-url="{{ path('invite_promote_link')}}">{{'邀请好友'|trans}}</a></p>
     <br>
     <div class="alert alert-warning">
-    {{'给TA分享您的邀请码或者邀请链接'|trans}}，
-    {% if inviteSetting %}
-      {% if inviteSetting.promoted_user_value  %}
-        {{'TA注册后将获得%coin_value%元优惠券'|trans({'%coin_value%': inviteSetting.promoted_user_value})}}
+    {{'给TA分享您的邀请码或者邀请链接'|trans}}
+    {% if setting('invite')|default(false) %}
+      {% if setting('invite.promoted_user_value')|default(false)  %}
+        {% trans with {'%promoted_user_value%': inviteSetting.promoted_user_value} %}，TA注册后将获得%promoted_user_value%元优惠券{% endtrans %}
       {% endif %}
-      {% if inviteSetting.promote_user_value %}
-        {{'TA在消费后您将获得%coin_value%元优惠券'|trans({'%coin_value%': inviteSetting.promote_user_value})}}
+
+      {% if setting('invite.promote_user_value')|default(false) %}
+        ，
+        {% if setting('invite.get_coupon_setting')|default(false) %}
+          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}
+            TA在消费后您将获得%promote_user_value%元优惠券
+          {% endtrans %}
+        {% else %}
+          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}   
+            同时您将获得%promote_user_value%元优惠券
+          {% endtrans %}
+        {% endif %}
+      {% endif %}
     {{'。'|trans}}
     {% else %}
     {{'。'|trans}}

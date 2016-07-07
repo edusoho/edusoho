@@ -28,7 +28,7 @@
           <a class="btn btn-fat btn-primary"
           id="upload-avatar-btn"
           data-url="{{path('settings_avatar_crop')}}"
-          data-goto-url="{{path('settings_avatar')}}"
+          data-goto-url="{% if goto %}{{ goto }}{% else %}{{path('settings_avatar')}}{% endif %}"
           >{{'保存'|trans}}</a>
           <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
         </div>
