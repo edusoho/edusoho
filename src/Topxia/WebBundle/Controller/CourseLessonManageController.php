@@ -15,7 +15,8 @@ class CourseLessonManageController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课时(#%lessonId%)不存在！', 
+                array('%lessonId%' =>$lessonId )));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -71,7 +72,7 @@ class CourseLessonManageController extends BaseController
                     'uri'    => ''
                 );
             } else {
-                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => $this->getServiceKernel()->trans('文件已删除'), 'uri' => '');
             }
         } else {
             $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
@@ -178,7 +179,8 @@ class CourseLessonManageController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课时(#%lessonId%)不存在！', 
+                array('%lessonId%' =>$lessonId )));
         }
 
         if ($request->getMethod() == 'POST') {

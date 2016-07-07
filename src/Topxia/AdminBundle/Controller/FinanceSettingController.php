@@ -13,7 +13,7 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled'          => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'disabled_message' => $this->getServiceKernel()->trans('尚未开启支付模块，无法购买课程。'),
             'bank_gateway'     => 'none',
             'alipay_enabled'   => 0,
             'alipay_key'       => '',
@@ -44,8 +44,8 @@ class FinanceSettingController extends BaseController
             $payment = ArrayToolkit::trim($payment);
 
             $this->getSettingService()->set('payment', $payment);
-            $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
-            $this->setFlashMessage('success', '支付方式设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更支付方式设置'), $payment);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('支付方式设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
@@ -68,8 +68,8 @@ class FinanceSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新退款设置", $refundSetting);
-            $this->setFlashMessage('success', '退款设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新退款设置'), $refundSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('退款设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(

@@ -57,7 +57,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = $this->getMarker($id);
 
         if (empty($marker)) {
-            throw $this->createServiceException("驻点不存在");
+            throw $this->createServiceException($this->getKernel()->trans('驻点不存在'));
         }
 
         if (isset($fields['updatedTime']) || $fields['updatedTime'] == "") {
@@ -65,7 +65,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         if (empty($fields['second'])) {
-            throw $this->createServiceException("更新驻点时间不存在");
+            throw $this->createServiceException($this->getKernel()->trans('更新驻点时间不存在'));
         }
 
         return $this->getMarkerDao()->updateMarker($id, $fields);
@@ -77,11 +77,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         if (empty($media)) {
             $media['id'] = 0;
-            $this->getLogService()->error('marker', 'mediaId_notExist', "视频文件不存在！");
+            $this->getLogService()->error('marker', 'mediaId_notExist', $this->getKernel()->trans('视频文件不存在！'));
         }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
-            throw $this->createServiceException("请输入弹题时间！");
+            throw $this->createServiceException($this->getKernel()->trans('请输入弹题时间！'));
         }
 
         $marker = array(
@@ -101,11 +101,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = $this->getMarker($id);
 
         if (empty($marker)) {
-            throw $this->createServiceException("驻点不存在，操作失败。");
+            throw $this->createServiceException($this->getKernel()->trans('驻点不存在，操作失败。'));
         }
 
         $this->getMarkerDao()->deleteMarker($id);
-        $this->getLogService()->info('marker', 'delete', "驻点#{$id}永久删除");
+        $this->getLogService()->info('marker', 'delete', $this->getKernel()->trans('驻点#%id%永久删除', array('%id%' => $id)));
 
         return true;
     }
@@ -141,17 +141,17 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
         }
 
         if ($user['id'] != $lessonUserId) {
-            throw $this->createAccessDeniedException('该视频不属于你，无权操作！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('该视频不属于你，无权操作！'));
         }
 
         $uploadMode = $this->getSettingService()->get('storage');
 
         if ($uploadMode['upload_mode'] == 'local') {
-            throw $this->createAccessDeniedException('请到我的教育云开启云视频！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('请到我的教育云开启云视频！'));
         }
 
         return true;

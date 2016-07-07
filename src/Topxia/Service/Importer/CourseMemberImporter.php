@@ -1,16 +1,14 @@
 <?php
 
-
 namespace Topxia\Service\Importer;
 
-
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseMemberImporter extends Importer
 {
-    protected $necessaryFields  = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+    protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
     protected $objWorksheet;
     protected $rowTotal         = 0;
     protected $colTotal         = 0;
@@ -169,7 +167,7 @@ class CourseMemberImporter extends Importer
                 $repeatRowInfo .= "重复行：</br>";
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= "第" . $value . "行 ";
+                    $repeatRowInfo .= "第".$value."行 ";
                 }
 
                 $repeatRowInfo .= "</br>";
@@ -192,7 +190,7 @@ class CourseMemberImporter extends Importer
         for ($row = 3; $row <= $this->rowTotal; $row++) {
             for ($col = 0; $col < $this->colTotal; $col++) {
                 $infoData          = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $columnsData[$col] = $infoData . "";
+                $columnsData[$col] = $infoData."";
             }
 
             foreach ($fieldSort as $sort) {
@@ -203,11 +201,11 @@ class CourseMemberImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = "第" . $row . "行为空行，已跳过";
+                $checkInfo[] = "第".$row."行为空行，已跳过";
                 continue;
             }
 
-            $info = $this->validExcelFieldValue($userData, $row, $fieldCol);
+            $info                            = $this->validExcelFieldValue($userData, $row, $fieldCol);
             empty($info) ? '' : $errorInfo[] = $info;
 
             $userCount     = $userCount + 1;
@@ -283,7 +281,7 @@ class CourseMemberImporter extends Importer
         }
 
         if (!$user) {
-            $errorInfo = "第 " . $row . "行的信息有误，用户数据不存在，请检查。";
+            $errorInfo = "第 ".$row."行的信息有误，用户数据不存在，请检查。";
         }
         return $errorInfo;
     }
@@ -306,7 +304,7 @@ class CourseMemberImporter extends Importer
             for ($row = 3; $row <= $this->rowTotal; $row++) {
                 $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
 
-                $nicknameData[] = $nickNameColData . "";
+                $nicknameData[] = $nickNameColData."";
             }
 
             $info = $this->arrayRepeat($nicknameData, $nickNameCol);
@@ -324,12 +322,12 @@ class CourseMemberImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= '第' . ($nickNameCol + 1) . "列重复:<br>";
+                $repeatRow .= '第'.($nickNameCol + 1)."列重复:<br>";
 
                 for ($i = 1; $i <= $value; $i++) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= "第" . $row . "行" . "    " . $key . "<br>";
+                    $repeatRow .= "第".$row."行"."    ".$key."<br>";
 
                     unset($array[$row - 3]);
                 }
@@ -342,7 +340,7 @@ class CourseMemberImporter extends Importer
     protected function getFieldSort()
     {
         $fieldSort       = array();
-        $necessaryFields = $this->necessaryFields;
+        $necessaryFields = $this->getNecessaryFields();
         $excelFields     = $this->excelFields;
 
         foreach ($excelFields as $key => $value) {
@@ -369,7 +367,7 @@ class CourseMemberImporter extends Importer
         $excelFields        = array();
 
         for ($col = 0; $col < $highestColumnIndex; $col++) {
-            $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+            $fieldTitle                                  = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
             empty($fieldTitle) ? '' : $excelFields[$col] = $this->trim($fieldTitle);
         }
 
@@ -414,6 +412,12 @@ class CourseMemberImporter extends Importer
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    public function getNecessaryFields()
+    {
+        $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+        return $this->getKernel()->transArray($necessaryFields);
     }
 
     protected function getUserService()

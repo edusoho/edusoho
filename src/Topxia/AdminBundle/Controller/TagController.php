@@ -67,7 +67,7 @@ class TagController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '标签已存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('标签已存在'));
         }
 
         return $this->createJsonResponse($response);

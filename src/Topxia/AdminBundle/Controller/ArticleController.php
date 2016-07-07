@@ -70,7 +70,7 @@ class ArticleController extends BaseController
         $article = $this->getArticleService()->getArticle($id);
 
         if (empty($article)) {
-            throw $this->createNotFoundException('文章已删除或者未发布！');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('文章已删除或者未发布！'));
         }
 
         if (empty($article['tagIds'])) {

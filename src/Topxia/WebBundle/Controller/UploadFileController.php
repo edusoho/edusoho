@@ -16,13 +16,13 @@ class UploadFileController extends BaseController
         $token = $this->getUserService()->getToken('fileupload', $token);
 
         if (empty($token)) {
-            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN已过期或不存在。'));
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
 
         if (empty($user)) {
-            throw $this->createAccessDeniedException('上传TOKEN非法。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN非法。'));
         }
 
         $currentUser = new CurrentUser();
@@ -87,7 +87,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看此页面！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看此页面！'));
         }
 
         $conditions = $request->query->all();
@@ -119,7 +119,7 @@ class UploadFileController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看此页面！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看此页面！'));
         }
 
         $conditions = $request->query->all();
@@ -215,7 +215,7 @@ class UploadFileController extends BaseController
 
         if (empty($file)) {
             $result = array(
-                "error" => "文件不存在"
+                "error" => $this->getServiceKernel()->trans('文件不存在')
             );
 
             return $this->createJsonResponse($result);
@@ -240,7 +240,7 @@ class UploadFileController extends BaseController
         $result = array_merge($request->query->all(), $result);
 
         if (empty($result['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
         }
 
         if (!empty($result['convertHash'])) {
@@ -286,7 +286,7 @@ class UploadFileController extends BaseController
         $result = array_merge($request->query->all(), $result);
 
         if (empty($result['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
         }
 
         if ($result['code'] != 0) {
@@ -300,7 +300,7 @@ class UploadFileController extends BaseController
         if (empty($file)) {
             $this->getLogService()->error('upload_file', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
             $result = array(
-                "error" => "文件不存在"
+                "error" => $this->getServiceKernel()->trans('文件不存在')
             );
 
             return $this->createJsonResponse($result);
@@ -321,13 +321,13 @@ class UploadFileController extends BaseController
         $fullKey = $request->query->get('fullKey');
 
         if (empty($key)) {
-            throw new \RuntimeException('key不能为空');
+            throw new \RuntimeException($this->getServiceKernel()->trans('key不能为空'));
         }
 
         $data = json_decode($data, true);
 
         if (empty($data['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException($this->getServiceKernel()->trans('数据中id不能为空'));
         }
 
         if ($fullKey) {
@@ -339,12 +339,12 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
 
         if (empty($file)) {
-            throw new \RuntimeException('文件不存在');
+            throw new \RuntimeException($this->getServiceKernel()->trans('文件不存在'));
         }
 
         if ($data['code'] != 0) {
             $this->getUploadFileService()->convertFile($file['id'], 'error');
-            throw new \RuntimeException('转换失败');
+            throw new \RuntimeException($this->getServiceKernel()->trans('转换失败'));
         }
 
         $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];

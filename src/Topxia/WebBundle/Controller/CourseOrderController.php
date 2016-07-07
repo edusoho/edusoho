@@ -96,13 +96,13 @@ class CourseOrderController extends OrderController
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
         }
 
         $course = $this->getCourseService()->getCourse($formData['targetId']);
 
         if (empty($course)) {
-            return $this->createMessageResponse('error', '课程不存在，不能购买。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('课程不存在，不能购买。'));
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -176,27 +176,27 @@ class CourseOrderController extends OrderController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，不能支付。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能支付。'));
         }
 
         $order = $this->getOrderService()->getOrder($request->query->get('orderId'));
 
         if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
         if ((time() - $order['createdTime']) > 40 * 3600) {
-            return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单已过期，不能支付，请重新创建订单。'));
         }
 
         if ($order["userId"] != $user["id"]) {
-            return $this->createMessageResponse('error', '不是您的订单，不能支付');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('不是您的订单，不能支付'));
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            return $this->createMessageResponse('error', '购买的课程不存在，请重新创建订单!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('购买的课程不存在，请重新创建订单!'));
         }
 
         $result          = $this->getOrderInfo($order["targetId"]);
@@ -210,7 +210,7 @@ class CourseOrderController extends OrderController
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
         $this->getCourseService()->tryManageCourse($order["targetId"]);

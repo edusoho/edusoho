@@ -152,9 +152,9 @@ class DiscoveryColumnController extends BaseController
         $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
 
         if (empty($title)) {
-            $response = array('success' => false, 'message' => '请输入栏目名称！');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请输入栏目名称！'));
         } elseif ($discoveryColumn && $title && $discoveryColumn[0]['id'] != $id) {
-            $response = array('success' => false, 'message' => '该栏目名称已经存在！');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该栏目名称已经存在！'));
         } else {
             $response = array('success' => true);
         }

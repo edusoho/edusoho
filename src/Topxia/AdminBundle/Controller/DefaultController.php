@@ -26,7 +26,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "this_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week');
                 $endTime   = strtotime('Monday this week');
             } else {
@@ -36,7 +36,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "last_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
                 $endTime   = strtotime('Monday this week') - (7 * 24 * 60 * 60);
             } else {
@@ -99,7 +99,7 @@ class DefaultController extends BaseController
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
         $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         $site  = urlencode(http_build_query($site));
-        return $this->redirect("http://www.edusoho.com/question?site=" . $site . "");
+        return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
     public function inspectAction(Request $request)
@@ -134,7 +134,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'warning',
-                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信、云搜索功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'errorMessage' => $this->getServiceKernel()->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl
@@ -185,12 +185,12 @@ class DefaultController extends BaseController
         $apps          = array();
         $systemVersion = "";
         $error         = "";
-        $apps          = $this->getAppService()->checkAppUpgrades();
+
+        $apps = $this->getAppService()->checkAppUpgrades();
 
         $appsAll = $this->getAppService()->getCenterApps();
 
-        $codes = ArrayToolkit::column($appsAll, 'code');
-
+        $codes         = ArrayToolkit::column($appsAll, 'code');
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         $unInstallAppCount = count($appsAll) - count($installedApps);
@@ -338,31 +338,31 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'todayUserSum'           => $todayUserSum,
-            'yesterdayUserSum'       => $yesterdayUserSum,
-            'todayCourseSum'         => $todayCourseSum,
-            'yesterdayCourseSum'     => $yesterdayCourseSum,
-            'todayRegisterNum'       => $todayRegisterNum,
-            'yesterdayRegisterNum'   => $yesterdayRegisterNum,
-            'todayLoginNum'          => $todayLoginNum,
-            'yesterdayLoginNum'      => $yesterdayLoginNum,
-            'todayCourseNum'         => $todayCourseNum,
-            'yesterdayCourseNum'     => $yesterdayCourseNum,
-            'todayLessonNum'         => $todayLessonNum,
-            'yesterdayLessonNum'     => $yesterdayLessonNum,
-            'todayJoinLessonNum'     => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum' => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'      => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'  => $yesterdayBuyLessonNum,
+            'todayUserSum'                 => $todayUserSum,
+            'yesterdayUserSum'             => $yesterdayUserSum,
+            'todayCourseSum'               => $todayCourseSum,
+            'yesterdayCourseSum'           => $yesterdayCourseSum,
+            'todayRegisterNum'             => $todayRegisterNum,
+            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
+            'todayLoginNum'                => $todayLoginNum,
+            'yesterdayLoginNum'            => $yesterdayLoginNum,
+            'todayCourseNum'               => $todayCourseNum,
+            'yesterdayCourseNum'           => $yesterdayCourseNum,
+            'todayLessonNum'               => $todayLessonNum,
+            'yesterdayLessonNum'           => $yesterdayLessonNum,
+            'todayJoinLessonNum'           => $todayJoinLessonNum,
+            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
+            'todayBuyLessonNum'            => $todayBuyLessonNum,
+            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
 
-            'todayBuyClassroomNum'     => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum' => $yesterdayBuyClassroomNum,
+            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
 
-            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
+            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
 
-            'todayAllVideoViewedNum'     => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum' => $yesterdayAllVideoViewedNum,
+            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
 
             'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
             'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
@@ -370,20 +370,20 @@ class DefaultController extends BaseController
             'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
             'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
 
-            'todayNetVideoViewedNum'     => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum' => $yesterdayNetVideoViewedNum,
+            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
 
-            'todayIncome'              => $todayIncome,
-            'yesterdayIncome'          => $yesterdayIncome,
-            'todayCourseIncome'        => $todayCourseIncome,
-            'yesterdayCourseIncome'    => $yesterdayCourseIncome,
-            'todayClassroomIncome'     => $todayClassroomIncome,
-            'yesterdayClassroomIncome' => $yesterdayClassroomIncome,
-            'todayVipIncome'           => $todayVipIncome,
-            'yesterdayVipIncome'       => $yesterdayVipIncome,
-            'todayExitLessonNum'       => $todayExitLessonNum,
-            'yesterdayExitLessonNum'   => $yesterdayExitLessonNum,
-            'keyCheckResult'           => $keyCheckResult
+            'todayIncome'                  => $todayIncome,
+            'yesterdayIncome'              => $yesterdayIncome,
+            'todayCourseIncome'            => $todayCourseIncome,
+            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
+            'todayClassroomIncome'         => $todayClassroomIncome,
+            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
+            'todayVipIncome'               => $todayVipIncome,
+            'yesterdayVipIncome'           => $yesterdayVipIncome,
+            'todayExitLessonNum'           => $todayExitLessonNum,
+            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
+            'keyCheckResult'               => $keyCheckResult
         ));
     }
 
@@ -472,13 +472,13 @@ class DefaultController extends BaseController
     private function getToken()
     {
         $site = $this->getSettingService()->get('site');
-        return 'token_' . date('Ymd', time()) . $site['url'];
+        return 'token_'.date('Ymd', time()).$site['url'];
     }
 
     public function weekday($time)
     {
         if (is_numeric($time)) {
-            $weekday = array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+            $weekday = array($this->getServiceKernel()->trans('星期日'), $this->getServiceKernel()->trans('星期一'), $this->getServiceKernel()->trans('星期二'), $this->getServiceKernel()->trans('星期三'), $this->getServiceKernel()->trans('星期四'), $this->getServiceKernel()->trans('星期五'), $this->getServiceKernel()->trans('星期六'));
             return $weekday[date('w', $time)];
         }
 

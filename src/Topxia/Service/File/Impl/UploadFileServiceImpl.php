@@ -168,7 +168,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file       = $this->getUploadFileInitDao()->getFile($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
-            if ($initParams['resumed'] == 'ok' && $file && $file['status']!='ok') {
+            if ($initParams['resumed'] == 'ok' && $file && $file['status'] != 'ok') {
                 $file = $this->getUploadFileInitDao()->updateFile($file['id'], array(
                     'filename'   => $params['fileName'],
                     'fileSize'   => $params['fileSize'],
@@ -217,10 +217,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'fileSize'      => $params['size']
             );
 
-            $file = $this->getUploadFileInitDao()->updateFile($params['id'], array('status'=>'ok'));
+            $file = $this->getUploadFileInitDao()->updateFile($params['id'], array('status' => 'ok'));
 
-            $file = array_merge($file, $fields);
-            $file = $this->getUploadFileDao()->addFile($file);
+            $file   = array_merge($file, $fields);
+            $file   = $this->getUploadFileDao()->addFile($file);
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
@@ -230,7 +230,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
                 'length' => isset($result['length']) ? $result['length'] : 0
             ));
-            
+
             $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
 
             $this->getLogger('UploadFileService')->info("finishedUpload 添加文件：#{$file['id']}");
@@ -245,7 +245,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 }
             }
 
-            $this->dispatchEvent("upload.file.finish",array('file' => $file));
+            $this->dispatchEvent("upload.file.finish", array('file' => $file));
 
             $connection->commit();
             return $file;
@@ -614,7 +614,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' => $id)));
         }
 
         $file = $this->getFileImplementor($file['storage'])->saveConvertResult($file, $result);
@@ -633,7 +633,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' => $id)));
         }
 
         $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
@@ -657,13 +657,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');
 
         if (!in_array($status, $statuses)) {
-            throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
+            throw $this->createServiceException($this->getKernel()->trans('状态不正确，变更文件转换状态失败！'));
         }
 
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' => $id)));
         }
 
         $file = $this->getFileImplementor($file['storage'])->convertFile($file, $status, $result, $callback);

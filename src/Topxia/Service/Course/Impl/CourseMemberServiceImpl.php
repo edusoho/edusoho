@@ -10,29 +10,29 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
         if (!ArrayToolkit::requireds($data, array("price", "remark"))) {
-            throw $this->createServiceException("参数不对！");
+            throw $this->createServiceException($this->getKernel()->trans('参数不对！'));
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("用户{$user['nickname']}不存在");
+            throw $this->createNotFoundException($this->getKernel()->trans('用户%userNickName%不存在', array('%userNickName%' =>$user['nickname'] )));
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程{$course['title']}不存在");
+            throw $this->createNotFoundException($this->getKernel()->trans('课程%courseTitle%不存在', array('%courseTitle%' =>$course['title'] )));
         }
 
         if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
-            throw $this->createNotFoundException("用户已经是学员，不能添加！");
+            throw $this->createNotFoundException($this->getKernel()->trans('用户已经是学员，不能添加！'));
         }
 
-        $orderTitle = "购买课程《{$course['title']}》";
+        $orderTitle = $this->getKernel()->trans('购买课程《%courseTitle%》', array('%courseTitle%' =>$course['title'] ));
 
         if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
-            $orderTitle = $orderTitle."(管理员添加)";
+            $orderTitle = $orderTitle.$this->getKernel()->trans('(管理员添加)');
         }
 
         if (empty($data['price'])) {
@@ -74,7 +74,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
             ));
         }
 
-        $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+        $this->getLogService()->info('course', 'add_student', $this->getKernel()->trans('课程《%courseTitle%》(#%courseId%)，添加学员%userNickName%(#%userId%)，备注：%dataRemark%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%userNickName%' =>$user['nickname'], '%userId%' =>$user['id'], '%dataRemark%' =>$data['remark'] )));
 
         return array($course, $member, $order);
     }

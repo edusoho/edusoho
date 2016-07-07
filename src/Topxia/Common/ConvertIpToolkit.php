@@ -28,7 +28,7 @@ class ConvertIpToolkit
 			$offset = @unpack('Nlen', @fread($fp, 4));
 			$index  = @fread($fp, $offset['len'] - 4);
 		} else {
-			throw new \Exception("无法打开tinyipdata文件", 1);
+			throw new \Exception($this->getServiceKernel()->trans('无法打开tinyipdata文件'), 1);
 		}
 
 		$length = $offset['len'] - 1028;
@@ -49,7 +49,11 @@ class ConvertIpToolkit
 			$result = @fread($fp, $index_length['len']);
 			return $result;
 		} else {
-			return '查询不到此IP';
+			return $this->getServiceKernel()->trans('查询不到此IP');
 		}
 	}
+	protected function getServiceKernel()
+    	{
+        		return ServiceKernel::instance();
+    	}
 }

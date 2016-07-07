@@ -69,7 +69,7 @@ class CourseThreadController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -84,7 +84,7 @@ class CourseThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("话题不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('话题不存在，或已删除。'));
         }
 
         $paginator = new Paginator(
@@ -164,7 +164,7 @@ class CourseThreadController extends CourseBaseController
                         'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                    return $this->createMessageResponse('error', $e->getMessage(), $this->getServiceKernel()->trans('错误提示'), 1, $request->getPathInfo());
                 }
             }
         }
@@ -227,7 +227,7 @@ class CourseThreadController extends CourseBaseController
                     )));
                 }
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $e->getMessage(), $this->getServiceKernel()->trans('错误提示'), 1, $request->getPathInfo());
             }
         }
 
@@ -363,7 +363,7 @@ class CourseThreadController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
             }
         }
 

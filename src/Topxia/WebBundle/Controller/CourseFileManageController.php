@@ -101,7 +101,7 @@ class CourseFileManageController extends BaseController
         $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
-            return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
+            return $this->createJsonResponse(array('status' => 'error', 'message' => $this->getServiceKernel()->trans('文件转换请求失败，请重试！')));
         }
 
         return $this->createJsonResponse(array('status' => 'ok'));

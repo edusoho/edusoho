@@ -27,7 +27,7 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $this->getCourseService()->updateCourse($id, $data);
-            $this->setFlashMessage('success', '课程基本信息已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程基本信息已保存！'));
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
@@ -47,13 +47,13 @@ class CourseManageController extends BaseController
         $result   = $this->getUserService()->isNicknameAvaliable($nickname);
 
         if ($result) {
-            $response = array('success' => false, 'message' => '该用户还不存在！');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户还不存在！'));
         } else {
             $user            = $this->getUserService()->getUserByNickname($nickname);
             $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本课程的学员了！');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了！'));
             } else {
                 $response = array('success' => true, 'message' => '');
             }
@@ -61,7 +61,7 @@ class CourseManageController extends BaseController
             $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
 
             if ($isCourseTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加!');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加!'));
             }
         }
 
@@ -78,7 +78,7 @@ class CourseManageController extends BaseController
             $detail['audiences'] = (empty($detail['audiences']) || !is_array($detail['audiences'])) ? array() : $detail['audiences'];
 
             $this->getCourseService()->updateCourse($id, $detail);
-            $this->setFlashMessage('success', '课程详细信息已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程详细信息已保存！'));
 
             return $this->redirect($this->generateUrl('course_manage_detail', array('id' => $id)));
         }
@@ -146,7 +146,7 @@ class CourseManageController extends BaseController
                 $course = $this->getCourseService()->getCourse($id);
             }
 
-            $this->setFlashMessage('success', '课程价格已经修改成功!');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程价格已经修改成功!'));
         }
 
         response:
@@ -229,7 +229,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting("course");
 
         if (!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) || $courseSetting["teacher_search_order"] != 1)) {
-            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('查询订单已关闭，请联系管理员'));
         }
 
         $conditions               = $request->query->all();
@@ -286,11 +286,11 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting("course");
 
         if (!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) || $courseSetting["teacher_search_order"] != 1)) {
-            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('查询订单已关闭，请联系管理员'));
         }
 
-        $status  = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
-        $payment = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'cion' => '虚拟币支付', 'none' => '--');
+        $status  = array('created' => $this->getServiceKernel()->trans('未付款'), 'paid' => $this->getServiceKernel()->trans('已付款'), 'refunding' => $this->getServiceKernel()->trans('退款中'), 'refunded' => $this->getServiceKernel()->trans('已退款'), 'cancelled' => $this->getServiceKernel()->trans('已关闭'));
+        $payment = array('alipay' => $this->getServiceKernel()->trans('支付宝'), 'wxpay' => $this->getServiceKernel()->trans('微信支付'), 'cion' => $this->getServiceKernel()->trans('虚拟币支付'), 'none' => '--');
 
         $conditions = $request->query->all();
 
@@ -421,7 +421,7 @@ class CourseManageController extends BaseController
                 $this->getClassroomService()->updateClassroomTeachers($classroomIds[0]);
             }
 
-            $this->setFlashMessage('success', '教师设置成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('教师设置成功！'));
 
             return $this->redirect($this->generateUrl('course_manage_teachers', array('id' => $id)));
         }
@@ -488,51 +488,51 @@ class CourseManageController extends BaseController
 
         switch ($type) {
             case 'base':
-                $title = '基本信息';
+                $title = $this->getServiceKernel()->trans('基本信息');
                 $url   = 'course_manage_base';
                 break;
             case 'detail':
-                $title = '详细信息';
+                $title = $this->getServiceKernel()->trans('详细信息');
                 $url   = 'course_manage_detail';
                 break;
             case 'picture':
-                $title = '课程图片';
+                $title = $this->getServiceKernel()->trans('课程图片');
                 $url   = 'course_manage_picture';
                 break;
             case 'lesson':
-                $title = '课时管理';
+                $title = $this->getServiceKernel()->trans('课时管理');
                 $url   = 'course_manage_lesson';
                 break;
             case 'files':
-                $title = '文件管理';
+                $title = $this->getServiceKernel()->trans('文件管理');
                 $url   = 'course_manage_files';
                 break;
             case 'replay':
-                $title = '录播管理';
+                $title = $this->getServiceKernel()->trans('录播管理');
                 $url   = 'live_course_manage_replay';
                 break;
             case 'price':
-                $title = '价格设置';
+                $title = $this->getServiceKernel()->trans('价格设置');
                 $url   = 'course_manage_price';
                 break;
             case 'teachers':
-                $title = '教师设置';
+                $title = $this->getServiceKernel()->trans('教师设置');
                 $url   = 'course_manage_teachers';
                 break;
             case 'question':
-                $title = '题目管理';
+                $title = $this->getServiceKernel()->trans('题目管理');
                 $url   = 'course_manage_question';
                 break;
             case 'question_plumber':
-                $title = '题目导入/导出';
+                $title = $this->getServiceKernel()->trans('题目导入/导出');
                 $url   = 'course_question_plumber';
                 break;
             case 'testpaper':
-                $title = '试卷管理';
+                $title = $this->getServiceKernel()->trans('试卷管理');
                 $url   = 'course_manage_testpaper';
                 break;
             default:
-                $title = '未知页面';
+                $title = $this->getServiceKernel()->trans('未知页面');
                 $url   = '';
                 break;
         }

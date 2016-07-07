@@ -22,7 +22,7 @@ class CourseSettingController extends BaseController
 
         $default = array(
             'welcome_message_enabled'  => '0',
-            'welcome_message_body'     => '{{nickname}},欢迎加入课程{{course}}',
+            'welcome_message_body'     => $this->getServiceKernel()->trans('{{nickname}},欢迎加入课程{{course}}'),
             'teacher_modify_price'     => '1',
             'teacher_search_order'     => '0',
             'teacher_manage_student'   => '0',
@@ -48,13 +48,13 @@ class CourseSettingController extends BaseController
             if (isset($defaultSetting['chapter_name'])) {
                 $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
             } else {
-                $defaultSetting['chapter_name'] = '章';
+                $defaultSetting['chapter_name'] = $this->getServiceKernel()->trans('章');
             }
 
             if (isset($defaultSetting['part_name'])) {
                 $defaultSetting['part_name'] = $defaultSetting['part_name'];
             } else {
-                $defaultSetting['part_name'] = '节';
+                $defaultSetting['part_name'] = $this->getServiceKernel()->trans('节');
             }
 
             $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
@@ -73,8 +73,8 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
-            $this->setFlashMessage('success', '课程设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $courseSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
@@ -100,8 +100,8 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新课程默认图片设置", $defaultSetting);
-            $this->setFlashMessage('success', '课程默认图片设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程默认图片设置'), $defaultSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程默认图片设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:course-avatar.html.twig', array(
@@ -144,8 +144,8 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
-            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $setting);
-            $this->setFlashMessage('success', '课程设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -169,8 +169,8 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
-            $this->setFlashMessage('success', '题库设置已保存！');
+            $this->getLogService()->info('system', 'questions_settings', $this->getServiceKernel()->trans('更新题库设置'), $questionsSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题库设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
@@ -181,12 +181,12 @@ class CourseSettingController extends BaseController
         $default = array(
             'defaultCoursePicture'         => 0,
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent'          => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent'           => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent'            => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-            'classroomShareContent'        => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'chapter_name'                 => '章',
-            'part_name'                    => '节'
+            'articleShareContent'          => $this->getServiceKernel()->trans('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'),
+            'courseShareContent'           => $this->getServiceKernel()->trans('我正在学习{{course}}，收获巨大哦，一起来学习吧！'),
+            'groupShareContent'            => $this->getServiceKernel()->trans('我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!'),
+            'classroomShareContent'        => $this->getServiceKernel()->trans('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'),
+            'chapter_name'                 => $this->getServiceKernel()->trans('章'),
+            'part_name'                    => $this->getServiceKernel()->trans('节')
         );
 
         return $default;

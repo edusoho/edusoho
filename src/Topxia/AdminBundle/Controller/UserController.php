@@ -48,7 +48,7 @@ class UserController extends BaseController
                 0,
                 $profilesCount
             );
-            $userIds       = ArrayToolkit::column($userProfiles, 'id');
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
@@ -93,31 +93,31 @@ class UserController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
-        $email = $request->query->get('value');
-        $email = str_replace('!', '.', $email);
+        $email                  = $request->query->get('value');
+        $email                  = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile = $request->query->get('value');
-        $mobile = str_replace('!', '.', $mobile);
+        $mobile                 = $request->query->get('value');
+        $mobile                 = str_replace('!', '.', $mobile);
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
         return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname = $request->query->get('value');
+        $nickname               = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
         return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile = $request->query->get('value');
-        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile          = $request->query->get('value');
+        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
@@ -149,7 +149,7 @@ class UserController extends BaseController
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
-            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
+            $this->getLogService()->info('user', 'add', $this->getServiceKernel()->trans('管理员添加新用户 %nickname% (%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])));
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
@@ -176,8 +176,8 @@ class UserController extends BaseController
         $userData['createdIp'] = $clientIp;
         $userData['type']      = $formData['type'];
 
-        if(isset($formData['orgCode'])){
-            $userData['orgCode']  = $formData['orgCode'];
+        if (isset($formData['orgCode'])) {
+            $userData['orgCode'] = $formData['orgCode'];
         }
 
         return $userData;
@@ -208,9 +208,9 @@ class UserController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+                $this->getLogService()->info('user', 'edit', $this->getServiceKernel()->trans('管理员编辑用户资料 %nickname% (#%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])), $profile);
             } else {
-                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -378,7 +378,7 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
@@ -418,23 +418,23 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $site   = $this->setting('site', array());
+        $site  = $this->setting('site', array());
         try {
             $mailOptions = array(
-                'to'     => $user['email'],
+                'to'       => $user['email'],
                 'template' => 'email_reset_password',
-                'params' => array(
-                    'nickname' => $user['nickname'],
+                'params'   => array(
+                    'nickname'  => $user['nickname'],
                     'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                    'sitename' => $site['name'],
-                    'siteurl' => $site['url']
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
                 )
             );
             $mail = MailFactory::create($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -452,25 +452,25 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site      = $this->getSettingService()->get('site', array());
-        $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
 
         try {
-            $mailOptions  = array(
-                'to'        => $user['email'],
-                'template'  => 'email_registration',
-                'params' => array(
-                    'sitename' => $site['name'],
-                    'siteurl' => $site['url'],
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_registration',
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url'],
                     'verifyurl' => $verifyurl,
                     'nickname'  => $user['nickname']
-                ),
+                )
             );
 
             $mail = MailFactory::create($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
             throw $e;
         }
 

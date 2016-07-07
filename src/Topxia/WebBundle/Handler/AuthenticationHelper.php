@@ -23,13 +23,13 @@ class AuthenticationHelper
         if ($result['status'] == 'error') {
             switch ($result['code']) {
                 case 'max_ip_failed_limit':
-                    $result['message'] = "您当前IP下帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试。";
+                    $result['message'] = $this->getServiceKernel()->trans('您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
                     break;
                 case 'max_failed_limit':
-                    $result['message'] = "帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试，您可以通过找回并重置密码来解除封禁。";
+                    $result['message'] = $this->getServiceKernel()->trans('帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
                     break;
                 default:
-                    $result['message'] = "帐号或密码输入错误过多，您已被禁止登录。";
+                    $result['message'] = $this->getServiceKernel()->trans('帐号或密码输入错误过多，您已被禁止登录。');
                     break;
             }
         } else {
@@ -49,5 +49,9 @@ class AuthenticationHelper
     protected static function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

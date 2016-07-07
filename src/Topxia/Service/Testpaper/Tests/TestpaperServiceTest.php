@@ -114,8 +114,8 @@ class TestpaperServiceTest extends BaseTestCase
             'difficulty'=>'normal',
             'answer' => array('answer'),
             'target' => 'course-1',
-            '"stem"'=>'测试',
-            "choices"=>array("爱","测","额","恶"),
+            '"stem"'=>$this->getServiceKernel()->trans('测试'),
+            "choices"=>array($this->getServiceKernel()->trans('爱'),$this->getServiceKernel()->trans('测'),$this->getServiceKernel()->trans('额'),$this->getServiceKernel()->trans('恶')),
             'uncertain'=>0,
             "analysis"=>'',
             "score"=>'2',
@@ -126,7 +126,7 @@ class TestpaperServiceTest extends BaseTestCase
             "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
-        $testpaper = array('name' => 'Test',"description"=>'测试',"limitedTime"=>'0',"mode"=>"rand","range"=>"course","ranges"=>array(),"counts"=>array("single_choice"=>"1","choice"=>"0","uncertain_choice"=>"0","fill"=>"0","determine"=>"0","material"=>"0"),'CopyId'=>1,'target'=>'course-1',"scores"=>array("single_choice"=>"2","uncertain_choice"=>"2","choice"=>"2","uncertain_choice"=>"2","fill"=>"2","determine"=>"2","essay"=>"2","material"=>"2"),"missScores"=>array("choice"=>0,"uncertain_choice"=>0),"percentages"=>array("simple"=>"","normal"=>"","difficulty"=>''),"target"=>'course-1',"pattern"=>"QuestionType","copyId"=>"1");
+        $testpaper = array('name' => 'Test',"description"=>$this->getServiceKernel()->trans('测试'),"limitedTime"=>'0',"mode"=>"rand","range"=>"course","ranges"=>array(),"counts"=>array("single_choice"=>"1","choice"=>"0","uncertain_choice"=>"0","fill"=>"0","determine"=>"0","material"=>"0"),'CopyId'=>1,'target'=>'course-1',"scores"=>array("single_choice"=>"2","uncertain_choice"=>"2","choice"=>"2","uncertain_choice"=>"2","fill"=>"2","determine"=>"2","essay"=>"2","material"=>"2"),"missScores"=>array("choice"=>0,"uncertain_choice"=>0),"percentages"=>array("simple"=>"","normal"=>"","difficulty"=>''),"target"=>'course-1',"pattern"=>"QuestionType","copyId"=>"1");
         $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
         $testpaper = $this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget(1,"('course-1')");
         $this->assertEquals('Test',$testpaper[0]['name']);

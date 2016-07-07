@@ -1056,6 +1056,11 @@ class FileToolkit
         return array($naturalSize, $scaledSize);
     }
 
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
     public static function downloadImg($url, $savePath)
     {
         $curl = curl_init($url);

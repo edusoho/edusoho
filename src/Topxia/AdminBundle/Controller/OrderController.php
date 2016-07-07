@@ -110,7 +110,7 @@ class OrderController extends BaseController
 
         $conditions = $this->buildExportCondition($request, $targetType);
 
-        $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $status = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
 
         $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);

@@ -170,7 +170,7 @@ class CourseStudentManageController extends BaseController
 
     public function exportCsvAction(Request $request, $id)
     {
-        $gender        = array('female' => '女', 'male' => '男', 'secret' => '秘密');
+        $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (isset($courseSetting['teacher_export_student']) && $courseSetting['teacher_export_student'] == "1") {
@@ -189,7 +189,7 @@ class CourseStudentManageController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        $fields['weibo'] = "微博";
+        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
@@ -217,7 +217,7 @@ class CourseStudentManageController extends BaseController
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
         }
 
-        $str = "用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
+        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
@@ -292,12 +292,12 @@ class CourseStudentManageController extends BaseController
         $user    = $this->getUserService()->getUserByLoginField($keyword);
 
         if (!$user) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
         } else {
             $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 
             if ($isCourseStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本课程的学员了');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了'));
             } else {
                 $response = array('success' => true, 'message' => '');
             }
@@ -305,7 +305,7 @@ class CourseStudentManageController extends BaseController
             $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
 
             if ($isCourseTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));
             }
         }
 
@@ -315,7 +315,7 @@ class CourseStudentManageController extends BaseController
     public function showAction(Request $request, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
         }
 
         $user             = $this->getUserService()->getUser($userId);
@@ -409,7 +409,7 @@ class CourseStudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         if ($course['status'] != 'published') {
-            throw $this->createNotFoundException("未发布课程不能导入学员!");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('未发布课程不能导入学员!'));
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(

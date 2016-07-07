@@ -89,7 +89,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
                 break;
 
             default:
-                throw $this->createDaoException('参数sort不正确。');
+                throw $this->createDaoException($this->getKernel()->trans('参数sort不正确。'));
         }
 
         return $orderBys;

@@ -79,7 +79,7 @@ class LogController extends BaseController
     protected function readFileLastLines($filename, $n)
     {
         if (!$fp = fopen($filename, 'r')) {
-            throw new \RuntimeException("打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文");
+            throw new \RuntimeException($this->getServiceKernel()->trans('打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文'));
         }
         $pos = -2;
         $eof = "";
