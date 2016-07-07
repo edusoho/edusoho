@@ -15,14 +15,21 @@ class CourseMaterialController extends CourseBaseController
             return $response;
         }
 
+        $conditions = array(
+            'courseId'        => $id,
+            'excludeLessonId' => 0,
+            'source'          => 'coursematerial'
+        );
+
         $paginator = new Paginator(
             $request,
-            $this->getMaterialService()->getMaterialCount($id),
+            $this->getMaterialService()->searchMaterialCount($conditions),
             20
         );
 
-        $materials = $this->getMaterialService()->findCourseMaterials(
-            $id,
+        $materials = $this->getMaterialService()->searchMaterials(
+            $conditions,
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

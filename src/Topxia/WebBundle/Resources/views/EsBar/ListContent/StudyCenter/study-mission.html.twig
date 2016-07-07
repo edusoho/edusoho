@@ -3,7 +3,12 @@
   <div class="line"></div>
 </div>
 
-{% if classrooms or courses %}
+{% if app.user.id|default(0) %}
+  {% set classrooms = data('ClassroomMissions',{userId:app.user.id, count:5, missionCount:4}) %}
+  {% set courses = data('CourseMissions',{userId:app.user.id, count:5, missionCount:4}) %}
+{% endif %}
+
+{% if classrooms|default(false) or courses|default(false) %}
   {% for classroom in classrooms if classrooms %}
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{'classroomId':classroom.id})|default(null) %}

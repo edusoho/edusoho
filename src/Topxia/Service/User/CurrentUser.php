@@ -14,6 +14,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (array_key_exists($name, $this->data)) {
             $this->data[$name] = $value;
         }
+
         throw new \RuntimeException("{$name} is not exist in CurrentUser.");
     }
 
@@ -22,6 +23,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
+
         throw new \RuntimeException("{$name} is not exist in CurrentUser.");
     }
 
@@ -114,11 +116,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return true;
     }
 
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
     public function isEqualTo(UserInterface $user)
     {
         if ($this->email !== $user->getUsername()) {
@@ -160,6 +157,16 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function isTeacher()
     {
         return in_array('ROLE_TEACHER', $this->getRoles());
+    }
+
+    public function getSelectOrgCode()
+    {
+        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
+    }
+
+    public function getCurrentOrgCode()
+    {
+        return $this->orgCode;
     }
 
     public function fromArray(array $user)

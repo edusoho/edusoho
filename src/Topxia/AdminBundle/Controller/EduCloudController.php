@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
@@ -111,9 +112,14 @@ class EduCloudController extends BaseController
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
-        if (isset($overview['service']['storage']['startMonth']) && isset($overview['service']['storage']['endMonth']) && $overview['service']['storage']['startMonth'] && $overview['service']['storage']['endMonth']) {
-            $overview['service']['storage']['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
-            $overview['service']['storage']['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
+        if (isset($overview['service']['storage']['startMonth'])
+            && isset($overview['service']['storage']['endMonth'])
+            && $overview['service']['storage']['startMonth']
+            && $overview['service']['storage']['endMonth']) {
+            $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
+
+            $endMonthFormated                           = $this->dateFormat($videoInfo['endMonth']);
+            $overview['service']['storage']['endMonth'] = strtotime($endMonthFormated.'-'.$this->monthDays($endMonthFormated));
         }
 
         $notices = $eduSohoOpenClient->getNotices();
@@ -141,6 +147,7 @@ class EduCloudController extends BaseController
         $default        = array(
             'upload_mode'                 => 'local',
             'cloud_bucket'                => '',
+            'support_mobile'              => 0,
             'video_quality'               => 'low',
             'video_audio_quality'         => 'low',
             'video_watermark'             => 0,
@@ -160,7 +167,7 @@ class EduCloudController extends BaseController
 
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->setFlashMessage('success', '云视频设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
         } else {
             $storageSetting = array_merge($default, $storageSetting);
         }
@@ -176,11 +183,7 @@ class EduCloudController extends BaseController
         $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
         $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
-        $headLeader = array();
-
-        if (!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]) {
-            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        }
+        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
         return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,
@@ -208,7 +211,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'watermark_'.time().'.'.$file->getClientOriginalExtension();
@@ -230,7 +233,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'watermarkembed_'.time().'.'.$file->getClientOriginalExtension();
@@ -271,6 +274,38 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function smsStatusAction(Request $request)
+    {
+        $dataUserPosted = $request->request->all();
+        $settings       = $this->getSettingService()->get('cloud_sms', array());
+
+        $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
+        $api       = CloudAPIFactory::create('root');
+        $status    = $api->get('/me/sms_account');
+
+//启动或者更新短信签名
+        if (isset($dataUserPosted['sms-open']) || isset($dataUserPosted['sms_school_name'])) {
+            $smsStatus                    = array_merge($smsStatus, $settings);
+            $smsStatus['sms_enabled']     = 1;
+            $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
+
+            if (isset($status['error']) && $status['error'] == '不存在短信账号' || $status['status'] !== 'used') {
+                $info   = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
+                $status = $api->get('/me/sms_account');
+            }
+        }
+
+        if (isset($dataUserPosted['sms-close'])) {
+            $smsStatus                = array_merge($smsStatus, $settings);
+            $smsStatus['sms_enabled'] = 0;
+        }
+
+        $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
+
+        $this->getSettingService()->set('cloud_sms', $smsStatus);
+        return $this->redirect($this->generateUrl('admin_edu_cloud_sms'));
+    }
+
     //云短信设置页
     public function smsAction(Request $request)
     {
@@ -281,7 +316,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -289,9 +324,8 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
 
-            $smsStatus = $this->newHandleSmsSetting($request);
-            $status    = $api->get('/me/sms_account');
-
+            $this->handleSmsSetting($request, $api);
+            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -313,7 +347,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -443,7 +477,14 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('storage', $settings);
             }
 
-            $this->refreshCopyright($info);
+            if ($info['copyright']) {
+                $copyright                   = $this->getSettingService()->get('copyright', array());
+                $copyright['owned']          = 1;
+                $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                $this->getSettingService()->set('copyright', $copyright);
+            } else {
+                $this->getSettingService()->delete('copyright');
+            }
         } else {
             $settings                      = $this->getSettingService()->get('storage', array());
             $settings['cloud_key_applied'] = 0;
@@ -470,9 +511,9 @@ class EduCloudController extends BaseController
         $result      = $api->post('/me/license-domain', array('domain' => $currentHost));
 
         if (!empty($result['licenseDomains'])) {
-            $this->setFlashMessage('success', '授权域名绑定成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权域名绑定成功！'));
         } else {
-            $this->setFlashMessage('danger', '授权域名绑定失败，请重试！');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('授权域名绑定失败，请重试！'));
         }
 
         return $this->createJsonResponse($result);
@@ -495,14 +536,14 @@ class EduCloudController extends BaseController
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
             if (isset($result['error'])) {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！'));
                 goto render;
             }
 
             $user = $api->get('/me');
 
             if ($user['edition'] != 'opensource') {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！！'));
                 goto render;
             }
 
@@ -512,7 +553,7 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('storage', $settings);
 
-            $this->setFlashMessage('success', '授权码保存成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权码保存成功！'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
 
@@ -521,7 +562,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function searchSettingAction()
+    public function searchSettingAction(Request $request)
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
 
@@ -533,81 +574,86 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('cloud_search', $cloud_search_settting);
         }
 
-        $data = array('status' => 'success');
+        $data = $cloud_search_settting;
 
         try {
             $api = CloudAPIFactory::create('root');
 
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
-            $info     = $api->get('/me');
+
+            $this->isSearchInited($api);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
                 'data' => array('status' => 'unlink')
             ));
         }
 
-//是否接入教育云
-
-        if (empty($info['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+        //是否接入教育云
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
-            goto response;
+        } elseif (empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+                $data['status'] = 'binded_error';
+            }
         }
 
-        response:
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
             'data' => $data
         ));
     }
 
+    public function searchReapplyAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
+            $this->getSearchService()->refactorAllDocuments();
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-reapply-modal.html.twig');
+    }
+
     public function searchClauseAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $searchSetting = $this->getSettingService()->get('cloud_search');
-
-            $siteSetting        = $this->getSettingService()->get('site');
-            $siteSetting['url'] = rtrim($siteSetting['url']);
-            $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-
-            $api  = CloudAPIFactory::create('root');
-            $urls = array(
-                array('category' => 'course', 'url' => $siteSetting['url'].'/api/courses?cursor=0&start=0&limit=100'),
-                array('category' => 'lesson', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
-                array('category' => 'user', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
-                array('category' => 'thread', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-                array('category' => 'article', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
-            );
-            $urls = urlencode(json_encode($urls));
-
-            $callbackUrl = $siteSetting['url'];
-            $callbackUrl .= $this->generateUrl('edu_cloud_search_callback');
-            $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
-            $sign = rawurlencode($sign);
-            $callbackUrl .= '?sign='.$sign;
-
-            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
-
-            if ($result['success']) {
-                $searchSetting['search_enabled'] = 1;
-                $searchSetting['status']         = 'waiting';
-                $this->getSettingService()->set('cloud_search', $searchSetting);
-            }
-
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-clause-modal.html.twig');
     }
 
-    public function searchCloseAction()
+    public function searchOpenAction()
     {
-        $searchSetting['search_enabled'] = 0;
-        $searchSetting['status']         = 'closed';
-        $this->getSettingService()->set('cloud_search', $searchSetting);
-
-        $data = array('status' => 'success');
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloud_search_settting['status'] == 'ok') {
+            $this->getSettingService()->set('cloud_search', array(
+                'search_enabled' => 1,
+                'status'         => $cloud_search_settting['status']
+            ));
+        }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => $data
+            'data' => array('status' => 'success')
+        ));
+    }
+
+    public function searchCloseAction()
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        $this->getSettingService()->set('cloud_search', array(
+            'search_enabled' => 0,
+            'status'         => $cloud_search_settting['status']
+        ));
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => array('status' => 'success')
         ));
     }
 
@@ -617,7 +663,7 @@ class EduCloudController extends BaseController
         $keys    = $applier->applyKey($this->getCurrentUser());
 
         if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-            return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('Key生成失败，请检查服务器网络后，重试！')));
         }
 
         $settings = $this->getSettingService()->get('storage', array());
@@ -637,7 +683,7 @@ class EduCloudController extends BaseController
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {
-            throw $this->createAccessDeniedException('您无权操作!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权操作!'));
         }
 
         $name = $request->request->get('name');
@@ -645,22 +691,35 @@ class EduCloudController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned'          => 1,
             'name'           => $request->request->get('name', ''),
-            'thirdCopyright' => isset($info['thirdCopyright']) && $info['thirdCopyright'] == '1' ? 1 : 0
+            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    protected function newHandleSmsSetting(Request $request)
+    protected function dateFormat($time)
     {
-        $api            = CloudAPIFactory::create('root');
+        return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));
+    }
+
+    protected function monthDays($time)
+    {
+        return date('t', strtotime("{$time}-1"));
+    }
+
+    /**
+     * 默认的短信策略
+     * @var [type]
+     */
+    private function handleUserSmsSetting($dataUserPosted)
+    {
         $defaultSetting = array(
             'sms_enabled'               => '0',
             'sms_registration'          => 'off',
-            'sms_forget_password'       => 'off',
-            'sms_user_pay'              => 'off',
-            'sms_forget_pay_password'   => 'off',
-            'sms_bind'                  => 'off',
+            'sms_forget_password'       => 'on',
+            'sms_user_pay'              => 'on',
+            'sms_forget_pay_password'   => 'on',
+            'sms_bind'                  => 'on',
             'sms_classroom_publish'     => 'off',
             'sms_course_publish'        => 'off',
             'sms_normal_lesson_publish' => 'off',
@@ -675,94 +734,51 @@ class EduCloudController extends BaseController
             'sms_vip_buy_notify'        => 'off',
             'sms_coin_buy_notify'       => 'off'
         );
+
+        $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
+        return array_merge($defaultSetting, $dataUserPosted);
+    }
+
+    protected function handleSmsSetting(Request $request, $api)
+    {
         $dataUserPosted = $request->request->all();
+        $settings       = $this->getSettingService()->get('cloud_sms', array());
 
-        if (isset($dataUserPosted['sms_order_pay_success']) && $dataUserPosted['sms_order_pay_success'] == 'on') {
-            $dataUserPosted['sms_course_buy_notify']    = 'on';
-            $dataUserPosted['sms_classroom_buy_notify'] = 'on';
-            $dataUserPosted['sms_vip_buy_notify']       = 'on';
-            $dataUserPosted['sms_coin_buy_notify']      = 'on';
-        } else {
-            $dataUserPosted['sms_course_buy_notify']    = 'off';
-            $dataUserPosted['sms_classroom_buy_notify'] = 'off';
-            $dataUserPosted['sms_vip_buy_notify']       = 'off';
-            $dataUserPosted['sms_coin_buy_notify']      = 'off';
-        }
-
-        $settings  = $this->getSettingService()->get('cloud_sms', array());
-        $smsStatus = array();
-
-//启用云短信，没有则创建云平台短信服务帐号
-
-        if (isset($dataUserPosted['sms-open'])) {
-            if (isset($settings['sms_school_name'])) {
-                $status = $api->get('/me/sms_account');
-
-                if (isset($status['error']) && $status['error'] == '不存在短信账号') {
-                    $info   = $api->post('/sms_accounts', array('name' => $settings['sms_school_name']));
-                    $status = $api->get('/me/sms_account');
-                }
-
-                $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
-                $smsStatus['sms_enabled'] = '1';
-                $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                $smsStatus                = array_merge($settings, $smsStatus);
-                $this->getSettingService()->set('cloud_sms', $smsStatus);
-                return $smsStatus;
-            } else {
-                $info = $api->post('/sms_accounts', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
-
-                if ($info['status'] == 'ok') {
-                    $status                       = $api->get('/me/sms_account');
-                    $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
-                    $smsStatus['sms_enabled']     = '1';
-                    $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                    $smsStatus                    = array_merge($settings, $smsStatus);
-                    $smsStatus['sms_school_name'] = $status['name'];
-                    $this->getSettingService()->set('cloud_sms', $smsStatus);
-                    return $smsStatus;
-                }
-            }
-        }
-
-//关闭云短信
-
-        if (isset($dataUserPosted['sms-close'])) {
-            $status                   = $api->get('/me/sms_account');
-            $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
-            $smsStatus['sms_enabled'] = '0';
-            $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
-            $smsStatus                = array_merge($settings, $smsStatus);
+        //如果要更改短信策略则同步到数据库
+        if (isset($dataUserPosted['strategy_overwrite'])) {
+            $smsStatus = array_merge($settings, $dataUserPosted);
+            $smsStatus = $this->updateSmstrategy($smsStatus, $dataUserPosted);
             $this->getSettingService()->set('cloud_sms', $smsStatus);
-            return $smsStatus;
         }
 
-//更新云短信签名
+        if (empty($settings)) {
+            $smsStatus           = $this->handleUserSmsSetting($dataUserPosted);
+            $status              = $api->get('/me/sms_account');
+            $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
-        if (isset($dataUserPosted['sign'])) {
-            if (empty($dataUserPosted['sign'])) {
-                $dataUserPosted['sign'] = $settings['sms_school_name'];
-            }
+            $this->getSettingService()->set('cloud_sms', $smsStatus);
+        }
+    }
 
-            $info = $api->post('/me/sms_account', array('name' => $dataUserPosted['sign']));
-
-            if ($info['status'] == 'ok') {
-                $status                       = $api->get('/me/sms_account');
-                $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
-                $smsStatus['sms_enabled']     = '1';
-                $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                $smsStatus                    = array_merge($settings, $smsStatus);
-                $smsStatus['sms_school_name'] = $status['name'];
-                $this->getSettingService()->set('cloud_sms', $smsStatus);
-                return $smsStatus;
-            }
+    /**
+     * 处理支付成功回执的总开关
+     * @param  Request $request        [description]
+     * @return [type]  [description]
+     */
+    private function updateSmstrategy($smsStatus, $dataUserPosted)
+    {
+        if ($dataUserPosted['sms_order_pay_success'] == 'on') {
+            $smsStatus['sms_course_buy_notify']    = 'on';
+            $smsStatus['sms_classroom_buy_notify'] = 'on';
+            $smsStatus['sms_vip_buy_notify']       = 'on';
+            $smsStatus['sms_coin_buy_notify']      = 'on';
+        } else {
+            $smsStatus['sms_course_buy_notify']    = 'off';
+            $smsStatus['sms_classroom_buy_notify'] = 'off';
+            $smsStatus['sms_vip_buy_notify']       = 'off';
+            $smsStatus['sms_coin_buy_notify']      = 'off';
         }
 
-        $smsStatus           = array_merge($settings, $dataUserPosted);
-        $status              = $api->get('/me/sms_account');
-        $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-
-        $this->getSettingService()->set('cloud_sms', $smsStatus);
         return $smsStatus;
     }
 
@@ -794,7 +810,7 @@ class EduCloudController extends BaseController
 
             if (isset($status['code']) && $status['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
-                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : "我的网校"));
+                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->getServiceKernel()->trans("我的网校")));
 
                 if (isset($result['status']) && $result['status'] == 'enable') {
                     $emailStatus['status'] = 'enable';
@@ -808,7 +824,7 @@ class EduCloudController extends BaseController
             }
 
             $result = $api->get("/me/email_account");
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
             $mailer = $this->getSettingService()->get('mailer', array());
 
             if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == "1") {
@@ -826,7 +842,7 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('mailer', $mailer);
                 $mailerWithoutPassword             = $mailer;
                 $mailerWithoutPassword['password'] = '******';
-                $this->getLogService()->info('system', 'update_settings', "开启云邮件关闭第三方邮件服务器设置", $mailerWithoutPassword);
+                $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('开启云邮件关闭第三方邮件服务器设置'), $mailerWithoutPassword);
             }
         }
 
@@ -838,11 +854,11 @@ class EduCloudController extends BaseController
                 $result = $api->post("/me/email_account", $params);
 
                 if (isset($result['nickname'])) {
-                    $this->setFlashMessage('success', '云邮件设置已保存！');
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
                     $emailStatus['status'] = $settings['status'];
                     $sign                  = array('sign' => $result['nickname']);
                 } else {
-                    $this->setFlashMessage('danger', '云邮件设置保存失败！');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('云邮件设置保存失败！'));
                 }
             } else {
                 $emailStatus['status'] = $settings['status'];
@@ -853,11 +869,12 @@ class EduCloudController extends BaseController
         if (isset($operation['email-close'])) {
             $emailStatus['status'] = 'disable';
             $emailStatus           = array_merge($settings, $emailStatus);
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
         }
 
         if (empty($operation)) {
             $result = $api->get("/me/email_account");
+
             if (isset($result['nickname'])) {
                 $emailStatus['status'] = $result['status'];
                 $sign                  = array('sign' => $result['nickname']);
@@ -950,6 +967,29 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
+    }
+
+    protected function isSearchInited($api)
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        if ($cloud_search_settting['status'] == 'waiting') {
+            $search_account = $api->get("/me/search_account");
+
+            if ($search_account['isInit'] == 'yes') {
+                $this->getSettingService()->set('cloud_search', array(
+                    'search_enabled' => $cloud_search_settting['search_enabled'],
+                    'status'         => 'ok'
+                ));
+            }
+        }
+
+        return true;
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
     }
 
     protected function getAppService()

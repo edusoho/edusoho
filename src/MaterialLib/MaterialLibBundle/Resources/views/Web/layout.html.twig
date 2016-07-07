@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}{{'教学资料库'|trans}} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('assets/css/colorbox/colorbox.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/materiallib/css/main.css') }}" />
+{% endblock %}
+
+{% set side_nav = 'material-lib' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+	<div class="panel-heading">
+		教学资料库
+	</div>
+
+	<div class="panel-body material-body">
+	{% block page_body %}
+	{% endblock %}
+	</div>
+</div>
+{% endblock %}

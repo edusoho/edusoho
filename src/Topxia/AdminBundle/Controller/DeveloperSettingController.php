@@ -15,11 +15,13 @@ class DeveloperSettingController extends BaseController
         $storageSetting   = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'debug'                => '0',
-            'app_api_url'          => '',
-            'cloud_api_server'     => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
-            'hls_encrypted'        => '1'
+            'debug'                  => '0',
+            'app_api_url'            => '',
+            'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_file_server'      => '',
+            'cloud_api_tui_server'   => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
+            'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
+            'hls_encrypted'          => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -27,17 +29,18 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
-            $storageSetting['cloud_api_server']     = $developerSetting['cloud_api_server'];
-            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_server']       = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server']   = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新开发者设置'), $developerSetting);
 
             $this->dealServerConfigFile();
             $this->dealNetworkLockFile($developerSetting);
 
-            $this->setFlashMessage('success', '开发者已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('开发者已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:index.html.twig', array(
@@ -59,9 +62,7 @@ class DeveloperSettingController extends BaseController
 
         if (isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
             $fileSystem->touch($networkLock);
-        } else
-
-        if (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
+        } elseif (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
             $fileSystem->remove($networkLock);
         }
     }
@@ -93,9 +94,14 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $setting = $request->request->get('setting', '{}');
             $setting = json_decode($setting, true);
+
+            if (empty($setting)) {
+                $setting = array('export_allow_count' => 100000, 'export_limit' => 10000, 'enable_org' => 0);
+            }
+
             $this->getSettingService()->set('magic', $setting);
-            $this->getLogService()->info('system', 'update_settings', "更新Magic设置", $setting);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新Magic设置'), $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $setting = $this->getSettingService()->get('magic', array());
@@ -114,8 +120,9 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('redis', $redis);
 
             $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
+
             if ($redis['opened'] == '1') {
-                $config          = "<?php \nreturn ".var_export($redis['setting'], true).';';
+                $config = "<?php \nreturn ".var_export($redis['setting'], true).';';
                 file_put_contents($redisConfigFile, $config);
             }
 
@@ -123,8 +130,8 @@ class DeveloperSettingController extends BaseController
                 file_exists($redisConfigFile) && unlink($redisConfigFile);
             }
 
-            $this->getLogService()->info('system', 'update_redis', "更新redis设置", $redis);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_redis', $this->getServiceKernel()->trans('更新redis设置'), $redis);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $redis = $this->getSettingService()->get('redis', array());
@@ -140,6 +147,15 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
+    public function syncUploadFileAction(Request $request)
+    {
+        $conditions = array(
+            'storage'  => 'cloud',
+            'globalId' => 0
+        );
+        $this->getCloudFileService()->synData($conditions);
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -148,5 +164,10 @@ class DeveloperSettingController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
     }
 }

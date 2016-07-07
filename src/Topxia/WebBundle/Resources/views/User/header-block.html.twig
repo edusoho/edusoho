@@ -12,16 +12,16 @@
       </div>
       <div class="position">
         <span class="mrm">{% if user.title %}{{ user.title }}{% else %}{{'暂无头衔'|trans}}{% endif %}</span>
-        {% if user.weibo %}
+        {% if user.weibo and user.isWeiboPublic %}
           <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
         {% endif %}
         {% if user.site %}
           <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>
         {% endif %}
-        {% if user.qq %}
+        {% if user.qq and user.isQQPublic %}
           <a data-toggle="tooltip" data-placement="top" title="{{ user.qq }}"><i class="es-icon es-icon-qq"></i></a>
         {% endif %}
-        {% if user.weixin %}
+        {% if user.weixin and user.isWeixinPublic %}
           <a data-toggle="tooltip" data-placement="top" title="{{ user.weixin }}"><i class="es-icon es-icon-weixin"></i></a>
         {% endif %}
       </div>

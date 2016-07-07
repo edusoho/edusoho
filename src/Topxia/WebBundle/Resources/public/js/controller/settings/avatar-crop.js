@@ -4,9 +4,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $form = $("#avatar-crop-form"),
-            $picture = $("#avatar-crop");
-
         var imageCrop = new ImageCrop({
             element: "#avatar-crop",
             group: "user",

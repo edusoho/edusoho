@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\ArrayToolkit;
 
 class FinanceSettingController extends BaseController
 {
@@ -12,7 +13,7 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled'          => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'disabled_message' => $this->getServiceKernel()->trans('尚未开启支付模块，无法购买课程。'),
             'bank_gateway'     => 'none',
             'alipay_enabled'   => 0,
             'alipay_key'       => '',
@@ -39,18 +40,12 @@ class FinanceSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $payment                    = $request->request->all();
-            $payment['alipay_key']      = trim($payment['alipay_key']);
-            $payment['alipay_secret']   = trim($payment['alipay_secret']);
-            $payment['wxpay_key']       = trim($payment['wxpay_key']);
-            $payment['wxpay_secret']    = trim($payment['wxpay_secret']);
-            $payment['heepay_key']      = trim($payment['heepay_key']);
-            $payment['heepay_secret']   = trim($payment['heepay_secret']);
-            $payment['quickpay_key']    = trim($payment['quickpay_key']);
-            $payment['quickpay_secret'] = trim($payment['quickpay_secret']);
-            $payment['quickpay_aes']    = trim($payment['quickpay_aes']);
+
+            $payment = ArrayToolkit::trim($payment);
+
             $this->getSettingService()->set('payment', $payment);
-            $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
-            $this->setFlashMessage('success', '支付方式设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更支付方式设置'), $payment);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('支付方式设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
@@ -73,8 +68,8 @@ class FinanceSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新退款设置", $refundSetting);
-            $this->setFlashMessage('success', '退款设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新退款设置'), $refundSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('退款设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(
@@ -85,11 +80,6 @@ class FinanceSettingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getAppService()

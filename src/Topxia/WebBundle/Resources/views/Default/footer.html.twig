@@ -1,12 +1,14 @@
-<footer class="es-footer">
-  <div class="footer-link">
-    <div class="container">
-      <div class="row">
-        {{ block_show('jianmo:bottom_info') }}
-      </div>
-    </div>
-  </div>
+{% set currentTheme = current_theme() %}
+{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
+{% for config in themeConfig.blocks.left|default([]) %}
+    {% set code = config.code %}
+    {% if code == 'footer-link' %}
+      {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
+      {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
+    {% endif %}
+{% endfor %}
 
+<footer class="es-footer">
   <div class="copyright">
     <div class="container">
       {% include "TopxiaWebBundle::powered-by.html.twig" %}

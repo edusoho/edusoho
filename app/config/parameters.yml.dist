@@ -8,3 +8,25 @@ parameters:
 
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+
+    #扩展参数
+    #oauth2_clients: #oauth2客户端配置
+    #    third_party_oauth:
+    #        name: 前台登录显示名称
+    #        admin_name: 后台显示名称
+    #        class: AnywhereClient\Component\AnywhereOAuthClient #oauth客户端类
+    #        icon_class: anywhere #图标的class
+    #        icon_img: bundles/anywhereclient/images/anywhere-icon.png //图标
+    #        large_icon_img: bundles/anywhereclient/images/anywhere-large-icon.png #大不图标
+    #        key_setting_label: 'App Key' # 后台显示
+    #        secret_setting_label: 'App Secret' #后台显示
+
+    # 重写twig文件，key是被重写的bundle， value 是重写的bundle，如果重写的bundle的模板文件路径和被重写bundle的路径一样，
+    # 则会使用重写bundle下的模板文件
+    #template_overwrite_map:
+    #    TopxiaWebBundle: CustomWebBundle
+    #topxia_services: #重写服务层  key是被重写的服务, value是重写的类
+    #    'User.UserService' : 'Custom\Service\User\Impl\UserServiceImpl' # 重写用户服务
+    #topxia_daos: #重写dao层
+    #    'Course.CourseMemberDao' : 'Custom\Service\Course\Dao\Impl\CourseMemberDaoImpl' #重写数据访问层

@@ -15,7 +15,7 @@ class CancelOrderJob implements Job
 
         $orders = $this->getOrderService()->searchOrders($conditions, $sort = 'latest', 0, 10);
         foreach ($orders as $key => $order) {
-        	$this->getOrderService()->cancelOrder($order["id"],"系统自动取消");
+        	$this->getOrderService()->cancelOrder($order["id"],$this->getKernel()->trans('系统自动取消'));
         }
 
     }
@@ -25,7 +25,7 @@ class CancelOrderJob implements Job
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getServiceKernel()
+    protected function getKernel()
     {
         return ServiceKernel::instance();
     }

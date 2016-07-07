@@ -1,12 +1,23 @@
 .es-live-poster{
   position: relative;
+  background: #fff;
+  margin: 0 auto;
+  max-height: 300px;
+  a.img-responsive{
+    max-width: none;
+    width: 100%;
+  }
+  .swiper-slide{
+    margin: 0 auto;
+    width: 100%;
+  }
   .swiper-pager{
     position: absolute;
     bottom: 20px;
     z-index: 100;
     width: 100%;
     text-align: center;
-      span{
+    span{
         cursor: pointer;
         font-size: 0;
         margin: 0 7px;
@@ -16,7 +27,7 @@
         .border-radius(50%);
         background: #fff;
         background: rgba(255, 255, 255, 0.5);
-      }
+     }
     span.swiper-active-switch{
       background: @gray-lighter;
        background: rgba(255, 255, 255, 1)
@@ -25,11 +36,14 @@
 }
 
 .live-course-body{
+  .label{
+    padding:0.4em 0.8em!important; 
+  }
   .es-live-list{
     padding: 0;
     .panel-body{
       padding: 0;
-        >ul{
+      >ul{
       margin:0;
       padding: 0;
       background: @gray-lighter;
@@ -54,10 +68,10 @@
             padding: 14px 0;
           }
           @media (max-width:@screen-sm-max){
-            padding: 14px 62px;
+            padding: 14px 60px;
           }
           @media (max-width:@screen-xs-max){
-            padding: 14px 17px;
+            padding: 14px 9px;
           }
         }
       }
@@ -66,7 +80,7 @@
         border-bottom: none;
       }
     }
-    }
+  }
   
    
     .es-live-item{
@@ -103,7 +117,6 @@
         }
         .label{
           margin-left: 24px;
-          padding: 0.3em 0.5em;
         }
       }
       .live-content.live{
@@ -121,12 +134,11 @@
         a{
           color: @gray-darker;
           .text-overflow ;
+          font-size: 12px;
           span{
            color: @gray;
            padding-right: 15px;
-
           }
-
         }
       }
     }
@@ -135,6 +147,7 @@
     img{
       width: 110px;
       max-width: 110px;
+      .border-radius(4px);
     }
     .title{
       margin-bottom: 10px;
@@ -192,9 +205,28 @@
         position: absolute;
         left: 0;top:0;
         display: inline-block;
-        width: 62px;
-        height: 62px;
-        background: url("../img/re-live.png") no-repeat;
+        width: 68px;
+        height: 68px;
+        background: url("@{img-src}tag_recommend.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_recommend.png") 1x,url("@{img-src}tag_recommend@2x.png") 2x);
+      }
+      .re-report{
+        position: absolute;
+        bottom: 0;
+        background-color: #000;
+        background: rgba(0,0,0,0.5);
+        width: 302px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        height: 25px;
+        font-size: 12px;
+        text-align: center;
+        line-height: 25px;
+        color: #fff;
+        font-weight: bold;
+        @media(max-width:@screen-lg-min){
+          width: 288px;
+        }
       }
         @media(max-width:@screen-xs-max){
           display: block;
@@ -202,22 +234,23 @@
         }
       img{
         max-width: 302px;
-        @media(max-width:@screen-xs-max){
+        .border-radius(4px);
+        @media(max-width:@screen-md-max){
           max-width:@screen-xs-max;
           width: 100%;
+        }
+        @media(max-width:@screen-lg-min){
+          width: 288px;
         }
 
       }
     }
     .media-body{
       position: relative;
-      .label{
-        font-size: 12px;
-        padding: 5px 15px;
-      }
       .title{
         height: 20px;
         overflow: hidden;
+        margin-top: 10px;
         a{
           font-size: 16px;
         }
@@ -228,9 +261,9 @@
       }
       .user a{
         color: @gray-medium !important;
-        img{
-          margin-right: 14px;
-        }
+        // img{
+        //   margin-right: 14px;
+        // }
         &:hover{
            color: @brand-primary;
         }
@@ -241,14 +274,21 @@
         top: 50%;
         margin-top: -34px;
         text-align: center;
+        @media(max-width:@screen-xs-max){
+          margin-top: -14px;
+        }
         span{
           display: block;
           margin-bottom: 8px;
-          color:  @brand-primary;
+          // color:  @brand-primary;
           font-size: 18px;
         }
-        span.price{
-          color: #e83d2c;
+        // span.price{
+        //   color: #e83d2c;
+        // }
+        a{
+          position: absolute;
+          right: 0;
         }
       }
     }

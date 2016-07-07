@@ -1,11 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Service\Common\Mail;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,6 +19,8 @@ abstract class BaseController extends Controller
      * 如果当前用户为游客，那么返回id为0, nickanme为"游客", currentIp为当前IP的CurrentUser对象。
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      */
+
+    
     protected function getCurrentUser()
     {
         return $this->getUserService()->getCurrentUser();
@@ -32,7 +33,7 @@ abstract class BaseController extends Controller
 
     public function getUser()
     {
-        throw new \RuntimeException('获得当前登录用户的API变更为：getCurrentUser()。');
+        throw new \RuntimeException($this->getServiceKernel()->trans('获得当前登录用户的API变更为：getCurrentUser()。'));
     }
 
     /**
@@ -48,7 +49,7 @@ abstract class BaseController extends Controller
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
         if (!in_array($type, array('info', 'warning', 'error'))) {
-            throw new \RuntimeException('type不正确');
+            throw new \RuntimeException($this->getServiceKernel()->trans('type不正确'));
         }
 
         return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
@@ -86,7 +87,7 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
-        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', '登录成功');
+        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
 
         $loginBind = $this->setting('login_bind', array());
 
@@ -116,76 +117,6 @@ abstract class BaseController extends Controller
     protected function createNamedFormBuilder($name, $data = null, array $options = array())
     {
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
-    }
-
-    protected function sendEmail(Mail $mail)
-    {
-        $config      = $this->setting('mailer', array());
-        $cloudConfig = $this->setting('cloud_email', array());
-
-        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            return $this->sendCloudEmail($mail->getCloudMail());
-        } elseif (isset($config['enabled']) && $config['enabled'] == 1) {
-            return $this->sendNormalEmail($mail->getMail());
-        }
-
-        return false;
-    }
-
-    private function sendCloudEmail($cloudMail)
-    {
-        $cloudConfig = $this->setting('cloud_email', array());
-
-        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api    = CloudAPIFactory::create('leaf');
-            $site   = $this->setting('site', array());
-            $params = array(
-                'to'       => $cloudMail['to'],
-                'template' => $cloudMail['template'],
-                'params'   => array(
-                    'sitename'  => $site['name'],
-                    'nickname'  => $cloudMail['nickname'],
-                    'verifyurl' => $cloudMail['verifyurl'],
-                    'siteurl'   => $site['url']
-                )
-            );
-            $result = $api->post("/emails", $params);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function sendNormalEmail($params)
-    {
-        $format = isset($params['format']) && $params['format'] == 'html' ? 'text/html' : 'text/plain';
-
-        $config = $this->setting('mailer', array());
-
-        if (isset($config['enabled']) && $config['enabled'] == 1) {
-            $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
-                ->setUsername($config['username'])
-                ->setPassword($config['password']);
-
-            $mailer = \Swift_Mailer::newInstance($transport);
-
-            $email = \Swift_Message::newInstance();
-            $email->setSubject($params['title']);
-            $email->setFrom(array($config['from'] => $config['name']));
-            $email->setTo($params['to']);
-
-            if ($format == 'text/html') {
-                $email->setBody($params['body'], 'text/html');
-            } else {
-                $email->setBody($params['body']);
-            }
-
-            $mailer->send($email);
-            return true;
-        }
-
-        return false;
     }
 
     protected function createJsonResponse($data)
@@ -221,17 +152,14 @@ abstract class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+        if (strpos($url[0], 'callback') !== false
+            || strpos($url[0], '/login/bind') !== false
+            || strpos($url[0], 'crontab') !== false) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
 
-        ) {
-            $targetPath = $this->generateUrl('homepage');
+        if (empty($targetPath)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
         return $targetPath;
@@ -261,13 +189,9 @@ abstract class BaseController extends Controller
     {
         $whiteList = array("iPhone", "iPad", "Android", "HTC");
 
-        foreach ($whiteList as $value) {
-            if (strpos($userAgent, $value) > -1) {
-                return true;
-            }
-        }
-
-        return false;
+        return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
+            return strpos($userAgent, $agent) > -1;
+        });
     }
 
     protected function getServiceKernel()

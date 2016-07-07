@@ -1,23 +1,41 @@
 <?php
 namespace Topxia\Service\Common;
 
-class Mail
+abstract class Mail
 {
-    private $mail;
-    private $cloudMail;
-    public function __construct($_mail, $_cloudMail)
+    private $options;
+
+    public function __construct($options)
     {
-        $this->mail      = $_mail;
-        $this->cloudMail = $_cloudMail;
+        $this->options = $options;
     }
 
-    public function getMail()
+    public function __set($name, $value)
     {
-        return $this->mail;
+        $this->options[$name] = $value;
     }
 
-    public function getCloudMail()
+    public function __get($name)
     {
-        return $this->cloudMail;
+        if(!array_key_exists($name, $this->options)){
+            return null;
+        };
+
+        return $this->options[$name];
     }
+
+    public function __unset($name)
+    {
+        unset($this->options[$name]);
+        return $this;
+    }
+
+    protected function setting($name, $default)
+    {
+        global $kernel;
+        $container = $kernel->getContainer();
+        return $container->get('topxia.twig.web_extension')->getSetting($name, $default);
+    }
+
+    public abstract function send();
 }

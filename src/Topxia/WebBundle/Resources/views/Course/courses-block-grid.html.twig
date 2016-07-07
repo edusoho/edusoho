@@ -49,7 +49,7 @@
             <span class="price-col">
               <span class="meta-label">{{'价格'|trans}}</span>
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}</span>
+              <span class="price-num" style="display:inline " >{% if course.price > 0 %}{{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% else %}
               <span class="price-num">{% if course.price > 0 %}{{'%price%元'|trans({'%price%': course.price}) }}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% endif %}

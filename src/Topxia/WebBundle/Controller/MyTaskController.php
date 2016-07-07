@@ -10,7 +10,7 @@ class MyTaskController extends BaseController
         $user = $this->getCurrentUser();
         $conditions = array('userId' => $user['id']);
 
-        $tasks = $this->getTaskService()->searchTasks($conditions, array('taskStartTime', 'ASC'), 0, 9999);
+        $tasks = $this->getTaskService()->searchTasks($conditions, array('taskStartTime', 'ASC'), 0, PHP_INT_MAX);
         $tasksevents = array();
 
         if ($tasks) {
@@ -21,7 +21,7 @@ class MyTaskController extends BaseController
         }*/
         } else {
             $tasksevents = array(array(
-                'title' => '并没有任务',
+                'title' => $this->getServiceKernel()->trans('并没有任务'),
                 'start' => date("Y-m-d", time()),
                 'end' => date("Y-m-d", time()),
             ));

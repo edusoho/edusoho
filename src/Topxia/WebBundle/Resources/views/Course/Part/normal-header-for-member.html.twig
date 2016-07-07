@@ -23,28 +23,9 @@
 
     <div class="course-operation">
       {{ header_macro.student_num(course) }}
-      <ul class="course-data clearfix {% if not ( not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course') %} two-col {% endif %}">
+      <ul class="course-data clearfix two-col">
         {{ header_macro.favorite_btn(course, hasFavorited) }}
         {{ header_macro.share_btn(course) }}
-        {% if not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' %}
-          <li>
-            {% if member.orderId  %}
-              <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
-                <p><i class="es-icon es-icon-exit"></i><p>
-                <p>{{'退出'|trans}}</p>
-              </a>
-            {% else %}
-              <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
-                <p><i class="es-icon es-icon-exit"></i><p>
-                <p>{{'退出'|trans}}</p>
-              </a>
-            {% endif %}
-          </li>
-        {% elseif member["joinedType"] == 'groupSell'%}
-          <div class="last" href="javascript:;" data-toggle="tooltip" data-placement="top" title={{'"组合购买课程不能退出"'|trans}}>
-          <a href="javascript:;"> <i class="hz-icon icon-exit"></i>{{'退出'|trans}}</a>
-          </div>
-        {% endif %}
       </ul>
     </div>
   </div>
@@ -58,7 +39,7 @@
     <span class="pull-left">{{'完成课时：'|trans}} {{ learnProgress.number }}/{{ learnProgress.total }}</span>
     {% if nextLearnLesson %}
       <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{'继续学习'|trans}}</a>
-      <span class="next-class hidden-xs">{{'下一课时：'|trans}}<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
+      <span class="next-class hidden-xs">{{'下一课时：'|trans}}<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title|raw }}</a></span>
     {% endif %}
   </div>
 

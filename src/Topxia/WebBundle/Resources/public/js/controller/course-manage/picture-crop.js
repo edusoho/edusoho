@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var ImageCrop = require('edusoho.imagecrop');
 
     exports.run = function() {
-      	require('./header').run();
 
         var imageCrop = new ImageCrop({
             element: "#course-picture-crop",

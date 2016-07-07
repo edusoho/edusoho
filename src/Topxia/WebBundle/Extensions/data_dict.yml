@@ -40,11 +40,14 @@ refundStatus:
     cancelled: 已取消
 
 payment:
+    none: --
     alipay: 支付宝
     wxpay: 微信支付
     heepay: 网银支付
     quickpay: 快捷支付
     iosiap: 苹果应用内支付
+    outside: 站外支付
+    coin: 虚拟币
 
 moneyRecordType:
     income: 充值
@@ -148,6 +151,11 @@ logLevel:
     info: 提示
     warning: 警告
     error: 错误
+
+logLevel:html:
+    info: <span>提示</span>
+    warning: <span class="text-warning">警告</span>
+    error: <span class="text-danger">错误</span>
 
 analysisDateType:
     register: 新注册用户数
@@ -285,6 +293,13 @@ passedStatus:
     good: 良好
     passed: 合格
     unpassed: 不合格
+
+processStatus:
+    none: 未转码
+    waiting: 转码中
+    processing: 转码中
+    ok: 转码成功
+    error: 转码失败
 
 state:
     banned: 禁用

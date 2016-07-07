@@ -23,7 +23,7 @@ class SmsServiceImpl extends BaseService implements SmsService
     public function smsSend($smsType, $userIds, $description, $parameters = array())
     {
         if (!$this->isOpen($smsType)) {
-            throw new \RuntimeException("云短信相关设置未开启!");
+            throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
         }
 
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
@@ -33,19 +33,19 @@ class SmsServiceImpl extends BaseService implements SmsService
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException("发送失败！");
+            throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
         }
 
         $users        = $this->getUserService()->findUsersByIds($userIds);
         $userProfiles = ArrayToolkit::index($this->getUserService()->findUserProfilesByIds($userIds), 'id');
 
-        $message = '对';
+        $message = $this->getKernel()->trans('对');
 
         foreach ($users as $user) {
             $message .= 'userId: '.$user['id'].';nickname: '.$user['nickname'].';verifiedMobile: '.$user['verifiedMobile'].';mobile: '.$userProfiles[$user['id']]['mobile'].';';
         }
 
-        $message .= '发送用于'.$smsType.'的通知短信';
+        $message .= $this->getKernel()->trans('发送用于%Type%的通知短信',array('%Type%'=>$smsType));
         $this->getLogService()->info('sms', $smsType, $message, $mobiles);
 
         return true;

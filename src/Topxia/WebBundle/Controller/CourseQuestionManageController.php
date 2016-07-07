@@ -5,7 +5,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseQuestionManageController extends BaseController
 {
@@ -80,13 +79,13 @@ class CourseQuestionManageController extends BaseController
                 $urlParams['type']     = $type;
                 $urlParams['courseId'] = $courseId;
                 $urlParams['goto']     = $request->query->get('goto', null);
-                $this->setFlashMessage('success', '题目添加成功，请继续添加。');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
                 return $this->redirect($this->generateUrl('course_manage_question_create', $urlParams));
             } elseif ($data['submission'] == 'continue_sub') {
-                $this->setFlashMessage('success', '题目添加成功，请继续添加子题。');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加子题。'));
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['id']))));
             } else {
-                $this->setFlashMessage('success', '题目添加成功。');
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId))));
             }
         }
@@ -103,7 +102,7 @@ class CourseQuestionManageController extends BaseController
             $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
 
             if (empty($parentQuestion)) {
-                return $this->createMessageResponse('error', '父题不存在，不能创建子题！');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('父题不存在，不能创建子题！'));
             }
         } else {
             $parentQuestion = null;
@@ -136,7 +135,7 @@ class CourseQuestionManageController extends BaseController
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
 
-            $this->setFlashMessage('success', '题目修改成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目修改成功！'));
 
             return $this->redirect($request->query->get('goto', $this->generateUrl('course_manage_question', array('courseId' => $courseId, 'parentId' => $question['parentId']))));
         }
@@ -180,17 +179,6 @@ class CourseQuestionManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function uploadFileAction(Request $request, $courseId, $type)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-
-        if ($request->getMethod() == 'POST') {
-            $originalFile = $this->get('request')->files->get('file');
-            $file         = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
-            return new Response(json_encode($file));
-        }
-    }
-
     /**
      * @todo refact it, to xxvholic.
      */
@@ -203,7 +191,7 @@ class CourseQuestionManageController extends BaseController
         $question = $this->getQuestionService()->getQuestion($id);
 
         if (empty($question)) {
-            throw $this->createNotFoundException('题目不存在！');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('题目不存在！'));
         }
 
         $item = array(
@@ -248,7 +236,7 @@ class CourseQuestionManageController extends BaseController
     {
         $lessons                           = $this->getCourseService()->getCourseLessons($course['id']);
         $choices                           = array();
-        $choices["course-{$course['id']}"] = '本课程';
+        $choices["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
 
         foreach ($lessons as $lesson) {
             if ($lesson['type'] == 'testpaper') {
@@ -283,26 +271,6 @@ class CourseQuestionManageController extends BaseController
             'storageSetting' => $storageSetting,
             'targetType'     => $targetType,
             'targetId'       => $id
-        ));
-    }
-
-    public function batchUploadAttachmentsAction(Request $request, $id, $targetType)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $fileExts       = "";
-
-        if ("coursequestion" == $targetType) {
-            $fileExts = "*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.zip";
-        }
-
-        return $this->render('TopxiaWebBundle:CourseQuestionManage:batch-upload.html.twig', array(
-            'course'         => $course,
-            'storageSetting' => $storageSetting,
-            'targetType'     => $targetType,
-            'targetId'       => $id,
-            'fileExts'       => $fileExts
         ));
     }
 

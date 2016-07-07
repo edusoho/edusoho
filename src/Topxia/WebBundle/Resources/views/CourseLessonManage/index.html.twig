@@ -7,7 +7,8 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col lesson-manage-panel">
+<div class="panel panel-default panel-col lesson-manage-panel"
+	data-file-status-url={{path('course_manage_lesson_file_status',{id:course.id})}}>
 	<div class="panel-heading">
 		<div class="pull-right">
 

@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        require('./header').run();
 
         var sortList = function($list) {
             var data = $list.sortable("serialize").get();
@@ -156,11 +155,15 @@ define(function(require, exports, module) {
                 var $elem = this.elem;
                 $elem.addClass('sticky');
                 $elem.width($elem.parent().width() - 10);
+                $elem.css({
+                    bottom: 'auto'
+                });
             } else {
                 this.elem.removeClass('sticky');
                 this.elem.width('auto');
             }
         });
+
 
         $("#course-item-list .item-actions .btn-link").tooltip();
         $("#course-item-list .fileDeletedLesson").tooltip();
@@ -184,6 +187,30 @@ define(function(require, exports, module) {
             $(this).find('.dropdown-menu-more').show();
         });
 
+        asyncLoadFiles();
+
     };
+
+    function asyncLoadFiles()
+    {
+        var url=$('.lesson-manage-panel').data('file-status-url');
+        $.get(url,'',function(data){
+            if(!data||data.length==0){
+                return ;
+            }
+            
+            for(var i=0;i<data.length;i++){
+              var file=data[i];
+              if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
+              }else if(file.convertStatus=='error'){
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+              } else if (file.convertStatus == 'success') {
+                $("li[data-file-id="+file.id+"]").find('.mark-manage').show();
+                $("li[data-file-id="+file.id+"]").find('.mark-manage-divider').show();
+              }
+            }
+        });
+    }
 
 });

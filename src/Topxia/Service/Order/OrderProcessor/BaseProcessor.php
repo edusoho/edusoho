@@ -22,7 +22,7 @@ class BaseProcessor
             $isRight = $this->getAuthService()->checkPayPassword($user["id"], $payPassword);
 
             if (!$isRight) {
-                throw new Exception("支付密码不正确，创建订单失败!");
+                throw new Exception($this->getKernel()->trans('支付密码不正确，创建订单失败!'));
             }
         }
 
@@ -129,5 +129,9 @@ class BaseProcessor
     protected function getAppService()
     {
         return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+    }
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

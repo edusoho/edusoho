@@ -75,7 +75,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 break;
 
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
         }
 
         return $orderBys;
@@ -94,7 +94,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
-                throw $this->createServiceException('keywordType参数不正确');
+                throw $this->createServiceException($this->getKernel()->trans('keywordType参数不正确'));
             }
 
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -123,15 +123,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createThread($thread)
     {
         if (empty($thread['title'])) {
-            throw $this->createServiceException("标题名称不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('标题名称不能为空！'));
         }
 
         if (empty($thread['content'])) {
-            throw $this->createServiceException("话题内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('话题内容不能为空！'));
         }
 
         if (empty($thread['targetId'])) {
-            throw $this->createServiceException(' Id不能为空！');
+            throw $this->createServiceException($this->getKernel()->trans(' Id不能为空！'));
         }
 
         if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question', 'event'))) {
@@ -143,7 +143,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+            throw $this->createServiceException($this->getKernel()->trans('发帖次数过多，请稍候尝试。'));
         }
 
         $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
@@ -159,7 +159,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if ($thread['type'] == 'event') {
             if ($this->tryAccess('thread.event.create', $thread)) {
-                throw $this->createAccessDeniedException('权限不够!');
+                throw $this->createAccessDeniedException($this->getKernel()->trans('权限不够!'));
             }
 
             if (!empty($thread['location'])) {
@@ -205,7 +205,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($id);
 
         if (empty($thread)) {
-            throw $this->createServiceException('话题不存在，更新失败！');
+            throw $this->createServiceException($this->getKernel()->trans('话题不存在，更新失败！'));
         }
 
         $this->tryAccess('thread.update', $thread);
@@ -213,7 +213,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture'));
 
         if (empty($fields)) {
-            throw $this->createServiceException('参数缺失，更新失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，更新失败。'));
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $thread['targetType'].'-thread-update');
@@ -225,6 +225,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (!empty($fields['startTime'])) {
             $fields['startTime'] = strtotime($fields['startTime']);
         }
+
+        $this->dispatchEvent('thread.update', new ServiceEvent($thread));
 
         return $this->getThreadDao()->updateThread($id, $fields);
     }
@@ -239,7 +241,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %threadId%)不存在。',array('%threadId%'=>$threadId))));
         }
 
         $this->tryAccess('thread.delete', $thread);
@@ -253,7 +255,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->dispatchEvent('thread.delete', $thread);
 
-        $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
+        $this->getLogService()->info('thread', 'delete', $this->getKernel()->trans('删除话题 %title%(%id%)',array('%title%'=>$thread['title'],'%id%'=>$thread['id'])));
+
     }
 
     public function setThreadSticky($threadId)
@@ -261,7 +264,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->tryAccess('thread.sticky', $thread);
@@ -276,14 +279,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->tryAccess('thread.sticky', $thread);
 
         $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 0, 'updateTime' => time()));
-
-        $this->dispatchEvent('thread.sticky', new ServiceEvent($thread, array('sticky' => 'cancel')));
     }
 
     public function setThreadNice($threadId)
@@ -291,7 +292,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->tryAccess('thread.nice', $thread);
@@ -306,7 +307,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->tryAccess('thread.nice', $thread);
@@ -321,7 +322,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->getThreadDao()->updateThread($thread['id'], array('solved' => 1, 'updateTime' => time()));
@@ -334,7 +335,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThreadDao()->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %id%)不存在。',array('%id%'=>$thread['id']))));
         }
 
         $this->getThreadDao()->updateThread($thread['id'], array('solved' => 0, 'updateTime' => time()));
@@ -420,7 +421,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.post.before_create', $fields);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('回复次数过多，请稍候尝试。');
+            throw $this->createServiceException($this->getKernel()->trans('回复次数过多，请稍候尝试。'));
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
@@ -438,7 +439,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
 
             if (empty($parent)) {
-                throw $this->createServiceException("parentId参数不正确！");
+                throw $this->createServiceException($this->getKernel()->trans('parentId参数不正确！'));
             }
 
             $this->getThreadPostDao()->wavePost($parent['id'], 'subposts', 1);
@@ -474,7 +475,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-        //回复的回复的人给该回复的作者发通知
+//回复的回复的人给该回复的作者发通知
 
         if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
@@ -501,13 +502,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $postId));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('帖子(#%postId%)不存在，删除失败。',array('%postId%'=>$postId))));
         }
 
         $this->tryAccess('post.delete', $post);
 
         $thread = $this->getThread($post['threadId']);
-        // if (!empty($thread)) {
+
+// if (!empty($thread)) {
         // }
 
         $totalDeleted = 1;
@@ -575,7 +577,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getThreadPostDao()->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题回复(ID: %id%)不存在。',array('%id%'=>$post['id']))));
         }
 
         $this->tryAccess('post.adopted', $post);
@@ -587,7 +589,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post = $this->getThreadPostDao()->getPost($postId);
 
         if (empty($post)) {
-            throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('话题回复(ID: %id%)不存在。',array('%id%'=>$post['id']))));
         }
 
         $this->tryAccess('post.adopted', $post);
@@ -640,7 +642,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $thread = $this->getThreadDao()->getThread($fields['threadId']);
 
             if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
-                throw $this->createAccessDeniedException('已超过人数限制!');
+                throw $this->createAccessDeniedException($this->getKernel()->trans('已超过人数限制!'));
             }
 
             $fields['createdTime'] = time();
@@ -649,7 +651,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
             return $member;
         } else {
-            throw $this->createServiceException('成员已存在!');
+            throw $this->createServiceException($this->getKernel()->trans('成员已存在!'));
         }
     }
 
@@ -662,7 +664,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('thread.member.delete', $member);
 
         if (empty($member)) {
-            throw $this->createServiceException('成员不存在!');
+            throw $this->createServiceException($this->getKernel()->trans('成员不存在!'));
         }
 
         $this->getThreadMemberDao()->deleteMember($memberId);
@@ -672,7 +674,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMembersByThreadId($threadId)
     {
         if (empty($threadId)) {
-            throw $this->createServiceException('参数错误!');
+            throw $this->createServiceException($this->getKernel()->trans('参数错误!'));
         }
 
         $thread = $this->getThread($threadId);

@@ -12,21 +12,21 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
-            return array('error' => '已经是课程的学员了!');
+            return array('error' => $this->getKernel()->trans('已经是课程的学员了!'));
         }
 
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (!$course['buyable']) {
-            return array('error' => '该课程不可购买，如有需要，请联系客服');
+            return array('error' => $this->getKernel()->trans('该课程不可购买，如有需要，请联系客服'));
         }
 
         if ($course['status'] != 'published') {
-            return array('error' => '不能加入未发布课程!');
+            return array('error' => $this->getKernel()->trans('不能加入未发布课程!'));
         }
 
         if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
-            return array('error' => '名额已满，不能加入!');
+            return array('error' => $this->getKernel()->trans('名额已满，不能加入!'));
         }
 
         return array();
@@ -37,7 +37,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (empty($course)) {
-            throw new Exception("找不到要购买课程!");
+            throw new Exception($this->getKernel()->trans('找不到要购买课程!'));
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
@@ -59,7 +59,15 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+
+            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+                $cashRate = $coinSetting['cash_rate'];
+            }
+
+            $totalPrice = $course["price"] * $cashRate;
         } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
             $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
@@ -70,7 +78,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if (!isset($maxCoin)) {
             $maxCoin = $coinPayAmount;
         }
-
+        
         return array(
             'course'         => empty($course) ? null : $course,
             'users'          => empty($users) ? null : $users,
@@ -92,9 +100,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $amount = $totalPrice;
 
-        //优惠码优惠价格
+//优惠码优惠价格
 
-        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (isset($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'course',
@@ -111,7 +119,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
-        //虚拟币优惠价格
+//虚拟币优惠价格
 
         if (array_key_exists("coinPayAmount", $fields)) {
             $amount = $this->afterCoinPay(
@@ -155,7 +163,14 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($priceType == "RMB") {
             $totalPrice = $course["price"];
         } elseif ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+                $cashRate = $coinSetting['cash_rate'];
+            }
+
+            $totalPrice = $course["price"] * $cashRate;
         }
 
         $totalPrice = (float) $totalPrice;
@@ -270,4 +285,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
 }

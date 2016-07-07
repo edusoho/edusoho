@@ -32,7 +32,7 @@ class InitCommand extends BaseCommand
         $this->initMailerSetting($output);
         $this->initPaymentSetting($output);
         $this->initStorageSetting($output);
-
+        $this->initMagicSetting($output);
         $this->initCategory($output);
         $this->initTag($output);
         $this->initRefundSetting($output);
@@ -88,6 +88,16 @@ class InitCommand extends BaseCommand
         );
 
         $site = $this->getSettingService()->set('site', $default);
+    }
+
+    private function initMagicSetting($output)
+    {
+        $default = array(
+            'export_allow_count' => 100000,
+            'export_limit'       => 10000
+        );
+
+        $site = $this->getSettingService()->set('magic', $default);
     }
 
     private function initConsultSetting($output)
@@ -455,29 +465,47 @@ EOD;
     {
         $output->write('  初始化CrontabJob');
 
-        // $this->getCrontabService()->createJob(array(
-        //     'name'=>'CancelOrderJob',
-        //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
-        //     'nextExcutedTime'=>time(),
-        //     'createdTime'=>time()
-        // ));
+// $this->getCrontabService()->createJob(array(
 
-        // $this->getCrontabService()->createJob(array(
-        //     'name'=>'DeleteExpiredTokenJob',
-        //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
-        //     'nextExcutedTime'=>time(),
-        //     'createdTime'=>time()
-        // ));
+//     'name'=>'CancelOrderJob',
 
-        // $this->getCrontabService()->createJob(array(
-        //     'name'=>'DeleteSessionJob',
-        //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteSessionJob',
-        //     'jobParams'=>'',
-        //     'nextExcutedTime'=>time(),
-        //     'createdTime'=>time()
+//     'cycle'=>'everyhour',
+
+//     'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+
+//     'nextExcutedTime'=>time(),
+
+//     'createdTime'=>time()
+
+// ));
+
+// $this->getCrontabService()->createJob(array(
+
+//     'name'=>'DeleteExpiredTokenJob',
+
+//     'cycle'=>'everyhour',
+
+//     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+
+//     'nextExcutedTime'=>time(),
+
+//     'createdTime'=>time()
+
+// ));
+
+// $this->getCrontabService()->createJob(array(
+
+//     'name'=>'DeleteSessionJob',
+
+//     'cycle'=>'everyhour',
+
+//     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteSessionJob',
+
+//     'jobParams'=>'',
+
+//     'nextExcutedTime'=>time(),
+
+//     'createdTime'=>time()
         // ));
 
         $this->getCrontabService()->setNextExcutedTime(time());

@@ -3,13 +3,13 @@
   <div class="bar-popover-content" style="display:none;">
     <div id="bar-qq-content">
       {% set countQq = 0 %}
-      {% for qq in consult.qq if qq.name is not empty %}
+      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
         {% set countQq = 1 %}
       {% endfor %}
 
       {% if countQq > 0 %}
       <div class="row mtm">
-        {% for qq in consult.qq if qq.name is not empty %}
+        {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
           {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
               <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
@@ -29,7 +29,7 @@
       {% endif %}
 
       <div class="row">
-        {% for qqgroup in consult.qqgroup if qqgroup.name is not empty %}
+        {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
           <div class="col-xs-6 mbm">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">

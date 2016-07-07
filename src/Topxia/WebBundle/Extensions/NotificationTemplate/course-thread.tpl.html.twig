@@ -6,52 +6,94 @@
     <div class="notification-body">
       {% set data = notification.content %}
 
-          {% if data.type == 'at' %}
+      {% if data.type == 'at' %}
 
-            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> {{'在话题'|trans}} <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中@了您。'|trans}}
-            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
+        <a href="{{ path('user_show', {id:data.userId}) }}"
+           target="_blank">{{ data.userName }}</a> 在{{ dict_text('threadType', data.threadType|default('discussion')) }}
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}"
+           target="_blank">{{ data.title }}</a> 中@了您。
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{ data.postId }}"
+           target='_blank'>点击查看</a>
 
-          {% elseif data.type == 'reply'%}
+      {% elseif data.type == 'reply' %}
 
-            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> {{'在话题'|trans}} <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中回复了您。'|trans}}
-            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
+        <a href="{{ path('user_show', {id:data.userId}) }}"
+           target="_blank">{{ data.userName }}</a> 在{{ dict_text('threadType', data.threadType|default('discussion')) }}
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}"
+           target="_blank">{{ data.title }}</a> 中回复了您。
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{ data.postId }}"
+           target='_blank'>点击查看</a>
 
-          {% elseif data.type == 'modify-thread' %}
+      {% elseif data.type == 'replayat' %}
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员编辑。'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
-            
-          {% elseif data.type == 'modify-post' %}
+        <a href="{{ path('user_show', {id:data.userId}) }}"
+           target="_blank">{{ data.userName }}</a> 在{{ dict_text('threadType', data.threadType|default('discussion')) }}
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}"
+           target="_blank">{{ data.title }}</a> 回复中@了您。
+        <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{ data.postId }}"
+           target='_blank'>点击查看</a>
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'有回复被管理员编辑。'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
+      {% elseif data.type == 'modify-thread' %}
 
-          {% elseif data.type == 'delete' %}
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员编辑。<a
+          href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{ data.postId }}"
+          target='_blank'>点击查看</a>
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'有回复被管理员删除.'|trans}}
+      {% elseif data.type == 'modify-post' %}
 
-          {% elseif data.type == 'modify'%}
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>有回复被管理员编辑。<a
+          href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{ data.postId }}"
+          target='_blank'>点击查看</a>
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员编辑.'|trans}}
+      {% elseif data.type == 'delete' %}
 
-          {% elseif data.type == 'top' %}
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<strong class="color-primary">
+        “{{ data.title }}”</strong>被删除.
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员设为置顶.'|trans}} 
+      {% elseif data.type == 'delete-post' %}
 
-          {% elseif data.type == 'untop'%}
+        您在{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>中有回复被删除。
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员取消置顶.'|trans}}
+      {% elseif data.type == 'modify' %}
 
-          {% elseif data.type == 'elite'%}
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员编辑.
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员加精.'|trans}} 
+      {% elseif data.type == 'top' %}
 
-          {% elseif data.type == 'unelite'%}  
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员设为置顶.
 
-            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员取消加精.'|trans}}
+      {% elseif data.type == 'untop' %}
 
-          {% endif %}
-     
-    <div class="notification-footer">
-     {{ notification.createdTime|date_format }}  
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员取消置顶.
+
+      {% elseif data.type == 'elite' %}
+
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员加精.
+
+      {% elseif data.type == 'unelite' %}
+
+        您的{{ dict_text('threadType', data.threadType|default('discussion')) }}<a
+        href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'>
+        <strong>“{{ data.title }}”</strong></a>被管理员取消加精.
+
+      {% endif %}
+
+      <div class="notification-footer">
+        {{ notification.createdTime|date_format }}
+      </div>
     </div>
-  </div>
 </li>

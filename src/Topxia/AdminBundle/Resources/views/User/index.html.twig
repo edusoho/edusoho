@@ -11,7 +11,9 @@
 
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
-    
+
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+   
     <select class="form-control" name="datePicker" id="datePicker">
       {{ select_options({longinDate:'登录时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
     </select>
@@ -36,7 +38,7 @@
   
   <div class="form-group">
     <select id="keywordType" name="keywordType" class="form-control">
-      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), '--关键词类型--') }}
+      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickname') }}
     </select>
   </div>
 
@@ -54,15 +56,18 @@
   {% endif %}
 </form>
 
+
+
 <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
       <th>用户名</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>手机号</th>
       <th>Email</th>
       <th>注册时间</th>
       <th>最近登录</th>
-      <th>操作</th>
+      <th width="10%">操作</th>
     </tr>
   </thead>
   <tbody>
@@ -74,5 +79,6 @@
     {% endfor %}
   </tbody>
 </table>
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'user', formId:'user-table'} %}
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}

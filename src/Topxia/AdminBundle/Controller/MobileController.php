@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {
@@ -50,8 +51,8 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
         $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
@@ -90,10 +91,10 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
- 
+
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
@@ -114,7 +115,7 @@ class MobileController extends BaseController
     {
         $file = $request->files->get($type);
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
@@ -127,7 +128,7 @@ class MobileController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片',array('%type%'=>$type)), array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],
@@ -144,19 +145,33 @@ class MobileController extends BaseController
 
         $this->getSettingService()->set('mobile', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片',array('%type%'=>$type)));
 
         return $this->createJsonResponse(true);
     }
 
-   protected function getCourseService()
+    public function customizationUpgradeAction(Request $request)
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        $currentVersion = $request->request->get('currentVersion');
+        $targetVersion = $request->request->get('targetVersion');
+
+        if (empty($currentVersion) || empty($targetVersion)) {
+            throw new \RuntimeException("参数不正确");
+        }
+
+        $api = CloudAPIFactory::create('root');
+
+        $resp = $api->post('/customization/mobile/apply', array(
+            'currentVersion' => $currentVersion,
+            'targetVersion' => $targetVersion,
+        ));
+
+        return $this->createJsonResponse($resp);
     }
 
-    protected function getUploadFileService()
+    protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     protected function getAppService()
