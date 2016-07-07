@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                 if (response.error) {
                     html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
                 } else {
-	                html = '<div class="slide-player" style="min-height:500px;"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
+	                html = '<div class="slide-player" style="min-height:500px;"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">'+Translator.trans('已经到最后一张图片了哦')+'<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
                 }
 
                 $player.html(html);
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
                 html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
                 html += '<span aria-hidden="true">×</span>';
                 html += '</button>';
-                html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                html += Translator.trans('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。');
                 html += '</div>';
                 player.html(html);
             } else {

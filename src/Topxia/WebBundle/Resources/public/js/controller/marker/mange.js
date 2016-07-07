@@ -58,7 +58,7 @@ define(function(require, exports, module) {
             var $scalebox = $(_obj.get("scalebox"));
             var $subject_lesson_list = $(this.element).find(_obj.get('subject_lesson_list'));
             var $editbox_lesson_list = $(this.element).find(_obj.get('editbox_lesson_list'));
-            var value = '<span class="sub-remask"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="remask">左右拖动驻点调整刻度位置或与已有驻点合并<p></p>释放后设置将自动保存</span>';
+            var value = '<span class="sub-remask"><i class="es-icon es-icon-infooutline mrm"></i>' + Translator.trans('将题目拖至左侧时间条') + '</span>' + '<span class="remask">'+Translator.trans('左右拖动驻点调整刻度位置或与已有驻点合并')+'<p></p>'+Translator.trans('释放后设置将自动保存')+'</span>';
             var player = $(document.getElementById('viewerIframe').contentDocument);
             var _height = player.find('.vjs-progress-control').height()+player.find('.vjs-control-bar').height()+$editbox.height();
             // 显示红色时间轴

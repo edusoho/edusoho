@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                     window.location.reload();
                 }
             }, 'json').fail(function(){
-                alert('文件转换提交失败，请重试！');
+                alert(Translator.trans('文件转换提交失败，请重试！'));
             });
         });
 

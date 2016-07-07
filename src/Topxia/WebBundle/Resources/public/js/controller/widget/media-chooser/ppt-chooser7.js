@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
     var PPTChooser = BaseChooser.extend({
         attrs: {
-
         },
         
         setup: function() {

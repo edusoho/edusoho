@@ -98,7 +98,7 @@ define(function(require, exports, module) {
         _createValidator: function($form){
             var self = this;
 
-            Validator.addRule('score',/^(\d){1,10}$/i, '请输入正确的分值');
+            Validator.addRule('score',/^(\d){1,10}$/i, Translator.trans('请输入正确的分值'));
 
             validator = new Validator({
                 element: $form,

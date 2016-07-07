@@ -221,7 +221,7 @@ define(function(require, exports, module) {
 
         initSwfViewer: function($thiz){
 
-            $thiz.html('<div id="website"><p align="center" class="style1">您还没有安装flash播放器 请点击<a href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>');
+            $thiz.html('<div id="website"><p align="center" class="style1">'+Translator.trans('您还没有安装flash播放器 请点击')+'<a href="http://www.adobe.com/go/getflashplayer">'+Translator.trans('这里')+'</a>'+Translator.trans('安装')+'</p></div>');
             var flashvars = {
               doc_url: escape(this.attrs.swfFileUrl.value) 
             };

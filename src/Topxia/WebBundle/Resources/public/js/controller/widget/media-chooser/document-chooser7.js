@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
     var DocumentChooser = BaseChooser.extend({
         attrs: {
-
         },
 
         setup: function() {

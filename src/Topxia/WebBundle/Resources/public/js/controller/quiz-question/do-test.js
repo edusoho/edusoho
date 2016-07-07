@@ -101,8 +101,8 @@ define(function(require, exports, module) {
                             $('#timeout-dialog').show();
                             timer.stop();
                         }).error(function(){
-                            $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
-                            $('#timeout-dialog').find('#show_testpaper_result').text('确定');
+                            $('#timeout-dialog').find('.empty').text(Translator.trans('系统好像出了点小问题，请稍后再交卷'));
+                            $('#timeout-dialog').find('#show_testpaper_result').text(Translator.trans('确定'));
                             $('#timeout-dialog').show();
                             timer.stop();
                         });
@@ -115,8 +115,8 @@ define(function(require, exports, module) {
                                     usedTime = 0;
                                     $('#timeout-dialog').show();
                                 }).error(function(){
-                                    $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
-                                    $('#timeout-dialog').find('#show_testpaper_result').text('确定');
+                                    $('#timeout-dialog').find('.empty').text(Translator.trans('系统好像出了点小问题，请稍后再交卷'));
+                                    $('#timeout-dialog').find('#show_testpaper_result').text(Translator.trans('确定'));
                                     $('#timeout-dialog').show();
                                 });
                             }
@@ -507,7 +507,7 @@ define(function(require, exports, module) {
                 } else {
                     return false;
                 }
-            }, '{{display}}只能是<=题目分数、且>=0的整数或者1位小数');
+            }, Translator.trans('%display%只能是<=题目分数、且>=0的整数或者1位小数',{display:{display}));
         }
 
         $('[name^="score_"]').each(function(){
@@ -516,7 +516,7 @@ define(function(require, exports, module) {
                 element: '[name='+name+']',
                 required: true,
                 rule: 'score',
-                display: '得分'
+                display: Translator.trans('得分')
             });
         });
 

@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 
                             $form.find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
                             
-                            $form.find('.help-block').html('<span class="text-danger">验证码错误</span>');
+                            $form.find('.help-block').html('<span class="text-danger">'+Translator.trans('验证码错误')+'</span>');
                             $form.find('.help-block').show();
                         }
                     }, 'json');
@@ -69,8 +69,8 @@ define(function(require, exports, module) {
                 element: '#captcha_num_modal',
                 required: true,
                 rule: 'alphanumeric',
-                display: '验证码',
-                errormessageRequired:'请输入验证码',
+                display: Translator.trans('验证码'),
+                errormessageRequired:Translator.trans('请输入验证码'),
             });
         },
         

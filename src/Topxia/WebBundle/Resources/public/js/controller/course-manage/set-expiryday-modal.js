@@ -17,12 +17,12 @@ define(function(require, exports, module) {
                 }
                 $.post($form.attr('action'), $form.serialize(), function() {
                     var user_name = $('#submit').data('user') ;
-                    Notify.success('增加'+user_name+'有效期操作成功!');
+                    Notify.success(Translator.trans('增加%name%有效期操作成功!',{name:user_name}));
                     $modal.modal('hide');
                     window.location.reload();
                 }).error(function(){
                     var user_name = $('#submit').data('user') ;
-                    Notify.danger('增加'+user_name+'有效期操作失败!');
+                    Notify.danger(Translator.trans('增加%name%有效期操作失败!',{name:user_name}));
                 });
 
             }
