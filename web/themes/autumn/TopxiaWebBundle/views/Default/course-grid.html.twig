@@ -2,23 +2,23 @@
   <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture">
     {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', '') }}
     {% if course.status == 'draft' %}
-      <span class="label  label-warning course-status">未发布</span>
+      <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
     {% elseif course.status == 'closed' %}
-      <span class="label label-danger course-status">已关闭</span>
+      <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
     {% endif %} 
 
     {% if course.serializeMode == 'serialize' %}
-      <span class="label label-success series-mode-label">更新中</span>
+      <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
     {% elseif course.serializeMode == 'finished' %}
-      <span class="label label-warning series-mode-label">已完结</span>
+      <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
     {% endif %}
 
     {% if course.type == 'live' %}
       {% set lesson = course['lesson']|default(null) %}
       {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-        <span class="label label-warning series-mode-label">正在直播中</span>
+        <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
       {% else %}
-        <span class="label label-success series-mode-label">直播</span>
+        <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
       {% endif %}
     {% endif %}
   </a>
@@ -34,7 +34,7 @@
 
     <div class="course-metas">
       <span class="teachers">
-         主讲:
+         {{'主讲:'|trans}}
         {% for teacher in course.teachers %}
          {% if loop.index <= 1 %}
           {{ web_macro.user_link(teacher, 'text-muted') }}
