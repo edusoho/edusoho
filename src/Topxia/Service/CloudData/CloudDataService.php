@@ -4,7 +4,7 @@ namespace Topxia\Service\CloudData;
 
 interface CloudDataService
 {
-    public function push($name, array $body = array(), $timestamp, $tryTimes = 0);
+    public function push($name, array $body = array(), $timestamp = 0, $level = 'normal');
 
     public function searchCloudDataCount($conditions);
 

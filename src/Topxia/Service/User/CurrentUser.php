@@ -2,32 +2,38 @@
 namespace Topxia\Service\User;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
-class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess  {
-
+class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
+{
     protected $data;
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         if (array_key_exists($name, $this->data)) {
             $this->data[$name] = $value;
         }
+
         throw new \RuntimeException("{$name} is not exist in CurrentUser.");
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
+
         throw new \RuntimeException("{$name} is not exist in CurrentUser.");
     }
 
-    public function __isset($name) {
+    public function __isset($name)
+    {
         return isset($this->data[$name]);
     }
 
-    public function __unset($name) {
+    public function __unset($name)
+    {
         unset($this->data[$name]);
     }
 
@@ -41,35 +47,43 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         $this->data['newMessageNum'] = '0';
     }
 
-    public function offsetExists ($offset) {
+    public function offsetExists($offset)
+    {
         return $this->__isset($offset);
-
     }
-    public function offsetGet ($offset) {
+
+    public function offsetGet($offset)
+    {
         return $this->__get($offset);
     }
 
-    public function offsetSet ($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         return $this->__set($offset, $value);
     }
 
-    public function offsetUnset ($offset) {
+    public function offsetUnset($offset)
+    {
         return $this->__unset($offset);
     }
 
-    public function getRoles() {
+    public function getRoles()
+    {
         return $this->roles;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
-    public function getSalt() {
+    public function getSalt()
+    {
         return $this->salt;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->email;
     }
 
@@ -78,27 +92,32 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return $this->id;
     }
 
-    public function eraseCredentials() {
-
+    public function eraseCredentials()
+    {
     }
 
-    public function isAccountNonExpired() {
+    public function isAccountNonExpired()
+    {
         return true;
     }
 
-    public function isAccountNonLocked() {
+    public function isAccountNonLocked()
+    {
         return !$this->locked;
     }
 
-    public function isCredentialsNonExpired() {
+    public function isCredentialsNonExpired()
+    {
         return true;
     }
 
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return true;
     }
 
-    public function isEqualTo(UserInterface $user) {
+    public function isEqualTo(UserInterface $user)
+    {
         if ($this->email !== $user->getUsername()) {
             return false;
         }
@@ -124,7 +143,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-        return false;  
+
+        return false;
     }
 
     public function isSuperAdmin()
@@ -132,7 +152,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-        return false;  
+
+        return false;
     }
 
     public function isTeacher()
@@ -140,12 +161,24 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return in_array('ROLE_TEACHER', $this->getRoles());
     }
 
-    public function fromArray(array $user) {
+    public function getSelectOrgCode()
+    {
+        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
+    }
+
+    public function getCurrentOrgCode()
+    {
+        return $this->orgCode;
+    }
+
+    public function fromArray(array $user)
+    {
         $this->data = $user;
         return $this;
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return $this->data;
     }
 }

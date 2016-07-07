@@ -35,7 +35,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
 
-            'article.create'            => 'onArticleCreate',
             'article.publish'           => 'onArticleCreate',
             'article.update'            => 'onArticleUpdate',
             'article.trash'             => 'onArticleDelete',
@@ -67,7 +66,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'testpaper.reviewed'        => 'onTestPaperReviewed',
 
-            'homework.check'            => 'onHomeworkCheck',
+            'homework.check'            => 'onHomeworkCheck'
         );
     }
 
@@ -82,11 +81,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onUserUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
+
         if ($event->getName() == 'user.update') {
             $user = $context['user'];
         } else {
             $user = $context;
         }
+
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
@@ -94,14 +95,14 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onUserCreate(ServiceEvent $event)
     {
-        $user = $event->getSubject();
+        $user    = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $this->pushCloud('user.create', $this->convertUser($user, $profile));
     }
 
     public function onUserDelete(ServiceEvent $event)
     {
-        $user = $event->getSubject();
+        $user    = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $this->pushCloud('user.delete', $this->convertUser($user, $profile));
     }
@@ -109,19 +110,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function convertUser($user, $profile = array())
     {
         // id, nickname, title, roles, point, avatar(最大那个), about, updatedTime, createdTime
-        $converted = array();
-        $converted['id'] = $user['id'];
+        $converted             = array();
+        $converted['id']       = $user['id'];
         $converted['nickname'] = $user['nickname'];
-        $converted['title'] = $user['title'];
+        $converted['title']    = $user['title'];
 
         if (!is_array($user['roles'])) {
             $user['roles'] = explode('|', $user['roles']);
         }
-        
-        $converted['roles'] = in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'student';
-        $converted['point'] = $user['point'];
-        $converted['avatar'] = $this->getFileUrl($user['largeAvatar']);
-        $converted['about'] = empty($profile['about']) ? '' : $profile['about'];
+
+        $converted['roles']       = in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'student';
+        $converted['point']       = $user['point'];
+        $converted['avatar']      = $this->getFileUrl($user['largeAvatar']);
+        $converted['about']       = empty($profile['about']) ? '' : $profile['about'];
         $converted['updatedTime'] = $user['updatedTime'];
         $converted['createdTime'] = $user['createdTime'];
         return $converted;
@@ -137,10 +138,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         if ($event->getName() == 'course.create') {
             //创建课程IM会话
             $currentUser = ServiceKernel::instance()->getCurrentUser();
-            $message = array(
-                'name' => $course['title'],
+            $message     = array(
+                'name'    => $course['title'],
                 'clients' => array(array(
-                    'clientId' => $currentUser['id'],
+                    'clientId'   => $currentUser['id'],
                     'clientName' => $currentUser['nickname']
                 ))
             );
@@ -176,7 +177,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         $member['course'] = $this->convertCourse($course);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+        $member['user']   = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('course.join', $member, 'important');
     }
@@ -192,17 +193,17 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         $member['course'] = $this->convertCourse($course);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+        $member['user']   = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('course.quit', $member, 'important');
     }
 
     protected function convertCourse($course)
     {
-        $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
+        $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
         $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-        $course['largePicture'] = $this->getFileUrl($course['largePicture']);
-        $course['about'] = $this->convertHtml($course['about']);
+        $course['largePicture']  = $this->getFileUrl($course['largePicture']);
+        $course['about']         = $this->convertHtml($course['about']);
         return $course;
     }
 
@@ -243,20 +244,22 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $this->pushCloud('lesson.update', $lesson);
     }
-    
+
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context = $event->getSubject();
+
         if ($event->getName() == 'course.lesson.delete') {
             $lesson = $context['lesson'];
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+            $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+
             if ($jobs) {
                 $this->deleteJob($jobs);
             }
         } else {
             $lesson = $context;
         }
-        
+
         $this->pushCloud('lesson.delete', $lesson);
     }
 
@@ -280,11 +283,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onClassroomJoin(ServiceEvent $event)
     {
         $classroom = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
+        $userId    = $event->getArgument('userId');
+        $member    = $event->getArgument('member');
 
         $member['classroom'] = $this->convertClassroom($classroom);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+        $member['user']      = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('classroom.join', $member, 'important');
     }
@@ -292,21 +295,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onClassroomQuit(ServiceEvent $event)
     {
         $classroom = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
+        $userId    = $event->getArgument('userId');
+        $member    = $event->getArgument('member');
 
         $member['classroom'] = $this->convertClassroom($classroom);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+        $member['user']      = $this->convertUser($this->getUserService()->getUser($userId));
 
         $this->pushCloud('classroom.quit', $member, 'important');
     }
 
     protected function convertClassroom($classroom)
     {
-        $classroom['smallPicture'] = $this->getFileUrl($classroom['smallPicture']);
+        $classroom['smallPicture']  = $this->getFileUrl($classroom['smallPicture']);
         $classroom['middlePicture'] = $this->getFileUrl($classroom['middlePicture']);
-        $classroom['largePicture'] = $this->getFileUrl($classroom['largePicture']);
-        $classroom['about'] = $this->convertHtml($classroom['about']);
+        $classroom['largePicture']  = $this->getFileUrl($classroom['largePicture']);
+        $classroom['about']         = $this->convertHtml($classroom['about']);
         return $classroom;
     }
 
@@ -315,12 +318,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onArticleCreate(ServiceEvent $event)
     {
-        $article = $event->getSubject();
+        $article    = $event->getSubject();
         $schoolUtil = new MobileSchoolUtil();
 
-        $articleApp = $schoolUtil->getArticleApp();
+        $articleApp           = $schoolUtil->getArticleApp();
         $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
-        $article['app'] = $articleApp;
+        $article['app']       = $articleApp;
 
         $this->pushCloud('article.create', $this->convertArticle($article));
     }
@@ -339,10 +342,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function convertArticle($article)
     {
-        $article['thumb'] = $this->getFileUrl($article['thumb']);
+        $article['thumb']         = $this->getFileUrl($article['thumb']);
         $article['originalThumb'] = $this->getFileUrl($article['originalThumb']);
-        $article['picture'] = $this->getFileUrl($article['picture']);
-        $article['body'] = $this->convertHtml($article['body']);
+        $article['picture']       = $this->getFileUrl($article['picture']);
+        $article['body']          = $this->convertHtml($article['body']);
         return $article;
     }
 
@@ -371,27 +374,27 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         if (strpos($eventName, 'course') === 0) {
             $thread['targetType'] = 'course';
-            $thread['targetId'] = $thread['courseId'];
+            $thread['targetId']   = $thread['courseId'];
             $thread['relationId'] = $thread['lessonId'];
         } elseif (strpos($eventName, 'group') === 0) {
             $thread['targetType'] = 'group';
-            $thread['targetId'] = $thread['groupId'];
+            $thread['targetId']   = $thread['groupId'];
             $thread['relationId'] = 0;
         }
 
         // id, target, relationId, title, content, postNum, hitNum, updateTime, createdTime
         $converted = array();
 
-        $converted['id'] = $thread['id'];
-        $converted['target'] = $this->getTarget($thread['targetType'], $thread['targetId']);
-        $converted['relationId'] = $thread['relationId'];
-        $converted['type'] = empty($thread['type']) ? 'none' : $thread['type'];
-        $converted['userId'] = empty($thread['userId']) ? 0 : $thread['userId'];
-        $converted['title'] = $thread['title'];
-        $converted['content'] = $this->convertHtml($thread['content']);
-        $converted['postNum'] = $thread['postNum'];
-        $converted['hitNum'] = $thread['hitNum'];
-        $converted['updateTime'] = isset($thread['updateTime']) ? $thread['updateTime']: $thread['updatedTime'];
+        $converted['id']          = $thread['id'];
+        $converted['target']      = $this->getTarget($thread['targetType'], $thread['targetId']);
+        $converted['relationId']  = $thread['relationId'];
+        $converted['type']        = empty($thread['type']) ? 'none' : $thread['type'];
+        $converted['userId']      = empty($thread['userId']) ? 0 : $thread['userId'];
+        $converted['title']       = $thread['title'];
+        $converted['content']     = $this->convertHtml($thread['content']);
+        $converted['postNum']     = $thread['postNum'];
+        $converted['hitNum']      = $thread['hitNum'];
+        $converted['updateTime']  = isset($thread['updateTime']) ? $thread['updateTime'] : $thread['updatedTime'];
         $converted['createdTime'] = $thread['createdTime'];
 
         return $converted;
@@ -422,13 +425,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         if (strpos($eventName, 'course') === 0) {
             $threadPost['targetType'] = 'course';
-            $threadPost['targetId'] = $threadPost['courseId'];
-            $threadPost['thread'] = $this->convertThread($this->getThreadService('course')->getThread($threadPost['courseId'], $threadPost['threadId']), $eventName);
+            $threadPost['targetId']   = $threadPost['courseId'];
+            $threadPost['thread']     = $this->convertThread($this->getThreadService('course')->getThread($threadPost['courseId'], $threadPost['threadId']), $eventName);
         } elseif (strpos($eventName, 'group') === 0) {
-            $thread = $this->getThreadService('group')->getThread($threadPost['threadId']);
+            $thread                   = $this->getThreadService('group')->getThread($threadPost['threadId']);
             $threadPost['targetType'] = 'group';
-            $threadPost['targetId'] = $thread['groupId'];
-            $threadPost['thread'] = $this->convertThread($thread, $eventName);
+            $threadPost['targetId']   = $thread['groupId'];
+            $threadPost['thread']     = $this->convertThread($thread, $eventName);
         } else {
             $threadPost['thread'] = $this->convertThread($this->getThreadService()->getThread($threadPost['threadId']), $eventName);
         }
@@ -436,18 +439,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         // id, threadId, content, userId, createdTime, target, thread
         $converted = array();
 
-        $converted['id'] = $threadPost['id'];
-        $converted['threadId'] = $threadPost['threadId'];
-        $converted['content'] = $this->convertHtml($threadPost['content']);
-        $converted['userId'] = $threadPost['userId'];
-        $converted['target'] = $this->getTarget($threadPost['targetType'], $threadPost['targetId']);
-        $converted['thread'] = $threadPost['thread'];
+        $converted['id']          = $threadPost['id'];
+        $converted['threadId']    = $threadPost['threadId'];
+        $converted['content']     = $this->convertHtml($threadPost['content']);
+        $converted['userId']      = $threadPost['userId'];
+        $converted['target']      = $this->getTarget($threadPost['targetType'], $threadPost['targetId']);
+        $converted['thread']      = $threadPost['thread'];
         $converted['createdTime'] = $threadPost['createdTime'];
 
         return $converted;
     }
-    
-
 
     /**
      * Announcement相关
@@ -456,7 +457,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $announcement = $event->getSubject();
 
-        $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
+        $target                 = $this->getTarget($announcement['targetType'], $announcement['targetId']);
         $announcement['target'] = $target;
 
         $this->pushCloud('announcement.create', $announcement);
@@ -467,16 +468,17 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onTestPaperReviewed(ServiceEvent $event)
     {
-        $testpaper = $event->getSubject();
-        $testpaperResult    = $event->getArgument('testpaperResult');
+        $testpaper       = $event->getSubject();
+        $testpaperResult = $event->getArgument('testpaperResult');
 
-        $testpaper['target'] = explode('-', $testpaper['target']);
+        $testpaper['target']   = explode('-', $testpaper['target']);
         $testpaperResultTarget = explode('-', $testpaperResult['target']);
+
         if (empty($testpaperResultTarget[2])) {
             return;
         }
 
-        $testpaper['target'] = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
+        $testpaper['target']          = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
         $testpaperResult['testpaper'] = $testpaper;
 
         $testpaperResult['target'] = $this->getTarget('lesson', $testpaperResultTarget[2]);
@@ -491,8 +493,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $homeworkResult = $event->getSubject();
 
-        $homework = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
-        $homework['target'] = $this->getTarget('course', $homeworkResult['courseId']);
+        $homework                   = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
+        $homework['target']         = $this->getTarget('course', $homeworkResult['courseId']);
         $homeworkResult['homework'] = $homework;
 
         $homeworkResult['target'] = $this->getTarget('lesson', $homeworkResult['lessonId']);
@@ -506,9 +508,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         switch ($type) {
             case 'course':
-                $course          = $this->getCourseService()->getCourse($id);
-                $target['title'] = $course['title'];
-                $target['image'] = $this->getFileUrl($course['smallPicture']);
+                $course               = $this->getCourseService()->getCourse($id);
+                $target['title']      = $course['title'];
+                $target['image']      = $this->getFileUrl($course['smallPicture']);
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 break;
             case 'lesson':
@@ -565,6 +567,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function convertHtml($text)
     {
         preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+
         if (empty($matches)) {
             return $text;
         }
@@ -585,13 +588,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'       => "PushNotificationOneHourJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 60 * 60,
-                'jobClass'   => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
-                'jobParams' => '',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "PushNotificationOneHourJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
+                'jobClass'        => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
+                'jobParams'       => '',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

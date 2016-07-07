@@ -41,6 +41,8 @@ define(function(require, exports, module) {
         open: function() {
             this.show();
             this.$(".file-chooser-bar").hide();
+            this.$(".file-chooser-bar").find('[data-role=placeholder]').text('');
+            this.element.closest('form').find('[name=fileId]').val('');
             this.$(".file-chooser-main").show();
             this.$(".file-chooser-uploader-tab").tab('show');
             return this;

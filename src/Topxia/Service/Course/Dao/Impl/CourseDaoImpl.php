@@ -197,8 +197,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
-        if (empty($conditions['status']) || $conditions['status'] == "") {
+        if (empty($conditions['status'])) {
             unset($conditions['status']);
+        }
+
+        if (empty($conditions['categoryIds'])) {
+            unset($conditions['categoryIds']);
+        }
+
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] .= "%";
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -235,7 +243,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('id IN ( :courseIds )')
             ->andWhere('locked = :locked')
-            ->andWhere('lessonNum > :lessonNumGT');
+            ->andWhere('lessonNum > :lessonNumGT')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
 
         if (isset($conditions['tagIds'])) {
             $tagIds = $conditions['tagIds'];

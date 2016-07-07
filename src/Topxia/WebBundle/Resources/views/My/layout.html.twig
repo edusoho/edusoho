@@ -1,6 +1,12 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{'我的学习'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}
+  {% if side_nav in ['my-teaching-courses','my-teaching-classroom','my-teaching-questions','my-teaching-discussions','my-teaching-check','my-teaching-homework-check','material-lib'] %}
+    {{'我的教学'|trans}} - {{ parent() }}
+  {% else %}
+    {{'我的学习'|trans}} - {{ parent() }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 

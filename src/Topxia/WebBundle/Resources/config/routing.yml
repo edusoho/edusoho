@@ -92,6 +92,19 @@ register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
 
+register_reset_email:
+    path: /register/email/reset/{id}/{hash}
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmail}
+
+register_reset_email_check:
+    path: /register/email/reset/check
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailCheck}
+
+register_reset_email_verify:
+    path: /register/email/reset/verify
+    defaults: { _controller: TopxiaWebBundle:Register:resetEmailVerify}
+    methods: [POST]
+
 register_email_send:
     pattern:  /register/email/send/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:emailSend }
@@ -136,10 +149,6 @@ register_analysis:
 register_captcha_num:
     path:     /captcha_num
     defaults: { _controller: TopxiaWebBundle:Register:captcha }
-
-user_import_modal:
-    pattern:  /import/modal
-    defaults: { _controller: TopxiaWebBundle:Importer:importModal }
 
 file_upload:
     pattern:  /file/upload
@@ -191,11 +200,6 @@ uploader_chunks_start:
 uploader_chunks_finish:
     pattern:  /uploader/chunks/finish
     defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
-
-uploader_mkfile:
-    pattern:  /uploader/mkfile/{fileSize}
-    defaults: { _controller: TopxiaWebBundle:Uploader:mkfile }
-    methods: [POST]
 
 uploadfile_upload:
     pattern:  /uploadfile/upload
@@ -260,10 +264,6 @@ editor_download:
     defaults: { _controller: TopxiaWebBundle:Editor:download }
     methods: [POST]
 
-liveroom_entry_waiting:
-    pattern:  /liveroom/{id}/entry_waiting
-    defaults: { _controller: TopxiaWebBundle:Liveroom:entryWaiting }
-
 liveroom_ticket:
     pattern:  /liveroom/{id}/ticket
     defaults: { _controller: TopxiaWebBundle:Liveroom:ticket }
@@ -291,14 +291,6 @@ live_classroom_url:
 live_classroom_replay_url:
     pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
-
-live_course_list:
-    pattern:  /live/list/{category}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
-
-live_course_create:
-    pattern:  /livecourse/create
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:create }
 
 live_course_manage_replay:
     pattern:  /livecourse/{id}/manage/replay
@@ -686,9 +678,14 @@ course_manage_file_status:
     pattern:  /course/manage/file/status
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
 
-course_manage_upload_course_delete_files:
-    pattern:  /course/{id}/delete/files/{type}
+course_manage_delete_materials:
+    pattern:  /course/{id}/manage/delete/materials
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
+    methods: [POST]
+
+course_manage_delete_materials_show:
+    pattern:  /course/{id}/manage/show/delete/materials
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteMaterialShow }
     methods: [POST]
 
 course_manage_upload_course_files:
@@ -698,6 +695,10 @@ course_manage_upload_course_files:
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
+
+course_manage_record:
+    pattern:  /course/{id}/manage/refund_record
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:refundRecord }
 
 course_manage_students_show:
     pattern:  /course/{courseId}/manage/students/{userId}/show
@@ -944,10 +945,12 @@ course_manage_testpaper_update:
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+    methods: [POST]
 
 course_manage_testpaper_deletes:
     pattern: /course/{courseId}/manage/testpaper/deletes
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+    methods: [POST]
 
 course_manage_testpaper_publish:
     pattern: /course/{courseId}/manage/testpaper/{id}/publish
@@ -1007,6 +1010,14 @@ course_manage_material_delete:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/material/{materialId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:delete }
     methods: [POST]
+
+course_manage_material_browser:
+    pattern:  /course/{courseId}/manage/material/browser
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:browser }
+
+course_manage_material_create:
+    pattern:  /course/{courseId}/manage/material/create
+    defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:create }
 
 course_manage_media_library:
     pattern:  /course/{id}/manage/media/library
@@ -1119,10 +1130,6 @@ cloud_search:
     pattern:  /cloud/search
     defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
 
-note_show:
-    pattern:  /note/{id}
-    defaults: { _controller: TopxiaWebBundle:CourseNote:index }
-
 settings:
     pattern:  /settings/
     defaults: { _controller: TopxiaWebBundle:Settings:profile }
@@ -1134,6 +1141,10 @@ settings_avatar:
 settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
+
+settings_avatar_crop_modal:
+    pattern:  /settings/avatar/crop/modal
+    defaults: { _controller: TopxiaWebBundle:Settings:avatarCropModal }
 
 settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner
@@ -1147,6 +1158,10 @@ settings_security:
 settings_set_pay_password:
     pattern:  /settings/set_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
+
+settings_set_password:
+    pattern:  /settings/set_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setPassword }
 
 settings_pay_password:
     pattern:  /settings/pay_password
@@ -1208,6 +1223,10 @@ settings_binds_bind_callback:
 settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
+
+settings_setup_password:
+    pattern: /settings/setup_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setupPassword }
 
 settings_setup_check_nickname:
     pattern: /settings/setup/check_nickname
@@ -1412,10 +1431,6 @@ user_learn:
 user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: TopxiaWebBundle:User:favorited }
-
-user_friend:
-    pattern:  /user/{id}/friend
-    defaults: { _controller: TopxiaWebBundle:User:friend }
 
 user_group:
     pattern:  /user/{id}/group
@@ -1670,6 +1685,7 @@ group_member:
 group_member_delete:
     pattern:  /group/member/delete/{id}
     defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
+    methods: [POST]
 group_set_admin:
     pattern:  /group/set/admin/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
@@ -1679,18 +1695,12 @@ group_remove_admin:
 group_set:
     pattern:  /group/{id}/setting/info
     defaults: { _controller: TopxiaWebBundle:Group:groupSet }
-group_transfer:
-    pattern:  /group/transferGroup/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
     pattern:  /group/{id}/setting/logoCrop
     defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
 group_logo_set:
     pattern:  /group/{id}/setting/logo
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
-group_logo_crop_set:
-    pattern:  /group/set/logo/crop/{file}/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo_crop }
 group_edit:
     pattern:  /group/info/edit/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupEdit }
@@ -1700,9 +1710,6 @@ group_backgroundlogo_set:
 group_search:
     pattern:  /group/{id}/serach
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
-group_cloud_search:
-    pattern:  /group/{id}/cloudserach
-    defaults: { _controller: TopxiaWebBundle:GroupThread:cloudSearchResult }
 group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
@@ -1797,12 +1804,6 @@ receive_coupon:
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }
-coin_order_pay_return:
-    path:     /coin/pay/return/{name}
-    defaults: { _controller: TopxiaWebBundle:Coin:payReturn }
-coin_order_pay_notify:
-    path:     /coin/pay/notify/{name}
-    defaults: { _controller: TopxiaWebBundle:Coin:payNotify }
 coin_change:
     path:     /coin/change
     defaults: { _controller: TopxiaWebBundle:Coin:change }
@@ -2033,6 +2034,10 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+esbar_my_study_center:
+    pattern:  /esbar/my/study_center
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
+
 my_cards:
     pattern:  /my/cards
     defaults: { _controller: TopxiaWebBundle:Card:index }
@@ -2065,6 +2070,20 @@ live_course_manage_lesson_replay_title_update:
     pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
+
+importer_check:
+    path: /importer/{type}/check
+    defaults: { _controller: TopxiaWebBundle:Importer:check}
+    methods: [POST]
+
+importer_import:
+    path: /importer/{type}/import
+    defaults: { _controller: TopxiaWebBundle:Importer:import}
+    methods: [POST]
+
+importer_index:
+    path: /importer/{type}/index
+    defaults: { _controller: TopxiaWebBundle:Importer:template}
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

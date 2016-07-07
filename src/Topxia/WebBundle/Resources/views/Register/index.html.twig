@@ -49,7 +49,7 @@
         <div class="form-group mbl">
           <label class="control-label required" for="register_nickname">{{'用户名'|trans}}</label>
           <div class="controls">
-            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字'|trans}}">
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'中、英文均可，最长18个英文或9个汉字'|trans}}">
             <p class="help-block"></p>
           </div>
         </div>
@@ -120,7 +120,7 @@
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         {% if app.request.get('inviteCode', '') %}
-        <input type="hidden" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
+        <input type="hidden" id="invite_code" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
         {% endif %}
 
       </form>
@@ -128,7 +128,7 @@
       {% if setting('login_bind.enabled') %}
         <div class="social-login">
           <span>
-            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path,inviteCode:inviteCode|default('')})) }}
           </span>
           <div class="line"></div>
         </div>

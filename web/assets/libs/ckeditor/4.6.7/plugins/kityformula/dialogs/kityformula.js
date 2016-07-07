@@ -1,10 +1,13 @@
 ﻿(function () {
+    "use strict";
     function KityformulaDialog(editor) {
         var isIE=!-[1,];
-        if (isIE) {
-            html='<div class="formulaOld" style="width:750px;height:350px;"><div class="tips" style="color:red;line-height:40px;">请升级您的浏览器到IE9版本及以上版本，或使用chrome浏览器使用可视化公式编辑器</div><textarea id="oldFormula" style="width:100%;height:240px;border:1px solid #ccc;"></textarea></div>';
+
+        //防止modal关闭后重新打开创建多个iframe导致BUG
+        if($("#editorContainer_"+editor.name).length > 0 ){
+            $("#editorContainer_"+editor.name).remove();
         }
-        html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="/assets/libs/ckeditor/4.6.7/plugins/kityformula/kityformula/index.html" width="780" height="500"></iframe>';
+        var html = '<iframe scrolling="no" id="editorContainer_'+editor.name+'" src="/assets/libs/ckeditor/4.6.7/plugins/kityformula/kityformula/index.html" width="780" height="500"></iframe>';
         
         return {
             title: '公式编辑器',
@@ -21,33 +24,37 @@
                 padding: 0,
                 elements: [{
                     type: "html",
-                    html:html
+                    html: html
                 }]
             }],
             onLoad: function () {
-                // alert('onLoad');
+
             },
             onShow: function () {
-                if(isIE){
-                    $("#oldFormula").val(source);
-                    return false;
-                }
                 var kfe = $("#editorContainer_"+editor.name)[0].contentWindow.kfe;
                 if(kfe){
                     kfe.execCommand( "render", '\\placeholder');
                 }
             },
             onHide: function () {
-                // alert('onHide');
+                
             },
             onOk: function () {
-
+                var source;
                 if(isIE){
                     source = $("#oldFormula").val();
                 }else{
                     var kfe = $("#editorContainer_"+editor.name)[0].contentWindow.kfe;
                     source = kfe.execCommand( "get.source" );
-                    source = kfe.replaceSpecialCharacter(source);
+                    var replaceSpecialCharacter = function(source) {
+                        var $source = source.replace(/\\cong/g,'=^\\sim')
+                            .replace(/\\varnothing/g,'\\oslash')
+                            .replace(/\\gets/g,'\\leftarrow')
+                            .replace(/\\because/g,'\\cdot_\\cdot\\cdot')
+                            .replace(/\\blacksquare/g,'\\rule{20}{20}');
+                        return $source;
+                    };
+                    source = replaceSpecialCharacter(source);
                     if ($.trim(source) == "\\placeholder"){
                         return;
                     }
@@ -57,7 +64,7 @@
                     }
                     for(var i=0;i<source.length;i++)
                     {
-                        strCode=source.charCodeAt(i);
+                        var strCode=source.charCodeAt(i);
                         if((strCode>65248)||(strCode==12288)){
                             alert("不能含有中文全角字符");
                             return false;

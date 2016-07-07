@@ -12,11 +12,12 @@ define(function(require, exports, module) {
         });
 
         esuploader.on('preupload', function(file){
-            var quality = {
+            var params = {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
-                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val()
+                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val(),
+                supportMobile: $('.video-quality-switcher').find('input[name=support_mobile]').val()
             };
-            esuploader.set('process', quality);
+            esuploader.set('process', params);
         });
 
         $el.parents('.modal').on('hidden.bs.modal', function(){

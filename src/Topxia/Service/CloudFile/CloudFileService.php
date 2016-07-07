@@ -14,6 +14,8 @@ interface CloudFileService
 
     public function delete($globalId);
 
+    public function batchDelete($globalIds);
+
     public function download($globalId);
 
     public function reconvert($globalId, $options);

@@ -10,11 +10,13 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
+
         $user = $this->getCurrentUser();
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array());
+        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks'=>$friendlyLinks));
     }
 
     public function userlearningAction()
@@ -100,6 +102,15 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:foot-navigation.html.twig', array(
             'navigations' => $navigations
         ));
+    }
+
+    public function friendlyLinkAction()
+    {
+        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
+            
+        return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
+                'friendlyLinks' => $friendlyLinks
+            ));
     }
 
     public function customerServiceAction()

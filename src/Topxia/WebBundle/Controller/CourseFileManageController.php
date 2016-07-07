@@ -13,55 +13,35 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $type = $request->query->get('type');
-        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
-
-        $conditions = array(
-            'targetType' => $type,
-            'targetId'   => $course['id']
-        );
-
-        if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
-            $course = $this->getCourseService()->getCourse($conditions['targetId']);
-
-            if ($course['parentId'] > 0 && $course['locked'] == 1) {
-                $conditions['targetId'] = $course['parentId'];
-            }
+        if ($course['parentId'] > 0 && $course['locked'] == 1) {
+            $course['id'] = $course['parentId'];
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFileCount($conditions),
+            $this->getMaterialService()->findMaterialCountGroupByFileId($course['id']),
             20
         );
 
-        $files = $this->getUploadFileService()->searchFiles(
-            $conditions,
-            'latestCreated',
-            $paginator->getOffsetCount(),
+        $files = $this->getMaterialService()->findMaterialsGroupByFileId(
+            $course['id'], 
+            $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
         );
 
-        foreach ($files as $key => $file) {
-            $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-            $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
-
-            if ($files[$key]['targetType'] == 'coursematerial') {
-                $files[$key]['useNum'] = $manageFilesUseNum;
-            } else {
-                $files[$key]['useNum'] = $useNum;
-            }
-        }
+        $files      = $this->_materialsSort($files);
+        $fileIds    = ArrayToolkit::column($files,'fileId');
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'      => $type,
-            'course'    => $course,
-            'files'     => $files,
-            'users'     => ArrayToolkit::index($users, 'id'),
-            'paginator' => $paginator,
-            'now'       => time()
+            'course'     => $course,
+            'files'      => $files,
+            'users'      => ArrayToolkit::index($users, 'id'),
+            'paginator'  => $paginator,
+            'now'        => time(),
+            'filesQuote' => $filesQuote
         ));
     }
 
@@ -81,19 +61,27 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
+        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $materialCount = $this->getMaterialService()->searchMaterialCount(
+            array(
+                'courseId' => $id,
+                'fileId'   => $fileId
+            )
+        );
+
+        if (!$materialCount) {
+            throw $this->createNotFoundException();
+        }
+        
         $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($id != $file["targetId"]) {
             throw $this->createNotFoundException();
         }
 
@@ -102,9 +90,7 @@ class CourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
-        if ($id != 0) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -112,7 +98,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -123,11 +109,7 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
@@ -138,17 +120,64 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function deleteCourseFilesAction(Request $request, $id, $type)
+    public function deleteMaterialShowAction(Request $request, $id)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $fileIds   = $request->request->get('ids');
+        $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files,'id');
+        
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course'    => $course,
+            'materials' => $materials,
+            'files'     => $files,
+            'ids'       => $fileIds
+        ));
+    }
+
+    public function deleteCourseFilesAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+ 
+            $formData = $request->request->all();
+ 
+            if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
+                foreach ($formData['ids'] as $key => $fileId) {
+                    if ($this->getUploadFileService()->canManageFile($fileId)) {
+                        $this->getUploadFileService()->deleteFile($fileId);
+                    }
+                }
+            } 
+            
+            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
+ 
+            return $this->createJsonResponse(true);
+        }
+    }
+
+    private function _materialsSort($materials)
+    {
+        if (!$materials) {
+            return array();
         }
 
-        $ids = $request->request->get('ids', array());
+        $fileIds = ArrayToolkit::column($materials,'fileId');
+        $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
 
-        $this->getUploadFileService2()->deleteFiles($ids);
+        $files     = ArrayToolkit::index($files, 'id');
+        $sortFiles = array();
+        foreach ($materials as $key => $material) {
+            if (isset($files[$material['fileId']])) {
+                $file = array_merge($material, $files[$material['fileId']]);
+                $sortFiles[$key] = $file;
+            }
+        }
 
-        return $this->createJsonResponse(true);
+        return $sortFiles;
     }
 
     protected function getCourseService()
@@ -159,11 +188,6 @@ class CourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getUploadFileService2()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getSettingService()

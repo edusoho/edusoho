@@ -110,6 +110,9 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
+      
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode : course.orgCode, inputClass: 'width-input width-input-large'} %}
+
       {% if course.type == 'live'%}
       <div id="live-plugin-url" class="form-group hidden">
           <div class="col-md-offset-2 col-md-8 controls">

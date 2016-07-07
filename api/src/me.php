@@ -239,7 +239,7 @@ $api->get('/notifications', function (Request $request) {
 );
 
 /*
-## 获取登陆im的token
+## 获取登录im的token
 GET /im/login
 
 [支持分页](global-parameter.md)

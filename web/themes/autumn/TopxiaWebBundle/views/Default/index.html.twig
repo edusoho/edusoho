@@ -3,17 +3,19 @@
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'theme/index' %}
 
+{% set consultDisplay = true %}
+
 {% block content %}
   {% set top_banner = block_show('autumn:home_top_banner')%}
 
   {% if top_banner %}
-    <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
-      <ol class="carousel-indicators"></ol>
+    <div id="autumn-carousel" class="carousel slide mbl" data-ride="carousel">
+      <ol class="carousel-indicators hidden-xs"></ol>
       <div class="carousel-inner">{{ top_banner|raw }}</div>
-      <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
+      <a class="left carousel-control hidden-xs" href="#autumn-carousel" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
-      <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
+      <a class="right carousel-control hidden-xs" href="#autumn-carousel" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
     </div>      
@@ -21,13 +23,11 @@
   
   <div class="row">
     <div class="col-md-8">
-
-      
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
         {% if classrooms %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
+              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>Latest Class</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
@@ -44,16 +44,17 @@
                       <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
                     </h3>
                     <div class="class-metas">
-                     {% if teachers %}
                       <span class="class-teacher">
-                        <i class="fa fa-user"></i>
-                        {% for teacher in teachers %}
-                          {% if loop.index <= 1 %}
-                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-                           {% endif %}
-                        {% endfor %}
+                        {% if teachers %}
+                          <i class="fa fa-user"></i>
+                          {% for teacher in teachers %}
+                            {% if loop.index <= 1 %}
+                               <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                             {% endif %}
+                          {% endfor %}
+                        {% endif %} 
                       </span>
-                    {% endif %}
+               
                       <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
                       <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -90,7 +91,7 @@
       {% if recommendCourses %}
         <div class="panel panel-autumn panel-autumn-primary">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">推荐课程 / <small>RecommendCourses</small></h2>
+            <h2 class="panel-title">推荐课程 / <small>Recommend Course</small></h2>
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
@@ -108,7 +109,7 @@
       {% if latestCourses %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">最新课程 / <small>LatestCourse</small></h2>
+            <h2 class="panel-title">最新课程 / <small>Latest Course</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('course_explore') }}">More&gt;</a>
           </div>
           <div class="panel-body">
@@ -126,7 +127,7 @@
         {% if recentLiveCourses %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">近期直播 / <small>LiveCourse</small></h2>
+              <h2 class="panel-title">近期直播 / <small>Live Course</small></h2>
               {% if recentLiveCourses|length >= 1 %}
                 <a class="pull-right more-autumn-primary" href="{{ path('live_course_explore') }}">More&gt;</a>
               {% endif %}
@@ -153,7 +154,7 @@
       {% if articles %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">最新资讯 / <small>The latest infomation</small></h2>
+            <h2 class="panel-title">最新资讯 / <small>Latest News</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('article_show') }}">More&gt;</a>
           </div>
           <div class="panel-body news">
@@ -176,7 +177,7 @@
       {% if teachers %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">讲师团 / <small>Teachers</small></h2>
+            <h2 class="panel-title">讲师团 / <small>Teacher</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('teacher') }}">More&gt;</a>
           </div>
           <div class="panel-body teachers">
@@ -206,32 +207,30 @@
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">会员专区 / <small>Member Of The Zone</small></h2>
+              <h2 class="panel-title">会员专区 / <small>Members Area</small></h2>
             </div>
             <div class="panel-body vip">
-              <ul class="row vip-lists">
+              <ul class="vip-lists">
                 {% for level in levels %}
                   {% if level %}
-                    <li class="col-sm-12">
-                      <div class="vip-item">
-                        <div class="row">
-                          <div class="col-sm-4 col-md-4">
-                            <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                            <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
-                          </div>
+                    <li class="vip-item">
+                      <div class="row">
+                        <div class="col-sm-3 vip-Img">
+                          <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                            <img class="img-responsive" src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
                           </a>
-                          <div class="col-sm-5 col-md-5">
-                            <h3>{{ level.name }}</h3>
-                            <p>{{ level.description|plain_text(40) }}</p>
-                          </div>
-                          <div class="vip-price col-sm-3 col-md-3">
-                              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                               <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name', '虚拟币')}}</h4>
-                               {% else %}
-                                <h4>¥&nbsp;{{ level.monthPrice }}</h4>
-                               {% endif %}
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
-                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <h3>{{ level.name }}</h3>
+                          <p>{{ level.description|plain_text(40) }}</p>
+                        </div>
+                        <div class="vip-price col-sm-3">
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                             <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name', '虚拟币')}}</h4>
+                             {% else %}
+                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                             {% endif %}
+                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                         </div>
                       </div>
                     </li>
@@ -249,7 +248,7 @@
         {% if groups %}
           <div class="panel panel-autumn panel-autumn-default hot-group">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最热小组</h2>
+              <h2 class="panel-title">最热小组 / <small>Hot Group</small></h2>
               <a href="{{path('group_search_group')}}" class="pull-right more-autumn-default">More&gt;</a></div>
             <div class="panel-body">
                <ul class="list-unstyled row">
@@ -288,7 +287,8 @@
     <div class="col-md-4">
       {# 在学课程 #}
       {% if app.user %}
-        {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
+        {#{% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}#}
+        {% include 'TopxiaWebBundle:Default:user-learning.html.twig' %}
       {% endif %}
       
       {# 热门标签 #}
@@ -296,7 +296,7 @@
       {% if tags %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading side-autumn-default">
-            <h2 class="panel-title">热门标签 / <small>Hot Labels</small></h2>
+            <h2 class="panel-title">热门标签 / <small>Hot Tag</small></h2>
           </div>
           <div class="panel-body">
             <div class="tag-list">
@@ -314,8 +314,8 @@
       {% set coursesRank = data('CourseRankByStudent',{'count':5}) %}
       {% if coursesRank %}
         <div class="panel panel-autumn panel-autumn-primary">
-          <div class="panel-heading">
-            <h2 class="panel-title">课程排行榜 / <small>Top10</small></h2>
+          <div class="panel-heading  side-autumn-primary">
+            <h2 class="panel-title">课程排行榜 / <small>Course Ranking</small></h2>
           </div>
           <div class="panel-body">
             <ul class="media-list courses-rank">
@@ -367,8 +367,8 @@
         {% set hotThreads = data('HotThreads', {'count':11}) %}
         {% if hotThreads %}
           <div class="panel panel-autumn panel-autumn-default hot-threads">
-            <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最热话题</h2>
+            <div class="panel-heading side-autumn-primary">
+              <h2 class="panel-title">最热话题 / <small>Hot Topic</small></h2>
             </div>
             <div class="panel-body">
               <ul class="text-list">

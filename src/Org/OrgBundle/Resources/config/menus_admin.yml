@@ -1,0 +1,9 @@
+#admin_operation_org_manage:
+#   name: 组织机构管理
+#   parent: admin_operation
+#   router_name: admin_org
+#admin_org_create:
+#   name: 添加组织机构
+#   parent: admin_operation_org_manage
+#   mode: modal
+#   group: 2

@@ -5,6 +5,7 @@ use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Point;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -941,15 +942,43 @@ class FileToolkit
         return $file;
     }
 
+    public static function remove($filepath)
+    {
+        if (empty($filepath)) {
+            throw new \RuntimeException("filepath to be deleted is empty");
+        }
+
+        $isRemoved = false;
+
+        $prefixArr = array('data/private_files', 'data/udisk', 'web/files');
+        foreach ($prefixArr as $prefix) {
+            if (strpos($filepath, trim($prefix))) {
+                $fileSystem = new Filesystem();
+                if ($fileSystem->exists($filepath)) {
+                    $fileSystem->remove($filepath);
+                }
+
+                $isRemoved = true;
+                break;
+            }
+        }
+
+        if (!$isRemoved) {
+            $prefixString = join(' || ', $prefixArr);
+            throw new \RuntimeException("{$filepath} is not allowed to be deleted without prefix {$prefixString}");
+        }
+    }
+
     public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
     {
         $image = $rawImage->copy();
+
         $image->crop(new Point($x, $y), new Box($width, $height));
         if ($resizeWidth > 0 && $resizeHeight > 0) {
             $image->resize(new Box($resizeWidth, $resizeHeight));
         }
 
-        $image->save($targetPath, array('quality' => 100));
+        $image->save($targetPath);
 
         return $image;
     }
@@ -957,7 +986,7 @@ class FileToolkit
     public static function resize($image, $targetPath, $resizeWidth = 0, $resizeHeight = 0)
     {
         $image->resize(new Box($resizeWidth, $resizeHeight));
-        $image->save($targetPath, array('quality' => 100));
+        $image->save($targetPath);
         return $image;
     }
 
@@ -990,18 +1019,52 @@ class FileToolkit
         return $filePaths;
     }
 
+    public static function reduceImgQuality($fullPath, $level = 10)
+    {
+        $extension = strtolower(substr(strrchr($fullPath, '.'), 1));
+
+        $options = array();
+
+        if (in_array($extension, array('jpg', 'jpeg'))) {
+            $options['jpeg_quality'] = $level * 10;
+        } elseif ($extension == 'png') {
+            $options['png_compression_level'] = $level;
+        } else {
+            return $fullPath;
+        }
+
+        try {
+            $imagine = new Imagine();
+            $image   = $imagine->open($fullPath)->save($fullPath, $options);
+        } catch (\Exception $e) {
+            throw new \Exception("该文件为非图片格式文件，请重新上传。");
+        }
+    }
+
     public static function getImgInfo($fullPath, $width, $height)
     {
         try {
             $imagine = new Imagine();
             $image   = $imagine->open($fullPath);
         } catch (\Exception $e) {
-            throw new Exception("该文件为非图片格式文件，请重新上传。");
+            throw new \Exception("该文件为非图片格式文件，请重新上传。");
         }
 
         $naturalSize = $image->getSize();
         $scaledSize  = $naturalSize->widen($width)->heighten($height);
 
         return array($naturalSize, $scaledSize);
+    }
+
+    public static function downloadImg($url, $savePath)
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $imageData = curl_exec($curl);
+        curl_close($curl);
+        $tp = @fopen($savePath, 'w');
+        fwrite($tp, $imageData);
+        fclose($tp);
+        return $savePath;
     }
 }

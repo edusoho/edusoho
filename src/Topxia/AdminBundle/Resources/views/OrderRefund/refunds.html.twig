@@ -40,10 +40,11 @@
   <table class="table table-striped table-hover" id="refunds-table">
     <thead>
       <tr>
-        <th width="50%">退款订单</th>
+        <th width="40%">退款订单</th>
         <th>订单成交金额</th>
         <th>退款人</th>
         <th>退款状态</th>
+        <th>操作人</th>
         <th>操作</th>
       </tr>
     </thead>
@@ -72,6 +73,13 @@
               {{ dict_text('refundStatus:html', refund.status) }}
               {% if refund.status == 'success' %}
                 <div class="text-sm text-muted">实退{{ refund.actualAmount }}元</div>
+              {% endif %}
+            </td>
+            <td>
+              {% if refund.operator != 0 %}
+                {{ admin_macro.user_link(users[refund.operator]) }}
+              {% else %}
+                --
               {% endif %}
             </td>
             <td>

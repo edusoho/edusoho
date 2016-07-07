@@ -55,7 +55,7 @@
 }
 
 .balloon-filelist-heading {
-  position: relative;
+  padding: 8px 10px;
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
@@ -65,28 +65,33 @@
 
 }
 
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
+}
+
 .balloon-filelist .file-name {
-  margin-right: 250px;
-  padding: 8px;
+  display: inline-block;
+  width: 40%;
 }
 
 .balloon-filelist .file-size {
-  position: absolute;
-  top: 0px;
-  right: 150px;
-  width: 100px;
-  text-align: right;
-  padding: 8px;
+  display: inline-block;
+  width: 20%;
 }
 
 .balloon-filelist .file-status {
+  display: inline-block;
+  width: 18%;
+}
+.balloon-filelist .file-manage {
+  display: inline-block;
+  width: 20%;
+  z-index: 9999;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 120px;
-  text-align: left;
-  padding: 8px;
-
 }
 
 .balloon-filelist ul {
@@ -98,9 +103,11 @@
   overflow-y: scroll;
 }
 
+
 .balloon-filelist ul li {
   position: relative;
   border-bottom: 1px solid #ddd;
+  padding: 8px 10px;
 }
 
 .balloon-dnd {
@@ -160,11 +167,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
+  right: -40px;
   bottom: 0;
 }
 
 .balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
   background: rgba(59, 181, 33, 0.18);
   float: left;
   height: 100%;
@@ -172,6 +180,7 @@
 
 </style>
 
+{% set lesson = lesson|default(null) %}
 <div id="media-choosers">
 
   <div class="file-chooser" id="video-chooser" style="display:none;"
@@ -199,7 +208,9 @@
           </a>
         </li>
 
-        <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
+        <li {% if lesson and lesson.mediaSource != 'self' %}class="active"{% endif %}>
+          <a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
@@ -247,18 +258,22 @@
 
         <div class="tab-pane" id="video-chooser-course-file">
             <div id="file-browser-video" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'video'}) }}"
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'video'}) }}"
             data-empty="暂无视频文件，请先上传。">
             </div>
         </div>
 
         <div class="tab-pane" id="video-chooser-import-pane">
+          {% if lesson  %}
+            <div>原地址：{{ lesson.mediaUri }}</div>
+          {% endif %}
           <div class="input-group">
             <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" >
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
             </span>
           </div>
+          <strong class="text-danger">* 腾讯和网易的视频不支持手机端播放</strong>
         </div>
       </div>
     </div>
@@ -337,7 +352,7 @@
 
         <div class="tab-pane" id="audio-chooser-course-file">
           <div id="file-browser-audio" data-role="course-file-browser"
-          data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+          data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
         </div>
 
       </div>
@@ -407,7 +422,7 @@
 
         <div class="tab-pane" id="ppt-chooser-course-file">
             <div id="file-browser-ppt" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
         </div>
 
       </div>
@@ -475,7 +490,7 @@
 
         <div class="tab-pane" id="document-chooser-course-file">
             <div id="file-browser-document" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
         </div>
 
       </div>
@@ -544,7 +559,7 @@
 
         <div class="tab-pane" id="flash-chooser-course-file">
             <div id="file-browser-flash" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
+            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
         </div>
 
       </div>

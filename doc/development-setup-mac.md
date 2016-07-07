@@ -22,16 +22,22 @@
     sudo brew tap josegonzalez/homebrew-php 
 
 五、安装php 
+    
+    5.1 php55
 
-    sudo brew install php55 --with-debug --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear php5 --with-cli --with-curl --with-fpm --with-intl --with-mcrypt --with-mysqlnd_ms --with-gd
+    brew install php55 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd
+
+    5.2 php56
+
+    brew install php56 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd --without-apache 
 
 ## 下载EduSoho源码
 
     git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
 
-注：/var/www/edusoho-dev 为本地要放的目录,如果要修改，下面出现的目录相应变化
+    注：/var/www/edusoho-dev 为本地要放的目录,如果要修改，下面出现的目录相应变化
 
-由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
+    由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
 
 ## 进入程序目录
 
@@ -45,8 +51,8 @@
 
     php composer.phar install
 
-由于众所周知的原因，这一步也会花点时间，如果中途由于网络超时，只要重新执行上面的命令就可以了，会继续install的。
-在最后一步会问你数据库的设置，如下：
+    由于众所周知的原因，这一步也会花点时间，如果中途由于网络超时，只要重新执行上面的命令就可以了，会继续install的。
+    在最后一步会问你数据库的设置，如下：
 
     Some parameters are missing. Please provide them.
     database_driver (pdo_mysql):    

@@ -19,7 +19,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $createdUserIds = array();
 
             foreach ($result['data'] as &$cloudFile) {
-                $file = $this->getUploadFileService()->getThinFileByGlobalId($cloudFile['no']);
+                $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
 
                 if (!empty($file)) {
                     $createdUserIds[]           = $file['createdUserId'];
@@ -127,17 +127,25 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                 $courseIds = array('0');
             }
 
-            $lessonFiles   = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('courselesson', $courseIds);
-            $materialFiles = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('coursematerial', $courseIds);
-            $globalIds     = ArrayToolkit::column(array_merge($lessonFiles, $materialFiles), 'globalId');
+            $courseMaterials = $this->getMaterialService()->searchMaterials(
+                array('courseIds' => $courseIds), 
+                array('createdTime','DESC'),
+                0, PHP_INT_MAX
+            );
+
+            $conditions        = array();
+            $conditions['ids'] = ArrayToolkit::column($courseMaterials,'fileId');
+
+            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $globalIds = ArrayToolkit::column($materials, 'globalId');
 
             return $globalIds;
         } elseif ($searchType == 'user') {
-            $users      = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, 999);
+            $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, PHP_INT_MAX);
 
-            $userIds    = ArrayToolkit::column($users, 'id');
+            $userIds = ArrayToolkit::column($users, 'id');
 
-            $userIds = empty($userIds) ? array(-1) : $userIds;
+            $userIds    = empty($userIds) ? array(-1) : $userIds;
             $localFiles = $this->getUploadFileService()->searchFiles(
                 array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
             );
@@ -158,7 +166,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->edit($file['id'], $fields);
+            $result = $this->getUploadFileService()->update($file['id'], $fields);
             return array('success' => true);
         }
 
@@ -182,9 +190,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->deleteFile(array('globalId' => $globalId));
     }
 
+    public function batchDelete($globalIds)
+    {
+        if (empty($globalIds)) {
+            return false;
+        }
+
+        foreach ($globalIds as $globalId) {
+            $this->delete($globalId);
+        }
+    }
+
     public function getByGlobalId($globalId)
     {
-        return $this->getCloudFileImplementor()->get($globalId);
+        return $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
     }
 
     public function player($globalId)
@@ -231,7 +250,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService2');
+        return $this->createService('File.UploadFileService');
     }
 
     protected function getUploadFileTagService()
@@ -251,6 +270,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getCloudFileImplementor()
     {
-        return $this->createService('File.CloudFileImplementor2');
+        return $this->createService('File.CloudFileImplementor');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 }

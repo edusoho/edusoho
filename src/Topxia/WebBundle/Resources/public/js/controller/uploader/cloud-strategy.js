@@ -19,7 +19,6 @@ define(function(require, exports, module) {
             uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
             uploaderWidget.uploader.option('chunked', true);
             uploaderWidget.uploader.option('chunkSize', 1024*1024);
-            uploaderWidget.uploader.option('chunkRetry', 2);
 
 
             var startUrl = uploaderWidget.get('uploadProxyUrl') + '/chunks/start';
@@ -66,6 +65,16 @@ define(function(require, exports, module) {
 
         uploadAccept: function(object, ret){
             
+        },
+
+        /**
+         *
+         * @param lastPercentage    上一次进度
+         * @param currentPercentage 当前进度
+         * @returns {boolean}
+         */
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

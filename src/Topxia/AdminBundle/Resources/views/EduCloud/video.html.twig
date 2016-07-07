@@ -5,7 +5,7 @@
 
 {% block main %}
 
-  <style>
+<style>
 .webuploader-container {
   position: relative;
 }
@@ -70,6 +70,14 @@
 .balloon-uploader-body {
   position: relative;
 
+}
+
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
 }
 
 .balloon-filelist .file-name {
@@ -172,6 +180,7 @@
 }
 
 .balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
   background: rgba(59, 181, 33, 0.18);
   float: left;
   height: 100%;
@@ -251,10 +260,23 @@
 
       <div class="row form-group">
         <div class="col-md-3 control-label">
-          <label for="cloud_bucket" >云视频Bucket</label>
+          <label for="cloud_bucket">云视频Bucket</label>
         </div>
         <div class="controls col-md-8 radios">
           <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="support_mobile">手机浏览器MP4视频</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('support_mobile', {'1':'开启', '0':'关闭'}, storageSetting.support_mobile) }}
+          <div class="help-block">
+            MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；<br/>
+            开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；<br/>
+            <span style="color: red">注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。</span>
+          </div>
         </div>
       </div>
     <div class="row form-group">

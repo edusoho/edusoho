@@ -31,10 +31,13 @@ class ArrayToolkit
         return $array;
     }
 
-    public static function requireds(array $array, array $keys)
+    public static function requireds(array $array, array $keys, $strictMode = false)
     {
         foreach ($keys as $key) {
             if (!array_key_exists($key, $array)) {
+                return false;
+            }
+            if($strictMode && (is_null($array[$key]) || $array[$key] === "" || $array[$key] === 0)){
                 return false;
             }
         }
@@ -134,5 +137,45 @@ class ArrayToolkit
         }
 
         return $filtered;
+    }
+
+    public static function trim($array){
+        if (!is_array($array)) { 
+            return $array;
+        }
+
+        foreach($array as $key => $value) {
+            if (is_array($value)){
+                $array[$key] = ArrayToolkit::trim($value);
+            } elseif(is_string($value)) {
+                $array[$key] = trim($value);
+            }
+        }
+        
+        return $array;
+    }
+
+    public static function every($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && !$value){
+                return false;
+            }else if(is_callable($callback) && !$callback($value)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function some($array, $callback=null)
+    {
+        foreach ($array as $value){
+            if(is_null($callback) && $value){
+                return true;
+            }else if(is_callable($callback) && $callback($value)){
+                return true;
+            }
+        }
+        return false;
     }
 }

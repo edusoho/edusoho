@@ -24,7 +24,6 @@ define(function(require, exports, module) {
             self.uploader.option('method', 'POST');
             self.uploader.option('chunked', true);
             self.uploader.option('chunkSize', 1024*1024*5);
-            self.uploader.option('chunkRetry', 2);
             self.uploader.option('sendAsBinary', true);
             self.uploader.option('threads', 5);
 
@@ -127,6 +126,16 @@ define(function(require, exports, module) {
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
                 object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders[etagKey].replace(/\"/g, '')});
             }
+        },
+
+        /**
+         *
+         * @param lastPercentage    上一次进度
+         * @param currentPercentage 当前进度
+         * @returns {boolean}
+         */
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

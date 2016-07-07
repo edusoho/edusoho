@@ -18,6 +18,8 @@ interface MaterialLibService
 
     public function batchShare($ids);
 
+    public function unShare($id);
+
     public function download($id);
 
     public function reconvert($globalId, $options);

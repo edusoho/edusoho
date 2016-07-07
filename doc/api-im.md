@@ -1,6 +1,6 @@
 # 云服务IM API
 
-## 获取登陆im的token
+## 获取登录im的token
 
 ```
 GET /im/login

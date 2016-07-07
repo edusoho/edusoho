@@ -141,16 +141,31 @@ class LiveCourseController extends BaseController
 
     public function replayListAction()
     {
+        $publishedCourseIds = $this->findPublishedLiveCourseIds();
+
         $liveReplayList = $this->getCourseService()->searchLessons(array(
             'endTimeLessThan' => time(),
             'type'            => 'live',
             'copyId'          => 0,
-            'status'          => 'published'
+            'status'          => 'published',
+            'courseIds'       => $publishedCourseIds
         ), array('startTime', 'DESC'), 0, 10);
 
         return $this->render('TopxiaWebBundle:LiveCourse:live-replay-list.html.twig', array(
             'liveReplayList' => $liveReplayList
+
         ));
+    }
+
+    private function findPublishedLiveCourseIds()
+    {
+        $conditions = array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => 0
+        );
+        $publishedCourses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        return ArrayToolkit::column($publishedCourses, 'id');
     }
 
     public function liveCourseListAction(Request $request)
@@ -412,8 +427,9 @@ class LiveCourseController extends BaseController
             return $this->createJsonResponse($resultList);
         }
 
-        $lesson          = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lesson["isEnd"] = intval(time() - $lesson["endTime"]) > 0;
+        $lesson              = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
+        $lesson["canRecord"] = $this->_canRecord($lesson['mediaId']);
 
         $client = new EdusohoLiveClient();
 
@@ -462,6 +478,7 @@ class LiveCourseController extends BaseController
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
+                $item["canRecord"] = $this->_canRecord($item['mediaId']);
                 $courseItems[$key] = $item;
             }
         }
@@ -574,6 +591,13 @@ class LiveCourseController extends BaseController
         }
 
         return $courses;
+    }
+
+    private function _canRecord($mediaId)
+    {
+        $client = new EdusohoLiveClient();
+
+        return $client->isAvailableRecord($mediaId);
     }
 
     protected function getCourseService()

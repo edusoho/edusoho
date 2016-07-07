@@ -96,7 +96,7 @@ class CourseLessonController extends BaseController
         $tryLookTime               = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (empty($lesson['free']) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
@@ -274,7 +274,7 @@ class CourseLessonController extends BaseController
         }
 
         if ($json['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
@@ -363,7 +363,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -444,7 +444,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -489,7 +489,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -534,7 +534,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -698,16 +698,13 @@ class CourseLessonController extends BaseController
             $lessonLearns = array();
         }
 
-        $testpaperIds = array();
-        array_walk($items, function ($item, $key) use (&$testpaperIds) {
-            if ($item['type'] == 'testpaper') {
-                array_push($testpaperIds, $item['mediaId']);
-            }
-        }
-
-        );
+        $testpaperIds = ArrayToolkit::column(array_filter($items, function($item){
+            return $item['type'] == 'testpaper';
+        }), 'mediaId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        ;
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items'              => $items,
@@ -826,7 +823,7 @@ class CourseLessonController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getTestpaperService()

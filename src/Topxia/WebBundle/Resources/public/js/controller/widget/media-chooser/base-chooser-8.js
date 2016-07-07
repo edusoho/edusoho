@@ -66,14 +66,21 @@ define(function(require, exports, module) {
         open: function() {
             this.element.find(".file-chooser-bar").hide();
             this.element.find(".file-chooser-main").show();
-            this.element.find(".file-chooser-tabs > li").removeClass('active');
-            this.element.find(".file-chooser-uploader-tab").tab('show');
+
+            if (this.element.find(".file-chooser-tabs > li.active").length == 0) {
+                this.element.find(".file-chooser-uploader-tab").tab('show');
+            } else {
+                var $activeTab = this.element.find(".file-chooser-tabs > li.active");
+                this.element.find(".file-chooser-tabs > li").removeClass('active');
+                $activeTab.find("a").tab('show');
+            }
+            
             return this;
         },
 
         close: function() {
             this._destoryUploader();
-            this.element.find(".file-chooser-tabs > li.active").removeClass('active');
+            //this.element.find(".file-chooser-tabs > li.active").removeClass('active');
 
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
@@ -194,6 +201,10 @@ define(function(require, exports, module) {
                 if(self.getProcess){
                     uploader.set('process', self.getProcess());
                 }
+            });
+
+            uploader.on('file.remove', function (file) {
+                self._isUploading = false;
             });
 
             this.uploader = uploader;

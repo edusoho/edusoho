@@ -6,6 +6,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MaterialServiceTest extends BaseTestCase
 {   
+    public function testUploadMaterial()
+    {
+        //$this->getServiceKernel()->uploadMaterial($material);
+    }
+
     public function testAddMaterial()
     {
 

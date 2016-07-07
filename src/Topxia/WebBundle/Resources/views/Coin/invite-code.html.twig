@@ -20,8 +20,18 @@
       {% if setting('invite.promoted_user_value')|default(false)  %}
         {% trans with {'%promoted_user_value%': inviteSetting.promoted_user_value} %}，TA注册后将获得%promoted_user_value%元优惠券{% endtrans %}
       {% endif %}
+
       {% if setting('invite.promote_user_value')|default(false) %}
-        {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}，TA在消费后您将获得%promote_user_value%元优惠券{% endtrans %}
+        ，
+        {% if setting('invite.get_coupon_setting')|default(false) %}
+          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}
+            TA在消费后您将获得%promote_user_value%元优惠券
+          {% endtrans %}
+        {% else %}
+          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}   
+            同时您将获得%promote_user_value%元优惠券
+          {% endtrans %}
+        {% endif %}
       {% endif %}
     {{'。'|trans}}
     {% else %}

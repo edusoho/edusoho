@@ -127,4 +127,19 @@ class Paginator {
         }
         return $pages;
     }
+
+    public static function toArray(Paginator $paginator)
+    {
+         return array(
+            'firstPage' => $paginator->getFirstPage(),
+            'currentPage'=> $paginator->getCurrentPage(),
+            'firstPageUrl' => $paginator->getPageUrl($paginator->getFirstPage()),
+            'previousPageUrl' => $paginator->getPageUrl($paginator->getPreviousPage()),
+            'pages' => $paginator->getPages(),
+            'pageUrls' => array_map(function ($page) use($paginator){ return $paginator->getPageUrl($page);}, $paginator->getPages()),
+            'lastPageUrl' => $paginator->getPageUrl($paginator->getLastPage()),
+            'lastPage' => $paginator->getLastPage(),
+            'nextPageUrl' => $paginator->getPageUrl($paginator->getNextPage()),
+        );
+    }
 }

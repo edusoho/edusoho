@@ -97,4 +97,45 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
+
+    public function searchNavigationCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchNavigations($conditions, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy('sequence', 'ASC')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (empty($conditions['orgId'])) {
+            unset($conditions['orgId']);
+        }
+
+        if (isset($conditions['likeOrgCode'])) {
+            unset($conditions['orgCode']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'org')
+            ->andWhere('name = :name')
+            ->andWhere('type = :type')
+            ->andWhere('isOpen = :isOpen')
+            ->andWhere('isNewWin =:isNewWin')
+            ->andWhere('orgId = :orgId')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
+        return $builder;
+    }
 }

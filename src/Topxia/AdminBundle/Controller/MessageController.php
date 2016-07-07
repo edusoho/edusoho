@@ -11,29 +11,35 @@ class MessageController extends BaseController
     public function indexAction(Request $request)
     {
         $fields     = $request->query->all();
+
         $conditions = array(
             'content'   => '',
             'nickname'  => '',
             'startDate' => 0,
-            'endDate'   => time()
+            'endDate'   => 0,
         );
 
-        if (!empty($fields)) {
-            $conditions = $this->convertConditions($fields);
+        $conditions = array_merge($conditions, $fields);
+
+        $conditions = $this->convertConditions($fields);
+        if(isset($conditions['fromIds']) && empty($conditions['fromIds'])){
+            $paginator = new Paginator($request, 0, 20);
+            $messages = array();
+        }else{
+            $paginator = new Paginator(
+                $request,
+                $this->getMessageService()->searchMessagesCount($conditions),
+                20
+            );
+
+            $messages = $this->getMessageService()->searchMessages(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
         }
 
-        $paginator = new Paginator(
-            $request,
-            $this->getMessageService()->searchMessagesCount($conditions),
-            20
-        );
-
-        $messages = $this->getMessageService()->searchMessages(
-            $conditions,
-            null,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
 
         $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
         $usersToId   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
@@ -60,35 +66,24 @@ class MessageController extends BaseController
     protected function convertConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
-            $userConditions['nickname'] = trim($conditions['nickname']);
-
+            $conditions['fromIds']= "";
+            
+            $userConditions = array('nickname' => trim($conditions['nickname']));
             $userCount = $this->getUserService()->searchUserCount($userConditions);
-
             if ($userCount) {
                 $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
             }
+            
         }
 
         unset($conditions['nickname']);
-
-        if (empty($conditions['content'])) {
-            unset($conditions['content']);
-        }
-
-        if (empty($conditions['startDate'])) {
-            unset($conditions['startDate']);
-        }
-
-        if (empty($conditions['endDate'])) {
-            unset($conditions['endDate']);
-        }
-
-        if (isset($conditions['startDate'])) {
+      
+        if (!empty($conditions['startDate'])  ) {
             $conditions['startDate'] = strtotime($conditions['startDate']);
         }
 
-        if (isset($conditions['endDate'])) {
+        if (!empty($conditions['endDate'])) {
             $conditions['endDate'] = strtotime($conditions['endDate']);
         }
 

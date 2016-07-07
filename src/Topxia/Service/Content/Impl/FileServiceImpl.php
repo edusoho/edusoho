@@ -33,7 +33,7 @@ class FileServiceImpl extends BaseService implements FileService {
 	 */
 	public function getFileCount($group = null) {
 		if (empty($group)) {
-			return $this->getFileDao->findFileCount();
+			return $this->getFileDao()->findFileCount();
 		}
 
 		$group = $this->getGroupDao()->findGroupByCode($group);
@@ -64,7 +64,10 @@ class FileServiceImpl extends BaseService implements FileService {
 		}
 		$record = array();
 		$record['userId'] = $user['id'];
-		$record['groupId'] = $group['id'];
+
+		if(!empty($group)){
+			$record['groupId'] = $group['id'];
+		}
 		// @todo fix it.
 		$record['mime'] = '';
 		// $record['mime'] = $file->getMimeType();

@@ -2,6 +2,8 @@
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'index' %}
 
+{% set consultDisplay = true %}
+
 {% block content %}
 
 <div class="es-row-wrap container-gap">
@@ -22,7 +24,7 @@
             <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
           </div>
           <div class="es-box-body">
-            <ul class="home-class-list">
+            <ul class="home-class-list clearfix">
             {% for classroom in classrooms %}
             {% set teachers = classroom.users|default(null) %}
             {% if loop.index <= 5%}
@@ -139,32 +141,30 @@
               <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
             </div>
             <div class="es-box-body">
-              <ul class="row vip-lists">
+              <ul class="vip-lists">
                   {% for level in levels %}
-                    <li class="col-sm-12">
-                      <div class="vip-item">
-                        <div class="row">
-                          <div class="col-sm-4 col-md-4">
-                            <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                            <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
-                            </a>
-                          </div>
+                    <li class="vip-item">
+                      <div class="row">
+                        <div class="vip-img col-sm-3 ">
+                          <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                          <img class="img-responsive" src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
                           </a>
-                          <div class="col-sm-5 col-md-5">
-                            <h3>{{ level.name }}</h3>
-                            <p>{{ level.description|plain_text(40) }}</p>
-                          </div>
-                          <div class="vip-price col-sm-3 col-md-3">
-                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            <h4> {{  set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name')}}</h4>
-                           {% else %}
-                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
-                         {% endif %}
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
-                          </div>
                         </div>
-                      </div>      
-                    </li>
+                        </a>
+                        <div class="vip-intro col-sm-6">
+                          <h3>{{ level.name }}</h3>
+                          <p>{{ level.description|plain_text(40) }}</p>
+                        </div>
+                        <div class="vip-price col-sm-3">
+                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                          <h4> {{  set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name')}}</h4>
+                         {% else %}
+                          <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                       {% endif %}
+                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                        </div>
+                      </div>
+                    </li>      
                   {% endfor %}
               </ul>
             </div>

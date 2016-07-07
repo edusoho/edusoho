@@ -63,22 +63,23 @@
     </div>
   </div>
   <div id="material-lib-items-panel">
-    <p>
+    
       <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
       data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="上传资料"   data-placement="bottom" >上传资料
       </a>
       <a class="btn btn-info js-manage-batch-btn" href="javascript:;">批量管理
       </a>
-      <a class="btn btn-info js-batch-tag-btn" style="display:none;" data-role="batch-tag">添加标签
-      </a>
-      <a class="btn btn-info js-batch-share-btn" style="display:none;" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
-      </a>
-      <a class="btn btn-danger js-batch-delete-btn" style="display:none;" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_batch_delete') }}"  >删除
-      </a>
-      <label class="checkbox-inline" style="display:none;" data-role="batch-manage" >
-        <input type="checkbox"  data-role="batch-select"/> 全选
-      </label>
-    </p>
+      <span id="material-lib-batch-btn-bar" style="display:none;">
+        <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">添加标签
+        </a>
+        <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
+        </a>
+        <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >删除
+        </a>
+        <label class="checkbox-inline" data-role="batch-manage" >
+          <input type="checkbox"  data-role="batch-select"/> 全选
+        </label>  
+      </span>
     <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
@@ -92,11 +93,12 @@
       <div class="modal-body">
         <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
           <div class="form-group" id="form">
+            <div class="col-md-2 control-label">
+              <label for="tags">标签</label>
+            </div>
 
-
-            <label class="col-md-2 control-label">标签</label>
             <div class="col-md-8 controls">
-              <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}"name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans}}">
+              <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}" name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans}}">
               <div class="help-block">{{'标签来自网校课程标签，由网校管理员统一管理。'|trans}}</div>
             </div>
 

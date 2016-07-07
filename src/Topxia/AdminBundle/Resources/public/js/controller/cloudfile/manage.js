@@ -5,11 +5,13 @@ define(function(require, exports, module) {
     require('jquery.select2');
     var DetailWidget = require('./detail');
     var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
 
     exports.run = function() {
 
         var MaterialWidget = Widget.extend({
             attrs: {
+                model: '',
                 renderUrl: ''
             },
             events: {
@@ -23,13 +25,32 @@ define(function(require, exports, module) {
                 'click .js-search-type option': 'onClickSearchTypeBtn',
                 'click .js-refresh-btn': 'onClickRefreshBtn',
                 'change .js-process-status-select': 'onClickProcessStatusBtn',
-                'change .js-use-status-select': 'onClickUseStatusBtn'
+                'change .js-use-status-select': 'onClickUseStatusBtn',
+                'click .js-manage-batch-btn': 'onClickManageBtn',
+                'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
+                'click .js-batch-share-btn': 'onClickShareBatchBtn',
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
             },
             setup: function() {
+                this.set('model','normal');
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
                 this.renderTable();
                 this._initHeader();
                 this._initSelect2();
+                this.initTagForm();
+            },
+            initTagForm: function(event)
+            {
+                var $form = $("#tag-form");
+                var validator = new Validator({
+                    element: $form
+                });
+
+                validator.addItem({
+                    element: '#tags',
+                    required: true,
+                    display: '标签'
+                });
             },
             onClickNav: function(event)
             {
@@ -91,20 +112,15 @@ define(function(require, exports, module) {
             },
             onClickDeleteBtn: function(event)
             {
-                if (confirm('真的要删除该资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    this._loading();
-                    $.ajax({
-                        type:'POST',
-                        url:$target.data('url'),
-                    }).done(function(){
-                        Notify.success('删除成功!');
-                        self.renderTable(true);
-                    }).fail(function(){
-                        Notify.danger('删除失败!');
-                    });
-                }
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+
+                ids.push($target.data('id'));
+                
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
             },
             onClickReconvertBtn: function(event)
             {
@@ -176,9 +192,98 @@ define(function(require, exports, module) {
                     $table.find('tbody').html(resp);
                     var $temp = $table.find('.js-paginator');
                     self.element.find('[data-role=paginator]').html($temp.html());
+
+                    if (self.get('model') == 'edit') {
+                        $('#materials-form').find('[data-role=batch-item]').show();
+                        $("[data-role=batch-select]").attr("checked",false);
+                    }
                 }).fail(function(){
                     self._loaded_error();
                 });
+            },
+            onClickManageBtn: function(event)
+            {
+                var self = this;
+                var mode = self.get('model');
+                var $target = $(event.currentTarget);
+
+                if(mode == "normal") {
+                    this.set('model','edit');
+                  
+                    $target.siblings('.btn').show();
+                    $target.siblings('[data-role=batch-manage]').show();
+                    $('#materials-table').find('.batch-item').show();
+                    $target.html('完成管理');
+                } else {
+                    this.set('model','normal');
+                    var self = this;
+                  
+                    $target.siblings('.btn').hide();
+                    $target.siblings('[data-role=batch-manage]').hide();
+                    $('#materials-table').find('.batch-item').hide();
+                    $target.html('批量管理');
+                }
+            },
+            onClickDeleteBatchBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+                $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
+                    ids.push(this.value);
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要删除的资源!');
+                    return;
+                }
+
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
+
+            },
+            onClickShareBatchBtn: function(event)
+            {
+                if (confirm('确定要分享这些资源吗？')) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    var ids = [];
+                    this.element.find('[data-role=batch-item]:checked').each(function() {
+                        ids.push($(this).data('fileId'));
+                    });
+                    if(ids == ""){
+                        Notify.danger('请先选择你要分享的资源!');
+                        return;
+                    }
+
+                    $.post($target.data('url'),{"ids":ids},function(data){
+                        if(data){
+                            Notify.success('分享资源成功');
+                            self.renderTable();
+                        } else {
+                            Notify.danger('分享资源失败');
+                            self.renderTable();
+                        }
+                        this.element.find('[data-role=batch-item]').show();
+
+                    });
+                }
+            },
+            onClickTagBatchBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+                this.element.find('[data-role=batch-item]:checked').each(function() {
+                    ids.push($(this).data('fileId'));
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要操作的资源!');
+                    return;
+                }
+
+                $("#select-tag-items").val(ids);
+                $("#tag-modal").modal('show');
             },
             _loading: function()
             {
@@ -198,6 +303,56 @@ define(function(require, exports, module) {
             },
             _initSelect2: function()
             {
+                $('#tags').select2({
+                    ajax: {
+                        url: $('#tags').data('url') + '#',
+                        dataType: 'json',
+                        quietMillis: 100,
+                        data: function(term, page) {
+                            return {
+                                q: term,
+                                page_limit: 10
+                            };
+                        },
+                        results: function(data) {
+                            var results = [];
+                            $.each(data, function(index, item) {
+                                results.push({
+                                    id: item.name,
+                                    name: item.name
+                                });
+                            });
+                            return {
+                                results: results
+                            };
+                        }
+                    },
+                    initSelection: function(element, callback) {
+                        var data = [];
+                        $(element.val().split(",")).each(function() {
+                            data.push({
+                                id: this,
+                                name: this
+                            });
+                        });
+                        callback(data);
+                    },
+                    formatSelection: function(item) {
+                        return item.name;
+                    },
+                    formatResult: function(item) {
+                        return item.name;
+                    },
+                    width: 400,
+                    multiple: true,
+                    placeholder: "请输入标签",
+                    multiple: true,
+                    createSearchChoice: function() {
+                        return null;
+                    },
+                    maximumSelectionSize: 20
+                });
+
                 $("#js-course-search").select2({
                     placeholder: "选择课程",
                     minimumInputLength: 1,
@@ -336,6 +491,26 @@ define(function(require, exports, module) {
         window.materialWidget = new MaterialWidget({
             element: '#materials-form'
         });
+
+        $('#modal').on('click','.file-delete-form-btn', function(event){
+            
+            var $form = $('#file-delete-form');
+
+            $(this).button('loading').addClass('disabled');
+            $.post($form.attr('action'),$form.serialize(),function(data){
+                if(data){
+                    $('#modal').modal('hide');
+                    Notify.success('删除资源成功');
+                    materialWidget.renderTable(true);
+                    $("input[name = 'batch-select']").attr("checked",false);
+                }
+                $('#materials-form').find('[data-role=batch-item]').show();
+                $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
+            });
+        });
+
+        var $panel = $('#materials-form');
+        require('../../../../topxiaweb/js/util/batch-select')($panel);
 
     }
 

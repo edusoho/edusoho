@@ -68,6 +68,10 @@ define(function(require, exports, module) {
 
         uploadAccept: function(object, ret){
 
+        },
+
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

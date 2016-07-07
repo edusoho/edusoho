@@ -11,8 +11,10 @@
   <br>
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      
       <div class="form-group">
-        <select style="max-width:150px;" class="form-control" name="categoryId">
+        <select class="form-control" style="width:150px;" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
         </select>
       </div>
@@ -36,7 +38,6 @@
         <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
       </div>
       <button class="btn btn-primary">搜索</button>
-
     </form>
   </div>
 
@@ -44,7 +45,9 @@
     <thead>
     <tr>
       <th>编号</th>
-      <th width="30%">名称</th>
+      <th width="25%">名称</th>
+      <th>价格</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th width="">连载状态</th>
       {% if filter == 'classroom' %}
       <th>所在{{setting("classroom.name")|default("班级")}}</th>
@@ -67,7 +70,7 @@
       {% endfor %}
     </tbody>
   </table>
-
+   {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
   {{ web_macro.paginator(paginator) }}
 
 {% endblock %}

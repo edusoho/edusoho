@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_edu_cloud_search' %}
-{% set script_controller = 'setting/cloud' %}
+{% set script_controller = 'setting/search' %}
 
 {% block main %}
 
@@ -18,7 +18,7 @@
         <h1 class="text-muted">网络问题，无法连接{{ 'EduSoho'|copyright_less }}开放云平台</h1>
       </div>
     {% else %}
-      <div class="row form-group">
+      <div class="row form-group search-button">
         {% if data.status == 'unconnect' %}
           <div class="col-md-2">
             <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>

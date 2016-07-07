@@ -38,13 +38,14 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
                 if ($file['type'] == "document" && $file['convertStatus'] == "none") {
-                    $convertHash = $this->getUploadFileService()->reconvertFile(
-                        $file['id'],
-                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                    $convertHash = $this->getUploadFileService()->reconvertFile($file['id'],
+                        array(
+                            'callback' => $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                        )
                     );
                 }
             }
@@ -59,7 +60,7 @@ class CourseLessonManageController extends BaseController
         $file = null;
 
         if ($lesson['mediaId']) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['media'] = array(
@@ -73,11 +74,12 @@ class CourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
+            $name            = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
                 'source' => $lesson['mediaSource'],
-                'name'   => $lesson['mediaName'],
+                'name'   => $name,
                 'uri'    => $lesson['mediaUri']
             );
         }
@@ -113,6 +115,11 @@ class CourseLessonManageController extends BaseController
             'features'       => $features,
             'draft'          => $draft
         ));
+    }
+
+    protected function hasSelfMedia($lesson)
+    {
+        return !in_array($lesson['type'], array('text', 'live', 'testpaper')) && $lesson['mediaSource'] == 'self';
     }
 
     public function createTestPaperAction(Request $request, $id)
@@ -225,7 +232,7 @@ class CourseLessonManageController extends BaseController
         $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -245,7 +252,7 @@ class CourseLessonManageController extends BaseController
         $file   = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -285,7 +292,6 @@ class CourseLessonManageController extends BaseController
 
         //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
         $this->getCourseService()->deleteLesson($course['id'], $lessonId);
-        $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
         if ($this->isPluginInstalled('Homework')) {
             //如果安装了作业插件那么也删除作业和练习
@@ -335,14 +341,6 @@ class CourseLessonManageController extends BaseController
 
         if (!empty($mediaIds)) {
             $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
-
-            foreach ($files as $file) {
-                $lessonIds = $mediaMap[$file['id']];
-
-                foreach ($lessonIds as $lessonId) {
-                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
-                }
-            }
         }
 
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
@@ -425,7 +423,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
 
@@ -469,23 +467,36 @@ class CourseLessonManageController extends BaseController
 
     public function fileStatusAction(Request $request, $id)
     {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
         $courseItems = $this->getCourseService()->getCourseItems($id);
 
         if (empty($courseItems)) {
             return $this->createJsonResponse(array());
         }
 
-        $mediaIds = array_unique(ArrayToolkit::column($courseItems, 'mediaId'));
-
         $fileIds = array();
 
-        foreach ($mediaIds as $medisId) {
-            if (intval($medisId) > 0) {
-                $fileIds[] = intval($medisId);
+        foreach ($courseItems as $key => $item) {
+            if ($item['itemType'] == 'lesson' && in_array($item['type'], array('ppt', 'document', 'video'))) {
+                $fileIds[] = $item['mediaId'];
             }
         }
 
-        return $this->createJsonResponse($this->getUploadFileService()->findCloudFilesByIds($fileIds));
+        $fileIds = array_unique($fileIds);
+
+        $pageSize     = 20;
+        $totalPageNum = (count($fileIds) + $pageSize - 1) / $pageSize;
+
+        $files = array();
+
+        for ($i = 0; $i < $totalPageNum; $i++) {
+            $partFileIds = array_slice($fileIds, $i * $pageSize, $pageSize);
+            $cloudFiles  = $this->getUploadFileService()->findFilesByIds($partFileIds, 1);
+            $files       = array_merge($files, $cloudFiles);
+        }
+
+        return $this->createJsonResponse($files);
     }
 
     protected function secondsToText($value)
@@ -527,7 +538,7 @@ class CourseLessonManageController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getQuestionService()

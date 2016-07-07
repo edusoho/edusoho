@@ -5,11 +5,11 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CategoryBuilder
 {
-	public function buildChoices($groupCode, $indent = '　')
-	{
+    public function buildChoices($groupCode, $indent = '　')
+    {
         $group = $this->getCategoryService()->getGroupByCode($groupCode);
         if (empty($group)) {
-        	return array();
+            return array();
         }
 
         $choices = array();
@@ -20,11 +20,10 @@ class CategoryBuilder
         }
 
         return $choices;
-	}
+    }
 
     private function getCategoryService()
     {
         return ServiceKernel::instance()->createService('Taxonomy.CategoryService');
     }
 }
-    

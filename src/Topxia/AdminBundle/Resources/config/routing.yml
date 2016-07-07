@@ -27,13 +27,30 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
-admin_dashboard:
-    pattern:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
+
+admin_dictionary:
+    pattern:  /dictionary
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:index }
+
+admin_dictionary_create:
+    pattern: /dictionary/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
+
+admin_dictionary_delete:
+    pattern:  /Dictionary/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:delete }
+    methods: [POST]
+
+admin_dictionary_edit:
+    pattern:  /dictionary/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:edit }
+
+admin_dictionary_name_check:
+    pattern:  /dictionary/{id}/name_check
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:checkName }
 
 admin_content_create:
     pattern:  /content/create/{type}
@@ -174,6 +191,10 @@ admin_user_show:
 admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
+
+admin_user_org_update:
+    path: /user/{id}/org/update
+    defaults: { _controller: TopxiaAdminBundle:User:orgUpdate}
 
 admin_user_lock:
     pattern:  /user/{id}/lock
@@ -416,9 +437,15 @@ admin_operation_mobile_select:
     pattern:  /operation/mobile/select
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
 
+admin_operation_mobile_customization_upgrade:
+    pattern:  /operation/mobile/customization_upgrade
+    defaults: { _controller: TopxiaAdminBundle:Mobile:customizationUpgrade }
+    methods: [POST]
+
 admin_discovery_column_delete:
     pattern:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
+    methods: [POST]
 
 admin_discovery_column_edit:
     pattern:  /discovery_column/{id}/edit
@@ -683,6 +710,10 @@ admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
+admin_setting_developer_sync_file_data:
+    pattern:  /setting/developer/sync_upload_file
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:syncUploadFile }
+
 admin_setting_post_num_rules:
     pattern:  /setting/post_num_rules
     defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
@@ -739,6 +770,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_logs_action_dicts:
+    pattern:  /setting/logs/logActions
+    defaults: { _controller: TopxiaAdminBundle:Log:logActions }
+    
 admin_cloud_access:
     pattern:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }
@@ -835,9 +870,9 @@ admin_cloud_file_preview:
     pattern:  /cloud_file/{globalId}/preview
     defaults: { _controller: TopxiaAdminBundle:CloudFile:preview }
 
-admin_cloud_file_play:
-    pattern:  /cloud_files/{globalId}/play
-    defaults: { _controller: TopxiaAdminBundle:CloudFile:player }
+# admin_cloud_file_play:
+#     pattern:  /cloud_files/{globalId}/play
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:player }
 
 admin_cloud_file_reconvert:
     pattern: /cloud_file/{globalId}/reconvert
@@ -850,6 +885,40 @@ admin_cloud_file_download:
 admin_cloud_file_delete:
     pattern: /cloud_file/{globalId}/delete
     defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
+    methods:  [POST]
+
+admin_cloud_file_batch_delete:
+    pattern: /cloud_file/delete/batch
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:batchDelete }
+    methods:  [POST]
+
+admin_cloud_file_delete_modal_show:
+    pattern: /cloud_file/delete/show
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:deleteShow }
+
+admin_cloud_file_tag_show:
+    pattern: /cloud_file/tag/show
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:batchTagShow }
+
+# global_file_hls_playlist:
+#     pattern:  /global_file/{globalId}/playlist/{token}.m3u8
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:playlist }
+
+# global_file_hls_stream:
+#     pattern:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:stream }
+
+# global_file_hls_clef:
+#     pattern:  /global_file/{globalId}/clef/{token}
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:clef }
+
+# global_file_ppt:
+#     pattern:  /global_file/{globalId}/ppt
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:ppt }
+
+# global_file_document:
+#     pattern:  /global_file/{globalId}/document
+#     defaults: { _controller: TopxiaAdminBundle:CloudFile:document }
 
 admin_app_installed:
     pattern:  /app/installed/{postStatus}
@@ -942,7 +1011,10 @@ admin_category_delete:
     pattern:  /category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
-
+admin_category_sort:
+    pattern:  /category/sort
+    defaults: { _controller: TopxiaAdminBundle:Category:sort }
+    methods: [POST]
 
 admin_file:
     pattern:  /file
@@ -1035,6 +1107,10 @@ admin_article_category_delete:
     pattern:  /article/category/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:ArticleCategory:delete }
     methods: [POST]
+admin_article_category_sort:
+    pattern:  /article/category/sort
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategory:sort }
+    methods: [POST]
 
 admin_article_setting:
     pattern: /setting/article
@@ -1108,6 +1184,14 @@ admin_invite_set:
     pattern:  /setting/invite
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
 
+admin_invite_coupon:
+    pattern: /invite/{filter}/coupon/
+    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'} 
+
+admin_invite_coupon_query:
+    pattern: /invite/coupon/query/
+    defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon }
+
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
@@ -1120,6 +1204,7 @@ admin_groupThread:
 admin_groupThread_batch_delete:
     pattern:  /group/batchDeleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
+    methods:  [POST]
 admin_group_close:
     pattern:  /group/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
@@ -1147,6 +1232,7 @@ admin_group_thread_open:
 admin_group_thread_delete:
     pattern:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+    methods:  [POST]
 admin_group_transfer:
     pattern:  /group/transfer/{groupId}
     defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }
@@ -1344,6 +1430,10 @@ admin_edu_cloud:
 admin_edu_cloud_sms:
     pattern:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
+
+admin_edu_cloud_sms_status:
+    pattern:  /setting/sms/status
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsStatus }
 
 admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms

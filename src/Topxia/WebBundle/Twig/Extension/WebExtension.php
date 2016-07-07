@@ -51,7 +51,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('at', array($this, 'atFilter')),
             new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
-            new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp'))
+            new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
+            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter'))
         );
     }
 
@@ -111,7 +112,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
-
         );
     }
 
@@ -374,6 +374,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'classroom';
         $names[] = 'materiallib';
         $names[] = 'sensitiveword';
+        $names[] = 'org';
 
         $paths = array(
             'common' => 'common',
@@ -896,6 +897,28 @@ class WebExtension extends \Twig_Extension
         return sprintf('%.1f', $currentValue).$currentUnit;
     }
 
+    public function numberFilter($number)
+    {
+        if ($number <= 1000) {
+            return $number;
+        }
+
+        $currentValue = $currentUnit = null;
+        $unitExps     = array('千' => 3, '万' => 4, '亿' => 8);
+
+        foreach ($unitExps as $unit => $exp) {
+            $divisor      = pow(10, $exp);
+            $currentUnit  = $unit;
+            $currentValue = $number / $divisor;
+
+            if ($currentValue < 10) {
+                break;
+            }
+        }
+
+        return sprintf('%.0f', $currentValue).$currentUnit;
+    }
+
     public function loadObject($type, $id)
     {
         $kernel = ServiceKernel::instance();
@@ -1136,40 +1159,22 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if ($coinSettings['coin_enabled'] == 1 && $coinSettings['price_type'] == 'coin') {
-            if ($order['amount'] == 0 && $order['coinAmount'] == 0) {
-                $default = "无";
-            } else {
-                if ($order['amount'] > 0) {
-                    if ($order['payment'] == 'wxpay') {
-                        $default = "微信支付";
-                    } elseif ($order['payment'] == 'heepay') {
-                        $default = "网银支付";
-                    } elseif ($order['payment'] == 'quickpay') {
-                        $default = "快捷支付";
-                    } else {
-                        $default = "支付宝";
-                    }
-                }
-
-                $default = "余额支付";
-            }
-        }
-
         if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
-                $default = "余额支付";
+                $default = '余额支付';
             } else {
                 if ($order['amount'] == 0) {
                     $default = "无";
                 } elseif ($order['payment'] == 'wxpay') {
-                    $default = "微信支付";
+                    $default = '微信支付';
                 } elseif ($order['payment'] == 'heepay') {
-                    $default = "网银支付";
+                    $default = '网银支付';
                 } elseif ($order['payment'] == 'quickpay') {
-                    $default = "快捷支付";
+                    $default = '快捷支付';
+                } elseif ($order['payment'] == 'outside') {
+                    $default = '站外支付';
                 } else {
-                    $default = "支付宝";
+                    $default = '支付宝';
                 }
             }
         }

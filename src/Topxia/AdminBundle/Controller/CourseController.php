@@ -11,13 +11,17 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
-
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
 
         if ($filter == 'classroom') {
             $conditions["parentId_GT"] = 0;
+        }
+
+        if ($filter == 'vip') {
+            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions["parentId"]              = 0;
         }
 
         if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
@@ -35,6 +39,7 @@ class CourseController extends BaseController
         if (isset($conditions["creator"]) && $conditions["creator"] == "") {
             unset($conditions["creator"]);
         }
+        $conditions = $this->fillOrgCode($conditions);
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
@@ -306,6 +311,8 @@ class CourseController extends BaseController
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
+        $conditions = $this->fillOrgCode($conditions);
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
@@ -359,8 +366,9 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        $conditions = $this->fillOrgCode($conditions);
 
+        $count     = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
         $courses = $this->getCourseService()->searchCourses(

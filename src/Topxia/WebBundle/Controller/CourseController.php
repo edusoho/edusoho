@@ -25,17 +25,17 @@ class CourseController extends CourseBaseController
 
         unset($conditions['code']);
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'type'           => 'all',
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
+        if ($filter['price'] == 'free') {
             $coinSetting = $this->getSettingService()->get("coin");
             $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
             $priceType   = "RMB";
@@ -51,20 +51,20 @@ class CourseController extends CourseBaseController
             }
         }
 
-        if ($fliter['type'] == 'live') {
+        if ($filter['type'] == 'live') {
             $conditions['type'] = 'live';
         }
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if ($fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if ($filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -163,7 +163,7 @@ class CourseController extends CourseBaseController
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'orderBy'                  => $orderBy,
             'paginator'                => $paginator,
             'categories'               => $categories,

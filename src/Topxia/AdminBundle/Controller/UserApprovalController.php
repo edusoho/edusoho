@@ -11,20 +11,16 @@ class UserApprovalController extends BaseController
 {
     public function approvalsAction(Request $request, $approvalStatus)
     {
-        $fields = $request->query->all();
-
+        $fields     = $request->query->all();
+        $user       = $this->getCurrentUser();
         $conditions = array(
             'roles'          => '',
             'keywordType'    => '',
             'keyword'        => '',
             'approvalStatus' => $approvalStatus
         );
-
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
+        $conditions = $this->fillOrgCode($conditions);
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
@@ -43,9 +39,12 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus
         );
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+        if (!empty($conditions['startDateTime'])) {
             $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovalTime']   = strtotime($conditions['endDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         }
 
         $userApprovalcount = 0;

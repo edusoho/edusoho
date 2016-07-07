@@ -179,7 +179,6 @@ function install_step3($init_data = 0)
         }
 
         $admin = $init->initAdmin($_POST);
-
         if (empty($init_data)) {
             $init->initTag();
             $init->initCategory();
@@ -190,6 +189,7 @@ function install_step3($init_data = 0)
             $init->initThemes();
             $init->initSetting($admin);
             $init->initCrontabJob();
+            $init->initOrg();
         } else {
             $init->deleteKey();
             $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
@@ -418,9 +418,10 @@ class SystemInit
 {
     public function initAdmin($user)
     {
-        $user              = $user              = $this->getUserService()->register($user);
-        $user['roles']     = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
-        $user['currentIp'] = '127.0.0.1';
+        $user['emailVerified'] = 1;
+        $user                  = $user                  = $this->getUserService()->register($user);
+        $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
+        $user['currentIp']     = '127.0.0.1';
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -538,7 +539,7 @@ EOD;
                 'username' => 'user@example.com',
                 'password' => '',
                 'from'     => 'user@example.com',
-                'name'     => $sitename
+                'name'     => $_POST['sitename']
             ),
             'payment'        => array(
                 'enabled'        => 0,
@@ -833,6 +834,15 @@ EOD;
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
+    public function initOrg()
+    {
+        $org = array(
+            'name' => '全站',
+            'code' => 'FullSite'
+        );
+        $this->getOrgService()->createOrg($org);
+    }
+
     public function initLockFile()
     {
         file_put_contents(__DIR__.'/../../app/data/install.lock', '');
@@ -881,6 +891,11 @@ EOD;
     protected function getNavigationService()
     {
         return ServiceKernel::instance()->createService('Content.NavigationService');
+    }
+
+    protected function getOrgService()
+    {
+        return ServiceKernel::instance()->createService('Org:Org.OrgService');
     }
 
     protected function postRequest($url, $params)

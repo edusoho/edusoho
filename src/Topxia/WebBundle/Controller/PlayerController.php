@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -12,7 +13,7 @@ class PlayerController extends BaseController
     public function showAction(Request $request, $id, $context = array())
     {
         try {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($id);
+            $file = $this->getUploadFileService()->getFullFile($id);
 
             if (empty($file)) {
                 throw $this->createNotFoundException();
@@ -31,6 +32,14 @@ class PlayerController extends BaseController
             }
 
             $url = $this->getPlayUrl($id, $context);
+
+            $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+            if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                $player = "local-video-player";
+                $api    = CloudAPIFactory::create("leaf");
+                $result = $api->get("/resources/{$file['globalId']}/player");
+                $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
+            }
         } catch (\Exception $e) {
         }
 
@@ -39,32 +48,9 @@ class PlayerController extends BaseController
             'url'              => isset($url) ? $url : null,
             'context'          => $context,
             'player'           => $player,
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+            'agentInWhiteList' => $agentInWhiteList
         ));
     }
-
-// protected function getPlayUrl($file)
-
-// {
-
-//     if (!in_array($file["type"], array("audio", "video"))) {
-
-//         throw $this->createAccessDeniedException();
-
-//     }
-
-//     $token = $this->makeToken('hls.playlist', $file['globalId']);
-
-//     $params = array(
-
-//         'globalId' => $file['globalId'],
-
-//         'token'    => $token['token']
-
-//     );
-
-//     return $this->generateUrl('global_file_hls_playlist', $params, true);
-    // }
 
     public function playlistAction(Request $request, $globalId, $token)
     {
@@ -230,16 +216,13 @@ class PlayerController extends BaseController
 
         if ($file['storage'] == 'cloud') {
             if (!empty($file['globalId'])) {
-                $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
-            }
-
-            if ($file['status'] != 'ok') {
-                return '';
+                $file = $this->getUploadFileService()->getFullFile($file['id']);
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $context['hideBeginning'] = $this->haveHeadLeader();
+                    $hideBeginning            = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
+                    $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
                     $token                    = $this->makeToken('hls.playlist', $file['id'], $context);
                     $params                   = array(
                         'id'    => $file['id'],
@@ -329,15 +312,14 @@ class PlayerController extends BaseController
         return $response;
     }
 
-    protected function haveHeadLeader()
+    protected function isHiddenVideoHeader($isHidden = false)
     {
         $storage = $this->setting("storage");
-
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+            return false;
+        } else {
             return true;
         }
-
-        return false;
     }
 
     protected function getTokenService()

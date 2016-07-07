@@ -38,28 +38,28 @@ class ClassroomController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
         }
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
+        if ($filter['price'] == 'free') {
             $conditions['price'] = '0.00';
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if (!$fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if (!$filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
@@ -108,7 +108,7 @@ class ClassroomController extends BaseController
             'categoryArray'            => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'levels'                   => $levels,
             'orderBy'                  => $orderBy
         ));
@@ -136,8 +136,15 @@ class ClassroomController extends BaseController
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'student', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'auditor', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -779,6 +786,15 @@ class ClassroomController extends BaseController
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
+
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
+
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
@@ -945,8 +961,8 @@ class ClassroomController extends BaseController
         }
 
         $classrooms            = array();
-        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($teacherClassrooms, $headTeacherClassrooms);
 
@@ -1168,5 +1184,10 @@ class ClassroomController extends BaseController
     protected function getClassroomPlanService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 }

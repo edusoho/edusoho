@@ -81,7 +81,8 @@ class PayCenterController extends BaseController
                 'sn'       => $order['sn'],
                 'status'   => 'success',
                 'amount'   => $order['amount'],
-                'paidTime' => time()
+                'paidTime' => time(),
+                'payment'  => 'coin'
             );
             list($success, $order) = $this->getPayCenterService()->pay($payData);
 
@@ -240,7 +241,6 @@ class PayCenterController extends BaseController
         } else {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
-
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
@@ -262,12 +262,6 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
-        if ($request->getMethod() == 'GET') {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->query->all());
-        } else {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        }
-
         if ($name == 'wxpay') {
             $returnXml   = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
@@ -277,14 +271,14 @@ class PayCenterController extends BaseController
             $returnArray = $request->request->all();
         }
 
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
+
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
-
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
         }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
@@ -382,38 +376,6 @@ class PayCenterController extends BaseController
         }
 
         return $this->createJsonResponse(false);
-    }
-
-    public function orderQueryAction(Request $request)
-    {
-        $orderId        = $request->query->get('orderId');
-        $order          = $this->getOrderService()->getOrder($orderId);
-        $paymentRequest = $this->createPaymentRequest($order, array(
-            'returnUrl' => '',
-            'notifyUrl' => '',
-            'showUrl'   => ''
-        ));
-        $returnXml   = $paymentRequest->orderQuery();
-        $returnArray = $this->fromXml($returnXml);
-
-        if ($returnArray['trade_state'] == 'SUCCESS') {
-            $payData               = array();
-            $payData['status']     = 'success';
-            $payData['payment']    = 'wxpay';
-            $payData['amount']     = $order['amount'];
-            $payData['paidTime']   = time();
-            $payData['sn']         = $returnArray['out_trade_no'];
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-            $processor             = OrderProcessorFactory::create($order["targetType"]);
-
-            if ($success) {
-                return $this->createJsonResponse(true);
-            } else {
-                return $this->createJsonResponse(false);
-            }
-        } else {
-            return $this->createJsonResponse(false);
-        }
     }
 
     public function resultNoticeAction(Request $request)

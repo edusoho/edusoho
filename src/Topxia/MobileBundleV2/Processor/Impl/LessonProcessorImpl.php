@@ -205,14 +205,18 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $course  = $this->controller->getCourseService()->getCourse($courseId);
         $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
         $lessons = $this->controller->filterItems($lessons);
-
         if ($user->isLogin()) {
             $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
         } else {
             $learnStatuses = null;
         }
-
-        $files   = $this->getUploadFiles($courseId);
+        // $files = $this->getUploadFiles($courseId);
+        $fileIds = ArrayToolkit::column($lessons, 'mediaId');
+        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+        $files = array_map(function ($file) {
+            $file['convertParams'] = null; //过滤convertParams防止移动端报错
+            return $file;
+        }, $files);
         $lessons = $this->filterLessons($lessons, $files);
         return array(
             "lessons" => array_values($lessons),
@@ -252,7 +256,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime', 'DESC'),
             0,
             100
         );
@@ -260,9 +264,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $uploadFiles = array();
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2']        = json_decode($file['metas2'], true) ?: array();
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
             unset($file["metas"]);
             unset($file["metas2"]);
             unset($file["hashId"]);
@@ -413,7 +414,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         if ($mediaSource == 'self') {
-            $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
@@ -542,7 +543,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getPPTLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_ppt', '获取ppt课时失败!');
@@ -610,7 +611,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');

@@ -140,11 +140,11 @@
 }
 
 @font-face {font-family: "esicon";
-  src: url('font/iconfont.eot'); /* IE9*/
-  src: url('font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('font/iconfont.woff') format('woff'), /* chrome、firefox */
-  url('font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('font/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('font/es-icon.eot'); /* IE9*/
+  src: url('font/es-icon.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('font/es-icon.woff') format('woff'), /* chrome、firefox */
+  url('font/es-icon.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('font/es-icon.svg#es-icon') format('svg'); /* iOS 4.1- */
 }
 
 .esicon {
@@ -1870,7 +1870,6 @@ ol.sortable-list li.placeholder,
   border: 1px dashed #ccc;
   list-style: none;
 }
-
 tr.placeholder {
   display: block;
   background: red;
@@ -1880,13 +1879,52 @@ tr.placeholder {
   border: none;
 }
 tr.placeholder:before {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-left-color: red;
-    margin-top: -5px;
-    left: -5px;
-    border-right: none;
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-left-color: red;
+  margin-top: -5px;
+  left: -5px;
+  border-right: none;
+}
+.sortable-list .sort-handle{
+  cursor: move !important;
+}
+.list-table {
+  padding: 0;
+}
+.list-table .row {
+  margin-left: 0px; 
+}
+.list-table>.th {
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+.list-table-striped>.tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+.list-table>.th, .list-table>.tr{
+  border-top: 1px solid #ddd;
+  margin: 0;
+}
+.list-table .td {
+  line-height: 45px;
+  height: 45px;
+}
+.list-table-tree-icon {
+  display: inline-block;
+  width: 14px;
+}
+.treegrid-expander {
+  cursor: pointer !important;
+}
+
+.form-group .select2-container .select2-choice {
+  height: 34px;
+  line-height: 34px;
+}
+.form-group .select2-search input, .form-group .select2-search-choice-close, .form-group .select2-container .select2-choice abbr, .form-group .select2-container .select2-choice .select2-arrow b {
+  background-size: 60px 50px!important;
 }

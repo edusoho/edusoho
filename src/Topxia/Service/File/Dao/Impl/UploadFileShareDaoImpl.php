@@ -49,6 +49,7 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
     public function searchShareHistories(array $conditions, array $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime','updatedTime'));
         $builder = $this->createShareHistoryQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -66,13 +67,13 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
             throw $this->createDaoException('Insert file share error.');
         }
 
-        return $this->getConnection()->lastInsertId();
+        return $this->getShare($this->getConnection()->lastInsertId());
     }
 
     public function updateShare($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        return $id;
+        return $this->getShare($id);
     }
 
     protected function createShareHistoryQueryBuilder($conditions)
