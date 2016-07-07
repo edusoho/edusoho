@@ -276,6 +276,7 @@ CREATE TABLE `announcement` (
   `content` text NOT NULL COMMENT '公告内容',
   `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
   `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+  `copyId` INT(11) NOT NULL DEFAULT '0' COMMENT '复制的公告ID',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
   PRIMARY KEY (`id`)
