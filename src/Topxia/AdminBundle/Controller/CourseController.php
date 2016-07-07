@@ -63,7 +63,7 @@ class CourseController extends BaseController
         );
 
         $classrooms = array();
-
+        $vips       = array();
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
@@ -71,6 +71,11 @@ class CourseController extends BaseController
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        } elseif ($filter == 'vip') {
+            if ($this->isPluginInstalled('Vip')) {
+                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
+                $vips = ArrayToolkit::index($vips, 'id');
             }
         }
 
@@ -95,7 +100,8 @@ class CourseController extends BaseController
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
             'default'        => $default,
             'classrooms'     => $classrooms,
-            'filter'         => $filter
+            'filter'         => $filter,
+            'vips'           => $vips
         ));
     }
 
@@ -584,5 +590,10 @@ class CourseController extends BaseController
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }
