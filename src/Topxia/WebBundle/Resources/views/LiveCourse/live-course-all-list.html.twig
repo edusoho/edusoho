@@ -9,7 +9,7 @@
       </div>
       <div class="form-group">
         <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
-          <option value="">会员课程</option>
+          <option value="">{{'会员课程'|trans}}</option>
           {% for level in levels if level %}
             <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
           {% endfor %}
@@ -49,7 +49,6 @@
             {% endif %}
           </div>
 
-       
 
           <div class="metas">
             <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ course.studentNum }}</span>
@@ -66,16 +65,16 @@
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
 
             {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-warning" target="_blank">进入直播</a>
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-warning" target="_blank">{{'进入直播'|trans}}</a>
             {% else %}
-              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary" target="_blank">查看回放</a>
+              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary" target="_blank">{{'查看回放'|trans}}</a>
             {% endif %}
 
           </div>
         </div>
       </div>
     {% else %}
-      <div class="empty">暂无直播课程</div>
+      <div class="empty">{{'暂无直播课程'|trans}}</div>
     {% endfor %}
 
     {{ web_macro.paginator(paginator) }}

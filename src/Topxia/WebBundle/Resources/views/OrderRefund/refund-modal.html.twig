@@ -21,10 +21,10 @@
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> {{'申请退款'|trans}} <span class="text-muted text-sm">{{'（'|trans}}{{'购买时的价格：'|trans}}{{ order.amount }}{{'元'|trans}}{{'）'|trans}}</span></label>
+            <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> {{'申请退款'|trans}} <span class="text-muted text-sm">{{'（购买时的价格：%amount%元）'|trans({'%amount%':order.amount})}}</span></label>
           </div>
           {% if maxRefundDays > 0 and refundOverdue %}
-            <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>
+            <div class="alert alert-warning">{{'已经超出了退款期限%maxRefundDays%天，不能申请退款。'|trans({'%maxRefundDays%':maxRefundDays})}}</div>
           {% endif %}
         </div>
       </div>

@@ -27,6 +27,6 @@
     {% endif %}
   </div>
 {% else %}
-  <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}</div>
+  <div class="empty">{{'暂无%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}</div>
 {% endif %}
 {% endblock %}

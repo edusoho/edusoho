@@ -11,13 +11,13 @@
 		{% if not member %}
       <div class="es-piece">
         <div class="piece-header">
-          课程介绍
+          {{'课程介绍'|trans}}
         </div>
         <div class="piece-body p-lg clearfix">
           {% if course.about %}
             {{ course.about|raw }}
           {% else %}
-            <div class="text-muted">暂无课程简介</div>
+            <div class="text-muted">{{'暂无课程简介'|trans}}</div>
           {% endif %}
         </div>
       </div>
@@ -25,7 +25,7 @@
       {% if course.goals %}
         <div class="es-piece">
           <div class="piece-header">
-            课程目标
+            {{'课程目标'|trans}}
           </div>
           <div class="piece-body">
             <ul class="piece-body-list">
@@ -42,7 +42,7 @@
       {% if course.audiences %}
         <div class="es-piece">
           <div class="piece-header">
-            适合人群
+            {{'适合人群'|trans}}
           </div>
           <div class="piece-body">
             <ul class="piece-body-list">

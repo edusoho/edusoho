@@ -38,7 +38,7 @@
     {% endif %}
 
     {% if setting('course.custom_chapter_enabled')|default(true) %}
-      课时 <span class="number">{{ lesson.number }}</span>：
+      {{'课时'|trans}} <span class="number">{{ lesson.number }}</span>：
     {% endif %}
 
     {% if lesson.free == 1 %}
@@ -61,12 +61,12 @@
     {% endif %}
 
     {% if lesson.giveCredit > 0 %}
-      <small class="text-muted">({{ lesson.giveCredit }}{{'学分'|trans}})</small>
+      <small class="text-muted">({{'%giveCredit%学分'|trans({'%giveCredit%': lesson.giveCredit })}})</small>
     {% endif %}
 
     {% if lesson.requireCredit > 0 %}
       <small class="text-muted">
-        (需{{ lesson.requireCredit }}学分)
+        ({{'需%giveCredit%学分'|trans({'%giveCredit%': lesson.giveCredit })}})
       </small>
     {% endif %}
 
@@ -74,11 +74,11 @@
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}
-        <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
+        <span class="text-warning">({{'正在等待'|trans}}{{ mediaTypeName }}{{'格式转换'|trans}})</span>
       {% elseif mediaStatus == 'doing' %}
-        <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
+        <span class="text-info">({{'正在转换'|trans}}{{ mediaTypeName }}{{'格式'|trans}})</span>
       {% elseif mediaStatus == 'error' %}
-        <span class="text-danger">({{ mediaTypeName }}格式转换失败)</span>
+        <span class="text-danger">({{ mediaTypeName }}{{'格式转换失败'|trans}})</span>
       {% endif %}
     {% endif  %}
 
@@ -132,7 +132,7 @@
           {% if  file.storage|default(null) == 'cloud' %}
           <li class="mark-manage" style="display:none;">
             <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
-            <span class="glyphicon glyphicon-list prs"></span>弹题管理
+            <span class="glyphicon glyphicon-list prs"></span>{{'弹题管理'|trans}}
             </a>
           </li>
           <li class="divider mark-manage-divider" style="display:none;"></li>

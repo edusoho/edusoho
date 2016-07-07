@@ -8,7 +8,7 @@
 
   <div class="homework-question-fill question-fill-inputs">
     {% for index,answer in question.answer %}
-      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="{% if itemResult.answer[index]|default("") %} {{ itemResult.answer[index] }}  {% endif %}" />
+      <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="{{'填空(%index%)答案，请填在这里'|trans({'%index%': loop.index})}}" value="{% if itemResult.answer[index]|default("") %} {{ itemResult.answer[index] }}  {% endif %}" />
     {% endfor %}
   </div>
 {% endblock %}

@@ -2,8 +2,8 @@
 {% block title %}{{'小组'|trans}} {{ parent() }}{% endblock %}
 {% block content %}
   <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
-    <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页'|trans) }}</a></li>
-    <li class="active"><a href="{{path('group')}}">{{setting('group.name', '小组主页'|trans)}}</a></li>
+    <li><a href="{{path('homepage')}}">{{'%name%'|trans({'%name%': homepage.name,|default('首页'|trans)}) }}</a></li>
+    <li class="active"><a href="{{path('group')}}">{{'%name%'|trans({'name': group.name,|default ('小组主页'|trans)})}}</a></li>
   </ol>
   <div class="row">
     <div class="col-md-9">

@@ -8,7 +8,7 @@
 
   <div class="announcement-detail clearfix">
   	<div>{{ announcement.content|raw }}</div>
-		<div class="text-muted pull-right mtm">{{'发表于'|trans}} {{ announcement.createdTime | date('Y-m-d H:i') }}</div>
+		<div class="text-muted pull-right mtm">{{'发表于%createdTime%'|trans({'%createdTime%': announcement.createdTime | date('Y-m-d H:i') })}}</div>
 	</div>
 
 {% endblock %}

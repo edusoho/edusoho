@@ -221,9 +221,18 @@
               </ul>
             </div>
           </div>
-          <div class="balloon-uploader-footer">
-            <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
-            <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>
+
+          <div class="alert alert-info">
+            <ul>
+              <li>{{'支持常见文档、图片、音视频、压缩包文件格式。'|trans}}</li>
+              {% if storageSetting.upload_mode == 'cloud' %}
+
+                <li>{{'文件将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
+                  {% else %}
+                <li>{{'视频将上传到'|trans}}<strong>{{'网站服务器'|trans}}</strong>{{'，如需使用%Edusoho%云视频,点击'|trans({'%Edusoho%': 'EduSoho'|copyright_less})}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</li>
+
+              {% endif %}
+            </ul>
           </div>
         </div>
       </div>

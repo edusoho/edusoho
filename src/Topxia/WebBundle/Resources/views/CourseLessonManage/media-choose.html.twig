@@ -228,14 +228,14 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
-                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-                  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+                  <li>{{'支持'|trans|raw}}<strong>{{'mp4, avi, flv, wmv, mov, m4v'|trans|raw}}</strong>{{'格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'|trans|raw}}</li>
+                  <li>{{'支持'|trans|raw}}<strong>{{'断点续传'|trans|raw}}</strong>{{'（仅支持HTML5浏览器）。'|trans|raw}}</li>
+                  <li>{{'视频将上传到'|trans|raw}}<strong>{{'云视频服务器'|trans|raw}}</strong>{{'，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。'|trans|raw}}</li>
                 {% else %}
-                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-                  <li>
-                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
-                  </li>
+                  <li>{{'支持'|trans}}<strong>{{'mp4'|trans}}</strong>{{'格式的视频文件上传，文件大小不能超过'|trans}}<strong>{{ upload_max_filesize() }} </strong>{{'。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans}}</li>
+                    <li>
+                      {{'视频将上传到'|trans}}<strong>{{'网站服务器'|trans}}</strong>{{'。如需使用%Edusoho%云视频,点击'|trans({'%Edusoho%':'EduSoho'|copyright_less})}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'|trans({'%Edusoho%':'EduSoho'|copyright_less})}}
+                    </li>
                 {% endif %}
               </ul>
             </div>
@@ -314,20 +314,20 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
+                <li>{{'支持'|trans}}<strong>{{'mp3'|trans}}</strong>{{'格式的音频文件上传，且文件大小不能超过'|trans}}<strong>
+                  {% if storageSetting.upload_mode == 'cloud' %}
+                    {{'500M'|trans}}
+                  {% else %}
+                    {{ upload_max_filesize() }}
+                  {% endif %}
+                  </strong>。</li>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  500M
-                {% else %}
-                  {{ upload_max_filesize() }}
-                {% endif %}
-                </strong>。</li>
-                {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-                  <li>音频将上传到<strong>云服务器</strong></li>
+                  <li>{{'支持'|trans}}<strong>{{'断点续传'|trans}}</strong>{{'（仅支持HTML5浏览器）。'|trans}}</li>
+                  <li>{{'音频将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
                 {% else %}
                   <li>
-                    音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
-                  </li>
+                      {{'音频将上传到'|trans}}<strong>{{'网站服务器'|trans}}</strong>{{'，%Edusoho%点击'|trans({'%Edusoho%': '如需使用EduSoho云视频,'|copyright_less})}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}
+                    </li>
                 {% endif %}
               </ul>
             </div>
@@ -397,8 +397,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>PPT将上传到<strong>云服务器</strong></li>
+                <li>{{'支持'|trans}}<strong>{{'ppt, pptx'|trans}}</strong>{{'格式的PPT文件上传，且文件大小不能超过'|trans}}<strong>{{'100 MB'|trans}}</strong>。</li>
+                <li>{{'PPT将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
               </ul>
             </div>
           </div>
@@ -465,8 +465,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>pdf,doc,docx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>文档将上传到<strong>云服务器</strong></li>
+                <li>{{'支持'|trans}}<strong>{{'pdf,doc,docx'|trans}}</strong>{{'格式的文档上传，且文件大小不能超过'|trans}}<strong>{{'100 MB'|trans}}</strong>。</li>
+                <li>{{'文档将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
               </ul>
             </div>
           </div>
@@ -534,8 +534,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>Flash将上传到<strong>云服务器</strong></li>
+                <li>{{'支持'}}<strong>{{'swf'|trans}}</strong>{{'格式的文件上传，且文件大小不能超过'|trans}}<strong>{{'100 MB'|trans}}</strong>。</li>
+                <li>{{'Flash将上传到'|trans}}<strong>{{'云服务器'|trans}}</strong></li>
               </ul>
             </div>
           </div>

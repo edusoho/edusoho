@@ -27,10 +27,10 @@
         <span class="bullet mhs">•</span>
         {{ thread.createdTime|smart_time }}
         <span class="bullet mhs">•</span>
-        {{ thread.hitNum}} {{'次浏览'|trans}}
+        {{'%hitNum%次浏览'|trans({'%hitNum%': thread.hitNum})}}
         {% if lesson %}
           <span class="bullet mhs">•</span>
-          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
+          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">{{'课时%number%'|trans({'%number%': lesson.number})}}</a>
         {% endif %}
 
       </div>
@@ -78,7 +78,7 @@
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
       {% else %}
-        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        <li class="empty">{{'还没有'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}，{{'赶快添加一个吧！'|trans}}</li>
       {% endfor %}
     </ul>
 

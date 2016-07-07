@@ -18,7 +18,7 @@
 
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
-      共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
+      {{'共找到'|trans}}<span>{{ count }}</span>{{'门'|trans}}{% if keywords %}<span>“{{ keywords }}”</span>{{'相关'|trans}}{% endif %}{{'课程'|trans}}
     </div>
     <ul class="nav nav-pills hidden-xs" role="tablist">
       <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
