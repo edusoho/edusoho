@@ -26,7 +26,8 @@ $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
 $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
-$app->get(_u('/course/{id}/lessons'), 'res.Lessons:get');
+$app->get(_u('/lessons'), 'res.Course/Lessons:get');
+$app->get(_u('/lessons/{id}'), 'res.Course/Lesson:get');
 $app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/chaos_threads'), 'res.ChaosThreads:get');
 $app->post(_u('/chaos_threads'), 'res.ChaosThreads:post');
@@ -37,14 +38,21 @@ $app->get(_u('/articles'), 'res.Articles:get');
 $app->get(_u('/articles/{id}'), 'res.Article:get');
 $app->get(_u('/article_categories'), 'res.ArticleCategories:get');
 
-$app->get(_u('/lessons'), 'res.Lessons:get');
 $app->post(_u('/lessons/{id}/live_tickets'), 'res.LessonLiveTickets:post');
 $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get');
 $app->get(_u('/lessons/{id}/replay'), 'res.LessonReplay:get');
 
-$app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
+$app->get(_u('/courses/{courseId}/members'), 'res.Course/Members:get');
 $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
 $app->get(_u('/course/{courseId}/status'), 'res.Status:get');
+$app->get(_u('/course_members'), 'res.CourseMembers:get');
+
+$app->get(_u('/courses/{courseId}/notes/{noteId}'), 'res.Course/Note:get');
+$app->get(_u('/courses/{courseId}/notes'), 'res.Course/Notes:get');
+$app->post(_u('/courses/{courseId}/notes'), 'res.Course/Notes:post');
+
+$app->get(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:get');
+$app->post(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:post');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
@@ -52,8 +60,11 @@ $app->get(_u('/classrooms/discovery/columns'), 'res.Classrooms:discoveryColumn')
 $app->get(_u('/classrooms/{id}'), 'res.Classroom:get');
 $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 
-$app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
-$app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
+$app->get(_u('/classrooms/{classroomId}/status'), 'res.ClassroomStatuses:get');
+
+$app->get(_u('/classrooms/{classroomId}/members'), 'res.Classroom/Members:get');
+$app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.Classroom/Member:get');
+$app->get(_u('/classroom_members'), 'res.ClassroomMembers:get');
 
 $app->get(_u('/exercise/{id}'), 'res.Exercise:get');
 $app->get(_u('/exercise/{id}/result'), 'res.Exercise:result');
@@ -82,3 +93,24 @@ $app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager
 $app->post(_u('/thread/create'), 'res.Thread:create');
 
 $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
+
+$app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
+
+$app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
+
+$app->get(_u('/im/my_conversations'), 'res.IM/MyConversations:get');
+$app->post(_u('/im/my_conversations/{no}'), 'res.IM/MyConversation:post');
+
+$app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}/posts'), 'res.CourseThreadPosts:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}/posts/{postId}'), 'res.CourseThreadPost:get');
+
+
+$app->get(_u('/classroom_play/{classRoomId}'), 'res.ClassRoomPlay:get');
+$app->get(_u('/classroom_play/{classRoomId}/status'), 'res.ClassRoomPlayStatus:get');
+
+$app->get(_u('/classrooms/{classRoomId}/threads'), 'res.ClassRoomThreads:get');
+
+$app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
+$app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');

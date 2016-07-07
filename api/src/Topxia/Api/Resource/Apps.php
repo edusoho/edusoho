@@ -10,12 +10,13 @@ class Apps extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-    	$schoolUtil = new MobileSchoolUtil();
-    	$apps = $schoolUtil->searchSchoolApps();
-    	return $this->filter($apps);
+        $schoolUtil = new MobileSchoolUtil();
+        $apps = $schoolUtil->searchSchoolApps();
+
+        return $this->filter($apps);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('App', $res);
     }

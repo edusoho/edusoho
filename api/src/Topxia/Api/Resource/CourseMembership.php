@@ -24,9 +24,8 @@ class CourseMembership extends BaseResource
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }
-
 }
