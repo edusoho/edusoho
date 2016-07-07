@@ -40,13 +40,43 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExcutedTime(time());
     }
 
-    private function batchUpdate($index)
+    private function updateScheme()
     {
         if (!$this->isFieldExist('announcement', 'copyId')) {
             $this->getConnection()->exec("ALTER TABLE announcement ADD copyId INT(11) NOT NULL DEFAULT '0' COMMENT '复制的公告ID';");
         }
 
+        if (!$this->isTableExist('im_conversation')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `im_conversation` (
+                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `no` varchar(64) NOT NULL COMMENT 'IM云端返回的会话id',
+                    `memberIds` text NOT NULL COMMENT '会话中用户列表(用户id按照小到大排序，竖线隔开)',
+                    `memberHash` varchar(32) NOT NULL DEFAULT '' COMMENT 'memberIds字段的hash值，用于优化查询',
+                    `createdTime` int(10) UNSIGNED NOT NULL,
+                    PRIMARY KEY (`id`)
+                ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='IM云端会话记录表';
+            ");
+        }
+
+        if (!$this->isTableExist('im_my_conversation')) {
+            $this->getConnection()->exec("
+                CREATE TABLE IF NOT EXISTS `im_my_conversation` (
+                    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                    `no` varchar(64) NOT NULL,
+                    `userId` int(10) UNSIGNED NOT NULL,
+                    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
+                    `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='用户个人的会话列表';
+            ");
+        }
+    }
+
+    private function batchUpdate($index)
+    {
         if ($index === 0) {
+            $this->updateScheme();
             return array(
                 'index'    => 1,
                 'message'  => '正在升级数据...',
