@@ -520,7 +520,7 @@ class CourseController extends BaseController
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
-        } elseif ($filter == 'vip') {
+        } elseif ($fields['filter'] == 'vip') {
             if ($this->isPluginInstalled('Vip')) {
                 $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
                 $vips = ArrayToolkit::index($vips, 'id');
