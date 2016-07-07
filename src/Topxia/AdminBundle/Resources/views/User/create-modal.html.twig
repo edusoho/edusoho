@@ -45,7 +45,9 @@
       </div>
     </div>
 
-<div class="row form-group">
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
+
+  <div class="row form-group">
     <div class="col-md-2 control-label">
       <label for="roles">{{'用户权限'|trans}}</label>
     </div>

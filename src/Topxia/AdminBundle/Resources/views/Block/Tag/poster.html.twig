@@ -45,9 +45,15 @@
           <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}"
              data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</a>
           <p class="text-success">
-            {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px'|trans}}<br>
-            {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px'|trans}}<br>
-            {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% if block.code == 'live_top_banner' %}
+              {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px'|trans}}<br>
+              {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px'|trans}}<br>
+              {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% else %}
+              {{'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px'|trans}}<br>
+              {{'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px'|trans}}<br>
+              {{'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'|trans}}
+            {% endif %}
           </p>
           <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
                  id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">

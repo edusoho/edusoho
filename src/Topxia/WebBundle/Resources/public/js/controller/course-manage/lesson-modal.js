@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var DocumentChooser = require('../widget/media-chooser/document-chooser7');
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
+    var _ = require('underscore');
     require('jquery.sortable');
     require('es-ckeditor');
 
@@ -80,11 +81,11 @@ define(function(require, exports, module) {
             }
 
             return true;
-        }, '请选择或上传{{display}}文件');
+        }, Translator.trans('请选择或上传%display%文件',{display:display}));
 
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
-        }, '时长格式不正确');
+        }, Translator.trans('时长格式不正确'));
         validator = new Validator({
             element: $form,
             failSilently: true,
@@ -97,7 +98,7 @@ define(function(require, exports, module) {
             }
             for(var i=0; i<$choosers.length; i++){
                 if($choosers[i].isUploading()){
-                    Notify.danger('文件正在上传，等待上传完后再保存。');
+                    Notify.danger(Translator.trans('文件正在上传，等待上传完后再保存。'));
                     return;
                 }
             }
@@ -112,7 +113,7 @@ define(function(require, exports, module) {
                 var $parent = $('#'+$form.data('parentid'));
                 if ($item.length) {
                     $item.replaceWith(html);
-                    Notify.success('课时已保存');
+                    Notify.success(Translator.trans('课时已保存'));
                 } else {
                     $panel.find('.empty').remove();
 
@@ -153,7 +154,7 @@ define(function(require, exports, module) {
                     }else{
                         $("#course-item-list").append(html);
                     }
-                    Notify.success('添加课时成功');
+                    Notify.success(Translator.trans('添加课时成功'));
                 }
                 $(id).find('.btn-link').tooltip();
                 $form.parents('.modal').modal('hide');
@@ -190,21 +191,21 @@ define(function(require, exports, module) {
                     element: '#lesson-media-field',
                     required: true,
                     rule: 'mediaValueEmpty',
-                    display: type == 'video' ? '视频' : '音频'
+                    display: type == 'video' ? Translator.trans('视频') : Translator.trans('音频')
                 });
 
                 validator.addItem({
                     element: '#lesson-minute-field',
                     required: true,
                     rule: 'integer',
-                    display: '时长'
+                    display: Translator.trans('时长')
                 });
 
                 validator.addItem({
                     element: '#lesson-second-field',
                     required: true,
                     rule: 'second_range',
-                    display: '时长'
+                    display: Translator.trans('时长')
                 });
 
                 break;
@@ -228,7 +229,7 @@ define(function(require, exports, module) {
                     element: '#lesson-media-field',
                     required: true,
                     rule: 'mediaValueEmpty',
-                    display: '文档'
+                    display: Translator.trans('文档')
                 });
                 break;
         }
@@ -237,7 +238,7 @@ define(function(require, exports, module) {
             element: '#lesson-suggest-period-field',
             required: true,
             rule: 'arithmetic_number',
-            display: '建议学习时长'
+            display: Translator.trans('建议学习时长')
         });
     }
 
@@ -251,9 +252,9 @@ define(function(require, exports, module) {
         function getTmpContents(){
             var date = new Date(); //日期对象
             var now = "";
-            now = now + date.getHours()+"时";
-            now = now + date.getMinutes()+"分";
-            now = now + date.getSeconds()+"秒";
+            now = now + date.getHours()+Translator.trans('时');
+            now = now + date.getMinutes()+Translator.trans('分');
+            now = now + date.getSeconds()+Translator.trans('秒');
             tmpContents["title"] = $("#lesson-title-field").val();
             tmpContents["summary"] = $("#lesson-summary-field").val();
             tmpContents["courseId"]  = $("#course-lesson-form").data("courseId");
@@ -264,14 +265,14 @@ define(function(require, exports, module) {
 
             var lessonId = 0;
             if(compare(tmpContents, localContent)){
-                var titleName = "添加课时";
+                var titleName = Translator.trans('添加课时');
                 if(tmpContents["lessonId"] != undefined){
-                    titleName = "编辑课时";
+                    titleName = Translator.trans('编辑课时');
                     lessonId = tmpContents["lessonId"];
                 }
                 $.post($form.data("createDraftUrl"), tmpContents, function(data){
                     localContent = objClone(tmpContents);
-                    $(".modal-title").text(titleName + '(草稿已于' + tmpContents['createdTime'] + '保存)');
+                    $(".modal-title").text(titleName + Translator.trans('(草稿已于%createdTime%保存)',{createdTime:tmpContents['createdTime']}));
                 });
             }
         }
@@ -322,17 +323,21 @@ define(function(require, exports, module) {
             choosed: choosedMedia
         });
 
+        var fillTitle = function(name) {
+            var $title = $form.find('[name=title]');
+            if ($title.val().length > 0) {
+                return ;
+            }
+
+            $title.val(name.substring(0, name.lastIndexOf('.')));
+        }; 
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
 
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
 
         });
 
@@ -341,37 +346,43 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
 
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
 
         });
 
         pptChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         documentChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         flashChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
-            videoChooser.destroy();
-            audioChooser.destroy();
-            pptChooser.destroy();
-            documentChooser.destroy();
-            flashChooser.destroy();
+            var choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
+            var isUploading = _.some(choosers, function (chooser) {
+                return chooser.isUploading();
+            });
+
+            if(isUploading){
+                Notify.danger('文件正在上传，等待上传完后再保存。');
+                return false;
+            }
+
+            _.each(choosers, function (chooser) {
+                 chooser.destroy();
+            });
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
@@ -387,39 +398,39 @@ define(function(require, exports, module) {
             }
 
             if (type == 'video') {
-                videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                videoChooser.show();
                 clearInterval(Timer);
             } else if (type == 'audio') {
-                audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                audioChooser.show();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
-                pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                pptChooser.show();
                 clearInterval(Timer);
             } else if (type == 'document') {
-                documentChooser.show();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
                 flashChooser.hide();
+                documentChooser.show();
                 clearInterval(Timer);
             } else if (type == 'flash') {
-                flashChooser.show();
                 documentChooser.hide();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
+                flashChooser.show();
                 clearInterval(Timer);
             }
 

@@ -1,9 +1,21 @@
 {% if set.cash_model =="deduction" %}
   <ul class="nav nav-pills mbl">
-    <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'course') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'course'|default('course'), set:set})}}" id="course"><a href="javascript:;">{{'课程'|trans}}</a></li>
-    <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'classroom') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom"><a href="javascript:;">{{'班级'|trans}}</a></li>
+    <li role="presentation" class = "js-type-filter 
+    {% if (type|default('course') == 'course') %}active {% endif %}" 
+    data-url="{{path('admin_coin_model_ajax',{type:'course'|default('course'), set:set})}}" id="course">
+    <a href="javascript:;">{{'课程'|trans}}</a>
+    </li>
+    <li role="presentation" class = "js-type-filter 
+    {% if (type|default('course') == 'classroom') %}active {% endif %}" 
+    data-url="{{path('admin_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom">
+    <a href="javascript:;">{{'班级'|trans}}</a>
+    </li>
     {% if is_plugin_installed('vip') %}
-      <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'vip') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'vip'|default('course'), set:set})}}" id="vip"><a href="javascript:;">{{'会员'|trans}}</a></li>
+      <li role="presentation" class = "js-type-filter 
+      {% if (type|default('course') == 'vip') %}active {% endif %}" 
+      data-url="{{path('admin_coin_model_ajax',{type:'vip'|default('course'), set:set})}}" id="vip">
+      <a href="javascript:;">{{'会员'|trans}}</a>
+      </li>
     {% endif %}
   </ul>
 {% endif %}

@@ -10,6 +10,10 @@
 {{'新增底部导航'|trans}}
 {% elseif navigation.id > 0 and navigation.type =='foot'%}
 {{'编辑底部导航'|trans}}
+{% elseif navigation.id == 0 and navigation.type =='friendlyLink'%}
+新增友情链接
+{% elseif navigation.id > 0 and navigation.type =='friendlyLink'%}
+编辑友情链接
 {% endif %}
 
 {% endblock %}

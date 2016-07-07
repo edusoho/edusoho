@@ -1,21 +1,24 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set script_controller = 'navigation/page' %}
+{% set script_controller = 'navigation/index' %}
 
 {% set menu = 'admin_'~type~'_navigation' %}
-{% set types = {top:'顶部'|trans, foot:'底部'|trans} %}
+{% set types = {top:'顶部', foot:'底部', friendlyLink:'友情链接'} %}
 
 {% block page_buttons %} 
-    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">{{'新增%types%导航'|trans({'%types%': types[type] })}}</button>
+    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">{% if types[type] == '友情链接' %}新增{{ types[type] }}{% else %}新增{{ types[type] }}导航{% endif %}</button>
 {% endblock %}
 
 {% block main %}
 
 {% if type == 'foot' %}
-<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> {{'清秋主题、默认主题A、默认主题B、雅致简洁之外的主题'|trans}}，请前往 <a class="text-info" style="font-weight:bold;" href="{{ path('admin_block', {category:'theme'}) }}">{{'［运营］－［编辑区管理］</a> 中进行编辑。'|trans}}</div>
+<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> 清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往 <a class="text-info" style="font-weight:bold;" href="{{ path('admin_block', {category:'theme'}) }}">［运营］－［编辑区管理］</a> 中进行编辑。</div>
+{% elseif type == 'friendlyLink' %}
+<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> 如需在首页显示友情链接模块，请在对应<a class="text-info" style="font-weight:bold;" href="{{ path('admin_setting_theme') }}">主题管理</a>中添加相应模块，暂仅支持简墨主题。
+</div>
 {% endif %}
 
-<table id="navigation-table" class="table table-striped table-hover navigation-table">
+<table id="navigation-table" class="table table-striped table-hover navigation-table sortable-list">
 	<thead>
 	  <tr>
 	    <th width="50%">{{'名称'|trans}}</th>

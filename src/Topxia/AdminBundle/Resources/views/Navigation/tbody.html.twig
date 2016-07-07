@@ -1,11 +1,10 @@
 <tbody data-update-seqs-url="{{ path('admin_navigation_seqs_update') }}">
   {% for navigation in navigations %}
-		<tr class="{% if navigation.parentId == 0 %} has-subItems {% else %} child {% endif %}" id="navigations-tr-{{ navigation.id }}" data-id="{{ navigation.id }}" data-parent-id="{{ navigation.parentId }}">
-		  <td style="vertical-align: middle;">
-        {% if navigation.parentId == 0 %}
+		<tr class="treegrid-{{ navigation.id }} {% if navigation.parentId != 0 %}treegrid-parent-{{ navigation.parentId }}{% endif %} {% if navigation.parentId == 0 %}has-subItems{% else %} child{% endif %}" id="navigations-tr-{{ navigation.id }}" data-id="{{ navigation.id }}" data-parent-id="{{ navigation.parentId }}">
+		  <td class="sort-handle" style="vertical-align: middle; {% if navigation.parentId != 0 %}padding-left: 30px{% endif %}">
+        {# {% if navigation.parentId == 0 %}
           <span class="glyphicon glyphicon-resize-vertical"></span>
-        {% endif %}
-        {% if navigation.parentId > 0 %}<span class="indentation">&nbsp;&nbsp;&nbsp;&nbsp; └─</span>{% endif %}
+        {% endif %} #}
         <a href="{{navigation.url|navigation_url}}" target="_blank"> {{navigation.name}} </a>
       </td>
 		  <td>

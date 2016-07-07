@@ -7,7 +7,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
-    var BatchAttachmentsUploader = require('../../quiz-question/batch-upload-attachments');
     var UploadQuestionAttachments = require('../../quiz-question/upload-question-attachments');
 
     var QuestionCreator = Widget.extend({
@@ -43,17 +42,10 @@ define(function(require, exports, module) {
                     $("#modal").modal('show');
                     $.get(url, function(html){
                         $("#modal").html(html);
-                        if($('#selectFiles')){
-                            var batchAttachmentsUploader = new BatchAttachmentsUploader({
-                                 editor:editor
-                            });
-                        }else{
-                            var uploadQuestionAttachments = new UploadQuestionAttachments({
-                                 editor:editor
-                            });
-                        }
-                         
-                       
+                        var uploadQuestionAttachments = new UploadQuestionAttachments({
+                             editor:editor
+                        });
+                   
                     });
                 })
               
@@ -106,7 +98,7 @@ define(function(require, exports, module) {
         _createValidator: function($form){
             var self = this;
 
-            Validator.addRule('score',/^(\d){1,10}$/i, '请输入正确的分值');
+            Validator.addRule('score',/^(\d){1,10}$/i, Translator.trans('请输入正确的分值'));
 
             validator = new Validator({
                 element: $form,

@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             this.get("validator").addItem({
                 element: '[name^=answer]',
                 required: true,
-                errormessage:"请选择您的答案"
+                errormessage:Translator.trans('请选择您的答案')
             });
         }
     });

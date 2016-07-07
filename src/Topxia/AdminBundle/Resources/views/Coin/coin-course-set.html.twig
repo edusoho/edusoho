@@ -14,10 +14,17 @@
 
     <p>
       <span>{{'使用方式：'|trans}}</span>
-      <strong class="text-info">{% if set.cash_model =="deduction" %}{{'用于抵扣'|trans}}{% else %}{{'用于标价'|trans}}{% endif %}</strong>
+      <strong class="text-info">
+        {% if set.cash_model =="deduction" %}
+          {{'用于抵扣'|trans}}
+        {% else %}
+          {{'用于标价'|trans}}
+        {% endif %}
+      </strong>
       <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">{{'汇率：'|trans}}</span>
-      {{'1元人民币兑换'|trans}} <strong class="text-info">{{ set.cash_rate}}</strong> {{ setting('coin.coin_name') }}
-      {% if set.cash_model =="deduction" %}{% else %}<a class="btn btn-info btn-sm set mlm"><span class="glyphicon glyphicon-repeat"></span> {{'按汇率批量设置价格'|trans}}</a>{% endif %}
+      {{'1元人民币兑换'|trans}} 
+      <strong class="text-info">{{ set.cash_rate}}</strong> 
+      {{ setting('coin.coin_name') }}
     </p>
     <div id="typelist">
       {% include 'TopxiaAdminBundle:Coin:coin-table-setting.html.twig' %}

@@ -1,0 +1,38 @@
+{% extends 'TopxiaWebBundle:CourseStudentManage:index.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'student' %}
+
+{% set script_controller = 'course-manage/students' %}
+
+{% block maincontent %}
+<form class="form-inline well well-sm " action="" method="get" novalidate>
+  <div class="form-group col-md-7">
+    <input class="form-control " type="text" style="width:45%" placeholder="{{'请输入用户名/邮箱/手机号'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+  </div>
+  <div class="clearfix"></div>
+</form>
+<table class="table table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
+      <th width="30%">{{'学习进度'|trans}}</th>
+      <th width="30%">{{'操作'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      {% set user = users[student.userId] %}
+      {% set progress = progresses[student.userId] %}
+      {% set isFollowing = user.id in followingIds %}
+      {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
+    {% else %}
+      <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

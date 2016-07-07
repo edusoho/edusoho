@@ -14,7 +14,7 @@
 		  <span class="text-warning">{{'正在批阅'|trans}}</span>
 		{% elseif myTestpaperResult.status == 'finished' %}
 			<span class="text-muted">{{'得分'|trans}}<strong class="text-warning">{{ myTestpaperResult.score }}</strong>{{'分'|trans}}</span><br>
-			<small class="text-muted">{{'做对'|trans}}<strong>{{ myTestpaperResult.rightItemCount }}</strong>{{'题'|trans}} / {{'共'|trans}}<strong>{{ myTestpaper.itemCount }}</strong>{{'题'|trans}}</small>
+			<small class="text-muted">{{'做对'|trans}}<strong>{{ myTestpaperResult.rightItemCount }}</strong>{{'题 / 共'|trans}}<strong>{{ myTestpaper.itemCount }}</strong>{{'题'|trans}}</small>
 		{% else %}
 		  <span class="text-muted">{{'未交卷'|trans}}</span>
 		{% endif %}

@@ -17,7 +17,7 @@
       </div>
     </div>
 
-{% if setting('copyright.thirdCopyright')|default(null) == 0 and setting('copyright')|default(null) == 0 %}
+{% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
   <div class="col-md-12">
         {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     </div>

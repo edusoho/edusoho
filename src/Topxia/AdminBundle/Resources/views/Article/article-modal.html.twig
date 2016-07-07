@@ -38,9 +38,11 @@
         <label for="categoryId" class="control-label">{{'所属栏目'|trans}}</label>
         <div class="controls">
           <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
-            {% if article %}{% else %}<option value="">-{{'选择所属栏目'|trans}}-</option>{% endif %}
+            {% if not article|default(false) %}
+              <option value="0">--{{'选择所属栏目'|trans}}--</option>
+            {% endif %}
           {% for tree in categoryTree %}
-            <option value={{ tree.id }} {% if tree.id == category.id  %}selected{% endif%}>{% for i in 0..(tree.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ tree.name }}</option>
+            <option value={{ tree.id }} {% if tree.id == category.id|default()  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
           {% endfor %}
             </select>
         </div>
@@ -53,7 +55,9 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
-
+      
+      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true} %}
+     
       <div class="form-group">
         <label for="richeditor-body-field" class="control-label">{{'正文'|trans}}</label>
         <div class="controls">

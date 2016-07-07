@@ -7,29 +7,32 @@
 
 {% block main %}
 
-	{% if is_trial() %}
-		<div class="row form-group">
-  		<div class="help-block">
-    		</br></br>
-    		<script>
-          	var _hmt = _hmt || [];
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <script>
+          var _hmt = _hmt || [];
         </script>
         <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
-
-    		<p style = "text-align: center;font-size:16px">{{'短信发送服务由EduSoho教育云提供'|trans}} <a href="http://open.edusoho.com/educloud" target="_blank">{{'了解详情'|trans}}</a></p>
-
-    		<p style = "text-align:center;font-size:16px">{{'当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。'|trans}} 
-        {{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
-            <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
+        <p style="text-align: center;font-size:16px">
+          短信发送服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud"  target="_blank">了解详情</a>
         </p>
 
-    		<script type="text/javascript">
-        		BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
-    		</script>
-    		</br></br>
-  		</div>
+        <p style="text-align:center;font-size:16px">
+          当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 电话：0571-86819929 或
+          <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
+            <a id="BizQQWPA"  href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。
+          </span>
+        </p>
+
+        <script type="text/javascript">
+          BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+        </script>
+        </br></br>
+      </div>
     </div>
-	{% else %}	
+  {% else %}
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
       <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
@@ -46,59 +49,78 @@
       </div>
       <div class="edu-service">
         <div class="edu-balance">
-        <!-- <div class="alert alert-warning" role="alert">云短信服务免费公测中，将于2015年3月31日结束</div> -->
+          <!-- <div class="alert alert-warning" role="alert">云短信服务免费公测中，将于2015年3月31日结束</div> -->
           <div class="controls radios">
-            <form class="form-inline" method="post" id="sms-controller-form" novalidate="">
-            {% if (smsStatus.sms_enabled|default('0') == '0' or smsStatus.status|default('error') == 'error') and accessCloud|default(0) != 0 %}
-              <span>{{'短信签名：'|trans}}{% if not smsStatus.sms_school_name|default(null) %}<input class="form-control" type="text" name="sign" placeholder="{{'签名3-8字，建议使用汉字'|trans}}">{% else %}{{smsStatus.sms_school_name}}{% endif %}
-              </span>
-              <button name="sms-open" class="btn btn-primary" >{{'启用云短信'|trans}}</button>
-            {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
-              <div name="status">
-                <span class="text-success">{{'已启用'|trans}}</span>
-                <button  class="btn btn-default btn-sm mlm" name="sms-close"><span class="text-muted">{{'关闭'|trans}}</span></button>
-                <p><span>{{'短信签名：'|trans}}{{ smsStatus.sms_school_name }}</span> <a href="#" name="sign-update">{{'修改'|trans}}</a></p>
-              </div>
-              <div name="submit-sign" hidden="hidden">
-                <span>{{'短信签名：'|trans}}<input class="form-control" type="text" name="sign" placeholder="{{'签名3-8字，建议使用汉字'|trans}}"style="width:250px"></span><button class="btn btn-primary mlm mrm" >{{'提交'|trans}}</button><span><a href="">{{'取消'|trans}}</a></span>
-                <span class="glyphicon glyphicon-question-sign text-muted" id="article-property-tips17" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                <div id="article-property-tips17-html" style="display:none;">
-                  <div style="width:250px;font-size:14px;">
-                      <span style="color:blue;"> {{'哪些签名不允许：'|trans}}</span><br>
-                      1.{{'含有特殊字符（如$@^等）的签名'|trans}} <br>
-                      2.{{'与公司，商标和网站名无关的签名'|trans}}
+            <form class="form-inline" method="post" action="{{ path('admin_edu_cloud_sms_status') }}"
+                  id="sms-controller-form" novalidate="">
+
+              {% if (smsStatus.sms_enabled|default('0') == '0' or smsStatus.status|default('error') == 'error') and accessCloud|default(0) != 0 %}
+                <span>短信签名：
+                  {% if not smsStatus.sms_school_name|default(null) %}
+                    <input class="form-control" type="text" name="sms_school_name" placeholder="签名3-8字，建议使用汉字">
+                  {% else %}
+                    {{ smsStatus.sms_school_name }}
+                  {% endif %}
+                 </span>
+                <button name="sms-open" class="btn btn-primary">启用云短信</button>
+              {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
+                <div name="status">
+                  <span class="text-success">已启用</span>
+                  <button class="btn btn-default btn-sm mlm" name="sms-close">
+                    <span class="text-muted">关闭</span>
+                  </button>
+                  <p><span>短信签名：{{ smsStatus.sms_school_name }}</span> <a href="javascript:;" name="sign-update">修改</a></p>
+                </div>
+                <div name="submit-sign" hidden="hidden">
+                <span>
+                  短信签名：
+                  <input class="form-control" type="text" name="sms_school_name" placeholder="签名3-8字，建议使用汉字"
+                         style="width:250px">
+                </span>
+                  <button class="btn btn-primary mlm mrm">提交</button>
+                  <span><a href="{{ path('admin_edu_cloud_sms') }}">取消</a></span>
+                  <span class="glyphicon glyphicon-question-sign text-muted" id="article-property-tips17"
+                        data-toggle="tooltip" data-placement="bottom" href="javascript:" data-original-title=""></span>
+                  <div id="article-property-tips17-html" style="display:none;">
+                    <div style="width:250px;font-size:14px;">
+                      <span style="color:blue;"> 哪些签名不允许：</span><br>
+                      1.含有特殊字符（如$@^等）的签名 <br>
+                      2.与公司，商标和网站名无关的签名
+                    </div>
                   </div>
                 </div>
-              </div>
-            {% elseif smsStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
-              <div class="row">
-                <div class="col-md-2">
-                  <button name="email-open" class="btn btn-primary" disabled="disabled" >{{'启用云短信'|trans}}</button>
+              {% elseif smsStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
+                <div class="row">
+                  <div class="col-md-2">
+                    <button name="email-open" class="btn btn-primary" disabled="disabled">启用云短信</button>
+                  </div>
+                  <div class="col-md-10">
+                    <span class="text-danger text-sm">抱歉，您尚未接入教育云，不能使用云短信服务！</span>
+                    <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
+                  </div>
                 </div>
-                <div class="col-md-10">
-                  <span class="text-danger text-sm" >{{'抱歉，您尚未接入教育云，不能使用云短信服务！'|trans}}</span>
-                  <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
-                </div>
-              </div>
-            {% endif %}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+              {% endif %}
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             </form>
             {% if smsStatus.sms_enabled|default('0') != '1' %}
-            <div class="help-block">{{'云短信提供高效、可靠的短信发送服务，低至0.055元/条'|trans}}，{{'点击'|trans}}<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">{{'这里'|trans}}</a>{{'了解详情'|trans}}</div>
+              <div class="help-block">
+                云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情
+              </div>
             {% endif %}
           </div>
         </div>
       </div>
-        {% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
-        {% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) %}
-          <div class="alert alert-danger">
-            <a href="{{path("admin_edu_cloud_sms_no_message")}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
-            {{ smsStatus.schoolNameError|default(null) }}
-          </div>
-        {% endif %}
+      {% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
+      {% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) %}
+        <div class="alert alert-danger">
+          <a href="{{ path("admin_edu_cloud_sms_no_message") }}" class="close" data-dismiss="alert"
+             aria-label="Close"><span aria-hidden="true">×</span></a>
+          {{ smsStatus.schoolNameError|default(null) }}
+        </div>
+      {% endif %}
 
-        <form class="form-horizontal" method="post" id="sms-form" novalidate="">
-          <fieldset>
+      <form class="form-horizontal" method="post" id="sms-form" novalidate="">
+        <fieldset>
           {#  {% if smsStatus.status in ['passed','failed'] %}
               {% if ( not hasSchoolName ) and (smsStatus.status == 'failed') %}
                 <div class="alert alert-danger">
@@ -174,520 +196,583 @@
               </div>
             {% endif %} 
             #}
-            {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0 and smsStatus.sms_enabled|default('0') == '1' %}
+          {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0 and smsStatus.sms_enabled|default('0') == '1' %}
             <div class="page-header clearfix">
               <h1 class="pull-left">{{'短信应用场景'|trans}}</h1>
             </div>
-              <div class="js-usage" >
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="width:20%"></th>
-                      <th style="width:30%">{{'短信类型'|trans}}</th>
-                      <th style="width:10%">{{'类型编号'|trans}}</th>
-                      <th style="width:20%">{{'发送方式'|trans}}</th>
-                      <th style="width:20%">{{'启用状态'|trans}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                    </tr>
-                    <tr>
-                      <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{'身份验证'|trans}}
-                      </td>
-                      <td>{{'手机绑定'|trans}}</td>
-                      <td>
-                        1
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips1-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{'自动单发'|trans}}
-                      <td class="radios" style="text-align:center;">
-                        <label>
-                          <input type="hidden" name="sms_bind" value="on" >{{'默认开启'|trans}}
-                        </label>
-                      </td>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'登录密码重置'|trans}}</td>
-                      <td>
-                        2
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips2-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios" style="text-align:center;">
-                        <label>
-                          <input type="hidden" name="sms_forget_password" value="on"> {{'默认开启'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'支付密码重置'|trans}}</td>
-                      <td>
-                        3
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips3" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips3-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios" style="text-align:center;">
-                        <label>
-                          <input type="hidden" name="sms_forget_pay_password" value="on"> {{'默认开启'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'使用网站余额支付'|trans}}</td>
-                      <td>
-                        4
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips4" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips4-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios" style="text-align:center;">
-                        <label>
-                          <input type="hidden" name="sms_user_pay" value="on"> {{'默认开启'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="width:20%"></th>
-                      <th style="width:30%">{{'短信类型'|trans}}</th>
-                      <th style="width:10%">{{'类型编号'|trans}}</th>
-                      <th style="width:20%">{{'发送方式'|trans}}</th>
-                      <th style="width:20%">{{'启用状态'|trans}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                    </tr>
-                    <tr>
-                      <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">{{'教务通知'|trans}}
-                      </td>
-                      <td>{{'新%name%发布'|trans({'%name%': setting('classroom.name')|default('班级'|trans) })}}</td>
-                      <td>
-                        5
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips5" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips5-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'同学们'|trans}}，{{ setting('classroom.name')|default('班级'|trans) }}：{{'《班级名称》现已开始报名！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'所有用户'|trans}}
-                            <br>
-                            <span style="color:blue;"> {{'发送方式:'|trans}}</span><br>
-                            {{'进入后台班级列表页中的［操作］列中进行手动发送。'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                      {{'手动群发'|trans}}
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_classroom_publish" value="on"
+            <div class="js-usage">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th style="width:20%"></th>
+                  <th style="width:30%">短信类型</th>
+                  <th style="width:10%">类型编号</th>
+                  <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                </tr>
+                <tr>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">身份验证
+                  </td>
+                  <td>手机绑定</td>
+                  <td>
+                    1
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips1-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
+                  <td class="radios" style="text-align:center;">
+                    <label>
+                      <input type="hidden" name="sms_bind" value="on">默认开启
+                    </label>
+                  </td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>登录密码重置</td>
+                  <td>
+                    2
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips2-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
+                    <label>
+                      <input type="hidden" name="sms_forget_password" value="on"> 默认开启
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>支付密码重置</td>
+                  <td>
+                    3
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips3"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips3-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
+                    <label>
+                      <input type="hidden" name="sms_forget_pay_password" value="on"> 默认开启
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>使用网站余额支付</td>
+                  <td>
+                    4
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips4"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips4-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
+                    <label>
+                      <input type="hidden" name="sms_user_pay" value="on"> 默认开启
+                    </label>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th style="width:20%"></th>
+                  <th style="width:30%">短信类型</th>
+                  <th style="width:10%">类型编号</th>
+                  <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                </tr>
+                <tr>
+                  <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">教务通知
+                  </td>
+                  <td>新{{ setting('classroom.name')|default("班级") }}发布</td>
+                  <td>
+                    5
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips5"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips5-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">网校通知</span>】同学们，{{ setting('classroom.name')|default("班级") }}
+                        ：《班级名称》现已开始报名！{{ setting('cloud_sms.sms_school_name')|default('') }} 链接地址”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        所有用户
+                        <br>
+                        <span style="color:blue;"> 发送方式:</span><br>
+                        进入后台班级列表页中的［操作］列中进行手动发送。
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;">
+                    手动群发
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_classroom_publish" value="on"
                           {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_classroom_publish" value="off" 
-                            {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'新课程发布'|trans}}</td>
-                      <td>
-                        6
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips6" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips6-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'同学们，课程：《课程名称》现已开始报名！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'所有用户（或者班级用户）'|trans}}
-                            <br>
-                            <span style="color:blue;"> {{'发送方式:'|trans}}</span><br>
-                            {{'进入后台课程列表页中的［操作］列中进行手动发送。'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_course_publish" value="on"
-                          {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_course_publish" value="off" 
-                            {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'新课时发布通知（普通课程）'|trans}}</td>
-                      <td>
-                        7
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips7" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips7-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的课程：《课程名称》－课时：《课时名》已发布！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br><span <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'课程用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                      {{'自动群发'|trans}}
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_normal_lesson_publish" value="on"
-                          {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_normal_lesson_publish" value="off" 
-                            {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'新课时发布通知（直播）'|trans}}</td>
-                      <td>
-                        8
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips8" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips8-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'课程：《课程名》－课时：《课时名》将在［开播时间］开播！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'课程用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_live_lesson_publish" value="on"
-                          {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_live_lesson_publish" value="off" 
-                            {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    {#<tr>
-                      <td>预约辅导开课通知</td>
-                      <td>9</td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_user_pay" value="on"
-                          {% if (setting('cloud_sms.sms_user_pay')|default('off')) == 'on' %}
-                            checked="checked"
+                        checked="checked"
                           {% endif %}> 开启
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_user_pay" value="off" 
-                            {% if (setting('cloud_sms.sms_user_pay')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> 关闭
-                        </label>
-                      </td>
-                    </tr> #}
-                    <tr>
-                      <td>{{'直播开播前通知（提前1天）'|trans}}</td>
-                      <td>
-                        9
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips9" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips9-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'课程：《课程名》－课时《课时名》将在［开播时间］开播！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br>
-                          </div>
-                          <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'课程用户'|trans}}
-                            <br>
-                        </div>
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_live_play_one_day" value="on"
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_classroom_publish" value="off"
+                          {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>新课程发布</td>
+                  <td>
+                    6
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips6"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips6-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】同学们，课程：《课程名称》现已开始报名！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        链接地址”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        所有用户（或者班级用户）
+                        <br>
+                        <span style="color:blue;"> 发送方式:</span><br>
+                        进入后台课程列表页中的［操作］列中进行手动发送。
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_course_publish" value="on"
+                          {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_course_publish" value="off"
+                          {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>新课时发布通知（普通课程）</td>
+                  <td>
+                    7
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips7"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips7-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的课程：《课程名称》－课时：《课时名》已发布！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        链接地址”<br><span <span style="color:blue;"> 发送对象:</span><br>
+                        课程用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">
+                    自动群发
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_normal_lesson_publish" value="on"
+                          {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_normal_lesson_publish" value="off"
+                          {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>新课时发布通知（直播）</td>
+                  <td>
+                    8
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips8"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips8-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        链接地址”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        课程用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_live_lesson_publish" value="on"
+                          {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) == 'on' %}
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_live_lesson_publish" value="off"
+                          {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                {#<tr>
+                  <td>预约辅导开课通知</td>
+                  <td>9</td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_user_pay" value="on"
+                      {% if (setting('cloud_sms.sms_user_pay')|default('off')) == 'on' %}
+                        checked="checked"
+                      {% endif %}> 开启
+                    </label>
+                    <label>
+                        <input type="radio" name="sms_user_pay" value="off"
+                        {% if (setting('cloud_sms.sms_user_pay')|default('off')) != 'on' %}
+                          checked="checked"
+                        {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr> #}
+                <tr>
+                  <td>直播开播前通知（提前1天）</td>
+                  <td>
+                    9
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips9"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips9-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时《课时名》将在［开播时间］开播！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        链接地址”<br>
+                      </div>
+                      <span style="color:blue;"> 发送对象:</span><br>
+                      课程用户
+                      <br>
+                    </div>
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_live_play_one_day" value="on"
                           {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_live_play_one_day" value="off" 
-                            {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'直播开播前通知（提前1小时）'|trans}}</td>
-                      <td>
-                        10
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips10" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips10-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'课程：《课程名》－课时：《课时名》将在［开播时间］开播！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}} {{'链接地址'|trans}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'课程用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_live_play_one_hour" value="on"
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_live_play_one_day" value="off"
+                          {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>直播开播前通知（提前1小时）</td>
+                  <td>
+                    10
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips10"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips10-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        链接地址”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        课程用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_live_play_one_hour" value="on"
                           {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                          <input type="radio" name="sms_live_play_one_hour" value="off"
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_live_play_one_hour" value="off"
                           {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) != 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'作业完成批阅'|trans}}</td>
-                      <td>
-                        11
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips11" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips11-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容'|trans}}:</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                      {{'自动单发'|trans}}
-                      </td>
-                      <td class="radios">
-                        {% if (is_plugin_installed('Homework')) %}
-                          <label>
-                            <input type="radio" name="sms_homework_check" value="on"
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>作业完成批阅</td>
+                  <td>
+                    11
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips11"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips11-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;">
+                    自动单发
+                  </td>
+                  <td class="radios">
+                    {% if (is_plugin_installed('Homework')) %}
+                      <label>
+                        <input type="radio" name="sms_homework_check" value="on"
                             {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'开启'|trans}}
-                          </label>
-                          <label>
-                            <input type="radio" name="sms_homework_check" value="off" 
+                          checked="checked"
+                            {% endif %}> 开启
+                      </label>
+                      <label>
+                        <input type="radio" name="sms_homework_check" value="off"
                             {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                          </label>
-                        {% else %}
-                          {{'请先安装作业插件！'|trans}}
-                        {% endif %}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'试卷完成批阅'|trans}}</td>
-                      <td>
-                        12
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips12" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips12-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="radios">
-                        <label>
-                          <input type="radio" name="sms_testpaper_check" value="on"
+                          checked="checked"
+                            {% endif %}> 关闭
+                      </label>
+                    {% else %}
+                      请先安装作业插件！
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td>试卷完成批阅</td>
+                  <td>
+                    12
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips12"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips12-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios">
+                    <label>
+                      <input type="radio" name="sms_testpaper_check" value="on"
                           {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_testpaper_check" value="off" 
-                            {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="width:20%"></th>
-                      <th style="width:30%">{{'短信类型'|trans}}</th>
-                      <th style="width:10%">{{'类型编号'|trans}}</th>
-                      <th style="width:20%">{{'发送方式'|trans}}</th>
-                      <th style="width:20%">{{'启用状态'|trans}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                    </tr>
-                    <tr>
-                      <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{'支付成功回执'|trans}}
-                      </td>
-                      <td>{{'课程购买'|trans}}</td>
-                      <td>
-                        13
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips13" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips13-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'你已成功购买课程《课程名称》，支付［订单金额］。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                      <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">{{'自动单发'|trans}}
-                      </td>
-                      <td rowspan="4" class="radios" style="vertical-align:middle;">
-                        <label>
-                          <input type="radio" name="sms_order_pay_success" value="on"
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_testpaper_check" value="off"
+                          {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th style="width:20%"></th>
+                  <th style="width:30%">短信类型</th>
+                  <th style="width:10%">类型编号</th>
+                  <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                </tr>
+                <tr>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">支付成功回执
+                  </td>
+                  <td>课程购买</td>
+                  <td>
+                    13
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips13"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips13-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】你已成功购买课程《课程名称》，支付［订单金额］。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
+                  </td>
+                  <td rowspan="4" class="radios" style="vertical-align:middle;">
+                    <label>
+                      <input type="radio" name="sms_order_pay_success" value="on"
                           {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) == 'on' %}
-                            checked="checked"
-                          {% endif %}> {{'开启'|trans}}
-                        </label>
-                        <label>
-                            <input type="radio" name="sms_order_pay_success" value="off" 
-                            {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) != 'on' %}
-                              checked="checked"
-                            {% endif %}> {{'关闭'|trans}}
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'班级购买'|trans}}</td>
-                      <td>
-                        14
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips14" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips14-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'你已成功购买班级《班级名称》，支付［订单金额］。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'会员购买'|trans}}</td>
-                      <td>
-                        15
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips15" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips15-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'你已成功购买《会员名称》，支付［订单金额］。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{{'虚拟币充值'|trans}}</td>
-                      <td>
-                        16
-                        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips16" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-                        <div id="article-property-tips16-html" style="display:none;">
-                          <div style="width:250px;font-size:14px;">
-                            <span style="color:blue;"> {{'短信内容:'|trans}}</span><br>
-                            “【<span id="js-sms-school-name">{{'网校通知'|trans}}</span>】{{'你已成功购买《虚拟币面值》《单位》，支付［订单金额］。'|trans}}{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
-                            <span style="color:blue;"> {{'发送对象:'|trans}}</span><br>
-                            {{'单个用户'|trans}}
-                            <br>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            {% endif %}
-          </fieldset>
-
-          {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' and accessCloud|default(0) != 0 and enabled|default(1) == 1 %}
-            <div class="form-group">
-              <div class="controls col-md-offset-3 col-md-8">
-                <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
-              </div>
+                        checked="checked"
+                          {% endif %}> 开启
+                    </label>
+                    <label>
+                      <input type="radio" name="sms_order_pay_success" value="off"
+                          {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) != 'on' %}
+                        checked="checked"
+                          {% endif %}> 关闭
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>班级购买</td>
+                  <td>
+                    14
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips14"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips14-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】你已成功购买班级《班级名称》，支付［订单金额］。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>会员购买</td>
+                  <td>
+                    15
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips15"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips15-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】你已成功购买《会员名称》，支付［订单金额］。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>虚拟币充值</td>
+                  <td>
+                    16
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips16"
+                          data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""
+                          data-original-title=""></span>
+                    <div id="article-property-tips16-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span
+                            id="js-sms-school-name">网校通知</span>】你已成功购买《虚拟币面值》《单位》，支付［订单金额］。{{ setting('cloud_sms.sms_school_name')|default('') }}
+                        ”<br>
+                        <span style="color:blue;"> 发送对象:</span><br>
+                        单个用户
+                        <br>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           {% endif %}
-          <input type="hidden" name="register-mode" value="{{ setting('auth.register_mode')}}">
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </fieldset>
 
-        </form>
+        {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' and accessCloud|default(0) != 0 and enabled|default(1) == 1 %}
+          <div class="form-group">
+            <div class="controls col-md-offset-3 col-md-8">
+              <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+          </div>
+        {% endif %}
+        <input type="hidden" name="register-mode" value="{{ setting('auth.register_mode') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="strategy_overwrite" value="true">
+      </form>
     </div>
   {% endif %}
-	
+
 {% endblock %}

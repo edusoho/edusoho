@@ -45,8 +45,8 @@ class OrderRefundController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($refunds, 'userId'));
+        $userIds = array_merge(ArrayToolkit::column($refunds, 'userId'), ArrayToolkit::column($refunds, 'operator'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
         return $this->render('TopxiaAdminBundle:OrderRefund:refunds.html.twig', array(
@@ -102,9 +102,9 @@ class OrderRefundController extends BaseController
                 $this->sendAuditRefundNotification($orderRefundProcessor,$order, $data);
             } else {
                 if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'],'default',"您的退款申请已通过管理员审核");
-                }else{
-                    $this->getNotificationService()->notify($order['userId'],'default',"您的退款申请因{$data['note']}未通过审核");
+                    $this->getNotificationService()->notify($order['userId'],'default',$this->getServiceKernel()->trans('您的退款申请已通过管理员审核'));
+                }else{  
+                    $this->getNotificationService()->notify($order['userId'],'default',$this->getServiceKernel()->trans('您的退款申请因%note%未通过审核',array('%note%'=>$data['note'])));
                 }
             }
 

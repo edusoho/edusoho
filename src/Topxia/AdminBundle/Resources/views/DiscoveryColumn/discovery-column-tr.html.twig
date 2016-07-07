@@ -1,14 +1,15 @@
 <tbody data-update-seqs-url="{{ path('admin_discovery_column_sort') }}">
 	{% for discoveryColumn in discoveryColumns %}
-		<tr class="sort" data-id="{{ discoveryColumn.id }}">
+		<tr class="sort " data-id="{{ discoveryColumn.id }}">
 			<td>
-				{{ discoveryColumn.title }}
+				<span class="glyphicon glyphicon-move"></span>
+				<span>&nbsp;&nbsp;{{ discoveryColumn.title }}</span>
 			</td>
 		
 			<td>
-				{% if discoveryColumn.type == 'classroom' %}{{'班级'|trans}}
-				{% elseif discoveryColumn.type == 'course' %}{{'课程'|trans}}
-				{% else %}{{'直播'|trans}}
+				{% if discoveryColumn.type == 'classroom' %}班级
+				{% elseif discoveryColumn.type == 'course' %}普通课程
+				{% else %}直播课程
 				{% endif %}
 			</td>
 

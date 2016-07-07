@@ -23,8 +23,9 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 			return "";
 		}
 		content = content.replace(/<[^>]+>/g, "");
-		if (limitTo) {
+		if (limitTo && limitTo < content.length) {
 			content = content.substring(0, limitTo);
+			content += "...";
 		}
 		return content;
 	};

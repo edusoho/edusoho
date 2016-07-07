@@ -1,0 +1,38 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}分享教学资料{% endblock %}
+{% block body %}
+
+<script type="text/javascript">
+$("#target-teachers-input").select2({
+	multiple: true,
+	data:[
+		{% for contact in allTeachers %}
+			{% if contact.id != currentUserId %}
+		  		{id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
+		  	{% endif %}
+		{% endfor %}
+	  	]
+});
+</script>
+
+<form id="share-materials-form" class="form-horizontal" method="post"
+	action="{{ path('material_lib_save_sharing') }}">
+
+	<div class="row form-group">
+		<label class="col-md-3 control-label">分享教学资料给</label>
+		<div class="col-md-8 controls">
+			<div class="select2-container select2-container-multi width-full"
+				id="target-teachers-input" placeholder="输入用户名"></div>
+		</div>
+	</div>
+</form>
+
+<script>app.load('materiallibbundle/controller/material-lib/teachers')</script>
+{% endblock %} {% block footer %}
+<button id="share-materials-form-submit" type="submit"
+	class="btn btn-primary pull-right" data-toggle="form-submit"
+	data-target="#share-materials-form" data-submiting-text="正在保存...">保存</button>
+<button type="button" class="btn btn-link pull-right"
+	data-dismiss="modal">取消</button>
+{% endblock %}

@@ -5,12 +5,12 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-       用户
+       {{'用户'|trans}}
        <a href='{{path('user_show',{id:data.userId})}}' target='_blank'>{{data.userName}}</a>
         {% if data.opration == 'follow' %}
-            已经关注了你！
+            {{'已经关注了你！'|trans}}
         {% elseif data.opration == 'unfollow'%}
-           对你已经取消了关注！
+           {{'对你已经取消了关注！'|trans}}
         {% endif %}
     </div>
     <div class="notification-footer">

@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                     if(data.error) {
                         Notify.danger(data.error.message);
                     } else {
-                        Notify.danger('发表回复失败，请重试');
+                        Notify.danger(Translator.trans('发表回复失败，请重试'));
                     }
                 }
             });
@@ -85,7 +85,7 @@ define(function(require, exports, module) {
         });
 
         $(".thread-post-list").on('click', '[data-action=post-delete]', function() {
-            if (!confirm("您真的要删除该回帖吗？")) {
+            if (!confirm(Translator.trans('您真的要删除该回帖吗？'))) {
                 return false;
             }
             var $btn = $(this);

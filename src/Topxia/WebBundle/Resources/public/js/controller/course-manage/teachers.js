@@ -7,15 +7,13 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        require('./header').run();
-
         var dynamicCollection = new DynamicCollection({
             element: '#teachers-form-group',
             onlyAddItemWithModel: true,
             beforeDeleteItem: function(e){
             	var teacherCounts=$("#teacher-list-group").children("li").length;
 	            if(teacherCounts <= 1){
-	                Notify.danger("课程至少需要一个教师！");
+	                Notify.danger(Translator.trans('课程至少需要一个教师！'));
 	                return false;
 	            }
 	            return true;
@@ -38,7 +36,7 @@ define(function(require, exports, module) {
 	    	var error = '';
 	    	dynamicCollection.element.find('input[name="ids[]"]').each(function(i, item) {
 	    		if (parseInt(data.id) == parseInt($(item).val())) {
-	    			error = '该教师已添加，不能重复添加！';
+	    			error = Translator.trans('该教师已添加，不能重复添加！');
 	    		}
 	    	});
 

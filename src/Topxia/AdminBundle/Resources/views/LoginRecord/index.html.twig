@@ -9,7 +9,9 @@
 <div class="well well-sm">
   <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate> 
     
-    <div class="form-group">
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    
+    <div class="form-group controls">
       <select id="keywordType" name="keywordType" class="form-control">
         {{ select_options(dict('userKeyWordTypes'), app.request.query.get('keywordType')) }}
       </select>
@@ -36,6 +38,7 @@
   <thead>
     <tr>
       <th>{{'用户名'|trans}}</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>{{'用户邮箱'|trans}}</th>
       <th>{{'登录时间IP'|trans}}</th>
       <th>{{'登录地点'|trans}}</th>

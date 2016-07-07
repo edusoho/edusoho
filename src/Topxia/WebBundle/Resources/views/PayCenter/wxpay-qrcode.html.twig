@@ -18,7 +18,8 @@
       </div>
       <div class="pay-qrcode-body clearfix">
         <div class="qrcode-img">
-          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{order:order}) }}" data-goto="{% if order.targetType|default(null) %} {{ path('pay_success_show',{id:order['id']}) }} {% else %}{{ path('my_coin') }} {% endif %}">
+          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{order:order}) }}" 
+          data-goto="{% if order.targetType|default(null) and order.targetType == 'coin' %} {{ path('my_coin') }}{% else %}{{ path('pay_success_show',{id:order['id']}) }}{% endif %}">
           <div class="text-qrcode hidden-xs">
             {{'请使用微信扫一扫'|trans}}<br>{{'扫描二维码支付'|trans}}
           </div>

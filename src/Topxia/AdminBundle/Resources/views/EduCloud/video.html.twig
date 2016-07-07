@@ -4,6 +4,190 @@
 {% set script_controller = 'setting/cloud' %}
 
 {% block main %}
+
+<style>
+.webuploader-container {
+  position: relative;
+}
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #fff;
+  padding: 5px 10px;
+  color: #333;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+.webuploader-pick-hover {
+  background: #e6e6e6;
+  border-color: #adadad;
+}
+
+.webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events:none;
+}
+
+.balloon-uploader {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.balloon-uploader-heading {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  display: none;
+}
+
+.balloon-uploader-footer {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 15px;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+
+.balloon-filelist {
+  width: 100%;
+}
+
+.balloon-filelist-heading {
+  position: relative;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.balloon-uploader-body {
+  position: relative;
+
+}
+
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
+}
+
+.balloon-filelist .file-name {
+  margin-right: 250px;
+  padding: 8px;
+}
+
+.balloon-filelist .file-size {
+  position: absolute;
+  top: 0px;
+  right: 150px;
+  width: 100px;
+  text-align: right;
+  padding: 8px;
+}
+
+.balloon-filelist .file-status {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 120px;
+  text-align: left;
+  padding: 8px;
+
+}
+
+.balloon-filelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.balloon-filelist ul li {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
+.balloon-dnd {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-uploader-footer,
+.balloon-uploader-none .balloon-uploader-body {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-dnd {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.balloon-nofile {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 100px;
+  text-align: center;
+  color: #999;
+}
+
+.balloon-uploader .file-pick-btn {
+  display: inline-block;
+}
+
+.balloon-uploader .start-upload-btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #5bc0de;
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #46b8da;
+  overflow: hidden;
+}
+
+.balloon-uploader .start-upload-btn:hover {
+  background: #31b0d5;
+  border-color: #269abc;
+}
+
+.balloon-filelist .file-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
+  background: rgba(59, 181, 33, 0.18);
+  float: left;
+  height: 100%;
+}
+
+</style>
+
 {{ web_macro.flash_messages() }}
 
   {% if videoInfo.enableBuyVideo|default(0) == 1 and videoInfo.remaining|default(0) <= 30 and videoInfo.remaining|default(0) > 0 %}
@@ -80,6 +264,19 @@
         </div>
         <div class="controls col-md-8 radios">
           <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="support_mobile">手机浏览器MP4视频</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('support_mobile', {'1':'开启', '0':'关闭'}, storageSetting.support_mobile) }}
+          <div class="help-block">
+            MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；<br/>
+            开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；<br/>
+            <span style="color: red">注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。</span>
+          </div>
         </div>
       </div>
     <div class="row form-group">
@@ -195,8 +392,8 @@
       <div class="controls col-md-8">
 
 
-        <div class="file-chooser-bar" 
-          {% if not storageSetting.video_header|default(null) %}
+        <div class="head-leader-edit" 
+          {% if not headLeader|default(null) %}
           style="display:none;"
           {% endif %}
           >
@@ -211,39 +408,24 @@
         </div>
 
         <div class="file-chooser-main" 
-          {% if storageSetting.video_header|default(null) %}
-          style="display:none;"
+          {% if headLeader|default(null) %}
+            style="display:none;"
           {% endif %}
         >
-          <div class="file-chooser-uploader-control">
-            <span id="video-choose-uploader-btn"
-              data-role="uploader-btn"
-              data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
-              data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-              data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:'headLeader', targetId:0, lazyConvert:1}) }}{% endif %}" 
-              data-progressbar="#video-chooser-progress"
-              data-storage-type="{{storageSetting.upload_mode}}"
-              data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
-              >
-              <a class="uploadBtn btn btn-default btn-lg" >
-                {{'上传'|trans}}
-              </a>
-              </p>
-              <div style="display:none">
-                <input data-role="fileSelected" class="filePrew" type="file" />
-              </div>
-            </span>
-          </div>
-          <div class="progress" id="video-chooser-progress" style="display:none;">
-            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-            </div>
+          {% set token = uploader_token('headLeader', 0, 'private') %}
+          <div id="balloon-uploader"
+            data-init-url="{{ path('uploader_init', {token:token}) }}"
+            data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+            data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
+            data-accept="{{ uploader_accept('headLeader', 'cloud_video')|json_encode }}"
+            data-process="{{ uploader_process('headLeader') }}">
           </div>
 
           <div class="alert alert-info">
             <ul>
-              <li>{{'支持'|trans}}<strong>mp4, avi, flv, wmv, mov</strong>{{'格式的视频文件上传'|trans}}，{{'文件大小不能超过'|trans}}<strong>10 MB</strong>。</li>
-              <li>{{'支持'|trans}}<strong>{{'断点续传'|trans}}</strong>{{'（仅支持HTML5浏览器）。'|trans}}</li>
-              <li>{{'视频将上传到'|trans}}<strong>{{'云视频服务器'|trans}}</strong>，{{'上传后会对视频进行格式转换，转换过程需要一定的时间。'|trans}}</li>
+              <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>10 MB</strong>。</li>
+              <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+              <li>视频将上传到<strong>云视频服务器</strong>，上传后会对视频进行格式转换，转换过程需要一定的时间。</li>
             </ul>
           </div>
         </div>

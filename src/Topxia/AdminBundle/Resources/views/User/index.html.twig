@@ -11,10 +11,12 @@
 
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
+
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+   
     <select class="form-control" name="datePicker" id="datePicker">
       {{ select_options({longinDate:'登录时间'|trans, registerDate: '注册时间'|trans}, app.request.get('datePicker') ,'--时间类型--'|trans) }}
     </select>
-    
     <div class="form-group ">
       <input class="form-control" type="text" id="startDate" name="startDate" value="{{app.request.query.get('startDate')}}" placeholder="{{'起始时间'|trans}}">
       -
@@ -22,6 +24,7 @@
     </div>
   </div>
   <div class="form-group">
+    
     <select class="form-control" name="roles">
       {{ select_options(dict('userRole'), app.request.query.get('roles'), '--所有角色--'|trans) }}
     </select>
@@ -36,7 +39,7 @@
   
   <div class="form-group">
     <select id="keywordType" name="keywordType" class="form-control">
-      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), '--关键词类型--'|trans) }}
+      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickname') }}
     </select>
   </div>
 
@@ -54,15 +57,18 @@
   {% endif %}
 </form>
 
+
+
 <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
       <th>{{'用户名'|trans}}</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>{{'手机号'|trans}}</th>
       <th>Email</th>
       <th>{{'注册时间'|trans}}</th>
       <th>{{'最近登录'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th width="10%">{{'操作'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -74,5 +80,6 @@
     {% endfor %}
   </tbody>
 </table>
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'user', formId:'user-table'} %}
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}

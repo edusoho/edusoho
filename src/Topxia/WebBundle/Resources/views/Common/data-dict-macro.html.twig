@@ -87,3 +87,13 @@
         <span class="text-muted">{{ '已结束'|trans }}</span>
     {% endif %}
 {% endmacro %}
+
+{% macro  video_quality(option) %}
+     {% if option == 'low' %}
+       {{'流畅'|trans}} <span class="text-muted">({{'适合PPT讲解'|trans}})</span>
+    {% elseif option == 'normal' %}
+      {{'标准'|trans}} <span class="text-muted">({{'适合屏幕录制、摄像头拍摄'|trans}})</span>
+    {% elseif option == 'high' %}
+      {{'精细'|trans}} <span class="text-muted">({{'适合动态电影'|trans}})</span>
+    {% endif %}
+{% endmacro %}

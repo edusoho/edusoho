@@ -1,9 +1,9 @@
 <?php
 
 namespace Topxia\Service\Util;
+use Topxia\Service\Common\BaseService;
 
-
-class MySQLDumper
+class MySQLDumper extends BaseService
 {
 
 
@@ -44,7 +44,7 @@ class MySQLDumper
        $target .=  ".gz";
 
        if ( !is_writable( dirname($target)) ) {
-             throw new \Exception("无导出目录写权限，无法导出数据库", 1);
+             throw new \Exception( $this->getKernel()->trans('无导出目录写权限，无法导出数据库'), 1);
        }
 
         $tables = array();
@@ -55,10 +55,10 @@ class MySQLDumper
         $file =  gzopen($target, "wb");
 
         $this->lineWrite($file, "-- --------------------------------------------------\n");
-        $this->lineWrite($file, "-- ---------------- 导出数据库\n");
-        $this->lineWrite($file, "-- ---------------- 时间:". date('Y-m-d H:i:s')."\n\n");
-        $this->lineWrite($file, "-- ---------------- 数据库:{$this->connection->getDatabase()} \n\n");
-        $this->lineWrite($file, "-- ---------------- 主机:{$this->connection->getHost()} \n\n");
+        $this->lineWrite($file,  $this->getKernel()->trans('-- ---------------- 导出数据库')."\n");
+        $this->lineWrite($file,  $this->getKernel()->trans('-- ---------------- 时间:'). date('Y-m-d H:i:s')."\n\n");
+        $this->lineWrite($file,  $this->getKernel()->trans('-- ---------------- 数据库:')."{$this->connection->getDatabase()}"." \n\n");
+        $this->lineWrite($file, $this->getKernel()->trans('-- ---------------- 主机:')."{$this->connection->getHost()} "."\n\n");
         $this->lineWrite($file, "-- --------------------------------------------------\n\n\n");
 
         foreach ($tables as $table) {
@@ -93,7 +93,7 @@ class MySQLDumper
         foreach ($this->connection->query($sql) as $row) {
             if (isset($row['Create Table']) ) {
                 $line  = "-- --------------------------------------------------\n\n";
-                $line .= "-- -------------- 表:{$table} 的表结构  -------------- \n\n";
+                $line .= $this->getKernel()->trans('-- -------------- 表:%table% 的表结构  -------------- ',array('%table%'=>$table))."\n\n";
                 $line .= "-- --------------------------------------------------\n\n";
 
                 if ( $this->getSet('isDropTable') ) {
@@ -106,11 +106,11 @@ class MySQLDumper
             }
             if ( isset($row['Create View']) ) {
                 $line  = "-- --------------------------------------------------\n\n";
-                $line .= "-- -------------- 视图:{$table} 的表结构  -------------- \n\n";
+                $line .= $this->getKernel()->trans('-- -------------- 视图:%table% 的表结构  --------------',array('%table%'=>$table))."\n\n";
                 $line .= "-- --------------------------------------------------\n\n";
                 $line .= $row['Create View'];
                 $line .= ";\n\n";
-                               
+                 
                 $this->lineWrite($file,$line);
 
                 return false;
@@ -121,7 +121,7 @@ class MySQLDumper
 
     protected function exportValues($file,$table)
     {
-        $this->lineWrite($file,"-- ----------- {$table} 的数据 ---------\n\n");
+        $this->lineWrite($file,$this->getKernel()->trans("-- ----------- %table% 的数据 ---------",array('%table%'=>$table))."\n\n");
 
         if ( $this->getSet('hasTransaction') ) {
             $this->connection->setTransactionIsolation(3);
@@ -164,7 +164,7 @@ class MySQLDumper
             $this->connection->exec("UNLOCK TABLES");
         }
         $this->lineWrite($file,"\n\n");
-        $this->lineWrite($file,"-- ----------- {$table} 的数据结束 ---------\n\n");
+        $this->lineWrite($file,$this->getKernel()->trans('-- ----------- %table% 的数据结束 ---------',array('%table%'=>$table))."\n\n");
     }
 }
 

@@ -47,25 +47,27 @@ define(function(require, exports, module) {
         if (!error) {
             return;
         }
-
         if (error.name == 'Unlogin') {
-            var $loginModal = $("#login-modal");
-
-            $('.modal').modal('hide');
-
-            $loginModal.modal('show');
-            $.get($loginModal.data('url'), function(html) {
-                $loginModal.html(html);
-            });
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+                window.location.href = '/login/bind/weixinmob?_target_path='+location.href;
+            } else {
+                var $loginModal = $("#login-modal");
+                $('.modal').modal('hide');
+                $loginModal.modal('show');
+                $.get($loginModal.data('url'), function(html){
+                    $loginModal.html(html);
+                });
+            }
         }
     });
 
     if ($('html').hasClass('lt-ie8')) {
         var message = '<div class="alert alert-warning" style="margin-bottom:0;text-align:center;">';
-        message += '由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的';
-        message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">IE浏览器</a>、';
-        message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">谷歌浏览器</a><strong>(推荐)</strong>、';
-        message += '<a href="http://firefox.com.cn/download/" target="_blank">Firefox浏览器</a>，访问本站。';
+        message += Translator.trans('由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的');
+        message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">'+Translator.trans('IE浏览器')+'</a>、';
+        message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">'+Translator.trans('谷歌浏览器')+'</a>'+'<strong>'+'('+Translator.trans('推荐')+')'+'</strong>、';
+        message += '<a href="http://firefox.com.cn/download/" target="_blank">'+Translator.trans('Firefox浏览器')+'</a>'+'，'+Translator.trans('访问本站。');
         message += '</div>';
 
         $('body').prepend(message);
@@ -111,28 +113,17 @@ define(function(require, exports, module) {
             });
         });
     }
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
-        if ($('.weixin-alert.hide'))
-            $('.weixin-alert.hide').removeClass('hide');
-    };
 
-    $(".weixin-alert .close").click(function() {
-        Cookie.set("close_weixin_alert", 'true', {
-            path: '/'
-        });
-    });
+   	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+	    $("li.nav-hover").mouseenter(function(event) {
+	        $(this).addClass("open");
+	    }).mouseleave(function(event) {
+	        $(this).removeClass("open");
+	    });
 
-    if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
-        $("li.nav-hover").mouseenter(function(event) {
-            $(this).addClass("open");
-        }).mouseleave(function(event) {
-            $(this).removeClass("open");
-        });
-
-    } else {
-        $("li.nav-hover >a").attr("data-toggle", "dropdown");
-    }
+	} else {
+        $("li.nav-hover >a").attr("data-toggle","dropdown");
+	}
 
     if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
         $('.es-wrap [data-toggle="tooltip"]').tooltip({
@@ -143,7 +134,7 @@ define(function(require, exports, module) {
     $(".js-search").focus(function() {
         $(this).prop("placeholder", "").addClass("active");
     }).blur(function() {
-        $(this).prop("placeholder", "搜索").removeClass("active");
+        $(this).prop("placeholder", Translator.trans('搜索')).removeClass("active");
     });
 
     if ($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {

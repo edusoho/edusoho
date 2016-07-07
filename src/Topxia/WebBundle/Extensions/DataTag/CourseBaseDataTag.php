@@ -34,32 +34,32 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function checkUserId(array $arguments)
     {
         if (empty($arguments['userId'])) {
-            throw new \InvalidArgumentException("userId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('userId参数缺失'));
         }
     }
 
     protected function checkCategoryId(array $arguments)
     {
         if (empty($arguments['categoryId'])) {
-            throw new \InvalidArgumentException("categoryId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('categoryId参数缺失'));
         }
     }
 
     protected function checkCount(array $arguments)
     {
         if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('count参数缺失'));
         }
 
         if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('count参数超出最大取值范围'));
         }
     }
 
     protected function checkCourseId(array $arguments)
     {
         if (empty($arguments['courseId'])) {
-            throw new \InvalidArgumentException("courseId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('courseId参数缺失'));
         }
     }
 
@@ -77,28 +77,28 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function checkThreadId(array $arguments)
     {
         if (empty($arguments['threadId'])) {
-            throw new \InvalidArgumentException("threadId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('threadId参数缺失'));
         }
     }
 
     protected function checkReviewId(array $arguments)
     {
         if (empty($arguments['reviewId'])) {
-            throw new \InvalidArgumentException("reviewId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('reviewId参数缺失'));
         }
     }
 
     protected function checkGroupId(array $arguments)
     {
         if (empty($arguments['group'])) {
-            throw new \InvalidArgumentException("group参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('group参数缺失'));
         }
     }
 
     protected function checkLessonId(array $arguments)
     {
         if (empty($arguments['lessonId'])) {
-            throw new \InvalidArgumentException("lessonId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('lessonId参数缺失'));
         }
     }
 

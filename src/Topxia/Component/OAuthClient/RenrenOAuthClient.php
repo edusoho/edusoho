@@ -1,10 +1,12 @@
 <?php
 namespace Topxia\Component\OAuthClient;
 
+use Topxia\Common\ArrayToolkit;
+
 class RenrenOAuthClient extends AbstractOAuthClient
 {
-    CONST AUTHORIZE_URL = 'https://graph.renren.com/oauth/authorize?';
-    CONST OAUTH_TOKEN_URL = 'https://graph.renren.com/oauth/token?';
+    const AUTHORIZE_URL = 'https://graph.renren.com/oauth/authorize?';
+    const OAUTH_TOKEN_URL = 'https://graph.renren.com/oauth/token?';
 
     public function getAuthorizeUrl($callbackUrl)
     {
@@ -43,8 +45,9 @@ class RenrenOAuthClient extends AbstractOAuthClient
         $userInfo = array();
         $userInfo['id'] = $infos['id'];
         $userInfo['name'] = $infos['name'];
-        $userInfo['smallAvatar'] = $infos['avatar'][1]['url'];
-        $userInfo['largeAvatar'] = $infos['avatar'][2]['url'];
+        
+        $avatars = ArrayToolkit::index($infos['avatar'], 'type');
+        $userInfo['avatar'] = $avatars['large']['url'];
         return $userInfo;
     }
 }

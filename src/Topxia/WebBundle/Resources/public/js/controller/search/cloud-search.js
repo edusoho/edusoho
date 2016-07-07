@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Lazyload = require('echo.js');
     require('jquery.lavalamp');
+    require('topxiawebbundle/util/follow-btn');
     var Widget = require('widget');
 
     exports.run = function() {

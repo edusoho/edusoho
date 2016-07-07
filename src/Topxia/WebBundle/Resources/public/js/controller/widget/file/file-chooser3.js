@@ -9,6 +9,7 @@ define(function(require, exports, module) {
         var MaterialFileBrowser = require('../file/file-browser-material-lib');
     }
     var CourseFileBrowser = require('../file/file-browser');
+    var BatchUploader = require('../../uploader/batch-uploader');
 
     var FileChooser = Widget.extend({
         attrs: {
@@ -27,7 +28,6 @@ define(function(require, exports, module) {
             this.on('change', this.onChanged);
 
             this._initTabs();
-            this._initUploadPane();
             this._initFileBrowser();
 
             var choosed = this.get('choosed');
@@ -41,6 +41,8 @@ define(function(require, exports, module) {
         open: function() {
             this.show();
             this.$(".file-chooser-bar").hide();
+            this.$(".file-chooser-bar").find('[data-role=placeholder]').text('');
+            this.element.closest('form').find('[name=fileId]').val('');
             this.$(".file-chooser-main").show();
             this.$(".file-chooser-uploader-tab").tab('show');
             return this;
@@ -57,7 +59,6 @@ define(function(require, exports, module) {
                 this.$('.file-chooser-uploader-tab').parent().removeClass('active');
             }
             
-            this.get('progressbar').reset().hide();
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
             return this;
@@ -95,13 +96,9 @@ define(function(require, exports, module) {
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
                     self._createUploader();
-                    self.get('progressbar').reset().hide();
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
-                    if (self.isUploading()) {
-                        return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
-                    }
                     self._destoryUploader();
                 }
 
@@ -141,7 +138,6 @@ define(function(require, exports, module) {
         _initLinkPane: function() {
             var self = this;
 
-
             var validator = Validator.query('#course-material-form');
             if (!validator) {
                 validator = new Validator({
@@ -152,7 +148,7 @@ define(function(require, exports, module) {
 
             validator.addItem({
                 element: '[name="link"]',
-                display: '链接地址',
+                display: Translator.trans('链接地址'),
                 required: true,
                 rule: 'url'
             }).on('itemValidated', function(error, results, $item){
@@ -179,132 +175,45 @@ define(function(require, exports, module) {
             return media;
         },
 
-        _initUploadPane: function() {
-            this.set('progressbar', new UploadProgressBar(this.$('[data-role=progress]')));
-        },
-
         _destoryUploader: function() {
-            if (this.get('uploader')) {
-                this.get('uploader').destroy();
-                this.set('uploader', null);
+            if (!this.uploader) {
+                return ;
             }
+            this.uploader.destroy();
+            this.uploader = null;
         },
 
         _createUploader: function() {
-            var self = this,
-                $btn = this.$('[data-role=uploader-btn]'),
-                progressbar = this.get('progressbar'),
-                btnData = $btn.data();
+            if (this.uploader) {
+                return ;
+            }
 
-            var uploader = new plupload.Uploader({
-                runtimes : 'flash',
-                max_file_size: '2gb',
-                multi_selection: false,
-                browse_button : $btn.attr('id'),
-                url : btnData.uploadUrl
+            var self = this;
+            var $el = this.element.find('.balloon-uploader');
+            var uploader = new BatchUploader({
+                element: $el,
+                initUrl: $el.data('initUrl'),
+                finishUrl: $el.data('finishUrl'),
+                uploadAuthUrl: $el.data('uploadAuthUrl'),
+                multi: false
             });
 
-            uploader.bind('FilesAdded', function(uploader, files) {
-                if (uploader.files.length > 0) {
-                    Notify.danger('文件正在上传中，请等待本次上传完毕后，再上传。');
-                    uploader.removeFile(files[0]);
-                }
-                uploader.refresh();
-                setTimeout(function(){
-                    uploader.start();
-                }, 1);
+            uploader.on('file.uploaded', function(file, data,response) {
+                var item = {
+                    id: response.id,
+                    status: 'waiting',
+                    source: 'self',
+                    name: response.filename,
+                    length: parseInt(data.length)
+                };
+
+                self.trigger("change", item);
             });
 
-            uploader.bind('BeforeUpload', function(uploader, file) {
-                $.ajax({
-                    url: btnData.paramsUrl,
-                    async: false,
-                    dataType: 'json',
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        uploader.settings.url = response.url;
-                        uploader.settings.multipart_params = response.postParams;
-                        uploader.refresh();
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
-                        uploader.stop();
-                    }
-                });
-                progressbar.reset().show();
-            });
-
-            uploader.bind('UploadProgress', function(uploader, file) {
-                progressbar.setProgress(file.percent);
-            });
-
-            uploader.bind('FileUploaded', function(uploader, file, response) {
-                uploader.removeFile(file);
-                uploader.refresh();
-                progressbar.setComplete().hide();
-                response = $.parseJSON(response.response);
-
-                if (btnData.callback) {
-                    $.post(btnData.callback, response, function(response) {
-                        var media = self._convertFileToMedia(response);
-                        self.trigger('change',  media);
-                        Notify.success('文件上传成功！');
-                    }, 'json');
-                } else {
-                    var media = self._convertFileToMedia(response);
-                    self.trigger('change',  media);
-                    Notify.success('文件上传成功！');
-                }
-            });
-
-            uploader.bind('Error', function(uploader) {
-
-                Notify.danger('文件上传失败，请重试！');
-            });
-
-            uploader.init();
-
-            this.set('uploader', uploader);
-
-            return uploader;
+            this.uploader = uploader;
         }
 
     });
-
-    function UploadProgressBar(element) {
-        this.element = $(element);
-        this.percentage = 0;
-    }
-
-    UploadProgressBar.prototype.show = function () {
-        this.element.show();
-        return this;
-    }
-
-    UploadProgressBar.prototype.hide = function () {
-        this.element.hide();
-        return this;
-    }
-
-    UploadProgressBar.prototype.setProgress = function (percentage) {
-        this.percentage = percentage;
-        this.element.find('.progress-bar').css('width', percentage + '%');
-        return this;
-    }
-
-    UploadProgressBar.prototype.setComplete = function () {
-        this.setProgress(100);
-        return this;
-    }
-
-    UploadProgressBar.prototype.reset = function () {
-        this.setProgress(0);
-        return this;
-    }
-
-    UploadProgressBar.prototype.isProgressing = function () {
-        return this.percentage > 0;
-    }
 
     module.exports = FileChooser;
 });

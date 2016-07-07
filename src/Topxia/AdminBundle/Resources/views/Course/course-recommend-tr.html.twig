@@ -7,6 +7,7 @@
     <br>
     <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
     {{ admin_macro.user_link(user) }}
     <br>

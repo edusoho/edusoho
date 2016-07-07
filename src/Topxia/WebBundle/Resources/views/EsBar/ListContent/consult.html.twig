@@ -3,13 +3,13 @@
   <div class="bar-popover-content" style="display:none;">
     <div id="bar-qq-content">
       {% set countQq = 0 %}
-      {% for qq in consult.qq if qq.name is not empty %}
+      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
         {% set countQq = 1 %}
       {% endfor %}
 
       {% if countQq > 0 %}
       <div class="row mtm">
-        {% for qq in consult.qq if qq.name is not empty %}
+        {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
           {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
               <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
@@ -29,7 +29,7 @@
       {% endif %}
 
       <div class="row">
-        {% for qqgroup in consult.qqgroup if qqgroup.name is not empty %}
+        {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
           <div class="col-xs-6 mbm">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
@@ -55,10 +55,10 @@
 
     <div id="bar-phone-content">
       {% if consult.worktime is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'工作时间：'|trans}} {{ consult.worktime }}</p>
+        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'工作时间：%worktime%'|trans({'%worktime%': consult.worktime}) }}</p>
       {% endif %}
       {% for phone in consult.phone if phone.name is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}{{'：'|trans}} {{ phone.number }}</p>
+        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{'%name%:%number%'|trans({'%name%': phone.name,'%number%': phone.number}) }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
         <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'邮箱：'|trans}} <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>

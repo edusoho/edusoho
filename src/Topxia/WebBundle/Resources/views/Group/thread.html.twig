@@ -18,7 +18,9 @@
         {% if is_feature_enabled('group_reward') %}
           {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
             <span class="label label-danger">{{'奖'|trans}}</span>
-            <span style="color:#d9534f;" class="mll"> {{'悬赏'|trans}}:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
+
+            <span style="color:#d9534f;" class="mll"> {{'悬赏:%rewardCoin%%coin_name%'|trans({'%rewardCoin%':threadMain.rewardCoin,'%coin_name%':setting('coin').coin_name})}}</span>
+
           {% endif %}
         {% endif %}
       </h3>
@@ -37,8 +39,13 @@
             <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'收藏'|trans}}</a>
           {% endif %}
         </div>
+<<<<<<< HEAD
         {{'发表于'|trans}} {{ threadMain.createdTime|smart_time }}
-        <span class="mll">{{ threadMain.hitNum }} {{'次查看'|trans}}</span>
+        <span class="mll">{{'%hitNum%次查看'|trans({'hitNum': threadMain.hitNum}) }}</span>
+=======
+        {{'发表于%createdTime%'|trans({'%createdTime%':threadMain.createdTime|smart_time})}} 
+        <span class="mll"> {{'%hitNum%次查看'|trans({'%hitNum%':threadMain.hitNum})}}</span>
+>>>>>>> origin/feature/fill-topxiaweb-twig-translate-zc
       </div>
 
       {{threadMain.content|raw}}
@@ -47,7 +54,11 @@
         <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
         <div class="row clearfix mtm">
           {% for attach in attachs %}
-            <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
+<<<<<<< HEAD
+            <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：%description%'|trans({'%description%': attach.description}}{% endif %}  {{'上传于%createdTime%'|trans({'%createdTime%': files[attach.fileId].createdTime|smart_time})}}">
+=======
+            <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：%description%'|trans({'%description%':attach.description})}}{% endif %}  {{'上传于 %createdTime%'|trans({'%createdTime%':files[attach.fileId].createdTime|smart_time})}}">
+>>>>>>> origin/feature/fill-topxiaweb-twig-translate-zc
               {% if attach.coin > 0  and   user.id != attach.userId and app.user %}
                 <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
               {% else %}
@@ -65,11 +76,19 @@
                 <div class="content" style="color: #999;font-size:11px;">
                   {{files[attach.fileId].size|file_size}}
                   {% if attach.coin > 0 %}
-                    <span class="mls">{{'售价'|trans}}:{{attach.coin}}{{setting('coin').coin_name}}</span>
+<<<<<<< HEAD
+                    <span class="mls">{{'售价:%coin%%name%'|trans({'%coin%': attach.coin,'%name%': setting('coin').coin_name})}}</span>
                     {% else %}
                     <span class="mls">{{'免费'|trans}}</span>
                   {% endif %}
-                  <br>{{'下载次数：'|trans}}{{attach.hitNum}}
+                  <br>{{'下载次数：%hitNum%'|trans({'%hitNum%': attach.hitNum})}}
+=======
+                    <span class="mls">{{'售价:%coin%%coin_name%'|trans({'%coin%':attach.coin,'%coin_name%':setting('coin').coin_name})}}</span>
+                    {% else %}
+                    <span class="mls">{{'免费'|trans}}</span>
+                  {% endif %}
+                  <br>{{'下载次数：%hitNum%'|trans({'%hitNum%':attach.hitNum})}}
+>>>>>>> origin/feature/fill-topxiaweb-twig-translate-zc
                 </div>
               </div>
             </div>
@@ -168,7 +187,7 @@
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
     <div class="panel-heading">
-      {{threadMain.postNum}}{{'回复'|trans}}
+      {{'%postNum%回复'|trans({'%hpostNum%': threadMain.postNum})}}
     </div>
     <div class="panel-body">
       <ul class="media-list">
@@ -180,9 +199,9 @@
               <div class="metas">
                 <span class="floor">
                   {% if filters.sort=='desc' %}
-                    {{ (postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0 }}{{'楼'|trans}}
+                    {{'%postCount%楼'|trans({'%postCount%':(postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0})}}
                   {% else %}
-                    {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}{{'楼'|trans}}
+                    {{'%loop.index%楼'|trans({'%loop.index%':(loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1)})}}
                   {% endif %}
                 </span>
                 <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
@@ -242,7 +261,7 @@
             <div class="row clearfix mtm">
               {% for attach in postAttachs[post.id] %}
                 {% set postFile = postFiles[post.id] %}
-                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：'|trans}}{{attach.description}}{% endif %}  {{'上传于'|trans}} {{postFile[attach.fileId].createdTime|smart_time}}">
+                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：%description%'|trans({'%description%': attach.description}}{% endif %}  {{'上传于%createdTime%'|trans({'%createdTime%': postFile[attach.fileId].createdTime|smart_time})}}">
                   {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                     <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                   {% else %}
@@ -263,7 +282,11 @@
                         {% else %}
                         <span class="mls">{{'免费'|trans}}</span>
                       {% endif %}
-                      <br>{{'下载次数：'|trans}}{{attach.hitNum}}
+<<<<<<< HEAD
+                      <br>{{'下载次数：%hitNum%'|trans({'%hitNum%': attach.hitNum})}}
+=======
+                      <br>{{'下载次数：%hitNum%'|trans({'%hitNum%':attach.hitNum})}}
+>>>>>>> origin/feature/fill-topxiaweb-twig-translate-zc
                     </div>
                     {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
                       <a title="{{'确定删除此附件'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'删除'|trans}}</a>
@@ -284,6 +307,7 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">{{'发表回复'|trans}}</div>
+
     <div class="panel-body">
 
       {% if app.user %}
@@ -307,7 +331,7 @@
         </form>
       {% else %}
         <div class="empty">
-          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+          {{'你还没有登录，请先'|trans}}<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">{{'注册'|trans}}</a>！
         </div>
       {% endif %}
     </div>
@@ -329,7 +353,7 @@
           <div>
             <a class="gray-darker">{{ web_macro.user_link(owner)}}</a>
           </div>
-          <span class="text-sm gray-medium">{{owner.title|default('无'|trans)}}</span>
+          <span class="text-sm gray-medium">{{'%title%'|trans({'%title%': owner.title|default('无'|trans)})}}</span>
         </div>
       </div>
     </div>

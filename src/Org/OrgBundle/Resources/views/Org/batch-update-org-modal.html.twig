@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}设置组织机构{% endblock %}
+{% block body %}
+
+  <form id="batch-setting-org-form" class="form-horizontal" method="post" action="{{ path('admin_batch_update_org',{module: module}) }}">
+
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {colmd:7} %}
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="ids" id ="batch-ids">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="batch-setting-org-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right"
+          data-toggle="form-submit" data-target="#batch-setting-org-form">提交
+  </button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('orgbundle/controller/org/batch-org-modal')</script>
+{% endblock %}

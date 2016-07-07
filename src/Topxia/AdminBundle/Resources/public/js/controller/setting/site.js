@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $form = $("#site-form");
-        
+
 
         var uploader = new WebUploader({
             element: '#site-logo-upload'
@@ -20,20 +20,20 @@ define(function(require, exports, module) {
                 $("#site-logo-container").html('<img src="' + data.url + '">');
                 $form.find('[name=logo]').val(data.path);
                 $("#site-logo-remove").show();
-                Notify.success('上传网站LOGO成功！');
+                Notify.success(Translator.trans('上传网站LOGO成功！'));
             });
         });
 
         $("#site-logo-remove").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
+            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#site-logo-container").html('');
                 $form.find('[name=logo]').val('');
                 $btn.hide();
-                Notify.success('删除网站LOGO成功！');
+                Notify.success(Translator.trans('删除网站LOGO成功！'));
             }).error(function(){
-                Notify.danger('删除网站LOGO失败！');
+                Notify.danger(Translator.trans('删除网站LOGO失败！'));
             });
         });
 
@@ -48,20 +48,20 @@ define(function(require, exports, module) {
                 $("#site-favicon-container").html('<img src="' + data.url + '" style="margin-bottom: 10px;">');
                 $form.find('[name=favicon]').val(data.path);
                 $("#site-favicon-remove").show();
-                Notify.success('上传网站浏览器图标成功！');
+                Notify.success(Translator.trans('上传网站浏览器图标成功！'));
             });
         });
 
         $("#site-favicon-remove").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
+            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#site-favicon-container").html('');
                 $form.find('[name=favicon]').val('');
                 $btn.hide();
-                Notify.success('删除网站浏览器图标成功！');
+                Notify.success(Translator.trans('删除网站浏览器图标成功！'));
             }).error(function(){
-                Notify.danger('删除网站浏览器图标失败！');
+                Notify.danger(Translator.trans('删除网站浏览器图标失败！'));
             });
         });
 

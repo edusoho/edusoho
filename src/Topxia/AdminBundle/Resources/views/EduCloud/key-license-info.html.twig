@@ -50,7 +50,7 @@
 
 
 
-    {% if info.copyright %}
+    {% if info.copyright and info.thirdCopyright != 2 %}
       <div class="form-group">
         <label class="col-md-3 control-label">{{'版权名称'|trans}}</label>
         <div class="col-md-6">

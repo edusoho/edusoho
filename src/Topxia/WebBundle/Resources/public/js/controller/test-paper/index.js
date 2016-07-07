@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     
     exports.run = function() {
 
-        require('../course-manage/header').run();
 
         var $container = $('#quiz-table-container');
         require('../../util/batch-select')($container);
@@ -13,7 +12,7 @@ define(function(require, exports, module) {
         require('../../util/item-delete')($container);
 
         $('.test-paper-reset').on('click','',function(){
-        	if (!confirm('重置会清空原先的题目,确定要继续吗？')) {
+        	if (!confirm(Translator.trans('重置会清空原先的题目,确定要继续吗？'))) {
         	    return ;
         	}
             window.location.href=$(this).data('url');
@@ -27,17 +26,17 @@ define(function(require, exports, module) {
             var $trigger = $(this);
             var $oldTr = $trigger.parents('tr');
 
-            if (!confirm('真的要' + $trigger.attr('title') + '吗？ 试卷发布后无论是否关闭都将无法修改。')) {
+            if (!confirm(Translator.trans('真的要%title%吗？ 试卷发布后无论是否关闭都将无法修改。',{title:$trigger.attr('title')}))) {
                 return ;
             }
 
             $.post($(this).data('url'), function(html){
-                Notify.success($trigger.attr('title') + '成功！');
+                Notify.success($trigger.attr('title') + Translator.trans('成功！'));
 
                 var $tr = $(html);
                 $oldTr.replaceWith($tr);
             }).error(function(){
-                Notify.danger($trigger.attr('title') + '失败');
+                Notify.danger($trigger.attr('title') + Translator.trans('失败'));
             });
         });
 

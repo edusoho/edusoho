@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: ['班级营收额'],
+                      labels: [Translator.trans('班级营收额')],
                       xLabels:"day"
                     });
         }

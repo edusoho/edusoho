@@ -25,17 +25,13 @@ class MobileController extends BaseController
         $mobile = $this->setting('mobile', array());
 
         if (empty($mobile['enabled'])) {
-            return $this->createMessageResponse('info', '客户端尚未开启！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('客户端尚未开启！'));
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if(array_key_exists('ver',$mobile) && $mobile['ver']){
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        }else{
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
-        }
-
+        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
             'mobileCode' => $mobileCode,

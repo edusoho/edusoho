@@ -6,6 +6,7 @@
       <label class="label label-danger">{{'禁'|trans}}</label>
     {% endif %}
   </td>
+   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.promoted %}
       <span class="label label-default">{{'荐:'|trans}}{{ user.promotedTime|date('Y-m-d') }} / {{'序号:'|trans}}{{ user.promotedSeq }}</span>

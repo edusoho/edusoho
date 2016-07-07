@@ -6,7 +6,8 @@
 
 {% block main %}
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-
+  {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+  
   <div class="form-group">
     <input type="text" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}" placeholder="{{'用户名'|trans}}">
   </div>
@@ -18,6 +19,7 @@
   <thead>
     <tr>
       <th>{{'用户名'|trans}}</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th width="30%" >{{'推荐教师'|trans}}</th>
       <th>{{'最近登录'|trans}}</th>
       <th>{{'操作'|trans}}</th>

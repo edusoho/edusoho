@@ -53,7 +53,7 @@ class UserSettingController extends BaseController
             if (isset($defaultSetting['user_name'])) {
                 $defaultSetting['user_name'] = $defaultSetting['user_name'];
             } else {
-                $defaultSetting['user_name'] = '学员';
+                $defaultSetting['user_name'] = $this->getServiceKernel()->trans('学员');
             }
 
             $userDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
@@ -88,8 +88,8 @@ class UserSettingController extends BaseController
             $auth = array_merge($auth, $authUpdate);
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
-            $this->setFlashMessage('success', '注册设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新注册设置'), $auth);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('注册设置已保存！'));
         }
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -117,8 +117,8 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新头像设置", $userDefaultSetting);
-            $this->setFlashMessage('success', '头像设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新头像设置'), $userDefaultSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('头像设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:user-avatar.html.twig', array(
@@ -155,8 +155,8 @@ class UserSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
-            $this->setFlashMessage('success', '登录设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新登录设置'), $loginConnect);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('登录设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
@@ -195,21 +195,20 @@ class UserSettingController extends BaseController
 
             if ($setting['mode'] == 'discuz') {
                 if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
                     goto response;
                 }
-
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', "用户中心设置", $setting);
+            $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
             $this->setFlashMessage('success', '用户中心设置已保存！');
         }
 
@@ -245,23 +244,23 @@ class UserSettingController extends BaseController
 
         for ($i = 0; $i < count($fields); $i++) {
             if (strstr($fields[$i]['fieldName'], "textField")) {
-                $fields[$i]['fieldName'] = "多行文本";
+                $fields[$i]['fieldName'] = $this->getServiceKernel()->trans('多行文本');
             }
 
             if (strstr($fields[$i]['fieldName'], "varcharField")) {
-                $fields[$i]['fieldName'] = "文本";
+                $fields[$i]['fieldName'] = $this->getServiceKernel()->trans('文本');
             }
 
             if (strstr($fields[$i]['fieldName'], "intField")) {
-                $fields[$i]['fieldName'] = "整数";
+                $fields[$i]['fieldName'] = $this->getServiceKernel()->trans('整数');
             }
 
             if (strstr($fields[$i]['fieldName'], "floatField")) {
-                $fields[$i]['fieldName'] = "小数";
+                $fields[$i]['fieldName'] = $this->getServiceKernel()->trans('小数');
             }
 
             if (strstr($fields[$i]['fieldName'], "dateField")) {
-                $fields[$i]['fieldName'] = "日期";
+                $fields[$i]['fieldName'] = $this->getServiceKernel()->trans('日期');
             }
         }
 
@@ -299,8 +298,8 @@ class UserSettingController extends BaseController
             $auth['registerFieldNameArray']    = $request->request->get('registerFieldNameArray');
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
-            $this->setFlashMessage('success', '用户信息设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新用户信息设置'), $auth);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户信息设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
@@ -325,23 +324,23 @@ class UserSettingController extends BaseController
         }
 
         if (strstr($field['fieldName'], "textField")) {
-            $field['fieldName'] = "多行文本";
+            $field['fieldName'] = $this->getServiceKernel()->trans('多行文本');
         }
 
         if (strstr($field['fieldName'], "varcharField")) {
-            $field['fieldName'] = "文本";
+            $field['fieldName'] = $this->getServiceKernel()->trans('文本');
         }
 
         if (strstr($field['fieldName'], "intField")) {
-            $field['fieldName'] = "整数";
+            $field['fieldName'] = $this->getServiceKernel()->trans('整数');
         }
 
         if (strstr($field['fieldName'], "floatField")) {
-            $field['fieldName'] = "小数";
+            $field['fieldName'] = $this->getServiceKernel()->trans('小数');
         }
 
         if (strstr($field['fieldName'], "dateField")) {
-            $field['fieldName'] = "日期";
+            $field['fieldName'] = $this->getServiceKernel()->trans('日期');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -390,8 +389,8 @@ class UserSettingController extends BaseController
         $field = $request->request->all();
 
         if (isset($field['field_title'])
-            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'))) {
-            throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
+            && in_array($field['field_title'], array($this->getServiceKernel()->trans('真实姓名'), $this->getServiceKernel()->trans('手机号码'), $this->getServiceKernel()->trans('QQ'), $this->getServiceKernel()->trans('所在公司'), $this->getServiceKernel()->trans('身份证号码'), $this->getServiceKernel()->trans('性别'), $this->getServiceKernel()->trans('职业'), $this->getServiceKernel()->trans('微博'), $this->getServiceKernel()->trans('微信')))) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('请勿添加与默认字段相同的自定义字段！'));
         }
 
         $field = $this->getUserFieldService()->addUserField($field);
@@ -399,7 +398,7 @@ class UserSettingController extends BaseController
         $this->changeUserInfoFields($field, $type = "update");
 
         if ($field == false) {
-            $this->setFlashMessage('danger', '已经没有可以添加的字段了!');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('已经没有可以添加的字段了!'));
         }
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
@@ -410,11 +409,11 @@ class UserSettingController extends BaseController
         $default = array(
             'defaultAvatar'         => 0,
             'defaultAvatarFileName' => 'avatar',
-            'articleShareContent'   => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent'    => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent'     => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'user_name'             => '学员'
+            'articleShareContent'   => $this->getServiceKernel()->trans('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'),
+            'courseShareContent'    => $this->getServiceKernel()->trans('我正在学习{{course}}，收获巨大哦，一起来学习吧！'),
+            'groupShareContent'     => $this->getServiceKernel()->trans('我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!'),
+            'classroomShareContent' => $this->getServiceKernel()->trans('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'),
+            'user_name'             => $this->getServiceKernel()->trans('学员')
         );
 
         return $default;
@@ -460,11 +459,6 @@ class UserSettingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getAppService()

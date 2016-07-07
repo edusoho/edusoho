@@ -29,6 +29,7 @@ class CourseOrderController extends OrderController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
+
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
@@ -95,13 +96,13 @@ class CourseOrderController extends OrderController
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
         }
 
         $course = $this->getCourseService()->getCourse($formData['targetId']);
 
         if (empty($course)) {
-            return $this->createMessageResponse('error', '课程不存在，不能购买。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('课程不存在，不能购买。'));
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -122,7 +123,14 @@ class CourseOrderController extends OrderController
         ));
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
 
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
         //判断用户是否为VIP
         $vipStatus = $courseVip = null;
 
@@ -144,7 +152,7 @@ class CourseOrderController extends OrderController
         $coinEnable    = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
         //$userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
 
-        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0)
+        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['price'] == 0)
             || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0) || $vipStatus == 'ok') {
             $data['price']  = 0;
             $data['remark'] = '';
@@ -168,27 +176,27 @@ class CourseOrderController extends OrderController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，不能支付。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能支付。'));
         }
 
         $order = $this->getOrderService()->getOrder($request->query->get('orderId'));
 
         if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
         if ((time() - $order['createdTime']) > 40 * 3600) {
-            return $this->createMessageResponse('error', '订单已过期，不能支付，请重新创建订单。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单已过期，不能支付，请重新创建订单。'));
         }
 
         if ($order["userId"] != $user["id"]) {
-            return $this->createMessageResponse('error', '不是您的订单，不能支付');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('不是您的订单，不能支付'));
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            return $this->createMessageResponse('error', '购买的课程不存在，请重新创建订单!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('购买的课程不存在，请重新创建订单!'));
         }
 
         $result          = $this->getOrderInfo($order["targetId"]);
@@ -202,7 +210,7 @@ class CourseOrderController extends OrderController
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
         $this->getCourseService()->tryManageCourse($order["targetId"]);
@@ -253,7 +261,7 @@ class CourseOrderController extends OrderController
             }
         } else
         if ($coursePriceShowType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $totalPrice = $course["price"];
 
             if ($hasPayPassword && $totalPrice * 100 > $accountCash * 100) {
                 $coinPayAmount = $accountCash;

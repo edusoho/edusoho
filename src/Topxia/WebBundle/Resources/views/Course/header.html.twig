@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-
+ {{ load_script('course-manage/header') }}
 <div class="es-section course-manage-header clearfix">
   <a href="{{ path('course_show', {id:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
@@ -34,7 +34,7 @@
       <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="{{'评价'|trans}}" data-placement="top" href="#modal">
         <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
       {% if setting('course.show_student_num_enabled', '1') == 1 or member.role|default('student') == 'teacher' or isAdmin %}
-        <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{{setting('default.user_name', '学员')}}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+        <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="{{'查看%user_name%的学习进度, 还可以发私信进行联系'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}!" data-placement="bottom"
           href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
       {% endif %}
 
@@ -109,12 +109,12 @@
 {% if not isNonExpired %}
   <div class="alert alert-danger alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
+    {{'您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击'|trans}}
       <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
       {% if course.price>0 %}
-        重新购买
+        {{'重新购买'|trans}}
       {% else %}
-        重新加入
+        {{'重新加入'|trans}}
       {% endif %}
     </a>
   </div>

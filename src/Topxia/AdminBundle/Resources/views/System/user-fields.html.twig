@@ -176,10 +176,10 @@
     <legend>{{'其它设置'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'头像设置提醒'|trans}}</label>
+        <label>{{'加入免费课程要求设置头像'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('avatar_alert', {'none':'从不'|trans, 'in_user_center':'每次进入"我的课程"时'|trans, 'when_join_course':'加入免费课程时强制要求'|trans}, setting('user_partner.avatar_alert')|default('none')) }}
+        {{ radios('avatar_alert', {'open':'开启', 'close':'关闭'}, setting('user_partner.avatar_alert')|default('close')) }}
       </div>
     </div>
     <div class="form-group">

@@ -12,11 +12,10 @@ class AlipayResponse extends Response
     {
         $error = $this->hasError();
         if ($error) {
-            throw new \RuntimeException(sprintf('支付宝支付校验失败(%s)。', $error));
+            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('支付宝支付校验失败(%error%)。', array('%error%' =>$error ))));
         }
 
         $params = $this->params;
-
         if ($params['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
 
             $trade_no = $params['trade_no'];
@@ -71,7 +70,6 @@ class AlipayResponse extends Response
                 'service' => 'notify_verify',
                 'partner' => $this->options['key'],
             ));
-
             if (strtolower($notifyResult) !== 'true') {
                 return 'notify_verify_error';
             }
@@ -141,5 +139,9 @@ class AlipayResponse extends Response
         $sign .=$this->options['secret'];
         return md5($sign);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

@@ -3,11 +3,9 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\WebBundle\Controller\BaseController as WebBaseController;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class BaseController extends WebBaseController
 {
-
     protected function getDisabledFeatures()
     {
         if (!$this->container->hasParameter('disabled_features')) {
@@ -15,33 +13,33 @@ class BaseController extends WebBaseController
         }
 
         $disableds = $this->container->getParameter('disabled_features');
+
         if (!is_array($disableds) || empty($disableds)) {
             return array();
         }
 
         return $disableds;
     }
+    /**
+     * condtions 中添加 likeOrgCode
+     * @param  [type] $conditions [description]
+     * @return [type]             [description]
+     */
+    protected function fillOrgCode($conditions){
 
-    protected function refreshCopyright($info = array())
-    {
-        $settingService = $this->getServiceKernel()->createService('System.SettingService');
-
-        if (empty($info)) {
-            $api = CloudAPIFactory::create('leaf');
-            $info = $api->get('/me');
+        if($this->setting('magic.enable_org')){
+             if( !isset($conditions['orgCode'])){
+                $conditions['likeOrgCode'] =  $this->getCurrentUser()->getSelectOrgCode();
+             }else{
+                $conditions['likeOrgCode'] =  $conditions['orgCode'];
+                 unset($conditions['orgCode']); 
+             }
+        }else{
+             if(isset($conditions['orgCode'])){
+               unset($conditions['orgCode']); 
+             }
         }
 
-        if (isset($info['copyright'])) {
-            if ($info['copyright']) {
-                $copyright = $settingService->get('copyright', array());
-                if (empty($copyright['owned'])) {
-                    $copyright['owned'] = 1;
-                    $settingService->set('copyright', $copyright);
-                }
-            } else {
-                $settingService->delete('copyright');
-            }
-        }
+        return $conditions;
     }
-
 }

@@ -8,7 +8,7 @@ define(function(require, exports, module){
 
         $(".form-paytype").on('click','.check', function() {
             var $this = $(this);
-            if (!$this.hasClass('active')) {
+            if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
                 $this.addClass('active').siblings().removeClass('active');
                 $("input[name='payment']").val($this.attr("id"));
             }
@@ -22,9 +22,9 @@ define(function(require, exports, module){
             var $this = $(this);
             $.post($this.data('url'), function(data) {
                 if(data!=true) {
-                    Notify.danger('订单取消失败！');
+                    Notify.danger(Translator.trans('订单取消失败！'));
                 }
-                Notify.success('订单已取消成功！');
+                Notify.success(Translator.trans('订单已取消成功！'));
                 window.location.href = $this.data('goto');
             });
 
@@ -36,7 +36,7 @@ define(function(require, exports, module){
 
         }).on('click', '.js-pay-bank .closed', function() {
 
-            if(!confirm('确定解除绑定该银行卡吗')){
+            if(!confirm(Translator.trans('确定解除绑定该银行卡吗'))){
                 return;
             }
 
@@ -56,6 +56,30 @@ define(function(require, exports, module){
         if (navigator.userAgent.match(/mobile/i)) {
             $("#heepay").css("display","none");
         }
+
+        $("input[name='payment']").val($('div .active').attr("id"));
+
+        $("#copy").on('click',function(event){
+            var textarea = document.createElement("textarea");
+            textarea.style.position = 'fixed';
+            textarea.style.top = 0;
+            textarea.style.left = 0;
+            textarea.style.border = 'none';
+            textarea.style.outline = 'none';
+            textarea.style.resize = 'none';
+            textarea.style.background = 'transparent';
+            textarea.style.color = 'transparent';
+
+            textarea.value = document.location.href;
+            var ele = $(textarea);
+            $(this).append(ele);
+
+            textarea.select();
+            document.execCommand('copy');
+
+            ele.remove();
+            Notify.success('复制成功！');
+        })
     };
 
 });

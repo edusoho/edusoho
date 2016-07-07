@@ -17,13 +17,13 @@ class CoinController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
         }
 
         $coinEnabled = $this->setting("coin.coin_enabled");
 
         if (empty($coinEnabled) || $coinEnabled == 0) {
-            return $this->createMessageResponse('error', '网校虚拟币未开启！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('网校虚拟币未开启！'));
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
@@ -84,7 +84,7 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
 
-        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+// $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
             'account'       => $account,
@@ -161,7 +161,7 @@ class CoinController extends BaseController
         $promote      = array();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
         }
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
@@ -267,13 +267,13 @@ class CoinController extends BaseController
             $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
 
             if ($record) {
-                $response = array('success' => false, 'message' => '您已经填过邀请码');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('您已经填过邀请码'));
             } else {
                 $promoteUser = $this->getUserservice()->getUserByInviteCode($inviteCode);
 
                 if ($promoteUser) {
                     if ($promoteUser['id'] == $user['id']) {
-                        $response = array('success' => false, 'message' => '不能填写自己的邀请码');
+                        $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('不能填写自己的邀请码'));
                     } else {
                         $this->getInviteRecordService()->createInviteRecord($promoteUser['id'], $user['id']);
                         $response     = array('success' => true);
@@ -282,10 +282,11 @@ class CoinController extends BaseController
                         if (!empty($inviteCoupon)) {
                             $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
                             $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+                            $this->sendInviteUserCard($promoteUser['id'], $user['id']);
                         }
                     }
                 } else {
-                    $response = array('success' => false, 'message' => '邀请码不正确');
+                    $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('邀请码不正确'));
                 }
             }
 
@@ -357,6 +358,19 @@ class CoinController extends BaseController
         ));
     }
 
+    private function sendInviteUserCard($inviteUserId, $invitedUserId)
+    {
+        $inviteSetting = $this->setting('invite');
+
+        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 0) {
+            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
+
+            if (!empty($inviteCoupon)) {
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($invitedUserId, array('inviteUserCardId' => $inviteCoupon['id']));
+            }
+        }
+    }
+
     protected function caculate($amount, $canChange, $data)
     {
         $coinSetting = $this->getSettingService()->get('coin', array());
@@ -405,7 +419,8 @@ class CoinController extends BaseController
 
         if ($send > 0) {
             $data[] = array(
-                'send'       => "消费满{$ranges[$send][0]}元送{$ranges[$send][1]}",
+                'send'       => $this->getServiceKernel()->trans('消费满%rangessend0%元送%rangessend1%', 
+                    array('%rangessend0%' =>$ranges[$send][0] ,'%rangessend1%' =>$ranges[$send][1])),
                 'sendAmount' => "{$ranges[$send][1]}");
         }
 

@@ -1,5 +1,6 @@
 {% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
 <tr id="user-table-tr-{{ user.id }}">
+  {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
@@ -13,7 +14,7 @@
       {% endfor %}
     </span>
   </td>
-
+ {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
@@ -69,7 +70,9 @@
       </a>
       <ul class="dropdown-menu">
         <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">{{'编辑用户信息'|trans}}</a></li>
-
+        {% if setting('magic.enable_org','0') %}
+          <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_org_update', {id: user.id}) }}">{{'修改用户组织机构'|trans}}</a></li>
+        {% endif %}
         {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
             {% if 'ROLE_SUPER_ADMIN' in user.roles %}
                   <li></li>
