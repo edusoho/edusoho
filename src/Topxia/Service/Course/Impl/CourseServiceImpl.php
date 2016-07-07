@@ -503,8 +503,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookTime'    => 0,
             'buyable'        => 0,
             'conversationId' => '',
-            'orgCode'        => '',
-            'orgId'          => ''
+            'orgCode'        => '1.',
+            'orgId'          => 0
         ));
 
         if (!empty($fields['about'])) {

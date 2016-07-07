@@ -49,22 +49,35 @@ DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户Id',
-  `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
-  `mode` enum('html','template') NOT NULL DEFAULT 'html' COMMENT '模式',
-  `template` text COMMENT '模板',
-  `templateName` varchar(255) DEFAULT NULL COMMENT '编辑区模板名字',
-  `templateData` text COMMENT '模板数据',
+  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'),
+  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'),
   `content` text COMMENT '编辑区的内容',
   `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
-  `meta` text COMMENT '编辑区元信息',
   `data` text COMMENT '编辑区内容',
-  `tips` text,
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `block_template`;
+CREATE TABLE `block_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模版ID',
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `mode` ENUM('html','template') NOT NULL DEFAULT 'html' COMMENT '模式' ,
+  `template` text COMMENT '模板',
+  `templateName` VARCHAR(255)  COMMENT '编辑区模板名字',
+  `templateData` text  COMMENT '模板数据',
+  `content` text COMMENT '默认内容',
+  `data` text COMMENT '编辑区内容',
+  `code` varchar(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
+  `meta` text  COMMENT '编辑区元信息',
+  `tips` VARCHAR( 255 ),
+  `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
+  `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
+  `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)                  
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';
 
 DROP TABLE IF EXISTS `block_history`;
 CREATE TABLE `block_history` (
