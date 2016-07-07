@@ -8,28 +8,28 @@
     <form class="form-horizontal" method="post" id="invite-form">
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label>邀请码设置</label>
+          <label>{{'邀请码设置'|trans}}</label>
         </div>
         <div class="controls col-md-7 radios">
-          {{ radios('invite_code_setting', {1:'开启', 0:'关闭'}, setting('invite').invite_code_setting|default(0)) }}
+          {{ radios('invite_code_setting', {1:'开启'|trans, 0:'关闭'|trans}, setting('invite').invite_code_setting|default(0)) }}
         </div>
       </div>
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label for="promoted_user_value">被邀请人注册奖励</label>
+          <label for="promoted_user_value">{{'被邀请人注册奖励'|trans}}</label>
         </div>
         <div class="controls col-md-7 radios">
-        <input type="text" class="form-control width-input width-input-small" id="promoted_user_value" name="promoted_user_value" value="{{ inviteSetting.promoted_user_value}}">元面值抵价优惠券 （可用于全站消费）
+        <input type="text" class="form-control width-input width-input-small" id="promoted_user_value" name="promoted_user_value" value="{{ inviteSetting.promoted_user_value}}">{{'元面值抵价优惠券 （可用于全站消费）'|trans}}
         </div>
       </div>
 
       <div class="row form-group">
         <div class="col-md-2 control-label" >
-          <label for="promote_user_value">邀请人邀请奖励</label>
+          <label for="promote_user_value">{{'邀请人邀请奖励'|trans}}</label>
         </div>
         <div class="controls col-md-7 radios">
-        <input type="text" class="form-control width-input width-input-small" id="promote_user_value"name="promote_user_value" value="{{ inviteSetting.promote_user_value }}">元面值抵价优惠券 （可用于全站消费）
+        <input type="text" class="form-control width-input width-input-small" id="promote_user_value"name="promote_user_value" value="{{ inviteSetting.promote_user_value }}">{{'元面值抵价优惠券 （可用于全站消费）'|trans}}
         </div>
       </div>
 
@@ -45,16 +45,16 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label" >
-          <label for="deadline">优惠券有效时间</label>
+          <label for="deadline">{{'优惠券有效时间'|trans}}</label>
         </div>
         <div class="controls col-md-7 radios">
-          <input type="text" class="form-control width-input width-input-small" id="deadline"name="deadline" value="{{ inviteSetting.deadline }}">天 
+          <input type="text" class="form-control width-input width-input-small" id="deadline"name="deadline" value="{{ inviteSetting.deadline }}">{{'天 '|trans}}
         </div>
       </div>
 
       <div class="row form-group">
         <div class="col-md-2 control-label" style="white-space:nowrap;">
-          <label>邀请信息模板</label>
+          <label>{{'邀请信息模板'|trans}}</label>
         </div>
         <div class="controls col-md-7 radios">
           <textarea class="form-control" rows="5" name="inviteInfomation_template">{{inviteInfomation_template}} </textarea>
@@ -65,7 +65,7 @@
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary">提交</button>  
+          <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>  
         </div>
       </div>
 
@@ -74,10 +74,10 @@
 
 {% verbatim %}    
 <div class="alert alert-info">
-  <p><strong>通知变量说明：</strong></p>
+  <p><strong>{{'通知变量说明：'|trans}}</strong></p>
   <ul>
-    <li>{{siteName}}:网校名称</li>
-    <li>{{registerUrl}}:注册链接的地址</li>
+    <li>{{siteName}}:{{'网校名称'|trans}}</li>
+    <li>{{registerUrl}}:{{'注册链接的地址'|trans}}</li>
   </ul>
 </div>
 {% endverbatim %}

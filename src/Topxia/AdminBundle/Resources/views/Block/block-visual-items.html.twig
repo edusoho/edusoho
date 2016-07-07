@@ -15,9 +15,9 @@
                 <span class="panel-item-title ellipsis">{{ item.title }}</span>
                 <span class="pull-left">&nbsp;-&nbsp;</span>
                 {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
-                <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="展开"></i>
+                <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="{{'展开'|trans}}"></i>
                 {% if item.count != 1 %}
-                  <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
+                  <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="{{'删除'|trans}}"></i>
                 {% endif %}
               </h4>
 
@@ -48,7 +48,7 @@
       <div class="form-group mtl">
         <div class="col-sm-10 col-sm-offset-2">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary mrm" data-toggle="block-edit-form" data-target="#block-edit-form">保存设置</button>
+          <button id="block-save-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary mrm" data-toggle="block-edit-form" data-target="#block-edit-form">{{'保存设置'|trans}}</button>
         </div>
       </div>
     </div>

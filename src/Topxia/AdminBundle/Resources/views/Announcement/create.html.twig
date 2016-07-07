@@ -2,14 +2,14 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{% if announcement|default(null) %}编辑{% else %}新增{% endif %}公告{% endblock %}
+{% block title %}{% if announcement|default(null) %}{{'编辑'|trans}}{% else %}{{'新增'|trans}}{% endif %}{{'公告'|trans}}{% endblock %}
 {% block body %}
 
 <form id="announcement-create-form" class="form-horizontal" method="post" action="{% if announcement|default(null) %}{{ path('admin_announcement_edit',{id:announcement.id})}}{% else %}{{ path('admin_announcement_create')}}{% endif %}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="title">公告内容</label>
+      <label for="title">{{'公告内容'|trans}}</label>
     </div>
     <div class="col-md-8 controls">
       <input type="text" id="title"  name="content" class="form-control" value="{% if announcement|default(null) %}{{announcement.content}}{% endif %}">
@@ -18,17 +18,17 @@
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="url">内容链接</label>
+      <label for="url">{{'内容链接'|trans}}</label>
     </div>
     <div class="col-md-8 controls">
       <input type="text" id="url"  name="url" class="form-control" value="{{ announcement.url|default('')}}">
-      <p class="help-block">以"http://"或"https://"开头</p>
+      <p class="help-block">{{'以'|trans}}"http://"{{'或'|trans}}"https://"{{'开头'|trans}}</p>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="startTime">发布时间</label>
+      <label for="startTime">{{'发布时间'|trans}}</label>
     </div>
     <div class="col-md-8 controls" style="z-index:2000;">
       <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if announcement|default(null) %}{{announcement.startTime|date("Y-m-d H:i")}}{% endif %}">
@@ -37,7 +37,7 @@
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="endTime">结束时间</label>
+      <label for="endTime">{{'结束时间'|trans}}</label>
     </div>
     <div class="col-md-8 controls" style="z-index:2000;">
       <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if announcement|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
@@ -51,7 +51,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="announcement-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-create-form">提交</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button id="announcement-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-create-form">{{'提交'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('announcement/create-modal')</script>
 {% endblock %}

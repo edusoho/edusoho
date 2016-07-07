@@ -5,7 +5,7 @@
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     <br>
-    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
   </td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
@@ -18,14 +18,14 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'recommendList'}) }}">设置序号</a>
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'recommendList'}) }}">{{'设置序号'|trans}}</a>
 
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
 
-        <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+        <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{'取消推荐'|trans}}</a></li>
     
       </ul>
     </div>

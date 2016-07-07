@@ -13,11 +13,11 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >用户登录限制</label>
+        <label >{{'用户登录限制'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('login_limit', {1:'开启', 0:'关闭'}, loginConnect.login_limit) }}
-      <p class="help-block">开启后同一账号将不能在不同IP或者不同地域下同时登录</p>
+        {{ radios('login_limit', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.login_limit) }}
+        <p class="help-block">{{'开启后同一账号将不能在不同IP或者不同地域下同时登录'|trans}}</p>
       </div>
     </div>
   </fieldset>
@@ -25,10 +25,10 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >第三方登录</label>
+        <label >{{'第三方登录'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('enabled', {1:'开启', 0:'关闭'}, loginConnect.enabled) }}
+        {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.enabled) }}
       </div>
     </div>
   </fieldset>
@@ -37,47 +37,47 @@
 <fieldset>
 <div class="form-group">
       <div class="col-md-3 control-label">
-          <label >用户登录保护</label>
+          <label >{{'用户登录保护'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
           {{ radios('temporary_lock_enabled', {1:'开启', 0:'关闭'}, loginConnect.temporary_lock_enabled) }} 
-          <p class="help-block">开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户</p>
+          <p class="help-block">{{'开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户'|trans}}</p>
       </div>
 
       <div id="times_and_minutes" class="col-md-8 col-md-offset-3" {% if not loginConnect.temporary_lock_enabled|default(false) %}style="display:none"{% endif %}>
         <div class="row">
           <div class="col-md-4 lock-user-text-right">
-            用户连续输入错误密码
+            {{'用户连续输入错误密码'|trans}}
           </div>
           <div class="controls col-md-2 form-group">
             <input type="text" id="temporary_lock_allowed_times" name="temporary_lock_allowed_times" class="form-control" value="{{loginConnect.temporary_lock_allowed_times}}">
           </div>
           <div class="col-md-3 lock-user-text-left">
-            次，将暂时封禁用户
+            {{'次，将暂时封禁用户'|trans}}
           </div>
         </div>
         <div class="row">
           <div class="col-md-4 lock-user-text-right">
-            同一IP连续输入错误密码
+            {{'同一IP连续输入错误密码'|trans}}
           </div>
           <div class="controls col-md-2 form-group">
             <input type="text" id="temporary_lock_allowed_times" name="ip_temporary_lock_allowed_times" class="form-control" value="{{loginConnect.ip_temporary_lock_allowed_times}}">
           </div>
           <div class="col-md-3 lock-user-text-left">
-            次，将暂时封禁IP
+            {{'次，将暂时封禁IP'|trans}}
           </div>
         </div>
 
 
         <div class="row">
           <div class="col-md-4 lock-user-text-right">
-            经过
+            {{'经过'|trans}}
           </div>
           <div class="controls col-md-2 form-group">
             <input type="text" id="temporary_lock_minutes" name="temporary_lock_minutes" class="form-control" value="{{loginConnect.temporary_lock_minutes}}">
           </div>
           <div class="col-md-3 lock-user-text-left">
-            分钟后，解锁用户/IP
+            {{'分钟后，解锁用户/IP'|trans}}
           </div>  
         </div>
       </div> 
@@ -92,11 +92,11 @@
             <label >{{ client.admin_name }}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios( type ~ '_enabled', {1:'开启', 0:'关闭'}, loginConnect[type ~ '_enabled']) }}
+          {{ radios( type ~ '_enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect[type ~ '_enabled']) }}
           {% if client.apply_url|default(null) %}
-            <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">申请{{ client.admin_name }}</a> 
+            <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">{{'申请'|trans}}{{ client.admin_name }}</a> 
               {% if type == "qq" %}
-              <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="接入帮助:" data-html="true" data-content="1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。">接入帮助</a>
+              <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="{{'接入帮助:'|trans}}" data-html="true" data-content="1.{{'你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；'|trans}}<br>2.{{'需填写的回调地址为：'|trans}}<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>{{'为你的ES系统网址。例如，气球鱼学院的回调地址填写为：'|trans}}http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；{{'网址一定要有www哦；'|trans}}<br>3.{{'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。'|trans}}<br>{{'如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。'|trans}}">{{'接入帮助'|trans}}</a>
               {% endif %}
             </div>
           {% endif %}
@@ -122,11 +122,11 @@
       </div>
         <div class="form-group">
           <div class="col-md-3 control-label">
-            <label for="">登录时必须设置邮箱</label>
+            <label for="">{{'登录时必须设置邮箱'|trans}}</label>
           </div>
             <div class="controls col-md-8 radios">    
-              {{ radios(type ~ '_set_fill_account' , {1:'开启', 0:'关闭'}, loginConnect[type ~ '_set_fill_account']) }}
-                <p class="help-block">在{{ client.admin_name }}官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过</p>
+              {{ radios(type ~ '_set_fill_account' , {1:'开启'|trans, 0:'关闭'|trans}, loginConnect[type ~ '_set_fill_account']) }}
+                <p class="help-block">{{'在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过'|trans({'%admin_name%': client.admin_name })}}</p>
             </div>
         </div>
       {% if type != 'weixinmob' and type != 'weixinweb' %}
@@ -135,7 +135,7 @@
             <label for=""></label>
           </div>
           <div class="controls col-md-8 radios">
-            <div class="help-block"><a href="#port">最后一步,请在底部输入登录接口验证代码></a></div>
+            <div class="help-block"><a href="#port">{{'最后一步,请在底部输入登录接口验证代码'|trans}}></a></div>
           </div>
         </div>
       {% endif %}
@@ -143,21 +143,21 @@
   {% endfor %}
 
   <fieldset>
-    <legend id="port" >登录接口验证代码</legend>
+    <legend id="port" >{{'登录接口验证代码'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="verify_code" >验证代码</label>
+        <label for="verify_code" >{{'验证代码'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{loginConnect.verify_code}}</textarea>
-        <div class="help-block">在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。</div>
+        <div class="help-block">{{'在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。'|trans}}</div>
       </div>
     </div>
   </fieldset>
 </fieldset>
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">提交</button>
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

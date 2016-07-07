@@ -16,7 +16,7 @@
   
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({'':'--查询条件--',nickname:'用户名',email:'邮箱',truename:'真实姓名',idcard:'身份证号码'}, app.request.get('keywordType')) }}
+        {{ select_options({'':'--查询条件--'|trans,nickname:'用户名'|trans,email:'邮箱'|trans,truename:'真实姓名'|trans,idcard:'身份证号码'|trans}, app.request.get('keywordType')) }}
       </select>
     </div>
     <div class="form-group">

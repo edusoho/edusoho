@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}添加新用户{% endblock %}
+{% block title %}{{'添加新用户'|trans}}{% endblock %}
 {% block body %}
 
   <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create') }}">
@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-7 controls">
         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
-        <p class="help-block">再输入一次密码</p>
+        <p class="help-block">{{'再输入一次密码'|trans}}</p>
       </div>
     </div>
 

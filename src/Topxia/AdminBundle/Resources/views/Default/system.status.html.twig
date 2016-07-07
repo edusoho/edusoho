@@ -4,9 +4,9 @@
     {% if mainAppUpgrade %}
       {% set status = 1 %}
       <tr>
-        <td>主系统</td>
+        <td>{{'主系统'|trans}}</td>
         <td>
-          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">立即更新</a>
+          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{'立即更新'|trans}}</a>
           <span class="glyphicon glyphicon-info-sign text-info"></span>
           {{ '当前版本'|trans }}: {{ constant('Topxia\\System::VERSION') }}&nbsp;
           {{ '下一版本'|trans }}: {{ mainAppUpgrade.package.toVersion }}&nbsp;
@@ -15,10 +15,10 @@
       </tr>
     {% else %}
       <tr>
-        <td>主系统</td>
+        <td>{{'主系统'|trans}}</td>
         <td>
           <span class="glyphicon glyphicon-ok-sign text-success"></span>
-          已是最新版本 {{ constant('Topxia\\System::VERSION') }}
+          {{'已是最新版本'|trans}} {{ constant('Topxia\\System::VERSION') }}
         </td>
       </tr>
     {% endif %}
@@ -52,7 +52,6 @@
           {% if status|default(0) == 1 and app_count == 1 %}
             <span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
           {% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge"
-                                                                                           style="background-color:#cc0000;">
           {% if status|default(0) == 1 %}{{ app_count - 1 }}{% else %}
             {{ app_count }}
           {% endif %}</span> 个应用没有更新 <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">立即更新</a>
@@ -75,8 +74,7 @@
       <td>{% if setting("storage.cloud_bucket")!="" %}<span
             class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已开通'|trans }}{% if setting("storage.upload_mode") != 'cloud' %}({{ '尚未启用'|trans }})
           <a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>{% endif %}{% else %}
-          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right"
-                                                                                             href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
+          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
         {% endif %}</td>
     </tr>
   {% endif %}

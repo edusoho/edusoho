@@ -35,17 +35,17 @@
   {% else %}
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
-      <div class="alert alert-warning" role="alert">您的云短信已被锁定，请联系客服人员：0571-86819929。</div>
+      <div class="alert alert-warning" role="alert">{{'您的云短信已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
     {% endif %}
     {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
-      <div class="alert alert-danger" role="alert">您的云短信已被禁用，请联系客服人员：0571-86819929。</div>
+      <div class="alert alert-danger" role="alert">{{'您的云短信已被禁用，请联系客服人员：'|trans}}0571-86819929。</div>
     {% endif %}
     <div class="eduyun-main">
       {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
         <div class="mask"></div>
       {% endif %}
       <div class="page-header clearfix">
-        <h1 class="pull-left">云短信</h1>
+        <h1 class="pull-left">{{'云短信'|trans}}</h1>
       </div>
       <div class="edu-service">
         <div class="edu-balance">
@@ -198,7 +198,7 @@
             #}
           {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0 and smsStatus.sms_enabled|default('0') == '1' %}
             <div class="page-header clearfix">
-              <h1 class="pull-left">短信应用场景</h1>
+              <h1 class="pull-left">{{'短信应用场景'|trans}}</h1>
             </div>
             <div class="js-usage">
               <table class="table table-bordered">

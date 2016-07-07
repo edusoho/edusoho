@@ -2,7 +2,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 class="modal-title">设置资讯图片</h4>
+      <h4 class="modal-title">{{'设置资讯图片'|trans}}</h4>
     </div>
     <div class="modal-body">
 
@@ -12,7 +12,7 @@
         <div class="col-md-offset-2 col-md-8 controls">
           <img src="{{ filepath(pictureUrl) }}" id="article-pic-crop"
            width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
-          <div class="help-block">提示：请选择图片裁剪区域。</div>
+          <div class="help-block">{{'提示：请选择图片裁剪区域。'|trans}}</div>
         </div>
       </div>
 
@@ -21,13 +21,13 @@
           <a class="btn btn-fat btn-primary" 
           id="upload-picture-crop-btn" 
           data-goto="{{ path('admin_article_show_upload')}}"
-          data-goto-url="{{ path('admin_article_picture_crop')}}">保存</a>
+          data-goto-url="{{ path('admin_article_picture_crop')}}">{{'保存'|trans}}</a>
         </div>
       </div>
 
     </form>
 </div>
-          <div class="modal-footer">  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+          <div class="modal-footer">  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('article/picture-crop-modal')</script>
 </div>
       </div>
