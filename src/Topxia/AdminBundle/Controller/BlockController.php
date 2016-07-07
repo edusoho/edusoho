@@ -192,8 +192,8 @@ class BlockController extends BaseController
         foreach ($block['meta']['items'] as $key => &$item) {
             $item['default'] = $block['data'][$key];
         }
-       
-        return new Response('<pre>' . StringToolkit::jsonPettry(json_encode($block['meta'], JSON_UNESCAPED_UNICODE)) . '</pre>');
+        
+        return new Response('<pre>' . StringToolkit::jsonPettry(StringToolkit::jsonEncode($block['meta'])) . '</pre>');    
     }
 
     public function visualHistoryAction(Request $request, $blockId)

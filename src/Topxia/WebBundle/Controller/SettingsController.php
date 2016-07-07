@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
@@ -42,7 +42,6 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile'    => $profile,
             'fields'     => $fields,
@@ -53,23 +52,37 @@ class SettingsController extends BaseController
 
     public function approvalSubmitAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user              = $this->getCurrentUser();
+        $profile           = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
 
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
 
+            if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
+                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
+            }
+
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'));
+                // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('实名认证提交成功！'));
-            return $this->redirect($this->generateUrl('settings'));
+            // $this->setFlashMessage('success', '实名认证提交成功！');
+            return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+            'profile' => $profile
         ));
     }
 
@@ -125,8 +138,8 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('avatar', 'file')
-                     ->getForm();
+            ->add('avatar', 'file')
+            ->getForm();
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 
@@ -137,12 +150,13 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
+        $goto       = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar.html.twig', array(
             'form'          => $form->createView(),
             'user'          => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
-            'fromCourse'    => $fromCourse
+            'fromCourse'    => $fromCourse,
+            'goto'          => $goto
         ));
     }
 
@@ -158,8 +172,33 @@ class SettingsController extends BaseController
 
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-
+        $goto                                        = $request->query->get('goto');
         return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize,
+            'goto'        => $goto
+
+        ));
+    }
+
+    public function avatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
+            $user   = $this->getUserService()->getUser($currentUser['id']);
+            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+            return $this->createJsonResponse(array(
+                'status' => 'success',
+                'avatar' => $avatar));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        return $this->render('TopxiaWebBundle:Settings:avatar-crop-modal.html.twig', array(
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
@@ -181,16 +220,8 @@ class SettingsController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $avatar = $this->fetchAvatar($url);
-
-        if (empty($avatar)) {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('获取论坛头像失败或超时，请重试！'));
-            return $this->createJsonResponse(true);
-        }
-
-        $imgUrl = $request->request->get('imgUrl');
-        $file   = new File($this->downloadImg($imgUrl));
-
+        $imgUrl    = $request->request->get('imgUrl');
+        $file      = new File($this->downloadImg($imgUrl));
         $groupCode = "tmp";
         $imgs      = array(
             'large'  => array("200", "200"),
@@ -257,7 +288,7 @@ class SettingsController extends BaseController
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile  = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-        && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+            && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
         $itemScore     = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
@@ -287,10 +318,15 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -326,10 +362,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -351,16 +387,58 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function setPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!empty($user['password'])) {
+            throw new \RuntimeException("登录密码已设置，请勿重复设置");
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                $form = $this->createFormBuilder()
+                    ->add('currentUserLoginPassword', 'password')
+                    ->add('newPayPassword', 'password')
+                    ->add('confirmPayPassword', 'password')
+                    ->getForm();
+
+                return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array(
+                    'form' => $form->createView()
+                ));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:password-modal.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
     public function resetPayPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     // ->add('currentUserLoginPassword','password')
-                     ->add('oldPayPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+        // ->add('currentUserLoginPassword','password')
+            ->add('oldPayPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
+
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -410,10 +488,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('payPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->add('currentUserLoginPassword', 'password')
-                     ->getForm();
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -459,8 +537,8 @@ class SettingsController extends BaseController
         $verifiedMobile       = $user['verifiedMobile'];
         $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
         $canSmsFind           = ($hasVerifiedMobile) &&
-        ($this->setting('cloud_sms.sms_enabled') == '1') &&
-        ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
+            ($this->setting('cloud_sms.sms_enabled') == '1') &&
+            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
         if ((!$hasSecurityQuestions) && ($canSmsFind)) {
             return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -564,6 +642,11 @@ class SettingsController extends BaseController
         $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
+
         if ($request->getMethod() == 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您的登录密码错误，不能设置安全问题。'));
@@ -624,6 +707,13 @@ class SettingsController extends BaseController
             return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array());
         }
 
+        $user = $this->getCurrentUser();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
+
         if ($request->getMethod() == 'POST') {
             $password = $request->request->get('password');
 
@@ -679,10 +769,15 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentPassword', 'password')
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('currentPassword', 'password')
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -717,9 +812,9 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('password', 'password')
-                     ->add('email', 'text')
-                     ->getForm();
+            ->add('password', 'password')
+            ->add('email', 'text')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -748,28 +843,24 @@ class SettingsController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $normalMail = array(
-                        'to'    => $data['email'],
-                        'title' => $this->getServiceKernel()->trans('重设%userNickName%在%siteName%的电子邮箱', array('%userNickName%' =>$user['nickname'], '%siteName%' =>$this->setting('site.name', 'EDUSOHO' ))),
-                        'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
-                            'user'  => $user,
-                            'token' => $token
-                        ))
+                    $site        = $this->setting('site', array());
+                    $mailOptions = array(
+                        'to'       => $data['email'],
+                        'template' => 'email_reset_email',
+                        'params'   => array(
+                            'sitename'  => $site['name'],
+                            'siteurl'   => $site['url'],
+                            'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                            'nickname'  => $user['nickname']
+                        )
                     );
-                    $cloudMail = array(
-                        'to'        => $data['email'],
-                        'template'  => 'email_reset_email',
-                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                        'nickname'  => $user['nickname']
-                    );
-                    $mail = new Mail($normalMail, $cloudMail);
-                    $this->sendEmail($mail);
-                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。', array('%dataEmail%' =>$data['email'] )));
+                    $mail = MailFactory::create($mailOptions);
+                    $mail->send();
+                    $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败，请联系管理员。'));
-                    $this->getLogService()->error('setting', 'email_change', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败:').$e->getMessage());
+                    $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
+                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
-
                 return $this->redirect($this->generateUrl('settings_email'));
             }
         }
@@ -783,22 +874,27 @@ class SettingsController extends BaseController
 
     public function emailVerifyAction()
     {
-        $user  = $this->getCurrentUser();
-        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-
+        $user      = $this->getCurrentUser();
+        $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $site      = $this->setting('site', array());
         try {
-            $this->sendEmail(
-                $user['email'],
-                $this->getServiceKernel()->trans('验证%userNickName%在%siteName%的电子邮箱', array('%userNickName%' =>$user['nickname'], '%siteName%' =>$this->setting('site.name') )),
-                $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
-                    'user'  => $user,
-                    'token' => $token
-                ))
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_verify_email',
+                'params'   => array(
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname'],
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
+                )
             );
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。', array('%userEmail%' =>$user['email'] )));
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
+            $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
-            $this->getLogService()->error('setting', 'email-verify', $this->getServiceKernel()->trans('邮箱验证邮件发送失败:').$e->getMessage());
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱验证邮件发送失败，请联系管理员。'));
+            $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
+            $this->setFlashMessage('danger', "邮箱验证邮件发送失败，请联系管理员。");
         }
 
         return $this->createJsonResponse(true);
@@ -904,6 +1000,31 @@ class SettingsController extends BaseController
         return $this->render('TopxiaWebBundle:Settings:setup.html.twig');
     }
 
+    public function setupPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $form = $this->createFormBuilder()
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $targetPath = $this->getTargetPath($request);
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                return $this->redirect($targetPath);
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:setup-password.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
     public function setupCheckNicknameAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -953,11 +1074,11 @@ class SettingsController extends BaseController
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' =>$type )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' => $type)));
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)未开启', array('%type%' =>$type )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)未开启', array('%type%' => $type)));
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
@@ -984,6 +1105,11 @@ class SettingsController extends BaseController
     protected function getSensitiveService()
     {
         return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function downloadImg($url)

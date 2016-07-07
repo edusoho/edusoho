@@ -1,0 +1,30 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <style>
+      body{
+        padding:0;
+        margin:0;
+        box-sizing:border-box;
+      }
+      html,body,div{
+        height:100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body >
+    <div >
+	   <div id="flash-player" data-url='{{file.url}}'></div>
+    </div>
+
+	   {% set script_controller = 'materiallibbundle/controller/web/player/flash-player' %}
+
+    {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+</body>
+</html>

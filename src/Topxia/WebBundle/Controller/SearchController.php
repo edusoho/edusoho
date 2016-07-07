@@ -18,15 +18,13 @@ class SearchController extends BaseController
 
         $cloud_search_setting = $this->getSettingService()->get('cloud_search');
 
-        // if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
-        //     $type       = $request->query->get('type', 'course');
-        //     $targetType = $request->query->get('targetType', '');
-        //     return $this->redirect($this->generateUrl('cloud_search', array(
-        //         'q'          => $keywords,
-        //         'type'       => $type,
-        //         'targetType' => $targetType
-        //     )));
-        // }
+        if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
+            $type       = $request->query->get('type', 'course');
+            return $this->redirect($this->generateUrl('cloud_search', array(
+                'q'          => $keywords,
+                'type'       => $type
+            )));
+        }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
@@ -52,7 +50,7 @@ class SearchController extends BaseController
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $fliter     = $request->query->get('fliter');
+        $filter     = $request->query->get('filter');
 
         $conditions = array(
             'status'     => 'published',
@@ -61,11 +59,11 @@ class SearchController extends BaseController
             'parentId'   => 0
         );
 
-        if ($fliter == 'vip') {
+        if ($filter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ($fliter == 'live') {
+        } elseif ($filter == 'live') {
             $conditions['type'] = 'live';
-        } elseif ($fliter == 'free') {
+        } elseif ($filter == 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -89,7 +87,7 @@ class SearchController extends BaseController
             'isShowVipSearch'     => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds'         => $categoryIds,
-            'fliter'              => $fliter,
+            'filter'              => $filter,
             'count'               => $count
         ));
     }
@@ -105,8 +103,14 @@ class SearchController extends BaseController
 
         $type       = $request->query->get('type', 'course');
         $page       = $request->query->get('page', '1');
-        $targetType = $request->query->get('targetType', 'group');
 
+        if(empty($keywords)){
+            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
+                'keywords'     => $keywords,
+                'type'         => $type,
+                'errorMessage' => '在上方搜索框输入关键词进行搜索.'
+            ));
+        }
         $conditions = array(
             'type'  => $type,
             'words' => $keywords,
@@ -118,8 +122,8 @@ class SearchController extends BaseController
             $conditions['type']    = 'user';
             $conditions['num']     = $pageSize;
             $conditions['filters'] = json_encode(array('role' => 'teacher'));
-        } elseif ($type == 'thread' && !empty($targetType)) {
-            $conditions['filters'] = json_encode(array('targetType' => $targetType));
+        } elseif ($type == 'thread') {
+            $conditions['filters'] = json_encode(array('targetType' => 'group'));
         }
 
         $counts = 0;
@@ -141,7 +145,6 @@ class SearchController extends BaseController
             'resultSet'  => $resultSet,
             'counts'     => $counts,
             'paginator'  => $paginator,
-            'targetType' => $targetType
         ));
     }
 

@@ -8,6 +8,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\Common\BlockToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
 use Topxia\System;
 use ZipArchive;
 
@@ -24,6 +26,7 @@ class BuildThemeAppCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->initServiceKernel();
         $this->output = $output;
         $this->filesystem = new Filesystem();
         $name = $input->getArgument('name');
@@ -202,6 +205,23 @@ class BuildThemeAppCommand extends BaseCommand
         }
 
         return $themeDir;
+    }
+
+    protected function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', true);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
+
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
     }
 
 }

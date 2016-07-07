@@ -3,7 +3,6 @@ namespace Topxia\Service\Coupon\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Coupon\CouponService;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -31,6 +30,13 @@ class CouponServiceImpl extends BaseService implements CouponService
     public function findCouponsByBatchId($batchId, $start, $limit)
     {
         $coupons = $this->getCouponDao()->findCouponsByBatchId($batchId, $start, $limit);
+
+        return ArrayToolkit::index($coupons, 'id');
+    }
+
+    public function findCouponsByIds(array $ids)
+    {
+        $coupons = $this->getCouponDao()->findCouponsByIds($ids);
 
         return ArrayToolkit::index($coupons, 'id');
     }
@@ -203,7 +209,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 'userId' => $currentUser['id'],
                 'status' => 'receive'
             ));
-
+            $this->getLogService()->info('coupon', 'receive', "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠码 {$coupon['code']}", $coupon);
             if (empty($coupon)) {
                 return false;
             }
@@ -235,7 +241,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     public function useCoupon($code, $order)
     {
         $coupon = $this->getCouponDao()->getCouponByCode($code, true);
-
+        $user   = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;
         }
@@ -244,56 +250,16 @@ class CouponServiceImpl extends BaseService implements CouponService
             return null;
         }
 
-        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
-
-        if (!empty($card)) {
-            $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-                'status'  => 'used',
-                'useTime' => $order['paidTime']
-            ));
-            $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
-                'status'    => 'used',
-                // 'targetType' => $order['targetType'],
-                'targetId'  => $order['targetId'],
-                'orderTime' => time(),
-                'userId'    => $order['userId'],
-                'orderId'   => $order['id']
-            ));
-        } else {
-            $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
-                'status'     => 'used',
-                'targetType' => $order['targetType'],
-                'targetId'   => $order['targetId'],
-                'orderTime'  => time(),
-                'userId'     => $order['userId'],
-                'orderId'    => $order['id']
-            ));
-        }
-
-        $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-            'status'  => 'used',
-            'useTime' => $coupon['orderTime']
+        $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
+            'status'     => 'used',
+            'targetType' => $order['targetType'],
+            'targetId'   => $order['targetId'],
+            'orderTime'  => time(),
+            'userId'     => $order['userId'],
+            'orderId'    => $order['id']
         ));
-
-        $usedCount = $this->getCouponDao()->searchCouponsCount(array('status' => 'used', 'batchId' => $coupon['batchId']));
-        $coupons   = $this->getCouponDao()->searchCoupons(array('status' => 'used', 'batchId' => $coupon['batchId']), array('createdTime', 'DESC'), 0, $usedCount);
-
-        $orders      = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
-        $allDiscount = 0;
-
-        foreach ($coupons as $key => $oneCoupon) {
-            $order = $orders[$oneCoupon['orderId']];
-
-            if ($order["priceType"] == 'Coin') {
-                $rate = $order["coinRate"];
-            } else {
-                $rate = 1;
-            }
-
-            $allDiscount += ($order["couponDiscount"] / $rate);
-        }
-
-        $this->dispatchEvent('coupon.use', new ServiceEvent($coupon, array('usedNum' => $usedCount, 'money' => $allDiscount)));
+        $this->getLogService()->info('coupon', 'use', "用户{$user['nickname']}(#{$user['id']})使用了优惠码 {$coupon['code']}", $coupon);
+        $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
     }
@@ -359,5 +325,10 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getNotificationService()
     {
         return $this->createService('User.NotificationService');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

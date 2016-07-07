@@ -9,22 +9,22 @@
     {% block body %}
     {{ web_macro.flash_messages() }}
 
-      <div class="row safety-setting">
+      <div class="row safety-setting" style="margin-top:10px;">
         <div class="col-xs-2 tar">
-          <span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:20px"></span>
+          <span class="glyphicon glyphicon-info-sign {% if progressScore > 67 %}text-success{% elseif progressScore > 34 %}text-warning{% else %}text-danger{% endif %}" style="font-size:20px;"></span>
         </div>
       <div class="col-sm-6 col-xs-5">
-        <div class="progress" style="margin-top:5px;">
+        <div class="progress mbs">
           <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
         </div>
       </div>
       <div class="col-sm-4 col-xs-5">
-        {% if progressScore > 80 %}
-          <span class="text-success" style="display:block;margin-top:5px;">{{'安全等级：高'|trans}}</span>
-        {% elseif progressScore > 30 %}
-        <span class="text-warning" style="display:block;margin-top:5px;">{{'安全等级：中'|trans}}</span>
+        {% if progressScore > 67 %}
+          <span class="text-success" style="display:block;">{{'安全等级：高'|trans}}</span>
+        {% elseif progressScore > 34 %}
+        <span class="text-warning" style="display:block;">{{'安全等级：中'|trans}}</span>
         {% else %}
-          <span class="text-danger" style="display:block;margin-top:5px;">{{'安全等级：低'|trans}}</span>
+          <span class="text-danger" style="display:block;">{{'安全等级：低'|trans}}</span>
         {% endif %}
       </div>
     </div>

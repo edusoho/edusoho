@@ -1,4 +1,4 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}" style="word-break: break-all;" >
   <div class="item-line"></div>
   <div class="item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
@@ -36,19 +36,22 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
+
     {% if setting('course.custom_chapter_enabled')|default(true) %}
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
-    
+
     {% if lesson.free == 1 %}
       <span class="label label-success">{{'免费'|trans}}</span>
     {% elseif course.tryLookable and lesson.type == 'video' and file.storage|default('') == 'cloud' %}
       <span class="label label-warning mrm">{{'试看'|trans}}</span>{% endif %}
-    {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
+    {% if lesson.type not in ['text','live','testpaper'] 
+      and lesson.mediaSource == 'self'
+      and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId) 
+    %}
       <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
     {% endif %}
-    {{ lesson.title }}
-
+    {{ lesson.title|raw }}
     {% if lesson.type in ['video', 'audio'] %}
       <span class="text-muted">{{ lesson.length|duration }}</span>
     {% endif %}
@@ -67,6 +70,7 @@
       </small>
     {% endif %}
 
+    <span data-role="mediaStatus"></span>
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}
@@ -125,14 +129,13 @@
         {% endif %}
 
         {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
-          {% if  file.convertStatus|default(null) == 'success' %}
-          <!-- file.createdUserId|default(null) == app.user.id and -->
-          <li>
+          {% if  file.storage|default(null) == 'cloud' %}
+          <li class="mark-manage" style="display:none;">
             <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
             <span class="glyphicon glyphicon-list prs"></span>弹题管理
             </a>
           </li>
-          <li class="divider"></li>
+          <li class="divider mark-manage-divider" style="display:none;"></li>
           {% endif %}
         {% endif %}
 

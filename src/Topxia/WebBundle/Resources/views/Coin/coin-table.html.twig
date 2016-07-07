@@ -1,7 +1,6 @@
 
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% if setting('coin.coin_enabled') %}
-{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
+
 <table class="table table-striped table-hover" id="order-table">
   <thead>
     <tr>
@@ -45,11 +44,12 @@
         <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
       </td> #}
     </tr>
+  {% else %}
+    <tr>
+      <td colspan="6">
+        <div class="empty">暂无虚拟币订单记录</div>
+      </td>
+    </tr>
   {% endfor %}
   </tbody>
 </table>
-{% else %}
-<div class="well" style="text-align:center;">
-虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
-</div>
-{% endif %}

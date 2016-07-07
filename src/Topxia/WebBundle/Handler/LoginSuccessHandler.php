@@ -41,7 +41,6 @@ class LoginSuccessHandler
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-        // var_dump("aaaaa");exit();
 
         if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in

@@ -11,7 +11,6 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
-
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
@@ -35,24 +34,17 @@ class CourseController extends BaseController
         if (isset($conditions["creator"]) && $conditions["creator"] == "") {
             unset($conditions["creator"]);
         }
+        $conditions = $this->fillOrgCode($conditions);
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "free") {
-            if ($coinEnable) {
-                $conditions['coinPrice'] = '0.00';
-            } else {
-                $conditions['price'] = '0.00';
-            }
+            $conditions['price'] = '0.00';
         }
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "charge") {
-            if ($coinEnable) {
-                $conditions['coinPrice_GT'] = '0.00';
-            } else {
-                $conditions['price_GT'] = '0.00';
-            }
+            $conditions['price_GT'] = '0.00';
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
@@ -310,9 +302,11 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions                = $request->query->all();
+        $conditions = $request->query->all();
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
+
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -349,6 +343,7 @@ class CourseController extends BaseController
 
     public function dataAction(Request $request, $filter)
     {
+
         $conditions = $request->query->all();
 
         if ($filter == 'normal') {
@@ -367,8 +362,9 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        $conditions = $this->fillOrgCode($conditions);
 
+        $count     = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
         $courses = $this->getCourseService()->searchCourses(

@@ -3,7 +3,7 @@
 {% block title %}{% if category.id %}编辑分类{% else %}添加分类{% endif %}{% endblock %}
 
 {% block body %}
-<div id="category-creater-widget" data-upload-url="{{ path('admin_category_upload') }}">
+<div id="category-creater-widget">
 
 	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('admin_category_edit', {id:category.id}) }}{% else %}{{ path('admin_category_create') }}{% endif %}" method="post">
 		<div class="form-group">
@@ -13,13 +13,13 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		{# <div class="form-group">
 			<label class="col-md-2 control-label" for="category-weight-field">显示序号</label>
 			<div class="col-md-8 controls">
 				<input class="form-control" id="category-weight-field" type="text" name="weight" value="{{ category.weight }}" tabindex="2">
 				<div class="help-block">显示序号需为整数，分类按序号的顺序从小到大排序。</div>
 			</div>
-		</div>
+		</div> #}
 
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="category-code-field">编码</label>

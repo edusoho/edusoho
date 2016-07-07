@@ -102,8 +102,7 @@ class CoinController extends BaseController
                 goto response;
             }
 
-            $courses = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, 99999);
-
+            $courses = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig', array(
                 'set'   => $set,
                 'items' => $courses
@@ -127,11 +126,11 @@ class CoinController extends BaseController
         $set        = $conditions['set'];
 
         if ($type == 'course') {
-            $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, 99999);
+            $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime', 'desc'), 0, 99999);
+            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime', 'desc'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
-            $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, 99999);
+            $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
         }
 
         return $this->render('TopxiaAdminBundle:Coin:coin-table-setting.html.twig', array(
@@ -453,10 +452,10 @@ class CoinController extends BaseController
 
             if ($fields['type'] == "add") {
                 $this->getCashAccountService()->waveCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('cash', 'add_coin', $this->getServiceKernel()->trans('添加 ').$user['nickname'].$this->getServiceKernel()->trans(' %amount% 虚拟币',array( '%amount%'=>$fields['amount'])), array());
-            } else { 
+                $this->getLogService()->info('coin', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+            } else {
                 $this->getCashAccountService()->waveDownCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('cash', 'add_coin', $this->getServiceKernel()->trans('扣除 ').$user['nickname'].$this->getServiceKernel()->trans(' %amount% 虚拟币',array('%amount%'=>$fields['amount'])), array());
+                $this->getLogService()->info('coin', 'deduct_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             }
         }
 
@@ -476,10 +475,10 @@ class CoinController extends BaseController
                 if ($fields['type'] == "add") {
                     $this->getCashAccountService()->waveCashField($id, $fields['amount']);
 
-                    $this->getLogService()->info('cash', 'add_coin', $this->getServiceKernel()->trans('添加 ').$user['nickname'].$this->getServiceKernel()->trans(' %amount% 虚拟币',array('%amount%'=>$fields['amount'])), array());
-                } else {  
+                    $this->getLogService()->info('coin', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                } else {
                     $this->getCashAccountService()->waveDownCashField($id, $fields['amount']);
-                    $this->getLogService()->info('cash', 'add_coin', $this->getServiceKernel()->trans('扣除 ').$user['nickname'].$this->getServiceKernel()->trans(' %amount% 虚拟币',array('%amount%'=>$fields['amount'])), array());
+                    $this->getLogService()->info('coin', 'deduct_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
                 }
             }
         }
@@ -508,8 +507,8 @@ class CoinController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('avatar', 'file')
-                     ->getForm();
+            ->add('avatar', 'file')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);

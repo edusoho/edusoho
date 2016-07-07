@@ -3,7 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,9 +11,9 @@ class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        
+        $user   = $this->getCurrentUser();
         $fields = $request->query->all();
-      
+
         $conditions = array(
             'roles'           => '',
             'keywordType'     => '',
@@ -21,11 +21,8 @@ class UserController extends BaseController
             'keywordUserType' => ''
         );
 
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
+        $conditions = $this->fillOrgCode($conditions);
 
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
@@ -41,7 +38,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //根据mobile查询user_profile获得userIds
+//根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
@@ -141,8 +138,9 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData         = $request->request->all();
             $formData['type'] = 'import';
+            $registration     = $this->getRegisterData($formData, $request->getClientIp());
+            $user             = $this->getAuthService()->register($registration);
 
-            $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
@@ -151,7 +149,7 @@ class UserController extends BaseController
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
-            $this->getLogService()->info('user', 'add', $this->getServiceKernel()->trans('管理员添加新用户 %nickname% (%id%)',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
+            $this->getLogService()->info('user', 'add', $this->getServiceKernel()->trans('管理员添加新用户 %nickname% (%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])));
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
@@ -163,14 +161,10 @@ class UserController extends BaseController
     {
         if (isset($formData['email'])) {
             $userData['email'] = $formData['email'];
-            //$userData['emailVerified'] = 1;
         }
 
         if (isset($formData['emailOrMobile'])) {
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
-            /*if (SimpleValidator::email($formData['emailOrMobile'])) {
-        $userData['emailVerified'] = 1;
-        }*/
         }
 
         if (isset($formData['mobile'])) {
@@ -181,6 +175,10 @@ class UserController extends BaseController
         $userData['password']  = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type']      = $formData['type'];
+
+        if (isset($formData['orgCode'])) {
+            $userData['orgCode'] = $formData['orgCode'];
+        }
 
         return $userData;
     }
@@ -210,7 +208,7 @@ class UserController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->getLogService()->info('user', 'edit', $this->getServiceKernel()->trans('管理员编辑用户资料 %nickname% (#%id%)',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])), $profile);
+                $this->getLogService()->info('user', 'edit', $this->getServiceKernel()->trans('管理员编辑用户资料 %nickname% (#%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])), $profile);
             } else {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
@@ -227,6 +225,22 @@ class UserController extends BaseController
         ));
     }
 
+    public function orgUpdateAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+
+        if ($request->isMethod('POST')) {
+            $orgCode = $request->request->get('orgCode', $user['orgCode']);
+            $this->getUserService()->changeUserOrg($user['id'], $orgCode);
+        }
+
+        $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+        return $this->render('TopxiaAdminBundle:User:update-org-modal.html.twig', array(
+            'user' => $user,
+            'org'  => $org
+        ));
+    }
+
     public function showAction(Request $request, $id)
     {
         $user             = $this->getUserService()->getUser($id);
@@ -234,7 +248,6 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
-
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user'    => $user,
             'profile' => $profile,
@@ -245,7 +258,8 @@ class UserController extends BaseController
     public function rolesAction(Request $request, $id)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
-            && false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            && false === $this->get('security.context')->isGranted('ROLE_ADMIN')
+        ) {
             throw $this->createAccessDeniedException();
         }
 
@@ -378,6 +392,7 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
+        $this->kickUserLogout($id);
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user'    => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id)
@@ -403,27 +418,23 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-
+        $site  = $this->setting('site', array());
         try {
-            $mail = new Mail(array(
-                'to'     => $user['email'],
-                'title'  => $this->getServiceKernel()->trans('重设%nickname%在%EDUSOHO%的密码',array('%nickname%'=>$user['nickname'],'%EDUSOHO%'=>$this->setting('site.name', 'EDUSOHO'))),
-                'format' => 'html',
-                'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                    'user'  => $user,
-                    'token' => $token
-                ))),
-                array(
-                    'to'        => $user['email'],
-                    'template'  => 'email_reset_password',
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_reset_password',
+                'params'   => array(
+                    'nickname'  => $user['nickname'],
                     'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                    'nickname'  => $user['nickname']
-                ));
-            $this->sendEmail($mail);
-
-            $this->getLogService()->info('user', 'send_password_reset', $this->getServiceKernel()->trans("管理员给用户 %nickname%(%id%) 发送密码重置邮件",array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
+                )
+            );
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
+            $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送密码重置邮件失败：',array(' %nickname%'=>$user['nickname'],'%id%'=>$user['id'])).$e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -439,42 +450,27 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
-        $auth  = $this->getSettingService()->get('auth', array());
 
         $site      = $this->getSettingService()->get('site', array());
-        $emailBody = $this->setting('auth.email_activation_body', $this->getServiceKernel()->trans(' 验证邮箱内容'));
-
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
-        $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
-        $valuesToReplace   = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
-        $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
-
-        if (!empty($emailBody)) {
-            $emailBody = $emailBody;
-        } else {
-            $emailBody = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                'user'  => $user,
-                'token' => $token
-            ));
-        }
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
 
         try {
-            $normalMail = array(
-                'to'    => $user['email'],
-                'title' => $this->getServiceKernel()->trans('请激活你的帐号 完成注册'),
-                'body'  => $emailBody
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_registration',
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url'],
+                    'verifyurl' => $verifyurl,
+                    'nickname'  => $user['nickname']
+                )
             );
-            $cloudMail = array(
-                'to'        => $user['email'],
-                'template'  => 'email_reset_password',
-                'verifyurl' => $verifyurl,
-                'nickname'  => $user['nickname']
-            );
-            $mail = new Mail($normalMail, $cloudMail);
-            $this->sendEmail($mail);
-            $this->getLogService()->info('user', 'send_email_verify', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送Email验证邮件',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
+
+            $mail = MailFactory::create($mailOptions);
+            $mail->send();
+            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送Email验证邮件失败：',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])).$e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -493,12 +489,24 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+            $this->kickUserLogout($user['id']);
             return $this->createJsonResponse(true);
         }
 
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
             'user' => $user
         ));
+    }
+
+    protected function kickUserLogout($userId)
+    {
+        $this->getSessionService()->clearByUserId($userId);
+        $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'mobile_login');
+        if (!empty($tokens)) {
+            foreach ($tokens as $token) {
+                $this->getTokenService()->destoryToken($token['token']);
+            }
+        }
     }
 
     protected function getNotificationService()
@@ -514,6 +522,16 @@ class UserController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getSessionService()
+    {
+        return $this->getServiceKernel()->createService('System.SessionService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getCourseService()
@@ -544,5 +562,10 @@ class UserController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getOrgService()
+    {
+        return $this->getServiceKernel()->createService('Org:Org.OrgService');
     }
 }

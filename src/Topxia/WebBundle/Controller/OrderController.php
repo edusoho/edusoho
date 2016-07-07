@@ -67,6 +67,7 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
+        $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -167,7 +168,7 @@ class OrderController extends BaseController
                 'coinRate'       => $cashRate,
                 'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId'         => $user["id"],
-                'payment'        => 'alipay',
+                'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
@@ -192,6 +193,7 @@ class OrderController extends BaseController
     {
         $order = $this->getOrderService()->getOrder($id);
 
+        preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['userId']);
 
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);

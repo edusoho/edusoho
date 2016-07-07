@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
-use Topxia\Service\Common\Mail;
+use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
@@ -22,8 +22,8 @@ class PasswordResetController extends BaseController
         }
 
         $form = $this->createFormBuilder($data)
-                     ->add('email', 'email')
-                     ->getForm();
+            ->add('email', 'email')
+            ->getForm();
 
         $error = null;
 
@@ -49,29 +49,27 @@ class PasswordResetController extends BaseController
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
                     try {
-                        $normalMail = array(
-                            'to'     => $user['email'],
-                            'title'  => $this->getServiceKernel()->trans('重设%userNickName%在%siteName%的密码', array('%userNickName%' => $user['nickname'], '%siteName%' =>$this->setting('site.name', 'EDUSOHO') )),
-                            'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
-                                'user'  => $user,
-                                'token' => $token
-                            )),
-                            'format' => 'html'
+                        $site        = $this->setting('site', array());
+                        $mailOptions = array(
+                            'to'       => $user['email'],
+                            'template' => 'email_reset_password',
+                            'format'   => 'html',
+                            'params'   => array(
+                                'nickname'  => $user['nickname'],
+                                'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                                'sitename'  => $site['name'],
+                                'siteurl'   => $site['url']
+                            )
                         );
-                        $cloudMail = array(
-                            'to'        => $user['email'],
-                            'template'  => 'email_reset_password',
-                            'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                            'nickname'  => $user['nickname']
-                        );
-                        $mail = new Mail($normalMail, $cloudMail);
-                        $this->sendEmail($mail);
+
+                        $mail = MailFactory::create($mailOptions);
+                        $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', $this->getServiceKernel()->trans('重设密码邮件发送失败:').$e->getMessage());
                         return $this->createMessageResponse('error', $this->getServiceKernel()->trans('重设密码邮件发送失败，请联系管理员。'));
                     }
 
-                    $this->getLogService()->info('user', 'password-reset', $this->getServiceKernel()->trans('%userEmail%向发送了找回密码邮件。', array('%userEmail%' =>$user['email'] )));
+                    $this->getLogService()->info('user', 'password-reset', $this->getServiceKernel()->trans('%userEmail%向发送了找回密码邮件。', array('%userEmail%' => $user['email'])));
 
                     return $this->render('TopxiaWebBundle:PasswordReset:sent.html.twig', array(
                         'user'          => $user,
@@ -98,9 +96,9 @@ class PasswordResetController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('password', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('password', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);

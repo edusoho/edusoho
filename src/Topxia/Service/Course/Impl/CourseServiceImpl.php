@@ -6,7 +6,6 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -184,8 +183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (isset($conditions['categoryId'])) {
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            $conditions['categoryIds'] = array();
+
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+
             unset($conditions['categoryId']);
         }
 
@@ -398,13 +402,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，创建课程失败！'));
         }
 
-        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
+        $course                = $this->fillOrgId($course);
         $course                = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
 
         $member = array(
@@ -418,7 +423,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($course['id']);
 
-        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('创建课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
+        $this->dispatchEvent("course.create", $course);
+        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('创建课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
 
         return $course;
     }
@@ -434,15 +440,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->_filterCourseFields($fields);
 
-        $this->getLogService()->info('course', 'update', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)的信息', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )), $fields);
+        $this->getLogService()->info('course', 'update', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)的信息', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])), $fields);
 
-        $fields = CourseSerialize::serialize($fields);
-
+        $fields        = $this->fillOrgId($fields);
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
 
         return CourseSerialize::unserialize($updatedCourse);
+    }
+
+    public function batchUpdateOrg($courseIds, $orgCode)
+    {
+        if (!is_array($courseIds)) {
+            $courseIds = array($courseIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($courseIds as $courseId) {
+            $user = $this->getCourseDao()->updateCourse($courseId, $fields);
+        }
     }
 
     // TODO refactor
@@ -460,28 +479,31 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'         => '',
-            'subtitle'      => '',
-            'about'         => '',
-            'expiryDay'     => 0,
-            'serializeMode' => 'none',
-            'categoryId'    => 0,
-            'vipLevelId'    => 0,
-            'goals'         => array(),
-            'audiences'     => array(),
-            'tags'          => '',
-            'startTime'     => 0,
-            'endTime'       => 0,
-            'locationId'    => 0,
-            'address'       => '',
-            'maxStudentNum' => 0,
-            'watchLimit'    => 0,
-            'approval'      => 0,
-            'maxRate'       => 0,
-            'locked'        => 0,
-            'tryLookable'   => 0,
-            'tryLookTime'   => 0,
-            'buyable'       => 0
+            'title'          => '',
+            'subtitle'       => '',
+            'about'          => '',
+            'expiryDay'      => 0,
+            'serializeMode'  => 'none',
+            'categoryId'     => 0,
+            'vipLevelId'     => 0,
+            'goals'          => array(),
+            'audiences'      => array(),
+            'tags'           => '',
+            'startTime'      => 0,
+            'endTime'        => 0,
+            'locationId'     => 0,
+            'address'        => '',
+            'maxStudentNum'  => 0,
+            'watchLimit'     => 0,
+            'approval'       => 0,
+            'maxRate'        => 0,
+            'locked'         => 0,
+            'tryLookable'    => 0,
+            'tryLookTime'    => 0,
+            'buyable'        => 0,
+            'conversationId' => '',
+            'orgCode'        => '',
+            'orgId'          => ''
         ));
 
         if (!empty($fields['about'])) {
@@ -523,7 +545,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->deleteNotUsedPictures($course);
 
-        $this->getLogService()->info('course', 'update_picture', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)图片', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )), $fields);
+        $this->getLogService()->info('course', 'update_picture', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)图片', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])), $fields);
 
         $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
 
@@ -566,7 +588,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedTime' => time()
         ));
 
-        $this->getLogService()->info('course', 'recommend', $this->getKernel()->trans('推荐课程《%courseTitle%》(#%courseId%),序号为%number%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%number%' =>$number )));
+        $this->getLogService()->info('course', 'recommend', $this->getKernel()->trans('推荐课程《%courseTitle%》(#%courseId%),序号为%number%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%number%' => $number)));
 
         return $course;
     }
@@ -598,28 +620,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedSeq'  => 0
         ));
 
-        $this->getLogService()->info('course', 'cancel_recommend', $this->getKernel()->trans('取消推荐课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
+        $this->getLogService()->info('course', 'cancel_recommend', $this->getKernel()->trans('取消推荐课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
     }
 
     public function deleteCourse($id)
     {
         $course = $this->tryAdminCourse($id);
-
-        // Decrease the course lesson files usage counts, if there are files used by the course lessons.
-        $lessons = $this->getLessonDao()->findLessonsByCourseId($id);
-
-        if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, "mediaId");
-
-            if (!empty($fileIds)) {
-                foreach ($fileIds as $fileId) {
-                    $this->getUploadFileService()->waveUploadFile($fileId, 'usedCount', -1);
-                }
-            }
-        }
-
-        // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        $this->getCourseMaterialService()->deleteMaterialsByCourseId($id);
 
         // Delete course related data
         $this->getMemberDao()->deleteMembersByCourseId($id);
@@ -632,11 +638,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
         }
 
-        $this->dispatchEvent("course.delete", array(
-            "id" => $id
-        ));
+        $this->getLogService()->info('course', 'delete', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
 
-        $this->getLogService()->info('course', 'delete', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
+        $this->dispatchEvent("course.delete", $course);
 
         return true;
     }
@@ -654,7 +658,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
-        $this->getLogService()->info('course', 'publish', $this->getKernel()->trans('发布课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
+        $this->getLogService()->info('course', 'publish', $this->getKernel()->trans('发布课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
         $this->dispatchEvent('course.publish', $course);
     }
 
@@ -671,7 +675,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
-        $this->getLogService()->info('course', 'close', $this->getKernel()->trans('关闭课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
+        $this->getLogService()->info('course', 'close', $this->getKernel()->trans('关闭课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
         $this->dispatchEvent('course.close', $course);
     }
 
@@ -750,7 +754,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException($this->getKernel()->trans('课程%courseId%不存在', array('%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('课程%courseId%不存在', array('%courseId%' => $courseId)));
         }
 
         $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id']);
@@ -816,11 +820,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
     }
 
-    public function uploadCourseFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
-    {
-        return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
-    }
-
     public function setCoursePrice($courseId, $currency, $price)
     {
         if (!in_array($currency, array('coin', 'default'))) {
@@ -853,8 +852,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($currency == 'coin') {
-            $fields['originCoinPrice'] = $price;
-            $fields['coinPrice']       = $price * ($discount / 10);
+            $fields['originPrice'] = $price;
+            $fields['price']       = $price * ($discount / 10);
         } else {
             $fields['originPrice'] = $price;
             $fields['price']       = $price * ($discount / 10);
@@ -878,15 +877,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $discount = $this->getDiscountService()->getDiscount($discountId);
 
         if (empty($discount)) {
-            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' =>$discountId )));
+            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
         }
 
         if ($discount['type'] == 'global') {
-            if ($currency == 'coin') {
-                $conditions = array('originCoinPrice_GT' => '0.00');
-            } else {
-                $conditions = array('originPrice_GT' => '0.00');
-            }
+            $conditions = array('originPrice_GT' => '0.00');
 
             $count   = $this->searchCourseCount($conditions);
             $courses = $this->searchCourses($conditions, 'latest', 0, $count);
@@ -896,7 +891,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10
+                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
                     );
                 } else {
                     $fields = array(
@@ -924,7 +919,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $item['discount'] / 10
+                        'price' => $course['originPrice'] * $item['discount'] / 10
                     );
                 } else {
                     $fields = array(
@@ -945,7 +940,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $discount = $this->getDiscountService()->getDiscount($discountId);
 
         if (empty($discount)) {
-            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' =>$discountId )));
+            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
         }
 
         $this->getCourseDao()->clearCourseDiscountPrice($discountId);
@@ -1068,10 +1063,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->fillLessonMediaFields($lesson);
 
-        //课程内容的过滤 @todo
-        // if(isset($lesson['content'])){
-        //     $lesson['content'] = $this->purifyHtml($lesson['content']);
-        // }
+//课程内容的过滤 @todo
+
+// if(isset($lesson['content'])){
+
+//     $lesson['content'] = $this->purifyHtml($lesson['content']);
+
+// }
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -1101,18 +1099,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             LessonSerialize::serialize($lesson)
         );
 
-        // Increase the linked file usage count, if there's a linked file used by this lesson.
-
-        if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
-        }
-
         $this->updateCourseCounter($course['id'], array(
             'lessonNum'  => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
 
-        $this->getLogService()->info('course', 'add_lesson', $this->getKernel()->trans('添加课时《%lessonTitle%》(%lessonId%)', array('%lessonTitle%' =>$lesson['title'], '%lessonId%' =>$lesson['id'] )), $lesson);
+        $this->getLogService()->info('course', 'add_lesson', $this->getKernel()->trans('添加课时《%lessonTitle%》(%lessonId%)', array('%lessonTitle%' => $lesson['title'], '%lessonId%' => $lesson['id'])), $lesson);
         $this->dispatchEvent("course.lesson.create", array('argument' => $argument, 'lesson' => $lesson));
 
         return $lesson;
@@ -1128,14 +1120,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getLessonDao()->findFutureLiveDates($courseIds, $limit);
     }
 
-    public function findRecentLiveLessons(array $courseIds, $start, $limit)
+    public function findFutureLiveCourseIds()
     {
-        return $this->getLessonDao()->findRecentLiveLessons($courseIds, $start, $limit);
+        return $this->getLessonDao()->findFutureLiveCourseIds();
     }
 
-    public function findRecentLiveCourses($courseIds, $start, $limit)
+    public function findPastLiveCourseIds()
     {
-        return $this->getLessonDao()->findRecentLiveCourses($courseIds, $start, $limit);
+        return $this->getLessonDao()->findPastLiveCourseIds();
     }
 
     protected function fillLessonMediaFields(&$lesson)
@@ -1199,7 +1191,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->_filterDraftFields($fields);
 
-        $this->getLogService()->info('draft', 'update', $this->getKernel()->trans('更新草稿《%draftTitle%》(#%draftId%)的信息', array('%draftTitle%' =>$draft['title'], '%draftId%' =>$draft['id'] )), $fields);
+        $this->getLogService()->info('course', 'update_draft', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
 
         $fields = LessonSerialize::serialize($fields);
 
@@ -1225,13 +1217,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course   = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' => $courseId)));
         }
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' => $lessonId)));
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -1278,28 +1270,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
-        // Update link count of the course lesson file, if the lesson file is changed
 
-        if (array_key_exists('mediaId', $fields)) {
-            if ($fields['mediaId'] != $lesson['mediaId']) {
-                // Incease the link count of the new selected lesson file
-
-                if (!empty($fields['mediaId'])) {
-                    $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
-                }
-
-                // Decrease the link count of the original lesson file
-
-                if (!empty($lesson['mediaId'])) {
-                    $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-                }
-            }
-        }
-
-        $this->getLogService()->info('course', 'update_lesson', $this->getKernel()->trans('更新课时《%updatedLessonTitle%》(%updatedLessonId%)', array('%updatedLessonTitle%' =>$updatedLesson['title'], '%updatedLessonId%' =>$updatedLesson['id'] )), $updatedLesson);
+        $this->getLogService()->info('course', 'update_lesson', $this->getKernel()->trans('更新课时《%updatedLessonTitle%》(%updatedLessonId%)', array('%updatedLessonTitle%' => $updatedLesson['title'], '%updatedLessonId%' => $updatedLesson['id'])), $updatedLesson);
 
         $updatedLesson['fields'] = $lesson;
-        $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson));
+        $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson, 'sourceLesson' => $lesson));
 
         return $updatedLesson;
     }
@@ -1309,13 +1284,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' => $courseId)));
         }
 
         $lesson = $this->getCourseLesson($courseId, $lessonId, true);
 
         if (empty($lesson)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' => $lessonId)));
         }
 
         // 更新已学该课时学员的计数器
@@ -1346,18 +1321,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
-        // [END] 更新课时序号
 
-        // Decrease the course lesson file usage count, if there's a linked file used by this lesson.
+        $this->getLogService()->info('course', 'delete_lesson', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)的课时 %lessonTitle%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%lessonTitle%' => $lesson['title'])));
 
-        if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
-        }
-
-        // Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
-        $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
-
-        $this->getLogService()->info('lesson', 'delete', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)的课时 %lessonTitle%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%lessonTitle%' =>$lesson['title'] )));
         $this->dispatchEvent("course.lesson.delete", array(
             "courseId" => $courseId,
             "lesson"   => $lesson
@@ -1405,7 +1371,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' => $lessonId)));
         }
 
         $publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
@@ -1420,12 +1386,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' => $lessonId)));
         }
 
         $unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
         $this->dispatchEvent("course.lesson.unpublish", $unpublishLesson);
+    }
+
+    public function resetLessonMediaId($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+        if ($lesson) {
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId' => 0));
+            return true;
+        }
+
+        return false;
     }
 
     public function getNextLessonNumber($courseId)
@@ -1569,7 +1546,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
-        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('%nickName%观看课时《%lessonTitle%》', array('%nickName%' =>$this->getCurrentUser()->nickname, '%lessonTitle%' =>$lesson['title'] )));
+        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('%nickName%观看课时《%lessonTitle%》', array('%nickName%' => $this->getCurrentUser()->nickname, '%lessonTitle%' => $lesson['title'])));
 
         return $lessonView;
     }
@@ -1581,7 +1558,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在！', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在！', array('%lessonId%' => $lessonId)));
         }
 
         $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
@@ -1655,11 +1632,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
 
         if (empty($learn)) {
-            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学习，取消学习失败。', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学习，取消学习失败。', array('%lessonId%' => $lessonId)));
         }
 
         if ($learn['status'] != 'finished') {
-            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学完，取消学习失败。', array('%lessonId%' =>$lessonId )));
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学完，取消学习失败。', array('%lessonId%' => $lessonId)));
         }
 
         $this->getLessonLearnDao()->updateLearn($learn['id'], array(
@@ -1778,7 +1755,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter  = $this->getChapter($courseId, $chapterId);
 
         if (empty($chapter)) {
-            throw $this->createServiceException($this->getKernel()->trans('章节#%chapterId%不存在！', array('%chapterId%' =>$chapterId )));
+            throw $this->createServiceException($this->getKernel()->trans('章节#%chapterId%不存在！', array('%chapterId%' => $chapterId)));
         }
 
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
@@ -2008,7 +1985,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        if ($sort = 'latest') {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } else {
             $orderBy = array('createdTime', 'DESC');
         }
 
@@ -2084,13 +2063,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
-                throw $this->createServiceException($this->getKernel()->trans('教师ID不能为空，设置课程(#%courseId%)教师失败', array('%courseId%' =>$courseId )));
+                throw $this->createServiceException($this->getKernel()->trans('教师ID不能为空，设置课程(#%courseId%)教师失败', array('%courseId%' => $courseId)));
             }
 
             $user = $this->getUserService()->getUser($teacher['id']);
 
             if (empty($user)) {
-                throw $this->createServiceException($this->getKernel()->trans('用户不存在或没有教师角色，设置课程(#%courseId%)教师失败', array('%courseId%' =>$courseId )));
+                throw $this->createServiceException($this->getKernel()->trans('用户不存在或没有教师角色，设置课程(#%courseId%)教师失败', array('%courseId%' => $courseId)));
             }
 
             $teacherMembers[] = array(
@@ -2128,7 +2107,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        $this->getLogService()->info('course', 'update_teacher', $this->getKernel()->trans('更新课程#%courseId%的教师', array('%courseId%' =>$courseId )), $teacherMembers);
+        $this->getLogService()->info('course', 'update_teacher', $this->getKernel()->trans('更新课程#%courseId%的教师', array('%courseId%' => $courseId)), $teacherMembers);
 
         // 更新课程的teacherIds，该字段为课程可见教师的ID列表
         $fields = array('teacherIds' => $visibleTeacherIds);
@@ -2160,7 +2139,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseDao()->updateCourse($member['courseId'], CourseSerialize::serialize($fields));
         }
 
-        $this->getLogService()->info('course', 'cancel_teachers_all', $this->getKernel()->trans('取消用户#%userId%所有的课程老师角色', array('%userId%' =>$userId )));
+        $this->getLogService()->info('course', 'cancel_teachers_all', $this->getKernel()->trans('取消用户#%userId%所有的课程老师角色', array('%userId%' => $userId)));
     }
 
     public function remarkStudent($courseId, $userId, $remark)
@@ -2205,13 +2184,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入课程失败！', array('%userId%' =>$userId )));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入课程失败！', array('%userId%' => $userId)));
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)已加入该课程！', array('%userId%' =>$userId )));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)已加入该课程！', array('%userId%' => $userId)));
         }
 
         $levelChecked = '';
@@ -2220,7 +2199,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 
             if ($levelChecked != 'ok') {
-                throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不能以会员身份加入课程！', array('%userId%' =>$userId )));
+                throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不能以会员身份加入课程！', array('%userId%' => $userId)));
             }
 
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
@@ -2236,7 +2215,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('订单(#%orderId%})不存在，加入课程失败！', array('%orderId%' =>$info['orderId'] )));
+                throw $this->createServiceException($this->getKernel()->trans('订单(#%orderId%})不存在，加入课程失败！', array('%orderId%' => $info['orderId'])));
             }
         } else {
             $order = null;
@@ -2290,7 +2269,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->updateCourse($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
         return $member;
     }
@@ -2337,13 +2316,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，退出课程失败。', array('%courseId%' =>$courseId )));
+            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，退出课程失败。', array('%courseId%' => $courseId)));
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。', array('%userId%' =>$userId, '%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
         }
 
         $this->getMemberDao()->deleteMember($member['id']);
@@ -2352,10 +2331,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
 
-        $this->getLogService()->info('course', 'remove_student', $this->getKernel()->trans('课程《%courseTitle%》(#%courseId%)，移除学员#%memberId%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%memberId%' =>$member['id'] )));
+        $this->getLogService()->info('course', 'remove_student', $this->getKernel()->trans('课程《%courseTitle%》(#%courseId%)，移除学员#%memberId%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%memberId%' => $member['id'])));
         $this->dispatchEvent(
             'course.quit',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
@@ -2364,13 +2343,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' =>$courseId )));
+            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' => $courseId)));
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。', array('%userId%' =>$userId, '%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
         }
 
         if ($member['locked']) {
@@ -2385,13 +2364,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' =>$courseId )));
+            throw $this->createNotFoundException($this->getKernel()->trans('课程(#%courseId%)不存在，封锁学员失败。', array('%courseId%' => $courseId)));
         }
 
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。', array('%userId%' =>$userId, '%courseId%' =>$courseId )));
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。', array('%userId%' => $userId, '%courseId%' => $courseId)));
         }
 
         if (empty($member['locked'])) {

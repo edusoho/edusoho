@@ -195,21 +195,21 @@ class UserSettingController extends BaseController
 
             if ($setting['mode'] == 'discuz') {
                 if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。',array('%discuzConfigPath%'=>$discuzConfigPath)));
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
                     goto response;
                 }
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。',array('%phpwindConfigPath%'=>$phpwindConfigPath)));
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。', array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', $this->getServiceKernel()->trans('用户中心设置'), $setting);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户中心设置已保存！'));
+            $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
+            $this->setFlashMessage('success', '用户中心设置已保存！');
         }
 
         if (file_exists($discuzConfigPath)) {
@@ -459,11 +459,6 @@ class UserSettingController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getAppService()

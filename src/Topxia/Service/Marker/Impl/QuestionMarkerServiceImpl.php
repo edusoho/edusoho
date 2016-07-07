@@ -94,7 +94,8 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         }
 
         $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($id);
-        $this->getLogService()->info('questionMarker', 'delete', $this->getKernel()->trans('删除驻点问题#%stem%',array('%stem%'=>$questionMarker['stem'])));
+
+        $this->getLogService()->info('marker', 'delete_question', $this->getKernel()->trans('删除驻点问题#%stem%', array('%stem%' => $questionMarker['stem'])));
         return true;
     }
 

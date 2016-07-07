@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'文件删除'|trans}}{% endblock %}
+
+{% block body %}
+	<form id="file-delete-form" class="form-horizontal" method="post" action="{{ deleteFormUrl }}" onsubmit="return false">
+
+    <div class="form-group">
+      <div class="controls mll">
+        <span>{{'是否确认删除资源？'|trans}}</span>
+      </div>
+
+      {% include 'TopxiaWebBundle:CourseFileManage:file-used-in-material-list.html.twig' %}
+    </div>
+    
+    {% for id in ids if id %}
+      <input type="hidden" name="ids[]" value="{{ id }}" />
+    {% endfor %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <div class="pull-left pts"> 
+      <span class="text-danger">文件若被引用，删除会引起引用课时无法正常使用</span>
+    </div>
+    <button class="btn btn-danger file-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#file-delete-form" data-loading-text="正在删除...">确认</button>
+    
+{% endblock %}

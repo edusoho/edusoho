@@ -70,14 +70,15 @@ class CardController extends BaseController
         $cards      = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'coupon');
         $cards      = $this->sortCards($cards);
         $groupCards = ArrayToolkit::group($cards, 'status');
-        
+
         if (isset($groupCards['useable'])) {
             $cardIds      = ArrayToolkit::column($groupCards['useable'], 'cardId');
             $cardDetails  = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon', $cardIds);
             $useableCards = array();
 
             foreach ($cardDetails as $key => $value) {
-               $useable =  $this->isUseable($value,$targetType, $targetId);
+                $useable = $this->isUseable($value, $targetType, $targetId);
+
                 if ($useable) {
                     if ($value['type'] == 'minus') {
                         $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
@@ -116,11 +117,13 @@ class CardController extends BaseController
         ));
     }
 
-    public function isUseable($cardDetail,$targetType, $targetId){
-        if($cardDetail['targetType'] == 'all' || $cardDetail['targetType'] == 'fullDiscount' ){
+    public function isUseable($cardDetail, $targetType, $targetId)
+    {
+        if ($cardDetail['targetType'] == 'all' || $cardDetail['targetType'] == 'fullDiscount') {
             return true;
         }
-        if($cardDetail['targetType'] == $targetType && ($cardDetail['targetId'] == 0 || $cardDetail['targetId'] == $targetId)){
+
+        if ($cardDetail['targetType'] == $targetType && ($cardDetail['targetId'] == 0 || $cardDetail['targetId'] == $targetId)) {
             return true;
         }
     }

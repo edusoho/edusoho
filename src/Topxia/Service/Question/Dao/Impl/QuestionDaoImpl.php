@@ -260,6 +260,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
                         ->andWhere('type = :type')
                         ->andWhere('stem LIKE :stem')
                         ->andWhere("type IN ( :types )")
+                        ->andwhere("subCount <> :subCount")
                         ->andWhere("id NOT IN ( :excludeIds ) ");
 
         if (isset($conditions['excludeUnvalidatedMaterial']) && ($conditions['excludeUnvalidatedMaterial'] == 1)) {

@@ -8,7 +8,6 @@ define(function(require, exports, module) {
 
         var $form = $("#mobile-form");
 
-
         var uploader = new WebUploader({
             element: '#mobile-splash1-upload'
         });
@@ -36,15 +35,6 @@ define(function(require, exports, module) {
                 Notify.danger('删除网校启动图1失败！');
             });
         });
-
-        $("input[name='enabled']").on("click",function(){
-            $this = $(this);
-            if($this.val() == 1){
-                $this.parents('.form-group').next('.form-group').removeClass('hidden');
-            }else{
-                $this.parents('.form-group').next('.form-group').addClass('hidden');
-            }
-        })
 
         var uploader = new WebUploader({
             element: '#mobile-splash2-upload'

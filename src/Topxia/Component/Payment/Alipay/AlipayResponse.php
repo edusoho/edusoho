@@ -16,7 +16,6 @@ class AlipayResponse extends Response
         }
 
         $params = $this->params;
-
         if ($params['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
 
             $trade_no = $params['trade_no'];
@@ -71,7 +70,6 @@ class AlipayResponse extends Response
                 'service' => 'notify_verify',
                 'partner' => $this->options['key'],
             ));
-
             if (strtolower($notifyResult) !== 'true') {
                 return 'notify_verify_error';
             }

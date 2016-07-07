@@ -1,11 +1,9 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
     var FileChooser = require('../widget/file/file-chooser3');
 
     exports.run = function() {
-
         var $form = $("#course-material-form");
 
         var materialChooser = new FileChooser({
@@ -18,13 +16,13 @@ define(function(require, exports, module) {
 
         $form.on('click', '.delete-btn', function(){
             var $btn = $(this);
-            if (!confirm('真的要删除该资料吗？')) {
+            if (!confirm('真的要移除该资料吗？')) {
                 return ;
             }
 
             $.post($btn.data('url'), function(){
                 $btn.parents('.list-group-item').remove();
-                Notify.success('资料已删除');
+                Notify.success('资料已移除');
             });
         });
 

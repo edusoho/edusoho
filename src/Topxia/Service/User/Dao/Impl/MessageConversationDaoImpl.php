@@ -24,23 +24,33 @@ class MessageConversationDaoImpl extends BaseDao implements MessageConversationD
         if ($affected <= 0) {
             throw $this->createDaoException('Insert conversation error.');
         }
+
+        $this->clearCached();
+
         return $this->getConversation($this->getConnection()->lastInsertId());
     }
 
     public function deleteConversation($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function getConversationByFromIdAndToId($fromId, $toId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($fromId, $toId));
+        $that = $this;
+
+        return $this->fetchCached("fromId:{$fromId}:toId:{$toId}", $fromId, $toId, function ($fromId, $toId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE fromId = ? AND toId = ?";
+            return $that->getConnection()->fetchAssoc($sql, array($fromId, $toId));
+        });
     }
 
     public function updateConversation($id, $toUpdateConversation)
     {
         $this->getConnection()->update($this->table, $toUpdateConversation, array('id' => $id));
+        $this->clearCached();
         return $this->getConversation($id);
     }
 

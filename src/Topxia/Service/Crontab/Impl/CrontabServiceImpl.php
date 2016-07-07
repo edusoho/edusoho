@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Crontab\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Crontab\CrontabService;
@@ -46,9 +47,8 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $user = $this->getCurrentUser();
 
-        if ($job['cycle'] == 'once') {
-            $job['nextExcutedTime'] = $job['time'];
-            unset($job['time']);
+        if (!ArrayToolKit::requireds($job, array('nextExcutedTime'))) {
+            throw $this->createServiceException('缺少 nextExcutedTime 字段,创建job失败');
         }
 
         $job['creatorId']   = $user['id'];
@@ -72,7 +72,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             // 加锁
             $job = $this->getJob($id, true);
 
-            // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
 
             if (empty($job) || $job['executing']) {
                 $this->getLogService()->error('crontab', 'execute', $this->getKernel()->trans('任务(#%jobId%)已经完成或者在执行', array('%jobId%' =>$job['id'] )));
@@ -81,9 +81,15 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             }
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
-            $jobInstance                    = new $job['jobClass']();
-            $job['jobParams']['targetType'] = $job['targetType'];
-            $job['jobParams']['targetId']   = $job['targetId'];
+            $jobInstance = new $job['jobClass']();
+            if (!empty($job['targetType'])) {
+                $job['jobParams']['targetType'] = $job['targetType'];
+            }
+
+            if (!empty($job['targetId'])) {
+                $job['jobParams']['targetId'] = $job['targetId'];
+            }
+
             $jobInstance->execute($job['jobParams']);
         } catch (\Exception $e) {
             $message = $e->getMessage();
@@ -172,6 +178,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         $fileContent = file_get_contents($filePath);
         $config      = $yaml->parse($fileContent);
+
         return $config['crontab_next_executed_time'];
     }
 

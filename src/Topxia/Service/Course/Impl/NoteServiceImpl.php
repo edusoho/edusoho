@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\NoteService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 
 class NoteServiceImpl extends BaseService implements NoteService
@@ -42,7 +42,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         $conditions = array_filter($conditions);
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseTitle' ))) {
+            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseTitle'))) {
                 throw $this->createServiceException($this->getKernel()->trans('keywordType参数不正确'));
             }
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -51,7 +51,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         unset($conditions['keyword']);
 
         if (isset($conditions['author'])) {
-            $author = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
             unset($conditions['author']);
         }
@@ -60,7 +60,7 @@ class NoteServiceImpl extends BaseService implements NoteService
     }
 
     /**
-     *类似这样的，提交数据保存到数据的流程是：
+     * 类似这样的，提交数据保存到数据的流程是：
      *
      *  1. 检查参数是否正确，不正确就抛出异常
      *  2. 过滤数据
@@ -74,7 +74,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($note['courseId']);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
 
         if (!$this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId'])) {
             throw $this->createServiceException($this->getKernel()->trans('课时不存在，保存笔记失败'));
@@ -83,23 +83,23 @@ class NoteServiceImpl extends BaseService implements NoteService
         $note = ArrayToolkit::filter($note, array(
             'courseId' => 0,
             'lessonId' => 0,
-            'content' => '',
-            'status' => 0,
+            'content'  => '',
+            'status'   => 0
         ));
 
-        $note['content'] = $this->purifyHtml($note['content']) ? : '';
-        $note['length'] = $this->calculateContnentLength($note['content']);
+        $note['content'] = $this->purifyHtml($note['content']) ?: '';
+        $note['length']  = $this->calculateContnentLength($note['content']);
 
         $existNote = $this->getUserLessonNote($user['id'], $note['lessonId']);
         if (!$existNote) {
-            $note['userId'] = $user['id'];
+            $note['userId']      = $user['id'];
             $note['createdTime'] = time();
             $note['updatedTime'] = time();
-            $note = $this->getNoteDao()->addNote($note);
+            $note                = $this->getNoteDao()->addNote($note);
             $this->getDispatcher()->dispatch('course.note.create', new ServiceEvent($note));
         } else {
             $note['updatedTime'] = time();
-            $note = $this->getNoteDao()->updateNote($existNote['id'], $note);
+            $note                = $this->getNoteDao()->updateNote($existNote['id'], $note);
             $this->getDispatcher()->dispatch('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
         }
 
@@ -116,12 +116,12 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $note = $this->getNote($id);
         if (empty($note)) {
-            throw $this->createServiceException($this->getKernel()->trans('笔记(#%id%)不存在，删除失败', array('%id%' =>$id )));
+            throw $this->createServiceException($this->getKernel()->trans('笔记(#%id%)不存在，删除失败', array('%id%' => $id)));
         }
 
         $currentUser = $this->getCurrentUser();
         if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'])) {
-            throw $this->createServiceException($this->getKernel()->trans('你没有权限删除笔记(#%id%)', array('%id%' =>$id )));
+            throw $this->createServiceException($this->getKernel()->trans('你没有权限删除笔记(#%id%)', array('%id%' => $id)));
         }
 
         $this->getNoteDao()->deleteNote($id);
@@ -134,7 +134,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         );
 
         if ($note['userId'] != $currentUser['id']) {
-            $this->getLogService()->info('note', 'delete', $this->getKernel()->trans('删除笔记#%id%', array('%id%' =>$id )));
+            $this->getLogService()->info('course', 'delete_note', $this->getKernel()->trans('删除笔记#%id%', array('%id%' => $id)));
         }
     }
 
@@ -168,9 +168,9 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $noteLike = array(
-            'noteId' => $noteId,
-            'userId' => $user['id'],
-            'createdTime' => time(),
+            'noteId'      => $noteId,
+            'userId'      => $user['id'],
+            'createdTime' => time()
         );
 
         $this->getDispatcher()->dispatch('course.note.liked', new ServiceEvent($note));
@@ -183,7 +183,6 @@ class NoteServiceImpl extends BaseService implements NoteService
         $user = $this->getCurrentUser();
         if (empty($user)) {
             throw $this->createNotFoundException($this->getKernel()->trans('用户还未登录,不能点赞。'));
-            
         }
 
         $note = $this->getNote($noteId);

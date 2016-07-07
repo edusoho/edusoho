@@ -53,8 +53,10 @@
 		    {% endif %}
 		  </td>
 		  <td>{{ course.studentNum }}</td>
-		  <td class="text-danger">{{ course.price }}</td>
-		  <td> {{ dict_macro.courseStatus( course.status) }}</td>
+		  <td class="text-danger">
+		  	{% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
+		  </td>
+		  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
 		  <td>
 		    {{ admin_macro.user_link(user) }}
 		    <br>

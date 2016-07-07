@@ -226,6 +226,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $fields['startTime'] = strtotime($fields['startTime']);
         }
 
+        $this->dispatchEvent('thread.update', new ServiceEvent($thread));
+
         return $this->getThreadDao()->updateThread($id, $fields);
     }
 
@@ -283,8 +285,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('thread.sticky', $thread);
 
         $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 0, 'updateTime' => time()));
-
-        $this->dispatchEvent('thread.sticky', new ServiceEvent($thread, array('sticky' => 'cancel')));
     }
 
     public function setThreadNice($threadId)
@@ -475,7 +475,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-        //回复的回复的人给该回复的作者发通知
+//回复的回复的人给该回复的作者发通知
 
         if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
@@ -508,7 +508,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('post.delete', $post);
 
         $thread = $this->getThread($post['threadId']);
-        // if (!empty($thread)) {
+
+// if (!empty($thread)) {
         // }
 
         $totalDeleted = 1;

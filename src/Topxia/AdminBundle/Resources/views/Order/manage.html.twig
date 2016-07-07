@@ -50,7 +50,8 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-    <a class="btn btn-primary" href="{{ path('admin_order_manage_export_csv',
+    <a class="btn btn-primary btn-export-csv" 
+    href="{{ path('admin_order_manage_export_csv',
     {targetType:targetType,
     startTime:request.get('startDateTime'),
     endTime:request.get('endDateTime'),
@@ -58,14 +59,18 @@
     payment:request.get('payment'),
     keywordType:request.get('keywordType'),
     keyword:request.get('keyword')
-    })}}">导出结果</a>
+    })}}"
+    data-export-count="{{paginator.getItemCount()}}"
+    data-export-count-format="{{paginator.getItemCount()|number_to_human}}"
+    data-export-allow-count="{{setting('magic.export_allow_count')}}"
+    data-export-allow-count-format="{{setting('magic.export_allow_count')|number_to_human}}"
+    >导出结果</a>
     </div>
   </form>
 
   <table class="table table-striped table-hover" id="order-table">
     {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode:'admin'} %}
   </table>
-
   <div class="paginator">
     {{ web_macro.paginator(paginator) }} 
   </div>

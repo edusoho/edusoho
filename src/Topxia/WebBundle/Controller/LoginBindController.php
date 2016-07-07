@@ -22,8 +22,13 @@ class LoginBindController extends BaseController
             }
         }
 
+        $inviteCode  = $request->query->get('inviteCode', null);
         $client      = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+
+        if ($inviteCode) {
+            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+        }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -38,6 +43,7 @@ class LoginBindController extends BaseController
     public function callbackAction(Request $request, $type)
     {
         $code        = $request->query->get('code');
+        $inviteCode  = $request->query->get('inviteCode');
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
@@ -62,13 +68,16 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
+            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type, 'inviteCode' => $inviteCode)));
         }
     }
 
     public function chooseAction(Request $request, $type)
     {
-        $token       = $request->getSession()->get('oauth_token');
+        $token      = $request->getSession()->get('oauth_token');
+        $inviteCode = $request->query->get('inviteCode', '');
+        $inviteUser = $inviteCode ? $inviteUser = $this->getUserService()->getUserByInviteCode($inviteCode) : array();
+
         $client      = $this->createOAuthClient($type);
         $clientMetas = OAuthClientFactory::clients();
         $clientMeta  = $clientMetas[$type];
@@ -93,6 +102,7 @@ class LoginBindController extends BaseController
 
         $name = $this->mateName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+            'inviteUser'     => $inviteUser,
             'oauthUser'      => $oauthUser,
             'type'           => $type,
             'name'           => $name,
@@ -201,9 +211,12 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
+        if (!empty($oauthUser['avatar'])) {
+            $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser['avatar']);
+        }
+
         $redirectUrl = $this->generateUrl('register_success', array(
-            'userId' => $user['id'],
-            'goto'   => $this->getTargetPath($request)
+            'goto' => $this->getTargetPath($request)
         ));
         $response = array('success' => true, '_target_path' => $redirectUrl);
 
@@ -276,6 +289,10 @@ class LoginBindController extends BaseController
             $registration['emailOrMobile'] = $setData['mobile'];
         }
 
+        if (isset($setData['invite_code']) && !empty($setData['invite_code'])) {
+            $registration['invite_code'] = $setData['invite_code'];
+        }
+
         $user = $this->getAuthService()->register($registration, $type);
 
         return $user;
@@ -303,7 +320,7 @@ class LoginBindController extends BaseController
         } elseif (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('密码不正确，请重试！'));
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！', array('%siteName%' => $this->setting('site.name') )));
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！', array('%siteName%' => $this->setting('site.name'))));
         } else {
             $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
@@ -371,19 +388,19 @@ class LoginBindController extends BaseController
     {
         switch ($type) {
             case 'weixinweb':
-                return $this->getServiceKernel()->trans('微信创建新账号');
+                return $this->getServiceKernel()->trans('微信注册帐号');
                 break;
             case 'weixinmob':
-                return $this->getServiceKernel()->trans('微信创建新账号');
+                return $this->getServiceKernel()->trans('微信注册帐号');
                 break;
             case 'weibo':
-                return $this->getServiceKernel()->trans('微博创建新账号');
+                return $this->getServiceKernel()->trans('微博注册帐号');
                 break;
             case 'qq':
-                return $this->getServiceKernel()->trans('QQ创建新账号');
+                return $this->getServiceKernel()->trans('QQ注册账号');
                 break;
             case 'renren':
-                return $this->getServiceKernel()->trans('人人创建新账号');
+                return $this->getServiceKernel()->trans('人人注册账号');
                 break;
             default:
                 return '';
@@ -422,11 +439,11 @@ class LoginBindController extends BaseController
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' =>$type )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' => $type)));
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)未开启', array('%type%' =>$type )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('第三方登录(%type%)未开启', array('%type%' => $type)));
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);

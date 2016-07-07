@@ -1,0 +1,117 @@
+{% extends 'MaterialLibBundle:Web:layout.html.twig' %}
+
+{% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
+
+{% block page_body %}
+
+<form id="material-search-form"  calss="form-inline" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
+  <input type="hidden" class="js-page" name="page" value="1">
+  <div class="source-btn" role="group" aria-label="...">
+    <ul class="nav nav-tabs">
+      <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">我的资料</a></li>
+      <li class="" data-value="public"><a href="javascript:;" class="js-source-btn">公共资料</a></li>
+      <li class="" data-value="favorite"><a href="javascript:;" class="js-source-btn">收藏夹</a></li>
+      <li class="" data-value="sharing"><a href="javascript:;" class="js-source-btn">来自分享</a></li>
+    </ul>
+    <input type="hidden" name="sourceFrom" value="my">
+  </div>
+  <div class="form-group clearfix material-search-list">
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
+        <span class="input-group-btn">
+          <button class="btn btn-primary">搜索</button>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-8 btn-group">
+    {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
+    </div>
+  </div>
+  {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
+  <div class="material-search-list material-tag js-material-tag">
+    <span  class="all">标签:</span>
+      <div class="right-content">
+        {% for tag in tags %}
+          <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
+        {% endfor %}
+        <input type="hidden" name="tagId">
+      </div>
+  </div>
+  <div class="material-search-list bottom">
+    <span class="all">筛选：</span>
+    <div class="right-content ">
+      <div class="row">
+        <div class="col-sm-6">
+        <input class="form-control input-time" type="text" id="startDate" name="startDate" value="" placeholder="起始时间"><span class="input-space">-</span><input class="form-control input-time" type="text" id="endDate" name="endDate" value="" placeholder="结束时间" ></div>
+        <div class="col-sm-2">
+          <select class="form-control js-process-status-select" name="processStatus">
+            <option value="">转码状态</option>
+            <option value="ok">转码成功</option>
+            <option value="waiting">转码中</option>
+            <option value="error">转码失败</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <select class="form-control js-use-status-select" name="useStatus">
+            <option value="">使用状态</option>
+            <option value="unused">未使用</option>
+            <option value="used">已使用</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="material-lib-items-panel">
+    
+      <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+      data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="上传资料"   data-placement="bottom" >上传资料
+      </a>
+      <a class="btn btn-info js-manage-batch-btn" href="javascript:;">批量管理
+      </a>
+      <span id="material-lib-batch-btn-bar" style="display:none;">
+        <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">添加标签
+        </a>
+        <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
+        </a>
+        <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >删除
+        </a>
+        <label class="checkbox-inline" data-role="batch-manage" >
+          <input type="checkbox"  data-role="batch-select"/> 全选
+        </label>  
+      </span>
+    <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+  </div>
+</form>
+<div id="tag-modal" class="modal in" aria-hidden="false" data-backdrop="static" style="display: none;">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">×</button>
+        <h4 class="modal-title">标签设置</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
+          <div class="form-group" id="form">
+            <div class="col-md-2 control-label">
+              <label for="tags">标签</label>
+            </div>
+
+            <div class="col-md-8 controls">
+              <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}" name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans}}">
+              <div class="help-block">{{'标签来自网校课程标签，由网校管理员统一管理。'|trans}}</div>
+            </div>
+
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input id="select-tag-items" name="fileIds" type="hidden" value="">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+        <button id="tag-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form ">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

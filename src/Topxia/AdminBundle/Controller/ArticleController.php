@@ -1,26 +1,25 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Imagine\Gd\Imagine;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleController extends BaseController
 {
-
-	public function indexAction(Request $request)
-	{
+    public function indexAction(Request $request)
+    {
         $conditions = $request->query->all();
 
         $categoryId = 0;
-        if(!empty($conditions['categoryId'])){
+
+        if (!empty($conditions['categoryId'])) {
             $conditions['includeChildren'] = true;
-            $categoryId = $conditions['categoryId'];
+            $categoryId                    = $conditions['categoryId'];
         }
+
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $request,
@@ -34,79 +33,82 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $categoryIds = ArrayToolkit::column($articles, 'categoryId');
-        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categoryIds  = ArrayToolkit::column($articles, 'categoryId');
+        $categories   = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('TopxiaAdminBundle:Article:index.html.twig',array(
-        	'articles' => $articles,
-            'categories' => $categories,
-        	'paginator' => $paginator,
-            'categoryTree'  => $categoryTree,
-            'categoryId'  => $categoryId
-    	));
-	}
+        return $this->render('TopxiaAdminBundle:Article:index.html.twig', array(
+            'articles'     => $articles,
+            'categories'   => $categories,
+            'paginator'    => $paginator,
+            'categoryTree' => $categoryTree,
+            'categoryId'   => $categoryId
+        ));
+    }
 
     public function createAction(Request $request)
     {
-        if($request->getMethod() == 'POST'){
-            $article = $request->request->all();
+        if ($request->getMethod() == 'POST') {
+            $article         = $request->request->all();
             $article['tags'] = array_filter(explode(',', $article['tags']));
 
             $article = $this->getArticleService()->createArticle($article);
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
-        
+
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
-            'categoryTree'  => $categoryTree,
-            'category'  => array( 'id' =>0, 'parentId' =>0)
+        return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig', array(
+            'categoryTree' => $categoryTree,
+            'category'     => array('id' => 0, 'parentId' => 0)
         ));
     }
 
     public function editAction(Request $request, $id)
     {
         $article = $this->getArticleService()->getArticle($id);
+
         if (empty($article)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('文章已删除或者未发布！'));
         }
-        if(empty($article['tagIds'])){
+
+        if (empty($article['tagIds'])) {
             $article['tagIds'] = array();
         }
 
-        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+        $tags     = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $categoryId = $article['categoryId'];
-        $category = $this->getCategoryService()->getCategory($categoryId);
+        $category   = $this->getCategoryService()->getCategory($categoryId);
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $article = $this->getArticleService()->updateArticle($id, $formData);
+            $article  = $this->getArticleService()->updateArticle($id, $formData);
             return $this->redirect($this->generateUrl('admin_article'));
         }
-        return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig',array(
-            'article' => $article,
-            'categoryTree'  => $categoryTree,
-            'category'  => $category,
-            'tagNames' => $tagNames
+
+        return $this->render('TopxiaAdminBundle:Article:article-modal.html.twig', array(
+            'article'      => $article,
+            'categoryTree' => $categoryTree,
+            'category'     => $category,
+            'tagNames'     => $tagNames
         ));
     }
 
-    public function setArticlePropertyAction(Request $request,$id,$property)
+    public function setArticlePropertyAction(Request $request, $id, $property)
     {
-         $this->getArticleService()->setArticleProperty($id, $property);
-         return $this->createJsonResponse(true); 
+        $this->getArticleService()->setArticleProperty($id, $property);
+        return $this->createJsonResponse(true);
     }
 
-    public function cancelArticlePropertyAction(Request $request,$id,$property)
+    public function cancelArticlePropertyAction(Request $request, $id, $property)
     {
-         $this->getArticleService()->cancelArticleProperty($id, $property);
-         return $this->createJsonResponse(true);
+        $this->getArticleService()->cancelArticleProperty($id, $property);
+        return $this->createJsonResponse(true);
     }
 
     public function trashAction(Request $request, $id)
@@ -115,7 +117,7 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function thumbRemoveAction(Request $request,$id)
+    public function thumbRemoveAction(Request $request, $id)
     {
         $this->getArticleService()->removeArticlethumb($id);
         return $this->createJsonResponse(true);
@@ -124,16 +126,18 @@ class ArticleController extends BaseController
     public function deleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());
-        $id = $request->query->get('id', null);
-        
+        $id  = $request->query->get('id', null);
+
         if ($id) {
             array_push($ids, $id);
         }
+
         $result = $this->getArticleService()->deleteArticlesByIds($ids);
-        if($result){
-            return $this->createJsonResponse(array("status" =>"failed"));
+
+        if ($result) {
+            return $this->createJsonResponse(array("status" => "failed"));
         } else {
-            return $this->createJsonResponse(array("status" =>"success")); 
+            return $this->createJsonResponse(array("status" => "success"));
         }
     }
 
@@ -141,7 +145,7 @@ class ArticleController extends BaseController
     {
         $this->getArticleService()->publishArticle($id);
         return $this->createJsonResponse(true);
-    } 
+    }
 
     public function unpublishAction(Request $request, $id)
     {
@@ -152,29 +156,30 @@ class ArticleController extends BaseController
     public function showUploadAction(Request $request)
     {
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
-            'pictureUrl' => "",
+            'pictureUrl' => ""
         ));
     }
 
     public function pictureCropAction(Request $request)
     {
-        if($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $files = $this->getArticleService()->changeIndexPicture($options["images"]);
+            $files   = $this->getArticleService()->changeIndexPicture($options["images"]);
 
             foreach ($files as $key => $file) {
                 $files[$key]["file"]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($file["file"]['uri']);
             }
+
             return new JsonResponse($files);
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-        
+
         return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
-            'pictureUrl' => $pictureUrl,
+            'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize
+            'scaledSize'  => $scaledSize
         ));
     }
 
@@ -202,5 +207,4 @@ class ArticleController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-
 }

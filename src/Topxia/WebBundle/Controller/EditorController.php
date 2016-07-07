@@ -12,6 +12,7 @@ class EditorController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        $isWebuploader = 0;
         try {
             $token = $request->query->get('token');
 
@@ -22,7 +23,13 @@ class EditorController extends BaseController
                 throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
             }
 
-            $file = $request->files->get('upload');
+            $isWebuploader = $request->query->get('isWebuploader', 0);
+
+            if ($isWebuploader) {
+                $file = $request->files->get('file');
+            } else {
+                $file = $request->files->get('upload');
+            }
 
             if ($token['type'] == 'image') {
                 if (!FileToolkit::isImageFile($file)) {
@@ -40,21 +47,34 @@ class EditorController extends BaseController
 
             $record = $this->getFileService()->uploadFile($token['group'], $file);
 
-            $funcNum = $request->query->get('CKEditorFuncNum');
-            $url     = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+            $parsed = $this->getFileService()->parseFileUri($record['uri']);
+            FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
 
-            if ($token['type'] == 'image') {
-                $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
+            $url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+
+            if ($isWebuploader) {
+                return $this->createJsonResponse(array('url' => $url));
             } else {
-                $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}');</script>";
-            }
+                $funcNum = $request->query->get('CKEditorFuncNum');
 
-            return new Response($response);
+                if ($token['type'] == 'image') {
+                    $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
+                } else {
+                    $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}');</script>";
+                }
+
+                return new Response($response);
+            }
         } catch (\Exception $e) {
-            $message  = $e->getMessage();
-            $funcNum  = $request->query->get('CKEditorFuncNum');
-            $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
-            return new Response($response);
+            $message = $e->getMessage();
+
+            if ($isWebuploader) {
+                return $this->createJsonResponse(array('message' => $message));
+            } else {
+                $funcNum  = $request->query->get('CKEditorFuncNum');
+                $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
+                return new Response($response);
+            }
         }
     }
 

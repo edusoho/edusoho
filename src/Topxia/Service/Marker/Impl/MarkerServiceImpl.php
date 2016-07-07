@@ -75,13 +75,9 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     {
         $media = $this->getUploadFileService()->getFile($mediaId);
 
-        // if (empty($mediaId) || empty($media)) {
-        //     throw $this->createServiceException("视频文件不存在！");
-        // }
-
         if (empty($media)) {
             $media['id'] = 0;
-            $this->getLogService()->error('mediaId', 'isNotExist', $this->getKernel()->trans('视频文件不存在！'));
+            $this->getLogService()->error('marker', 'mediaId_notExist', $this->getKernel()->trans('视频文件不存在！'));
         }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
@@ -94,8 +90,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'updatedTime' => time(),
             'second'      => $fields['second']
         );
-
-        $marker   = $this->getMarkerDao()->addMarker($marker);
+        $marker = $this->getMarkerDao()->addMarker($marker);
+        $this->getLogService()->info('marker', 'create', "增加驻点#{$marker['id']}");
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
         return $question;
     }
@@ -109,7 +105,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $this->getMarkerDao()->deleteMarker($id);
-        $this->getLogService()->info('Marker', 'delete', $this->getKernel()->trans('驻点#%id%永久删除',array('%id%'=>$id)));
+        $this->getLogService()->info('marker', 'delete', $this->getKernel()->trans('驻点#%id%永久删除', array('%id%' => $id)));
 
         return true;
     }

@@ -14,7 +14,7 @@
 
       <ul class="media-list conversation-list">
         {% for conversation in conversations %}
-          {% set fromUser = users[conversation.fromId] %}
+          {% set fromUser = users[conversation.fromId]|default(null) %}
           {% include 'TopxiaWebBundle:Message/Template:conversation-' ~ conversation.latestMessageType ~ '.tpl.html.twig' %}
         {% else %}
           <li class="empty">{{'暂无私信'|trans}}</li>

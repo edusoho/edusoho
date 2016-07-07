@@ -69,11 +69,7 @@ class SettingController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if (array_key_exists('ver', $mobile) && $mobile['ver']) {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        } else {
-            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");
-        }
+        $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
 
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
@@ -103,7 +99,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片',array('%type%'=>$type)), array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片', array('%type%' => $type)), array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],
@@ -120,7 +116,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片',array('%type%'=>$type)));
+        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片', array('%type%' => $type)));
 
         return $this->createJsonResponse(true);
     }
@@ -495,21 +491,21 @@ class SettingController extends BaseController
 
             if ($setting['mode'] == 'discuz') {
                 if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。',array('%discuzConfigPath%'=>$discuzConfigPath)));
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。', array('%discuzConfigPath%' => $discuzConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans("配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。",array('%phpwindConfigPath%'=>$phpwindConfigPath)));
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans("配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。", array('%phpwindConfigPath%' => $phpwindConfigPath)));
                     goto response;
                 }
 
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting', $this->getServiceKernel()->trans('用户中心设置'), $setting);
+            $this->getLogService()->info('system', 'setting_userCenter', $this->getServiceKernel()->trans('用户中心设置'), $setting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户中心设置已保存！'));
         }
 

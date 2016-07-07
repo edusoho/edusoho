@@ -50,7 +50,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             return array();
         }
 
-        $marks    = str_repeat('?,', count($ids) - 1).'?';
+        $marks    = str_repeat('?,', count($ids) - 1) . '?';
         $sql      = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         $articles = $this->getConnection()->fetchAll($sql, $ids);
 
@@ -72,7 +72,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
+        $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql   = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         $artilces = $this->getConnection()->fetchAll($sql, $categoryIds);
@@ -86,7 +86,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
+        $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql   = "SELECT COUNT(id) FROM {$this->table} WHERE categoryId in ({$marks})";
 
         return $this->getConnection()->fetchColumn($sql, $categoryIds);
@@ -98,9 +98,9 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         $this->filterStartLimit($start, $limit);
 
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
@@ -114,7 +114,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
     public function searchArticlesCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -123,7 +123,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
     {
         $article['createdTime'] = time();
         $article['updatedTime'] = $article['createdTime'];
-        $article  = $this->createSerializer()->serialize($article, $this->serializeFields);
+        $article                = $this->createSerializer()->serialize($article, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $article);
 
@@ -177,7 +177,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
                 $sql .= " OR ";
             }
 
-            $tagArray[] = '%|'.$tagIds[$i].'|%';
+            $tagArray[] = '%|' . $tagIds[$i] . '|%';
         }
 
         $sql .= " ) ";
@@ -203,6 +203,11 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             }
         }
 
+        if (array_key_exists('hasThumb', $conditions)) {
+            $conditions['thumbNotEqual'] = '';
+            unset($conditions['hasThumb']);
+        }
+
         if (isset($conditions['keywords'])) {
             $conditions['keywords'] = "%{$conditions['keywords']}%";
         }
@@ -211,19 +216,28 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             $conditions['tagId'] = "%|{$conditions['tagId']}|%";
         }
 
+        if(isset($conditions['likeOrgCode'])){
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+            unset($conditions['orgCode']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'article')
-                        ->andWhere('status = :status')
-                        ->andWhere('categoryId = :categoryId')
-                        ->andWhere('featured = :featured')
-                        ->andWhere('promoted = :promoted')
-                        ->andWhere('sticky = :sticky')
-                        ->andWhere('title LIKE :keywords')
-                        ->andWhere('picture != :pictureNull')
-                        ->andWhere('tagIds LIKE :tagId')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('categoryId = :categoryId')
-                        ->andWhere('categoryId IN (:categoryIds)');
+            ->from($this->table, 'article')
+            ->andWhere('status = :status')
+            ->andWhere('categoryId = :categoryId')
+            ->andWhere('featured = :featured')
+            ->andWhere('promoted = :promoted')
+            ->andWhere('sticky = :sticky')
+            ->andWhere('title LIKE :keywords')
+            ->andWhere('picture != :pictureNull')
+            ->andWhere('tagIds LIKE :tagId')
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('categoryId = :categoryId')
+            ->andWhere('categoryId IN (:categoryIds)')
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('id != :idNotEqual')
+            ->andWhere('thumb != :thumbNotEqual')
+            ->andWhere('orgCode = :orgCode');
 
         return $builder;
     }

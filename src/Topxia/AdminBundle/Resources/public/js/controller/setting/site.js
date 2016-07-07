@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var $form = $("#site-form");
-        
+
 
         var uploader = new WebUploader({
             element: '#site-logo-upload'

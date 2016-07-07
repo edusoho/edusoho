@@ -66,7 +66,7 @@ class TestpaperController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        //学习计划任务
+//学习计划任务
 
         if ($this->isPluginInstalled('ClassroomPlan')) {
             $taskProcessor = $this->getTaskProcessor('studyPlan');
@@ -275,7 +275,7 @@ class TestpaperController extends BaseController
             throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在!'));
         }
 
-        //权限！
+//权限！
 
         if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('不可以访问其他学生的试卷哦~'));

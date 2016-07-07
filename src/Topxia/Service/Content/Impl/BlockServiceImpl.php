@@ -1,13 +1,12 @@
 <?php
 namespace Topxia\Service\Content\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\BlockService;
-use Topxia\Common\ArrayToolkit;
 
 class BlockServiceImpl extends BaseService implements BlockService
 {
-
     public function searchBlockCount($condition)
     {
         return $this->getBlockDao()->searchBlockCount($condition);
@@ -20,7 +19,7 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function getLatestBlockHistory()
     {
-        return  $this->getBlockHistoryDao()->getLatestBlockHistory();
+        return $this->getBlockHistoryDao()->getLatestBlockHistory();
     }
 
     public function getLatestBlockHistoriesByBlockIds($blockIds)
@@ -35,9 +34,9 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function getBlock($id)
     {
         $result = $this->getBlockDao()->getBlock($id);
-        if(!$result){
+        if (!$result) {
             return null;
-        } else{
+        } else {
             return $result;
         }
     }
@@ -48,10 +47,9 @@ class BlockServiceImpl extends BaseService implements BlockService
     }
 
     public function generateBlockTemplateItems($block)
-    {  
-
+    {
         preg_match_all("/\(\((.+?)\)\)/", $block['template'], $matches);
-        while (list($key, $value) = each($matches[1])){
+        while (list($key, $value) = each($matches[1])) {
             $matches[1][$key] = trim($value);
         };
 
@@ -62,8 +60,8 @@ class BlockServiceImpl extends BaseService implements BlockService
             return $templateItems;
         } else {
             foreach ($templateDatas as &$item) {
-                $item = explode(":", $item);
-                $arr[] = array( 'title' => $item[0],'type' => $item[1] );
+                $item  = explode(":", $item);
+                $arr[] = array('title' => $item[0], 'type' => $item[1]);
             }
 
             $templateItems = ArrayToolkit::index($arr, 'title');
@@ -74,16 +72,15 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function getBlockByCode($code)
     {
-
         $result = $this->getBlockDao()->getBlockByCode($code);
-        if(!$result){
+        if (!$result) {
             return null;
-        } else{
+        } else {
             return $result;
         }
     }
 
-    public function searchBlocks($condition, $sort,$start, $limit)
+    public function searchBlocks($condition, $sort, $start, $limit)
     {
         return $this->getBlockDao()->findBlocks($condition, $sort, $start, $limit);
     }
@@ -94,50 +91,50 @@ class BlockServiceImpl extends BaseService implements BlockService
     }
 
     public function createBlock($block)
-    {   
+    {
         if (!ArrayToolkit::requireds($block, array('code', 'title'))) {
             throw $this->createServiceException($this->getKernel()->trans('创建编辑区失败，缺少必要的字段'));
         }
 
-        $user = $this->getCurrentUser();
-        $block['userId'] = $user['id'];
-        $block['tips'] = empty($block['tips']) ? '' : $block['tips'];
+        $user                 = $this->getCurrentUser();
+        $block['userId']      = $user['id'];
+        $block['tips']        = empty($block['tips']) ? '' : $block['tips'];
         $block['createdTime'] = time();
-        $block['updateTime'] = time();
-        $createdBlock = $this->getBlockDao()->addBlock($block);
+        $block['updateTime']  = time();
+        $createdBlock         = $this->getBlockDao()->addBlock($block);
 
         $blockHistoryInfo = array(
-            'blockId'=>$createdBlock['id'],
-            'content'=>$createdBlock['content'],
-            'userId'=>$createdBlock['userId'],
-            'createdTime'=>time()
-            );
+            'blockId'     => $createdBlock['id'],
+            'content'     => $createdBlock['content'],
+            'userId'      => $createdBlock['userId'],
+            'createdTime' => time()
+        );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
         return $createdBlock;
     }
 
     public function updateBlock($id, $fields)
-    {   
+    {
         $block = $this->getBlockDao()->getBlock($id);
-        $user = $this->getCurrentUser();
+        $user  = $this->getCurrentUser();
 
         if (!$block) {
             throw $this->createServiceException($this->getKernel()->trans('此编辑区不存在，更新失败!'));
         }
         $fields['updateTime'] = time();
-        $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
+        $updatedBlock         = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
-            'blockId'=>$updatedBlock['id'],
-            'content'=>$updatedBlock['content'],
-            'data' => $updatedBlock['data'],
-            'templateData'=>$updatedBlock['templateData'],
-            'userId'=>$user['id'],
-            'createdTime'=>time()
+            'blockId'      => $updatedBlock['id'],
+            'content'      => $updatedBlock['content'],
+            'data'         => $updatedBlock['data'],
+            'templateData' => $updatedBlock['templateData'],
+            'userId'       => $user['id'],
+            'createdTime'  => time()
         );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
-        $this->getLogService()->info('block', 'update', $this->getKernel()->trans('更新编辑区#%id%', array('%id%' =>$id )), array('content' => $updatedBlock['content']));
+        $this->getLogService()->info('system', 'update_block', $this->getKernel()->trans('更新编辑区#%id%', array('%id%' => $id)), array('content' => $updatedBlock['content']));
         return $updatedBlock;
     }
 
@@ -150,17 +147,17 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function getContentsByCodes(array $codes)
     {
-        if(empty($codes)){
+        if (empty($codes)) {
             throw $this->createServiceException($this->getKernel()->trans('获取内容失败，不允许查询空编号所对应的内容!'));
         }
 
-        $cdn = $this->getSettingService()->get('cdn');
+        $cdn    = $this->getSettingService()->get('cdn');
         $cdnUrl = empty($cdn['enabled']) ? '' : $cdn['url'];
 
         $contents = array();
         foreach ($codes as $key => $value) {
             $block = $this->getBlockDao()->getBlockByCode($value);
-            if($block){
+            if ($block) {
                 if ($cdnUrl) {
                     $contents[$value] = preg_replace('/\<img(\s+)src=\"\/files\//', "<img src=\"{$cdnUrl}/files/", $block['content']);
                 } else {
@@ -182,7 +179,7 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($id, array(
-            'content'=>$content,
+            'content'    => $content,
             'updateTime' => time()
         ));
     }
@@ -201,7 +198,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($blockId, array(
             'content' => $history['content'],
-            'data' => $history['data']
+            'data'    => $history['data']
         ));
     }
 
