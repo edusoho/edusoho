@@ -17,7 +17,9 @@
           <li class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}">
             <a href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> {{'头像设置'|trans}}</a>
           </li>
-
+          <li class="list-group-item {% if side_nav == 'approval' %}active{% endif %}">
+           <a href="{{ path('setting_approval_submit') }}"><i class="glyphicon glyphicon-registration-mark"></i> {{'实名认证'|trans}}</a>
+          </li>
           <li class="list-group-item {% if side_nav == 'security' %}active{% endif %}">
             <a href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> {{'安全设置'|trans}}</a>
           </li>

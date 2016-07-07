@@ -135,11 +135,6 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if (isset($fields['coinPrice'])) {
-                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
-                unset($fields['coinPrice']);
-            }
-
             if (isset($fields['price'])) {
                 $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);
                 unset($fields['price']);
@@ -327,28 +322,50 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $users = ArrayToolkit::index($users, 'id');
 
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
         $course = $this->getCourseService()->getCourse($id);
 
-        $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
+        $str = "订单号,订单状态,订单名称,课程名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
 
         $str .= "\r\n";
 
         $results = array();
 
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
             $column = "";
-            $column .= $orders['sn'].",";
-            $column .= $orders['title'].",";
-            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-            $column .= $status[$orders['status']].",";
-            $column .= $orders['amount'].",";
-            $column .= $users[$orders['userId']]['nickname'].",";
-            $column .= $payment[$orders['payment']].",";
+            $column .= $order['sn'].",";
+            $column .= $status[$order['status']].",";
+            $column .= $order['title'].",";
+            $column .= "《".$course['title']."》".",";
+            $column .= $order['totalPrice'].",";
 
-            if ($orders['paidTime'] == 0) {
-                $column .= "-".",";
+            if (!empty($order['coupon'])) {
+                $column .= $order['coupon'].",";
             } else {
-                $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+                $column .= "无".",";
+            }
+
+            $column .= $order['couponDiscount'].",";
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
+            $column .= $order['amount'].",";
+            $column .= $payment[$order['payment']].",";
+            $column .= $users[$order['userId']]['nickname'].",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+
+            if (preg_match('/管理员添加/', $order['title'])) {
+                $column .= '管理员添加,';
+            } else {
+                $column .= "-,";
+            }
+
+            $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
+
+            if ($order['paidTime'] != 0) {
+                $column .= date('Y-n-d H:i:s', $order['paidTime']);
+            } else {
+                $column .= "-";
             }
 
             $results[] = $column;
@@ -357,7 +374,7 @@ class CourseManageController extends BaseController
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
 
-        $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
+        $filename = sprintf("%s-订单-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');

@@ -22,9 +22,9 @@
 			           	<div class="rating-progress" ng-repeat="i in reviewData.progress track by $index">
 			           		<span class="progress-title">{{ $index + 1 }}星</span>
 			           		<div class="ui-progress">
-						    <span style="width:{{ i | reviewProgress : reviewData.info.rating }}"></span>
+						    <span style="width:{{ i | reviewProgress : reviewData.info.ratingNum }}"></span>
 						</div>
-						<span class="progress">{{ i | reviewProgress : reviewData.info.rating }}</span>
+						<span class="progress">{{ i | reviewProgress : reviewData.info.ratingNum }}</span>
 			           	</div>
 			        	</div>
 			</li>

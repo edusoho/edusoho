@@ -1,4 +1,4 @@
-{% if (course.discountId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
+{% if (course.discountId > 0) and ((course.price != course.originPrice)) %}
   <li class="autumn-grid autumn-course-grid">
     <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
       {% if course.status == 'draft' %}
@@ -28,9 +28,10 @@
     <div class="mll">  
       {% if setting('course.coursesPrice') == 0 %}
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-          <span class="price-show">{% if course.coinPrice > 0 %}{{'折后价：'|trans}}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}
+          <span class="price-show">{% if course.price > 0 %}{{'折后价：'|trans}}{{ course.price * setting('coin.cash_rate') }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}
           </span>
-          <span class="origin-price">{{'原价：'|trans}}<del>{{ course.originCoinPrice }}{{setting('coin.coin_name')}}</del></span>
+          <span class="origin-price">{{'原价：'|trans}}<del>{{ course.originPrice * setting('coin.cash_rate')}}
+          {{setting('coin.coin_name')}}</del></span>
         {% else %}
           <span class="price-show">{% if course.price > 0 %}{{'折后价：'|trans}}{{ '%coursePrice%元'|trans({'%coursePrice%': course.price})}}{% else %}{{'免费'|trans}}{% endif %}</span>&nbsp;&nbsp;
           <span class="origin-price">{{'原价：'|trans}}<del>{{ '%courseOriginPrice%元'|trans({'%courseOriginPrice%': course.originPrice})}}</del></span>
@@ -48,8 +49,8 @@
       </span>
       <span class="label label-danger">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            {% if course.coinPrice > 0 %}
-                {{ '%discount%折'|trans({'%discount%': (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common')}) }}
+            {% if course.price > 0 %}
+                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
             {% else %}
                 {{'免'|trans}}
             {% endif %}
@@ -93,7 +94,7 @@
     <div class="mll">  
       {% if setting('course.coursesPrice') == 0 %}
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-          <span class="price-show">{% if course.coinPrice > 0 %}{{'价格：'|trans}}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}
+          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
           </span>
         {% else %}
           <span class="price-show">{% if course.price > 0 %}{{'价格：'|trans}}{{ '%coursePrice%元'|trans({'%coursePrice%': course.price})}}{% else %}{{'免费'|trans}}{% endif %}

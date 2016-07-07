@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {
@@ -93,7 +94,7 @@ class MobileController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
- 
+
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
@@ -149,14 +150,28 @@ class MobileController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-   protected function getCourseService()
+    public function customizationUpgradeAction(Request $request)
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        $currentVersion = $request->request->get('currentVersion');
+        $targetVersion = $request->request->get('targetVersion');
+
+        if (empty($currentVersion) || empty($targetVersion)) {
+            throw new \RuntimeException("参数不正确");
+        }
+
+        $api = CloudAPIFactory::create('root');
+
+        $resp = $api->post('/customization/mobile/apply', array(
+            'currentVersion' => $currentVersion,
+            'targetVersion' => $targetVersion,
+        ));
+
+        return $this->createJsonResponse($resp);
     }
 
-    protected function getUploadFileService()
+    protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     protected function getAppService()

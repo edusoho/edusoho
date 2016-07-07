@@ -73,4 +73,5 @@ web/assets/img/default/video.png
 .crunch
 *.css.map
 *.codekit
+web/php-performance.php
 

@@ -1,0 +1,19 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_operation_dictionary' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/dictionary/index' %}
+
+{% block main %}
+
+<table class="table table-hover" id="discovery-table">
+  <thead>
+    <tr>
+      <th width="50%">名称</th>
+      <th width="15%">显示序号</th>
+      <th width="20%">操作</th>
+    </tr>
+  </thead>
+  {% include 'TopxiaAdminBundle:Dictionary:tbody.html.twig' %}
+</table>
+{% endblock %}

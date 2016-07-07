@@ -1169,11 +1169,6 @@ are just basic styles to make it look ok with plain text.
 .ballon-video-player .video-js.vjs-default-skin .vjs-control.vjs-time-controls {
   width: 60px;
 }
-@media (max-width: 767px) {
-  .ballon-video-player .video-js.vjs-default-skin .vjs-control.vjs-time-controls {
-    width: 50px;
-  }
-}
 .ballon-video-player .video-js.vjs-default-skin .vjs-time-controls {
   font-size: 14px;
 }
@@ -1511,7 +1506,6 @@ are just basic styles to make it look ok with plain text.
 .lt-ie9 .ballon-video-player .vjs-default-skin.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
   content: "" !important;
 }
-
 #vjs-tip {
   visibility: hidden;
   display: block;

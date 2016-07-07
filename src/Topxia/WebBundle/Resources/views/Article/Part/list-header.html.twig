@@ -16,7 +16,7 @@
               {% else %}
                 <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"  alt="{{ featuredArticle.title }}">
               {% endif %}
-              <div class="swiper-cat">{{ featuredCategories[featuredArticle['id']].name }}</div>
+              <div class="swiper-cat">{{ featuredCategories[featuredArticle['id']].name|default() }}</div>
               <div class="swiper-caption">{{ featuredArticle.title }}</div>
               <div class="image-overlay"></div>
             </a>
@@ -36,7 +36,7 @@
           <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ ( 8 - loop.index ) ~ ".jpg" ) }}"  alt="{{ promotedArticle.title }}">
         {% endif %}
         <div class="content">
-          <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
+          <p>{{ promotedCategories[promotedArticle['id']].name|default('') }}</p>
           <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
         </div>
         <div class="image-overlay"></div>

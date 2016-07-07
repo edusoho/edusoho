@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -166,6 +167,24 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
 
+    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy = '')
+    {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'createdTimeByAsc') {
+            $orderBy = array('createdTime', 'ASC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        return $this->getThreadPostDao()->searchThreadPosts($conditions, $orderBy, $start, $limit, $groupBy);
+    }
+
+    public function searchThreadPostsCount($conditions, $groupBy)
+    {
+        return $this->getThreadPostDao()->searchThreadPostsCount($conditions, $groupBy);
+    }
+
     public function createThread($thread)
     {
         if (empty($thread['courseId'])) {
@@ -234,8 +253,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
         $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
 
-        $user = $this->getCurrentUser();
-        ($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($thread['courseId']);
+        if ($this->getCurrentUser()->getId() != $thread['userId']) {
+            $this->getCourseService()->tryManageCourse($thread['courseId']);
+        }
 
         $fields = ArrayToolkit::parts($fields, array('title', 'content'));
 
@@ -245,7 +265,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        return $this->getThreadDao()->updateThread($threadId, $fields);
+
+        $thread = $this->getThreadDao()->updateThread($threadId, $fields);
+        $this->dispatchEvent('course.thread.update', new ServiceEvent($thread));
+        return $thread;
     }
 
     public function deleteThread($threadId)
@@ -263,7 +286,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
-        $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
+        $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
+        $this->getLogService()->info('course', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
     public function stickThread($courseId, $threadId)
@@ -441,7 +465,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新post过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        return $this->getThreadPostDao()->updatePost($id, $fields);
+        $post              = $this->getThreadPostDao()->updatePost($id, $fields);
+        $this->dispatchEvent('course.thread.post.update', $post);
+        return $post;
     }
 
     public function deletePost($courseId, $id)
@@ -460,6 +486,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadPostDao()->deletePost($post['id']);
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+        $this->dispatchEvent('course.thread.post.delete', $post);
     }
 
     protected function getThreadDao()

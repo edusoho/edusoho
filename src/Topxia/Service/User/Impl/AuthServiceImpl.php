@@ -11,26 +11,95 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
-        $registration = $this->refillFormData($registration, $type);
-        $authUser     = $this->getAuthProvider()->register($registration);
-
-        if ($type == 'default') {
-            if (!empty($authUser['id'])) {
-                $registration['token'] = array(
-                    'userId' => $authUser['id']
-                );
-            }
-
-            $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
-        } else {
-            $newUser = $this->getUserService()->register($registration, $type);
-
-            if (!empty($authUser['id'])) {
-                $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
-            }
+        if (isset($registration['nickname']) && !empty($registration['nickname'])
+            && $this->getSensitiveService()->scanText($registration['nickname'])) {
+            throw $this->createServiceException('用户名中含有敏感词！');
         }
 
-        return $newUser;
+        if ($this->registerLimitValidator($registration)) {
+            throw $this->createServiceException('由于您注册次数过多，请稍候尝试');
+        }
+
+        $this->getKernel()->getConnection()->beginTransaction();
+        try {
+            $registration = $this->refillFormData($registration, $type);
+
+            $authUser = $this->getAuthProvider()->register($registration);
+
+            if ($type == 'default') {
+                if (!empty($authUser['id'])) {
+                    $registration['token'] = array(
+                        'userId' => $authUser['id']
+                    );
+                }
+
+                $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
+            } else {
+                $newUser = $this->getUserService()->register($registration, $type);
+
+                if (!empty($authUser['id'])) {
+                    $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
+                }
+            }
+
+            $this->getKernel()->getConnection()->commit();
+            return $newUser;
+        } catch (\Exception $e) {
+            $this->getKernel()->getConnection()->rollBack();
+            return array();
+        }
+    }
+
+    protected function registerLimitValidator($registration)
+    {
+        $authSettings = $this->getSettingService()->get('auth', array());
+        $user         = $this->getCurrentUser();
+
+        if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
+            $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
+
+            if (!$status) {
+                return true;
+            }
+        }
+    }
+
+    protected function protectiveRule($type, $ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition = array(
+                    'startTime' => time() - 24 * 3600,
+                    'createdIp' => $ip);
+                $registerCount = $this->getUserService()->searchUserCount($condition);
+
+                if ($registerCount > 30) {
+                    return false;
+                }
+
+                return true;
+            case 'high':
+                $condition = array(
+                    'startTime' => time() - 24 * 3600,
+                    'createdIp' => $ip);
+                $registerCount = $this->getUserService()->searchUserCount($condition);
+
+                if ($registerCount > 10) {
+                    return false;
+                }
+
+                $registerCount = $this->getUserService()->searchUserCount(array(
+                    'startTime' => time() - 3600,
+                    'createdIp' => $ip));
+
+                if ($registerCount >= 1) {
+                    return false;
+                }
+
+                return true;
+            default:
+                return true;
+        }
     }
 
     protected function refillFormData($registration, $type = 'default')
@@ -46,7 +115,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         if ($this->getUserService()->isMobileRegisterMode() && !isset($registration['email'])) {
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
-
+        $registration = $this->fillOrgId($registration);
         return $registration;
     }
 
@@ -133,7 +202,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function checkUsername($username, $randomName = '')
     {
 //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
-
         if (empty($randomName) || $username != $randomName) {
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
@@ -143,6 +211,10 @@ class AuthServiceImpl extends BaseService implements AuthService
 
             if ($result[0] != 'success') {
                 return $result;
+            }
+
+            if (preg_match('/^1\d{10}$/', $username)) {
+                return array('error_mismatching', '用户名不允许以1开头的11位纯数字!');
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
@@ -201,9 +273,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (SimpleValidator::email($emailOrMobile)) {
             return $this->checkEmail($emailOrMobile);
-        } else
-
-        if (SimpleValidator::mobile($emailOrMobile)) {
+        } elseif (SimpleValidator::mobile($emailOrMobile)) {
             return $this->checkMobile($emailOrMobile);
         } else {
             return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
@@ -304,6 +374,11 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         return $this->partner;
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function getUserService()

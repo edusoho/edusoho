@@ -1,0 +1,68 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'orgbundle/controller/orgManage/list' %}
+
+{% set menu = 'admin_operation_org_manage' %}
+
+{% block main %}
+
+
+<ul class="list-table" id="org-table" style="margin-bottom: 0">
+   <li class="th">
+        <div class="row">
+            <div class="td col-md-3">名称</div>
+            <div class="td col-md-2">编码</div>
+            <div class="td col-md-1">辖下机构数</div>
+            <div class="td col-md-2">创建者</div>
+            <div class="td col-md-2">创建时间</div>
+            <div class="td col-md-2">操作</div>
+        </div>
+    </li>
+    <li id="category-table-body" data-sort-url="{{ path('admin_org_sort') }}">
+      {% if orgs is not empty %}
+          {{ _self.showorgTree(orgs, createdUsers,false) }}
+      {% else %}
+          <div class="row empty">暂无分类记录</div>
+      {% endif %}
+    </li>
+</ul>
+
+{% macro showorgTree(orgs, createdUsers,isCollapseChildren) %}
+    <ul class="list-table sortable-list" data-group-id="{{ orgs[0]['parentId'] }}">
+        {% for org in orgs %}
+            {% set user = createdUsers[org.createdUserId]%}
+            {% set isParent = org.children|default(null) is not empty %}
+            {% set isRoot = org.depth == 1 %}
+            <li id="{{ org.id }}" class="tr" data-name="{{ org.name }}" data-id="{{ org.id }}" data-parent-id="{{ org.parentId }}" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
+                <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
+                    <div class="td col-md-3 name sort-handle" style="padding-left: {{ 24 * (org.depth - 1 ) }}px">
+                        {% if isParent %}
+                            <i class="list-table-tree-icon glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
+                        {% else %}
+                            <i class="list-table-tree-icon"></i>
+                        {% endif %}
+                        {{ org.name }}
+                    </div>
+                    <div class="td col-md-2 code">{{ org.code }}</div>
+                    <div class="td col-md-1 code">{{ org.childrenNum }}</div>
+                    <div class="td col-md-2 code">{{ user.nickname }}</div>
+                    <div class="td col-md-2 code"> {{org.createdTime|date('Y-m-d')}}</div>
+                    <div class="td col-md-2 operation">
+                        <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_org_update', {id:org.id}) }}" data-toggle="modal" data-target="#modal">
+                            <i class="glyphicon glyphicon-edit"></i> 编辑
+                        </a>
+                        {% if org.depth <= 5  %}
+                            <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_org_create', {parentId:org.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% if isParent %}
+                    {{ _self.showorgTree(org.children, createdUsers, isCollapseChildren) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% endblock %}

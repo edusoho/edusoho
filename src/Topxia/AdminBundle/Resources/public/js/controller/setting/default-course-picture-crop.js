@@ -1,6 +1,9 @@
 define(function(require, exports, module) {
     var ImageCrop = require('edusoho.imagecrop');
 
+    var WebUploader = require('edusoho.webuploader');
+    var Notify = require('common/bootstrap-notify');
+
     exports.run = function() {
 
         var imageCrop = new ImageCrop({
@@ -28,9 +31,16 @@ define(function(require, exports, module) {
 
         })
 
-        $('.go-back').click(function(){
-            history.go(-1);
+        var defaultCoursePicUploader = new WebUploader({
+            element: '#default-course-picture-btn'
         });
+
+        defaultCoursePicUploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#default-course-picture-btn").data("gotoUrl");
+            Notify.success('上传成功！', 1);
+            document.location.href = url;
+        });
+
     };
   
 });

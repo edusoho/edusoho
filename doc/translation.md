@@ -61,7 +61,7 @@
 
 <a>我的{{setting('coin.coin_name')|default('虚拟币')}}</a>
 
-<a>{{'我的%coin_name%'|trans({'%coin_name%': coin.coin_name|default('虚拟币'|trans)})}}</a>
+<a>{{'我的%coin_name%'|trans({'%coin_name%': setting('coin.coin_name')|default('虚拟币'|trans)})}}</a>
 ```
 有参数的翻译文本格式为：{{'翻译文%foo%本'|trans({'%foo%':参数})}}
 注意：参数后|default('虚拟币'|trans)(见上)中如有需翻译文本，目前不匹配自动查找的正则，无法自动添加词条到messages.*.yml中

@@ -7,8 +7,9 @@
 {% block main %}
   
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
     <div class="form-group">
-      <select style="max-width:150px;" class="form-control" name="categoryId">
+      <select style="width:150px;" class="form-control" name="categoryId">
         {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
       </select>
     </div>
@@ -26,7 +27,8 @@
     <thead>
     <tr>
       <th>顺序号</th>
-      <th width="50%">课程名称</th>
+      <th width="35%">课程名称</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>创建者</th>
       <th>推荐时间</th>
       <th>操作</th>
