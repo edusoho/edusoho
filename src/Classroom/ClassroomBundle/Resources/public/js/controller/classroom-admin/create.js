@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             element: '[name="title"]',
             required: true,
             rule: 'minlength{min:2} maxlength{max:30}',
-            errormessageUrl: '长度为2-30位'
+            errormessageUrl: Translator.trans('长度为2-30位')
         });
 
     };
