@@ -121,19 +121,23 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function searchLessons($conditions, $orderBy, $start, $limit)
     {
+        if ($this->hasEmptyInCondition($conditions, array('courseIds'))) {
+            return array();
+        }
+
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchLessonCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -261,25 +265,25 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('status = :status')
-                        ->andWhere('type = :type')
-                        ->andWhere('free = :free')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('mediaId = :mediaId')
-                        ->andWhere('startTime >= :startTimeGreaterThan')
-                        ->andWhere('endTime < :endTimeLessThan')
-                        ->andWhere('startTime <= :startTimeLessThan')
-                        ->andWhere('endTime > :endTimeGreaterThan')
-                        ->andWhere('title LIKE :titleLike')
-                        ->andWhere('createdTime >= :startTime')
-                        ->andWhere('createdTime <= :endTime')
-                        ->andWhere('copyId = :copyId')
-                        ->andWhere('courseId IN ( :courseIds )');
+            ->from($this->table, $this->table)
+            ->andWhere('courseId = :courseId')
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('status = :status')
+            ->andWhere('type = :type')
+            ->andWhere('free = :free')
+            ->andWhere('userId = :userId')
+            ->andWhere('mediaId = :mediaId')
+            ->andWhere('startTime >= :startTimeGreaterThan')
+            ->andWhere('endTime < :endTimeLessThan')
+            ->andWhere('startTime <= :startTimeLessThan')
+            ->andWhere('endTime > :endTimeGreaterThan')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('copyId = :copyId')
+            ->andWhere('courseId IN ( :courseIds )');
 
-        if (isset($conditions['notLearnedIds'])) {
+        if (isset($conditions['notLearnedIds']) && !empty($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
         }
 
@@ -324,37 +328,21 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
-    public function findRecentLiveLessons($courseIds, $start, $limit)
+    public function findFutureLiveCourseIds()
     {
-        if (empty($courseIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-
         $time = time();
-        $sql  = "SELECT * FROM
-               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
-                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-             AS cl  ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
+        $sql  = "SELECT min(startTime) as startTime, courseId FROM {$this->table} WHERE endTime >= {$time} AND status='published' AND
+                type = 'live' GROUP BY courseId ORDER BY startTime ASC";
 
-        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+        return $this->getConnection()->fetchAll($sql);
     }
 
-    public function findRecentLiveCourses($courseIds, $start, $limit)
+    public function findPastLiveCourseIds()
     {
-        if (empty($courseIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-
         $time = time();
-        $sql  = "SELECT courseId,min(recentTime) as recentTime FROM
-               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
-                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-             AS cl  GROUP BY courseId ORDER BY status DESC, recentTime ASC LIMIT {$start}, {$limit}";
+        $sql  = "SELECT max(startTime) as startTime, courseId FROM {$this->table} WHERE endTime < {$time} AND status='published' AND
+                type = 'live' GROUP BY courseId ORDER BY startTime DESC";
 
-        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+        return $this->getConnection()->fetchAll($sql);
     }
 }

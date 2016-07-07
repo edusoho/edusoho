@@ -27,12 +27,17 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         );
 
         if ($arguments['count'] > count($articlePosts)) {
+            $conditions = array(
+                'targetType' => 'article',
+            );
+
             $excludeIds = ArrayToolkit::column($articlePosts, 'id');
+            if(!empty($excludeIds)) {
+                $conditions['excludeIds'] = $excludeIds;
+            }
+
             $otherPosts = $this->getThreadService()->searchPosts(
-                array(
-                    'targetType' => 'article',
-                    'excludeIds' => $excludeIds
-                ),
+                $conditions,
                 array('ups' => 'DESC', 'createdTime' => 'DESC'),
                 0,
                 $arguments['count'] - count($articlePosts)

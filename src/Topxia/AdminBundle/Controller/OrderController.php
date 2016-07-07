@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,8 +11,7 @@ class OrderController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array(
-        ));
+        return $this->render('TopxiaAdminBundle:Order:index.html.twig', array());
     }
 
     public function manageAction(Request $request, $targetType)
@@ -103,18 +103,18 @@ class OrderController extends BaseController
      */
     public function exportCsvAction(Request $request, $targetType)
     {
-        $conditions = $request->query->all();
+        $start = $request->query->get('start', 0);
 
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime']   = strtotime($conditions['endTime']);
-        }
+        $magic = $this->setting('magic');
+        $limit = $magic['export_limit'];
 
-        $conditions['targetType'] = $targetType;
-        $status                   = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
-        $payment                  = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
-        $orders                   = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $conditions = $this->buildExportCondition($request, $targetType);
 
+        $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+
+        $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
+        $orders         = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), $start, $limit);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -123,35 +123,42 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+        if ($targetType == 'course') {
+            $str = "订单号,订单状态,订单名称,课程名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
+        } elseif ($targetType == 'classroom') {
+            $str = "订单号,订单状态,订单名称,班级名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
+        } else {
+            $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+        }
 
         $str .= "\r\n";
 
         $results = array();
 
-        foreach ($orders as $key => $orders) {
-            $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+        if ($targetType == 'vip') {
+            $results = $this->generateVipExportData($orders, $status, $users, $profiles, $payment, $results);
+        } else {
+            $results = $this->generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results);
+        }
 
-            if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
-            } else {
-                $member .= "-".",";
-            }
+        $loop = $request->query->get('loop', 0);
+        ++$loop;
 
-            $results[] = $member;
+        $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
+        $readTempDate   = $start;
+        $file           = $request->query->get('fileName', $this->genereateExportCsvFileName($targetType));
+
+        if ($enableRedirect) {
+            $content = implode("\r\n", $results);
+            file_put_contents($file, $content."\r\n", FILE_APPEND);
+            return $this->redirect($this->generateUrl('admin_order_manage_export_csv', array('targetType' => $targetType, 'loop' => $loop, 'start' => $loop * $limit, 'fileName' => $file)));
+        } elseif ($readTempDate) {
+            $str .= file_get_contents($file);
+            FileToolkit::remove($file);
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
-
+        $str      = chr(239).chr(187).chr(191).$str;
         $filename = sprintf("%s-order-(%s).csv", $targetType, date('Y-n-d'));
 
         $response = new Response();
@@ -161,6 +168,26 @@ class OrderController extends BaseController
         $response->setContent($str);
 
         return $response;
+    }
+
+    private function buildExportCondition($request, $targetType)
+    {
+        $conditions = $request->query->all();
+
+        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startTime']);
+            $conditions['endTime']   = strtotime($conditions['endTime']);
+        }
+
+        $conditions['targetType'] = $targetType;
+        return $conditions;
+    }
+
+    private function genereateExportCsvFileName($targetType)
+    {
+        $rootPath = $this->getServiceKernel()->getParameter('topxia.upload.private_directory');
+        $user     = $this->getCurrentUser();
+        return $rootPath."/export_content".$targetType.$user['id'].time().".txt";
     }
 
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
@@ -199,9 +226,95 @@ class OrderController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
+    private function generateVipExportData($orders, $status, $users, $profiles, $payment, $results)
+    {
+        foreach ($orders as $key => $orders) {
+            $member = "";
+            $member .= $orders['sn'].",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['title'].",";
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $member .= $orders['amount'].",";
+            $member .= $payment[$orders['payment']].",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+
+            if ($orders['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            } else {
+                $member .= "-".",";
+            }
+
+            $results[] = $member;
+        }
+
+        return $results;
+    }
+
+    private function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
+    {
+        foreach ($orders as $key => $orders) {
+            if ($targetType == 'course') {
+                $result = $this->getCourseService()->getCourse($orders['targetId']);
+            } else {
+                $result = $this->getClassroomService()->getClassroom($orders['targetId']);
+            }
+
+            $member = "";
+            $member .= $orders['sn'].",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['title'].",";
+            $member .= "《".$result['title']."》".",";
+
+            $member .= $orders['totalPrice'].",";
+
+            if (!empty($orders['coupon'])) {
+                $member .= $orders['coupon'].",";
+            } else {
+                $member .= "无".",";
+            }
+
+            $member .= $orders['couponDiscount'].",";
+            $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
+            $member .= $orders['amount'].",";
+            $member .= $payment[$orders['payment']].",";
+
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+
+            if (preg_match('/管理员添加/', $orders['title'])) {
+                $member .= '管理员添加,';
+            } else {
+                $member .= "-,";
+            }
+
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+
+            if ($orders['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']);
+            } else {
+                $member .= "-";
+            }
+
+            $results[] = $member;
+        }
+
+        return $results;
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getCashService()

@@ -38,39 +38,28 @@ class ClassroomController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
         }
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
-            $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType   = "RMB";
-
-            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-                $priceType = $coinSetting["price_type"];
-            }
-
-            if ($priceType == 'Coin') {
-                $conditions['coinPrice'] = '0.00';
-            }
+        if ($filter['price'] == 'free') {
             $conditions['price'] = '0.00';
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if (!$fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if (!$filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
@@ -119,7 +108,7 @@ class ClassroomController extends BaseController
             'categoryArray'            => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'levels'                   => $levels,
             'orderBy'                  => $orderBy
         ));
@@ -147,8 +136,15 @@ class ClassroomController extends BaseController
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'student', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'auditor', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -213,10 +209,12 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             $lessonNum += $course['lessonNum'];
 
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -440,8 +438,10 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -587,13 +587,13 @@ class ClassroomController extends BaseController
     public function becomeStudentAction(Request $request, $id)
     {
         if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
@@ -620,10 +620,11 @@ class ClassroomController extends BaseController
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
+
         if ($order['targetType'] == 'groupSell') {
             throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
-        
+
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -785,6 +786,15 @@ class ClassroomController extends BaseController
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
+
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
+
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
@@ -858,10 +868,10 @@ class ClassroomController extends BaseController
         $courseMembers     = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
+        $priceType         = "RMB";
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $priceType   = "RMB";
 
         if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
             $priceType = $coinSetting["price_type"];
@@ -886,11 +896,13 @@ class ClassroomController extends BaseController
     {
         $coursesTotalPrice = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             if ($priceType == "RMB") {
                 $coursesTotalPrice += $course["originPrice"];
             } elseif ($priceType == "Coin") {
-                $coursesTotalPrice += $course["originCoinPrice"];
+                $coursesTotalPrice += $course["originPrice"] * $cashRate;
             }
         }
 
@@ -949,8 +961,8 @@ class ClassroomController extends BaseController
         }
 
         $classrooms            = array();
-        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($teacherClassrooms, $headTeacherClassrooms);
 
@@ -1028,6 +1040,14 @@ class ClassroomController extends BaseController
             'users'      => $users,
             'classrooms' => $classrooms
         ));
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     public function orderInfoAction(Request $request, $sn)
@@ -1164,5 +1184,10 @@ class ClassroomController extends BaseController
     protected function getClassroomPlanService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 }

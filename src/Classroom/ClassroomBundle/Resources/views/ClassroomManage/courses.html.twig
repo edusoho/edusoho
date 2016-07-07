@@ -46,9 +46,10 @@
                     <div class="course-body">
                      <div style="float:right;" class="text-muted mrm mls">
                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.coinPrice }}">
-                              {% if course.coinPrice > 0 %}
-                                {{ course.coinPrice }}{{setting('coin.coin_name')}}
+                            <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.price * setting('coin.cash_rate')}}">
+                              {% if course.price > 0 %}
+                                {{ course.price * setting('coin.cash_rate')}}
+                                {{setting('coin.coin_name')}}
                               {% else %}
                                 免费
                               {% endif %}

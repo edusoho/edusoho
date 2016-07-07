@@ -283,7 +283,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($priceType == "RMB") {
             $coursePrice = $course["originPrice"];
         } elseif ($priceType == "Coin") {
-            $coursePrice = $course["originCoinPrice"];
+            $coursePrice = $course["originPrice"];
         }
 
         return $coursePrice;
@@ -297,7 +297,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             if ($priceType == "RMB") {
                 $coursesTotalPrice += $course["originPrice"];
             } elseif ($priceType == "Coin") {
-                $coursesTotalPrice += $course["originCoinPrice"];
+                $coursesTotalPrice += $course["originPrice"];
             }
         }
 

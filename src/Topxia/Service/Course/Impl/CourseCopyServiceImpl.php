@@ -218,24 +218,24 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
-                'name'       => "SmsSendOneDayJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 24 * 60 * 60,
-                'jobClass'   => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "SmsSendOneDayJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
+                'jobClass'        => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'       => "SmsSendOneHourJob",
-                'cycle'      => 'once',
-                'time'       => $lesson['startTime'] - 60 * 60,
-                'jobClass'   => 'Topxia\\Service\\Sms\\Job\\SmsSendOneHourJob',
-                'targetType' => 'lesson',
-                'targetId'   => $lesson['id']
+                'name'            => "SmsSendOneHourJob",
+                'cycle'           => 'once',
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
+                'jobClass'        => 'Topxia\\Service\\Sms\\Job\\SmsSendOneHourJob',
+                'targetType'      => 'lesson',
+                'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
@@ -282,7 +282,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyCourse($course, $link = false)
     {
-        $fields                = ArrayToolkit::parts($course, array('coinPrice', 'originCoinPrice', 'price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
+        $fields                = ArrayToolkit::parts($course, array('price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
         $fields['createdTime'] = time();
 
         if ($link) {
@@ -293,8 +293,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['status'] = 'draft';
         }
 
-        $fields["coinPrice"] = $fields["originCoinPrice"];
-        $fields["price"]     = $fields["originPrice"];
+        $fields["price"] = $fields["originPrice"];
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
 
@@ -306,7 +305,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map = array();
 
         foreach ($materials as $material) {
-            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId'));
+            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId','source'));
 
             $fields['courseId'] = $newCourse['id'];
             $fields['copyId']   = $material['id'];

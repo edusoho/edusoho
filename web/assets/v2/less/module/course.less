@@ -1,9 +1,9 @@
 .course-list {
-  &.no-shadow {
-    .course-item {
-      .box-shadow(none); 
-    }
-  }
+  // &.no-shadow {
+  //   .course-item {
+  //     .box-shadow(none); 
+  //   }
+  // }
   &.no-margin {
     .course-item {
       margin-bottom: 0; 
@@ -14,7 +14,8 @@
     z-index: 1;
     margin-bottom: 30px;
     .border-radius;
-    .es-box-shadow;
+    // .es-box-shadow;
+    border: 1px solid @border-color;
     background-color: #fff;
     @media (min-width: @screen-md-min) {
       .es-transup;
@@ -27,7 +28,7 @@
     // 用于近期直播
     &.course-default {
       background-color: @gray-lighter;
-      padding: 48px 20px;
+      padding: 50px 20px 55px;
       border: 1px dashed @gray-light;
       color: @gray-light;
       text-align: center;
@@ -49,8 +50,8 @@
     .course-img {
       position: relative;
       overflow: hidden;
-      border-top-left-radius: 2px;
-      border-top-right-radius: 2px;
+      .border-top-left-radius();
+      .border-top-right-radius();
       .tag-discount {
         position: absolute;
         right: 0;
@@ -58,12 +59,15 @@
         width: 68px;
         height: 68px;
         background: url("@{img-src}tag_discount.png");
+        background-image: -webkit-image-set(url("@{img-src}tag_discount.png") 1x,url("@{img-src}tag_discount@2x.png") 2x);
         &.free {
           background: url("@{img-src}tag_limitfree.png");
+          background-image: -webkit-image-set(url("@{img-src}tag_limitfree.png") 1x,url("@{img-src}tag_limitfree@2x.png") 2x);
         }
       }
       .img-responsive {
         width: 100%;
+        padding: 10px;
       }
     }
     .tags {
@@ -79,12 +83,15 @@
       }
       .tag-live {
         background: url("@{img-src}tag_live.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
       }
       .tag-serialing {
         background: url("@{img-src}tag_serialing.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_serialing.png") 1x,url("@{img-src}tag_serialing@2x.png") 2x);
       }
       .tag-finished {
         background: url("@{img-src}tag_finished.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_finished.png") 1x,url("@{img-src}tag_finished@2x.png") 2x);
       }
     }
     .title {
@@ -165,6 +172,6 @@
   }
 }
 
-.lt-ie9 .course-list .course-item {
-  border: 1px solid @gray-light;
-}
+// .lt-ie9 .course-list .course-item {
+//   border: 1px solid @gray-light;
+// }

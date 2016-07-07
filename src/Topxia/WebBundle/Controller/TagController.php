@@ -38,7 +38,7 @@ class TagController extends BaseController
             $paginator = new Paginator(
                 $this->get('request'),
                 $this->getCourseService()->searchCourseCount($conditions)
-                , 10
+                , 12
             );       
 
             $courses = $this->getCourseService()->searchCourses(

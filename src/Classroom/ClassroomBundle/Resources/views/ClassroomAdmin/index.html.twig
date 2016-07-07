@@ -5,26 +5,26 @@
 {% set script_controller='classroombundle/controller/classroom-admin/classroom' %}
 {% block main %}
 
-
-
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="{{setting("classroom.name")|default("班级")}}名称" name="title" value="{{ app.request.get('title') }}">
     </div>
 
     <button class="btn btn-primary">搜索</button>
-
+    
   </form>
   {% if classroomInfo%}
   <table class="table table-striped table-hover" id="classroom-table">
     <thead>
     <tr>
       <th>班级编号</th>
-      <th width="40%">{{setting("classroom.name")|default("班级")}}名称</th>
+      <th width="25%">{{setting("classroom.name")|default("班级")}}名称</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>课程数</th>
       <th>学员数</th>
-      <th>价格</th>
+      <th width="15%">价格</th>
       <th>状态</th>
       <th>操作</th>
     </tr>
@@ -43,9 +43,10 @@
   {% else %}
     <div class="empty">暂无{{setting("classroom.name")|default("班级")}}信息!</div>
   {% endif %}
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
   <div class="pull-right">
- {{ web_macro.paginator(paginator) }}
-</div>
+   {{ web_macro.paginator(paginator) }}
+  </div>
 
 
 {% endblock %}

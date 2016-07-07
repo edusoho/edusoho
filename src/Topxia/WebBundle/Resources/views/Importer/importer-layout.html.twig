@@ -1,0 +1,54 @@
+{% extends "TopxiaWebBundle::bootstrap-modal-layout.html.twig" %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}批量导入{% endblock %}
+
+{% block body %}
+  <div id="importer-app"
+       data-type="{{ importerType }}"
+       data-check-url="{{ path('importer_check', {type: importerType}) }}"
+       data-import-url="{{ path('importer_import', {type: importerType}) }}"
+  >
+
+  </div>
+
+  <script type="text/template" id="importer-template">
+    <div class="alert js-importer-message hidden">
+    </div>
+
+    <div class="page-header clearfix">
+      <h1 class="pull-left">步骤1</h1>
+    </div>
+
+    <div class="row">
+      <form method="post" id="importer-form" enctype="multipart/form-data" class="form-horizontal">
+        {% block form_data %}
+
+        {% endblock %}
+        <div class="form-group">
+          <div class="col-md-3 col-md-offset-1"></div>
+          <div class="col-md-8 controls">
+            <button type="submit" class="btn btn-primary" id="start-import-btn">开始校验数据</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+    </div>
+  </script>
+  {% block stylesheet %}
+
+  {% endblock %}
+  <script type="text/javascript">
+    seajs.use('topxiawebbundle/controller/importer/importer', function(module) {
+      if ($.isFunction(module.run)) {
+        module.run();
+        {% block load_import_js %}
+        {% endblock %}
+      }
+    });
+
+  </script>
+{% endblock %}

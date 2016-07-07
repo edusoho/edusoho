@@ -4,23 +4,16 @@ namespace Classroom\ClassroomBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
+        $conditions = $request->query->all();
 
-        $conditions = array(
-            'title' => ''
-        );
-
-        if (!empty($fields)) {
-            $conditions = $fields;
-        }
-
-        $paginator = new Paginator(
+        $conditions = $this->fillOrgCode($conditions);
+        $paginator  = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
             10
@@ -39,6 +32,8 @@ class ClassroomAdminController extends BaseController
         $priceAll            = array();
         $classroomCoursesNum = array();
 
+        $cashRate = $this->getCashRate();
+
         foreach ($classroomIds as $key => $value) {
             $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
@@ -47,7 +42,7 @@ class ClassroomAdminController extends BaseController
             $price     = 0;
 
             foreach ($courses as $course) {
-                $coinPrice += $course['coinPrice'];
+                $coinPrice += $course['price'] * $cashRate;
                 $price += $course['price'];
             }
 
@@ -83,14 +78,14 @@ class ClassroomAdminController extends BaseController
 
     public function addClassroomAction(Request $request)
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
-        }
-
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+        }
+
+        if (!$user->isAdmin()) {
+            return $this->createMessageResponse('info', '只允许管理员创建班级!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -121,6 +116,10 @@ class ClassroomAdminController extends BaseController
                 'showable' => $myClassroom['showable'],
                 'buyable'  => $myClassroom['buyable']
             );
+
+            if (array_key_exists('orgCode', $myClassroom)) {
+                $classroom['orgCode'] = $myClassroom['orgCode'];
+            }
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
@@ -226,6 +225,48 @@ class ClassroomAdminController extends BaseController
         ));
     }
 
+    public function chooserAction(Request $request)
+    {
+        $conditions             = $request->query->all();
+        $conditions["parentId"] = 0;
+
+        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+            unset($conditions["categoryId"]);
+        }
+
+        if (isset($conditions["status"]) && $conditions["status"] == "") {
+            unset($conditions["status"]);
+        }
+
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        $count = $this->getClassroomService()->searchClassroomsCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count,
+            20
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
+
+        return $this->render('ClassroomBundle:ClassroomAdmin:classroom-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'classrooms' => $classrooms,
+            'categories' => $categories,
+            'paginator'  => $paginator
+        ));
+    }
+
     private function renderClassroomTr($id, $classroom)
     {
         $coinPrice                = 0;
@@ -235,9 +276,10 @@ class ClassroomAdminController extends BaseController
         $classroomCoursesNum      = array();
         $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
+        $cashRate                 = $this->getCashRate();
 
         foreach ($courses as $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -250,6 +292,14 @@ class ClassroomAdminController extends BaseController
             'coinPriceAll'        => $coinPriceAll,
             'priceAll'            => $priceAll
         ));
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     protected function getClassroomService()

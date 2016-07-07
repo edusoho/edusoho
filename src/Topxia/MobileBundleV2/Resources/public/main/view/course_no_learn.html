@@ -19,15 +19,15 @@
                     {{ course.price | formatPrice }}
                 </span>
                 <span class="price-block" ng-if="course.priceType == 'Coin'">
-                    {{ course.coinPrice | formatCoinPrice }}
-                    <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
+                    {{ course.price | formatPrice }}
+                    <small ng-if="course.price > 0">{{ course.coinName }}</small>
                 </span>
                 <span ng-if="discount">
                     <s ng-if="course.priceType != 'Coin'">
                         {{ course.originPrice | formatPrice }}
                     </s>
                     <s ng-if="course.priceType == 'Coin'">
-                        {{ course.originCoinPrice | formatPrice }}
+                        {{ course.originPrice | formatPrice }}
                     </s>
                 </span>
             </p>
@@ -97,7 +97,7 @@
                 </section>
                 <section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
                     <h2 class="title-body">
-			    	<span class="title">课程评价 ({{ reviews.length }})</span>
+			    	<span class="title">课程评价 ({{ reviewCount }})</span>
 
 			    	<a class="title-tips" href="#/coursereview/course/{{ course.id }}">
 			    		<i class="iconfont icon-gengduo"></i>

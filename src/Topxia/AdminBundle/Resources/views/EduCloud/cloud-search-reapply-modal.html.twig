@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}确定重建索引？{% endblock %}
+
+{% block body %}
+  <form id="search-clause-form" class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_search_reapply') }}">
+    <div class="item">
+      <h3 class="text-center">风险提示</h3>
+      <p>1.重建索引完成后会覆盖之前的搜索数据；<br>
+        2.索引在重建时需要大约30分钟的时间；<br>
+        3.在重建索引期间不影响云搜索功能正常使用；</p>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="search-clause-form" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#search-clause-form">确定</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}
