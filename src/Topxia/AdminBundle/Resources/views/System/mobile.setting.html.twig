@@ -31,16 +31,6 @@
       <div class="help-block">开启后，网站首页顶部导航会出现客户端入口<a href="{{path('admin_operation_mobile')}}">常规设置点这里</a></div>
     </div>
   </div>
-
-  <div class="form-group {% if mobile.enabled|default(0) != 1 and hasMobile %}hidden {% endif %}">
-    <div class="col-md-2 control-label">
-      <label >版本选择</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('ver', {1:'安卓新版APP3.0', 0:'安卓旧版APP2.6'}, mobile.ver) }}
-      <div class="alert alert-warning " role="alert"><i class="glyphicon glyphicon-info-sign"></i>  选择后请勿随意切换。</div>
-    </div>
-  </div>
   
   <div class="form-group">
     <div class="col-md-2 control-label">

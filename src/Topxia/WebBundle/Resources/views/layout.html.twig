@@ -4,7 +4,8 @@
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
-<html lang="{{ app.request.locale }}">
+{# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
+<html lang="{{ app.request.getLocale() }}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -12,7 +13,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <title>
     {%- block title -%}
-      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if  setting('copyright.owned','0') != '1' or setting('copyright.thirdCopyright')|default(0) == 2 %} - Powered By EduSoho{% endif %}
     {%- endblock -%}
   </title>
   <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
@@ -27,7 +28,9 @@
   {% endif %}
 
   {% block stylesheets %}
-    {{ render(controller('TopxiaWebBundle:Theme:getCurrentConfigColor', {isEditColor:isEditColor|default(false)})) }}
+    {% set currentTheme = current_theme() %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+
   {% endblock %}
   
   <!--[if lt IE 9]>

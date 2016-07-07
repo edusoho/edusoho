@@ -4,7 +4,6 @@ define(function(require, exports, module) {
 
 	exports.run = function() {
 
-		require('./header').run();
 
 		var uploader = new WebUploader({
 			element: '#upload-picture-btn'

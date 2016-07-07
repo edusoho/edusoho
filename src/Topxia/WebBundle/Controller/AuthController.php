@@ -28,7 +28,7 @@ class AuthController extends BaseController
 
             $isPasswordOk = $this->getAuthService()->checkPassword($user['id'], $data['password']);
             if (!$isPasswordOk) {
-                $this->setFlashMessage('danger', '密码不正确，请重试。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('密码不正确，请重试。'));
                 return $this->redirect($this->generateUrl('auth_email_confirm', array('token' => $token['token'])));
             }
 

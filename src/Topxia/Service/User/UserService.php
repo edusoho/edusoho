@@ -24,6 +24,14 @@ interface UserService
 
     public function setEmailVerified($userId);
 
+    public function changeUserOrg($userId, $orgCode);
+    /**
+     * [batchUpdateOrg 对单个或者多个用户更改组织机构]
+     * @param [String  |        Arrary] $userIds [用户Id]
+     * @param [String] $orgCode [组织机构内部编码]
+     */
+    public function batchUpdateOrg($userIds, $orgCode);
+
     public function changeNickname($userId, $nickname);
 
     public function changeEmail($userId, $email);
@@ -261,4 +269,5 @@ interface UserService
 
     public function updateUserLocale($id, $locale);
 
+    public function changeAvatarFromImgUrl($userId, $imgUrl);
 }

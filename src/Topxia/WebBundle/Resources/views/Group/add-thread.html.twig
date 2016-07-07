@@ -77,7 +77,9 @@
           <div class="controls">
             <div class="col-md-4 control">
             <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
-            <label for="amount" class="control-label"> {{'查看所需'|trans}}{{setting('coin').coin_name|default('')}}:</label>
+
+            <label for="amount" class="control-label"> {{'查看所需%coin_name%'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}:</label>
+
             </div>
             <div class="col-md-3 controls">
                <input name="amount" class="form-control" tyoe="text" id="amount"/>
@@ -96,7 +98,9 @@
       </form>
       </div>
       <div class="modal-footer">
-        <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name|default('')}}会在扣除50%之后添加到您的账户
+
+        <div class="pull-left text-muted">{{'隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
+
           </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</button>
         <button type="button" class="btn btn-primary" id="insert">{{'插入'|trans}}</button>

@@ -90,13 +90,13 @@ class MyQuestionController extends BaseController
         $userId = $this->getCurrentUser()->id;
 
         if (empty($question)) {
-            throw $this->createNotFoundException('题目不存在！');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('题目不存在！'));
         }
 
         $myFavorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($userId);
 
         if (!in_array($question['id'], ArrayToolkit::column($myFavorites, 'questionId'))){
-            throw $this->createAccessDeniedException('无权预览非本人收藏的题目!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权预览非本人收藏的题目!'));
         }
 
         $item = array(

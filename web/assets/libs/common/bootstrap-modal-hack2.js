@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         $($(this).data('target')).submit();
     });
 
-    $(".modal").on('click', '.pagination a', function(e){
+    $(".modal").on('click.modal-pagination', '.pagination a', function(e){
         e.preventDefault();
         var $modal = $(e.delegateTarget);
         $.get($(this).attr('href'), function(html){

@@ -17,13 +17,13 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $coinSetting = $this->getSettingService()->get('coin', array());
 
         if (!is_numeric($order['amount'])) {
-            throw $this->createServiceException('充值金额必须为整数!');
+            throw $this->createServiceException($this->getKernel()->trans('充值金额必须为整数!'));
         }
 
         $coin                 = $coinSetting['cash_rate'] * $order['amount'];
         $order['sn']          = "O".date('YmdHis').rand(10000, 99999);
         $order['status']      = "created";
-        $order['title']       = "充值购买".$coin.$coinSetting['coin_name'];
+        $order['title']       = $this->getKernel()->trans('充值购买').$coin.$coinSetting['coin_name'];
         $order['createdTime'] = time();
 
         return $this->getOrderDao()->addOrder($order);
@@ -44,11 +44,11 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException('订单不存在，取消订单失败！');
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消订单失败！'));
         }
 
         if (!in_array($order['status'], array('created'))) {
-            throw $this->createServiceException('当前订单状态不能取消订单！');
+            throw $this->createServiceException($this->getKernel()->trans('当前订单状态不能取消订单！'));
         }
 
         $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
@@ -73,14 +73,14 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             $order = $this->getOrderDao()->getOrderBySn($payData['sn'], true);
 
             if (empty($order)) {
-                throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
+                throw $this->createServiceException($this->getKernel()->trans('订单(%payData%)已被删除，支付失败。', array('%payData%' =>$payData['sn'] )));
             }
 
             if ($payData['status'] == 'success') {
                 // 避免浮点数比较大小可能带来的问题，转成整数再比较。
 
                 if (intval($payData['amount'] * 100) !== intval($order['amount'] * 100)) {
-                    $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
+                    $message = sprintf($this->getKernel()->trans('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。'), $order['sn'], $order['amount'], $payData['amount']);
                     $this->_createLog($order['id'], 'pay_error', $message, $payData);
                     throw $this->createServiceException($message);
                 }
@@ -90,13 +90,13 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         'status'   => 'paid',
                         'paidTime' => $payData['paidTime']
                     ));
-                    $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
+                    $this->_createLog($order['id'], 'pay_success', $this->getKernel()->trans('付款成功'), $payData);
 
                     $userId = $order["userId"];
                     $inFlow = array(
                         'userId'   => $userId,
                         'amount'   => $order["amount"],
-                        'name'     => '入账',
+                        'name'     => $this->getKernel()->trans('入账'),
                         'orderSn'  => $order['sn'],
                         'category' => 'outflow',
                         'note'     => '',
@@ -108,7 +108,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                     $rmbOutFlow = array(
                         'userId'   => $userId,
                         'amount'   => $order["amount"],
-                        'name'     => '出账',
+                        'name'     => $this->getKernel()->trans('出账'),
                         'orderSn'  => $order['sn'],
                         'category' => 'inflow',
                         'note'     => '',
@@ -122,7 +122,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         new ServiceEvent($order, array('targetType' => 'coin'))
                     );
                 } else {
-                    $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
+                    $this->_createLog($order['id'], 'pay_ignore', $this->getKernel()->trans('订单已处理'), $payData);
                 }
             } else {
                 $this->_createLog($order['id'], 'pay_unknown', '', $payData);
@@ -178,7 +178,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
         $fields = array('data' => json_encode($data));
         $order  = $this->updateOrder($id, $fields);
-        $this->_createLog($order['id'], 'cash_pay_create', '创建交易', $payData);
+        $this->_createLog($order['id'], 'cash_pay_create', $this->getKernel()->trans('创建交易'), $payData);
     }
 
     protected function _createLog($orderId, $type, $message = '', array $data = array())

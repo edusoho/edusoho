@@ -26,17 +26,6 @@
 						</div>
 					</div>
 
-					{# <div class="form-group form-iam-group">
-						<label class="col-md-2 control-label">我是</label>
-						<div class="col-md-7 controls radios">
-							<div id="profile_iam">
-								<input type="radio" id="profile_iam_0" name="profile[iam]" required="required" value="student" {% if profile.iam == 'student' %}checked="checked"{% endif %}>
-								<label for="profile_iam_0" class="required">在校生</label>
-								<input type="radio" id="profile_iam_1" name="profile[iam]" required="required" value="notStudent" {% if profile.iam == 'notStudent' %}checked="checked"{% endif %}>
-								<label for="profile_iam_1" class="required">非在校生</label></div>
-							</div>
-					</div> #}
-
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">{{'姓名'|trans}}</label>
 						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
@@ -48,32 +37,7 @@
             	</div>
             {% endif %}
 					</div>
-
-					<div class="help-block approval">
-						<label class="col-md-2 control-label" ></label>
-							{% if app.user.approvalStatus == 'approving' %}
-								<p class="text-primary" >
-									{{'正在实名认证中，管理员会尽快答复您。'|trans}}
-								</p>
-							{% elseif  app.user.approvalStatus == 'approved' %}
-								<p class="text-success" >
-									{{'恭喜您，已通过实名认证！'|trans}}
-								</p>
-							{% elseif  app.user.approvalStatus == 'unapprove' %}
-								<p class="text-warning" >
-									{{'您尚未实名认证，'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'点此认证'|trans}}</a>{{'。'|trans}}
-									</strong>
-									{% if is_plugin_installed('TeacherAudit') %}{{'若您想成为教师，请去'|trans}}<strong><a href="{{ path('teacher_audit_submit') }}">{{'教师资格申请'|trans}}</a>。
-									</strong>{% endif %}
-								</p>
-							{% elseif app.user.approvalStatus == 'approve_fail' %}
-								 <p class="text-danger" >
-									{{'实名认证审核尚未通过，请参照通知中的信息，修改后重新'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'认证。'|trans}}</a>
-									</strong>
-								 </p>
-							{% endif %}
-					</div>
-
+				
 					<div class="form-group">
 						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
 						<div class="col-md-7 controls radios">
@@ -130,22 +94,6 @@
 						{% endif %}
 					{% endif %}
 
-					{# <div class="form-group form-forIam-group form-student-group">
-						<label class="col-md-2 control-label">学校</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_school" name="profile[school]" class="form-control" value="{{ profile.school|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div>
-
-					<div class="form-group form-forIam-group form-student-group">
-						<label class="col-md-2 control-label">班级</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_class" name="profile[class]" class="form-control" value="{{ profile.class|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
-					</div> #}
-
 					<div class="form-group form-forIam-group form-notStudent-group">
 						<label class="col-md-2 control-label">{{'公司'|trans}}</label>
 						<div class="col-md-7 controls">
@@ -201,6 +149,7 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>公开</div>
 					</div>
 
 					<div class="form-group">
@@ -209,6 +158,7 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>公开</div>
 					</div>
 
 					<div class="form-group">
@@ -217,6 +167,7 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>公开</div>
 					</div>
 
 

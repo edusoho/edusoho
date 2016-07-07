@@ -1,0 +1,28 @@
+<div class="panel panel-default live-course-body">
+	<div class="panel-heading">
+        <h3 class="panel-title">{{'推荐课程'|trans}}</h3>
+    </div>
+    <div class="panel-body es-live-recommend">
+    	{% set courses = data('RecommendCourses',{'count':10,'notFill':true}) %}
+    	{% for course in courses if course %}
+	    <div class="media">
+	      <div class="media-left">
+	      	<a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}" target="_blank">
+            <img src="{{ filepath(course.smallPicture, 'course.png') }}">
+          </a>
+	        
+	      </div>
+	      <div class="media-body">
+	        <div class="title">
+	          <a href="{{ path('course_show',{id:course.id}) }}" class="gray-darker" title="{{ course.title }}" target="_blank">{{ course.title|plain_text(20) }}</a>
+	        </div>
+	        <div class="metas">
+	        	{% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+	        </div>
+	      </div>
+	    </div>
+    {% else %}
+    	<div class="empty">{{'暂无推荐课程'|trans}}</div>
+    {% endfor %}
+    </div>
+</div>

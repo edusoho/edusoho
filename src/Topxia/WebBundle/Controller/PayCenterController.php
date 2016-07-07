@@ -14,14 +14,14 @@ class PayCenterController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，不能支付。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能支付。'));
         }
 
         $paymentSetting = $this->setting('payment');
 
         if (!isset($paymentSetting['enabled']) || $paymentSetting['enabled'] == 0) {
             if (!isset($paymentSetting['disabled_message'])) {
-                $paymentSetting['disabled_message'] = '尚未开启支付模块，无法购买课程。';
+                $paymentSetting['disabled_message'] = $this->getServiceKernel()->trans('尚未开启支付模块，无法购买课程。');
             }
 
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
@@ -37,26 +37,26 @@ class PayCenterController extends BaseController
         $isTargetExist           = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
-            return $this->createMessageResponse('error', '该订单已失效');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('该订单已失效'));
         }
 
         if (empty($order)) {
-            return $this->createMessageResponse('error', '订单不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
         if ($order["userId"] != $user["id"]) {
-            return $this->createMessageResponse('error', '不是您的订单，不能支付');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('不是您的订单，不能支付'));
         }
 
         if ($order["status"] != "created") {
-            return $this->createMessageResponse('error', '订单状态被更改，不能支付');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单状态被更改，不能支付'));
         }
 
         if (($order["createdTime"] + 40 * 60 * 60) < time()) {
-            return $this->createMessageResponse('error', '订单已经过期，不能支付');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单已经过期，不能支付'));
         }
 
-        // $this->isPluginInstalled('Coupon') &&
+// $this->isPluginInstalled('Coupon') &&
 
         if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
@@ -113,21 +113,21 @@ class PayCenterController extends BaseController
         $user   = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，支付失败。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，支付失败。'));
         }
 
         if (!array_key_exists('orderId', $fields)) {
-            return $this->createMessageResponse('error', '缺少订单，支付失败');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('缺少订单，支付失败'));
         }
 
         if (!isset($fields['payment'])) {
-            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('支付方式未开启，请先开启'));
         }
 
         $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
 
         if ($user["id"] != $order["userId"]) {
-            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('不是您创建的订单，支付失败'));
         }
 
         if ($order['status'] == 'paid') {
@@ -170,7 +170,7 @@ class PayCenterController extends BaseController
             $returnXml = $paymentRequest->unifiedOrder();
 
             if (!$returnXml) {
-                throw new \RuntimeException("xml数据异常！");
+                throw new \RuntimeException($this->getServiceKernel()->trans('xml数据异常！'));
             }
 
             $returnArray = $paymentRequest->fromXml($returnXml);
@@ -196,7 +196,7 @@ class PayCenterController extends BaseController
 
     public function unbindAuthAction(Request $request)
     {
-        $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
+        $this->getLogService()->info('order', 'unbind-back', $this->getServiceKernel()->trans('银行卡解绑'));
         $fields   = $request->request->all();
         $response = $this->verification($fields);
 
@@ -227,7 +227,7 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
+        $this->getLogService()->info('order', 'pay_result', $this->getServiceKernel()->trans('%name%页面跳转支付通知', array('%name%' => $name)), $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
         $payData  = $response->getPayData();
 
@@ -240,7 +240,6 @@ class PayCenterController extends BaseController
         } else {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
-
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
@@ -257,17 +256,11 @@ class PayCenterController extends BaseController
 
     public function payErrorAction(Request $request)
     {
-        return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
+        return $this->createMessageResponse('error', $this->getServiceKernel()->trans('由于余额不足，支付失败，订单已被取消。'));
     }
 
     public function payNotifyAction(Request $request, $name)
     {
-        if ($request->getMethod() == 'GET') {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->query->all());
-        } else {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        }
-
         if ($name == 'wxpay') {
             $returnXml   = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
@@ -277,14 +270,14 @@ class PayCenterController extends BaseController
             $returnArray = $request->request->all();
         }
 
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
+
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
-
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
         }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
@@ -303,7 +296,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "closed") {
             $order = $processor->getOrderBySn($payData['sn']);
-            $processor->cancelOrder($order["id"], '{$name}交易订单已关闭', $payData);
+            $processor->cancelOrder($order["id"], $this->getServiceKernel()->trans('%name%交易订单已关闭', array('%name%' => $name)), $payData);
             return new Response('success');
         }
 
@@ -336,15 +329,15 @@ class PayCenterController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $response = array('success' => false, 'message' => '用户未登录');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('用户未登录'));
         }
 
         $isRight = $this->getAuthService()->checkPayPassword($user["id"], $password);
 
         if (!$isRight) {
-            $response = array('success' => false, 'message' => '支付密码不正确');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('支付密码不正确'));
         } else {
-            $response = array('success' => true, 'message' => '支付密码正确');
+            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('支付密码正确'));
         }
 
         return $this->createJsonResponse($response);
@@ -382,38 +375,6 @@ class PayCenterController extends BaseController
         }
 
         return $this->createJsonResponse(false);
-    }
-
-    public function orderQueryAction(Request $request)
-    {
-        $orderId        = $request->query->get('orderId');
-        $order          = $this->getOrderService()->getOrder($orderId);
-        $paymentRequest = $this->createPaymentRequest($order, array(
-            'returnUrl' => '',
-            'notifyUrl' => '',
-            'showUrl'   => ''
-        ));
-        $returnXml   = $paymentRequest->orderQuery();
-        $returnArray = $this->fromXml($returnXml);
-
-        if ($returnArray['trade_state'] == 'SUCCESS') {
-            $payData               = array();
-            $payData['status']     = 'success';
-            $payData['payment']    = 'wxpay';
-            $payData['amount']     = $order['amount'];
-            $payData['paidTime']   = time();
-            $payData['sn']         = $returnArray['out_trade_no'];
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-            $processor             = OrderProcessorFactory::create($order["targetType"]);
-
-            if ($success) {
-                return $this->createJsonResponse(true);
-            } else {
-                return $this->createJsonResponse(false);
-            }
-        } else {
-            return $this->createJsonResponse(false);
-        }
     }
 
     public function resultNoticeAction(Request $request)
@@ -458,14 +419,14 @@ class PayCenterController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return array('success' => false, 'message' => '用户未登录');
+            return array('success' => false, 'message' => $this->getServiceKernel()->trans('用户未登录'));
         }
 
         $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
         $authBanks = ArrayToolkit::column($authBanks, 'id');
 
         if (!in_array($fields['payAgreementId'], $authBanks)) {
-            return array('success' => false, 'message' => '不是您绑定的银行卡');
+            return array('success' => false, 'message' => $this->getServiceKernel()->trans('不是您绑定的银行卡'));
         }
     }
 
@@ -474,19 +435,19 @@ class PayCenterController extends BaseController
         $settings = $this->setting('payment');
 
         if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+            throw new \RuntimeException($this->getServiceKernel()->trans('支付参数尚未配置，请先配置。'));
         }
 
         if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
+            throw new \RuntimeException($this->getServiceKernel()->trans('支付模块未开启，请先开启。'));
         }
 
         if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+            throw new \RuntimeException($this->getServiceKernel()->trans('支付模块(%payment%)未开启，请先开启。', array('%payment%' => $payment)));
         }
 
         if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+            throw new \RuntimeException($this->getServiceKernel()->trans('支付模块(%payment%)参数未设置，请先设置。', array('%payment%' => $payment)));
         }
 
         if ($payment == 'alipay') {

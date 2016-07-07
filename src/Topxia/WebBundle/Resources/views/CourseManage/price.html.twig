@@ -18,29 +18,18 @@
       <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
         {% if currency == 'coin' %}
           <div class="form-group">
-            <label class="col-md-2 control-label">{{setting('coin.coin_name')}}{{'价格'|trans}}</label>
+            <label class="col-md-2 control-label">{{'%coin_name%价格'|trans({'%coin_name%':setting('coin.coin_name')})}}</label>
             <div class="col-md-8 controls">
-              <input type="text" name="coinPrice" class="form-control course-current-price" value="{{course.originCoinPrice}}">
-              <div class="help-block">
-                <span class="text-muted">{{ coinRate }}{{setting('coin.coin_name')}} = １{{'元'|trans}}</span>
-              </div>
+              <input type="text" name="price" class="form-control course-current-price" value="{{course.price}}">
               {% if discount %}
                 <div class="alert alert-warning">
-                  <small>当前课程正处于「{{ discount.name }}」打折活动中。
-                  折扣： <strong>{{ course.discount }} 折</strong>，
-                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>
+                  <small>{{'当前课程正处于%name%打折活动中。'|trans({'%name%':「 discount.name 」})}}
+                  {{'折扣'|trans}}： <strong>{{'%discount%折'|trans({'%discount%': course.discount}) }} </strong>，
+                  {{'折后价'|trans}}：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>
                 </div>
               {% endif %}
             </div>
           </div>
-
-          <div class="form-group">
-            <label class="col-md-2 control-label">{{'手机端价格'|trans}}</label>
-            <div class="col-md-8 controls">
-              <input type="text" name="price" class="form-control" value="{{course.originPrice}}">              
-            </div>
-          </div>
-
         {% else %}
           <div class="form-group">
             <label class="col-md-2 control-label">{{'价格'|trans}}</label>
@@ -50,9 +39,9 @@
               </div>
               {% if discount %}
                 <div class="alert alert-warning">
-                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
-                  折扣： <strong>{{ course.discount }} 折</strong>，
-                  折后价：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> 元</strong>。
+                  {{'当前课程正处于%name%打折活动中。'|trans({'%name%':「 discount.name 」})}}<br>
+                  {{'折扣'|trans}}： <strong>{{'%discount%折'|trans({'%discount%': course.discount}) }} </strong>，
+                  {{'折后价'|trans}}：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> {{'元'|trans}}</strong>。
                 </div>
               {% endif %}
             </div>

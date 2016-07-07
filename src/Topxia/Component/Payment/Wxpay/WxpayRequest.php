@@ -77,7 +77,7 @@ class WxpayRequest extends Request
         $converted = array();
 
         $converted['appid']            = $this->options['key'];
-        $converted['attach']           = '支付';
+        $converted['attach']           = $this->getServiceKernel()->trans('支付');
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
         $settings                      = $this->getSettingService()->get('payment');
         $converted['mch_id']           = $settings["wxpay_account"];

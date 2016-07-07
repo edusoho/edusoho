@@ -28,7 +28,7 @@
           <div class="col-md-2 control-label">
           </div>
           <div class="controls col-md-8 controls">
-            {{'<p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>'|trans|raw}}
+            <p class="help-block">{{'你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过'|trans|raw}}<strong>{{'2M'|trans}}</strong>。</p>
           </div>
         </div>
 
@@ -38,7 +38,7 @@
             <a id="upload-picture-btn"
             class="btn btn-primary"
             data-upload-token="{{ upload_token('tmp', 'image') }}"
-            data-goto-url="{{path('settings_avatar_crop')}}"
+            data-goto-url="{{path('settings_avatar_crop',{goto: goto})}}"
             >{{'上传新头像'|trans}}</a>
           </div>
         </div>

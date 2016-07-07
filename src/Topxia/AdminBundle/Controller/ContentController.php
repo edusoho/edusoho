@@ -142,7 +142,7 @@ class ContentController extends BaseController
             return $this->createJsonResponse(array('success' => true, 'message' => ''));
         }
 
-        return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
+        return $this->createJsonResponse(array('success' => false, 'message' => $this->getServiceKernel()->trans('该URL路径已存在')));
     }
 
     protected function filterEditorField($content)

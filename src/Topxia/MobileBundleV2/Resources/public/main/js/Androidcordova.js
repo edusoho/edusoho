@@ -210,6 +210,7 @@
 
     define("jsBridgeAdapter", function(require, exports, module) {
         var messageLoop = require("jsBridgeAdapter/messageInvoke");
+        var deviceready = false;
 
         var jsBridgeAdapter = {
             define : define,
@@ -217,12 +218,18 @@
             version : version,
             messageLoop : messageLoop,
             invokeCallback : function(callbackName, callbackType, args) {
-                console.log("invokeCallback" + callbackType);
+                console.log("invokeCallback:" + callbackType);
                 var callback = this.messageLoop.getCallback(callbackName);
                 if (callback.success || callbac.error) {
                     callback[callbackType](args);
                     this.messageLoop.removeCallback(callbackName);
                 }
+            },
+            isDeviceready : function() {
+                return deviceready;
+            },
+            setDeviceready : function(isReadly) {
+                deviceready = isReadly;
             }
         };
 
@@ -232,7 +239,7 @@
     define("jsBridgeAdapter/platform", function(require, exports, module) {
 
         function deviceready() {
-            console.log("jsBridgeAdapter:deviceready");
+            require("jsBridgeAdapter").setDeviceready(true);
             var event = document.createEvent('HTMLEvents');
             event.initEvent("deviceready", true, true);
             event.eventType = 'message';
@@ -255,7 +262,6 @@
     define("jsBridgeAdapter/init", function(require, exports, module) {
         module.exports = require("jsBridgeAdapter");
         require("jsBridgeAdapter/plugin").load(function() {
-            console.log("plugin load");
             var platform = require("jsBridgeAdapter/platform");
             platform.bootstrap();
         });

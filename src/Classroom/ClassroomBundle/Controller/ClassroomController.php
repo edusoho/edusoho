@@ -38,39 +38,28 @@ class ClassroomController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
         }
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
-            $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType   = "RMB";
-
-            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-                $priceType = $coinSetting["price_type"];
-            }
-
-            if ($priceType == 'Coin') {
-                $conditions['coinPrice'] = '0.00';
-            }
+        if ($filter['price'] == 'free') {
             $conditions['price'] = '0.00';
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if (!$fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if (!$filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
@@ -119,7 +108,7 @@ class ClassroomController extends BaseController
             'categoryArray'            => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'levels'                   => $levels,
             'orderBy'                  => $orderBy
         ));
@@ -147,8 +136,15 @@ class ClassroomController extends BaseController
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'student', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'auditor', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -213,10 +209,12 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             $lessonNum += $course['lessonNum'];
 
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -351,7 +349,7 @@ class ClassroomController extends BaseController
         $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%title%，如有需要请联系客服',array('%title%'=>$classroom['title'])), '', 3, $this->generateUrl('homepage'));
         }
 
         if (!$classroom) {
@@ -440,8 +438,10 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -518,7 +518,7 @@ class ClassroomController extends BaseController
 
         $isSignedToday = $this->getSignService()->isSignedToday($user->id, 'classroom_sign', $classroom['id']);
 
-        $week = array('日', '一', '二', '三', '四', '五', '六');
+        $week = array($this->getServiceKernel()->trans('日'), $this->getServiceKernel()->trans('一'), $this->getServiceKernel()->trans('二'), $this->getServiceKernel()->trans('三'), $this->getServiceKernel()->trans('四'), $this->getServiceKernel()->trans('五'), $this->getServiceKernel()->trans('六'));
 
         $userSignStatistics = $this->getSignService()->getSignUserStatistics($user->id, 'classroom_sign', $classroom['id']);
 
@@ -569,7 +569,7 @@ class ClassroomController extends BaseController
             foreach ($userSigns as $userSign) {
                 $result['records'][] = array(
                     'day'  => date('d', $userSign['createdTime']),
-                    'time' => date('G点m分', $userSign['createdTime']),
+                    'time' => date('H-i', $userSign['createdTime']),
                     'rank' => $userSign['rank']);
             }
         }
@@ -587,13 +587,13 @@ class ClassroomController extends BaseController
     public function becomeStudentAction(Request $request, $id)
     {
         if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
@@ -608,22 +608,23 @@ class ClassroomController extends BaseController
         $member = $this->getClassroomService()->getClassroomMember($id, $user["id"]);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是班级的学员。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
         }
 
         if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
-            throw $this->createAccessDeniedException('您不是班级的学员。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
         }
 
         if (!empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
+
         if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException('组合购买课程不能退出。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('组合购买课程不能退出。'));
         }
-        
+
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -634,7 +635,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -644,7 +645,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom['buyable']) {
-            return $this->createMessageResponse('info', "非常抱歉，该{$classroom['title']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，该%title%不允许加入，如有需要请联系客服',array('%title%'=>$classroom['title'])), '', 3, $this->generateUrl('homepage'));
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -757,13 +758,13 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
 
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('%title%不存在，不能购买。',array('%title%'=>$classroom['title'])));
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -784,6 +785,15 @@ class ClassroomController extends BaseController
         ));
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
+
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
 
         $coinSetting = $this->setting("coin");
 
@@ -858,10 +868,10 @@ class ClassroomController extends BaseController
         $courseMembers     = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
+        $priceType         = "RMB";
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $priceType   = "RMB";
 
         if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
             $priceType = $coinSetting["price_type"];
@@ -886,11 +896,13 @@ class ClassroomController extends BaseController
     {
         $coursesTotalPrice = 0;
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             if ($priceType == "RMB") {
                 $coursesTotalPrice += $course["originPrice"];
             } elseif ($priceType == "Coin") {
-                $coursesTotalPrice += $course["originCoinPrice"];
+                $coursesTotalPrice += $course["originPrice"] * $cashRate;
             }
         }
 
@@ -945,12 +957,12 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $classrooms            = array();
-        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($teacherClassrooms, $headTeacherClassrooms);
 
@@ -1030,18 +1042,26 @@ class ClassroomController extends BaseController
         ));
     }
 
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
+    }
+
     public function orderInfoAction(Request $request, $sn)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException('订单不存在!');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException("找不到要购买的班级!");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('找不到要购买的班级!'));
         }
 
         return $this->render('ClassroomBundle:Classroom:classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
@@ -1164,5 +1184,10 @@ class ClassroomController extends BaseController
     protected function getClassroomPlanService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 }

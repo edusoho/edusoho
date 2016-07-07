@@ -25,17 +25,17 @@ class CourseController extends CourseBaseController
 
         unset($conditions['code']);
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'type'           => 'all',
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
+        if ($filter['price'] == 'free') {
             $coinSetting = $this->getSettingService()->get("coin");
             $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
             $priceType   = "RMB";
@@ -47,24 +47,24 @@ class CourseController extends CourseBaseController
             if ($priceType == 'RMB') {
                 $conditions['price'] = '0.00';
             } else {
-                $conditions['coinPrice'] = '0.00';
+                $conditions['price'] = '0.00';
             }
         }
 
-        if ($fliter['type'] == 'live') {
+        if ($filter['type'] == 'live') {
             $conditions['type'] = 'live';
         }
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if ($fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if ($filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -163,7 +163,7 @@ class CourseController extends CourseBaseController
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses'                  => $courses,
             'category'                 => $category,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'orderBy'                  => $orderBy,
             'paginator'                => $paginator,
             'categories'               => $categories,
@@ -266,7 +266,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -289,7 +289,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -343,7 +343,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -358,30 +358,12 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
-        $items       = $this->getCourseService()->getCourseItems($course['id']);
-        $courseAbout = $course['about'];
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        $courseAbout = strip_tags($courseAbout, '');
-
-        $courseAbout = preg_replace("/ /", "", $courseAbout);
-        $courseAbout = substr($courseAbout, 0, 100);
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course'      => $course,
-            'member'      => $member,
-            'items'       => $items,
-            'courseAbout' => $courseAbout
-        ));
-    }
-
-    public function keywordsAction($course)
-    {
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
-        return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
-            'category' => $category,
-            'tags'     => $tags,
-            'course'   => $course
+            'course' => $course,
+            'member' => $member,
+            'items'  => $items
         ));
     }
 
@@ -426,7 +408,7 @@ class CourseController extends CourseBaseController
             $courseSetting = $this->setting('course', array());
 
             if (empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请前往后台开启直播,尝试创建！'));
             }
 
             if (!empty($courseSetting['live_course_enabled'])) {
@@ -437,7 +419,7 @@ class CourseController extends CourseBaseController
             }
 
             if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请联系EduSoho官方购买直播教室，然后才能开启直播功能！'));
             }
         }
 
@@ -464,11 +446,11 @@ class CourseController extends CourseBaseController
         $user                  = $this->getCurrentUser();
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是课程的学员。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
 
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
 
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
@@ -479,13 +461,13 @@ class CourseController extends CourseBaseController
     public function becomeUseMemberAction(Request $request, $id)
     {
         if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
@@ -501,21 +483,21 @@ class CourseController extends CourseBaseController
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
 
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         $course = $this->getCourseService()->getCourse($id);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
         if ($course['approval'] == 1 && ($user['approvalStatus'] != 'approved')) {
-            return $this->createMessageResponse('info', "该课程需要通过实名认证，你还没有通过实名认证。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该课程需要通过实名认证，你还没有通过实名认证。'), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         if (!$this->getCourseService()->canTakeCourse($id)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%coursetitle%》的学员，请先购买或加入学习。', array('%coursetitle%' =>$course['title'] )), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         try {
@@ -531,7 +513,7 @@ class CourseController extends CourseBaseController
                 }
             }
         } catch (Exception $e) {
-            throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('抱歉，未发布课程不能学习！'));
         }
 
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
@@ -545,7 +527,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
@@ -594,7 +576,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
@@ -900,13 +882,13 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException('订单不存在!');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));

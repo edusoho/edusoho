@@ -116,6 +116,7 @@ define( function ( require, exports, module ) {
 
             var latexInfo = this.kfEditor.requestService( "syntax.serialization" ),
                 originString = latexInfo.str;
+
             // 拼接latex字符串
             originString = originString.substring( 0, latexInfo.startOffset ) + " " + str + " " + originString.substring( latexInfo.endOffset );
 
@@ -240,6 +241,7 @@ define( function ( require, exports, module ) {
         },
 
         delete: function () {
+
             var isNeedRedraw = null;
 
             // 当前处于"根占位符"上，不允许删除操作

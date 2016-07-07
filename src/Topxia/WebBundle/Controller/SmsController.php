@@ -60,16 +60,16 @@ class SmsController extends BaseController
         if ($targetType == 'classroom') {
             $classroom                     = $this->getClassroomService()->getClassroom($id);
             $classroomSetting              = $this->getSettingService()->get("classroom");
-            $classroomName                 = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+            $classroomName                 = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
             $classroom['title']            = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
-            $description                   = $parameters['classroom_title'].'发布';
+            $description                   = $parameters['classroom_title'].$this->getServiceKernel()->trans('发布');
             $students                      = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true), array('createdTime', 'DESC'), $index, $onceSendNum);
         } elseif ($targetType == 'course') {
             $course                     = $this->getCourseService()->getCourse($id);
             $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
-            $parameters['course_title'] = '课程：《'.$course['title'].'》';
-            $description                = $parameters['course_title'].'发布';
+            $parameters['course_title'] = $this->getServiceKernel()->trans('课程：《').$course['title'].'》';
+            $description                = $parameters['course_title'].$this->getServiceKernel()->trans('发布');
 
             if ($course['parentId']) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -84,7 +84,7 @@ class SmsController extends BaseController
         }
 
         if (!$this->getSmsService()->isOpen($smsType)) {
-            throw new \RuntimeException("请先开启相关设置!");
+            throw new \RuntimeException($this->getServiceKernel()->trans('请先开启相关设置!'));
         }
 
         $parameters['url'] = $url.' ';

@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
         $('#message-reply-form').on('click', '#course-reply-btn', function(e){
             $("#course-reply-btn").addClass("disabled");
+            $("#course-reply-btn").attr("disabled",true);
             if($("#message_reply_content").val().length >= 500){
                 Notify.danger(Translator.trans('不好意思，私信内容长度不能超过500!'));
                 return false;
@@ -19,6 +20,7 @@ define(function(require, exports, module) {
             $.post($("#message-reply-form").attr('action'), $("#message-reply-form").serialize(), function(response) {
                 $(".message-list").prepend(response.html);
                 $("#message_reply_content").val("");
+                $("#course-reply-btn").attr("disabled",false);
             });
 
             return false;

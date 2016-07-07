@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}{% if org.id|default(null) %}编辑组织机构{% else %}添加组织机构{% endif %}{% endblock %}
+
+{% block body %}
+<div id="org-creater-widget">
+
+	<form id="org-manage-form" class="form-horizontal" action="{% if org.id|default(null) %}{{ path('admin_org_update', {id:org.id}) }}{% else %}{{ path('admin_org_create') }}{% endif %}" method="post">
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="org-name-field">名称</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="org-name-field" type="text" name="name" value="{{ org.name|default('')  }}" tabindex="1">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="org-code-field">编码</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('')  }}" data-url="{{ path('admin_org_checkcode', {exclude:org.code|default(null)}) }}" tabindex="3">
+				<div class="help-block">必填，建议使用分类名称的英文单词或缩写作为编码。</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="org-description-field">描述</label>
+			<div class="col-md-8 controls">
+				<textarea class="form-control" id="org-description-field" style="height:100px;" name="description">{{org.description |default('') }}</textarea>
+				<div class="help-block">非必填</div>
+			</div>
+		</div>
+		<input type="hidden" name="parentId" value="{{ org.parentId|default(0)  }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>
+<script type="text/javascript"> app.load('orgbundle/controller/orgManage/save-modal') </script>
+{% endblock %}
+
+{% block footer %}
+	{# {% if org.id %}
+		<button type="button" class="btn btn-default pull-left delete-org" data-url="{{ path('admin_org_delete', {id:org.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+	{% endif %} #}
+
+  	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+	<button id="org-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#org-manage-form" tabindex="4">保存</button>
+{% endblock %}

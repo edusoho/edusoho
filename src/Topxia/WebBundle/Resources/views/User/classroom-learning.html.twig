@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle:User:layout.html.twig' %}
-{% block title %}{{'在学'|trans}}{{ setting('classroom.name')|default('班级'|trans) }} - {{ parent() }}{% endblock %}
+{% block title %}{{'在学%classroom.name%'|trans({'%classroom.name%': setting('classroom.name')|default('班级'|trans)})}} - {{ parent() }}{% endblock %}
 {% set pageNav = 'learning' %}
 {% block main %}
   {% if classrooms %}
@@ -8,19 +8,22 @@
         {% set teachers = classroom['teachers']|default(null) %}
         <div class="col-md-3 col-sm-6">
           <div class="class-item">
-            <div class="class-bg-layer"></div>
-            <div class="class-item-bg">
+            <div class="class-img-wrap">
               <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
                 <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
               </a>
-              <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+              <div class="mask">
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">立即加入</a>
+              </div>
             </div>
+            <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+            <div class="metas">共{{classroom.courseNum}}门课程</div>
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty">无在学的{{setting('classroom.name')|default('班级'|trans)}}！</div>
+    <div class="empty">{{'无在学的%classroom.name%！'|trans({'%classroom.name%': setting('classroom.name')|default('班级'|trans)})}}</div>
   {% endif %}
 
   {{ web_macro.paginator(paginator) }}

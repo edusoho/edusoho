@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
-
+    require('webuploader2');
+    var store = require('store');
     var BaseChooser = require('./base-chooser-8');
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
-    var VideoQualitySwitcher = require('../video-quality-switcher');
 
     var VideoChooser = BaseChooser.extend({
 
@@ -12,46 +12,19 @@ define(function(require, exports, module) {
 
     	attrs: {
     		uploaderSettings: {
-                file_types : "*.mp4;*.avi;*.flv;*.m4v",
+                file_types : "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg",
                 file_size_limit : "2048 MB",
                 file_types_description: Translator.trans('视频文件')
     		},
-            preUpload: function(uploader, file) {
-                var data = {};
-                if (this.qualitySwitcher) {
-                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    if (this.element.data('hlsEncrypted')) {
-                        data.convertor = 'HLSEncryptedVideo';
-                    } else {
-                        data.convertor = 'HLSVideo';
-                    }
-                    data.lazyConvert = 1;
-                }
-                var self = this;
-                $.ajax({
-                    url: this.element.data('paramsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: data, 
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        var paramsKey = {};
-                        paramsKey.data=data;
-                        paramsKey.targetType=self.element.data('targetType');
-                        paramsKey.targetId=self.element.data('targetId');
+        },
 
-                        response.postParams.paramsKey = JSON.stringify(paramsKey);
-
-                        uploader.setUploadURL(response.url);
-                        uploader.setPostParams(response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger(Translator.trans('请求上传授权码失败！'));
-                    }
-                });
-            }
-    	},
+        getProcess: function() {
+            return {
+                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
+                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val(),
+                supportMobile: $('.video-quality-switcher').find('input[name=support_mobile]').val()
+            };
+        },
 
     	events: {
     		'click [data-role=import]': 'onImport'
@@ -60,16 +33,6 @@ define(function(require, exports, module) {
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
             $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
-
-            if ($('.video-quality-switcher').length > 0) {
-                var switcher = new VideoQualitySwitcher({
-                    element: '.video-quality-switcher'
-                });
-
-                this.qualitySwitcher = switcher;
-            }
-
-
     	},
 
     	onImport: function(e) {
@@ -114,5 +77,3 @@ define(function(require, exports, module) {
     module.exports = VideoChooser;
 
 });
-
-

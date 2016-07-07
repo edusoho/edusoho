@@ -1,12 +1,12 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}课程 - {{ parent() }}{% endblock %}
+{% block title %}{{'课程'|trans}} - {{ parent() }}{% endblock %}
 {% set nav = 'course' %}
 
 {% set bodyClass = 'homepage' %}
 
 {% block content %}
-  <p>请创建模版文件customize/content/{{ type }}/list.html.twig，自定义。</p>
+  <p>{{'请创建模版文件'|trans}}customize/content/{{ type }}/list.html.twig，{{'自定义'|trans}}。</p>
   <div class="row es-row-light">
 
 
@@ -14,7 +14,7 @@
     <div class="col-md-8">
 
       <div class="panel panel-default panel-primary">
-        <div class="panel-heading"><h2>最新文章</h2></div>
+        <div class="panel-heading"><h2>{{'最新文章'|trans}}</h2></div>
 
         <ul class="media-list content-list article-list">
           {% for content in contents %}
@@ -29,9 +29,9 @@
                 <h4 class="media-heading"><a href="{{ path('content_article_show', {alias:content.alias|default(content.id)}) }}">{{ content.title }}</a></h4>
                 {{ content.body|plain_text(120) }}
                 <div class="text-muted">
-                  <span class="text-muted">发布于 {{ content.publishedTime|date('Y-n-d') }}</span>
+                  <span class="text-muted">{{'发布于'|trans}} {{ content.publishedTime|date('Y-n-d') }}</span>
                   {% if contentCategory %}
-                    <span>, 属于 <a href="#" class="text-muted">{{ contentCategory.name }}</a> 分类</span>
+                    <span>, {{'属于'|trans}} <a href="#" class="text-muted">{{ contentCategory.name }}</a> {{'分类'|trans}}</span>
                   {% endif %}
                 </div>
               </div>
@@ -46,7 +46,7 @@
 
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-heading">分类</div>
+        <div class="panel-heading">{{'分类'|trans}}</div>
 
           <div class="list-group list-group-flush">
             {% for category in categoryTree %}

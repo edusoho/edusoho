@@ -28,10 +28,10 @@
       <tr>
         <th width="50%">{{'名称'|trans}}</th>
         {% if filter == 'classroom' %}
-        <th >{{'所属'|trans}}{{setting("classroom.name")|default('班级'|trans)}}</th>
+        <th >{{'所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)})}}</th>
         {% else %}
         <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'数'|trans}}</th>
-        <th>{{'价格'|trans}}({{'元'|trans}})</th>
+        <th>{{'价格(元)'|trans}}</th>
         {% endif %}
         <th>{{'状态'|trans}}</th>
         <th width="20%">{{'操作'|trans}}</th>

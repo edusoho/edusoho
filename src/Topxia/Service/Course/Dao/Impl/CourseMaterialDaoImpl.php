@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Course\Dao\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\CourseMaterialDao;
 
@@ -44,6 +45,12 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
+    public function updateMaterial($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->getMaterial($id);
+    }
+
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if(empty($courseIds)){
@@ -76,18 +83,81 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
 
+    public function deleteMaterialsByFileId($fileId)
+    {
+        return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
+    }
 
-     public function getLessonMaterialCount($courseId,$lessonId)
-     {
+    public function getLessonMaterialCount($courseId,$lessonId)
+    {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
         return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
-     } 
+    } 
 
-      public function getMaterialCountByFileId($fileId)
-     {
+    public function getMaterialCountByFileId($fileId)
+    {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($fileId)); 
-     } 
+    }
 
+    public function findMaterialsGroupByFileId($courseId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? and fileId != 0 GROUP BY fileId ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
+    }
 
+    public function findMaterialCountGroupByFileId($courseId)
+    {
+        $sql = "SELECT COUNT(DISTINCT(fileId)) FROM {$this->table} WHERE courseId = ? and fileId != 0 ";
+        return $this->getConnection()->fetchColumn($sql, array($courseId),0); 
+    }
+
+    public function searchMaterials($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchMaterialCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+
+            ->from($this->table, $this->table)
+            ->andWhere('id = :id')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
+            ->andWhere('lessonId <> ( :excludeLessonId )')
+            ->andWhere('type = :type')
+            ->andWhere('userId = :userId')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('copyId = :copyId')
+            ->andWhere('fileId = :fileId')
+            ->andWhere('fileId IN (:fileIds)')
+            ->andWhere('source = :source')
+            ->andWhere('source IN (:sources)')
+            ->andWhere('courseId IN (:courseIds)');
+
+        return $builder;
+    }
 }

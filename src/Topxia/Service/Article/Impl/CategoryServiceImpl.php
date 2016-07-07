@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Article\Impl;
 
+use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Article\CategoryService;
@@ -42,6 +43,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->makeCategoryTree($tree, $categories, 0);
 
         return $tree;
+    }
+
+    public function getCategoryStructureTree()
+    {
+        return TreeToolkit::makeTree($this->getCategoryTree(), 'weight');
+    }
+
+    public function sortCategories($ids)
+    {
+        foreach ($ids as $index => $id) {
+            $this->getCategoryDao()->updateCategory($id, array('weight' => $index + 1));
+        }
     }
 
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
@@ -161,9 +174,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        $category = ArrayToolkit::parts($category, array('name', 'code', 'weight', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
+        $category = ArrayToolkit::parts($category, array('name', 'code', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
-        if (!ArrayToolkit::requireds($category, array('name', 'code', 'weight', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, array('name', 'code', 'parentId'))) {
             throw $this->createServiceException("缺少必要参数，，添加栏目失败");
         }
 
@@ -194,9 +207,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->_filterCategoryFields($fields);
 
-        $this->getLogService()->info('category', 'update', "编辑栏目 {$fields['name']}(#{$id})", $fields);
+        $category = $this->getCategoryDao()->updateCategory($id, $fields);
 
-        return $this->getCategoryDao()->updateCategory($id, $fields);
+        $this->getLogService()->info('category', 'update', "编辑栏目 {$category['name']}(#{$id})", $fields);
+
+        return $category;
     }
 
     public function deleteCategory($id)

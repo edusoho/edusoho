@@ -150,7 +150,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 $this->getUserService()->changeEmail($user['id'], $partnerUser['email']);
             }
         } catch(\Exception $e) {
-            $this->getLogService()->error('user', 'sync_email', "同步用户(#{$user['id']})Email失败");
+            $this->getLogService()->error('user', 'sync_email', $this->getServiceKernel()->trans('同步用户(#%userId%)Email失败', array('%userId%' =>$user['id'] )));
         }
 
         try {
@@ -159,7 +159,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 $this->getUserService()->changePassword($user['id'], $token->getCredentials());
             }
         } catch(\Exception $e) {
-            $this->getLogService()->error('user', 'sync_password', "同步用户(#{$user['id']})密码失败");
+            $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', array('%userId%' =>$user['id'] )));
         }
 
 
@@ -199,6 +199,10 @@ class AuthenticationProvider extends UserAuthenticationProvider
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User.AuthService');
+    }
+            protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
 }

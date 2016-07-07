@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Crontab\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Crontab\CrontabService;
@@ -27,7 +28,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 $sort = array('nextExcutedTime', 'DESC');
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
                 break;
         }
 
@@ -46,9 +47,8 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $user = $this->getCurrentUser();
 
-        if ($job['cycle'] == 'once') {
-            $job['nextExcutedTime'] = $job['time'];
-            unset($job['time']);
+        if (!ArrayToolKit::requireds($job, array('nextExcutedTime'))) {
+            throw $this->createServiceException('缺少 nextExcutedTime 字段,创建job失败');
         }
 
         $job['creatorId']   = $user['id'];
@@ -72,22 +72,28 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             // 加锁
             $job = $this->getJob($id, true);
 
-            // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
 
             if (empty($job) || $job['executing']) {
-                $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
+                $this->getLogService()->error('crontab', 'execute', $this->getKernel()->trans('任务(#%jobId%)已经完成或者在执行', array('%jobId%' =>$job['id'] )));
                 $this->getJobDao()->getConnection()->commit();
                 return;
             }
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
-            $jobInstance                    = new $job['jobClass']();
-            $job['jobParams']['targetType'] = $job['targetType'];
-            $job['jobParams']['targetId']   = $job['targetId'];
+            $jobInstance = new $job['jobClass']();
+            if (!empty($job['targetType'])) {
+                $job['jobParams']['targetType'] = $job['targetType'];
+            }
+
+            if (!empty($job['targetId'])) {
+                $job['jobParams']['targetId'] = $job['targetId'];
+            }
+
             $jobInstance->execute($job['jobParams']);
         } catch (\Exception $e) {
             $message = $e->getMessage();
-            $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
+            $this->getLogService()->error('crontab', 'execute', $this->getKernel()->trans('执行任务(#%jobId%)失败: %message%', array('%jobId%' =>$job['id'], '%message%' =>$message )), $job);
         }
 
         $this->afterJonExecute($job);
@@ -137,9 +143,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         if (!empty($job)) {
             $job = $job[0];
-            $this->getLogService()->info('crontab', 'job_start', "定时任务(#{$job['id']})开始执行！", $job);
+            $this->getLogService()->info('crontab', 'job_start', $this->getKernel()->trans('定时任务(#%jobId%)开始执行！', array('%jobId%' =>$job['id'] )), $job);
             $this->executeJob($job['id']);
-            $this->getLogService()->info('crontab', 'job_end', "定时任务(#{$job['id']})执行结束！", $job);
+            $this->getLogService()->info('crontab', 'job_end', $this->getKernel()->trans('定时任务(#%jobId%)执行结束！', array('%jobId%' =>$job['id'] )), $job);
         }
     }
 
@@ -172,6 +178,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         $fileContent = file_get_contents($filePath);
         $config      = $yaml->parse($fileContent);
+
         return $config['crontab_next_executed_time'];
     }
 

@@ -33,6 +33,21 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
+
+        $conditions = array_filter($conditions, function ($v) {
+            if ($v === 0) {
+                return true;
+            }
+
+            if (empty($v)) {
+                return false;
+            }
+            return true;
+        });
+
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
         return $this->createDynamicQueryBuilder($conditions)
                     ->from($this->table, 'message')
                     ->andWhere('fromId = :fromId')
@@ -47,14 +62,6 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function searchMessagesCount($conditions)
     {
-        if (isset($conditions['content'])) {
-            if (empty($conditions['content'])) {
-                unset($conditions['content']);
-            } else {
-                $conditions['content'] = "%{$conditions['content']}%";
-            }
-        }
-
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('COUNT(id)');
 
@@ -64,10 +71,6 @@ class MessageDaoImpl extends BaseDao implements MessageDao
     public function searchMessages($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-
-        if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
-        }
 
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')

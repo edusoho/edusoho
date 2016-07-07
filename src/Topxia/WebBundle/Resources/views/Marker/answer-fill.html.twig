@@ -17,7 +17,7 @@
 		  <p class="answer-title mtl">{{'正确答案'|trans}}</p>
 		  <div class="fill-answer">
 		  {% for index,value in answer %}
-		    <p>{{'填空'|trans}}({{index+1}}):{{'正确答案'|trans}}<strong class="text-success">{% for i,answerValue in value %} {% if i %}{{'或'|trans}}{% endif %} {{answerValue}}{% endfor %}</strong></p>
+		    <p>{{'填空(%index%):正确答案'|trans({'%index%':index+1})}}<strong class="text-success">{% for i,answerValue in value %} {% if i %}{{'或'|trans}}{% endif %} {{answerValue}}{% endfor %}</strong></p>
 		  {% endfor %}
 		  </div>
 		</div>
@@ -25,6 +25,6 @@
 	<div class="question-footer clearfix">
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
-		<button id="continue" class="btn btn-primary btn-lg pull-right">{% if compelete %}{{'完成'|trans}}{% else %}{{'下一题'|trans}}{% endif %}</button>
+		<button id="continue" class="btn btn-primary btn-lg pull-right">{% if compelete %}{{'完成'|trans}}{% else %}{{'下一题'|trans}} {% endif %}</button>
 	</div>
 </div>

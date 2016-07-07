@@ -40,17 +40,17 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
     {
         if (!isset($admin['userId']) || empty($admin['userId'])) {
 
-            throw $this->createServiceException("userId不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('userId不能为空！'));
         }
 
         if (!isset($admin['title']) || empty($admin['title'])) {
 
-            throw $this->createServiceException("名称不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('名称不能为空！'));
         }
 
         if (!isset($admin['url']) || empty($admin['url'])) {
             
-            throw $this->createServiceException("url不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('url不能为空！'));
         }
 
         $admin['createdTime'] = time();

@@ -1,8 +1,9 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
-    var UploadPanel = require('edusoho.uploadpanel');
     var Notify = require('common/bootstrap-notify');
+
+    var BatchUploader = require('../../uploader/batch-uploader');
     
     if ($("div .file-browser-list-container").length > 0) {
         var MaterialFileBrowser = require('../file/file-browser-material-lib');
@@ -10,14 +11,13 @@ define(function(require, exports, module) {
 
     var CourseFileBrowser = require('../file/file-browser');
 	
-
     var BaseChooser = Widget.extend({
+        uploader: null,
+        _isUploading: false,
+
+
         attrs: {
             choosed: null,
-            uploader: null,
-            uploaderSettings: {},
-            preUpload: null,
-            uploadPanel: null
         },
 
         events: {
@@ -27,44 +27,61 @@ define(function(require, exports, module) {
         setup: function() {
             this._chooses = {};
             this.on('change', this.onChanged);
-            this.on('preUpload', this.get("preUpload"));
 
             this._initTabs();
             this.FileBrowser();
-            this._initUploadPane();
 
             var choosed = this.get('choosed');
             if (choosed) {
                 this.trigger('change', choosed);
             }
+        },
 
+        show: function() {
+            this.element.show();
+
+            if (this.element.find(".file-chooser-main").css('display') == 'none') {
+                return this;
+            }
+
+            if (this.element.find(".file-chooser-tabs > li.active").length == 0) {
+                this.element.find(".file-chooser-uploader-tab").tab('show');
+            }
+
+            if (this.element.find(".file-chooser-uploader-tab").parent().hasClass('active')) {
+                this._createUploader();
+            }
+
+            return this;
+        },
+
+        hide: function() {
+            if (this.element.find(".file-chooser-uploader-tab").parent().hasClass('active')) {
+                this._destoryUploader();
+            }
+            this.element.hide();
+            return this;
         },
 
         open: function() {
             this.element.find(".file-chooser-bar").hide();
             this.element.find(".file-chooser-main").show();
-            return this;
-        },
-
-        show: function() {
-            this.element.show();
+            this.element.find(".file-chooser-tabs > li").removeClass('active');
+            this.element.find(".file-chooser-uploader-tab").tab('show');
             return this;
         },
 
         close: function() {
+            this._destoryUploader();
+            this.element.find(".file-chooser-tabs > li.active").removeClass('active');
+
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
-            this.get('uploaderProgressbar').reset().hide();
             return this;
         },
 
-        hide: function() {
-            this.element.hide();
-            return this;
-        },
-
-        isUploading: function() {
-            return this.get('uploaderProgressbar').isProgressing();
+        isUploading: function() { 
+            return this._isUploading;
         },
 
         onChanged: function(item) {
@@ -87,21 +104,22 @@ define(function(require, exports, module) {
 
         _initTabs: function() {
             var self = this;
+
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
-                    self.get('uploaderProgressbar').reset().hide();
+                    self._createUploader();
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
-                        var result = confirm(Translator.trans('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？'));
-                        if(result){
-                            self.get("uploadPanel").destroy();
-                        }
-                        return result;
+                        return confirm(Translator.trans('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？'));
                     }
+                    self._destoryUploader();
                 }
+
             });
+
+
         },
 
         FileBrowser: function() {
@@ -113,7 +131,14 @@ define(function(require, exports, module) {
                     }).show();
 
                     materialBrowser.on('select', function(file) {
-                        self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                        var media = {
+                            id: file.id,
+                            status: file.convertStatus,
+                            source: 'self',
+                            name: file.filename,
+                            length: file.length
+                        };
+                        self.trigger('change', media);
                     });
             }
             
@@ -122,27 +147,73 @@ define(function(require, exports, module) {
             }).show();
 
             courseBrowser.on('select', function(file) {
-                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                var media = {
+                    id: file.id,
+                    status: file.convertStatus,
+                    source: 'self',
+                    name: file.filename,
+                    length: file.length
+                };
+                self.trigger('change', media);
             });
         },
 
-        _initUploadPane: function(){
+        _createUploader: function() {
+            if (this.uploader) {
+                return ;
+            }
+
             var self = this;
-            var uploadPanel = new UploadPanel({
-                element: this.element,
-                uploaderSettings: this.get("uploaderSettings")
+            var $el = this.element.find('.balloon-uploader');
+            var uploader = new BatchUploader({
+                element: $el,
+                initUrl: $el.data('initUrl'),
+                finishUrl: $el.data('finishUrl'),
+                uploadAuthUrl: $el.data('uploadAuthUrl'),
+                multi: false
             });
-            uploadPanel.on("preUpload", function(uploader, file){
-                self.trigger("preUpload", uploader, file);
+
+            uploader.on('file.uploaded', function(file, data, response){
+                var item = {
+                    id: response.id,
+                    status: data.status,
+                    source: 'self',
+                    name: response.filename,
+                    length: parseInt(response.length)
+                };
+
+                self.trigger("change", item);
+                self._isUploading = false;
             });
-            uploadPanel.on("change", function(item){
-                self.trigger("change",item);
+
+            uploader.on('file.uploadStart', function(){
+                self._isUploading = true;
             });
-            this.set("uploadPanel", uploadPanel);
-            this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));
+
+            uploader.on('preupload', function(file){
+                if(self.getProcess){
+                    uploader.set('process', self.getProcess());
+                }
+            });
+
+            uploader.on('file.remove', function (file) {
+                self._isUploading = false;
+            });
+
+            this.uploader = uploader;
         },
-        destroy: function(){
-            this.get("uploadPanel").destroy();
+
+        _destoryUploader: function() {
+            if (!this.uploader) {
+                return ;
+            }
+            this.uploader.destroy();
+            this.uploader = null;
+        },
+
+        destroy: function() {
+            this._destoryUploader();
+            BaseChooser.superclass.destroy.call(this);
         }
 
     });

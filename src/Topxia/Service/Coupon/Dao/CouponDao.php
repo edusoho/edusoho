@@ -14,6 +14,8 @@ interface CouponDao
 
     public function findCouponsByBatchId($batchId, $start, $limit);
 
+    public function findCouponsByIds(array $ids);
+
     public function searchCoupons($conditions, $orderBy, $start, $limit);
 
     public function searchCouponsCount(array $conditions);

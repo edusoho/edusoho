@@ -11,6 +11,8 @@ interface CategoryService
 
     public function getCategoryTree($groupId);
 
+    public function getCategoryStructureTree($groupId);
+
     public function findCategories($groupId);
     
     public function findAllCategoriesByParentId($parentId);
@@ -46,4 +48,6 @@ interface CategoryService
     public function addGroup(array $group);
 
     public function deleteGroup($id);
+
+    public function sortCategories($ids);
 }

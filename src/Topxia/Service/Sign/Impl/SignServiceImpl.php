@@ -12,13 +12,13 @@ class SignServiceImpl extends BaseService implements SignService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createNotFoundException(sprintf('用户不存在.'), 404);
+            throw $this->createNotFoundException(sprintf($this->getKernel()->trans('用户不存在.')), 404);
         }
 
         $isSignedToday = $this->isSignedToday($userId, $targetType, $targetId);
 
         if ($isSignedToday) {
-            throw $this->createServiceException('今日已签到!', 403);
+            throw $this->createServiceException($this->getKernel()->trans('今日已签到!'), 403);
         }
 
         $sign                = array();

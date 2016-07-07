@@ -19,7 +19,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
+            $sql       = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
             $classroom = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $classroom ? $that->createSerializer()->unserialize($classroom, $that->getSerializeFields()) : null;
@@ -38,10 +38,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit)
-                        ->addOrderBy($orderBy[0], $orderBy[1]);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->addOrderBy($orderBy[0], $orderBy[1]);
 
         $classrooms = $builder->execute()->fetchAll();
 
@@ -69,7 +69,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
-                        ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -80,21 +80,28 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             $conditions['title'] = "%{$conditions['title']}%";
         }
 
+        if (isset($conditions['likeOrgCode'])) {
+            $conditions['likeOrgCode'] .= "%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('status = :status')
-                        ->andWhere('title like :title')
-                        ->andWhere('price > :price_GT')
-                        ->andWhere('price = :price')
-                        ->andWhere('private = :private')
-                        ->andWhere('categoryId IN (:categoryIds)')
-                        ->andWhere('id IN (:classroomIds)')
-                        ->andWhere('recommended = :recommended')
-                        ->andWhere('showable = :showable')
-                        ->andWhere('buyable = :buyable')
-                        ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-                        ->andWhere('vipLevelId = :vipLevelId')
-                        ->andWhere('vipLevelId IN ( :vipLevelIds )');
+            ->from($this->table, $this->table)
+            ->andWhere('status = :status')
+            ->andWhere('title like :title')
+            ->andWhere('price > :price_GT')
+            ->andWhere('price = :price')
+            ->andWhere('private = :private')
+            ->andWhere('categoryId IN (:categoryIds)')
+            ->andWhere('categoryId =:categoryId')
+            ->andWhere('id IN (:classroomIds)')
+            ->andWhere('recommended = :recommended')
+            ->andWhere('showable = :showable')
+            ->andWhere('buyable = :buyable')
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('orgCode = :orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode');
 
         return $builder;
     }
@@ -148,7 +155,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $fields = array('hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'noteNum');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减',array('%field%'=>$field,'%fields%'=>implode(',', $fields)))));
         }
 
         $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
@@ -173,5 +180,9 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function getSerializeFields()
     {
         return $this->serializeFields;
+    }
+     protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

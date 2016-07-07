@@ -37,10 +37,15 @@ a.btn.disabled, fieldset[disabled] a.btn {
   }
 }
 
+.table td {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
 .section-gray {
-  background-color: @bg-color !important;
+  background-color: @bg-new-color !important;
   .text-line h5 > span {
-    background-color: @bg-color !important;
+    background-color: @bg-new-color !important;
   }
 }
 
@@ -175,6 +180,12 @@ a.transition {
   height: auto;
 }
 
+.img-full(@display: block) {
+  display: @display;
+  height: auto;
+  width: 100%;
+}
+
 // css3样式简写
 .es-transform(@x:1.1 , @y:1.1) {
   -webkit-transform: scale(@x, @y);
@@ -203,10 +214,23 @@ a.transition {
           box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
 }
 
-.border-radius(@border-radius:2px) {
+.border-radius(@border-radius:4px) {
   -webkit-border-radius: @border-radius;
      -moz-border-radius: @border-radius;
           border-radius: @border-radius;
+}
+
+.border-top-left-radius(@border-radius:4px) {
+  border-top-left-radius: @border-radius;
+}
+.border-top-right-radius(@border-radius:4px) {
+  border-top-right-radius: @border-radius;
+}
+.border-bottom-left-radius(@border-radius:4px) {
+  border-bottom-left-radius: @border-radius;
+}
+.border-bottom-right-radius(@border-radius:4px) {
+  border-bottom-right-radius: @border-radius;
 }
 
 .animation(@animation) {

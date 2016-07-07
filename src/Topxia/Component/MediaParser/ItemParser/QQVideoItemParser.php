@@ -19,12 +19,12 @@ class QQVideoItemParser extends AbstractItemParser
         } else {
             $response = $this->fetchUrl($url);
             if ($response['code'] != 200) {
-                throw $this->createParseException('获取QQ视频页面信息失败！');
+                throw $this->createParseException($this->getServiceKernel()->trans('获取QQ视频页面信息失败！'));
             }
 
             $matched = preg_match('/VIDEO_INFO.*?vid\s*:\s*"(\w+?)"/s', $response['content'], $matches);
             if (empty($matched)) {
-                throw $this->createParseException("解析QQ视频ID失败！");
+                throw $this->createParseException($this->getServiceKernel()->trans('解析QQ视频ID失败！'));
             }
 
             $vid = $matches[1];
@@ -36,17 +36,17 @@ class QQVideoItemParser extends AbstractItemParser
 
             $response = $this->fetchUrl($url);
             if ($response['code'] != 200) {
-                throw $this->createParseException('获取QQ视频信息失败！.');
+                throw $this->createParseException($this->getServiceKernel()->trans('获取QQ视频信息失败！.'));
             }
 
             $matched = preg_match('/{.*}/s', $response['content'], $matches);
             if (empty($matched)) {
-                throw $this->createParseException('解析QQ视频信息失败！..');
+                throw $this->createParseException($this->getServiceKernel()->trans('解析QQ视频信息失败！..'));
             }
 
             $video = json_decode($matches[0], true) ? : array();
             if (empty($video) || empty($video['video'])) {
-                throw $this->createParseException('解析QQ视频信息失败！...');
+                throw $this->createParseException($this->getServiceKernel()->trans('解析QQ视频信息失败！...'));
             }
             $video = $video['video'];
 
@@ -72,7 +72,7 @@ class QQVideoItemParser extends AbstractItemParser
             $matched = preg_match('/VIDEO_INFO.*?title\s*:\s*"(.*?)"/s', $response['content'], $matches);
 
             if (empty($matched)) {
-                throw $this->createParseException("解析QQ视频ID失败！....");
+                throw $this->createParseException($this->getServiceKernel()->trans('解析QQ视频ID失败！....'));
             }
 
             $title = $matches[1];

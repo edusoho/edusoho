@@ -22,7 +22,7 @@ class OrderController extends BaseController
         if (empty($targetType)
             || empty($targetId)
             || !in_array($targetType, array("course", "vip", "classroom", "groupSell"))) {
-            return $this->createMessageResponse('error', '参数不正确');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('参数不正确'));
         }
 
         $processor = OrderProcessorFactory::create($targetType);
@@ -67,6 +67,7 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
+        $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -95,7 +96,7 @@ class OrderController extends BaseController
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
                 if (!$result) {
-                    return $this->createMessageResponse('error', '短信验证失败。');
+                    return $this->createMessageResponse('error', $this->getServiceKernel()->trans('短信验证失败。'));
                 }
             }
         }
@@ -103,11 +104,11 @@ class OrderController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，创建订单失败。'));
         }
 
         if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
-            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单中没有购买的内容，不能创建!'));
         }
 
         $targetType  = $fields["targetType"];
@@ -130,7 +131,7 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (isset($fields["couponCode"]) && $fields["couponCode"] == "请输入优惠码") {
+            if (isset($fields["couponCode"]) && $fields["couponCode"] == $this->getServiceKernel()->trans('请输入优惠码')) {
                 $fields["couponCode"] = "";
             }
 
@@ -140,19 +141,19 @@ class OrderController extends BaseController
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
-                $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
+                $this->createMessageResponse('error', $this->getServiceKernel()->trans('实际价格不匹配，不能创建订单!'));
             }
 
             //价格比较
 
             if (intval($amount * 100) != intval($shouldPayMoney * 100)) {
-                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('支付价格不匹配，不能创建订单!'));
             }
 
             //虚拟币抵扣率比较
 
             if (isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
-                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
@@ -167,7 +168,7 @@ class OrderController extends BaseController
                 'coinRate'       => $cashRate,
                 'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId'         => $user["id"],
-                'payment'        => 'alipay',
+                'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
@@ -192,6 +193,7 @@ class OrderController extends BaseController
     {
         $order = $this->getOrderService()->getOrder($id);
 
+        preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['userId']);
 
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
@@ -212,7 +214,7 @@ class OrderController extends BaseController
             $code = $request->request->get('code');
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
-                throw new \RuntimeException('优惠码不支持的购买项目。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('优惠码不支持的购买项目。'));
             }
 
             $price = $request->request->get('amount');

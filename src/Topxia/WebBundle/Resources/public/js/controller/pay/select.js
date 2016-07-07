@@ -8,7 +8,7 @@ define(function(require, exports, module){
 
         $(".form-paytype").on('click','.check', function() {
             var $this = $(this);
-            if (!$this.hasClass('active')) {
+            if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
                 $this.addClass('active').siblings().removeClass('active');
                 $("input[name='payment']").val($this.attr("id"));
             }
@@ -56,6 +56,30 @@ define(function(require, exports, module){
         if (navigator.userAgent.match(/mobile/i)) {
             $("#heepay").css("display","none");
         }
+
+        $("input[name='payment']").val($('div .active').attr("id"));
+
+        $("#copy").on('click',function(event){
+            var textarea = document.createElement("textarea");
+            textarea.style.position = 'fixed';
+            textarea.style.top = 0;
+            textarea.style.left = 0;
+            textarea.style.border = 'none';
+            textarea.style.outline = 'none';
+            textarea.style.resize = 'none';
+            textarea.style.background = 'transparent';
+            textarea.style.color = 'transparent';
+
+            textarea.value = document.location.href;
+            var ele = $(textarea);
+            $(this).append(ele);
+
+            textarea.select();
+            document.execCommand('copy');
+
+            ele.remove();
+            Notify.success('复制成功！');
+        })
     };
 
 });
