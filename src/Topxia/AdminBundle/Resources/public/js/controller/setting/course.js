@@ -61,20 +61,20 @@ define(function(require, exports, module) {
                 $("#live-course-logo-container").html('<img src="' + response.url + '">');
                 $form.find('[name=live_logo]').val(response.url);
                 $("#live-course-logo-remove").show();
-                Notify.success('上传直播课程的LOGO成功！');
+                Notify.success(Translator.trans('上传直播课程的LOGO成功！'));
                 
             });
 
             $("#live-course-logo-remove").on('click', function(){
-                if (!confirm('确认要删除吗？')) return false;
+                if (!confirm(Translator.trans('确认要删除吗？'))) return false;
                 var $btn = $(this);
                 $.post($btn.data('url'), function(){
                     $("#live-course-logo-container").html('');
                     $form.find('[name=live_logo]').val('');
                     $btn.hide();
-                    Notify.success('删除直播课程LOGO成功！');
+                    Notify.success(Translator.trans('删除直播课程LOGO成功！'));
                 }).error(function(){
-                    Notify.danger('删除直播课程LOGO失败！');
+                    Notify.danger(Translator.trans('删除直播课程LOGO失败！'));
                 });
             });
         }

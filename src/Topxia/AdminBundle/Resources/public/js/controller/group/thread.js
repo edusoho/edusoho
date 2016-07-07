@@ -8,10 +8,10 @@ define(function(require, exports, module) {
 
 		$('#thread-delete-btn').on('click', function() {
 			if ($table.find(":checkbox:checked").length < 1) {
-				alert("请选择要删除的话题！");
+				alert(Translator.trans('请选择要删除的话题！'));
 				return false;
 			}
-			if (!confirm('确定要删除话题吗？')) {
+			if (!confirm(Translator.trans('确定要删除话题吗？'))) {
 				return false;
 			}
 
@@ -24,22 +24,22 @@ define(function(require, exports, module) {
 
 		$table.on('click', '.delete-thread,.close-thread,.open-thread', function() {
 			var $trigger = $(this);
-			if (!confirm($(this).attr('title') + '吗？')) {
+			if (!confirm(Translator.trans('%trigger%吗？',{trigger:$(this).attr('title')}))) {
 				return;
 			}
 
 			$.post($(this).data('url'), function(html) {
 				if (html == "success") {
-					Notify.success($trigger.attr('title') + '成功！');
+					Notify.success(Translator.trans('%trigger%成功！',{trigger:$trigger.attr('title')}));
 					setTimeout(function() {
 						window.location.reload();
 					}, 1500);
 				}
-				Notify.success($trigger.attr('title') + '成功！');
+				Notify.success(Translator.trans('%trigger%成功！',{trigger:$trigger.attr('title')}));
 				var $tr = $(html);
 				$('#' + $tr.attr('id')).replaceWith(html);
 			}).error(function() {
-				Notify.danger($trigger.attr('title') + '失败');
+				Notify.danger(Translator.trans('%trigger%失败',{trigger:$trigger.attr('title')}));
 			});
 
 		})

@@ -15,7 +15,7 @@ define(function(require, exports, module) {
             });
         };
 
-        validateSmsControllerForm = function() {
+        var validateSmsControllerForm = function() {
             var validator = new Validator({
                 element: '#sms-controller-form'
             });

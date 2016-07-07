@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
         $('.tbody').on('click', 'button.remind-teachers', function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success('提醒教师的通知，发送成功！');
+                Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
         step1();
@@ -56,14 +56,14 @@ define(function(require, exports, module) {
 
     function step4() {
         $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+            $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
             step5();
         });
     }
 
     function step5() {
         $.post($('#loginNum').data('url'),function(res){
-            $('#loginNum').html("登录人数："+res.loginCount+"人");
+            $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
         });
     }
 

@@ -23,10 +23,10 @@ define(function(require, exports, module) {
                         var $html = $(response.html);
                             if ($form.data('id') == 0 ) {
                                 $table.find('tbody').prepend(response.html);
-                                Notify.success('创建编辑区成功!');
+                                Notify.success(Translator.trans('创建编辑区成功!'));
                             } else {
                                 $('#' + $html.attr('id')).replaceWith($html);
-                                Notify.success('更新编辑区成功!');
+                                Notify.success(Translator.trans('更新编辑区成功!'));
                             };
                         $modal.modal('hide');
                     }
