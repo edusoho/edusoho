@@ -27,6 +27,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $newMaterials = $this->copyMaterials($course['id'], $newCourse, $newLessons);
 
+            $this->copyAnnouncement($course['id'], $newCourse);
+
             $code           = 'Homework';
             $homework       = $this->getAppService()->findInstallApp($code);
             $isCopyHomework = $homework && version_compare($homework['version'], "1.4.0", ">=");
@@ -305,7 +307,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map = array();
 
         foreach ($materials as $material) {
-            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId','source'));
+            $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId', 'source'));
 
             $fields['courseId'] = $newCourse['id'];
             $fields['copyId']   = $material['id'];
@@ -398,6 +400,33 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
+    protected function copyAnnouncement($courseId, $newCourse)
+    {
+        $announcements = $this->getAnnouncementService()->searchAnnouncements(
+            array(
+                'targetId'   => $courseId,
+                'targetType' => 'course'
+            ),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$announcements) {
+            return false;
+        }
+
+        foreach ($announcements as $announcement) {
+            $fields = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
+
+            $fields['targetId']    = $newCourse['id'];
+            $fields['createdTime'] = time();
+            $fields['copyId']      = $announcement['id'];
+
+            $this->getAnnouncementService()->createAnnouncement($fields);
+        }
+        return true;
+    }
+
     protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
@@ -476,5 +505,10 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     protected function getSmsService()
     {
         return $this->createService('Sms.SmsService');
+    }
+
+    protected function getAnnouncementService()
+    {
+        return $this->createService('Announcement.AnnouncementService');
     }
 }
