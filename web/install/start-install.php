@@ -588,6 +588,11 @@ EOD;
                 'coin_picture_20_20'  => '',
                 'coin_picture_10_10'  => '',
                 'charge_coin_enabled' => ''
+            ),
+            'magic'          => array(
+                'export_allow_count' => 100000,
+                'export_limit'       => 10000,
+                'enable_org'         => 0
             )
         );
 
