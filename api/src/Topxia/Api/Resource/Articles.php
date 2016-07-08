@@ -29,7 +29,7 @@ class Articles extends BaseResource
         }
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('Article', $res);
     }
@@ -76,10 +76,10 @@ class Articles extends BaseResource
         return $articles;
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
     }

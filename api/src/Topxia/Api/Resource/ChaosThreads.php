@@ -106,7 +106,7 @@ class ChaosThreads extends BaseResource
         return $this->callFilter('Thread', $thread);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }

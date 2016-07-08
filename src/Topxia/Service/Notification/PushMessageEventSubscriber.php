@@ -24,14 +24,14 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.close'              => 'onCourseDelete',
             'course.join'               => 'onCourseJoin',
             'course.quit'               => 'onCourseQuit',
-            // 'course.create'             => 'onCourseCreate',
+            'course.create'             => 'onCourseCreate',
 
             'course.lesson.publish'     => 'onCourseLessonCreate',
             'course.lesson.unpublish'   => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
             'course.lesson.delete'      => 'onCourseLessonDelete',
 
-            // 'classroom.create'          => 'onClassroomCreate',
+            'classroom.create'          => 'onClassroomCreate',
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
 
@@ -145,7 +145,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                     'clientName' => $currentUser['nickname']
                 ))
             );
+
             $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+
             $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
         }
 

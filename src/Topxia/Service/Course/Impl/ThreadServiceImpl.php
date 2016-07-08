@@ -180,7 +180,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->searchThreadPosts($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
-    public function searchThreadPostsCount($conditions, $groupBy)
+    public function searchThreadPostsCount($conditions, $groupBy = '')
     {
         return $this->getThreadPostDao()->searchThreadPostsCount($conditions, $groupBy);
     }

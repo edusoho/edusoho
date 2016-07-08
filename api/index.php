@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 
 if (API_ENV == 'prod') {
     ErrorHandler::register(0);
@@ -46,6 +49,10 @@ $app = new Silex\Application();
 include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/templates',
+));
 
 $app->view(function (array $result, Request $request) use ($app) {
     // 兼容气球云搜索的接口
