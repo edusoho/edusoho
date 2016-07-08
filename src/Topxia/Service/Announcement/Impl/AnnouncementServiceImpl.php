@@ -69,7 +69,12 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         }
         $announcement                = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
-        return $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
+
+        $announcement = $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
+
+        $this->dispatchEvent('announcement.update', $announcement);
+
+        return $announcement;
     }
 
     public function deleteAnnouncement($id)
@@ -83,6 +88,8 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
         $content = strip_tags($announcement['content']);
         $this->getLogService()->info('announcement', 'delete', "删除{$announcement['targetType']}(#{$announcement['targetId']})的公告《{$content}》(#{$announcement['id']})");
+
+        $this->dispatchEvent('announcement.delete', $announcement);
 
         return true;
     }

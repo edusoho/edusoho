@@ -137,7 +137,7 @@ class Exercise extends BaseResource
         return $res;
     }
 
-     public function filter(&$res)
+     public function filter($res)
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         return $res;

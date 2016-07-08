@@ -50,10 +50,15 @@
       {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th width="">连载状态</th>
       {% if filter == 'classroom' %}
-      <th>所在{{setting("classroom.name")|default("班级")}}</th>
+        <th>所在{{setting("classroom.name")|default("班级")}}</th>
       {% else %}
-      <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
-      <th>收入(元)</th>
+        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
+        
+      {% endif %}
+      {% if filter == 'course' %}
+        <th>收入(元)</th>
+      {% elseif filter == 'vip' %}
+        <th>会员等级</th>
       {% endif %}
       <th>状态</th>
       <th>创建者</th>

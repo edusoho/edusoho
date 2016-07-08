@@ -17,6 +17,7 @@ class HomeworkResult extends BaseResource
         $res = array(
             'id' => $result['id'],
         );
+
         return $res;
     }
 
@@ -25,12 +26,12 @@ class HomeworkResult extends BaseResource
         $user = $this->getCurrentUser();
         $homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
         if (empty($homework)) {
-            return "";
+            return '';
         }
         $homeworkResults = $this->getHomeworkService()->searchResults(
-            array('homeworkId'=>$homework['id'],'userId'=>$user['id']),array('createdTime','DESC'),0,1);
+            array('homeworkId' => $homework['id'], 'userId' => $user['id']), array('createdTime', 'DESC'), 0, 1);
         if (empty($homeworkResults)) {
-            return "";
+            return '';
         }
         $homeworkResult = $homeworkResults[0];
         $canLookHomeworkResult = $this->getHomeworkService()->canLookHomeworkResult($homeworkResult['id']);
@@ -39,12 +40,13 @@ class HomeworkResult extends BaseResource
         }
         $itemSetResults = $this->getHomeworkService()->findItemResultsbyHomeworkResultId($homeworkResult['id']);
         $homeworkResult['items'] = $this->filterItem($itemSetResults);
+
         return $this->filter($homeworkResult);
     }
 
     private function filterItem($items)
     {
-        $questionIds = ArrayToolkit::column($items, "questionId");
+        $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $materialMap = array();
@@ -78,11 +80,12 @@ class HomeworkResult extends BaseResource
         return array_values($newItems);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['usedTime'] = date('c', $res['usedTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
+
         return $res;
     }
 
