@@ -85,6 +85,22 @@
     {% if lesson.status == 'unpublished' %}
       <span class="unpublish-warning text-warning">({{'未发布'|trans}})</span>
     {% endif %}
+
+    {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') %}
+      {% set homework =  homeworks[lesson.id]|default(null) %}
+      {% if homework %}
+        <i class="es-icon es-icon-mylibrarybooks mls color-gray" title="{{'作业'|trans}}"></i>
+      {% endif %}
+    {% endif %}
+
+    {% set exercise = exercises[lesson.id]|default(null) %}
+    {% if exercise %}
+      <i class="es-icon es-icon-exam mls color-gray" title="{{'练习'|trans}}"></i>
+    {% endif %}
+
+    {% if lesson.materialNum > 0 %}
+      <i class="glyphicon glyphicon-paperclip mls color-gray" title="{{'资料'|trans}}"></i>
+    {% endif %}
   </div>
 
   <div class="item-actions">
