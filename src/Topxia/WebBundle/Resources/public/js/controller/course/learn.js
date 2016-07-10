@@ -303,6 +303,7 @@ define(function(require, exports, module) {
                         var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
                         $("#lesson-video-content").show();
+                        // $("#lesson-video-content").attr('data-mark-url', '');
                         $("#lesson-video-content").html(html);
 
                         var messenger = new Messenger({
@@ -312,31 +313,31 @@ define(function(require, exports, module) {
                             type: 'parent'
                         });
 
-                        messenger.on("ready", function() {
-                            var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                            var markersUrl = '/course/lesson/' + lesson.id + '/marker/show';
-                            $.ajax({
-                                type: "get",
-                                url: markersUrl,
-                                dataType: "json",
-                                success: function(data) {
-                                    var markers = new Array();
+                        // messenger.on("ready", function() {
+                        //     var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                        //     var markersUrl = '/course/lesson/' + lesson.id + '/marker/show';
+                        //     $.ajax({
+                        //         type: "get",
+                        //         url: markersUrl,
+                        //         dataType: "json",
+                        //         success: function(data) {
+                        //             var markers = new Array();
 
-                                    for (var index in data) {
-                                        var marker = {
-                                            "id": data[index].id,
-                                            "time": (parseInt(data[index].second) + data[index].videoHeaderTime),
-                                            "text": "ads",
-                                            "finished": data[index].finish
-                                        };
-                                        markers.push(marker);
-                                    }
-                                    if (data.length != 0) {
-                                        player.setMarkers(markers);
-                                    }
-                                }
-                            });
-                        });
+                        //             for (var index in data) {
+                        //                 var marker = {
+                        //                     "id": data[index].id,
+                        //                     "time": (parseInt(data[index].second) + data[index].videoHeaderTime),
+                        //                     "text": "ads",
+                        //                     "finished": data[index].finish
+                        //                 };
+                        //                 markers.push(marker);
+                        //             }
+                        //             if (data.length != 0) {
+                        //                 player.setMarkers(markers);
+                        //             }
+                        //         }
+                        //     });
+                        // });
 
                         messenger.on("ended", function() {
                             var player = that.get("player");

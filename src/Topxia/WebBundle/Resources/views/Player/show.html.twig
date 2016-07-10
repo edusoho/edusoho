@@ -11,7 +11,6 @@
     <meta content="telephone=no" name="format-detection" />
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
-    <script src="http://andytest.bj.public.edusoho.net/js-sdk/video-player/1.0.8/sdk.js"></script>
   </head>
   <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}
@@ -41,6 +40,7 @@
           {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-markerurl="{{ context.markerUrl|default('')}}"
+            data-question-markers='{{ render(controller('TopxiaWebBundle:QuestionMarker:showQuestionMakers', {mediaId: file.id})) }}'
             data-starttime="{{ context.starttime|default('')}}"
             style="height:100%"
           ></div>

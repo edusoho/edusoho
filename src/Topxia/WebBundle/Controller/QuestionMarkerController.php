@@ -7,6 +7,43 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionMarkerController extends BaseController
 {
+    //新的云播放器需要的弹题数据
+    public function showQuestionMakersAction(Request $request, $mediaId)
+    {
+        $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
+
+        $result     = array();
+        $convertMap = array( //云播放器字段值跟ES不太一致
+            "type" => array(
+                "choice"        => "multiChoice",
+                "single_choice" => "choice"
+            )
+        );
+
+        foreach ($questionMakers as $index => $questionMaker) {
+            $result[$index]['id']       = $questionMaker['id'];
+            $result[$index]['time']     = $questionMaker['second'];
+            $result[$index]['type']     = $convertMap['type'][$questionMaker['type']];
+            $result[$index]['question'] = $questionMaker['stem'];
+            if (in_array($questionMaker['type'], array('choice', 'single_choice'))) {
+                $questionMetas = json_decode($questionMaker['metas'], true);
+                if (!empty($questionMetas['choices'])) {
+                    foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
+                        $result[$index]['options'][$choiceIndex]['option_key'] = chr(65 + $choiceIndex);
+                        $result[$index]['options'][$choiceIndex]['option_val'] = $choice;
+                    }
+                }
+            }
+            $answers = json_decode($questionMaker['answer'], true);
+            foreach ($answers as $answerIndex => $answer) {
+                $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
+            }
+            $result[$index]['analysis'] = $questionMaker['analysis'];
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
     public function sortQuestionAction(Request $Request, $markerId)
     {
         if (!$this->tryManageQuestionMarker()) {
