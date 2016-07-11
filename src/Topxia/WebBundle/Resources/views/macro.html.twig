@@ -66,14 +66,6 @@
         {% endif %}
       </ul>
     </nav>
-    <span class="pull-left">
-      {% if paginator.currentPage == paginator.lastPage %}
-        {{ paginator.itemCount }}
-      {% else %}
-        {{ paginator.currentPage * paginator.perPageCount }}
-      {% endif %}
-      / {{ paginator.itemCount }}
-    </span>
   {% endif %}
 {% endmacro %}
 
