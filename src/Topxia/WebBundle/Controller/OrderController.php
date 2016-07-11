@@ -214,7 +214,7 @@ class OrderController extends BaseController
             $code = $request->request->get('code');
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
-                throw new \RuntimeException('优惠码不支持的购买项目。');
+                throw new \RuntimeException('优惠券不支持的购买项目。');
             }
 
             $price = $request->request->get('amount');

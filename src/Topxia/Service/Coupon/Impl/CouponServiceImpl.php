@@ -144,42 +144,42 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不存在'
+                'message' => '优惠券'.$code.'不存在'
             );
         }
 
         if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已经被使用'
+                'message' => '优惠券'.$code.'已经被使用'
             );
         }
 
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已经被其他人领取'
+                'message' => '优惠券'.$code.'已经被其他人领取'
             );
         }
 
         if ($coupon['deadline'] + 86400 < time()) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已过期'
+                'message' => '优惠券'.$code.'已过期'
             );
         }
 
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不可用'
+                'message' => '优惠券'.$code.'不可用'
             );
         }
 
         if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不可用'
+                'message' => '优惠券'.$code.'不可用'
             );
         }
 
@@ -187,7 +187,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
                     'useable' => 'no',
-                    'message' => '优惠码'.$code.'不可用'
+                    'message' => '优惠券'.$code.'不可用'
                 );
             }
         }
