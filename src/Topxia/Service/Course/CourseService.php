@@ -134,6 +134,8 @@ interface CourseService
 
     public function deleteLesson($courseId, $lessonId);
 
+    public function sumLessonGiveCreditByLessonIds($lessonIds);
+
     public function publishLesson($courseId, $lessonId);
 
     public function unpublishLesson($courseId, $lessonId);

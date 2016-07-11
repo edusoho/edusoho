@@ -1330,6 +1330,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
+    public function sumLessonGiveCreditByLessonIds($lessonIds)
+    {
+        return $this->getLessonDao()->sumLessonGiveCreditByLessonIds($lessonIds);
+    }
+
     public function findLearnsCountByLessonId($lessonId)
     {
         return $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
@@ -1579,7 +1584,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             ));
         }
 
-        $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+        /*$learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
 
         $totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
 
@@ -1587,13 +1592,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $memberFields['learnedNum'] = count($learns);
 
         if ($course['serializeMode'] != 'serialize') {
-            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+        $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
         }
 
         $memberFields['credit'] = $totalCredits;
 
         $this->getMemberDao()->updateMember($member['id'], $memberFields);
-
+         */
         $this->dispatchEvent(
             'course.lesson_finish',
             new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
