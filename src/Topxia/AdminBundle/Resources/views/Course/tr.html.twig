@@ -65,8 +65,6 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
-
-         <li><a  href="#modal" data-toggle="modal" data-url="{{ path('admin_move_course_to_org', {courseId:course.id}) }}"> <span class="glyphicon glyphicon-send"></span> 推送课程</a></li>
         {% if filter == 'normal' %}
           {% if not course.recommended %}
           <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
