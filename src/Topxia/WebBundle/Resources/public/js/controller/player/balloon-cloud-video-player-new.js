@@ -66,21 +66,7 @@ define(function(require, exports, module) {
                 });
             }
 
-            var playbackRates = {
-              enable : true,
-              source : 'hls',
-              src : 'http://192.168.67.252/video-player/examples/server/playlist.m3u8'
-            };
             var player = new VideoPlayerSDK($.extend({
-                id: elementId,
-                disableControlBar: self.get('disableControlBar'),
-                disableProgressBar: self.get('disableProgressBar'),
-                playlist: self.get('url'),
-                remeberLastPos : self.get('remeberLastPos')
-                // playbackRates : playbackRates
-            }, extConfig));
-
-            console.log($.extend({
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),

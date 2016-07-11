@@ -25,7 +25,6 @@ define(function(require, exports, module) {
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
         var questionMarkers = videoHtml.data('questionMarkers');
-        console.log(questionMarkers);
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
 
