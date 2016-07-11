@@ -72,7 +72,7 @@ define(function(require, exports, module) {
                 // IE9以下不支持倍数播放，IE9及以上不支持HLS
                 var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
                 if (isIE) {
-                    if ($('html').hasClass('lt-ie7') || $('html').hasClass('lt-ie8')) {
+                    if ($('html').hasClass('lt-ie9')) {
                         return '';
                     } else {
                         return self.get('playbackRatesMP4Url');
