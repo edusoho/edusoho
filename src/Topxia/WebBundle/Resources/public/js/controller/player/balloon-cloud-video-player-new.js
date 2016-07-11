@@ -12,7 +12,9 @@ define(function(require, exports, module) {
             remeberLastPos: true,
             disableControlBar: false,
             disableProgressBar: false,
-            questions: []
+            questions: [],
+            enablePlaybackRates: false,
+            playbackRatesMP4Url: ''
         },
 
         events: {},
@@ -62,6 +64,30 @@ define(function(require, exports, module) {
                             },
                             questions : self.get('questions')
                         }
+                    }
+                });
+            }
+
+            function getPlaybackRatesSrc() {
+                // IE9以下不支持倍数播放，IE9及以上不支持HLS
+                var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
+                if (isIE) {
+                    if ($('html').hasClass('lt-ie7') || $('html').hasClass('lt-ie8')) {
+                        return '';
+                    } else {
+                        return self.get('playbackRatesMP4Url');
+                    }
+                }
+
+                return self.get('url');
+            }
+
+            if(self.get('enablePlaybackRates') != false && getPlaybackRatesSrc() != '') {
+                extConfig = $.extend(extConfig, {
+                    playbackRates: {
+                        enable : true,
+                        source : 'hls',
+                        src : getPlaybackRatesSrc()
                     }
                 });
             }
