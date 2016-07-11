@@ -84,11 +84,10 @@ class MobileBaseController extends BaseController
         $user        = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
 
-        if ($user) {
-            $user['currentIp'] = $request->getClientIp();
-        } else {
+        if (!empty($user)) {
             $user = array('id' => 0);
         }
+        $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
