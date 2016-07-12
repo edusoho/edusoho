@@ -364,7 +364,7 @@ class MobileBaseController extends BaseController
             $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
 
-            if ($controller->setting('vip.enabled')) {
+            if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
                 $vip         = $controller->getVipService()->getMemberByUserId($user['id']);
                 $user["vip"] = $vip;
             }
