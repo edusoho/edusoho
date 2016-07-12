@@ -67,15 +67,6 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
-        $courseMembers = $this->getCourseService()->searchMembers(
-            array(
-                'courseId'              => $course['id'],
-                'learnedNumGreaterThan' => $course['lessonNum']
-            ),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
-
         if ($course['serializeMode'] != 'serialize') {
             $conditions = array(
                 'courseId'              => $course['id'],
