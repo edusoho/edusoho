@@ -7,8 +7,12 @@ define(function(require, exports, module) {
         $('.js-self-test').on('click', function () {
             var $this = $(this);
             $this.text('验证中..');
-            $.get($this.data('url')).done(function () {
-                Notify.success("邮件已发送, 请注意查收", 3);
+            $.get($this.data('url')).done(function (response) {
+                if(response.status){
+                    Notify.success("邮件已发送, 请注意查收", 3);
+                }else {
+                    Notify.danger(response.message, 3);
+                }
                 $this.text('验证');
             });
         });

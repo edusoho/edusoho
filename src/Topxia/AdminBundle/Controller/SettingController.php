@@ -337,8 +337,17 @@ class SettingController extends BaseController
             'template' => 'email_system_self_test',
         );
         $mail        = MailFactory::create($mailOptions);
-        $mail->send();
-        return $this->createJsonResponse(true);
+        try{
+            $mail->send();
+            return $this->createJsonResponse(array(
+                'status' => true
+            ));
+        }catch (\Exception $e){
+            return $this->createJsonResponse(array(
+                'status' => false,
+                'message' => $e->getMessage()
+            ));
+        }
     }
 
     protected function checkMailerStatus()
