@@ -4,6 +4,19 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
+        $('.js-self-test').on('click', function () {
+            var $this = $(this);
+            $this.text('验证中..');
+            $.get($this.data('url')).done(function (response) {
+                if(response.status){
+                    Notify.success("邮件已发送, 请注意查收", 3);
+                }else {
+                    Notify.danger(response.message, 3);
+                }
+                $this.text('验证');
+            });
+        });
+
         if($("input[name='email-setting-status']").val()=="email"){
             $('#mailer-form').show();
         }

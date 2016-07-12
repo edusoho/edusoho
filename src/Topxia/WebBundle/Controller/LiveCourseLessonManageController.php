@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\SimpleValidator;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,6 +14,11 @@ class LiveCourseLessonManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $liveLesson              = $request->request->all();
+
+            if(!SimpleValidator::chineseAndAlphanumeric($liveLesson['title'])){
+                throw $this->createAccessDeniedException("illegal title");
+            }
+
             $liveLesson['type']      = 'live';
             $liveLesson['courseId']  = $liveCourse['id'];
             $liveLesson['startTime'] = strtotime($liveLesson['startTime']);

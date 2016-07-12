@@ -447,7 +447,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
+        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course));
 
         return CourseSerialize::unserialize($updatedCourse);
     }
@@ -1330,6 +1330,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
+    public function sumLessonGiveCreditByLessonIds($lessonIds)
+    {
+        return $this->getLessonDao()->sumLessonGiveCreditByLessonIds($lessonIds);
+    }
+
     public function findLearnsCountByLessonId($lessonId)
     {
         return $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
@@ -1578,21 +1583,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'finishedTime' => time()
             ));
         }
-
-        $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
-
-        $totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
-
-        $memberFields               = array();
-        $memberFields['learnedNum'] = count($learns);
-
-        if ($course['serializeMode'] != 'serialize') {
-            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
-        }
-
-        $memberFields['credit'] = $totalCredits;
-
-        $this->getMemberDao()->updateMember($member['id'], $memberFields);
 
         $this->dispatchEvent(
             'course.lesson_finish',
@@ -2002,6 +1992,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseMember($id, $fields)
     {
         return $this->getMemberDao()->updateMember($id, $fields);
+    }
+
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->getMemberDao()->updateMembers($conditions, $updateFields);
     }
 
     public function getCourseMember($courseId, $userId)
@@ -2743,19 +2738,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.CourseLessonReplayDao');
     }
 
+    protected function hasAdminRole($courseId, $userId)
+    {
+        return $this->getUserService()->hasAdminRoles($userId);
+    }
+
+    public function hasTeacherRole($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        return !empty($member) && $member['role'] == 'teacher';
+    }
+
+
     protected function hasCourseManagerRole($courseId, $userId)
     {
-        if ($this->getUserService()->hasAdminRoles($userId)) {
-            return true;
-        }
-
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-
-        if ($member && ($member['role'] == 'teacher')) {
-            return true;
-        }
-
-        return false;
+        return $this->hasAdminRole($courseId, $userId) || $this->hasTeacherRole($courseId, $userId);
     }
 
     protected function getClassroomService()

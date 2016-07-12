@@ -533,6 +533,11 @@ admin_setting_mailer:
     pattern:  /setting/mailer
     defaults: { _controller: TopxiaAdminBundle:Setting:mailer }
 
+admin_setting_mailer_test:
+    pattern:  /setting/mailer/test
+    defaults: { _controller: TopxiaAdminBundle:Setting:mailerTest }
+    methods: [GET]
+
 admin_setting_login_bind:
     pattern:  /setting/login-connect
     defaults: { _controller: TopxiaAdminBundle:UserSetting:loginConnect }
