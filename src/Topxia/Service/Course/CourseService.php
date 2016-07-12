@@ -134,6 +134,8 @@ interface CourseService
 
     public function deleteLesson($courseId, $lessonId);
 
+    public function sumLessonGiveCreditByLessonIds($lessonIds);
+
     public function publishLesson($courseId, $lessonId);
 
     public function unpublishLesson($courseId, $lessonId);
@@ -250,6 +252,8 @@ interface CourseService
     public function findMemberUserIdsByCourseId($courseId);
 
     public function updateCourseMember($id, $fields);
+
+    public function updateMembers($conditions, $updateFields);
 
     public function isMemberNonExpired($course, $member);
 
