@@ -2743,19 +2743,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.CourseLessonReplayDao');
     }
 
+    protected function hasAdminRole($courseId, $userId)
+    {
+        return $this->getUserService()->hasAdminRoles($userId);
+    }
+
+    public function hasTeacherRole($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        return !empty($member) && $member['role'] == 'teacher';
+    }
+
+
     protected function hasCourseManagerRole($courseId, $userId)
     {
-        if ($this->getUserService()->hasAdminRoles($userId)) {
-            return true;
-        }
-
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-
-        if ($member && ($member['role'] == 'teacher')) {
-            return true;
-        }
-
-        return false;
+        return $this->hasAdminRole($courseId, $userId) || $this->hasTeacherRole($courseId, $userId);
     }
 
     protected function getClassroomService()
