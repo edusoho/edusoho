@@ -26,28 +26,17 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         if ($sourceCourse['serializeMode'] != $course['serializeMode']) {
             if ($course['serializeMode'] == 'serialize') {
-                $courseMembers = $this->getCourseService()->searchMembers(
-                    array(
-                        'courseId'  => $course['id'],
-                        'isLearned' => 1
-                    ),
-                    array('createdTime', 'DESC'),
-                    0, PHP_INT_MAX
+                $conditions = array(
+                    'courseId'  => $course['id'],
+                    'isLearned' => 1
                 );
-                $updateFields = array('isLearned' => 0);
-                $this->updateCourseMembers($courseMembers, $updateFields);
+                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
             } elseif ($sourceCourse['serializeMode'] == 'serialize' && $course['serializeMode'] != 'serialize') {
-                $courseMembers = $this->getCourseService()->searchMembers(
-                    array(
-                        'courseId'              => $course['id'],
-                        'learnedNumGreaterThan' => $course['lessonNum']
-                    ),
-                    array('createdTime', 'DESC'),
-                    0, PHP_INT_MAX
+                $conditions = array(
+                    'courseId'              => $course['id'],
+                    'learnedNumGreaterThan' => $course['lessonNum']
                 );
-
-                $updateFields = array('isLearned' => 1);
-                $this->updateCourseMembers($courseMembers, $updateFields);
+                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 1));
             }
         }
     }
@@ -60,25 +49,13 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
-        $courseMembers = $this->getCourseService()->searchMembers(
-            array(
-                'courseId'  => $course['id'],
-                'isLearned' => 1
-            ),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
-
-        if ($courseMembers && $course['serializeMode'] != 'serialize') {
-            foreach ($courseMembers as $key => $member) {
-                if ($member['learnedNum'] < $course['lessonNum']) {
-                    $memberFields = array(
-                        'isLearned' => 0
-                    );
-
-                    $this->getCourseService()->updateCourseMember($member['id'], $memberFields);
-                }
-            }
+        if ($course['serializeMode'] != 'serialize') {
+            $conditions = array(
+                'courseId'           => $course['id'],
+                'isLearned'          => 1,
+                'learnedNumLessThan' => $course['lessonNum']
+            );
+            $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
         }
     }
 
@@ -99,12 +76,17 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             0, PHP_INT_MAX
         );
 
-        if ($courseMembers && $course['serializeMode'] != 'serialize') {
+        if ($course['serializeMode'] != 'serialize') {
+            $conditions = array(
+                'courseId'              => $course['id'],
+                'learnedNumGreaterThan' => $course['lessonNum']
+            );
             $updateFields = array(
                 'isLearned'  => 1,
                 'learnedNum' => $course['lessonNum']
             );
-            $this->updateCourseMembers($courseMembers, $updateFields);
+
+            $this->getCourseService()->updateMembers($conditions, $updateFields);
         }
     }
 
@@ -143,19 +125,6 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
-    }
-
-    protected function updateCourseMembers($members, $updateFields)
-    {
-        if (!$members) {
-            return false;
-        }
-
-        foreach ($members as $key => $member) {
-            $this->getCourseService()->updateCourseMember($member['id'], $updateFields);
-        }
-
-        return true;
     }
 
     protected function getCourseService()

@@ -324,6 +324,23 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getMember($id);
     }
 
+    public function updateMembers($conditions, $updateFields)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->update($this->table, $this->table);
+
+        if ($updateFields) {
+            foreach ($updateFields as $key => $value) {
+                $builder->add('set', $key.' = '.$value, true);
+            }
+        }
+
+        $builder->execute();
+        $this->clearCached();
+
+        return true;
+    }
+
     public function deleteMember($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
@@ -400,6 +417,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('courseId IN (:courseIds)')
             ->andWhere('userId IN (:userIds)')
             ->andWhere('learnedNum >= :learnedNumGreaterThan')
+            ->andWhere('learnedNum < :learnedNumLessThan')
             ->andWhere('classroomId = :classroomId');
         return $builder;
     }

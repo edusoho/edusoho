@@ -253,6 +253,8 @@ interface CourseService
 
     public function updateCourseMember($id, $fields);
 
+    public function updateMembers($conditions, $updateFields);
+
     public function isMemberNonExpired($course, $member);
 
     public function findCourseStudents($courseId, $start, $limit);

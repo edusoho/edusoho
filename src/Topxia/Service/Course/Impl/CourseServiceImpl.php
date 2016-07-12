@@ -1994,6 +1994,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->updateMember($id, $fields);
     }
 
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->getMemberDao()->updateMembers($conditions, $updateFields);
+    }
+
     public function getCourseMember($courseId, $userId)
     {
         return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
