@@ -1,14 +1,14 @@
 <!-- 紧跟标题 -->
-{% if item.materialNum > 0 %}
-  <i class="glyphicon glyphicon-paperclip mls" title="{{'资料'|trans}}"></i>
-{% endif %}
-
 {% if item.id in homeworkLessonIds|default(null) %}
-  <i class="es-icon es-icon-mylibrarybooks mls" title="{{'作业'|trans}}"></i>
+  <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'作业'|trans}}"><i class="es-icon es-icon-mylibrarybooks mls" title="{{'作业'|trans}}"></i></span>
 {% endif %}
 
 {% if item.id in exercisesLessonIds|default(null) %}
-  <i class="es-icon es-icon-exam mls color-gray mls" title="{{'练习'|trans}}"></i>
+  <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'练习'|trans}}"><i class="es-icon es-icon-exam mls color-gray mls" title="{{'练习'|trans}}"></i></span>
+{% endif %}
+
+{% if item.materialNum > 0 %}
+  <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'资料'|trans}}"><i class="glyphicon glyphicon-paperclip mls" title="{{'资料'|trans}}"></i></span>
 {% endif %}
 
 {% if app.user and setting('magic.lesson_watch_limit') and course.watchLimit > 0 and item.type == 'video' and not fromPlugin|default(false) %}
