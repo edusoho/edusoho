@@ -18,6 +18,40 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function onCourseUpdate(ServiceEvent $event)
+    {
+        $context      = $event->getSubject();
+        $sourceCourse = $context['sourceCourse'];
+        $course       = $context['course'];
+
+        if ($sourceCourse['serializeMode'] != $course['serializeMode']) {
+            if ($course['serializeMode'] == 'serialize') {
+                $courseMembers = $this->getCourseService()->searchMembers(
+                    array(
+                        'courseId'  => $course['id'],
+                        'isLearned' => 1
+                    ),
+                    array('createdTime', 'DESC'),
+                    0, PHP_INT_MAX
+                );
+                $updateFields = array('isLearned' => 0);
+                $this->updateCourseMembers($courseMembers, $updateFields);
+            } elseif ($sourceCourse['serializeMode'] == 'serialize' && $course['serializeMode'] != 'serialize') {
+                $courseMembers = $this->getCourseService()->searchMembers(
+                    array(
+                        'courseId'              => $course['id'],
+                        'learnedNumGreaterThan' => $course['lessonNum']
+                    ),
+                    array('createdTime', 'DESC'),
+                    0, PHP_INT_MAX
+                );
+
+                $updateFields = array('isLearned' => 1);
+                $this->updateCourseMembers($courseMembers, $updateFields);
+            }
+        }
+    }
+
     public function onCourseLessonCreate(ServiceEvent $event)
     {
         $context  = $event->getSubject();
@@ -26,7 +60,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
-        $membersLearned = $this->getCourseService()->searchMembers(
+        $courseMembers = $this->getCourseService()->searchMembers(
             array(
                 'courseId'  => $course['id'],
                 'isLearned' => 1
@@ -35,8 +69,8 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             0, PHP_INT_MAX
         );
 
-        if ($membersLearned && $course['serializeMode'] != 'serialize') {
-            foreach ($membersLearned as $key => $member) {
+        if ($courseMembers && $course['serializeMode'] != 'serialize') {
+            foreach ($courseMembers as $key => $member) {
                 if ($member['learnedNum'] < $course['lessonNum']) {
                     $memberFields = array(
                         'isLearned' => 0
@@ -56,7 +90,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
 
-        $membersLearned = $this->getCourseService()->searchMembers(
+        $courseMembers = $this->getCourseService()->searchMembers(
             array(
                 'courseId'              => $course['id'],
                 'learnedNumGreaterThan' => $course['lessonNum']
@@ -65,23 +99,13 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             0, PHP_INT_MAX
         );
 
-        if ($membersLearned && $course['serializeMode'] != 'serialize') {
-            foreach ($membersLearned as $key => $member) {
-                $memberFields = array(
-                    'isLearned'  => 1,
-                    'learnedNum' => $course['lessonNum']
-                );
-
-                $this->getCourseService()->updateCourseMember($member['id'], $memberFields);
-            }
+        if ($courseMembers && $course['serializeMode'] != 'serialize') {
+            $updateFields = array(
+                'isLearned'  => 1,
+                'learnedNum' => $course['lessonNum']
+            );
+            $this->updateCourseMembers($courseMembers, $updateFields);
         }
-    }
-
-    public function onCourseLessonUpdate(ServiceEvent $event)
-    {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $lesson   = $context['lesson'];
     }
 
     public function onLessonFinish(ServiceEvent $event)
@@ -119,6 +143,19 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+    }
+
+    protected function updateCourseMembers($members, $updateFields)
+    {
+        if (!$members) {
+            return false;
+        }
+
+        foreach ($members as $key => $member) {
+            $this->getCourseService()->updateCourseMember($member['id'], $updateFields);
+        }
+
+        return true;
     }
 
     protected function getCourseService()
