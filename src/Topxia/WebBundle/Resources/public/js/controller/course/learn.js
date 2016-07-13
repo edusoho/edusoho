@@ -440,9 +440,9 @@ define(function(require, exports, module) {
                         if (lesson.liveProvider == 1) {
                             $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;"+Translator.trans('录制直播课程时，需在直播课程间点击');
                             $replayGuid += "<span style='color:red'>"+Translator.trans('录制面板')+"</span>";
-                            $replayGuid += ""Translator.trans('，录制完成后点击')"";
+                            $replayGuid += Translator.trans('，录制完成后点击');
                             $replayGuid += "<span style='color:red'>"+Translator.trans('暂停')+"</span>";
-                            $replayGuid += ""Translator.trans('结束录播，录播结束后在')"";
+                            $replayGuid += Translator.trans('结束录播，录播结束后在');
                             $replayGuid += "<span style='color:red'>"+Translator.trans('录播管理')+"</span>";
                             $replayGuid += Translator.trans('界面生成回放。');
                             $replayGuid += "<br>";
