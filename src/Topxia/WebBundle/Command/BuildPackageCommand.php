@@ -206,7 +206,8 @@ class BuildPackageCommand extends BaseCommand
         exec($command);
 
         $zipPath = "{$buildDir}/{$filename}.zip";
-        $this->output->writeln('<question>ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
+
+        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('topxia.twig.web_extension')->fileSizeFilter(filesize($zipPath)));
     }
 
     private function printChangeLog($version)
@@ -214,22 +215,22 @@ class BuildPackageCommand extends BaseCommand
         $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
             $this->output->writeln("<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>");
-        } else {
-            $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
-            $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
-            echo "\n";
-            $print = false;
-            while (!feof($file)) {
-                $line = fgets($file);
-                if (strpos($line, $version) !== false) {
-                    $print = true;
-                }
-                if (empty(trim($line))) {
-                    $print = false;
-                }
-                if ($print) {
-                    $this->output->writeln(trim(sprintf("<comment>%s<br/></comment>", trim($line))));
-                }
+            return false;
+        }
+
+        $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
+        $file  = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
+        $print = false;
+        while (!feof($file)) {
+            $line = fgets($file);
+            if (strpos($line, $version) !== false) {
+                $print = true;
+            }
+            if (empty(trim($line))) {
+                $print = false;
+            }
+            if ($print) {
+                $this->output->writeln(trim(sprintf("<comment>%s<br/></comment>", trim($line))));
             }
         }
     }
