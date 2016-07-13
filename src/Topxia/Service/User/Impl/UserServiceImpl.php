@@ -854,7 +854,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
 
-        $this->getLogService()->info('user', 'change_role', $this->getKernel()->trans('设置用户%nickname%(#%id%)的角色为：', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])).implode(',', $roles));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
     }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
