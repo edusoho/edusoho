@@ -44,8 +44,10 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="host" name="host" class="form-control" value="{{mailer.host}}">
-          <p class="help-block"> 每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com</p>
-          <p class="help-block"><a href="http://www.qiqiuyu.com/article/785" target="_blank">常用邮箱配置文档</a></p>
+          <p class="help-block">
+            每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com
+            {% if not setting('copyright.owned') %}<a href="http://www.qiqiuyu.com/article/785" target="_blank">常用邮箱配置文档</a> {% endif %}
+          </p>
         </div>
       </div>
       <p></p>
@@ -106,7 +108,11 @@
         <div class="controls col-md-8">
           <button type="submit" class="btn btn-primary">提交</button>
           <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">验证</a>
-          <p class="help-block">验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。</p>
+          <div class="mtl ptm">
+            <div class="alert alert-info" role="alert">
+              验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
+            </div>
+          </div>
         </div>
       </div>
       <input type="hidden" name="email-setting-status" value="{{status}}">
