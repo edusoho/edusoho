@@ -33,6 +33,7 @@ class PlayerController extends BaseController
 
             $url = $this->getPlayUrl($id, $context);
 
+            // todo delete
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                 $player = "local-video-player";
@@ -46,6 +47,7 @@ class PlayerController extends BaseController
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
+            'mp4Url'           => isset($result['mp4url']) ? $result['mp4url'] : null,
             'context'          => $context,
             'player'           => $player,
             'agentInWhiteList' => $agentInWhiteList
