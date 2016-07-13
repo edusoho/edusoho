@@ -76,6 +76,6 @@
     </tbody>
   </table>
    {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
-  {{ web_macro.paginator(paginator) }}
+  {{ admin_macro.paginator(paginator) }}
 
 {% endblock %}
