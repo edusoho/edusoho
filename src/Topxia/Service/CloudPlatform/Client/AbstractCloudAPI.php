@@ -2,6 +2,7 @@
 namespace Topxia\Service\CloudPlatform\Client;
 
 use Psr\Log\LoggerInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class AbstractCloudAPI
 {
@@ -86,6 +87,10 @@ class AbstractCloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.self::VERSION.$uri;
+        if ($this->isWithoutNetwork()) {
+            $this->logger && $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+            return array('network' => 'off');
+        }
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
@@ -183,5 +188,10 @@ class AbstractCloudAPI
         $hash = md5($text);
 
         return "{$this->accessKey}:{$hash}";
+    }
+
+    protected function isWithoutNetwork()
+    {
+        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/network.lock');
     }
 }

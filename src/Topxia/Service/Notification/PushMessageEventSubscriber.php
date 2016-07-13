@@ -147,7 +147,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             );
 
             $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-
+            if (isset($result['network']) && $result['network'] == 'off') {
+                return;
+            }
             $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
         }
 
@@ -279,6 +281,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+        if (isset($result['network']) && $result['network'] == 'off') {
+            return;
+        }
         $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
     }
 
