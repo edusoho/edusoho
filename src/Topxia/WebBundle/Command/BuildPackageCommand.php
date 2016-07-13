@@ -10,6 +10,8 @@ class BuildPackageCommand extends BaseCommand
 {
     private $fileSystem;
 
+    protected $output;
+
     protected function configure()
     {
         $this
@@ -29,13 +31,14 @@ class BuildPackageCommand extends BaseCommand
         $diffFile = $input->getArgument('diff_file');
 
         $this->filesystem = new Filesystem();
-
+        $this->output     = $output;
         $packageDirectory = $this->createDirectory($name, $version);
 
         $this->generateFiles($diffFile, $packageDirectory, $output);
 
         $this->copyUpgradeScript($packageDirectory, $version, $output);
 
+        $this->zipPackage($packageDirectory);
         $output->writeln('<question>编制升级包完毕</question>');
     }
 
@@ -183,5 +186,24 @@ class BuildPackageCommand extends BaseCommand
             $output->writeln($path." -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
         }
+    }
+
+    private function zipPackage($distDir)
+    {
+        $buildDir = dirname($distDir);
+        $filename = basename($distDir);
+
+        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
+            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
+        }
+
+        $this->output->writeln("<info>* 使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+
+        chdir($buildDir);
+        $command = "zip -r {$filename}.zip {$filename}/";
+        exec($command);
+
+        $zipPath = "{$buildDir}/{$filename}.zip";
+        $this->output->writeln('<question>    * ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
     }
 }
