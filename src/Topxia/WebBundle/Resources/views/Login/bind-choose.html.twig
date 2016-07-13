@@ -11,7 +11,8 @@
     <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
       <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
       {% if app.request.get('inviteCode') != null  %}
-      {{'<div class="alert alert-info alert-sm">您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。</div>'|trans({'%inviteUser%': inviteUser.nickname})|raw}}
+        <div class="alert alert-info alert-sm">{{'您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
+
       {% endif %}
       <div class="form-group mbl">
         <label class="control-label" for="set-bind-nickname-field">{{'头像'|trans}}</label>
