@@ -28,17 +28,22 @@ class CourseLessonController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $context             = array();
+        $context['lessonId'] = $lessonId;
+
         if ($isPreview && !empty($course['tryLookable'])) {
+            $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
-                'context' => array('watchTimeLimit' => $course['tryLookTime'] * 60)
+                'context' => $context
             ));
         }
 
-        list($course, $member)    = $this->getCourseService()->tryTakeCourse($courseId);
-        $context                  = array();
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
         $context['starttime']     = $request->query->get('starttime');
         $context['hideBeginning'] = $request->query->get('hideBeginning', false);
+
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
             'context' => $context

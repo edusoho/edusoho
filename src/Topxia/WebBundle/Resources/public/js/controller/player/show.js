@@ -63,6 +63,7 @@ define(function(require, exports, module) {
                 agentInWhiteList: agentInWhiteList,
                 timelimit: timelimit,
                 questions: questionMarkers
+                // enablePlaybackRates: true
             }
         );
 
@@ -93,8 +94,16 @@ define(function(require, exports, module) {
         });
 
         player.on('answered', function(data) {
-            console.log(data);
-            messenger.sendToParent("answered", $.extend({pause: true}, data));
+            // @todo delete lessonId
+            var finishUrl = '/course/lesson/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
+            $.post(finishUrl, {
+                "answer": data.answer,
+                "type": data.type,
+                "lessonId": lessonId
+            }, function(result) {
+
+            }, 'json');
+
         });
 
         player.on("timechange", function(data){

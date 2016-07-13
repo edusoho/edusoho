@@ -55,14 +55,15 @@ define(function(require, exports, module) {
                 })
             }
 
-            if(self.get('questions') != '' && self.get('questions').length > 0) {
+            var questions = self.getQuestions();
+            if(questions) {
                 extConfig = $.extend(extConfig, {
                     exam: { 
                         popupExam : {
                             config : {
                                 "mode" : "middle"
                             },
-                            questions : self.get('questions')
+                            questions : questions
                         }
                     }
                 });
@@ -121,14 +122,17 @@ define(function(require, exports, module) {
             });
 
             player.on("answered", function(e){
-                self.trigger("answered", e);
+                var data = e.data;
+                data['answer'] = data.result.choosed;
+                data['type'] = self.convertQuestionType(data.type, 'cloud');
+                self.trigger("answered", data);
             });
             
             self.set('player', player);
 
             BalloonCloudVideoPlayer.superclass.setup.call(self);
 
-            window.BalloonPlayer = this;
+            // window.BalloonPlayer = this;
         },
 
         play: function(){
@@ -144,6 +148,47 @@ define(function(require, exports, module) {
                 return !this.get("player").paused();
             }
             return false;
+        },
+
+        getQuestions: function() {
+            var questions = this.get('questions');
+
+            if(questions == '' || questions.length == 0) {
+                return null;
+            }
+
+            for (var i in questions) {
+                questions[i]['type'] = this.convertQuestionType(questions[i].type, 'es');
+            }
+
+            return questions;
+        },
+
+        //todo delete
+        convertQuestionType: function(source, from) {
+            var map = [ //云播放器弹题的字段值跟ES不太一致
+                {
+                    es: 'choice',
+                    cloud: 'multiChoice'
+                }, {
+                    es: 'single_choice',
+                    cloud: 'choice'
+                }, {
+                    es: 'determine',
+                    cloud: 'judge'
+                }
+            ];
+
+            for (var i in map) {
+                if (from == 'es' && map[i]['es'] == source) {
+                    return map[i]['cloud'];
+                }
+                if (from == 'cloud' && map[i]['cloud'] == source) {
+                    return map[i]['es'];
+                }
+            }
+
+            return source;
         }
 
     });

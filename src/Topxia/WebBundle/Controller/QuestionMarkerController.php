@@ -12,18 +12,13 @@ class QuestionMarkerController extends BaseController
     {
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
 
-        $result     = array();
-        $convertMap = array( //云播放器字段值跟ES不太一致
-            "type" => array(
-                "choice"        => "multiChoice",
-                "single_choice" => "choice"
-            )
-        );
+        $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
             $result[$index]['id']       = $questionMaker['id'];
+            $result[$index]['markerId'] = $questionMaker['markerId'];
             $result[$index]['time']     = $questionMaker['second'];
-            $result[$index]['type']     = $convertMap['type'][$questionMaker['type']];
+            $result[$index]['type']     = $questionMaker['type'];
             $result[$index]['question'] = $questionMaker['stem'];
             if (in_array($questionMaker['type'], array('choice', 'single_choice'))) {
                 $questionMetas = json_decode($questionMaker['metas'], true);
@@ -50,18 +45,10 @@ class QuestionMarkerController extends BaseController
             return $this->createJsonResponse(false);
         }
 
-        if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $ids  = $data['ids'];
-            $this->getQuestionMarkerService()->sortQuestionMarkers($ids);
-            return $this->createJsonResponse(true);
-        }
-
-        $marker = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
-        //返回twig为某一个驻点的所有问题
-        return $this->render('TopxiaWebBundle:Marker:question-marker-modal.html.twig', array(
-            'marker' => $marker
-        ));
+        $data = $request->request->all();
+        $ids  = $data['ids'];
+        $this->getQuestionMarkerService()->sortQuestionMarkers($ids);
+        return $this->createJsonResponse(true);
     }
 
     //删除弹题
@@ -127,96 +114,29 @@ class QuestionMarkerController extends BaseController
         }
     }
 
-    //获取驻点弹题
-    public function showMarkerQuestionAction(Request $request, $markerId)
+    public function finishQuestionMarkerAction(Request $request, $markerId, $questionMarkerId)
     {
-        $user      = $this->getUserService()->getCurrentUser();
-        $question  = array();
-        $data      = $request->query->all();
-        $questions = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
+        $data = $request->request->all();
 
-        if ($this->getMarkerService()->isFinishMarker($user['id'], $markerId)) {
-            if (isset($data['questionId'])) {
-                $question   = $this->getQuestionMarkerService()->getQuestionMarker($data['questionId']);
-                $conditions = array(
-                    'seq'      => ++$question['seq'],
-                    'markerId' => $markerId
-                );
-                $question = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 1);
-
-                if (!empty($question)) {
-                    $question = $question['0'];
-                }
-            } else {
-                $conditions = array(
-                    'seq'      => 1,
-                    'markerId' => $markerId
-                );
-                $question = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 1);
-                $question = $question[0];
+        $answer = $data['answer'];
+        if (in_array($data['type'], array('choice', 'single_choice'))) {
+            foreach ($answer as &$answerItem) {
+                $answerItem = (string) (ord($answerItem) - 65);
             }
-        } else {
-            foreach ($questions as $key => $value) {
-                $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
-
-                if (empty($questionResult)) {
-                    $question = $value;
-                    break;
-                }
+        } elseif ($data['type'] == 'determine') {
+            foreach ($answer as &$answerItem) {
+                $answerItem == 'T' ? 1 : 0;
             }
         }
 
-        return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
-            'markerId' => $markerId,
-            'question' => $question,
-            'lessonId' => $data['lessonId']
-        ));
-    }
-
-    public function doNextTestAction(Request $request)
-    {
-        $data                 = $request->query->all();
-        $data['markerId']     = isset($data['markerId']) ? $data['markerId'] : 0;
-        $data['questionId']   = isset($data['questionId']) ? $data['questionId'] : 0;
-        $data['answer']       = isset($data['answer']) ? $data['answer'] : null;
-        $data['type']         = isset($data['type']) ? $data['type'] : null;
         $user                 = $this->getUserService()->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($data['markerId'], $user['id'], $data['questionId'], $data['answer'], $data['type'], $data['lessonId']);
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($markerId, $user['id'], $questionMarkerId, $answer, $data['type'], $data['lessonId']);
 
         $data = array(
-            'markerId'               => $data['markerId'],
+            'markerId'               => $markerId,
             'questionMarkerResultId' => $questionMarkerResult['id']
         );
         return $this->createJsonResponse($data);
-    }
-
-    public function showQuestionAnswerAction(Request $request, $questionId)
-    {
-        $data                 = $request->query->all();
-        $user                 = $this->getUserService()->getCurrentUser();
-        $questionMarker       = $this->getQuestionMarkerService()->getQuestionMarker($questionId);
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->getQuestionMarkerResult($data['questionMarkerResultId']);
-        $conditions           = array(
-            'markerId' => $data['markerId']
-        );
-        $count                 = $this->getQuestionMarkerService()->searchQuestionMarkersCount($conditions);
-        $questionMarker['seq'] = isset($questionMarker['seq']) ? $questionMarker['seq'] : 1;
-        $progress              = array(
-            'seq'     => $questionMarker['seq'],
-            'count'   => $count,
-            'percent' => floor($questionMarker['seq'] / $count * 100)
-        );
-        $compelete = $progress['percent'] == 100 ? true : false;
-
-        return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
-            'markerId'   => $data['markerId'],
-            'question'   => $questionMarker,
-            'answer'     => $questionMarker['answer'],
-            'selfAnswer' => unserialize($questionMarkerResult['answer']),
-            'status'     => $questionMarkerResult['status'],
-            'progress'   => $progress,
-            'compelete'  => $compelete
-        ));
     }
 
     public function questionAction(Request $request, $courseId, $lessonId)
