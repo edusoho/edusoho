@@ -321,7 +321,7 @@ define(function(require, exports, module) {
             } else {
                 return false;
             }
-        }, Translator.trans('%display%只能是<=试卷总分、且>0的整数或者1位小数',{display:{{display}}}));
+        }, Translator.trans('%display%只能是<=试卷总分、且>0的整数或者1位小数',{display:'{{display}}'}));
 
 
         new TestpaperItemManager({

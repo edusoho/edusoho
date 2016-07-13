@@ -97,7 +97,7 @@
     <div>
       <label class="checkbox-inline"><input type="checkbox"  autocomplete="off" data-role="batch-select"> {{'全选'|trans}}</label>
       <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}" data-url="{{ path('course_manage_question_deletes',{courseId:course.id}) }}">{{'删除'|trans}}</button>
-      <span class="pull-right text-muted">{{'共%getitemCOunt()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
+      <span class="pull-right text-muted">{{'共%getItemCount()%题'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
     </div>
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}
