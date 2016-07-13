@@ -219,18 +219,27 @@ class BuildPackageCommand extends BaseCommand
         }
 
         $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
-        $file  = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
-        $print = false;
+        $file     = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
+        $print    = false;
+        $askPrint = false;
         while (!feof($file)) {
-            $line = fgets($file);
+            $line = trim(fgets($file));
             if (strpos($line, $version) !== false) {
                 $print = true;
             }
-            if (empty(trim($line))) {
+
+            if ($print && empty($line)) {
+                $askPrint = true;
+            }
+            if ($askPrint && strpos($line, '(') !== false) {
                 $print = false;
             }
             if ($print) {
-                $this->output->writeln(trim(sprintf("<comment>%s<br/></comment>", trim($line))));
+                if (empty($line)) {
+                    $this->output->writeln(sprintf("<comment>$line</comment>"));
+                } else {
+                    $this->output->writeln(sprintf("<comment>%s<br/></comment>", $line));
+                }
             }
         }
     }
