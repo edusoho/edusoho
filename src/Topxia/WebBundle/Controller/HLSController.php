@@ -11,9 +11,7 @@ class HLSController extends BaseController
     {
         $line       = $request->query->get('line', null);
         $levelParam = $request->query->get('level', "");
-        $format        = $request->query->get('format', "");
         $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp   = $request->getClientIp();
 
         if (empty($token)) {
@@ -42,8 +40,7 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id'      => $file['id'].$level,
-                        'fromApi' => $fromApi
+                        'id' => $file['id'].$level
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
@@ -55,10 +52,6 @@ class HLSController extends BaseController
 
                 if (isset($token['data']['watchTimeLimit'])) {
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
-                }
-
-                if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -85,36 +78,20 @@ class HLSController extends BaseController
         );
         $api = CloudAPIFactory::create('leaf');
 
-        //新版api需要返回json形式的m3u8
-        if (strtolower($format) == 'json') {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
-            return $this->createJsonResponse($playlist);
+        $playlist = $api->get('/hls/playlist', array(
+            'streams'   => $streams,
+            'qualities' => $qualities,
+            'clientIp'  => $clientIp
+        ));
+
+        if (empty($playlist['playlist'])) {
+            return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
-        if ($fromApi) {
-            $playlist = $api->get('/hls/playlist', array(
-                'streams'   => $streams,
-                'qualities' => $qualities,
-                'clientIp'  => $clientIp
-            ));
-
-            if (empty($playlist['playlist'])) {
-                return $this->createMessageResponse('error', '生成视频播放列表失败！');
-            }
-
-            return new Response($playlist['playlist'], 200, array(
-                'Content-Type'        => 'application/vnd.apple.mpegurl',
-                'Content-Disposition' => 'inline; filename="playlist.m3u8"'
-            ));
-        } else {
-            $playlist = $api->get('/hls/playlist/json', array(
-                'streams'   => $streams,
-                'qualities' => $qualities,
-                'clientIp'  => $clientIp
-            ));
-
-            return $this->createJsonResponse($playlist);
-        }
+        return new Response($playlist['playlist'], 200, array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+        ));
     }
 
     protected function haveHeadLeader()
@@ -131,7 +108,6 @@ class HLSController extends BaseController
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
-        $streamToken = $token;
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
@@ -165,7 +141,7 @@ class HLSController extends BaseController
 
         $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
-        $keyencryption = $token['data']['fromApi'] || $inWhiteList ? 0 : 1;
+        $keyencryption = $inWhiteList ? 0 : 1;
         $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
@@ -184,8 +160,7 @@ class HLSController extends BaseController
 
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        $isHiddenVideoHeader = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
-        if (!$inWhiteList && !$isHiddenVideoHeader && $this->haveHeadLeader()) {
+        if (!$inWhiteList && $this->haveHeadLeader()) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
                 'keyencryption' => $keyencryption

@@ -1054,17 +1054,14 @@ course_lesson_marker_update:
     defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
     methods: [POST]
 
-course_lesson_question_marker_show:
-    pattern:  /course/lesson/{markerId}/questionmarker/show
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showMarkerQuestion }
+course_lesson_question_markers_show:
+    pattern:  /course/lesson/media/{mediaId}/question_markers/show
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionMakers }
 
-course_lesson_question_marker_answer_show:
-    pattern:  /course/lesson/questionmarker/{questionId}/show
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionAnswer }
-
-course_lesson_question_marker_next:
-    pattern:  /course/lesson/{markerId}/questionmarker/next
-    defaults: { _controller: TopxiaWebBundle:QuestionMarker:doNextTest }
+course_lesson_question_marker_finish:
+    pattern:  /course/lesson/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:finishQuestionMarker }
+    methods: [POST]
 
 course_lesson_question_marker_add:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/add
