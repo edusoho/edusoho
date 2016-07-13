@@ -89,17 +89,17 @@
     {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') %}
       {% set homework =  homeworks[lesson.id]|default(null) %}
       {% if homework %}
-        <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'作业'|trans}}"><i class="es-icon es-icon-mylibrarybooks mls color-gray" title="{{'作业'|trans}}"></i></span>
+        <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'作业'|trans}}"><i class="es-icon es-icon-mylibrarybooks mls color-gray"></i></span>
       {% endif %}
     {% endif %}
 
     {% set exercise = exercises[lesson.id]|default(null) %}
     {% if exercise %}
-      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'练习'|trans}}"><i class="es-icon es-icon-exam mls color-gray" title="{{'练习'|trans}}"></i></span>
+      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'练习'|trans}}"><i class="es-icon es-icon-exam mls color-gray"></i></span>
     {% endif %}
 
     {% if lesson.materialNum > 0 %}
-      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'练习'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray" title="{{'资料'|trans}}"></i></span>
+      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'资料'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
     {% endif %}
   </div>
 
@@ -127,11 +127,11 @@
           {% set homework =  homeworks[lesson.id]|default(null) %}
           {% set homeworkId =  homework.id|default(null) %}
           {% if homework %}
-            <li><a href="{{ path('course_manage_lesson_homework_edit', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>{{'编辑作业'|trans}}</a></li>
+            <li><a href="{{ path('course_manage_lesson_homework_edit', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="es-icon es-icon-mylibrarybooks prs"></span>{{'编辑作业'|trans}}</a></li>
             <li><a href="{{ path('course_homework_preview', {courseId:course.id,homeworkId:homeworkId }) }}" class="preview-homework-btn" ><span class="glyphicon glyphicon-eye-open prs"></span>{{'预览作业'|trans}}</a></li>
             <li><a href="javascript:;" class="delete-homework-btn" data-url="{{ path('course_manage_lesson_homework_remove', {courseId:course.id, lessonId:lesson.id, homeworkId:homeworkId }) }}" ><span class="glyphicon glyphicon-trash prs"></span>{{'移除作业'|trans}}</a></li>
           {% else %}
-            <li><a href="{{ path('course_manage_lesson_homework_create', {courseId:course.id, lessonId:lesson.id,homeworkId:homeworkId}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>{{'布置作业'|trans}}</a></li>
+            <li><a href="{{ path('course_manage_lesson_homework_create', {courseId:course.id, lessonId:lesson.id,homeworkId:homeworkId}) }}" ><span class="es-icon es-icon-mylibrarybooks prs"></span>{{'布置作业'|trans}}</a></li>
           {% endif %}
             <li class="divider"></li>
           {% set lessonId = lesson.id %}
@@ -139,7 +139,7 @@
           {% if exercise %}
             <li><a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_exercise_delete', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-trash prs"></span>{{'移除练习'|trans}}</a></li>
           {% else %}
-            <li><a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>{{'新增练习'|trans}}</a></li>
+            <li><a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="es-icon es-icon-exam prs"></span>{{'新增练习'|trans}}</a></li>
           {% endif %}
           <li class="divider"></li>
         {% endif %}
