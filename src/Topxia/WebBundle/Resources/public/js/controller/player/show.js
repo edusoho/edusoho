@@ -19,6 +19,7 @@ define(function(require, exports, module) {
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var mp4Url = videoHtml.data('mp4Url');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
@@ -64,7 +65,7 @@ define(function(require, exports, module) {
                 agentInWhiteList: agentInWhiteList,
                 timelimit: timelimit,
                 questions: questionMarkers,
-                enablePlaybackRates: true,
+                enablePlaybackRates: enablePlaybackRates,
                 playbackRatesMP4Url: mp4Url
             }
         );
