@@ -51,7 +51,7 @@ class RegisterController extends BaseController
                     if ($result) {
                         $registration['verifiedMobile'] = $sessionField['to'];
                     } else {
-                        return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                        return $this->createMessageResponse('info', $this->getServiceKernel()->trans('手机号码和短信验证码不匹配，请重新注册'));
                     }
                 }
 
@@ -247,7 +247,7 @@ class RegisterController extends BaseController
             $user = $this->getUserService()->getUserByEmail($email);
 
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-                $this->setFlashMessage('danger', '输入的密码不正确');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('输入的密码不正确'));
             } else {
                 $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'), array(
                     'password' => $password
@@ -280,7 +280,7 @@ class RegisterController extends BaseController
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('email-reset', $token);
         if (empty($token)) {
-            return $this->createNotFoundException('token已失效');
+            return $this->createNotFoundException($this->getServiceKernel()->trans('token已失效'));
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
@@ -305,7 +305,7 @@ class RegisterController extends BaseController
         $user  = $this->getUserService()->getUserByEmail($email);
 
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该Email不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该Email不存在'));
         } else {
             $response = array('success' => true, 'message' => '');
         }
