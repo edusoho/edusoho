@@ -39,6 +39,8 @@ class BuildPackageCommand extends BaseCommand
         $this->copyUpgradeScript($packageDirectory, $version, $output);
 
         $this->zipPackage($packageDirectory);
+
+        $this->printChangeLog($version);
         $output->writeln('<question>编制升级包完毕</question>');
     }
 
@@ -197,13 +199,38 @@ class BuildPackageCommand extends BaseCommand
             $this->filesystem->remove("{$buildDir}/{$filename}.zip");
         }
 
-        $this->output->writeln("<info>* 使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+        $this->output->writeln("<info>使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
 
         chdir($buildDir);
         $command = "zip -r {$filename}.zip {$filename}/";
         exec($command);
 
         $zipPath = "{$buildDir}/{$filename}.zip";
-        $this->output->writeln('<question>    * ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
+        $this->output->writeln('<question>ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
+    }
+
+    private function printChangeLog($version)
+    {
+        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
+        if (!$this->filesystem->exists($changeLogPath)) {
+            $this->output->writeln("<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>");
+        } else {
+            $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
+            $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
+            echo "\n";
+            $print = false;
+            while (!feof($file)) {
+                $line = fgets($file);
+                if (strpos($line, $version) !== false) {
+                    $print = true;
+                }
+                if (empty(trim($line))) {
+                    $print = false;
+                }
+                if ($print) {
+                    $this->output->writeln(trim(sprintf("<comment>%s<br/></comment>", trim($line))));
+                }
+            }
+        }
     }
 }
