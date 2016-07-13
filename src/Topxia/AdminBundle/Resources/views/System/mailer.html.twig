@@ -107,12 +107,14 @@
         <div class="col-md-3 control-label"></div>
         <div class="controls col-md-8">
           <button type="submit" class="btn btn-primary">提交</button>
-          <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">验证</a>
-          <div class="mtl ptm">
-            <div class="alert alert-info" role="alert">
-              验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
+          {% if mailer.enabled %}
+            <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">验证</a>
+            <div class="mtl ptm">
+              <div class="alert alert-info" role="alert">
+                验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。
+              </div>
             </div>
-          </div>
+          {% endif %}
         </div>
       </div>
       <input type="hidden" name="email-setting-status" value="{{status}}">
