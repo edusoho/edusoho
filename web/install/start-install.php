@@ -196,6 +196,7 @@ function install_step3($init_data = 0)
             $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
         }
 
+        $init->initFolders();
         $init->initLockFile();
 
         header("Location: start-install.php?step=4");
@@ -846,6 +847,23 @@ EOD;
             'code' => 'FullSite'
         );
         $this->getOrgService()->createOrg($org);
+    }
+
+    public function initFolders()
+    {
+        $folders = array(
+            __DIR__.'/../../app/data/udisk',
+            __DIR__.'/../../app/data/private_files',
+            __DIR__.'/../../web/files'
+        );
+
+        $filesystem = new Filesystem();
+
+        foreach ($folders as $folder) {
+            if (!$filesystem->exists($folder)) {
+                $filesystem->mkdir($folder);
+            }
+        }
     }
 
     public function initLockFile()

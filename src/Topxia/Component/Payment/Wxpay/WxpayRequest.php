@@ -85,12 +85,31 @@ class WxpayRequest extends Request
         $converted['notify_url']       = $params['notifyUrl'];
         $converted['out_trade_no']     = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
-        $converted['total_fee']        = intval($params['amount'] * 100);
+        $converted['total_fee']        = $this->getAmount($amount);
         $converted['trade_type']       = 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
 
         return $converted;
+    }
+
+    protected function getAmount($amount)
+    {
+        $array = explode('.', $amount);
+
+        if (isset($array[1])) {
+            $suffix = $array[1];
+            $len    = strlen($suffix);
+            for ($i = $len; $i < 2; $i++) {
+                $suffix = $suffix.'0';
+            }
+
+            $amount = $array[0].$suffix;
+        } else {
+            $amount = $amount.'00';
+        }
+
+        return $amount;
     }
 
     private function toXml($array, $xml = false)
