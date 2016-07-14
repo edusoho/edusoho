@@ -16,7 +16,7 @@ class BuildPackageAutoCommand extends BaseCommand
     {
         $this
             ->setName('topxia:auto-build-package')
-            ->setDescription('编制升级包')
+            ->setDescription('自动编制升级包')
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('fromVersion', InputArgument::REQUIRED, 'compare from  version')
             ->addArgument('version', InputArgument::REQUIRED, 'compare to  version');
@@ -243,7 +243,8 @@ class BuildPackageAutoCommand extends BaseCommand
             if ($print && empty($line)) {
                 $askPrint = true;
             }
-            if ($askPrint && strpos($line, '(') !== false) {
+
+            if ($askPrint && preg_match("/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/", "$line", $matches)) {
                 $print = false;
             }
             if ($print) {
