@@ -85,7 +85,7 @@ class PluginRegisterCommand extends BaseCommand
         }
         $installMode = 'command';
         if ($installMode == 'command') {
-            $relativeOriginDir = $filesystem->makePathRelative($originDir, realpath("{$rootDir}/web/bundles/"));
+            $relativeOriginDir = $filesystem->makePathRelative($originDir, realpath("{$rootDir}/web/bundles"));
             $filesystem->symlink($relativeOriginDir, $targetDir, true);
         } else {
             $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
