@@ -148,7 +148,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
 
-            $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+            if (!empty($result['no'])) {
+                $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+            }
         }
 
         $this->pushCloud('course.create', $this->convertCourse($course));
@@ -279,7 +281,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-        $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
+        if (!empty($result['no'])) {
+            $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
+        }
     }
 
     public function onClassroomJoin(ServiceEvent $event)
