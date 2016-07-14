@@ -27,6 +27,7 @@ $app->post(_u('/users'), 'res.Users:post');
 $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
 $app->get(_u('/lessons'), 'res.Course/Lessons:get');
+$app->get(_u('/course/{id}/lessons'), 'res.Course/Lessons:get'); //todo delete
 $app->get(_u('/lessons/{id}'), 'res.Course/Lesson:get');
 $app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/chaos_threads'), 'res.ChaosThreads:get');
@@ -105,7 +106,6 @@ $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts'), 'res.CourseThreadPosts:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts/{postId}'), 'res.CourseThreadPost:get');
-
 
 $app->get(_u('/classroom_play/{classRoomId}'), 'res.ClassRoomPlay:get');
 $app->get(_u('/classroom_play/{classRoomId}/status'), 'res.ClassRoomPlayStatus:get');
