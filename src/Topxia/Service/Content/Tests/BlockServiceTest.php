@@ -5,6 +5,13 @@ use Topxia\Service\Common\BaseTestCase;
 
 class BlockServiceTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        $template = array('code' => 'test', 'mode' => 'template', 'category' => 'test', 'meta' => 'test', 'data' => '', 'templateName' => 'template', 'title' => '默认');
+        $this->getBlockService()->createBlockTemplate($template);
+    }
+
     public function testGetBlock()
     {
         $blockFields1 = array(
@@ -14,25 +21,9 @@ class BlockServiceTest extends BaseTestCase
             'blockTemplateId' => 1
         );
 
-        $blockFields2 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
-        );
-
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $createdBlock1  = $this->getBlockService()->createBlock($blockFields1);
-        $getBlock       = $this->getBlockService()->getBlock($createdBlock1['id']);
-
+        $createdBlock1 = $this->getBlockService()->createBlock($blockFields1);
+        $getBlock      = $this->getBlockService()->getBlock($createdBlock1['id']);
         $this->assertNotNull($getBlock);
-        $this->assertEquals($createdBlock1, $getBlock);
     }
 
     /**
@@ -41,7 +32,8 @@ class BlockServiceTest extends BaseTestCase
     public function testGetBlockWithNotExistId()
     {
         $getBlock = $this->getBlockService()->getBlock(999);
-        $this->assertNull($getBlock);
+
+        $this->assertEquals(0, $getBlock['blockId']);
     }
 
     /**
@@ -56,15 +48,9 @@ class BlockServiceTest extends BaseTestCase
             'blockTemplateId' => 1
         );
 
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $createBlock1   = $this->getBlockService()->createBlock($blockFields1);
-        $blockByCode    = $this->getBlockService()->getBlockByCode($blockFields1['code']);
-        $this->assertEquals($blockByCode, $createBlock1);
+        $createBlock1 = $this->getBlockService()->createBlock($blockFields1);
+        $blockByCode  = $this->getBlockService()->getBlockByCode($blockFields1['code']);
+        $this->assertEquals($blockByCode['code'], $createBlock1['code']);
     }
 
     /**
@@ -73,41 +59,16 @@ class BlockServiceTest extends BaseTestCase
     public function testGetBlockWithNotExistCode()
     {
         $getBlock = $this->getBlockService()->getBlockByCode("not_exist_code");
-        $this->assertNull($getBlock);
+        $this->assertEquals(0, $getBlock['blockId']);
     }
 
     /**
      * @group search
      */
-    public function testSearchBlockCount()
+    public function testSearchBlockTemplateCount()
     {
-        $blockFields1 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
-        );
-
-        $blockFields2 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
-        );
-
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $BlockCount     = $this->getBlockService()->searchBlockCount(array('title' => '默认'));
-        $this->assertEquals(0, $BlockCount);
-
-        $this->getBlockService()->createBlock($blockFields1);
-        $this->getBlockService()->createBlock($blockFields2);
-        $BlockCount = $this->getBlockService()->searchBlockCount(array('title' => '默认'));
-        $this->assertEquals(2, $BlockCount);
+        $BlockCount = $this->getBlockService()->searchBlockTemplateCount(array('title' => '默认'));
+        $this->assertEquals(1, $BlockCount);
     }
 
     /**
@@ -115,7 +76,7 @@ class BlockServiceTest extends BaseTestCase
      */
     public function testSearchBlockCountWithEmptyBlock()
     {
-        $BlockCount = $this->getBlockService()->searchBlockCount(array('title' => '默认'));
+        $BlockCount = $this->getBlockService()->searchBlockTemplateCount(array('title' => 'default'));
         $this->assertEquals(0, $BlockCount);
     }
 
@@ -124,32 +85,11 @@ class BlockServiceTest extends BaseTestCase
      */
     public function testSearchBlocksWithStartAndLimit()
     {
-        $blockFields1 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
-        );
+        $template     = array('code' => 'test1', 'mode' => 'template', 'category' => 'test1', 'meta' => 'test', 'data' => '', 'templateName' => 'template', 'title' => '默认');
+        $template1    = $this->getBlockService()->createBlockTemplate($template);
+        $findedBlocks = $this->getBlockService()->searchBlockTemplates(array('title' => '默认'), array('createdTime', 'DESC'), 0, 2);
 
-        $blockFields2 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
-        );
-
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $createBlock1   = $this->getBlockService()->createBlock($blockFields1);
-        $createBlock2   = $this->getBlockService()->createBlock($blockFields2);
-        $findedBlocks   = $this->getBlockService()->searchBlocks(array('title' => 'title'), array('createdTime', 'DESC'), 0, 30);
         $this->assertEquals(2, count($findedBlocks));
-        $this->assertContains($createBlock1, $findedBlocks);
-        $this->assertContains($createBlock2, $findedBlocks);
     }
 
     /**
@@ -157,8 +97,8 @@ class BlockServiceTest extends BaseTestCase
      */
     public function testSearchBlocksWithEmptyBlocks()
     {
-        $findedBlocks = $this->getBlockService()->searchBlocks(array('title' => '默认'), array('createdTime', 'DESC'), 0, 30);
-        $this->assertEmpty($findedBlocks);
+        $findedBlocks = $this->getBlockService()->searchBlockTemplates(array('title' => '默认'), array('createdTime', 'DESC'), 0, 30);
+        $this->assertEquals(1, count($findedBlocks));
     }
 
     /**
@@ -173,17 +113,11 @@ class BlockServiceTest extends BaseTestCase
             'blockTemplateId' => 1
         );
 
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $createBlock1   = $this->getBlockService()->createBlock($blockFields1);
-        $historys       = $this->getBlockService()->findBlockHistorysByBlockId($createBlock1['id'], 0, 30);
+        $createBlock1 = $this->getBlockService()->createBlock($blockFields1);
+        $historys     = $this->getBlockService()->findBlockHistorysByBlockId($createBlock1['id'], 0, 30);
 
         $this->assertEquals($createBlock1['id'], $historys[0]['blockId']);
-        $this->assertEmpty($historys[0]['content']);
+        $this->assertNotEmpty($historys[0]['content']);
     }
 
     /**
@@ -291,20 +225,12 @@ class BlockServiceTest extends BaseTestCase
     public function testCreateBlockWithIncompleteFields()
     {
         $blockFields1 = array(
-            'code'            => 'homepage_course_slide',
-            'data'            => 'data',
-            'content'         => 'content',
-            'blockTemplateId' => 1
+            'code'    => 'homepage_course_slide',
+            'data'    => 'data',
+            'content' => 'content'
         );
 
-        $userInfo = array(
-            'nickname' => 'test_nickname',
-            'password' => 'test_password',
-            'email'    => 'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
         $this->getBlockService()->createBlock($blockFields1);
-
     }
 
     /**
@@ -366,7 +292,7 @@ class BlockServiceTest extends BaseTestCase
     }
 
     /**
-     * @group  updatecontent
+     * @group  updateBlock
      */
     public function testUpdateContent()
     {
@@ -384,17 +310,17 @@ class BlockServiceTest extends BaseTestCase
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $createBlock1   = $this->getBlockService()->createBlock($blockFields1);
-        $result         = $this->getBlockService()->updateContent($createBlock1['id'], "updated_content");
-        $this->assertEquals("updated_content", $result['content']);
+        $result         = $this->getBlockService()->updateBlock($createBlock1['id'], array('content' => 'tmp'));
+        $this->assertEquals("tmp", $result['content']);
     }
 
     /**
-     * @group  updatecontent
+     * @group  updateBlock
      * @expectedException Topxia\Service\Common\ServiceException
      */
     public function testUpdateContentWithNotExistBlockId()
     {
-        $this->getBlockService()->updateContent(999, "updated_content");
+        $this->getBlockService()->updateBlock(999, "updated_content");
     }
 
     /**

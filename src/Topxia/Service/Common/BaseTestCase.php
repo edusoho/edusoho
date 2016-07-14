@@ -99,8 +99,9 @@ class BaseTestCase extends WebTestCase
         ));
         $currentUser       = new CurrentUser();
         $user['currentIp'] = $user['createdIp'];
+        $user['org']       = array('id' => 1);
         $currentUser->fromArray($user);
-        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService->changeUserRoles($user['id'], $roles);
         static::$serviceKernel->setCurrentUser($currentUser);
     }
