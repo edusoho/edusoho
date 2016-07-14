@@ -303,7 +303,7 @@ class BuildPackageAutoCommand extends BaseCommand
         $this->output->writeln("<info>准备制作升级脚本</info>");
         $question = "请根据以上sql脚本完成 scripts/upgrade-{$version}.php,完成后输入y (y/n)";
 
-        if (!$noSqlUpgrade && $askFileEdit && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+        if (!$noSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
