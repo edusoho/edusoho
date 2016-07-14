@@ -47,11 +47,7 @@
         {% endif %}
       </ul>
       <span class="page-num">
-      	{% if paginator.currentPage == paginator.firstPage %}
-					1
-      	{% else %}
-					{{ (paginator.currentPage - 1) * paginator.perPageCount }}
-      	{% endif %}
+				{{ (paginator.currentPage - 1) * paginator.perPageCount + 1 }}
       	-
 	      {% if paginator.currentPage == paginator.lastPage %}
 	        {{ paginator.itemCount }}
