@@ -20,7 +20,7 @@ class CoinController extends BaseController
 
         $coinSettingsSaved = $this->getSettingService()->get('coin', array());
 
-        $default = array(
+        $default           = array(
             'coin_enabled'        => 0,
             'cash_model'          => 'none',
             'cash_rate'           => 1,
@@ -62,10 +62,10 @@ class CoinController extends BaseController
     protected function savePicture(Request $request, $size)
     {
         $file      = $request->files->get('coin_picture');
-        $filename  = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+        $filename  = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
 
-        $pictureFilePath = $directory.'/'.$filename;
+        $pictureFilePath = $directory . '/' . $filename;
         $pathinfo        = pathinfo($pictureFilePath);
 
         $imagine  = new Imagine();
@@ -208,7 +208,7 @@ class CoinController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
         }
 
-        $filename  = 'logo_'.time().'.'.$file->getClientOriginalExtension();
+        $filename  = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file      = $file->move($directory, $filename);
 
@@ -227,7 +227,7 @@ class CoinController extends BaseController
 
         $coin = $this->getSettingService()->get('coin', array());
 
-        $coin['coin_picture']       = $coin['coin_picture_50_50']       = $url_50_50;
+        $coin['coin_picture']       = $coin['coin_picture_50_50'] = $url_50_50;
         $coin['coin_picture_30_30'] = $url_30_30;
         $coin['coin_picture_20_20'] = $url_20_20;
         $coin['coin_picture_10_10'] = $url_10_10;
@@ -452,10 +452,10 @@ class CoinController extends BaseController
 
             if ($fields['type'] == "add") {
                 $this->getCashAccountService()->waveCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('coin', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'add_coin', "添加 " . $user['nickname'] . " {$fields['amount']} 虚拟币", array());
             } else {
                 $this->getCashAccountService()->waveDownCashField($account["id"], $fields['amount']);
-                $this->getLogService()->info('coin', 'deduct_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                $this->getLogService()->info('coin', 'deduct_coin', "扣除 " . $user['nickname'] . " {$fields['amount']} 虚拟币", array());
             }
         }
 
@@ -475,10 +475,10 @@ class CoinController extends BaseController
                 if ($fields['type'] == "add") {
                     $this->getCashAccountService()->waveCashField($id, $fields['amount']);
 
-                    $this->getLogService()->info('coin', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                    $this->getLogService()->info('coin', 'add_coin', "添加 " . $user['nickname'] . " {$fields['amount']} 虚拟币", array());
                 } else {
                     $this->getCashAccountService()->waveDownCashField($id, $fields['amount']);
-                    $this->getLogService()->info('coin', 'deduct_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
+                    $this->getLogService()->info('coin', 'deduct_coin', "扣除 " . $user['nickname'] . " {$fields['amount']} 虚拟币", array());
                 }
             }
         }
@@ -522,17 +522,17 @@ class CoinController extends BaseController
                 }
 
                 $filenamePrefix = "user_{$user['id']}_";
-                $hash           = substr(md5($filenamePrefix.time()), -8);
+                $hash           = substr(md5($filenamePrefix . time()), -8);
                 $ext            = $file->getClientOriginalExtension();
-                $filename       = $filenamePrefix.$hash.'.'.$ext;
+                $filename       = $filenamePrefix . $hash . '.' . $ext;
 
-                $directory = $this->container->getParameter('topxia.upload.public_directory').'/tmp';
+                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
                 $file      = $file->move($directory, $filename);
 
                 $fileName = str_replace('.', '!', $file->getFilename());
 
                 return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-                    'file' => $fileName)
+                        'file' => $fileName)
                 ));
             }
         }
@@ -625,7 +625,7 @@ class CoinController extends BaseController
      */
     public function exportCsvAction(Request $request, $cashType)
     {
-        $payment    = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'coin' => '虚拟币支付', 'none' => '--');
+        $payment    = $this->get('topxia.twig.web_extension')->getDict('payment');
         $conditions = $request->query->all();
 
         if (!empty($conditions) && $cashType == 'Coin') {
@@ -656,37 +656,37 @@ class CoinController extends BaseController
 
         foreach ($orders as $key => $orders) {
             $member = "";
-            $member .= "流水号".$orders['sn'].",";
-            $member .= $orders['name'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $member .= "流水号" . $orders['sn'] . ",";
+            $member .= $orders['name'] . ",";
+            $member .= $users[$orders['userId']]['nickname'] . ",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'] . "," : "-" . ",";
 
             if ($orders['type'] == 'inflow') {
-                $member .= "+".$orders['amount'].",";
+                $member .= "+" . $orders['amount'] . ",";
             }
 
             if ($orders['type'] == 'outflow') {
-                $member .= "-".$orders['amount'].",";
+                $member .= "-" . $orders['amount'] . ",";
             }
 
             if (!empty($orders['payment'])) {
-                $member .= $payment[$orders['payment']].",";
+                $member .= $payment[$orders['payment']] . ",";
             } else {
-                $member .= "-".",";
+                $member .= "-" . ",";
             }
 
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']) . ",";
             $results[] = $member;
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("%s-order-(%s).csv", $cashType, date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
