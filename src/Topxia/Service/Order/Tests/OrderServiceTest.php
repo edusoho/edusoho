@@ -15,13 +15,12 @@ class OrderServiceTest extends BaseTestCase
     {
         parent::setUp();
 
-        $setting = array(
+        $this->getSettingService()->set('refund', array(
             'maxRefundDays'       => 0,
             'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
             'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
             'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
-        );
-        $setting = $this->getSettingService()->set('refund', $setting);
+        ));
 
     }
 

@@ -97,12 +97,13 @@ class BaseTestCase extends WebTestCase
             'orgCode'   => '1.',
             'orgId'     => '1'
         ));
-        $currentUser       = new CurrentUser();
-        $user['currentIp'] = $user['createdIp'];
-        $user['org']       = array('id' => 1);
-        $currentUser->fromArray($user);
         $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService->changeUserRoles($user['id'], $roles);
+        $user              = $userService->getUserByEmail($user['email']);
+        $user['currentIp'] = $user['createdIp'];
+        $user['org']       = array('id' => 1);
+        $currentUser       = new CurrentUser();
+        $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
     }
 
