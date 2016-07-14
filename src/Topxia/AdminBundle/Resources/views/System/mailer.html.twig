@@ -46,7 +46,9 @@
           <input type="text" id="host" name="host" class="form-control" value="{{mailer.host}}">
           <p class="help-block">
             每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com
-            {% if not setting('copyright.owned') %}<a href="http://www.qiqiuyu.com/article/785" target="_blank">常用邮箱配置文档</a> {% endif %}
+            {% if not setting('copyright.owned') or setting('copyright.thirdCopyright') == "2" %}
+              <a href="http://www.qiqiuyu.com/article/785" target="_blank">常用邮箱配置文档</a>
+            {% endif %}
           </p>
         </div>
       </div>
