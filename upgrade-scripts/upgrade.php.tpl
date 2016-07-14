@@ -53,6 +53,12 @@ use Topxia\Common\BlockToolkit;
         return empty($result) ? false : true;
     }
 
+    protected function isIndexExist($table, $filedName, $indexName)
+    {
+        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
     
     
     protected function isCrontabJobExist($code)
