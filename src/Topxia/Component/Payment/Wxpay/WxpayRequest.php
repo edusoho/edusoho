@@ -109,7 +109,7 @@ class WxpayRequest extends Request
             $amount = $amount.'00';
         }
 
-        return $amount;
+        return intval($amount);
     }
 
     private function toXml($array, $xml = false)

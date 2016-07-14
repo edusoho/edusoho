@@ -51,7 +51,10 @@
         </td>
       </tr>
       {% if setting("coin.coin_enabled")|default(0) == 1 %}
-      <tr> <th width="25%">{{'虚拟币支付'|trans}}</th>
+      <tr> 
+        <th width="25%">
+          {% trans with {'%coin_name%': setting('coin.coin_name')|default("虚拟币"|trans)} %}%coin_name%支付{% endtrans %}
+        </th>
         <td width="75%">
           <span class="money-text">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
         </td>
