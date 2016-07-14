@@ -137,7 +137,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
         $file        = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
+        if ($file['storage'] == 'local') {
             $fileTags     = $this->getUploadFileTagService()->findByFileId($fileId);
             $tags         = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
             $file['tags'] = ArrayToolkit::column($tags, 'name');
