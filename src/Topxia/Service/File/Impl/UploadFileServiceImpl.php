@@ -168,7 +168,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file       = $this->getUploadFileInitDao()->getFile($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
-            if ($initParams['resumed'] == 'ok' && $file && $file['status']!='ok') {
+            if ($initParams['resumed'] == 'ok' && $file && $file['status'] != 'ok') {
                 $file = $this->getUploadFileInitDao()->updateFile($file['id'], array(
                     'filename'   => $params['fileName'],
                     'fileSize'   => $params['fileSize'],
@@ -217,10 +217,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'fileSize'      => $params['size']
             );
 
-            $file = $this->getUploadFileInitDao()->updateFile($params['id'], array('status'=>'ok'));
+            $file = $this->getUploadFileInitDao()->updateFile($params['id'], array('status' => 'ok'));
 
-            $file = array_merge($file, $fields);
-            $file = $this->getUploadFileDao()->addFile($file);
+            $file   = array_merge($file, $fields);
+            $file   = $this->getUploadFileDao()->addFile($file);
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
@@ -230,7 +230,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
                 'length' => isset($result['length']) ? $result['length'] : 0
             ));
-            
+
             $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
 
             $this->getLogger('UploadFileService')->info("finishedUpload 添加文件：#{$file['id']}");
@@ -245,7 +245,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 }
             }
 
-            $this->dispatchEvent("upload.file.finish",array('file' => $file));
+            $this->dispatchEvent("upload.file.finish", array('file' => $file));
 
             $connection->commit();
             return $file;
@@ -726,7 +726,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getFullFile($fileId);
+        $file = $this->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -768,9 +768,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $file;
     }
 
+    // TODO
     public function tryAccessFile($fileId)
     {
-        $file = $this->getFullFile($fileId);
+        $file = $this->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -779,10 +780,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            return $file;
-        }
-
-        if ($user->isTeacher()) {
             return $file;
         }
 

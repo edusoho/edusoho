@@ -1,10 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
-use Symfony\Component\Yaml\Yaml;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\MenuBuilder;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\Yaml\Yaml;
 
 class MenuExtension extends \Twig_Extension
 {
@@ -14,13 +12,12 @@ class MenuExtension extends \Twig_Extension
 
     protected $builders = array();
 
-
-    public function __construct ($container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
 
-    public function getFilters ()
+    public function getFilters()
     {
         return array(
         );
@@ -31,20 +28,19 @@ class MenuExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
             new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
-            new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
+            new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true))
         );
     }
 
     public function getMenuPath($env, $context, $menu)
     {
-        $route = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
+        $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         if (!empty($menu['router_params_context'])) {
             foreach ($params as $key => $value) {
-                $value = explode('.', $value, 2);
+                $value        = explode('.', $value, 2);
                 $params[$key] = $context['_context'][$value[0]][$value[1]];
-
             }
         }
 
@@ -53,16 +49,16 @@ class MenuExtension extends \Twig_Extension
 
     public function inMenuBlacklist($code = '')
     {
-        if(empty($code)){
+        if (empty($code)) {
             return false;
         }
-        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
-        if(!file_exists($filename)){
+        $filename = $this->container->getParameter('kernel.root_dir').'/../app/config/menu_blacklist.yml';
+        if (!file_exists($filename)) {
             return false;
         }
-        $yaml = new Yaml();
+        $yaml      = new Yaml();
         $blackList = $yaml->parse(file_get_contents($filename));
-        if(empty($blackList)){
+        if (empty($blackList)) {
             $blackList = array();
         }
         return in_array($code, $blackList);
@@ -86,11 +82,8 @@ class MenuExtension extends \Twig_Extension
         return $this->builders[$position];
     }
 
-    public function getName ()
+    public function getName()
     {
         return 'topxia_menu_twig';
     }
-
 }
-
-

@@ -84,11 +84,10 @@ class MobileBaseController extends BaseController
         $user        = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
 
-        if ($user) {
-            $user['currentIp'] = $request->getClientIp();
-        } else {
+        if (!empty($user)) {
             $user = array('id' => 0);
         }
+        $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -365,7 +364,7 @@ class MobileBaseController extends BaseController
             $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
 
-            if ($controller->setting('vip.enabled')) {
+            if ($controller->isinstalledPlugin('Vip') && $controller->setting('vip.enabled')) {
                 $vip         = $controller->getVipService()->getMemberByUserId($user['id']);
                 $user["vip"] = $vip;
             }

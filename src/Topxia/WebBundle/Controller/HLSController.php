@@ -11,8 +11,9 @@ class HLSController extends BaseController
     {
         $line       = $request->query->get('line', null);
         $levelParam = $request->query->get('level', "");
-        $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $clientIp   = $request->getClientIp();
+
+        $token    = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $clientIp = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -187,6 +188,7 @@ class HLSController extends BaseController
 
         return new Response($stream['stream'], 200, array(
             'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Length'      => strlen($stream['stream']),
             'Content-Disposition' => 'inline; filename="stream.m3u8"'
         ));
     }

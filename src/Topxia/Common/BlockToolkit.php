@@ -15,15 +15,15 @@ class BlockToolkit
             }
 
             $blockService = ServiceKernel::instance()->createService('Content.BlockService');
-            $block = array();
+            $blockTemplate = array();
             foreach ($blockMeta as $key => $meta) {
-                $block = $blockService->getBlockByCode($key);
+                $blockTemplate = $blockService->getBlockTemplateByCode($key);
                 $default = array();
                 foreach ($meta['items'] as $i => $item) {
                     $default[$i] = $item['default'];
                 }
-                if (empty($block)) {
-                    $block = array(
+                if (empty($blockTemplate)) {
+                    $blockTemplate = array(
                         'code' => $key,
                         'mode' => 'template',
                         'category' => empty($meta['category']) ? 'system' : $meta['category'],
@@ -32,9 +32,9 @@ class BlockToolkit
                         'templateName' => $meta['templateName'],
                         'title' => $meta['title'],
                     );
-                    $block = $blockService->createBlock($block);
+                    $blockTemplate = $blockService->createBlockTemplate($blockTemplate);
                 } else {
-                    $block = $blockService->updateBlock($block['id'], array(
+                    $blockTemplate = $blockService->updateBlockTemplate($blockTemplate['id'], array(
                         'mode' => 'template',
                         'category' => empty($meta['category']) ? 'system' : $meta['category'],
                         'meta' => $meta,
@@ -52,12 +52,12 @@ class BlockToolkit
                         $content = '';
                     }
 
-                    $block = $blockService->updateContent($block['id'], $content);
+                    $blockTemplate = $blockService->updateTemplateContent($blockTemplate['id'], $content);
                 }
 
-                if (empty($block['content']) && $container) {
-                    $content = self::render($block, $container);
-                    $blockService->updateContent($block['id'], $content);
+                if (empty($blockTemplate['content']) && $container) {
+                    $content = self::render($blockTemplate, $container);
+                    $blockService->updateTemplateContent($blockTemplate['id'], $content);
                 }
                 
             }
@@ -90,8 +90,8 @@ class BlockToolkit
             foreach ($meta['items'] as $key => $item) {
                 $data[$key] = $item['default'];
             }
-            $block = array('templateName' => $meta['templateName'], 'data' => $data);
-            $html = self::render($block, $container);
+            $blockTemplate = array('templateName' => $meta['templateName'], 'data' => $data);
+            $html = self::render($blockTemplate, $container);
 
             $filename = "block-".md5($code).'.html';
             if (!file_exists($dist)) {
@@ -107,9 +107,9 @@ class BlockToolkit
     public static function updateCarousel($code)
     {
         $blockService = ServiceKernel::instance()->createService('Content.BlockService');
-        $block = $blockService->getBlockByCode($code);
-        $data = $block['data'];
-        $content = $block['content'];
+        $blockTemplate = $blockService->getBlockTemplateByCode($code);
+        $data = $blockTemplate['data'];
+        $content = $blockTemplate['content'];
 
         preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $content, $imgMatchs);
         preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $content, $altMatchs);
@@ -141,7 +141,7 @@ class BlockToolkit
             }
         }
 
-        $blockService->updateBlock($block['id'], array(
+        $blockService->updateBlockTemplate($block['id'], array(
             'data' => $data,
         ));
     }
@@ -149,7 +149,7 @@ class BlockToolkit
     public static function updateLinks($code)
     {
         $blockService = ServiceKernel::instance()->createService('Content.BlockService');
-        $block = $blockService->getBlockByCode($code);
+        $block = $blockService->getBlockTemplateByCode($code);
         $data = $block['data'];
         $content = $block['content'];
         preg_match_all('/< *dt.*?>(.*?)<\/dt>/is', $content, $textMatchs);
@@ -194,7 +194,7 @@ class BlockToolkit
             }
         }
 
-        $blockService->updateBlock($block['id'], array(
+        $blockService->updateBlockTemplate($block['id'], array(
             'data' => $data,
         ));
     }

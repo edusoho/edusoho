@@ -11,7 +11,6 @@ define(function(require, exports, module) {
         var $modal = $form.parents('.modal');
         var $table = $('#block-table');
 
-
         $form.find('.upload-img').each(function(index, el) {
 
             var uploader = new Uploader({
@@ -89,34 +88,6 @@ define(function(require, exports, module) {
             return false;
         });
 
-        $('.btn-recover-content').on('click', function() {
-            var html = $(this).parents('tr').find('.data-role-content').text();
-            $("#blockContent").val(html);
-        });
-
-        $('.btn-recover-template').on('click', function() {
-            var html = $(this).parents('tr').find('.data-role-content').text();
-            var templates = $.parseJSON(html);
-
-            $form.find("input").each(function(index, el) {
-
-                if (templates != null ) {
-                $.each(templates,function(n,value) {
-                    if ($(el).attr('name') == n ) {
-                        $(el).val(value);
-                        $(el).siblings('a').attr('href', value);
-                        if($(el).siblings('a').attr('href')) {
-                            $(el).siblings('a').show();
-                            $(el).siblings('.upload-img-del').show();
-                        } else {
-                            $(el).siblings('a').hide();
-                            $(el).siblings('.upload-img-del').hide();
-                        }
-                    };
-                });
-              };
-            });
-        });
     };
 
 });

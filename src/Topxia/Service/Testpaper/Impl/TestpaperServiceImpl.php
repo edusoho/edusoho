@@ -880,9 +880,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $user = $this->getCurrentUser();
 
-        if ($user->isAdmin()) {
+        if ($user->isSuperAdmin()) {
             return $user['id'];
         }
+
 
         $target = explode('-', $paper['target']);
 

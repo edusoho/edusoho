@@ -11,7 +11,7 @@ class TreeToolkit
      * @return [array]  tree data
      */
 
-    public static function maketree(array $data, $sort, $parentId = 0)
+    public static function makeTree(array $data, $sort, $parentId = 0)
     {
         $tree = self::makeParentTree($data, $sort, $parentId);
 

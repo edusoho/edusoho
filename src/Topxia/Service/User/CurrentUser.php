@@ -160,7 +160,10 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     {
         return in_array('ROLE_TEACHER', $this->getRoles());
     }
-
+    public function getSelectOrg()
+    {
+        return isset($this->selectOrg) ? $this->selectOrg : $this->org;
+    }
     public function getSelectOrgCode()
     {
         return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
@@ -170,7 +173,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     {
         return $this->orgCode;
     }
-
+    public function getSelectOrgId()
+    {
+        $selectOrg = $this->getSelectOrg();
+        return $selectOrg['id'];
+    }
     public function fromArray(array $user)
     {
         $this->data = $user;
