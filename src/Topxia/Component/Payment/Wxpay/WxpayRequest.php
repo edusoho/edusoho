@@ -85,7 +85,7 @@ class WxpayRequest extends Request
         $converted['notify_url']       = $params['notifyUrl'];
         $converted['out_trade_no']     = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
-        $converted['total_fee']        = $this->getAmount($amount);
+        $converted['total_fee']        = $this->getAmount($params['amount']);
         $converted['trade_type']       = 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
