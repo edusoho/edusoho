@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
     "use strict";
     var Lazyload = require('echo.js');
-    var Swiper = require('swiper');
 
     var getPageList = function (url){
         $.post(url, function(response){
