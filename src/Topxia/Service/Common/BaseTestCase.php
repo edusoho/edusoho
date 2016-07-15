@@ -73,6 +73,14 @@ class BaseTestCase extends WebTestCase
         }
 
         $this->initCurrentUser();
+        $this->initDevelopSetting();
+    }
+
+    protected function initDevelopSetting()
+    {
+        static::$serviceKernel->createService('System.SettingService')->set('developer', array(
+            'without_network' => '1'
+        ));
     }
 
     protected function initCurrentUser()
@@ -97,11 +105,13 @@ class BaseTestCase extends WebTestCase
             'orgCode'   => '1.',
             'orgId'     => '1'
         ));
-        $currentUser       = new CurrentUser();
-        $user['currentIp'] = $user['createdIp'];
-        $currentUser->fromArray($user);
-        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService->changeUserRoles($user['id'], $roles);
+        $user              = $userService->getUserByEmail($user['email']);
+        $user['currentIp'] = $user['createdIp'];
+        $user['org']       = array('id' => 1);
+        $currentUser       = new CurrentUser();
+        $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
     }
 

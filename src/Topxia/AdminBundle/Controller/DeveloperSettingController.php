@@ -16,6 +16,7 @@ class DeveloperSettingController extends BaseController
 
         $default = array(
             'debug'                  => '0',
+            'without_network'        => '0',
             'app_api_url'            => '',
             'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'cloud_file_server'      => '',
@@ -38,7 +39,6 @@ class DeveloperSettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
 
             $this->dealServerConfigFile();
-            $this->dealNetworkLockFile($developerSetting);
 
             $this->setFlashMessage('success', '开发者已保存！');
         }
@@ -53,18 +53,6 @@ class DeveloperSettingController extends BaseController
         $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/api_server.json';
         $fileSystem       = new Filesystem();
         $fileSystem->remove($serverConfigFile);
-    }
-
-    protected function dealNetworkLockFile($developerSetting)
-    {
-        $networkLock = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/network.lock';
-        $fileSystem  = new Filesystem();
-
-        if (isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
-            $fileSystem->touch($networkLock);
-        } elseif (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
-            $fileSystem->remove($networkLock);
-        }
     }
 
     public function versionAction(Request $request)
