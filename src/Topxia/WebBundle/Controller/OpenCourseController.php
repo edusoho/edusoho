@@ -78,12 +78,19 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        $member = $this->_memberOperate($request, $courseId);
+        //$member = $this->_memberOperate($request, $courseId);
 
-        return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
-            'course'   => $course,
-            'lessonId' => $lessonId
-        ));
+        if($this->isMobileClient()){
+            return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig", array(
+                'course'   => $course,
+                'lessonId' => $lessonId
+            ));
+        }else{
+            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+                'course'   => $course,
+                'lessonId' => $lessonId
+            ));
+        }
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)

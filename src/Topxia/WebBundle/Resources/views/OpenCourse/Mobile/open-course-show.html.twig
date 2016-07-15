@@ -1,0 +1,62 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course' %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  
+  <div class="container">
+    {% block content %}
+      <ol class="breadcrumb breadcrumb-o">
+        <li><a href="{{ path('homepage') }}">首页</a></li>
+        <li><a href="{{ path('open_course_explore') }}" target="_blank">公开课</a></li>
+        <li>{{ course.title }}</li>
+      </ol>
+
+      <div class="row" style="margin:0">
+
+        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+        
+        <div class="col-md-3 open-course-tab js-open-course-tab">
+          <ul class="clearfix">
+            <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
+            {% if course.type == 'open' %}
+              <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>课时列表</li>
+            {% endif %}
+          </ul>
+          <div id="content">
+            <ul id="recommand-tab" >
+              {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig'%}
+            </ul>
+            <ul id="live-tab" style="display:none">
+              {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig' with {currentLessonId:lessonId|default(null)} %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
+      <div class="open-course-detail row">
+        <div class="col-md-9">
+          <div class="es-section gray-darker editor-text">
+            {% if course.about %}
+              {{ course.about|raw }}
+            {% else %}
+              <div class="empty">暂无简介</div>
+            {% endif %}
+          </div>
+          {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+        </div>
+        <div class="col-md-3 hidden-sm hidden-xs">
+          {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+
+          {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
+        </div>
+      </div>
+
+
+    {% endblock %}
+  </div>
+  
+  {% block bottom_content %}{% endblock %}
+{% endblock %}
+    
