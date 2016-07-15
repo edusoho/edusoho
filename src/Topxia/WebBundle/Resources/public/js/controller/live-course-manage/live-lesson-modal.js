@@ -149,9 +149,10 @@ define(function (require, exports, module) {
             $('[name=startTime]').attr('disabled', false);
         }
 
+        Validator.addRule('live_lesson_title', /^[^(<|>|'|"|&|‘|’|”|“)]*$/, "暂不支持<、>、\"、&、‘、’、”、“字符");
         validator.addItem({
             element: '#live-title-field',
-            rule: 'chinese_alphanumeric',
+            rule: 'live_lesson_title',
             required: true
         });
 

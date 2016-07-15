@@ -6,7 +6,7 @@ use Topxia\Service\System\SettingService;
 
 class SettingServiceImpl extends BaseService implements SettingService
 {
-    const CACHE_NAME = 'settings';
+    const CACHE_NAME         = 'settings';
     const NAME_SPACE_DEFAULT = 'default';
 
     private $cached;
@@ -30,14 +30,16 @@ class SettingServiceImpl extends BaseService implements SettingService
             if (is_null($this->cached)) {
                 $settings = $this->getSettingDao()->findAllSettings();
                 foreach ($settings as $setting) {
-                    $this->cached[$setting['namespace'] . '-' . $setting['name']] = $setting['value'];
+                    $this->cached[$setting['namespace'].'-'.$setting['name']] = $setting['value'];
                 }
                 $this->getCacheService()->set(self::CACHE_NAME, $this->cached);
             }
         }
+
         $namespace  = $this->getNameSpace();
-        $defaultSet = isset($this->cached[self::NAME_SPACE_DEFAULT . '-' . $name]) ? unserialize($this->cached[self::NAME_SPACE_DEFAULT . '-' . $name]) : $default;
-        $orgSet     = isset($this->cached[$namespace . '-' . $name]) ? unserialize($this->cached[$namespace . '-' . $name]) : array();
+        $defaultSet = isset($this->cached[self::NAME_SPACE_DEFAULT.'-'.$name]) ? unserialize($this->cached[self::NAME_SPACE_DEFAULT.'-'.$name]) : $default;
+        $orgSet     = isset($this->cached[$namespace.'-'.$name]) ? unserialize($this->cached[$namespace.'-'.$name]) : $default;
+
         return empty($orgSet) ? $defaultSet : $this->mergeSetting($defaultSet, $orgSet);
     }
 
@@ -66,7 +68,6 @@ class SettingServiceImpl extends BaseService implements SettingService
         );
         $this->getSettingDao()->addSetting($setting);
         $this->clearCache();
-
     }
 
     public function deleteByNamespaceAndName($namespace, $name)
@@ -94,7 +95,7 @@ class SettingServiceImpl extends BaseService implements SettingService
     protected function getNameSpace()
     {
         $user = $this->getCurrentUser()->toArray();
-        if( empty($user['selectedOrgId']) ||  $user['selectedOrgId'] === 1 ){
+        if (empty($user['selectedOrgId']) || $user['selectedOrgId'] === 1) {
             return 'default';
         }
         return 'org-'.$user['selectedOrgId'];

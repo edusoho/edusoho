@@ -5,7 +5,6 @@ namespace Topxia\Service\Common;
 use Mockery;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -28,16 +27,6 @@ class BaseTestCase extends WebTestCase
         $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
         static::$kernel       = static::createKernel();
         static::$kernel->boot();
-    }
-
-    protected function dealNetworkLockFile($developerSetting)
-    {
-        $networkLock = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/network.lock';
-        $fileSystem  = new Filesystem();
-
-        if (!$fileSystem->exists($networkLock)) {
-            $fileSystem->touch($networkLock);
-        }
     }
 
     protected function setServiceKernel()
@@ -84,6 +73,14 @@ class BaseTestCase extends WebTestCase
         }
 
         $this->initCurrentUser();
+        $this->initDevelopSetting();
+    }
+
+    protected function initDevelopSetting()
+    {
+        static::$serviceKernel->createService('System.SettingService')->set('developer', array(
+            'without_network' => '1'
+        ));
     }
 
     protected function initCurrentUser()

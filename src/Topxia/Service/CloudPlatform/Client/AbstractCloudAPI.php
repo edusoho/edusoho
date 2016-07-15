@@ -192,6 +192,8 @@ class AbstractCloudAPI
 
     protected function isWithoutNetwork()
     {
-        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/network.lock');
+        $developer = ServiceKernel::instance()->createService('System.SettingService')->get('developer');
+
+        return empty($developer['without_network']) ? false : boolval($developer['without_network']);
     }
 }

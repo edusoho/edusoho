@@ -11,7 +11,7 @@ define(function(require, exports, module) {
                 if(response.status){
                     Notify.success("邮件已发送, 请注意查收", 3);
                 }else {
-                    Notify.danger(response.message, 3);
+                    Notify.danger("邮件发送失败，请检查邮箱服务器配置", 3);
                 }
                 $this.text('验证');
             });

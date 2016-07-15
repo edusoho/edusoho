@@ -6,30 +6,40 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BuildPackageCommand extends BaseCommand
+class BuildPackageAutoCommand extends BaseCommand
 {
     private $fileSystem;
+
+    protected $output;
 
     protected function configure()
     {
         $this
-            ->setName('topxia:build-package')
-            ->setDescription('编制升级包')
+            ->setName('topxia:auto-build-package')
+            ->setDescription('自动编制升级包')
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
-            ->addArgument('version', InputArgument::REQUIRED, 'which version to update')
-            ->addArgument('diff_file', InputArgument::REQUIRED, 'Where is Diff file of both versions');
+            ->addArgument('fromVersion', InputArgument::REQUIRED, 'compare from  version')
+            ->addArgument('version', InputArgument::REQUIRED, 'compare to  version');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<question>开始编制升级包</question>');
 
-        $name     = $input->getArgument('name');
-        $version  = $input->getArgument('version');
-        $diffFile = $input->getArgument('diff_file');
+        $name        = $input->getArgument('name');
+        $fromVersion = $input->getArgument('fromVersion');
+        $version     = $input->getArgument('version');
+
+        $diffFile = 'build/diff-'.$version;
 
         $this->filesystem = new Filesystem();
         $this->output     = $output;
+        $this->input      = $input;
+
+        $this->generateDiffFile($fromVersion, $version);
+
+        $this->diffFilePrompt($diffFile, $version);
+
         $packageDirectory = $this->createDirectory($name, $version);
 
         $this->generateFiles($diffFile, $packageDirectory, $output);
@@ -39,14 +49,17 @@ class BuildPackageCommand extends BaseCommand
         $this->zipPackage($packageDirectory);
 
         $this->printChangeLog($version);
-
         $output->writeln('<question>编制升级包完毕</question>');
     }
 
     private function generateFiles($diffFile, $packageDirectory, $output)
     {
-        $file = @fopen($diffFile, "r");
+        if (!$this->filesystem->exists($diffFile)) {
+            $output->writeln("<error>差异文件 {$diffFile}, 不存在,无法制作升级包</error>");
+            exit;
+        }
 
+        $file = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line = fgets($file);
             $op   = $line[0];
@@ -241,6 +254,76 @@ class BuildPackageCommand extends BaseCommand
                     $this->output->writeln(sprintf("<comment>%s<br/></comment>", $line));
                 }
             }
+        }
+    }
+
+    private function generateDiffFile($version, $toVersion)
+    {
+        $RootPath = $this->getContainer()->getParameter('kernel.root_dir').'/../';
+
+        if (!$this->filesystem->exists($RootPath.'build')) {
+            $this->filesystem->mkdir($RootPath.'build');
+        }
+        $prefix = 'release';
+
+        $this->output->writeln("<info>  使用 git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");
+
+        chdir($RootPath);
+        $command = "git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion}";
+        exec($command);
+    }
+
+    private function diffFilePrompt($diffFile, $version)
+    {
+        $noSqlUpgrade = true;
+        $askFileEdit  = false;
+        $file         = @fopen($diffFile, "r");
+        while (!feof($file)) {
+            $line   = fgets($file);
+            $op     = $line[0];
+            $opFile = trim(substr($line, 1));
+            if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
+                echo "异常的文件更新模式：{$line}";
+                $askFileEdit = true;
+                continue;
+            }
+
+            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+                $noSqlUpgrade = false;
+                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
+            }
+        }
+
+        $question = "请手动检查build/diff-{$version}文件是否需要编辑,继续请输入y (y/n)";
+        if ($askFileEdit && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+            $this->output->writeln('<error>制作升级包终止!</error>');
+            exit;
+        }
+
+        $this->output->writeln("<info>准备制作升级脚本</info>");
+        $question = "请根据以上sql脚本完成 scripts/upgrade-{$version}.php,完成后输入y (y/n)";
+
+        if (!$noSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+            $this->output->writeln('<error>制作升级包终止!</error>');
+            exit;
+        }
+    }
+
+    /**
+     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
+     * but use the ConfirmationQuestion when available.
+     *
+     * @param  $question
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
+     * @return mixed
+     */
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
+        if ($this->getHelperSet()->has('question')) {
+            return $this->getHelper('question')->ask($input, $output, new ConfirmationQuestion($question));
+        } else {
+            return $this->getHelper('dialog')->askConfirmation($output, '<question>'.$question.'</question>', false);
         }
     }
 }
