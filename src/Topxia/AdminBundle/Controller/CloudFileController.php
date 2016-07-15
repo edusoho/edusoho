@@ -3,10 +3,9 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudFileController extends BaseController
 {
@@ -59,7 +58,7 @@ class CloudFileController extends BaseController
         return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
-            'createdUsers' => isset($results['createdUsers']) ?$results['createdUsers'] : array(),
+            'createdUsers' => isset($results['createdUsers']) ? $results['createdUsers'] : array(),
             'paginator'    => $paginator
         ));
     }
@@ -97,7 +96,7 @@ class CloudFileController extends BaseController
             'material'   => $cloudFile,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
             'params'     => $reqeust->query->all(),
-            'editUrl'    => $this->generateUrl('admin_cloud_file_edit',array('globalId'=>$globalId))
+            'editUrl'    => $this->generateUrl('admin_cloud_file_edit', array('globalId' => $globalId))
         ));
     }
 
@@ -142,7 +141,6 @@ class CloudFileController extends BaseController
         $data = $request->request->all();
 
         if (isset($data['ids']) && !empty($data['ids'])) {
-
             $this->getCloudFileService()->batchDelete($data['ids']);
             return $this->createJsonResponse(true);
         }
@@ -155,17 +153,17 @@ class CloudFileController extends BaseController
         $globalIds = $request->request->get('ids');
         $files     = $this->getUploadFileService()->searchFiles(
             array('globalIds' => $globalIds),
-            array('createdTime','desc'),
+            array('createdTime', 'desc'),
             0, PHP_INT_MAX
         );
 
         $materials = array();
         if ($files) {
-            $files     = ArrayToolkit::index($files,'id');
+            $files     = ArrayToolkit::index($files, 'id');
             $fileIds   = ArrayToolkit::column($files, 'id');
             $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
         }
-        
+
         return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,

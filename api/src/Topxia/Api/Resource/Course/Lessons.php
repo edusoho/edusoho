@@ -1,7 +1,8 @@
 <?php
 
-namespace Topxia\Api\Resource;
+namespace Topxia\Api\Resource\Course;
 
+use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
@@ -13,7 +14,7 @@ class Lessons extends BaseResource
         $conditions = $request->query->all();
 
         $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 100);
+        $limit = $request->query->get('limit', 20);
 
         if (isset($conditions['cursor'])) {
             $conditions['status'] = 'published';
@@ -30,16 +31,16 @@ class Lessons extends BaseResource
 
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-        return $this->multicallFilter('Lesson', $res);
+        return $this->multicallFilter('Course/Lesson', $res);
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
-            $one['body'] = '';
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callFilter($name, $one);
+            $res[$key]['body'] = '';
         }
         return $res;
     }

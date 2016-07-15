@@ -14,8 +14,9 @@ class DiscoveryColumn extends BaseResource
         return $this->wrap($result, sizeof($result));
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
+        return $res;
     }
 
     protected function getDiscoveryColumnService()

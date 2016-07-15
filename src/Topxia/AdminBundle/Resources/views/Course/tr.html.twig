@@ -23,6 +23,7 @@
     {% endif %}
 
   </td>
+  <td>{{ course.originPrice }}</td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
   <td>
     {% if  course.serializeMode =="none" %}
@@ -41,8 +42,13 @@
     {% endif %}
   </td>
   {% else %}
-  <td>{{ course.studentNum }}</td>
-  <td><span class="money-text">{{ course.income }}</span></td>
+    <td>{{ course.studentNum }}</td>
+  {% endif %}
+  {% if filter == 'course' %}
+    <td><span class="money-text">{{ course.income }}</span></td>
+  {% elseif filter == 'vip' %}
+    {% set vip = vips[course.vipLevelId]|default(null) %}
+    <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
   {% endif %}
 
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
@@ -56,6 +62,7 @@
       <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">管理</a>
 
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
+
     </div>
   </td>
 </tr>

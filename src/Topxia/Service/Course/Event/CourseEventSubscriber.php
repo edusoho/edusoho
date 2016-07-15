@@ -23,13 +23,16 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.teacher.update'  => 'onCourseTeacherUpdate',
             'course.price.update'    => 'onCoursePriceUpdate',
             'course.picture.update'  => 'onCoursePictureUpdate',
-            'user.role.change'       => 'onRoleChange'
+            'user.role.change'       => 'onRoleChange',
+            'announcement.create'    => 'onAnnouncementCreate',
+            'announcement.update'    => 'onAnnouncementUpdate',
+            'announcement.delete'    => 'onAnnouncementDelete'
         );
     }
 
     public function onRoleChange(ServiceEvent $event)
     {
-        $user  = $event->getSubject();
+        $user = $event->getSubject();
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
             $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
         }
@@ -228,6 +231,108 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onAnnouncementCreate(ServiceEvent $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+            $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
+            $fields['copyId'] = $announcement['id'];
+
+            foreach ($courseIds as $courseId) {
+                $fields['targetId']    = $courseId;
+                $fields['createdTime'] = time();
+
+                $this->getAnnouncementService()->createAnnouncement($fields);
+            }
+        }
+
+        return true;
+    }
+
+    public function onAnnouncementUpdate(ServiceEvent $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+                array(
+                    'targetType' => 'course',
+                    'targetIds'  => $courseIds,
+                    'copyId'     => $announcement['id']
+                ),
+                array('createdTime', 'DESC'),
+                0, PHP_INT_MAX
+            );
+
+            $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
+
+            foreach ($copyAnnouncements as $copyAnnouncement) {
+                $fields['updatedTime'] = time();
+
+                $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
+            }
+        }
+
+        return true;
+    }
+
+    public function onAnnouncementDelete(ServiceEvent $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+                array(
+                    'targetType' => 'course',
+                    'targetIds'  => $courseIds,
+                    'copyId'     => $announcement['id']
+                ),
+                array('createdTime', 'DESC'),
+                0, PHP_INT_MAX
+            );
+
+            foreach ($copyAnnouncements as $copyAnnouncement) {
+                $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
+            }
+        }
+
+        return true;
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -275,5 +380,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getAnnouncementService()
+    {
+        return ServiceKernel::instance()->createService('Announcement.AnnouncementService');
     }
 }

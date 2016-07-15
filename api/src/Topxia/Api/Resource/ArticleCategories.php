@@ -14,10 +14,10 @@ class ArticleCategories extends BaseResource
         return $this->filter($categories);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-        foreach ($res as &$category) {
-            $category['createdTime'] = date('c', $category['createdTime']);
+        foreach ($res as $key => $one) {
+            $res[$key]['createdTime'] = date('c', $one['createdTime']);
         }
 
         return $res;
@@ -27,5 +27,4 @@ class ArticleCategories extends BaseResource
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
-
 }

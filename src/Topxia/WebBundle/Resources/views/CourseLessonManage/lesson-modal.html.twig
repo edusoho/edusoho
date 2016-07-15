@@ -80,7 +80,7 @@
     <div class="col-md-2 control-label for-document-type"><label>{{'文档'|trans}}</label></div>
     <div class="col-md-2 control-label for-flash-type"><label>Flash</label></div>
     <div class="col-md-9 controls">
-      {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
+      {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" with {lesson:lesson|default(null)} %}
       <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
     </div>
   </div>

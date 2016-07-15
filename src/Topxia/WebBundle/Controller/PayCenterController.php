@@ -81,7 +81,8 @@ class PayCenterController extends BaseController
                 'sn'       => $order['sn'],
                 'status'   => 'success',
                 'amount'   => $order['amount'],
-                'paidTime' => time()
+                'paidTime' => time(),
+                'payment'  => 'coin'
             );
             list($success, $order) = $this->getPayCenterService()->pay($payData);
 
@@ -275,11 +276,9 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
-
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
         }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {

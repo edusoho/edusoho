@@ -755,6 +755,13 @@ margin-top: 14px;
     background: #5cb85c;
 }
 
+.admin-pagination .page-num {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 27px;
+  margin-left: 10px;
+}
+
 
 
 

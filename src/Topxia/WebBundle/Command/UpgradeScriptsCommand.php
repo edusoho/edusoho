@@ -26,8 +26,12 @@ class UpgradeScriptsCommand extends BaseCommand
 
         $file = file($filePath);
         foreach ($file as $version) {
+            $version = trim($version);
             $this->executeScript($code, $version);
             $output->writeln("<info>执行脚本{$version}</info>");
+
+            $this->updateApp($code, $version);
+            $output->writeln("<info>元数据更新</info>");
         }
 
         $this->removeCache();
@@ -40,7 +44,6 @@ class UpgradeScriptsCommand extends BaseCommand
     protected function executeScript($code, $version, $index = 0)
     {
         $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../scripts/upgrade-{$version}.php";
-
         if (!file_exists($scriptFile)) {
             return;
         }

@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
+use Topxia\Service\Common\MailFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,7 +90,7 @@ class SettingController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename  = 'mobile_picture'.time().'.'.$file->getExtension();
+        $filename  = 'mobile_picture' . time() . '.' . $file->getExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file      = $file->move($directory, $filename);
 
@@ -137,7 +138,7 @@ class SettingController extends BaseController
 
         $oldFileId            = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
         $site['logo_file_id'] = $fileId;
-        $site['logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/" . $parsed["path"];
         $site['logo']         = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
@@ -191,7 +192,7 @@ class SettingController extends BaseController
 
         $oldFileId                 = empty($site['live_logo_file_id']) ? null : $site['live_logo_file_id'];
         $site['live_logo_file_id'] = $fileId;
-        $site['live_logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['live_logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/" . $parsed["path"];
         $site['live_logo']         = ltrim($site['live_logo'], '/');
 
         $this->getSettingService()->set('course', $site);
@@ -245,7 +246,7 @@ class SettingController extends BaseController
 
         $oldFileId               = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
         $site['favicon_file_id'] = $fileId;
-        $site['favicon']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['favicon']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/" . $parsed["path"];
         $site['favicon']         = ltrim($site['favicon'], '/');
 
         $this->getSettingService()->set('site', $site);
@@ -255,7 +256,7 @@ class SettingController extends BaseController
         }
 
         //浏览器图标覆盖默认图标
-        copy($this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/favicon.ico');
+        copy($this->getServiceKernel()->getParameter('kernel.root_dir') . '/../web/' . $site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir') . '/../web/favicon.ico');
 
         $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
 
@@ -310,7 +311,7 @@ class SettingController extends BaseController
             'from'     => '',
             'name'     => ''
         );
-        $mailer = array_merge($default, $mailer);
+        $mailer  = array_merge($default, $mailer);
 
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
@@ -326,6 +327,27 @@ class SettingController extends BaseController
             'mailer' => $mailer,
             'status' => $status
         ));
+    }
+
+    public function mailerTestAction(Request $request)
+    {
+        $user        = $this->getCurrentUser();
+        $mailOptions = array(
+            'to'       => $user['email'],
+            'template' => 'email_system_self_test',
+        );
+        $mail        = MailFactory::create($mailOptions);
+        try{
+            $mail->send();
+            return $this->createJsonResponse(array(
+                'status' => true
+            ));
+        }catch (\Exception $e){
+            return $this->createJsonResponse(array(
+                'status' => false,
+                'message' => $e->getMessage()
+            ));
+        }
     }
 
     protected function checkMailerStatus()
@@ -348,7 +370,7 @@ class SettingController extends BaseController
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
-        $path           = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+        $path           = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
 
         $default = $this->getDefaultSet();
 
@@ -472,17 +494,17 @@ class SettingController extends BaseController
 
         $setting = array_merge($default, $setting);
 
-        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
-        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
+        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
+        $discuzConfigPath  = $configDirectory . 'uc_client_config.php';
+        $phpwindConfigPath = $configDirectory . 'windid_client_config.php';
 
         if ($request->getMethod() == 'POST') {
             $data                 = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
-            $setting              = array('mode' => $data['mode'],
-                'nickname_enabled'                   => $data['nickname_enabled'],
-                'avatar_alert'                       => $data['avatar_alert'],
-                'email_filter'                       => $data['email_filter']
+            $setting              = array('mode'             => $data['mode'],
+                                          'nickname_enabled' => $data['nickname_enabled'],
+                                          'avatar_alert'     => $data['avatar_alert'],
+                                          'email_filter'     => $data['email_filter']
             );
             $this->getSettingService()->set('user_partner', $setting);
 
@@ -601,7 +623,7 @@ class SettingController extends BaseController
         $questionsSetting = $this->getSettingService()->get('questions', array());
 
         if (empty($questionsSetting)) {
-            $default = array(
+            $default          = array(
                 'testpaper_answers_show_mode' => 'submitted'
             );
             $questionsSetting = $default;

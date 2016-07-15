@@ -10,12 +10,12 @@ class BlockServiceImpl extends BaseService implements BlockService
 {
     public function createBlockTemplate($blockTemplate)
     {
-        if (!ArrayToolkit::requireds($blockTemplate, array('code', 'mode','category','meta','data','templateName','title'))) {
+        if (!ArrayToolkit::requireds($blockTemplate, array('code', 'mode', 'category', 'meta', 'data', 'templateName', 'title'))) {
             throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
         }
         $blockTemplate['createdTime'] = time();
-        $blockTemplate['updateTime'] = time();
-        $createdBlockTemplate = $this->getBlockTemplateDao()->addBlockTemplate($blockTemplate);
+        $blockTemplate['updateTime']  = time();
+        $createdBlockTemplate         = $this->getBlockTemplateDao()->addBlockTemplate($blockTemplate);
         return $createdBlockTemplate;
     }
 
@@ -33,7 +33,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $blockHistories = array();
         foreach ($blockIds as $key => $blockId) {
-            $block = $this->getBlockDao()->getBlock($blockId);
+            $block                                     = $this->getBlockDao()->getBlock($blockId);
             $blockHistories[$block['blockTemplateId']] = $this->getBlockHistoryDao()->getLatestBlockHistoryByBlockId($blockId);
         }
 
@@ -44,15 +44,15 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $result = $this->getBlockDao()->getBlock($id);
         if (empty($result)) {
-            $blockTemplate = $this->getBlockTemplate($id);
-            $blockTemplate['blockTemplateId']  = $blockTemplate['id'];
-             $blockTemplate['blockId']  = 0;
+            $blockTemplate                    = $this->getBlockTemplate($id);
+            $blockTemplate['blockTemplateId'] = $blockTemplate['id'];
+            $blockTemplate['blockId']         = 0;
             return $blockTemplate;
         } else {
-            $blockTemplate = $this->getBlockTemplate($result['blockTemplateId']);
-            $result['meta'] = $blockTemplate['meta'];
-            $result['blockId'] = $result['id'];
-            $result['blockTemplateId']  = $blockTemplate['id'];
+            $blockTemplate             = $this->getBlockTemplate($result['blockTemplateId']);
+            $result['meta']            = $blockTemplate['meta'];
+            $result['blockId']         = $result['id'];
+            $result['blockTemplateId'] = $blockTemplate['id'];
 
             return $result;
         }
@@ -77,7 +77,7 @@ class BlockServiceImpl extends BaseService implements BlockService
             return $templateItems;
         } else {
             foreach ($templateDatas as &$item) {
-                $item = explode(':', $item);
+                $item  = explode(':', $item);
                 $arr[] = array('title' => $item[0], 'type' => $item[1]);
             }
 
@@ -92,19 +92,19 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $user = $this->getCurrentUser();
 
-        $result = $this->getBlockDao()->getBlockByCodeAndOrgId($code,$user['orgId']);
+        $result = $this->getBlockDao()->getBlockByCodeAndOrgId($code, $user->getSelectOrgId());
         if (empty($result)) {
-            $blockTemplate = $this->getBlockTemplateByCode($code);
-            $blockTemplate['blockTemplateId']  = $blockTemplate['id'];
-             $blockTemplate['blockId']  = 0;
+            $blockTemplate                    = $this->getBlockTemplateByCode($code);
+            $blockTemplate['blockTemplateId'] = $blockTemplate['id'];
+            $blockTemplate['blockId']         = 0;
             return $blockTemplate;
         } else {
-            $blockTemplate = $this->getBlockTemplate($result['blockTemplateId']);
-            $result['meta'] = $blockTemplate['meta'];
-            $result['mode'] = $blockTemplate['mode'];
-            $result['templateName'] = $blockTemplate['templateName'];
-            $result['blockId'] = $result['id'];
-            $result['blockTemplateId']  = $blockTemplate['id'];
+            $blockTemplate             = $this->getBlockTemplate($result['blockTemplateId']);
+            $result['meta']            = $blockTemplate['meta'];
+            $result['mode']            = $blockTemplate['mode'];
+            $result['templateName']    = $blockTemplate['templateName'];
+            $result['blockId']         = $result['id'];
+            $result['blockTemplateId'] = $blockTemplate['id'];
             return $result;
         }
     }
@@ -126,34 +126,34 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function createBlock($block)
     {
-        if (!ArrayToolkit::requireds($block, array('code', 'data','content','userId','blockTemplateId','orgId'))) {
+        if (!ArrayToolkit::requireds($block, array('code', 'data', 'content', 'userId', 'blockTemplateId', 'orgId'))) {
             throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
         }
 
         $block['createdTime'] = time();
-        $block['updateTime'] = time();
+        $block['updateTime']  = time();
         unset($block['mode']);
         $createdBlock = $this->getBlockDao()->addBlock($block);
 
         $blockHistoryInfo = array(
-            'blockId' => $createdBlock['id'],
-            'content' => $createdBlock['content'],
-            'userId' => $createdBlock['userId'],
-            'createdTime' => time(),
+            'blockId'     => $createdBlock['id'],
+            'content'     => $createdBlock['content'],
+            'userId'      => $createdBlock['userId'],
+            'createdTime' => time()
         );
         $history = $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
-        $blockTemplate = $this->getBlockTemplateDao()->getBlockTemplate($createdBlock['blockTemplateId']);
-        $createdBlock['id'] = $blockTemplate['id'];
+        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($createdBlock['blockTemplateId']);
+        $createdBlock['id']    = $blockTemplate['id'];
         $createdBlock['title'] = $blockTemplate['title'];
-        $createdBlock['mode'] = $blockTemplate['mode'];
+        $createdBlock['mode']  = $blockTemplate['mode'];
         return $createdBlock;
     }
 
     public function updateBlock($id, $fields)
     {
         $block = $this->getBlockDao()->getBlock($id);
-        $user = $this->getCurrentUser();
+        $user  = $this->getCurrentUser();
 
         if (!$block) {
             throw $this->createServiceException('此编辑区不存在，更新失败!');
@@ -163,21 +163,21 @@ class BlockServiceImpl extends BaseService implements BlockService
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
-            'blockId' => $updatedBlock['id'],
-            'content' => $updatedBlock['content'],
-            'data' => $updatedBlock['data'],
-            'userId' => $user['id'],
-            'createdTime' => time(),
+            'blockId'     => $updatedBlock['id'],
+            'content'     => $updatedBlock['content'],
+            'data'        => $updatedBlock['data'],
+            'userId'      => $user['id'],
+            'createdTime' => time()
         );
-        
+
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
         $this->getLogService()->info('system', 'update_block', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
 
-        $blockTemplate = $this->getBlockTemplateDao()->getBlockTemplate($updatedBlock['blockTemplateId']);
-        $updatedBlock['id'] = $blockTemplate['id'];
+        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($updatedBlock['blockTemplateId']);
+        $updatedBlock['id']    = $blockTemplate['id'];
         $updatedBlock['title'] = $blockTemplate['title'];
-        $updatedBlock['mode'] = $blockTemplate['mode'];
+        $updatedBlock['mode']  = $blockTemplate['mode'];
 
         return $updatedBlock;
     }
@@ -196,7 +196,7 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createServiceException('获取内容失败，不允许查询空编号所对应的内容!');
         }
 
-        $cdn = $this->getSettingService()->get('cdn');
+        $cdn    = $this->getSettingService()->get('cdn');
         $cdnUrl = empty($cdn['enabled']) ? '' : $cdn['url'];
 
         $contents = array();
@@ -223,16 +223,15 @@ class BlockServiceImpl extends BaseService implements BlockService
             throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
 
-        
         return $this->getBlockTemplateDao()->updateBlockTemplate($id, array(
-            'content' => $content,
-            'updateTime' => time(),
+            'content'    => $content,
+            'updateTime' => time()
         ));
     }
 
     public function recovery($blockId, $history)
     {
-        $block = $this->getBlockDao()->getBlock($blockId);
+        $block         = $this->getBlockDao()->getBlock($blockId);
         $blockTemplate = $this->getBlockTemplateDao()->getBlockTemplate($block['blockTemplateId']);
         if (empty($block)) {
             throw $this->createServiceException('此编辑区不存在，更新失败!');
@@ -244,29 +243,29 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         return $this->getBlockDao()->updateBlock($blockId, array(
             'content' => $history['content'],
-            'data' => $history['data'],
+            'data'    => $history['data']
         ));
     }
+
     public function getBlockByTemplateIdAndOrgId($blockTemplateId, $orgId = 0)
     {
         $block = $this->getBlockDao()->getBlockByTemplateIdAndOrgId($blockTemplateId, $orgId);
         if (empty($block)) {
-            $blockTemplate = $this->getBlockTemplate($blockTemplateId);
-            $blockTemplate['blockTemplateId']  = $blockTemplate['id'];
-             $blockTemplate['blockId']  = 0;
+            $blockTemplate                    = $this->getBlockTemplate($blockTemplateId);
+            $blockTemplate['blockTemplateId'] = $blockTemplate['id'];
+            $blockTemplate['blockId']         = 0;
             return $blockTemplate;
         }
-        $blockTemplate = $this->getBlockTemplate($blockTemplateId);
-        $block['blockId'] = $block['id'];
-        $block['blockTemplateId']  = $blockTemplate['id'];
-        $block['code'] = $blockTemplate['code'];
-        $block['template'] = $blockTemplate['template'];
-        $block['tips'] = $blockTemplate['tips'];
-        $block['mode'] = $blockTemplate['mode'];
-        $block['meta'] = $blockTemplate['meta'];
-        $block['title'] = $blockTemplate['title'];
-        $block['templateName'] = $blockTemplate['templateName'];
-
+        $blockTemplate            = $this->getBlockTemplate($blockTemplateId);
+        $block['blockId']         = $block['id'];
+        $block['blockTemplateId'] = $blockTemplate['id'];
+        $block['code']            = $blockTemplate['code'];
+        $block['template']        = $blockTemplate['template'];
+        $block['tips']            = $blockTemplate['tips'];
+        $block['mode']            = $blockTemplate['mode'];
+        $block['meta']            = $blockTemplate['meta'];
+        $block['title']           = $blockTemplate['title'];
+        $block['templateName']    = $blockTemplate['templateName'];
 
         return $block;
     }
@@ -277,7 +276,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (empty($result)) {
             return;
         }
-         return $result;
+        return $result;
     }
 
     public function deleteBlockTemplate($id)

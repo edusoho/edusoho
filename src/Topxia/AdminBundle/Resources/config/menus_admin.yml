@@ -251,7 +251,6 @@ admin:
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
                                     visable: (course.status != 'published' and app.user.isSuperAdmin())
-
                         admin_course_recommend_list:
                             name: 课程推荐
                         admin_course_data:

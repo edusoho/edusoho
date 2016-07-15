@@ -1,24 +1,18 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-
-use Symfony\Component\Filesystem\Filesystem;
-
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Common\BlockToolkit;
-
 
 class PluginRegisterCommand extends BaseCommand
 {
-
     protected function configure()
     {
-        $this->setName ( 'plugin:register')
+        $this->setName('plugin:register')
             ->addArgument('code', InputArgument::REQUIRED, '插件编码')
             ->setDescription('注册插件到EduSoho');
     }
@@ -30,7 +24,7 @@ class PluginRegisterCommand extends BaseCommand
         $code = $input->getArgument('code');
         $output->writeln("<comment>注册插件`{$code}`：</comment>");
 
-        $pluginDir = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/plugins/' . $code;
+        $pluginDir = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/plugins/'.$code;
         if (!is_dir($pluginDir)) {
             throw new \RuntimeException("插件目录{$pluginDir}不存在！");
         }
@@ -42,23 +36,24 @@ class PluginRegisterCommand extends BaseCommand
         $this->executeInstall($pluginDir);
         $output->writeln("<comment>  - 执行安装脚本...</comment><info>OK</info>");
 
+        $this->assetsInstall($code, $pluginDir);
+        $output->writeln("<comment>  - 拷贝资源文件...</comment><info>OK</info>");
+
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
-
 
         PluginUtil::refresh();
         $output->writeln("<comment>  - 刷新插件缓存...</comment><info>OK</info>");
 
-        $this->initBlock($pluginDir . '/block.json', $this->getContainer());
+        $this->initBlock($pluginDir.'/block.json', $this->getContainer());
         $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
 
         $output->writeln("<info>注册成功....</info>");
-
     }
 
     private function executeInstall($pluginDir)
     {
-        $installFile = $pluginDir . '/Scripts/InstallScript.php';
+        $installFile = $pluginDir.'/Scripts/InstallScript.php';
         if (!file_exists($installFile)) {
             throw new \RuntimeException("插件安装脚本{$installFile}不存在！");
         }
@@ -67,15 +62,38 @@ class PluginRegisterCommand extends BaseCommand
         if (!class_exists('InstallScript')) {
             throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
         }
-
         $installer = new \InstallScript(ServiceKernel::instance());
         $installer->setInstallMode('command');
         $installer->execute();
     }
 
+    private function assetsInstall($code)
+    {
+        $rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+
+        $originDir = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/public";
+        if (!is_dir($originDir)) {
+            return false;
+        }
+
+        $targetDir = "{$rootDir}/web/bundles/".strtolower($code);
+
+        $filesystem = $this->getContainer()->get('filesystem');
+        if ($filesystem->exists($targetDir)) {
+            $filesystem->remove($targetDir);
+        }
+        $installMode = 'command';
+        if ($installMode == 'command') {
+            $relativeOriginDir = $filesystem->makePathRelative($originDir, realpath("{$rootDir}/web/bundles"));
+            $filesystem->symlink($relativeOriginDir, $targetDir, true);
+        } else {
+            $filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
+        }
+    }
+
     private function parseMeta($code, $pluginDir)
     {
-        $metaFile = $pluginDir . '/plugin.json';
+        $metaFile = $pluginDir.'/plugin.json';
         if (!file_exists($metaFile)) {
             throw new \RuntimeException("插件元信息文件{$metaFile}不存在！");
         }
@@ -105,5 +123,4 @@ class PluginRegisterCommand extends BaseCommand
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
-
 }

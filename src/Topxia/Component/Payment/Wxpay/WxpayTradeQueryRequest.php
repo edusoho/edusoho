@@ -21,10 +21,10 @@ class WxpayTradeQueryRequest extends Request
 
     public function tradeQuery()
     {
-        $params                    = $this->params;
-        $converted                 = array();
-        $converted['appid']        = $this->options['key'];
-        
+        $params             = $this->params;
+        $converted          = array();
+        $converted['appid'] = $this->options['key'];
+
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();

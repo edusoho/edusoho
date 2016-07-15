@@ -77,20 +77,20 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $navigations = ArrayToolkit::index($navigations, 'id');
 
         foreach ($navigations as $index => $nav) {
-//只显示Open菜单
+            //只显示Open菜单
             // if (empty($nav['isOpen']) || $nav['isOpen'] != 1) {
             //     unset($navigations[$index]);
             //     continue;
             // }
 
-//一级菜单 - 保留
+            //一级菜单 - 保留
             if ($nav['parentId'] == 0) {
                 continue;
             }
 
-//二级菜单
+            //二级菜单
 
-//如果父菜单不存在(被删除)，子菜单不显示
+            //如果父菜单不存在(被删除)，子菜单不显示
             if (!isset($navigations[$nav['parentId']])) {
                 unset($navigations[$index]);
                 continue;
@@ -104,12 +104,12 @@ class NavigationServiceImpl extends BaseService implements NavigationService
                 continue;
             }
 
-//初始化父菜单的children数组
+            //初始化父菜单的children数组
             if (empty($navigations[$nav['parentId']]['children'])) {
                 $navigations[$nav['parentId']]['children'] = array();
             }
 
-//子菜单是open的，放到父菜单中
+            //子菜单是open的，放到父菜单中
             if ($nav['isOpen']) {
                 $navigations[$nav['parentId']]['children'][] = $nav;
                 unset($navigations[$index]);

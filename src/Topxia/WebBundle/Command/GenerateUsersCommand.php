@@ -21,7 +21,7 @@ class GenerateUsersCommand extends BaseCommand
         $index = $input->getArgument('index');
         $start = $input->getArgument('start', 0);
 
-        for ($i = $start; $start < $index; $start++) {
+        for ($i = $start; $i < $index; $i++) {
             $user             = array();
             $user['nickname'] = 'test_'.$i;
             $user['password'] = 'abcde';

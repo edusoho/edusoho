@@ -77,7 +77,7 @@
       </tbody>
     </table>
 
-    {{ web_macro.paginator(paginator) }}
+    {{ admin_macro.paginator(paginator) }}
   {% else %}
     {% if approvalStatus == 'approved' %}
       <div class="empty">暂无已经审核成功的实名认证用户</div>

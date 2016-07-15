@@ -19,6 +19,11 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
+        if ($filter == 'vip') {
+            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions["parentId"]              = 0;
+        }
+
         if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
             unset($conditions["categoryId"]);
         }
@@ -58,7 +63,7 @@ class CourseController extends BaseController
         );
 
         $classrooms = array();
-
+        $vips       = array();
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
@@ -66,6 +71,11 @@ class CourseController extends BaseController
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        } elseif ($filter == 'vip') {
+            if ($this->isPluginInstalled('Vip')) {
+                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
+                $vips = ArrayToolkit::index($vips, 'id');
             }
         }
 
@@ -90,7 +100,8 @@ class CourseController extends BaseController
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
             'default'        => $default,
             'classrooms'     => $classrooms,
-            'filter'         => $filter
+            'filter'         => $filter,
+            'vips'           => $vips
         ));
     }
 
@@ -302,7 +313,7 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions                = $request->query->all();
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
@@ -343,7 +354,6 @@ class CourseController extends BaseController
 
     public function dataAction(Request $request, $filter)
     {
-
         $conditions = $request->query->all();
 
         if ($filter == 'normal') {
@@ -500,6 +510,7 @@ class CourseController extends BaseController
         $course     = $this->getCourseService()->getCourse($courseId);
         $default    = $this->getSettingService()->get('default', array());
         $classrooms = array();
+        $vips       = array();
 
         if ($fields['filter'] == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
@@ -509,6 +520,11 @@ class CourseController extends BaseController
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
+        } elseif ($fields['filter'] == 'vip') {
+            if ($this->isPluginInstalled('Vip')) {
+                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
+                $vips = ArrayToolkit::index($vips, 'id');
+            }
         }
 
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
@@ -517,7 +533,8 @@ class CourseController extends BaseController
             'course'     => $course,
             'default'    => $default,
             'classrooms' => $classrooms,
-            'filter'     => $fields["filter"]
+            'filter'     => $fields["filter"],
+            'vips'       => $vips
         ));
     }
 
@@ -580,5 +597,10 @@ class CourseController extends BaseController
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

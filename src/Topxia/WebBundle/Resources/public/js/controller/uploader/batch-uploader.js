@@ -352,7 +352,8 @@ define(function(require, exports, module) {
 
             var paramsDefault = {
                 'video' : {
-                    videoQuality: 'normal', audioQuality: 'normal'
+                    videoQuality: 'normal',
+                    audioQuality: 'normal'
                 },
                 'document' : {},
                 'ppt' : {},
@@ -369,7 +370,7 @@ define(function(require, exports, module) {
                 }
             }
             params.output = extOutput;
-
+            console.log(params);
             return params;
         },
 
@@ -500,7 +501,7 @@ define(function(require, exports, module) {
                         });
                         $li.find('.js-file-pause').addClass('hidden');
                         $li.find('[data-toggle="popover"]').popover({
-                            content: '当前上传文件可能无法播放，请确认后再次上传',
+                            content: '你的源文件可能已损坏，请检查后重新上传',
                             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" style="z-index: 5000"></div></div>',
                             trigger: 'hover',
                             placement: 'bottom',
