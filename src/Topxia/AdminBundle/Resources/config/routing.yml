@@ -101,31 +101,35 @@ admin_block_code_check_forcreate:
 
 admin_block_code_check_foredit:
     pattern:  /block/code/{id}/check/foredit
-    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
+    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockTemplateCodeForEdit }
 
 admin_block_update:
-    pattern:  /block/{block}/update
+    pattern:  /block/{blockTemplateId}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
 
 admin_block_edit:
-    pattern:  /block/{block}/edit
+    pattern:  /block/{blockTemplateId}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
 admin_block_visual_edit:
-    pattern:  /block/{blockId}/visual/edit
+    pattern:  /blockTemplate/{blockTemplateId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
 admin_block_visual_view_data:
-    pattern:  /block/{blockId}/data/view
+    pattern:  /block/{blockTemplateId}/data/view
     defaults: { _controller: TopxiaAdminBundle:Block:dataView }
 
 admin_block_visual_edit_history:
-    pattern:  /block/{blockId}/visual/edit/history
+    pattern:  /blockTemplate/{blockTemplateId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
 
 admin_block_recovery:
-    pattern:  /block/{blockId}/history/{historyId}/recovery
+    pattern:  /block/{blockTemplateId}/history/{historyId}/recovery
     defaults: { _controller: TopxiaAdminBundle:Block:recovery }
+
+admin_block_history_data:
+    pattern:  /block/histroy/{blockId}
+    defaults: { _controller: TopxiaAdminBundle:Block:blockHistoriesData }
 
 admin_block_picture_upload:
     pattern:  /block/{blockId}/picture/upload
@@ -528,6 +532,11 @@ admin_setting_auth:
 admin_setting_mailer:
     pattern:  /setting/mailer
     defaults: { _controller: TopxiaAdminBundle:Setting:mailer }
+
+admin_setting_mailer_test:
+    pattern:  /setting/mailer/test
+    defaults: { _controller: TopxiaAdminBundle:Setting:mailerTest }
+    methods: [GET]
 
 admin_setting_login_bind:
     pattern:  /setting/login-connect

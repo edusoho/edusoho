@@ -627,7 +627,8 @@ class TestpaperController extends BaseController
             'course'       => $course,
             'users'        => $users,
             'teachers'     => ArrayToolkit::index($teachers, 'id'),
-            'paginator'    => $paginator
+            'paginator'    => $paginator,
+            'isTeacher'    => $this->getCourseService()->hasTeacherRole($id, $user['id']) || $user->isSuperAdmin()
         ));
     }
 
