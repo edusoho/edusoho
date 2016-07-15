@@ -140,6 +140,33 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function attachmentAction(Request $request)
+    {
+        $attachment = $this->getSettingService()->get('cloud_attachment', array());
+        $default    = array(
+            'attachment_enable' => 0,
+            'article'           => 0,
+            'thread'            => 0,
+            'group'             => 0,
+            'question'          => 0,
+            'fileSize'          => 500
+        );
+        $attachment = array_merge($default, $attachment);
+
+        if ($request->getMethod() == 'POST') {
+            $attachment = $request->request->all();
+
+            if ($attachment['attachment_enable'] == 0) {
+                $attachment = array_merge($attachment, array('article' => 0, 'thread' => 0, 'group' => 0, 'question' => 0));
+            }
+            $attachment = array_merge($default, $attachment);
+            $this->getSettingService()->set('cloud_attachment', $attachment);
+            $this->setFlashMessage('success', '云附件设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-attachment.html.twig', array('attachment' => $attachment));
+    }
+
     //云视频设置页
     public function videoAction(Request $request)
     {
