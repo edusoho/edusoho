@@ -980,7 +980,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $user = $this->getCurrentUser();
-
         if (!$user->isLogin()) {
             return false;
         }
@@ -988,7 +987,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if ($user->isAdmin()) {
             return true;
         }
-
         $member = $this->getClassroomMember($id, $user['id']);
 
         if (empty($member)) {
