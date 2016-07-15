@@ -141,8 +141,8 @@ class HLSController extends BaseController
         }
 
         $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-
-        $keyencryption = $inWhiteList ? 0 : 1;
+        $enablePlayRate = $this->setting('magic.enable_playback_rates');
+        $keyencryption = ($inWhiteList || $enablePlayRate) ? 0 : 1;
         $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
@@ -196,13 +196,14 @@ class HLSController extends BaseController
     public function clefAction(Request $request, $id, $token)
     {
         $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $enablePlayRate = $this->setting('magic.enable_playback_rates');
         $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        if (!$inWhiteList && !empty($token['userId'])) {
+        if (!$inWhiteList && !empty($token['userId']) && !$enablePlayRate) {
             if (!($this->getCurrentUser()->isLogin()
                 && $this->getCurrentUser()->getId() == $token['userId'])) {
                 return $this->makeFakeTokenString();
