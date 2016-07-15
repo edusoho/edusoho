@@ -54,7 +54,11 @@
 
 	        <div class="ui-btn-wrap">
 			<div class="pay-body">
-		  		需支付:<span class="pay-price">{{ totalPayPrice | formatPrice}}</span>
+		  		需支付:
+		  		<span class="pay-price">
+		  			{{ totalPayPrice | formatPrice}}
+		  			<span>{{ payMode == 'coin' ? coin.name : '' }}</span>
+		  		</span>
 		  	</div>
 		    
 			<button class="ui-btn-lg btn-yellow" ng-click="pay()">

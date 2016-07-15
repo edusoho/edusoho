@@ -77,8 +77,17 @@ class BaseTestCase extends WebTestCase
 
     protected function initCurrentUser()
     {
-        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService = static::$serviceKernel->createService('User.UserService');
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array(),
+            'org'       => array('id' => 1)
+        ));
+        static::$serviceKernel->setCurrentUser($currentUser);
 
         $user = $userService->register(array(
             'nickname'  => 'admin',
@@ -88,15 +97,11 @@ class BaseTestCase extends WebTestCase
             'orgCode'   => '1.',
             'orgId'     => '1'
         ));
-
         $currentUser       = new CurrentUser();
         $user['currentIp'] = $user['createdIp'];
         $currentUser->fromArray($user);
-        static::$serviceKernel->setCurrentUser($currentUser);
+        $roles       = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService->changeUserRoles($user['id'], $roles);
-        $user              = $userService->getUser($user['id']);
-        $user['currentIp'] = $user['createdIp'];
-        $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
     }
 

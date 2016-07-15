@@ -4,12 +4,12 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		$('body').on('click', 'button.delete-btn', function() {
-			if (!confirm('确认要删除此编辑区吗？')) return false;
+			if (!confirm('确认要删除此编辑区模板吗？')) return false;
 			var $btn = $(this);
 			$.post($btn.data('url'), function(response) {
 				if (response.status == 'ok') {
 					$('#' + $btn.data('target')).remove();
-					Notify.success('删除成功!');
+					Notify.success('删除模板成功!');
 				} else {
 					alert('服务器错误!');
 				}

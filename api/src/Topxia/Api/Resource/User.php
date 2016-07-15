@@ -12,7 +12,11 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'nickname', 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about', 'createdTime', 'updatedTime'
+        'id', 'nickname', 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime'
+    );
+
+    private $_publicProfileFields = array(
+        'about'
     );
 
     private $_privateFields = array(
@@ -23,7 +27,7 @@ class User extends BaseResource
         'createdIp', 'createdTime', 'updatedTime'
     );
 
-    private $_profileFields = array(
+    private $_privateProfileFields = array(
         'truename', 'idcard', 'gender', 'birthday', 'city', 'mobile', 'qq',
         'signature', 'about', 'company', 'job', 'school', 'class', 'weibo', 'weixin', 'site'
     );
@@ -41,13 +45,11 @@ class User extends BaseResource
         return $this->filter($user);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         foreach ($this->_unsetFields as $key) {
             unset($res[$key]);
         }
-
-        $res['about'] = $res['profile']['about'];
 
         $currentUser = getCurrentUser();
 
@@ -58,8 +60,10 @@ class User extends BaseResource
                 $returnRes[$key] = $res[$key];
             }
 
-            foreach ($this->_profileFields as $key) {
-                $returnRes[$key] = $res['profile'][$key];
+            if (!empty($res['profile'])) {
+                foreach ($this->_privateProfileFields as $key) {
+                    $returnRes[$key] = $res['profile'][$key];
+                }
             }
         } else {
             foreach ($this->_publicFields as $key) {
@@ -70,6 +74,11 @@ class User extends BaseResource
                 $returnRes['roles'] = array('ROLE_TEACHER');
             } else {
                 $returnRes['roles'] = array('ROLE_USER');
+            }
+            if (!empty($res['profile'])) {
+                foreach ($this->_publicProfileFields as $key) {
+                    $returnRes[$key] = $res['profile'][$key];
+                }
             }
         }
 

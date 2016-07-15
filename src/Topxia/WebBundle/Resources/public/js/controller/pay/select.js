@@ -57,7 +57,9 @@ define(function(require, exports, module){
             $("#heepay").css("display","none");
         }
 
-        $("#copy").click(function(event){
+        $("input[name='payment']").val($('div .active').attr("id"));
+
+        $("#copy").on('click',function(event){
             var textarea = document.createElement("textarea");
             textarea.style.position = 'fixed';
             textarea.style.top = 0;
@@ -76,6 +78,7 @@ define(function(require, exports, module){
             document.execCommand('copy');
 
             ele.remove();
+            Notify.success('复制成功！');
         })
     };
 

@@ -5,12 +5,21 @@ $resources = array(
     'ArticleCategories',
     'Articles',
     'Classroom',
-    'ClassroomMember',
     'ClassroomMembers',
+    'Classroom/Member',
+    'Classroom/Members',
     'Classrooms',
-    'CourseMember',
+    'ClassroomStatus',
+    'ClassroomStatuses',
+    'Course/Member',
+    'Course/Members',
     'CourseMembers',
     'CourseMembership',
+    'Course/Note',
+    'Course/Notes',
+    'Course/Lesson',
+    'Course/Lessons',
+    'CourseReviews',
     'LessonLiveTickets',
     'LessonLiveTicket',
     'LessonReplay',
@@ -22,8 +31,6 @@ $resources = array(
     'Users',
     'Course',
     'Courses',
-    'Lesson',
-    'Lessons',
     'Thread',
     'Threads',
     'ChaosThreads',
@@ -38,14 +45,32 @@ $resources = array(
     'Thread',
     'Upload',
     'Status',
-    'DiscoveryColumn'
+    'DiscoveryColumn',
+    'Playlist',
+    'IM/MeLogin',
+    'IM/Conversations',
+    'IM/MyConversation',
+    'IM/MyConversations',
+    'CourseThread',
+    'CourseThreads',
+    'CourseThreadPost',
+    'CourseThreadPosts',
+    'ClassRoomPlay',
+    'ClassRoomPlayStatus',
+    'ClassRoomThread',
+    'ClassRoomThreads',
+    'ThreadPosts',
+    'ThreadPost'
 );
 
 foreach ($resources as $res) {
     $app["res.{$res}"] = $app->share(function () use ($res) {
-        $class = "Topxia\\Api\\Resource\\{$res}";
-        return new $class();
-    }
+        $class = "Topxia\\Api\\Resource";
+        $segments = explode('/', $res);
+        foreach ($segments as $seg) {
+            $class .= "\\{$seg}";
+        }
 
-    );
+        return new $class();
+    });
 }

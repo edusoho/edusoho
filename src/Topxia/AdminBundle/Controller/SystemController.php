@@ -6,13 +6,15 @@ use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
+use Topxia\Common\StringToolkit;
 
 class SystemController extends BaseController
 {
     public function reportAction()
     {
         return $this->render('TopxiaAdminBundle:System:Report/status.html.twig', array(
-            'env' => $this->getSystemStatus()
+            'env'             => $this->getSystemStatus(),
+            'systemDiskUsage' => $this->getSystemDiskUsage()
         ));
     }
 
@@ -65,7 +67,7 @@ class SystemController extends BaseController
                     return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
                 }
             } catch (\Exception $e) {
-                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
+                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：" . $e->getMessage());
                 return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
             }
         } else {
@@ -102,7 +104,7 @@ class SystemController extends BaseController
                 }
 
                 try {
-                    $finder->in($this->container->getParameter('kernel.root_dir').'/../'.$folder);
+                    $finder->in($this->container->getParameter('kernel.root_dir') . '/../' . $folder);
 
                     foreach ($finder as $fileInfo) {
                         $relaPath = $fileInfo->getRealPath();
@@ -141,6 +143,45 @@ class SystemController extends BaseController
         $env['safemode']            = ini_get('safe_mode');
 
         return $env;
+    }
+
+    private function getSystemDiskUsage()
+    {
+        $rootDir = $this->get('kernel')->getRootDir();
+        $logs    = array(
+            'name'  => '/app/logs',
+            'dir'   => $rootDir . '/logs',
+            'title' => '用户在站点进行操作的日志存放目录'
+        );
+
+        $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
+        $webFiles   = array(
+            'name'  => substr($webFileDir, strrpos($webFileDir, '/')),
+            'dir'   => $webFileDir,
+            'title' => '用户在站点上传图片的存放目录'
+        );
+
+        $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
+        $material    = array(
+            'name'  => substr($materialDir, strrpos($materialDir, '/')),
+            'dir'   => $materialDir,
+            'title' => '用户教学资料库中资源的所在目录(云文件除外)'
+        );
+
+        return array_map(function ($array) {
+            $name  = $array['name'];
+            $dir   = $array['dir'];
+            $total = disk_total_space($dir);
+            $free  = disk_free_space($dir);
+            $rate  = (string)number_format($free / $total, 2) * 100 . '%';
+            return array(
+                'name'  => $name,
+                'rate'  => $rate,
+                'free'  => StringToolkit::printMem($free),
+                'total' => StringToolkit::printMem($total),
+                'title' => $array['title']
+            );
+        }, array($logs, $webFiles, $material));
     }
 
     protected function getSettingService()

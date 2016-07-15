@@ -14,7 +14,7 @@ class LessonLiveTicket extends BaseResource
         return $ticket;
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }

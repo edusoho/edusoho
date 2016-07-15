@@ -67,7 +67,7 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
-        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
+        $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -168,7 +168,7 @@ class OrderController extends BaseController
                 'coinRate'       => $cashRate,
                 'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId'         => $user["id"],
-                'payment'        => 'alipay',
+                'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
@@ -214,7 +214,7 @@ class OrderController extends BaseController
             $code = $request->request->get('code');
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
-                throw new \RuntimeException('优惠码不支持的购买项目。');
+                throw new \RuntimeException('优惠券不支持的购买项目。');
             }
 
             $price = $request->request->get('amount');

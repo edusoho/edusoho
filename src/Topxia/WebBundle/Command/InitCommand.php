@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Topxia\Common\BlockToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,8 +43,28 @@ class InitCommand extends BaseCommand
         $this->initInstallLock($output);
         $this->initBlock($output);
         $this->initCrontabJob($output);
+        $this->initFolders();
 
         $output->writeln('<info>初始化系统完毕</info>');
+    }
+
+    private function initFolders()
+    {
+        $rootDir = realpath($this->getKernel()->getParameter('kernel.root_dir').'/..');
+
+        $folders = array(
+            $rootDir.'/app/data/udisk',
+            $rootDir.'/app/data/private_files',
+            $rootDir.'/web/files'
+        );
+
+        $filesystem = new Filesystem();
+
+        foreach ($folders as $folder) {
+            if (!$filesystem->exists($folder)) {
+                $filesystem->mkdir($folder);
+            }
+        }
     }
 
     private function installAssets($output)

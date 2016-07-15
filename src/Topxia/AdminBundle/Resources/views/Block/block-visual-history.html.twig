@@ -6,6 +6,8 @@
 {% block main %}
 
   {{ web_macro.flash_messages() }}
+
+   {% if blockHistorys|default() %}
   <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
     <thead>
       <th>修改时间</th>
@@ -22,12 +24,15 @@
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
             
             {% if blockHistory.data %}
-              <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockId:block.id, historyId:blockHistory.id})}}">恢复此内容</a>
+              <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockTemplateId:block.blockTemplateId, historyId:blockHistory.id})}}">恢复此内容</a>
             {% endif %}
           </td>
         </tr>
       {% endfor %}
     </tbody>
     </table>
-  {{ web_macro.paginator(paginator) }} 
+   {{ admin_macro.paginator(paginator) }} 
+    {% else %}
+<div class="empty">暂无历史记录!</div>
+    {% endif %}
 {% endblock %}

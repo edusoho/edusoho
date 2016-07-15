@@ -101,31 +101,35 @@ admin_block_code_check_forcreate:
 
 admin_block_code_check_foredit:
     pattern:  /block/code/{id}/check/foredit
-    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
+    defaults: { _controller: TopxiaAdminBundle:Block:checkBlockTemplateCodeForEdit }
 
 admin_block_update:
-    pattern:  /block/{block}/update
+    pattern:  /block/{blockTemplateId}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
 
 admin_block_edit:
-    pattern:  /block/{block}/edit
+    pattern:  /block/{blockTemplateId}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
 admin_block_visual_edit:
-    pattern:  /block/{blockId}/visual/edit
+    pattern:  /blockTemplate/{blockTemplateId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
 admin_block_visual_view_data:
-    pattern:  /block/{blockId}/data/view
+    pattern:  /block/{blockTemplateId}/data/view
     defaults: { _controller: TopxiaAdminBundle:Block:dataView }
 
 admin_block_visual_edit_history:
-    pattern:  /block/{blockId}/visual/edit/history
+    pattern:  /blockTemplate/{blockTemplateId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
 
 admin_block_recovery:
-    pattern:  /block/{blockId}/history/{historyId}/recovery
+    pattern:  /block/{blockTemplateId}/history/{historyId}/recovery
     defaults: { _controller: TopxiaAdminBundle:Block:recovery }
+
+admin_block_history_data:
+    pattern:  /block/histroy/{blockId}
+    defaults: { _controller: TopxiaAdminBundle:Block:blockHistoriesData }
 
 admin_block_picture_upload:
     pattern:  /block/{blockId}/picture/upload
@@ -476,6 +480,7 @@ admin_operation_mobile_customization_upgrade:
 admin_discovery_column_delete:
     pattern:  /discovery_column/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
+    methods: [POST]
 
 admin_discovery_column_edit:
     pattern:  /discovery_column/{id}/edit
@@ -558,6 +563,11 @@ admin_setting_auth:
 admin_setting_mailer:
     pattern:  /setting/mailer
     defaults: { _controller: TopxiaAdminBundle:Setting:mailer }
+
+admin_setting_mailer_test:
+    pattern:  /setting/mailer/test
+    defaults: { _controller: TopxiaAdminBundle:Setting:mailerTest }
+    methods: [GET]
 
 admin_setting_login_bind:
     pattern:  /setting/login-connect
@@ -915,10 +925,12 @@ admin_cloud_file_download:
 admin_cloud_file_delete:
     pattern: /cloud_file/{globalId}/delete
     defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
+    methods:  [POST]
 
 admin_cloud_file_batch_delete:
     pattern: /cloud_file/delete/batch
     defaults: { _controller: TopxiaAdminBundle:CloudFile:batchDelete }
+    methods:  [POST]
 
 admin_cloud_file_delete_modal_show:
     pattern: /cloud_file/delete/show
@@ -1232,6 +1244,7 @@ admin_groupThread:
 admin_groupThread_batch_delete:
     pattern:  /group/batchDeleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:batchDeleteThread }
+    methods:  [POST]
 admin_group_close:
     pattern:  /group/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Group:closeGroup }
@@ -1259,6 +1272,7 @@ admin_group_thread_open:
 admin_group_thread_delete:
     pattern:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
+    methods:  [POST]
 admin_group_transfer:
     pattern:  /group/transfer/{groupId}
     defaults: { _controller: TopxiaAdminBundle:Group:transferGroup }

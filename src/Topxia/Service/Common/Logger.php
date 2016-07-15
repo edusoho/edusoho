@@ -125,6 +125,11 @@ class Logger
      * @var string
      */
     const TAG = 'tag';
+    /**
+     * [$announcement 公告]
+     * @var string
+     */
+    const ANNOUNCEMENT = 'announcement';
 
     /**
      * [$open_course 公开课]
@@ -149,7 +154,7 @@ class Logger
     public static function systemModuleConfig()
     {
         return array(
-            self::COURSE      => array(
+            self::COURSE       => array(
                 'delete_testpaper'    => '删除试卷',
                 'delete_material'     => '删除课时资料',
                 'delete_chapter'      => '删除章节',
@@ -164,9 +169,9 @@ class Logger
                 'delete_review'       => '删除评价',
                 'delete_announcement' => '删除公告',
                 'delete_status'       => '删除动态',
-                'delete_member'       => '删除学员',
                 'delete'              => '删除课程',
                 'add_student'         => '增加学员',
+                'remove_student'      => '移除学员',
                 'create'              => '增加课程',
                 'update'              => '修改课程',
                 'update_picture'      => '更新图片',
@@ -178,9 +183,9 @@ class Logger
                 'update_draft'        => '更新草稿',
                 'update_lesson'       => '更新课时',
                 'update_teacher'      => '更新教师',
-                'cancel_teachers_all' => '取消所有教师角色',
-                'remove_student'      => '移除学员'),
-            self::USER        => array(
+                'cancel_teachers_all' => '取消所有教师角色'
+            ),
+            self::USER         => array(
                 'exportCsv'              => '导出',
                 'add'                    => '新增',
                 'edit'                   => '修改',
@@ -200,7 +205,7 @@ class Logger
                 'approved'               => '实名认证成功',
                 'approval_fail'          => '实名认证失败',
                 'password-reset'         => '重置密码'),
-            self::SYSTEM      => array(
+            self::SYSTEM       => array(
                 'email_send_check'       => '邮件自检',
                 'setting_email_change'   => '更变邮箱',
                 'setting_email-verify'   => '邮箱验证',
@@ -210,7 +215,7 @@ class Logger
                 'setting_userCenter'     => '用户中心设置',
                 'update_block'           => '更新编辑区',
                 'update_app_version'     => '更新版本'),
-            self::CLASSROOM   => array(
+            self::CLASSROOM    => array(
                 'create'           => '新增班级',
                 'delete'           => '删除班级',
                 'add_course'       => '添加课程',
@@ -223,7 +228,7 @@ class Logger
                 'recommend'        => '推荐班级',
                 'cancel_recommend' => '取消推荐'
             ),
-            self::ARTICLE     => array(
+            self::ARTICLE      => array(
                 'update_settings' => '更新设置',
                 'create'          => '新增',
                 'update'          => '修改',
@@ -235,46 +240,46 @@ class Logger
                 'publish'         => '发布',
                 'unpublish'       => '取消发布'),
 
-            self::NOTIFY      => array(
+            self::NOTIFY       => array(
                 'create'     => '创建',
                 'check_fail' => '检测'),
-            self::ORDER       => array(
+            self::ORDER        => array(
                 'pay_result'    => '支付结果',
                 'andit_refund'  => '退款审核',
                 'refund_cancel' => '取消退款',
                 'unbind-back'   => '解绑银行卡'),
-            self::CATEGORY    => array(
+            self::CATEGORY     => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除'),
-            self::CONTENT     => array(
+            self::CONTENT      => array(
                 'create'  => '新增',
                 'update'  => '修改',
                 'trash'   => '移动到回收站',
                 'delete'  => '删除',
                 'publish' => '发布'),
 
-            self::CRONTAB     => array(
+            self::CRONTAB      => array(
                 'job_start' => '开始任务',
                 'job_end'   => '结束任务'),
-            self::UPLOADFILE  => array(
+            self::UPLOADFILE   => array(
                 'create'                 => '新增文件',
                 'delete'                 => '删除文件',
                 'download'               => '下载文件',
                 'cloud_convert_callback' => '回调处理',
                 'cloud_convert_error'    => '转码失败'),
-            self::MARKER      => array(
+            self::MARKER       => array(
                 'create'           => '增加驻点',
                 'delete'           => '删除驻点',
                 'mediaId_notExist' => '视频不存在',
                 'delete_question'  => '删除驻点问题'),
-            self::GROUP       => array(
+            self::GROUP        => array(
                 'create_thread' => '新增话题',
                 'delete_thread' => '删除话题',
                 'close_thread'  => '关闭话题',
                 'open_thread'   => '开启话题'
             ),
-            self::SMS         => array(
+            self::SMS          => array(
                 'sms_forget_password'       => '登录密码重置',
                 'sms_user_pay'              => '使用网站余额支付',
                 'sms_forget_pay_password'   => '支付密码重置',
@@ -292,14 +297,17 @@ class Logger
                 'sms_vip_buy_notify'        => '会员购买',
                 'sms_coin_buy_notify'       => '虚拟币充值'
             ),
-            self::TAG         => array(
+            self::TAG          => array(
                 'create' => '新增',
                 'update' => '修改',
                 'delete' => '删除'),
-            self::COIN        => array(
+            self::COIN         => array(
                 'update_settings' => '设置',
                 'add_coin'        => '增加',
                 'deduct_coin'     => '扣除'),
+            self::ANNOUNCEMENT => array(
+                'delete' => '删除公告'
+            ),
             self::OPEN_COURSE => array(
                 'create_course'           => '创建公开课',
                 'update_course'           => '更新公开课',
@@ -397,6 +405,7 @@ class Logger
             self::EXERCISE     => '练习',
             self::HOMEWORK     => '作业',
             self::QUESTIONPLUS => '题库增强版',
+            self::ANNOUNCEMENT => '公告',
             self::OPEN_COURSE  => '公开课'
         );
     }

@@ -305,7 +305,7 @@ class BaseProcessor {
 
         $splashs = array();
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 6; $i++) {
             if (!empty($mobile['splash'.$i])) {
                 $splashs[] = $request->getSchemeAndHttpHost().'/'.$mobile['splash'.$i];
             }

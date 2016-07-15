@@ -226,4 +226,16 @@ class SimpleValidatorTest extends BaseTestCase
             $result = SimpleValidator::site("www.g.com/");
             $this->assertEquals(false,$result);
     }
+
+	public function testChineseAndAlphanumeric()
+	{
+		$result = SimpleValidator::chineseAndAlphanumeric('我是火车王');
+		$this->assertEquals(true, $result);
+		$result = SimpleValidator::chineseAndAlphanumeric('<<<信仰圣光吧>>>');
+		$this->assertEquals(false, $result);
+		$result = SimpleValidator::chineseAndAlphanumeric('en$gl%ish!');
+		$this->assertEquals(false, $result);
+		$result = SimpleValidator::chineseAndAlphanumeric('中文_english_');
+		$this->assertEquals(true, $result);
+	}
 }

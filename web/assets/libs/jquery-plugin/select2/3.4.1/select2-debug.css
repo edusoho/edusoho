@@ -687,5 +687,7 @@ disabled look for disabled choices in the results dropdown
     width: 75%;
 }
 .select2-tree-icon {
+    display: inline-block;
+    width: 14px;
     color: #333;
 }

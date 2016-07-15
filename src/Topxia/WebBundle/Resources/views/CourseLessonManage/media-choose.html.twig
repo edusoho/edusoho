@@ -187,6 +187,7 @@
   {% set courseMaterialUrl = 'course_manage_material_browser' %}
 {% endif %}
 
+{% set lesson = lesson|default(null) %}
 <div id="media-choosers">
 
   <div class="file-chooser" id="video-chooser" style="display:none;"
@@ -214,7 +215,9 @@
           </a>
         </li>
 
-        <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
+        <li {% if lesson and lesson.mediaSource != 'self' %}class="active"{% endif %}>
+          <a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
@@ -268,12 +271,16 @@
         </div>
 
         <div class="tab-pane" id="video-chooser-import-pane">
+          {% if lesson  %}
+            <div>原地址：{{ lesson.mediaUri }}</div>
+          {% endif %}
           <div class="input-group">
             <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" >
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
             </span>
           </div>
+          <strong class="text-danger">* 腾讯和网易的视频不支持手机端播放</strong>
         </div>
       </div>
     </div>

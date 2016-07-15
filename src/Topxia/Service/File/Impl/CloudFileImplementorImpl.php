@@ -426,9 +426,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             }
         }
 
-#TODO... 暂时直传
-        // $params['uploadType'] = 'direct';
-
         $api       = CloudAPIFactory::create();
         $apiResult = $api->post('/resources/upload_init', $params);
 
@@ -438,7 +435,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $result['hashId']         = $file['hashId'];
         $result['outerId']        = $file['id'];
         $result['uploadMode']     = $apiResult['uploadMode'];
-        $result['uploadUrl']      = $apiResult['uploadUrl']; #'http://upload.edusoho.net';
+        $result['uploadUrl']      = $apiResult['uploadUrl'];
         $result['uploadProxyUrl'] = '';
         $result['uploadToken']    = $apiResult['uploadToken'];
 
