@@ -32,13 +32,12 @@ class PlayerController extends BaseController
             }
 
             $url = $this->getPlayUrl($id, $context);
-
+            $api    = CloudAPIFactory::create("leaf");
+            $result = $api->get("/resources/{$file['globalId']}/player");
             // todo delete
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                 $player = "local-video-player";
-                $api    = CloudAPIFactory::create("leaf");
-                $result = $api->get("/resources/{$file['globalId']}/player");
                 $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
             }
         } catch (\Exception $e) {

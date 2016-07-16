@@ -68,15 +68,14 @@ define(function(require, exports, module) {
                     }
                 });
             }
-
+            var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
             function getPlaybackRatesSrc() {
                 // IE9以下不支持倍数播放，IE9及以上不支持HLS
-                var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
                 if (isIE) {
                     if ($('html').hasClass('lt-ie9')) {
                         return '';
                     } else {
-                        return self.get('playbackRatesMP4Url');
+                        return [{src : self.get('playbackRatesMP4Url'), type : 'video/mp4', label : '高清'}];
                     }
                 }
 
@@ -87,7 +86,7 @@ define(function(require, exports, module) {
                 extConfig = $.extend(extConfig, {
                     playbackRates: {
                         enable : true,
-                        source : 'hls',
+                        source : isIE ? 'mp4' : 'hls',
                         src : getPlaybackRatesSrc()
                     }
                 });
