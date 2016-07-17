@@ -39,8 +39,8 @@
             {% set lesson = course['lesson']|default(null) %}
             {% if lesson %}
               <span class="live-course-lesson metas">
-                <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">{{'第%number%'|trans({'%number%': lessom.number|default(课时|trans)})}}</span>
+                <span class="text-success mrm">{{ lesson.startTime|date('n-j H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                <span class="text-muted mrm">{{'第%number%课时'|trans({'%number%': lessom.number})}}</span>
               </span>
             {% endif %}
           {% endif %}

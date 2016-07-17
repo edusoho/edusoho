@@ -24,11 +24,11 @@
   <script type="text/x-handlebars-template" data-role="choice-template">
     {% verbatim %}
       <div class="form-group" data-role="choice">
-        <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">{{'选项'|trans}}{{ code }}</label></div>
+        <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
         <div class="col-sm-8 controls">
-          <textarea class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" data-display={'选项内容'|trans}} data-image-upload-url="{{ imageUploadUrl }}" data-image-download-url="{{ imageDownloadUrl }}">{{ content }}</textarea>
+          <textarea class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" data-display=选项内容 data-image-upload-url="{{ imageUploadUrl }}" data-image-download-url="{{ imageDownloadUrl }}">{{ content }}</textarea>
           <p class="mtm">
-            <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> {{'正确答案'|trans}}</label>
+            <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
           </p>
         </div>
         <div class="col-sm-2" style="padding-left:0;">
