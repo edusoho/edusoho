@@ -32,11 +32,11 @@
               <span class="re-live"></span>
             {% endif %}
             {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
-              <span class="re-report">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+              <span class="re-report">{{'正在直播 今天'|trans}} {{ course.liveStartTime|date('H:i')}}</span>
             {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-              <span class="re-report">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
+              <span class="re-report">{{'即将直播'|trans}} {{ course.liveStartTime|date('m-d H:i')}}</span>
             {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-              <span class="re-report">直播预告 {{ course.liveStartTime|date('m-d H:i')}}</span>
+              <span class="re-report">{{'直播预告'|trans}} {{ course.liveStartTime|date('m-d H:i')}}</span>
             {% endif %}
           </a>
         </div>
