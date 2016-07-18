@@ -333,7 +333,7 @@ define(function(require, exports, module) {
                 element: '[name="passedScore"]',
                 required: true,
                 rule: 'score',
-                display: '分数'
+                display: Translator.trans('分数')
             });
         }
 

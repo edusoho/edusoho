@@ -89,7 +89,7 @@ define(function (require, exports, module) {
                     html += '<nav class="text-center">';
                     html += '<ul class="pagination">';
                     if (paginator.currentPage != paginator.firstPage) {
-                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.firstPageUrl + '">首页</a></li>'
+                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.firstPageUrl + '">'+Translator.trans('首页')+'</a></li>'
                         html += '<li><a class="es-icon es-icon-chevronleft js-switch-page" data-url="' + paginator.previousPageUrl + '"></a></li>';
                     }
 
@@ -105,7 +105,7 @@ define(function (require, exports, module) {
 
                     if (paginator.currentPage != paginator.lastPage) {
                         html += '<li><a class="es-icon es-icon-chevronright js-switch-page" data-url="' + paginator.nextPageUrl + '"></a></li>';
-                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.lastPageUrl + '">尾页</a></li>';
+                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.lastPageUrl + '">'+Translator.trans('尾页')+'</a></li>';
                     }
                     html += '</ul>';
                     html += '</nav>';

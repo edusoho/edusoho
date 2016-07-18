@@ -507,7 +507,7 @@ define(function(require, exports, module) {
                 } else {
                     return false;
                 }
-            }, Translator.trans('%display%只能是<=题目分数、且>=0的整数或者1位小数',{display:{display}));
+            }, Translator.trans('%display%只能是<=题目分数、且>=0的整数或者1位小数',{display:'{{display}}'}));
         }
 
         $('[name^="score_"]').each(function(){

@@ -78,7 +78,7 @@ define(function(require, exports, module){
             document.execCommand('copy');
 
             ele.remove();
-            Notify.success('复制成功！');
+            Notify.success(Translator.trans('复制成功！'));
         })
     };
 
