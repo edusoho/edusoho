@@ -65,11 +65,11 @@ class PasswordResetController extends BaseController
                         $mail = MailFactory::create($mailOptions);
                         $mail->send();
                     } catch (\Exception $e) {
-                        $this->getLogService()->error('user', 'password-reset', $this->getServiceKernel()->trans('重设密码邮件发送失败:').$e->getMessage());
+                        $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
                         return $this->createMessageResponse('error', $this->getServiceKernel()->trans('重设密码邮件发送失败，请联系管理员。'));
                     }
 
-                    $this->getLogService()->info('user', 'password-reset', $this->getServiceKernel()->trans('%userEmail%向发送了找回密码邮件。', array('%userEmail%' => $user['email'])));
+                    $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 
                     return $this->render('TopxiaWebBundle:PasswordReset:sent.html.twig', array(
                         'user'          => $user,

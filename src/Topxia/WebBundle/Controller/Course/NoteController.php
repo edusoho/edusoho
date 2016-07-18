@@ -45,7 +45,7 @@ class NoteController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             $classroomSetting = $this->setting('classroom', array());
-            $classroomName    = isset($classroomSetting['name']) ? $this->getServiceKernel()->trans('%classroomSettingname%',array('%classroomSettingname%' => $classroomSetting['name'])) : $this->getServiceKernel()->trans('班级');
+            $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%课程，如有需要请联系客服', array('%classroomSettingname%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));

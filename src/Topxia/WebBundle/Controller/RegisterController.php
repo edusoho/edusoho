@@ -536,7 +536,7 @@ class RegisterController extends BaseController
             $mail = MailFactory::create($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'register', $this->getServiceKernel()->trans('注册激活邮件发送失败:').$e->getMessage());
+            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }
     }
 

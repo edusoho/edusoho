@@ -859,7 +859,7 @@ class SettingsController extends BaseController
                     $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。', array('%dataEmail%' => $data['email'])));
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败，请联系管理员。'));
-                    $this->getLogService()->error('system', 'setting_email_change', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败:').$e->getMessage());
+                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
                 return $this->redirect($this->generateUrl('settings_email'));
             }
@@ -893,7 +893,7 @@ class SettingsController extends BaseController
             $mail->send();
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。', array('%userEmail%' => $user['email'])));
         } catch (\Exception $e) {
-            $this->getLogService()->error('system', 'setting_email-verify', $this->getServiceKernel()->trans('邮箱验证邮件发送失败:').$e->getMessage());
+            $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
             $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱验证邮件发送失败，请联系管理员。'));
         }
 

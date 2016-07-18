@@ -479,7 +479,7 @@ class GroupThreadController extends BaseController
 
                 $file = $this->getFileService()->getFile($attach['fileId']);
 
-                $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的附件').'<'.$attach['title'].'>'.$this->getServiceKernel()->trans('被购买下载！'), $file['userId']);
+                $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的附件<%attachTitle%>被购买下载！',array('%attachTitle%' => $attach['title'])), $file['userId']);
             }
         }
 
@@ -780,7 +780,7 @@ class GroupThreadController extends BaseController
                 $reward = 1;
             }
 
-            $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的话题').'<'.$thread['title'].'>'.$this->getServiceKernel()->trans('的隐藏内容被查看！'), $thread['userId']);
+            $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的话题<%threadTitle%>的隐藏内容被查看！',array('%threadTitle%' => $thread['title'])), $thread['userId']);
         }
 
         return $this->render('TopxiaWebBundle:Group:hide-modal.html.twig', array(
