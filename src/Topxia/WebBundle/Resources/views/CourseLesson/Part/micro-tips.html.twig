@@ -84,7 +84,7 @@
     <span class="course-type">
       <i class="es-icon es-icon-videocam" data-toggle="tooltip" data-placement="top" title="{{'直播课程'|trans}}"></i>
       {% if item.startTime > currentTime %}
-        <small class="type">{{ item.startTime|date('m月d日') }}
+        <small class="type">{{ item.startTime|date('m月d日'|trans) }}
           {# {% for key,week in weeks %}
             {% if key == item.startTime|date('w')  %}
               星期{{ week }}

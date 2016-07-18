@@ -202,9 +202,9 @@ define(function(require, exports, module) {
             for(var i=0;i<data.length;i++){
               var file=data[i];
               if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
-                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>"+Translator.trans('正在文件格式转换')+"</span>");
               }else if(file.convertStatus=='error'){
-                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>"+Translator.trans('文件格式转换失败')+"</span>");
               } else if (file.convertStatus == 'success') {
                 $("li[data-file-id="+file.id+"]").find('.mark-manage').show();
                 $("li[data-file-id="+file.id+"]").find('.mark-manage-divider').show();

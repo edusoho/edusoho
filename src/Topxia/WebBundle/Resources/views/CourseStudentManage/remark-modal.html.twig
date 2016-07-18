@@ -10,7 +10,7 @@
   <div class="form-group">
     <div class="controls">
     	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
-    	<div class="help-block">请填写{% if setting('default.user_name') %}{{'%user_name%'|trans({'%user_name%': setting('default.user_name')|default('学员')})}}{% else %}{{'学员'|trans}}{% endif %}{{'的备注信息'|trans}}</div>
+    	<div class="help-block">{{'请填写'|trans}}{% if setting('default.user_name') %}{{'%user_name%'|trans({'%user_name%': setting('default.user_name')|default('学员')})}}{% else %}{{'学员'|trans}}{% endif %}{{'的备注信息'|trans}}</div>
     </div>
   </div>
 

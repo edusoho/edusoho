@@ -24,8 +24,8 @@
 
 {% block footer %}
     <div class="pull-left pts"> 
-      <span class="text-danger">文件若被引用，移除或删除会引起引用课时无法正常使用</span>
+      <span class="text-danger">{{'文件若被引用，移除或删除会引起引用课时无法正常使用'|trans}}</span>
     </div>
-    <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="正在删除...">确认</button>
+    <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="正在删除...">{{'确认'|trans}}</button>
     <script>app.load('course-manage-file/material-delete.js');</script>
 {% endblock %}

@@ -1,7 +1,7 @@
 <li class="item-chapter  clearfix" id="lesson-{{ lesson.id }}" style="word-break: break-all;" >
 	<div class="item-content">
 		{% if setting('course.custom_chapter_enabled')|default(true) %}
-          第 <span class="number">{{ lesson.number }}</span> {% if setting('default.chapter_name') %}{{'%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)})}}{% else %}{{'章'|trans}}{% endif %}：
+          {{'第'|trans}} <span class="number">{{ lesson.number }}</span> {% if setting('default.chapter_name') %}{{'%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)})}}{% else %}{{'章'|trans}}{% endif %}：
 	    {% endif %}  {{ lesson.title }}
     	{% if lesson.status == 'unpublished' %}
 	      <span class="unpublish-warning text-warning">({{'未发布'|trans}})</span>
