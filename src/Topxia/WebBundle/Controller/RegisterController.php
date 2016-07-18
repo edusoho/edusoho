@@ -514,7 +514,7 @@ class RegisterController extends BaseController
         $site              = $this->getSettingService()->get('site', array());
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
-        $welcomeBody       = $this->setting('auth.welcome_body', '注册欢迎的内容');
+        $welcomeBody       = $this->setting('auth.welcome_body', $this->getServiceKernel()->trans('注册欢迎的内容'));
         return str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
     }
 
@@ -536,7 +536,7 @@ class RegisterController extends BaseController
             $mail = MailFactory::create($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
+            $this->getLogService()->error('user', 'register', $this->getServiceKernel()->trans('注册激活邮件发送失败:').$e->getMessage());
         }
     }
 

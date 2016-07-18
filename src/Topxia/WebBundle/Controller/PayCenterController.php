@@ -270,7 +270,7 @@ class PayCenterController extends BaseController
             $returnArray = $request->request->all();
         }
 
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
+        $this->getLogService()->info('order', 'pay_result', $this->getServiceKernel()->trans('%name%服务器端支付通知',array('%name%' => $name)), $returnArray);
 
         $response = $this->createPaymentResponse($name, $returnArray);
 
