@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\SimpleValidator;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,10 +12,10 @@ class LiveCourseLessonManageController extends BaseController
         $parentId   = $request->query->get('parentId');
 
         if ($request->getMethod() == 'POST') {
-            $liveLesson              = $request->request->all();
+            $liveLesson = $request->request->all();
 
             //直播课时名称只支持中文、英文大小写以及数字，暂不支持<、>、"、&、‘、’、”、“字符
-            if((bool)preg_match('/^[^(<|>|\'|"|&|‘|’|”|“)]*$/', $liveLesson['title'])){
+            if (!(bool) preg_match('/^[^(<|>|\'|"|&|‘|’|”|“)]*$/', $liveLesson['title'])) {
                 throw $this->createAccessDeniedException("illegal title");
             }
 
@@ -102,8 +101,8 @@ class LiveCourseLessonManageController extends BaseController
                 'jumpUrl'  => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true)
             );
 
-           if (array_key_exists('startTime', $liveLesson)) {
-                  $liveParams['startTime'] = $liveLesson['startTime'];
+            if (array_key_exists('startTime', $liveLesson)) {
+                $liveParams['startTime'] = $liveLesson['startTime'];
             }
 
             if (array_key_exists('startTime', $liveLesson) && array_key_exists('length', $liveLesson)) {
