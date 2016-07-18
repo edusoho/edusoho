@@ -16,7 +16,7 @@ class CourseLessonManageController extends BaseController
 
         if (empty($lesson)) {
             throw $this->createNotFoundException($this->getServiceKernel()->trans('课时(#%lessonId%)不存在！', 
-                array('%lessonId%' =>$lessonId )));
+                array('%lessonId%' => $lessonId )));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -75,7 +75,7 @@ class CourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => $this->getServiceKernel()->trans('文件已删除'), 'uri' => '');
             }
         } else {
-            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
+            $name = $this->hasSelfMedia($lesson) ? $this->getServiceKernel()->trans('文件已在课程文件中移除') : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',

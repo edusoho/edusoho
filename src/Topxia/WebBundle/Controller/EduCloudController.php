@@ -98,7 +98,7 @@ class EduCloudController extends BaseController
             }
 
             if (!$this->checkPhoneNum($to)) {
-                return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('手机号错误:%to%', array('%to%' =>$to ))));
+                return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('手机号错误:%to%', array('%to%' => $to ))));
             }
 
             $smsCode = $this->generateSmsCode();
@@ -108,7 +108,7 @@ class EduCloudController extends BaseController
                 $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
 
                 if (isset($result['error'])) {
-                    return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('发送失败, %resulterror%', array('%resulterror%' =>$result['error'] ))));
+                    return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('发送失败, %resulterror%', array('%resulterror%' => $result['error'] ))));
                 }
             } catch (\RuntimeException $e) {
                 $message = $e->getMessage();
@@ -124,7 +124,7 @@ class EduCloudController extends BaseController
                 $result['nickname'] = $currentUser['nickname'];
             }
 
-            $this->getLogService()->info('sms', $smsType, $this->getServiceKernel()->trans('userId:%currentUserid%,对%to%发送用于%smsType%的验证短信%smsCode%', array('%currentUserid%' =>$currentUser['id'], '%to%' =>$to, '%smsType%' =>$smsType, '%smsCode%' =>$smsCode )), $result);
+            $this->getLogService()->info('sms', $smsType, $this->getServiceKernel()->trans('userId:%currentUserid%,对%to%发送用于%smsType%的验证短信%smsCode%', array('%currentUserid%' => $currentUser['id'], '%to%' => $to, '%smsType%' => $smsType, '%smsCode%' => $smsCode )), $result);
 
             $request->getSession()->set($smsType, array(
                 'to'            => $to,

@@ -14,10 +14,10 @@ class CourseReviewController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             $classroomSetting = $this->setting('classroom', array());
-            $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+            $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服',array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
             }
         }
         $paginator = new Paginator(
