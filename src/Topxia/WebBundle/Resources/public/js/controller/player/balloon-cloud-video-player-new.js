@@ -8,6 +8,7 @@ define(function(require, exports, module) {
             url: '',
             fingerprint: '',
             watermark: '',
+            agentInWhiteList: '',
             timelimit: 10,
             remeberLastPos: true,
             disableControlBar: false,
@@ -69,16 +70,25 @@ define(function(require, exports, module) {
                 });
             }
             var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
-            function getPlaybackRatesSrc() {
+            function needMp4ForPlaybackRate(){
                 // IE9以下不支持倍数播放，IE9及以上不支持HLS
-                if (isIE) {
-                    if ($('html').hasClass('lt-ie9')) {
-                        return '';
-                    } else {
-                        return [{src : self.get('playbackRatesMP4Url'), type : 'video/mp4', label : '高清'}];
-                    }
+                if (isIE && !$('html').hasClass('lt-ie9')) {
+                    return true;
                 }
+                // 低版本(47以下)的 chrome使用mp4方式倍速播放
+                var re = /Chrome\/(\d{0,3})/i;
+                var found = navigator.userAgent.match(re);
+                return found && found[1] < 47;
 
+            }
+            var needMp4ForPlaybackRate = needMp4ForPlaybackRate();
+            function getPlaybackRatesSrc() {
+                if (isIE && $('html').hasClass('lt-ie9')) {
+                    return '';
+                }
+                if (needMp4ForPlaybackRate) {
+                    return [{src : self.get('playbackRatesMP4Url'), type : 'video/mp4', label : '高清'}];
+                }
                 return self.get('url');
             }
 
@@ -86,7 +96,7 @@ define(function(require, exports, module) {
                 extConfig = $.extend(extConfig, {
                     playbackRates: {
                         enable : true,
-                        source : isIE ? 'mp4' : 'hls',
+                        source : needMp4ForPlaybackRate ? 'mp4' : 'hls',
                         src : getPlaybackRatesSrc()
                     }
                 });

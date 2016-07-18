@@ -32,7 +32,8 @@ class HLSController extends BaseController
         }
 
         $streams = array();
-
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $enablePlayRate = $this->setting('magic.enable_playback_rates');
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
@@ -43,7 +44,7 @@ class HLSController extends BaseController
                     'data'     => array(
                         'id' => $file['id'].$level
                     ),
-                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'times'    => ($inWhiteList || $enablePlayRate) ? 0 : 1,
                     'duration' => 3600
                 );
 
@@ -149,7 +150,7 @@ class HLSController extends BaseController
                 'level'         => $level,
                 'keyencryption' => $keyencryption
             ),
-            'times'    => $inWhiteList ? 0 : 1,
+            'times'    => ($inWhiteList || $enablePlayRate) ? 0 : 1,
             'duration' => 3600
         );
 
