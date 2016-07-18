@@ -134,7 +134,7 @@ class WebExtension extends \Twig_Extension
     public function isWithoutNetwork()
     {
         $network = $this->getSetting('developer.without_network', $default = false);
-        return boolval($network);
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
