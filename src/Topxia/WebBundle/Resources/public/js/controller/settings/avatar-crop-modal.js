@@ -21,9 +21,9 @@ define(function(require, exports, module) {
                     $("#user-profile-form img").attr('src', response.avatar);
                     $("#profile_avatar").blur();
                     $("#modal").modal('hide');
-                    Notify.success('上传成功');
+                    Notify.success(Translator.trans('上传成功'));
                 } else {
-                    Notify.success('上传失败,请重试');
+                    Notify.success(Translator.trans('上传失败,请重试'));
                 }
             });
         });
