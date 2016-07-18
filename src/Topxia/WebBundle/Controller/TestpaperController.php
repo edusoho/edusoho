@@ -103,6 +103,7 @@ class TestpaperController extends BaseController
     public function reDoTestpaperAction(Request $request, $targetType, $targetId, $testId)
     {
         $userId    = $this->getCurrentUser()->id;
+
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testpaper)) {
@@ -121,6 +122,13 @@ class TestpaperController extends BaseController
 
         if ($testpaper['status'] == 'closed') {
             return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
+        }
+
+
+        $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('reviewing'));
+
+        if(!empty($testResult)){
+            throw $this->createAccessDeniedException("试卷还在批阅中");
         }
 
         $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
