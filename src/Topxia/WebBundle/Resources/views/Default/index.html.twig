@@ -20,7 +20,6 @@
   	{{ block_show('jianmo:home_top_banner') }}
 
     {% for config in themeConfig.blocks.left|default([]) %}
-            <span class="text-muted fsm mrm">{{'第%number%'|trans({'%number%': lessom.number|default('课时'|trans)})}}</span>
 
     	{% set code = config.code %}
     	{% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
