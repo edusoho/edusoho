@@ -52,9 +52,9 @@
             <td>{{ admin_macro.user_link(users[message.toId]) }} </td>
             <td>
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span class="trigger">(展开)</span>
+                <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span class="trigger">{{ '(展开)'|trans }}</span>
                 </div>
-                <div class="long-text">{{ message.content }} <span class="trigger">(收起)</span></div>
+                <div class="long-text">{{ message.content }} <span class="trigger">{{ '(收起)'|trans }}</span></div>
               </div>
             </td>
             <td>{{ message.createdTime|date('Y-n-d H:i') }}</td>
@@ -63,7 +63,7 @@
       {% else %}
         <tr>
           <td colspan="20">
-            <div class="empty">暂无私信记录</div>
+            <div class="empty">{{ '暂无私信记录'|trans }}</div>
           </td>
         </tr>
       {% endif %}
@@ -71,9 +71,9 @@
       </tbody>
     </table>
     <div>
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-      <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="私信"
-              data-url="{{ path('admin_message_delete_messages') }}">删除
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select">{{ '全选'|trans }}</label>
+      <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{ '私信'|trans }}"
+              data-url="{{ path('admin_message_delete_messages') }}">{{ '删除'|trans }}
       </button>
     </div>
 

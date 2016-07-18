@@ -49,7 +49,7 @@
        <li><a href="{{path('group_show',{id:group.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> {{'查看小组'|trans}}</a></li>
 
        {% if group.status=='open'%}
-       <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> {{'关闭小组'|trans) }}</a></li>
+       <li><a href="javascript:" class="close-group" title="关闭小组({{group.title}})" data-url="{{path('admin_group_close',{id:group.id})}}"><span class="glyphicon glyphicon-off"></span> {{'关闭小组'|trans }}</a></li>
 
        {% else %}
        <li><a href="javascript:" class="open-group" title="开启小组({{group.title}})" data-url="{{path('admin_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>{{'开启小组'|trans}}</a></li>
