@@ -19,7 +19,7 @@
 		  <div>
 		  	<div class="text-warning">{{'总分'|trans}} <strong>{{ paperResult.score }}</strong> {{'分'|trans}}</div>
 				<div class="text-muted"><small>{{'客观题%objectiveScore%分 / 主观题%subjectiveScore%分'|trans({'%objectiveScore%':paperResult.objectiveScore,'%subjectiveScore%':paperResult.subjectiveScore})}}</small></div>
-				<div class="text-success"><small>{{ teacher.nickname|default('系统'|trans) }} {{'批于'|trans}}{{ paperResult.checkedTime|date("Y-n-d H:i") }}</small></div>
+				<div class="text-success"><small>{{ teacher.nickname|default('系统'|trans) }} {{'批于'|trans}}{{ paperResult.checkedTime|date('Y年n月d日 H:i'|trans) }}</small></div>
 		  </div>
 		{% endif %}
 	</td>

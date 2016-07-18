@@ -5,7 +5,7 @@
     <div>
       <small class="text-muted">{{'来自课程'|trans}}《{{ course.title }}》</small>
       <small class="text-muted mhs">•</small>
-      <small class="text-muted" title="{{'开始考试时间'|trans}}">{{ myTestpaperResult.beginTime|date("Y-n-d H:i") }}</small>
+      <small class="text-muted" title="{{'开始考试时间'|trans}}">{{ myTestpaperResult.beginTime|date('Y年n月d日 H:i'|trans) }}</small>
     </div>
   </td>
 
