@@ -1,7 +1,19 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:CloudFile:layout.html.twig' %}
 
 {% set menu = 'admin_cloud_attachment'%}
 {% do load_script('cloudattachment/manage')%}
+
+{% block stylesheets %}
+  {{parent()}}
+  <style>
+  .batch-item {
+      position: absolute;
+      left: 6px;
+      top: 3px;
+      z-index: 101;
+  }
+</style>
+{% endblock %}
 
 {% block main %}
 <div class="eduyun-main">
@@ -13,7 +25,7 @@
     {% include 'TopxiaAdminBundle:CloudFile/Form:nav.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:sort.html.twig' %}
-    {% include 'TopxiaAdminBundle:CloudFile/Form:batch.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudAttachment/Form:batch.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudAttachment:table.html.twig' %}
     <input type="hidden">
   </form>

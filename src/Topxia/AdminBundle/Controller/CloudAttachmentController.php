@@ -33,11 +33,11 @@ class CloudAttachmentController extends BaseController
         if (!isset($conditions['processStatus'])) {
             $conditions['processStatus'] = '';
         }
-        var_dump($conditions);
-        $count     = $this->getUploadFileService()->searchFileCount($conditions);
+
+        $count     = $this->getCloudAttachment()->searchFileCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $materials = $this->getUploadFileService()->searchFiles(
+        $materials = $this->getCloudAttachment()->searchFiles(
             $conditions,
             $orderBy = array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -77,5 +77,10 @@ class CloudAttachmentController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getCloudAttachment()
+    {
+        return $this->createService('CloudAttachment.CloudAttachmentService');
     }
 }

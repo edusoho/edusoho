@@ -2,11 +2,16 @@
 namespace Topxia\Service\CloudAttachment\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\BaseService;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudAttachment\CloudAttachmentService;
 
 class CloudAttachmentServiceImpl extends BaseService implements CloudAttachmentService
 {
+    static $implementor = array(
+        'local' => 'File.LocalFileImplementor',
+        'cloud' => 'File.CloudFileImplementor'
+    );
+
     public function searchFileCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);

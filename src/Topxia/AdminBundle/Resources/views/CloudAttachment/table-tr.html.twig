@@ -54,16 +54,18 @@
     <td class="text-center">
       <span style="display:block">{{ cloudAttachment.createdTime|date('Y-m-d H:i:s') }}</span>
     </td>
+     <td class="text-center">
+      <span style="display:block">资讯</span>
+    </td>
     <td class="es-materillib-table text-center">
       <div class="btn-group ">
-        <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudAttachment.no}) }}">编辑</a>
-
+         <a class="btn btn-default btn-sm js-detail-btn " href="{{ path('admin_cloud_file_download', {globalId:cloudAttachment.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
         <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu pull-right">
           <li>
-            <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudAttachment.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
+           
           </li>
           <li>
             <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete_modal_show') }}" data-id="{{ cloudAttachment.no }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>

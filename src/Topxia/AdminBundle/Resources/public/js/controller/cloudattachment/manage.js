@@ -19,7 +19,6 @@ define(function(require, exports, module) {
                 'click .targetType-tabs .js-targetType-btn' : 'onClickTargetType',
                 'click .pagination li': 'onClickPagination',
                 'click .js-detail-btn': 'onClickDetailBtn',
-                'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-search-type option': 'onClickSearchTypeBtn',
                 'click .js-refresh-btn': 'onClickRefreshBtn',
@@ -27,8 +26,6 @@ define(function(require, exports, module) {
                 'change .js-use-status-select': 'onClickUseStatusBtn',
                 'click .js-manage-batch-btn': 'onClickManageBtn',
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
-                'click .js-batch-share-btn': 'onClickShareBatchBtn',
-                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
             },
             setup: function() {
                 this.set('model','normal');
@@ -61,33 +58,6 @@ define(function(require, exports, module) {
                 this.element.find('.js-page').val($target.data('page'));
                 this.renderTable(true);
                 event.preventDefault();
-            },
-            onClickDetailBtn: function(event)
-            {
-                var self = this;
-                var $target = $(event.currentTarget);
-                $target.button('loading');
-                $.ajax({
-                    type:'GET',
-                    url:$target.data('url'),
-                }).done(function(resp){
-                    self.element.hide();
-                    self.element.prev().hide();
-                    self.element.parent().prev().html('资源详情');
-                    self.element.parent().append(resp);
-                    new DetailWidget({
-                        element:'#attachment-table',
-                        callback: function() {
-                            var $form = $('#materials-form');
-                            $form.show();
-                            $form.prev().show();
-                            window.materialWidget.renderTable();
-                        }
-                    });
-                }).fail(function(){
-                    $target.button('reset');
-                    Notify.danger('Opps,出错了!');
-                });
             },
             onClickDeleteBtn: function(event)
             {
@@ -191,7 +161,7 @@ define(function(require, exports, module) {
                   
                     $target.siblings('.btn').show();
                     $target.siblings('[data-role=batch-manage]').show();
-                    $('#materials-table').find('.batch-item').show();
+                    $('#attachment-table').find('.batch-item').show();
                     $target.html('完成管理');
                 } else {
                     this.set('model','normal');
@@ -199,7 +169,7 @@ define(function(require, exports, module) {
                   
                     $target.siblings('.btn').hide();
                     $target.siblings('[data-role=batch-manage]').hide();
-                    $('#materials-table').find('.batch-item').hide();
+                    $('#attachment-table').find('.batch-item').hide();
                     $target.html('批量管理');
                 }
             },
@@ -208,7 +178,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(event.currentTarget);
                 var ids = [];
-                $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
+                $('#attachment-form').find('[data-role=batch-item]:checked').each(function() {
                     ids.push(this.value);
                 });
                 if(ids == ""){
@@ -221,59 +191,16 @@ define(function(require, exports, module) {
                 $('#modal').modal('show');
 
             },
-            onClickShareBatchBtn: function(event)
-            {
-                if (confirm('确定要分享这些资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    var ids = [];
-                    this.element.find('[data-role=batch-item]:checked').each(function() {
-                        ids.push($(this).data('fileId'));
-                    });
-                    if(ids == ""){
-                        Notify.danger('请先选择你要分享的资源!');
-                        return;
-                    }
-
-                    $.post($target.data('url'),{"ids":ids},function(data){
-                        if(data){
-                            Notify.success('分享资源成功');
-                            self.renderTable();
-                        } else {
-                            Notify.danger('分享资源失败');
-                            self.renderTable();
-                        }
-                        this.element.find('[data-role=batch-item]').show();
-
-                    });
-                }
-            },
-            onClickTagBatchBtn: function(event)
-            {
-                var self = this;
-                var $target = $(event.currentTarget);
-                var ids = [];
-                this.element.find('[data-role=batch-item]:checked').each(function() {
-                    ids.push($(this).data('fileId'));
-                });
-                if(ids == ""){
-                    Notify.danger('请先选择你要操作的资源!');
-                    return;
-                }
-
-                $("#select-tag-items").val(ids);
-                $("#tag-modal").modal('show');
-            },
             _loading: function()
             {
                 var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在加载，请等待......</td></tr>';
-                var $table = this.element.find('#materials-table');
+                var $table = this.element.find('#attachment-table');
                 $table.find('tbody').html(loading);
             },
             _loaded_error: function()
             {
                 var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</td></tr>';
-                var $table = this.element.find('#materials-table');
+                var $table = this.element.find('#attachment-table');
                 $table.find('tbody').html(loading);
             },
             _resetPage: function()
@@ -483,12 +410,12 @@ define(function(require, exports, module) {
                     materialWidget.renderTable(true);
                     $("input[name = 'batch-select']").attr("checked",false);
                 }
-                $('#materials-form').find('[data-role=batch-item]').show();
-                $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
+                $('#attachment-form').find('[data-role=batch-item]').show();
+                $('#attachment-form').find('[data-role=batch-select]').attr("checked",false);
             });
         });
 
-        var $panel = $('#materials-form');
+        var $panel = $('#attachment-form');
         require('../../../../topxiaweb/js/util/batch-select')($panel);
 
     }
