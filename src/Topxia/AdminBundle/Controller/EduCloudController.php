@@ -144,12 +144,12 @@ class EduCloudController extends BaseController
     {
         $attachment = $this->getSettingService()->get('cloud_attachment', array());
         $default    = array(
-            'attachment_enable' => 0,
-            'article'           => 0,
-            'thread'            => 0,
-            'group'             => 0,
-            'question'          => 0,
-            'fileSize'          => 500
+            'enable'   => 0,
+            'article'  => 0,
+            'thread'   => 0,
+            'group'    => 0,
+            'question' => 0,
+            'fileSize' => 500
         );
         $attachment = array_merge($default, $attachment);
 
