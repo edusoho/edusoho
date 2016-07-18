@@ -73,14 +73,17 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             $order = $this->getOrderDao()->getOrderBySn($payData['sn'], true);
 
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('订单(%payData%)已被删除，支付失败。', array('%payData%' =>$payData['sn'] )));
+                throw $this->createServiceException($this->getKernel()->trans('订单(%sn%)已被删除，支付失败。', array('%sn%' =>$payData['sn'] )));
             }
 
             if ($payData['status'] == 'success') {
                 // 避免浮点数比较大小可能带来的问题，转成整数再比较。
 
                 if (intval($payData['amount'] * 100) !== intval($order['amount'] * 100)) {
-                    $message = sprintf($this->getKernel()->trans('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。'), $order['sn'], $order['amount'], $payData['amount']);
+                    $message = sprintf($this->getKernel()->trans('订单(%sn%)的金额(%orderAmount%)与实际支付的金额(%payAmount%)不一致，支付失败。',array(
+                        '%sn%' => $order['sn'],
+                        '%orderAmount%' => $order['amount'],
+                        '%payAmount%' => $payData['amount'])));
                     $this->_createLog($order['id'], 'pay_error', $message, $payData);
                     throw $this->createServiceException($message);
                 }
