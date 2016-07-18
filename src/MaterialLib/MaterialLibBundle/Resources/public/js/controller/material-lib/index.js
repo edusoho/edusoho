@@ -131,7 +131,7 @@ define(function(require, exports, module) {
                             }
                         });
                     }).fail(function(){
-                        Notify.danger('抱歉，您无权操作此文件');
+                        Notify.danger(Translator.trans('抱歉，您无权操作此文件'));
                     }).always(function() {
                        self.DetailBtnActive = false;
                     });
@@ -158,10 +158,10 @@ define(function(require, exports, module) {
                     type:'POST',
                     url:$target.data('url'),
                 }).done(function(response){
-                    Notify.success('重新转码成功!');
+                    Notify.success(Translator.trans('重新转码成功!'));
                     $target.parents(".materials-list").replaceWith($(response));
                 }).fail(function(){
-                    Notify.danger('重新转码失败!');
+                    Notify.danger(Translator.trans('重新转码失败!'));
                 }).always(function(){
                     $target.button('reset');
                 });
@@ -202,10 +202,10 @@ define(function(require, exports, module) {
                 $.get($target.data('url'),function(data){
                     if(data){
                         $target.addClass("material-collection");
-                        Notify.success('收藏成功');
+                        Notify.success(Translator.trans('收藏成功'));
                     } else {
                         $target.removeClass("material-collection");
-                        Notify.success('取消收藏成功');
+                        Notify.success(Translator.trans('取消收藏成功'));
 
                     }
                 });
@@ -221,7 +221,7 @@ define(function(require, exports, module) {
                   $('#material-lib-batch-btn-bar').show();
                   $('#material-lib-items-panel').find('[data-role=batch-item]').show();
                   $('.materials-ul').addClass('batch-hidden');
-                  $target.html('完成管理');
+                  $target.html(Translator.trans('完成管理'));
                 } else {
                   this.set('model','normal');
                   var self = this;
@@ -229,7 +229,7 @@ define(function(require, exports, module) {
                   $('#material-lib-batch-btn-bar').hide();
                   $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
                   $('.materials-ul').removeClass('batch-hidden');
-                  $target.html('批量管理');
+                  $target.html(Translator.trans('批量管理'));
                 }
             },
             onClickUploadTimeBtn: function(event)
@@ -253,7 +253,7 @@ define(function(require, exports, module) {
                     ids.push(this.value);
                 });
                 if(ids == ""){
-                    Notify.danger('请先选择你要删除的资源!');
+                    Notify.danger(Translator.trans('请先选择你要删除的资源!'));
                     return;
                 }
 
@@ -264,7 +264,7 @@ define(function(require, exports, module) {
             },
             onClickShareBatchBtn: function(event)
             {
-                if (confirm('确定要分享这些资源吗？')) {
+                if (confirm(Translator.trans('确定要分享这些资源吗？'))) {
                     var $target = $(event.currentTarget);
                     var ids = [];
                     $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -284,7 +284,7 @@ define(function(require, exports, module) {
                     ids.push(this.value);
                 });
                 if(ids == ""){
-                    Notify.danger('请先选择你要操作的资源!');
+                    Notify.danger(Translator.trans('请先选择你要操作的资源!'));
                     return;
                 }
 
@@ -293,7 +293,7 @@ define(function(require, exports, module) {
             },
             onClickShareBtn: function(event)
             {
-                if (confirm('确定要分享这个资源吗？')) {
+                if (confirm(Translator.trans('确定要分享这个资源吗？'))) {
                     var $target = $(event.currentTarget);
 
                     var ids = [];
@@ -304,13 +304,13 @@ define(function(require, exports, module) {
             },
             onClickUnshareBtn: function(event)
             {
-                if (confirm('确定要取消分享这个资源吗？')) {
+                if (confirm(Translator.trans('确定要取消分享这个资源吗？'))) {
                     var self = this;
                     var $target = $(event.currentTarget);
 
                     $.post($target.data('url'), function(response){
                         if (response) {
-                            Notify.success('取消分享资源成功');
+                            Notify.success(Translator.trans('取消分享资源成功'));
                             self.renderTable();
                         }
                     })
@@ -331,7 +331,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#tags',
                     required: true,
-                    display: '标签'
+                    display: Translator.trans('标签')
                 });
             },
             renderTable: function(isPaginator)
@@ -365,13 +365,13 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在加载，请等待......</div>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">'+Translator.trans('正在加载，请等待......')+'</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
             _loaded_error: function()
             {
-                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</div>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">'+Translator.trans('Opps,出错了......')+'</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
@@ -423,7 +423,7 @@ define(function(require, exports, module) {
                     },
                     width: 400,
                     multiple: true,
-                    placeholder: "请输入标签",
+                    placeholder: Translator.trans("请输入标签"),
                     multiple: true,
                     createSearchChoice: function() {
                         return null;
@@ -432,7 +432,7 @@ define(function(require, exports, module) {
                 });
 
                 $("#js-course-search").select2({
-                    placeholder: "选择课程",
+                    placeholder: Translator.trans("选择课程"),
                     minimumInputLength: 1,
                     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                         url: $("#js-course-search").data('url'),
@@ -487,7 +487,7 @@ define(function(require, exports, module) {
                 });
 
                 $("#js-user-search").select2({
-                    placeholder: "选择用户",
+                    placeholder: Translator.trans("选择用户"),
                     minimumInputLength: 1,
                     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                         url: $("#js-user-search").data('url'),
@@ -569,16 +569,16 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 if(ids == ""){
-                    Notify.danger('请先选择你要分享的资源!');
+                    Notify.danger(Translator.trans('请先选择你要分享的资源!'));
                     return;
                 }
 
                 $.post(url, {"ids":ids}, function(data){
                     if(data){
-                        Notify.success('分享资源成功');
+                        Notify.success(Translator.trans('分享资源成功'));
                         self.renderTable();
                     } else {
-                        Notify.danger('分享资源失败');
+                        Notify.danger(Translator.trans('分享资源失败'));
                         self.renderTable();
                     }
                     
@@ -599,7 +599,7 @@ define(function(require, exports, module) {
             $.post($form.attr('action'),$form.serialize(),function(data){
                 if(data){
                     $('#modal').modal('hide');
-                    Notify.success('删除资源成功');
+                    Notify.success(Translator.trans('删除资源成功'));
                     materialWidget.renderTable(true);
                     $("input[name = 'batch-select']").attr("checked",false);
                 }

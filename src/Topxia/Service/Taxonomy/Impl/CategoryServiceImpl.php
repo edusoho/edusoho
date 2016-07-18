@@ -240,7 +240,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->setCategoryOrg($category);
         $category = $this->getCategoryDao()->addCategory($category);
 
-        $this->getLogService()->info('category', 'create', $this->getKernel()->trans('添加分类 %name%(#%id%)', array('%name%' => $category['name'], '%id' => $category['id'])), $category);
+        $this->getLogService()->info('category', 'create', "添加分类 {$category['name']}(#{$category['id']})", $category);
 
         return $category;
     }
@@ -312,7 +312,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->getCategoryDao()->deleteCategory($id);
         }
 
-        $this->getLogService()->info('category', 'delete', $this->getKernel()->trans('删除分类%name%(#%id%)', array('%name%' => $category['name'], '%id%' => $id)));
+        $this->getLogService()->info('category', 'delete', "删除分类{$category['name']}(#{$id})");
     }
 
     /**

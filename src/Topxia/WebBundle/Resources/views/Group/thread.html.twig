@@ -244,7 +244,7 @@
             <div class="row clearfix mtm">
               {% for attach in postAttachs[post.id] %}
                 {% set postFile = postFiles[post.id] %}
-                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if attach.description %}{{'描述：%description%'|trans({'%description%': attach.description})}}{% endif %}  {{'上传于%createdTime%'|trans({'%createdTime%': postFile[attach.fileId].createdTime|smart_time})}}">
+                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：%description%'|trans({'%description%': attach.description})}} {% endif %}  {{'上传于%createdTime%'|trans({'%createdTime%': postFile[attach.fileId].createdTime|smart_time})}}">
                   {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                     <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                   {% else %}

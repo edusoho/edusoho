@@ -134,7 +134,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
-        $this->getLogService()->info('system', 'update_block', $this->getKernel()->trans('更新编辑区#%id%', array('%id%' => $id)), array('content' => $updatedBlock['content']));
+        $this->getLogService()->info('block', 'update', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
         return $updatedBlock;
     }
 

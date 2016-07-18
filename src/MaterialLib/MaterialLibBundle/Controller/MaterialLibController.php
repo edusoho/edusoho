@@ -14,7 +14,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
@@ -47,7 +47,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $currentUserId        = $currentUser['id'];
@@ -170,7 +170,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $currentUserId = $currentUser['id'];
@@ -188,7 +188,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -235,7 +235,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -280,7 +280,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $conditions['sourceUserId'] = $user['id'];
@@ -324,7 +324,7 @@ class MaterialLibController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
@@ -337,7 +337,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $currentUserId = $currentUser['id'];
@@ -359,7 +359,7 @@ class MaterialLibController extends BaseController
                     $targetUser   = $this->getUserService()->getUser($targetUserId);
                     $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
                     $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
-                    $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>已将资料分享给你，<a href='{$toMyShareUrl}'>点击查看</a>");
+                    $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->getServiceKernel()->trans('已将资料分享给你，')."<a href='{$toMyShareUrl}'>".$this->getServiceKernel()->trans('点击查看')."</a>");
                 }
             }
         }
@@ -372,7 +372,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
 
         $currentUserId = $currentUser['id'];
@@ -385,7 +385,7 @@ class MaterialLibController extends BaseController
             $targetUser   = $this->getUserService()->getUser($targetUserId);
             $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
             $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
-            $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>已取消分享资料给你，<a href='{$toMyShareUrl}'>点击查看</a>");
+            $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->getServiceKernel()->trans('已取消分享资料给你，')."<a href='{$toMyShareUrl}'>".$this->getServiceKernel()->trans('点击查看')."</a>");
         }
 
         return $this->createJsonResponse(true);

@@ -10,7 +10,7 @@
       {% if testpaper.status == 'closed' %}{{'已关闭'|trans}}{% endif %}
     </td>
     <td>
-      {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="text-muted">/</span> {{'%score分%'|trans({'%score%': testpaper.score})}}
+      {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="text-muted">/</span> {{'%score%分'|trans({'%score%': testpaper.score})}}
       {% if testpaper.passedScore > 0 %}
         <div class="text-muted"><small>{{'及格%passedScore%分'|trans({'%passedScore%': testpaper.passedScore })}}</small></div>
       {% endif %}

@@ -90,9 +90,9 @@ class LoginBindController extends BaseController
             $message = $e->getMessage();
 
             if ($message == 'unaudited') {
-                $message = $this->getServiceKernel()->trans('抱歉！暂时无法通过第三方帐号登录。原因：').$clientMeta['name'].$this->getServiceKernel()->trans('登录连接的审核还未通过。');
+                $message = $this->getServiceKernel()->trans('抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。', array('%name%' =>$clientMeta['name'] ));
             } else {
-                $message = $this->getServiceKernel()->trans('抱歉！暂时无法通过第三方帐号登录。原因：').$message;
+                $message = $this->getServiceKernel()->trans('抱歉！暂时无法通过第三方帐号登录。原因：%message%', array('%message%' =>$message ));
             }
 
             $this->setFlashMessage('danger', $message);

@@ -17,7 +17,7 @@
               </div>
             </div>
             <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-            <div class="metas">{{'共%courseNum%门课程'|trans({'%courseNum%':classroom.courseNum})}}</div>
+            <div class="metas">{{'共%classroom.courseNum%门课程'|trans({'%classroom.courseNum%':classroom.courseNum})}}</div>
           </div>
         </div>
       {% endfor %}

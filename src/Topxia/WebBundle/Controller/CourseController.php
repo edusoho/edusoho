@@ -418,9 +418,9 @@ class CourseController extends CourseBaseController
                 $capacity = array();
             }
 
-            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请联系EduSoho官方购买直播教室，然后才能开启直播功能！'));
-            }
+//            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+//                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请联系EduSoho官方购买直播教室，然后才能开启直播功能！'));
+//            }
         }
 
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {

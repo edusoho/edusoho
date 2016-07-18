@@ -11,14 +11,14 @@
       <p class="status-parent">
       {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
         {% if uploadFile.convertStatus == 'error' %}
-          <span class="status label label-danger">转码失败</span>
+          <span class="status label label-danger">{{'转码失败'|trans}}</span>
         {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
-          <span class="status label label-info">转码中</span>
+          <span class="status label label-info">{{'转码中'|trans}}</span>
         {% endif %}
       {% endif %}
 
       {% if uploadFile.usedCount|default(0) == 0 %}
-        <span class="label label-default">未使用</span>
+        <span class="label label-default">{{'未使用'|trans}}</span>
       {% endif %}
       </p>
       {#<p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>#}
