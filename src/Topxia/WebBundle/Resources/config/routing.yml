@@ -641,10 +641,6 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
-open_course_manage_students:
-    pattern: /open/course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:OpenCourseStudentManage:index}
-
 #课程同步
 course_manage_course_sync:
     pattern:  /course/manage/course/sync/{id}/{type}
