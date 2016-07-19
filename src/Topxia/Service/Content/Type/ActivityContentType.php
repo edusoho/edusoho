@@ -27,9 +27,4 @@ class ActivityContentType extends ContentType
 		return $this->getKernel()->trans('活动');
 	}
 
-	protected function getKernel()
-	{
-        		return  ServiceKernel::instance();
-   	}
-
 }

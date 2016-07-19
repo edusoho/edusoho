@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Content\Type;
 
-abstract class ContentType
+abstract class ContentType extends BaseService
 {
 
 	abstract public function getAlias();
