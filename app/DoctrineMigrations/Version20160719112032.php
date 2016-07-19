@@ -16,11 +16,9 @@ class Version20160719112032 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $table = $schema->getTable('referer_log');
-        if ($table->hasColumn('targertId') && !$table->hasColumn('targetInnerType')) {
-            $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
-            $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");
-        }
+
+        $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
+        $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");
     }
 
     /**
