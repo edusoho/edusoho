@@ -3,7 +3,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\PointcutToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +15,7 @@ class DefaultController extends BaseController
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks'=>$friendlyLinks));
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
     }
 
     public function userlearningAction()
@@ -107,10 +106,10 @@ class DefaultController extends BaseController
     public function friendlyLinkAction()
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-            
+
         return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
-                'friendlyLinks' => $friendlyLinks
-            ));
+            'friendlyLinks' => $friendlyLinks
+        ));
     }
 
     public function customerServiceAction()
