@@ -26,7 +26,7 @@
   </tr>
   {% if setting('magic.enable_org','0') %}
     <tr>
-      <th>所属组织机构</th>
+      <th>{{'所属组织机构'|trans}}</th>
       <td>
         {% set orgName = data('OrgDisplay',{id: user.orgId}) %}
         {% if orgName %}
@@ -57,7 +57,7 @@
   </tr>
 
   <tr>
-    <th>{{'最近登录时间'|trans}}/IP</th>
+    <th>{{'最近登录时间/IP'|trans}}</th>
     <td> 
       {% if user.loginTime == 0 %}
           --

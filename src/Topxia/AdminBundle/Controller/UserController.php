@@ -149,7 +149,7 @@ class UserController extends BaseController
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
-            $this->getLogService()->info('user', 'add', $this->getServiceKernel()->trans('管理员添加新用户 %nickname% (%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])));
+            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
@@ -208,7 +208,7 @@ class UserController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->getLogService()->info('user', 'edit', $this->getServiceKernel()->trans('管理员编辑用户资料 %nickname% (#%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])), $profile);
+                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
