@@ -165,7 +165,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $fields['sequence']    = $this->getNavigationDao()->getNavigationsCountByType($fields['type']) + 1;
         $result                = $this->getNavigationDao()->addNavigation($fields);
 
-        $this->getLogService()->info('info', 'navigation_create', $this->getKernel()->trans('创建导航%fieldsName%', array('%fieldsName%' => $fields['name'])));
+        $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
 
         return $result;
     }
@@ -204,7 +204,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         $fields['updateTime'] = time();
 
-        $this->getLogService()->info('info', 'navigation_update', $this->getKernel()->trans('编辑导航#%id%', array('%id%' => $id)), $fields);
+        $this->getLogService()->info('info', 'navigation_update', "编辑导航#{$id}", $fields);
 
         return $this->getNavigationDao()->updateNavigation($id, $fields);
     }
