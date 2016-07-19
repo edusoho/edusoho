@@ -12,8 +12,6 @@ class OpenCourseManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $openCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
         return $this->forward('TopxiaWebBundle:OpenCourseManage:base', array('id' => $id));
     }
 
