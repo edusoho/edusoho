@@ -15,7 +15,7 @@ class OrderProcessorFactory
 					throw new NotFoundException('订单类型不存在: ' . $type);
 			}
 
-			$class = $map[$type];
+			$class = $map[$type]['processor'];
 			return new $class();
     }
 

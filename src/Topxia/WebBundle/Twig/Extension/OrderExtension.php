@@ -29,9 +29,9 @@ class OrderExtension extends \Twig_Extension
 
     public function checkOrderType($type)
     {
-      $orderType = JoinPointToolkit::load('order_target_type');
+      $orderType = JoinPointToolkit::load('order');
       if(in_array($type, array_keys($orderType))){
-        return $orderType[$type];
+        return $orderType[$type]['order_show_template'];
       }
       return false;
     }
