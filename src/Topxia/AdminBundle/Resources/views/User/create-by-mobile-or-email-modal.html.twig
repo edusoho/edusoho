@@ -9,37 +9,37 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label ">
-        <label for="emailOrMobile">邮箱/手机</label>
+        <label for="emailOrMobile">{{'邮箱/手机'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="emailOrMobile" data-url="{{ path('admin_user_create_email_or_mobile_check') }}"
-               name="emailOrMobile" class="form-control" placeholder='邮箱地址/手机号码'>
+               name="emailOrMobile" class="form-control" placeholder='{{'邮箱地址/手机号码'|trans}}'>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="nickname">用户名</label>
+        <label for="nickname">{{'用户名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_user_create_nickname_check') }}"
-               class="form-control" placeholder='不填将自动生成'>
+               class="form-control" placeholder='{{'不填将自动生成'|trans}}'>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="password">密码</label>
+        <label for="password">{{'密码'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="password" id="password" name="password" class="form-control">
-        <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+        <p class="help-block">{{'5-20位英文、数字、符号，区分大小写'|trans}}</p>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="confirmPassword">确认密码</label>
+        <label for="confirmPassword">{{'确认密码'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
@@ -51,10 +51,10 @@
     
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="roles">用户权限</label>
+        <label for="roles">{{'用户权限'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> 教师
+        <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'教师'|trans}}
       </div>
     </div>
 
@@ -64,9 +64,9 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="user-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right"
-          data-toggle="form-submit" data-target="#user-create-form">提交
+  <button id="user-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right"
+          data-toggle="form-submit" data-target="#user-create-form">{{'提交'|trans}}
   </button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('user/create-modal-mobile')</script>
 {% endblock %}
