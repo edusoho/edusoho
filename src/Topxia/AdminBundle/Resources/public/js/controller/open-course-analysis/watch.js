@@ -2,7 +2,7 @@ define(function (require, exports, module) {
     "use strict";
     require('echarts-debug');
 
-    var Echarts = function (el, options) {
+    var initEcharts = function (el, options) {
         var obj = echarts.init(el);
         obj.setOption(options);
         return obj;
@@ -47,7 +47,7 @@ define(function (require, exports, module) {
                 }
             }]
         };
-        var lineCharts = Echarts($lineCharts.get(0), options);
+        var lineCharts = initEcharts($lineCharts.get(0), options);
         $('.js-watch-type').on('click', function () {
             var $self = $(this);
             $('#refererlog-search-form').find('[name=type]').val($self.data('value'));
