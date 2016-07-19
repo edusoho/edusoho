@@ -16,14 +16,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
-        $user = $this->getCurrentUser();
-
-        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl']);
+        $user                            = $this->getCurrentUser();
+        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['userAgent']);
 
         $refererlog['refererHost']   = $refererHost;
         $refererlog['refererName']   = $refererName;
         $refererlog['createdUserId'] = $user['id'];
-
         return $this->getRefererLogDao()->addRefererLog($refererlog);
     }
 
@@ -124,22 +122,36 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }, $analysisDatas);
     }
 
-    private function prepareRefererUrl($refererUrl)
+    private function prepareRefererUrl($refererUrl, $userAgent)
     {
         $refererHost = null;
         $refererName = null;
+        $outerVisit  = true;
 
-        $refererMap = $this->getRefererMap();
         $host       = $this->getKernel()->getEnvVariable('host');
+        $refererMap = $this->getRefererMap();
+
+        $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
+        preg_match($patten, $refererUrl, $matches);
+
+        array_walk($matches, function ($value) use ($host, &$outerVisit) {
+            if ($value == $host) {
+                $outerVisit = false;
+            }
+        });
         //站外
-        if (strpos($refererUrl, $host) === false) {
-            $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
-            preg_match($patten, $refererUrl, $matches);
+        if ($outerVisit) {
             $refererHost = $refererName = $matches[0];
         } else {
-            $refererHost = $refererName = $refererUrl;
+            if (strpos($userAgent, 'MicroMessenger') === false) {
+                $refererHost = $refererName = $refererUrl;
+            } else {
+                $refererHost = $refererName = 'mp.weixin.qq.com';
+            }
         }
-        $refererName = $this->arrayFind($refererMap, $refererUrl);
+
+        $refererName = $this->arrayFind($refererMap, $refererHost);
+
         return array($refererHost, $refererName);
     }
 
@@ -161,6 +173,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             'my/courses/favorited' => '收藏页面',
             $host                  => '首页',
             'baidu.com'            => '百度',
+            'www.so.com'           => '360搜索',
+            'www.sogou.com'        => '搜狗搜索',
             'mp.weixin.qq.com'     => '微信',
             'weibo.com'            => '微博'
         );

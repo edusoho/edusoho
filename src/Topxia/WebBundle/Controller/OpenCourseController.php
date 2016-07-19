@@ -756,9 +756,8 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog(Request $request, Response $response, $course)
     {
-        $refererUrl = $request->server->get('HTTP_REFERER');
-        $refererUrl = empty($refererUrl) ? $request->getUri() : $refererUrl;
-
+        $refererUrl      = $request->server->get('HTTP_REFERER');
+        $refererUrl      = empty($refererUrl) ? $request->getUri() : $refererUrl;
         $refererLogToken = $this->getRefererLogToken($request, $response);
 
         $fields = array(
@@ -767,7 +766,8 @@ class OpenCourseController extends BaseController
             'refererUrl'      => $refererUrl,
             'targetInnerType' => $course['type'],
             'token'           => $refererLogToken,
-            'ip'              => $request->getClientIp()
+            'ip'              => $request->getClientIp(),
+            'userAgent'       => $request->headers->get("user-agent")
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
