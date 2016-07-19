@@ -16,7 +16,8 @@ class SmsProcessorFactory
 
     	return new $class();
     }
-        protected function getKernel()
+    
+    protected function getKernel()
     {
         return ServiceKernel::instance();
     }
