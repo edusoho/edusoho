@@ -206,6 +206,7 @@ abstract class BaseController extends Controller
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
+
     protected function fillOrgCode($conditions){
 
         if($this->setting('magic.enable_org')){
