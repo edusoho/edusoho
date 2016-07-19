@@ -68,10 +68,10 @@ class SystemController extends BaseController
                 }
             } catch (\Exception $e) {
                 $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
-                return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送异常')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送服务并没开通！'));
+            return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送服务并没开通！')));
         }
     }
 
@@ -151,21 +151,21 @@ class SystemController extends BaseController
         $logs    = array(
             'name'  => '/app/logs',
             'dir'   => $rootDir.'/logs',
-            'title' => '用户在站点进行操作的日志存放目录'
+            'title' => $this->getServiceKernel()->trans('用户在站点进行操作的日志存放目录')
         );
 
         $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
         $webFiles   = array(
             'name'  => substr($webFileDir, strrpos($webFileDir, '/')),
             'dir'   => $webFileDir,
-            'title' => '用户在站点上传图片的存放目录'
+            'title' => $this->getServiceKernel()->trans('用户在站点上传图片的存放目录')
         );
 
         $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $material    = array(
             'name'  => substr($materialDir, strrpos($materialDir, '/')),
             'dir'   => $materialDir,
-            'title' => '用户教学资料库中资源的所在目录(云文件除外)'
+            'title' => $this->getServiceKernel()->trans('用户教学资料库中资源的所在目录(云文件除外)')
         );
 
         return array_map(function ($array) {
