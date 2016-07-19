@@ -73,62 +73,76 @@ class BaseTestCase extends WebTestCase
         }
 
         $this->initCurrentUser();
+        $this->initDevelopSetting();
+    }
 
+    protected function initDevelopSetting()
+    {
+        static::$serviceKernel->createService('System.SettingService')->set('developer', array(
+            'without_network' => '1'
+        ));
     }
 
     protected function initCurrentUser()
     {
-        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService = static::$serviceKernel->createService('User.UserService');
 
-        $user = $userService->register(array(
-            'nickname' => 'admin',
-            'email'    => 'admin@admin.com',
-            'password' => 'admin',
-            'createdIp'  => '127.0.0.1',
-            'orgCode'  => '1.'
-        ));
-
         $currentUser = new CurrentUser();
-        $user['currentIp'] = $user['createdIp'];
-        $currentUser->fromArray($user);
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array(),
+            'org'       => array('id' => 1)
+        ));
         static::$serviceKernel->setCurrentUser($currentUser);
+
+        $user = $userService->register(array(
+            'nickname'  => 'admin',
+            'email'     => 'admin@admin.com',
+            'password'  => 'admin',
+            'createdIp' => '127.0.0.1',
+            'orgCode'   => '1.',
+            'orgId'     => '1'
+        ));
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $userService->changeUserRoles($user['id'], $roles);
-        $user = $userService->getUser($user['id']);
+        $user              = $userService->getUserByEmail($user['email']);
         $user['currentIp'] = $user['createdIp'];
+        $user['org']       = array('id' => 1);
+        $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
     }
 
     /**
      * mock对象
-     * @param $name mock的类名
+     * @param $name                                       mock的类名
      * @param $params,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
 
-    protected function mock($objectName,$params = array())
+    protected function mock($objectName, $params = array())
     {
-      $newService = explode('.',$objectName);
-      $mockObject = Mockery::mock($newService[1]);
+        $newService = explode('.', $objectName);
+        $mockObject = Mockery::mock($newService[1]);
 
+        foreach ($params as $key => $param) {
+            $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+        }
 
-      foreach ($params as $key => $param) {
-        $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
-      }
-
-      $pool = array();
-      $pool[$objectName] = $mockObject;
-      $this->setPool($pool);
+        $pool              = array();
+        $pool[$objectName] = $mockObject;
+        $this->setPool($pool);
     }
 
     protected function setPool($object)
     {
-      $reflectionObject = new \ReflectionObject(static::$serviceKernel);
-      $pool             = $reflectionObject->getProperty("pool");
-      $pool->setAccessible(true);
-      $value = $pool->getValue(static::$serviceKernel);
-      $objects = array_merge($value,$object);
-      $pool->setValue(static::$serviceKernel, $objects);
+        $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+        $pool             = $reflectionObject->getProperty("pool");
+        $pool->setAccessible(true);
+        $value   = $pool->getValue(static::$serviceKernel);
+        $objects = array_merge($value, $object);
+        $pool->setValue(static::$serviceKernel, $objects);
     }
 
     protected function flushPool()
@@ -174,7 +188,7 @@ class BaseTestCase extends WebTestCase
 
         $tableWhiteList = array(
             'migration_versions',
-            'file_group',
+            'file_group'
         );
 
         $sql = '';

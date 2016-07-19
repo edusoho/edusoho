@@ -29,12 +29,16 @@ class BuildPackageCommand extends BaseCommand
         $diffFile = $input->getArgument('diff_file');
 
         $this->filesystem = new Filesystem();
-
+        $this->output     = $output;
         $packageDirectory = $this->createDirectory($name, $version);
 
         $this->generateFiles($diffFile, $packageDirectory, $output);
 
         $this->copyUpgradeScript($packageDirectory, $version, $output);
+
+        $this->zipPackage($packageDirectory);
+
+        $this->printChangeLog($version);
 
         $output->writeln('<question>编制升级包完毕</question>');
     }
@@ -162,6 +166,10 @@ class BuildPackageCommand extends BaseCommand
             return str_ireplace('src/MaterialLib/MaterialLibBundle/Resources/public', 'web/bundles/materiallib', $file);
         }
 
+        if (stripos($file, 'src/Org/OrgBundle/Resources/public') === 0) {
+            return str_ireplace('src/Org/OrgBundle/Resources/public', 'web/bundles/org', $file);
+        }
+
         return null;
     }
 
@@ -178,6 +186,61 @@ class BuildPackageCommand extends BaseCommand
             $targetPath = realpath($dir).'/Upgrade.php';
             $output->writeln($path." -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
+        }
+    }
+
+    private function zipPackage($distDir)
+    {
+        $buildDir = dirname($distDir);
+        $filename = basename($distDir);
+
+        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
+            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
+        }
+
+        $this->output->writeln("<info>使用 zip -r {$filename}.zip {$filename}/  制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+
+        chdir($buildDir);
+        $command = "zip -r {$filename}.zip {$filename}/";
+        exec($command);
+
+        $zipPath = "{$buildDir}/{$filename}.zip";
+
+        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('topxia.twig.web_extension')->fileSizeFilter(filesize($zipPath)));
+    }
+
+    private function printChangeLog($version)
+    {
+        $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
+        if (!$this->filesystem->exists($changeLogPath)) {
+            $this->output->writeln("<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>");
+            return false;
+        }
+
+        $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
+        $file     = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
+        $print    = false;
+        $askPrint = false;
+        while (!feof($file)) {
+            $line = trim(fgets($file));
+            if (strpos($line, $version) !== false) {
+                $print = true;
+            }
+
+            if ($print && empty($line)) {
+                $askPrint = true;
+            }
+
+            if ($askPrint && preg_match("/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/", "$line", $matches)) {
+                $print = false;
+            }
+            if ($print) {
+                if (empty($line)) {
+                    $this->output->writeln(sprintf("<comment>$line</comment>"));
+                } else {
+                    $this->output->writeln(sprintf("<comment>%s<br/></comment>", $line));
+                }
+            }
         }
     }
 }

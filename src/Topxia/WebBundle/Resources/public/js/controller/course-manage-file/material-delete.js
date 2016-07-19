@@ -4,6 +4,8 @@ define(function(require, exports, module) {
         $form = $('#material-delete-form');
 
         $('.material-delete-form-btn').click(function(){
+            $(this).button('loading').addClass('disabled');
+            
             var ids = [];
             $('[data-role=batch-item]:checked').each(function(){
                 ids.push(this.value);

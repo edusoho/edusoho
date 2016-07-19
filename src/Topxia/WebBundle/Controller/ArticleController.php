@@ -10,10 +10,9 @@ class ArticleController extends BaseController
     public function indexAction(Request $request)
     {
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-
-        $conditions = array(
+        $conditions =$this->fillOrgCode(array(
             'status' => 'published'
-        );
+        ));
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -32,10 +31,10 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        $featuredConditions = array(
+        $featuredConditions =$this->fillOrgCode(array(
             'status'   => 'published',
             'featured' => 1
-        );
+        ));
 
         $featuredArticles = $this->getArticleService()->searchArticles(
             $featuredConditions,
@@ -50,10 +49,10 @@ class ArticleController extends BaseController
             $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        $promotedConditions = array(
+       $promotedConditions =$this->fillOrgCode(array(
             'status'   => 'published',
             'promoted' => 1
-        );
+        ));
 
         $promotedArticles = $this->getArticleService()->searchArticles(
             $promotedConditions,
@@ -197,10 +196,6 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $conditions = array(
-            'targetType' => 'article'
-        );
-
-        $conditions = array(
             'targetId'   => $id,
             'targetType' => 'article'
         );
@@ -212,15 +207,7 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 10);
-
-        $sameTagArticles = array();
-
-        foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
-                $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
-            }
-        }
+        $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
 
         $user = $this->getCurrentUser();
 
@@ -354,10 +341,10 @@ class ArticleController extends BaseController
 
     public function popularArticlesBlockAction()
     {
-        $conditions = array(
+        $conditions =$this->fillOrgCode(array(
             'type'   => 'article',
             'status' => 'published'
-        );
+        ));
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0, 6);
 

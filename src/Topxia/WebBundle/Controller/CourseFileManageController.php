@@ -24,14 +24,14 @@ class CourseFileManageController extends BaseController
         );
 
         $files = $this->getMaterialService()->findMaterialsGroupByFileId(
-            $course['id'], 
-            $paginator->getOffsetCount(), 
+            $course['id'],
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $files      = $this->_materialsSort($files);
-        $fileIds    = ArrayToolkit::column($files,'fileId');
-        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($id, $fileIds);
+        $fileIds    = ArrayToolkit::column($files, 'fileId');
+        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -67,13 +67,21 @@ class CourseFileManageController extends BaseController
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        $file   = $this->getUploadFileService()->getFile($fileId);
 
-        if (empty($file)) {
+        $materialCount = $this->getMaterialService()->searchMaterialCount(
+            array(
+                'courseId' => $id,
+                'fileId'   => $fileId
+            )
+        );
+
+        if (!$materialCount) {
             throw $this->createNotFoundException();
         }
 
-        if ($id != $file["targetId"]) {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
             throw $this->createNotFoundException();
         }
 
@@ -112,30 +120,42 @@ class CourseFileManageController extends BaseController
         ));
     }
 
+    public function deleteMaterialShowAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $fileIds   = $request->request->get('ids');
+        $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files, 'id');
+
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course'    => $course,
+            'materials' => $materials,
+            'files'     => $files,
+            'ids'       => $fileIds
+        ));
+    }
+
     public function deleteCourseFilesAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
         if ($request->getMethod() == 'POST') {
- 
             $formData = $request->request->all();
- 
+
+            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
+
             if (isset($formData['isDeleteFile']) && $formData['isDeleteFile']) {
                 foreach ($formData['ids'] as $key => $fileId) {
                     if ($this->getUploadFileService()->canManageFile($fileId)) {
                         $this->getUploadFileService()->deleteFile($fileId);
                     }
                 }
-            } 
-            
-            $this->getMaterialService()->deleteMaterials($id, $formData['ids']);
- 
+            }
+
             return $this->createJsonResponse(true);
         }
-        
-        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
-            'course' => $course,
-        ));
     }
 
     private function _materialsSort($materials)
@@ -144,14 +164,14 @@ class CourseFileManageController extends BaseController
             return array();
         }
 
-        $fileIds = ArrayToolkit::column($materials,'fileId');
+        $fileIds = ArrayToolkit::column($materials, 'fileId');
         $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
 
         $files     = ArrayToolkit::index($files, 'id');
         $sortFiles = array();
         foreach ($materials as $key => $material) {
             if (isset($files[$material['fileId']])) {
-                $file = array_merge($material, $files[$material['fileId']]);
+                $file            = array_merge($material, $files[$material['fileId']]);
                 $sortFiles[$key] = $file;
             }
         }

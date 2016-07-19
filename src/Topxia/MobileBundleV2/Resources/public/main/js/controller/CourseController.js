@@ -116,9 +116,9 @@ function CourseDetailController($scope, $stateParams, CourseService)
   });
 }
 
-app.controller('CourseToolController', ['$scope', '$stateParams', 'OrderService', 'CourseService', 'cordovaUtil', '$state', CourseToolController]);
+app.controller('CourseToolController', ['$scope', '$stateParams', 'OrderService', 'CourseService', 'UserService', 'cordovaUtil', '$state', CourseToolController]);
 
-function BaseToolController($scope, OrderService, cordovaUtil)
+function BaseToolController($scope, OrderService, UserService, cordovaUtil)
 {
   var self = this;
 
@@ -151,11 +151,18 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       cordovaUtil.openWebView(app.rootPath + "#/login/course");
       return;
     }
-    if ($scope.user.vip == null || $scope.user.vip.levelId < vipLevelId) {
-      cordovaUtil.openWebView(app.rootPath + "#/viplist");
-      return;
-    }
-    callback();
+    
+    $scope.showLoad();
+    UserService.getUserInfo({
+      userId : $scope.user.id,
+    }, function(data) {
+      $scope.hideLoad();
+      if (data.vip == null || data.vip.levelId < vipLevelId) {
+        cordovaUtil.openWebView(app.rootPath + "#/viplist");
+      } else {
+        callback();
+      }
+    });
   }
 
   this.join = function(callback) {
@@ -207,9 +214,9 @@ function BaseToolController($scope, OrderService, cordovaUtil)
   }
 }
 
-function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
+function CourseToolController($scope, $stateParams, OrderService, CourseService, UserService, cordovaUtil, $state)
 {
-    this.__proto__ = new BaseToolController($scope, OrderService, cordovaUtil);
+    this.__proto__ = new BaseToolController($scope, OrderService, UserService, cordovaUtil);
     var self = this;
 
     this.goToPay = function() {
@@ -436,11 +443,11 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
 
 app.controller('ClassRoomController', ['$scope', '$stateParams', 'ClassRoomService', 'AppUtil', '$state', 'cordovaUtil', 'ClassRoomUtil', ClassRoomController]);
 app.controller('ClassRoomCoursesController', ['$scope', '$stateParams', 'ClassRoomService', '$state', ClassRoomCoursesController]);
-app.controller('ClassRoomToolController', ['$scope', '$stateParams', 'OrderService', 'ClassRoomService', 'cordovaUtil', '$state', ClassRoomToolController]);
+app.controller('ClassRoomToolController', ['$scope', '$stateParams', 'OrderService', 'ClassRoomService', 'UserService', 'cordovaUtil', '$state', ClassRoomToolController]);
 
-function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomService, cordovaUtil, $state)
+function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomService, UserService, cordovaUtil, $state)
 {
-  this.__proto__ = new BaseToolController($scope, OrderService, cordovaUtil);
+  this.__proto__ = new BaseToolController($scope, OrderService, UserService, cordovaUtil);
     var self = this;
 
     $scope.signDate = new Date();

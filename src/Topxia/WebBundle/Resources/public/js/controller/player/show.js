@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var Class = require('class');
     var Messenger = require('./messenger');
     var swfobject = require('swfobject');
+    var Notify  = require('common/bootstrap-notify');
 
     exports.run = function() {
 
@@ -33,11 +34,14 @@ define(function(require, exports, module) {
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
+                if(!swfobject.hasFlashPlayerVersion('11')){
+                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器，以便正常播放视频。',5);
+                }
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
             }
         }else if(fileType == 'audio'){
-            videoHtml.parent().css({"margin-top":"100px"});
-            html += '<audio id="lesson-player" width="500" height="50" style="margin-top:100px">';
+            videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
+            html += '<audio id="lesson-player" width="90%" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
         }

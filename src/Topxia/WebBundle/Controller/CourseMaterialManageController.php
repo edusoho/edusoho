@@ -1,21 +1,21 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
 
 class CourseMaterialManageController extends BaseController
 {
     public function indexAction(Request $request, $courseId, $lessonId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         $materials = $this->getMaterialService()->searchMaterials(
             array('lessonId' => $lesson['id'], 'source' => 'coursematerial'),
-            array('createdTime','DESC'), 0, 100
+            array('createdTime', 'DESC'), 0, 100
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
             'course'         => $course,
@@ -57,12 +57,12 @@ class CourseMaterialManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $lessonId, $materialId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        
+
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
         if ($material) {
-            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>$lessonId,'materialId'=>$materialId,'fileId'=>$material['fileId']));
+            $this->getMaterialService()->updateMaterial($materialId, array('lessonId' => 0), array('lessonId' => $lessonId, 'materialId' => $materialId, 'fileId' => $material['fileId']));
         }
-        
+
         return $this->createJsonResponse(true);
     }
 
@@ -71,14 +71,14 @@ class CourseMaterialManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $conditions = array();
-        $type = $request->query->get('type');
+        $type       = $request->query->get('type');
         if (!empty($type)) {
             $conditions['type'] = $type;
         }
 
-        $courseMaterials = $this->getMaterialService()->findMaterialsGroupByFileId($course['id'], 0, PHP_INT_MAX);
+        $courseMaterials   = $this->getMaterialService()->findMaterialsGroupByFileId($course['id'], 0, PHP_INT_MAX);
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
-        $paginator = new Paginator(
+        $paginator         = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
             20
@@ -86,18 +86,18 @@ class CourseMaterialManageController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime','DESC'), 
-            $paginator->getOffsetCount(), 
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
-        return $this->createFilesJsonResponse($files);
+
+        return $this->createFilesJsonResponse($files, $paginator);
     }
 
     public function createAction(Request $request, $courseId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
-        
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-create-modal.html.twig', array(
             'course'         => $course,
             'storageSetting' => $this->setting('storage'),
@@ -121,14 +121,14 @@ class CourseMaterialManageController extends BaseController
 
             unset($file);
         }
-        
-        if(!empty($paginator)){
+
+        if (!empty($paginator)) {
             $paginator = Paginator::toArray($paginator);
             return $this->createJsonResponse(array(
                 'files'     => $files,
                 'paginator' => $paginator
             ));
-        }else{
+        } else {
             return $this->createJsonResponse($files);
         }
     }

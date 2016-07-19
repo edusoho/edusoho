@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
+{% set modalSize = 'large' %}
 {% block title %}{% if org.id|default(null) %}编辑组织机构{% else %}添加组织机构{% endif %}{% endblock %}
 
 {% block body %}

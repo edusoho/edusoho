@@ -12,7 +12,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
     public function getVersion()
     {
-        var_dump("CourseProcessorImpl->getVersion");
         return $this->formData;
     }
 
@@ -861,7 +860,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function vipLearn()
     {
-        if (!$this->controller->setting('vip.enabled')) {
+        if (!$this->controller->isinstalledPlugin('Vip') || !$this->controller->setting('vip.enabled')) {
             return $this->createErrorResponse('error', "网校没有开启vip功能");
         }
 
@@ -1003,7 +1002,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels     = array();
 
-        if ($this->controller->setting('vip.enabled')) {
+        if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
             $vipLevels = $this->controller->getLevelService()->searchLevels(array(
                 'enabled' => 1
             ), 0, 100);

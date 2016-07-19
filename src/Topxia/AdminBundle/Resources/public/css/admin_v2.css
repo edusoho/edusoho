@@ -731,6 +731,39 @@ margin-top: 14px;
   background-color: #428bca;
 }
 
+#aticle-table-container .featured-label{
+    text-decoration: none;
+}
+
+#aticle-table-container .featured-label:hover span{
+    background: #5cb85c;
+}
+
+#aticle-table-container .promoted-label{
+    text-decoration: none;
+}
+
+#aticle-table-container .promoted-label:hover span{
+    background: #5cb85c;
+}
+
+#aticle-table-container .sticky-label{
+    text-decoration: none;
+}
+
+#aticle-table-container .sticky-label:hover span{
+    background: #5cb85c;
+}
+
+.admin-pagination .page-num {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 27px;
+  margin-left: 10px;
+}
+
+
+
 
 
 

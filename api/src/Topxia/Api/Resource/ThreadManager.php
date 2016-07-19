@@ -8,36 +8,36 @@ use Topxia\Common\ArrayToolkit;
 
 class ThreadManager extends BaseResource
 {
-	public function question(Application $app, Request $request)
-	{ 
+    public function question(Application $app, Request $request)
+    {
         $courseId = $request->query->get('courseId', 0);
-		$start = $request->query->get('start', 5);
-		$user = $this->getCurrentUser();
+        $start = $request->query->get('start', 5);
+        $user = $this->getCurrentUser();
 
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
-            return $this->error('error', '课程信息不存在!'); 
+            return $this->error('error', '课程信息不存在!');
         }
 
-        if (!$this->getCourseService()->isCourseTeacher($courseId, $user["id"])) {
-            return $this->error('error', '您不是老师，不能查看此页面！!'); 
+        if (!$this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+            return $this->error('error', '您不是老师，不能查看此页面！!');
         }
 
         $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), true);
 
         if (empty($myTeachingCourseCount)) {
             return array(
-            	"threadCount" => 0,
-	        	"users" => array(),
-	        	"threads" => array()
-        	);
+                'threadCount' => 0,
+                'users' => array(),
+                'threads' => array(),
+            );
         }
 
         $myTeachingCourses = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, $myTeachingCourseCount, true);
 
         $conditions = array(
             'courseIds' => array($courseId),
-            'type'      => "question"
+            'type' => 'question',
         );
 
         $threadCount = $this->getCourseThreadService()->searchThreadCountInCourseIds($conditions);
@@ -49,22 +49,24 @@ class ThreadManager extends BaseResource
         );
 
         $threads = $this->sortThreads($threads, $start);
-        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         foreach ($threads as $key => &$thread) {
-        	$lesson = $lessons[$thread["lessonId"]];
-            $lessonTitle = empty($lesson) ? "课程提问" : '课时:' . $lesson['number'] . $lesson["title"];
-        	$thread["lessonTitle"] = $lessonTitle;
+            $lesson = $lessons[$thread['lessonId']];
+            $lessonTitle = empty($lesson) ? '课程提问' : '课时:'.$lesson['number'].$lesson['title'];
+            $thread['lessonTitle'] = $lessonTitle;
             $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
         }
-        return array(
-        	"threadCount" => $threadCount,
-        	"users" => $this->simpleUsers($users),
-        	"threads" => $this->muiltFilter($threads)
-        );
-	}
 
-    protected function threadSort($t1, $t2) {
+        return array(
+            'threadCount' => $threadCount,
+            'users' => $this->simpleUsers($users),
+            'threads' => $this->muiltFilter($threads),
+        );
+    }
+
+    protected function threadSort($t1, $t2)
+    {
         $latestPostTime1 = $t1['latestPostTime'];
         $latestPostTime2 = $t2['latestPostTime'];
 
@@ -80,32 +82,35 @@ class ThreadManager extends BaseResource
             return -1;
         }
 
-        return $latestPostTime1 - $latestPostTime2;            
+        return $latestPostTime1 - $latestPostTime2;
     }
 
-    private function sortThreads($threads, $limit) {
-        
-        usort($threads, array($this, "threadSort"));
+    private function sortThreads($threads, $limit)
+    {
+        usort($threads, array($this, 'threadSort'));
         $threads = array_slice($threads, 0, $limit);
+
         return $threads;
     }
 
-	protected function muiltFilter($res)
+    protected function muiltFilter($res)
     {
-        foreach ($res as &$one) {
-            $this->filter($one);
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->filter($one);
         }
+
         return $res;
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-        $res["createdTime"] = date('c', $res["createdTime"]);
-        $res["latestPostTime"] = date('c', $res["latestPostTime"]);
+        $res['createdTime'] = date('c', $res['createdTime']);
+        $res['latestPostTime'] = date('c', $res['latestPostTime']);
+
         return $res;
     }
 
-	protected function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

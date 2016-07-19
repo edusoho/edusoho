@@ -477,14 +477,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         try {
-            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
-            $filesystem = new Filesystem();
-            $filesystem->remove($cachePath);
-
-//注解需要该目录存在
-            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
-                $filesystem->mkdir($cachePath.'/annotations/topxia');
-            }
+            $this->deleteCache();
         } catch (\Exception $e) {
             $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
@@ -500,6 +493,29 @@ class AppServiceImpl extends BaseService implements AppService
         last:
         $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
         return empty($info) ? $errors : $info;
+    }
+
+    protected function deleteCache($tryCount = 0)
+    {
+        if ($tryCount >= 5) {
+            throw $this->createServiceException("cannot delete cache.");
+        }
+
+        sleep($tryCount * 2);
+
+        try {
+            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
+            $filesystem = new Filesystem();
+            $filesystem->remove($cachePath);
+
+            //注解需要该目录存在
+            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
+                $filesystem->mkdir($cachePath.'/annotations/topxia');
+            }
+        } catch (\Exception $e) {
+            $tryCount++;
+            $this->deleteCache($tryCount);
+        }
     }
 
     public function repairProblem($token)

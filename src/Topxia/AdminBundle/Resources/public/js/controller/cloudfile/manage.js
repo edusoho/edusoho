@@ -112,20 +112,15 @@ define(function(require, exports, module) {
             },
             onClickDeleteBtn: function(event)
             {
-                if (confirm('真的要删除该资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    this._loading();
-                    $.ajax({
-                        type:'POST',
-                        url:$target.data('url'),
-                    }).done(function(){
-                        Notify.success('删除成功!');
-                        self.renderTable(true);
-                    }).fail(function(){
-                        Notify.danger('删除失败!');
-                    });
-                }
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+
+                ids.push($target.data('id'));
+                
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
             },
             onClickReconvertBtn: function(event)
             {
@@ -231,27 +226,20 @@ define(function(require, exports, module) {
             },
             onClickDeleteBatchBtn: function(event)
             {
-                if (confirm('确定要删除这些资源吗？')) {
-                    var self = this;
-                    var $target = $(event.currentTarget);
-                    var ids = [];
-                    $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
-                        ids.push(this.value);
-                    });
-                    if(ids == ""){
-                        Notify.danger('请先选择你要删除的资源!');
-                        return;
-                    }
-
-                    $.post($target.data('url'),{"ids":ids},function(data){
-                        if(data){
-                            Notify.success('删除资源成功');
-                            self.renderTable(true);
-                        }
-                        $('#materials-form').find('[data-role=batch-item]').show();
-                        $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
-                    });
+                var self = this;
+                var $target = $(event.currentTarget);
+                var ids = [];
+                $('#materials-form').find('[data-role=batch-item]:checked').each(function() {
+                    ids.push(this.value);
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要删除的资源!');
+                    return;
                 }
+
+                $('#modal').html('');
+                $('#modal').load($target.data('url'),{ids:ids});
+                $('#modal').modal('show');
 
             },
             onClickShareBatchBtn: function(event)
@@ -502,6 +490,23 @@ define(function(require, exports, module) {
 
         window.materialWidget = new MaterialWidget({
             element: '#materials-form'
+        });
+
+        $('#modal').on('click','.file-delete-form-btn', function(event){
+            
+            var $form = $('#file-delete-form');
+
+            $(this).button('loading').addClass('disabled');
+            $.post($form.attr('action'),$form.serialize(),function(data){
+                if(data){
+                    $('#modal').modal('hide');
+                    Notify.success('删除资源成功');
+                    materialWidget.renderTable(true);
+                    $("input[name = 'batch-select']").attr("checked",false);
+                }
+                $('#materials-form').find('[data-role=batch-item]').show();
+                $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
+            });
         });
 
         var $panel = $('#materials-form');

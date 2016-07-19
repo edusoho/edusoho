@@ -65,11 +65,14 @@ refundStatus:html:
     cancelled: <span class="text-muted">已取消</span>
 
 payment:
+    none: --
     alipay: 支付宝
     wxpay: 微信支付
     heepay: 网银支付
     quickpay: 快捷支付
     iosiap: 苹果应用内支付
+    outside: 站外支付
+    coin: 虚拟币
 
 moneyRecordType:
     income: 充值

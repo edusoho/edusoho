@@ -5,7 +5,7 @@
 {% set script_controller = 'manage/list' %}
 
 {% block main %}
-{% if  setting ('coin.coin_enabled') %}
+
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
@@ -50,13 +50,8 @@
   {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
 
   <div class="paginator">
-    {{ web_macro.paginator(paginator) }} 
+    {{ admin_macro.paginator(paginator) }} 
   </div>
-{% else %}
-<div class="well" style="text-align:center;">
-虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
-</div>
-{% endif %}
 
 
 {% endblock %}

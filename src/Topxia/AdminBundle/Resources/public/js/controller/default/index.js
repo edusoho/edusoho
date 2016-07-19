@@ -11,9 +11,7 @@ define(function(require, exports, module) {
                 Notify.success('提醒教师的通知，发送成功！');
             });
         });
-
         step1();
-
     };
 
     function step1() {

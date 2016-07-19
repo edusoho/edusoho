@@ -1,5 +1,4 @@
 CKEDITOR.plugins.add('uploadpictures', {
-    requires: 'dialog',
     icons: 'uploadpictures',
     init: function(editor) {
         CKEDITOR.dialog.add('uploadpictures', this.path + 'dialogs/uploadpictures.js');

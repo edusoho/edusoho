@@ -35,14 +35,13 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         //0 can buy
-        $magicSetting = $this->getSettingService()->get('magic', array());
+        $magicSetting  = $this->getSettingService()->get('magic', array());
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
         return array(
-            "coin"=>$coinEnabled,
-            "alipay"=>$apipayEnabled,
-            "ios_buy_disable"=>$iosBuyDisable == 0
+            "coin"            => $coinEnabled,
+            "alipay"          => $apipayEnabled,
+            "ios_buy_disable" => $iosBuyDisable == 0
         );
-
     }
 
     public function validateIAPReceipt()
@@ -95,9 +94,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'price'   => $course['price'],
                 'picture' => $this->coverPic($course['middlePicture'], 'course-large.png')
             );
-        } else
-
-        if ("classroom" == $targetType) {
+        } elseif ("classroom" == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
 
             if (empty($classroom)) {
@@ -109,8 +106,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'price'   => $classroom['price'],
                 'picture' => $this->coverPic($classroom['middlePicture'], 'course-large.png')
             );
-        } else
-        if ("vip" == $targetType) {
+        } elseif ("vip" == $targetType) {
             $result = $this->getVipOrderInfo($targetId);
 
             if (isset($result['error'])) {
@@ -462,14 +458,13 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'paidTime' => time()
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-            } else
-
-            if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+            } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
                 $payData = array(
                     'sn'       => $order['sn'],
                     'status'   => 'success',
                     'amount'   => $order['amount'],
-                    'paidTime' => time()
+                    'paidTime' => time(),
+                    'payment'  => 'coin'
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
                 $processor             = OrderProcessorFactory::create($order["targetType"]);
@@ -563,14 +558,13 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'paidTime' => time()
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-            } else
-
-            if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+            } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
                 $payData = array(
                     'sn'       => $order['sn'],
                     'status'   => 'success',
                     'amount'   => $order['amount'],
-                    'paidTime' => time()
+                    'paidTime' => time(),
+                    'payment'  => 'coin'
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
                 $processor             = OrderProcessorFactory::create($order["targetType"]);
@@ -799,14 +793,13 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'paidTime' => time()
             );
             list($success, $order) = $this->getPayCenterService()->processOrder($payData);
-        } else
-
-        if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+        } elseif ($order["amount"] == 0 && $order["coinAmount"] > 0) {
             $payData = array(
                 'sn'       => $order['sn'],
                 'status'   => 'success',
                 'amount'   => $order['amount'],
-                'paidTime' => time()
+                'paidTime' => time(),
+                'payment'  => 'coin'
             );
             list($success, $order) = $this->getPayCenterService()->pay($payData);
         }

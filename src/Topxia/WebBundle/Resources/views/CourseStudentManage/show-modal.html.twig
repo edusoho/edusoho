@@ -108,7 +108,9 @@
 		<th>{{'自我介绍'|trans}}</th>
 		<td>
 		{% if profile.about %}
+				<div class="editor-text">
 				{{ profile.about | raw }}
+				</div>
 			{% else %}
 				{{'暂无'|trans}}
 			{% endif %}

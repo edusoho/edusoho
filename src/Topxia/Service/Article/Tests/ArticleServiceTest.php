@@ -7,9 +7,17 @@ use Topxia\Service\Common\ServiceException;
 
 class ArticleServiceTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->getSettingService()->set('site', array('name' => 'name', 'slogan' => 'slogan'));
+        $this->getSettingService()->set('mobile', array('about' => 'about', 'logo' => 'logo'));
+    }
+
     public function testgetArticle()
     {
-        $user = $this->getCurrentUser();
+        $user       = $this->getCurrentUser();
         $newArticle = $this->createArticle();
         $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
         $this->assertEquals('test article', $getArticle['title']);
@@ -23,10 +31,25 @@ class ArticleServiceTest extends BaseTestCase
         $getArticle     = $this->getArticleService()->getArticlePrevious($newArticle['id']);
     }
 
-    // public function testgetArticleByAlias()
-    // {
-    //     // article表里并没有alias字段
-    // }
+    public function testgetArticleNext()
+    {
+        $newArticle = $this->createArticle();
+        sleep(1);
+        $newArticlesend = $this->createArticle();
+        $getArticle     = $this->getArticleService()->getArticleNext($newArticle['id']);
+
+        $this->assertEquals($newArticlesend['id'], $getArticle['id']);
+    }
+
+    public function testDeleteArticlesByIds()
+    {
+        $newArticle     = $this->createArticle();
+        $newArticlesend = $this->createArticle();
+        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'], $newArticlesend['id']));
+
+        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle['id']));
+        $this->assertEquals(null, $this->getArticleService()->getArticle($newArticlesend['id']));
+    }
 
     public function testfindAllArticles()
     {
@@ -271,6 +294,60 @@ class ArticleServiceTest extends BaseTestCase
         $result = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount();
     }
 
+    public function testFindRelativeArticles()
+    {
+        $tag1     = $this->getTagService()->addTag(array('name' => 'tag1'));
+        $tag2     = $this->getTagService()->addTag(array('name' => 'tag2'));
+        $tag3     = $this->getTagService()->addTag(array('name' => 'tag3'));
+        $article1 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article1',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s,%s', $tag1['name'], $tag2['name'])
+        );
+        $article1 = $this->getArticleService()->createArticle($article1);
+
+        $article2 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article2',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s,%s,%s', $tag1['name'], $tag2['name'], $tag3['name'])
+        );
+        $article2 = $this->getArticleService()->createArticle($article2);
+
+        $article3 = array(
+            'publishedTime' => 'now',
+            'title'         => 'test article3',
+            'type'          => 'article',
+            'body'          => '正午时分',
+            'thumb'         => 'thumb',
+            'originalThumb' => 'originalThumb',
+            'categoryId'    => '1',
+            'source'        => 'http://www.edusoho.com',
+            'sourceUrl'     => 'http://www.edusoho.com',
+            'tags'          => sprintf('%s', $tag3['name'])
+        );
+        $article3 = $this->getArticleService()->createArticle($article3);
+
+        $relativeArticles = $this->getArticleService()->findRelativeArticles($article1['id'], 3);
+        $this->assertEquals(count($relativeArticles), 1);
+
+        $relativeArticles = $this->getArticleService()->findRelativeArticles($article3['id'], 3);
+        $this->assertEquals(count($relativeArticles), 1);
+    }
+
     protected function createArticle()
     {
         $fileds = array(
@@ -286,8 +363,7 @@ class ArticleServiceTest extends BaseTestCase
             'tags'          => 'default',
             'tagIds'        => 'default'
         );
-        $article = $this->getArticleService()->createArticle($fileds);
-        return $article;
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createArticlesencond()
@@ -304,8 +380,7 @@ class ArticleServiceTest extends BaseTestCase
             'sourceUrl'     => 'http://try6.edusoho.cn',
             'tags'          => 'default'
         );
-        $article = $this->getArticleService()->createArticle($fileds);
-        return $article;
+        return $this->getArticleService()->createArticle($fileds);
     }
 
     protected function createUser($user)
@@ -330,6 +405,11 @@ class ArticleServiceTest extends BaseTestCase
         return $user;
     }
 
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
     protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
@@ -338,5 +418,10 @@ class ArticleServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

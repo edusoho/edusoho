@@ -65,7 +65,7 @@ admin_operation_block:
 admin_block_visual_edit:
     name: 编辑
     parent: admin_operation_block
-    router_params: {'blockId': 'block.id'}
+    router_params: {'blockTemplateId': 'block.blockTemplateId'}
     router_params_context: 1
 
 
@@ -77,7 +77,7 @@ admin_block_visual_edit:
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block
-    router_params: {'blockId': 'block.id'}
+    router_params: {'blockTemplateId': 'block.blockTemplateId'}
     router_params_context: 1
 admin_operation_content:
     name: 自定义页面管理
@@ -407,7 +407,7 @@ admin_setting_mobile:
     name: 移动端设置
     parent: admin_system
 admin_optimize:
-    name: 优化和备份
+    name: 系统优化
     parent: admin_system
     group: 2
 admin_jobs:

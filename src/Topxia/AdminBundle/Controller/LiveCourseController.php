@@ -10,18 +10,17 @@ class LiveCourseController extends BaseController
 {
     public function indexAction(Request $request, $status)
     {
-        $query = $request->query->all();
 
         $default = $this->getSettingService()->get('default', array());
+
+        $query = $request->query->all();
 
         $courseCondition = array(
             'type'   => 'live',
             'status' => 'published'
         );
 
-        if (isset($query['orgCode'])) {
-            $courseCondition['likeOrgCode'] = $query['orgCode'];
-        }
+        $courseCondition = array_merge($courseCondition, $query);
 
         if (!empty($query['keywordType']) && !empty($query['keyword'])) {
             if ($query['keywordType'] == 'courseTitle') {
@@ -33,9 +32,9 @@ class LiveCourseController extends BaseController
             }
         }
 
+        $courseCondition = $this->fillOrgCode($courseCondition);
         $courses   = $this->getCourseService()->searchCourses($courseCondition, $sort = 'latest', 0, 1000);
         $courseIds = ArrayToolkit::column($courses, 'id');
-
         if (empty($courseIds)) {
             return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
                 'status'    => $status,

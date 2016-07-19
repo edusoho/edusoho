@@ -112,7 +112,7 @@ class CoinOrderController extends BaseController
         }
 
         $status  = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
-        $payment = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
+        $payment = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -131,32 +131,32 @@ class CoinOrderController extends BaseController
 
         foreach ($orders as $key => $orders) {
             $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= $orders['sn'] . ",";
+            $member .= $status[$orders['status']] . ",";
+            $member .= $orders['title'] . ",";
+            $member .= $users[$orders['userId']]['nickname'] . ",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'] . "," : "-" . ",";
+            $member .= $orders['amount'] . ",";
+            $member .= $payment[$orders['payment']] . ",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']) . ",";
 
             if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']) . ",";
             } else {
-                $member .= "-".",";
+                $member .= "-" . ",";
             }
 
             $results[] = $member;
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("coin-order-(%s).csv", date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 

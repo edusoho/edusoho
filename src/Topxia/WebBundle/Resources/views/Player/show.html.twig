@@ -26,6 +26,7 @@
           data-file-type="{{file.type}}"
           data-url="{{url}}"
           data-player="{{player}}"
+          data-agentInWhiteList="{{agentInWhiteList}}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}

@@ -10,7 +10,6 @@
 				<input type="text" class="filename" readonly="readonly"/>
 				<input type="button" name="excel" class=" button" value="{{ '浏览'|trans }}..."/>
 				<input type="file" size="30" name="excel"/>
-				<input type="hidden" name="classroomId" value="{{ classroomId }}">
 			</div>
 			&nbsp;&nbsp;<a
 					href="{{ asset('bundles/classroom/example/classmember_import_example.xls') }}">{{ '点击下载示例说明文件'|trans }}</a>
@@ -18,6 +17,35 @@
 			{{ '支持从Excel文件导入'|trans }}
 		</div>
 	</div>
+
+	<div class="form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="buy-price">{{'购买价格'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<div class="input-group">
+				<input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+				<div class="input-group-addon">{{'元'|trans}}</div>
+			</div>
+			<div class="help-block">本{{ setting('classroom.name', '班级') }}的价格为{{classroom.price}}{{'元'|trans}}</div>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="student-remark">{{'备注'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<input type="text" id="student-remark" name="remark" class="form-control">
+			<div class="help-block">{{'选填'|trans}}</div>
+		</div>
+	</div>
+
+	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
+{% endblock %}
+
+{% block load_import_js %}
+	app.load('classroombundle/controller/classroom/manage/student-import');
 {% endblock %}
 
 {% block stylesheet %}

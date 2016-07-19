@@ -179,7 +179,6 @@ function install_step3($init_data = 0)
         }
 
         $admin = $init->initAdmin($_POST);
-
         if (empty($init_data)) {
             $init->initTag();
             $init->initCategory();
@@ -190,12 +189,14 @@ function install_step3($init_data = 0)
             $init->initThemes();
             $init->initSetting($admin);
             $init->initCrontabJob();
+            $init->initOrg();
         } else {
             $init->deleteKey();
             $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
             $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
         }
 
+        $init->initFolders();
         $init->initLockFile();
 
         header("Location: start-install.php?step=4");
@@ -419,9 +420,9 @@ class SystemInit
     public function initAdmin($user)
     {
         $user['emailVerified'] = 1;
-        $user              = $user              = $this->getUserService()->register($user);
-        $user['roles']     = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
-        $user['currentIp'] = '127.0.0.1';
+        $user                  = $user                  = $this->getUserService()->register($user);
+        $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
+        $user['currentIp']     = '127.0.0.1';
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -539,7 +540,7 @@ EOD;
                 'username' => 'user@example.com',
                 'password' => '',
                 'from'     => 'user@example.com',
-                'name'     => $sitename
+                'name'     => $_POST['sitename']
             ),
             'payment'        => array(
                 'enabled'        => 0,
@@ -588,6 +589,11 @@ EOD;
                 'coin_picture_20_20'  => '',
                 'coin_picture_10_10'  => '',
                 'charge_coin_enabled' => ''
+            ),
+            'magic'          => array(
+                'export_allow_count' => 100000,
+                'export_limit'       => 10000,
+                'enable_org'         => 0
             )
         );
 
@@ -834,6 +840,32 @@ EOD;
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
+    public function initOrg()
+    {
+        $org = array(
+            'name' => '全站',
+            'code' => 'FullSite'
+        );
+        $this->getOrgService()->createOrg($org);
+    }
+
+    public function initFolders()
+    {
+        $folders = array(
+            __DIR__.'/../../app/data/udisk',
+            __DIR__.'/../../app/data/private_files',
+            __DIR__.'/../../web/files'
+        );
+
+        $filesystem = new Filesystem();
+
+        foreach ($folders as $folder) {
+            if (!$filesystem->exists($folder)) {
+                $filesystem->mkdir($folder);
+            }
+        }
+    }
+
     public function initLockFile()
     {
         file_put_contents(__DIR__.'/../../app/data/install.lock', '');
@@ -882,6 +914,11 @@ EOD;
     protected function getNavigationService()
     {
         return ServiceKernel::instance()->createService('Content.NavigationService');
+    }
+
+    protected function getOrgService()
+    {
+        return ServiceKernel::instance()->createService('Org:Org.OrgService');
     }
 
     protected function postRequest($url, $params)

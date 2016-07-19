@@ -11,20 +11,12 @@ class LoginRecordController extends BaseController
     public function indexAction(Request $request)
     {
         $user           = $this->getCurrentUser();
-        $conditions     = $request->query->all();
-        $userConditions = array();
+        $userConditions = $conditions     = $request->query->all();
 
-        if (isset($conditions['keywordType'])) {
-            $userConditions['keywordType'] = $conditions["keywordType"];
-        }
-
-        if (isset($conditions['keyword'])) {
-            $userConditions['keyword'] = $conditions["keyword"];
-        }
-
-        if (isset($conditions['orgCode'])) {
-            $userConditions['likeOrgCode'] = $conditions["orgCode"];
-        }
+        unset( $userConditions['startDateTime']);
+        unset( $userConditions['endDateTime']);
+        
+        $userConditions = $this->fillOrgCode($userConditions);
 
         $users   = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, 2000);
         $userIds = ArrayToolkit::column($users, 'id');

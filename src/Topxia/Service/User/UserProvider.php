@@ -24,8 +24,7 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $org               = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
-        $user['org']       = isset($org) ? $org : array();
+        $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);

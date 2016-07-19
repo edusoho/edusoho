@@ -81,6 +81,11 @@ material_batch_delete:
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchDelete }
     methods: [POST]
 
+material_delete_modal_show:
+    pattern: /materials/delete/show
+    defaults: { _controller: MaterialLibBundle:MaterialLib:deleteModalShow }
+    methods: [POST]
+
 material_batch_share:
     pattern: /materials/batch/share
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchShare }

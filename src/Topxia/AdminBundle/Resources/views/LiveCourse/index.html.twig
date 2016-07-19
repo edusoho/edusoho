@@ -33,6 +33,7 @@
     <thead>
     <tr>
       <th width="45%">课时</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>直播开始时间</th>
       <th>直播时长(分)</th>
       <th>最大参与人数</th>
@@ -49,7 +50,7 @@
     </tbody>
   </table>
 
-  {{ web_macro.paginator(paginator) }}
+  {{ admin_macro.paginator(paginator) }}
 {% else %}
 <div class="well" style="text-align:center;">
 

@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-        require('../course-manage/header').run();
 
         var $panel = $('#file-manage-panel');
 	    require('../../util/batch-select')($panel);
@@ -43,14 +42,17 @@ define(function(require, exports, module) {
 
         $('[data-role=batch-delete]').click(function(){
             var flag = false;
+            var ids = [];
             $('[data-role=batch-item]').each(function(){
                 if($(this).is(":checked")) {
                     flag = true;
+                    ids.push(this.value);
                 }
             })
 
             if(flag) {
-                $('#modal').load($(this).data('url'));
+                $('#modal').html('');
+                $('#modal').load($(this).data('url'),{ids:ids});
                 $('#modal').modal('show');
             } else {
                 Notify.danger('未选中任何文件记录');
@@ -72,7 +74,7 @@ define(function(require, exports, module) {
           return ;
         }
 
-        $.post("/course/manage/file/status",{'ids':fileIds.join(",")},function(data){
+        $.post($("#file-manage-panel").data("fileStatusUrl"),{'ids':fileIds.join(",")},function(data){
             if(!data||data.length==0){
                 return ;
             }
@@ -92,9 +94,9 @@ define(function(require, exports, module) {
 
                 }
                 if(file.type == 'video' && file.metas2) {
-                    if(file.metas2.hd) {
+                    if(file.metas2.shd) {
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">超清</span>');
-                    } else if(file.metas2.md){
+                    } else if(file.metas2.hd){
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">高清</span>');
                     } else if(file.metas2.sd) {
                         $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after('<span class="label label-info tip">标清</span>');

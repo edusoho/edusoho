@@ -27,19 +27,20 @@
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
-        {% set activePayment = '' %}
+        
+        {% set activePayment = order.payment %}
         {% for payment,options in payments %}
-          {% if not (payment == 'alipay' and is_micro_messenger()) and not activePayment %}
+          {% if ( not is_micro_messenger() and activePayment == 'none' ) 
+            or (is_micro_messenger() and activePayment in ['none', 'alipay'] and not (payment == 'alipay')) %}
             {% set activePayment = payment %}
           {% endif %}
         {% endfor %}
-
         <input type="hidden" name="payment" value={{activePayment}}>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
             {% if payment == 'alipay' and is_micro_messenger() %}
-            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' href='javascript:;'>复制地址</a></p>
+            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
             <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />

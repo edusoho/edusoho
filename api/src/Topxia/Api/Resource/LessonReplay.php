@@ -33,7 +33,7 @@ class LessonReplay extends BaseResource
         return $res;
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }

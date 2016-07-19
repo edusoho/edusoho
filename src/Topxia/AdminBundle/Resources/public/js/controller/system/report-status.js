@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     exports.run = function() {
-
+        $('[data-toggle="popover"]').popover();
         var $table = $('#direcory-check-table');
         $.post($table.data('url'), function(html) {
             $table.find('tbody').html(html);

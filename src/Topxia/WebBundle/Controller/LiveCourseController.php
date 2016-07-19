@@ -427,8 +427,9 @@ class LiveCourseController extends BaseController
             return $this->createJsonResponse($resultList);
         }
 
-        $lesson          = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lesson["isEnd"] = intval(time() - $lesson["endTime"]) > 0;
+        $lesson              = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
+        $lesson["canRecord"] = $this->_canRecord($lesson['mediaId']);
 
         $client = new EdusohoLiveClient();
 
@@ -473,12 +474,11 @@ class LiveCourseController extends BaseController
     {
         $course      = $this->getCourseService()->tryManageCourse($id);
         $courseItems = $this->getCourseService()->getCourseItems($course['id']);
-        $client      = new EdusohoLiveClient();
 
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
-                $item["canRecord"] = $client->isAvailableRecord($item['mediaId']);
+                $item["canRecord"] = $this->_canRecord($item['mediaId']);
                 $courseItems[$key] = $item;
             }
         }
@@ -591,6 +591,13 @@ class LiveCourseController extends BaseController
         }
 
         return $courses;
+    }
+
+    private function _canRecord($mediaId)
+    {
+        $client = new EdusohoLiveClient();
+
+        return $client->isAvailableRecord($mediaId);
     }
 
     protected function getCourseService()

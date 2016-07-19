@@ -15,7 +15,8 @@
   <table id="announcement-table" class="table table-striped">
     <thead>
     <tr>
-      <th width="28%">公告信息</th>
+      <th width="25%">公告信息</th>
+      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th>发布时间</th>
       <th>结束时间</th>
       <th>状态</th>
@@ -28,6 +29,7 @@
       {% for announcement in announcements %}
         <tr>
           <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content }}</td>
+          {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
           <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
           <td>{{ announcement.endTime|date('Y-m-d H:i') }}</td>
           <td>
@@ -63,5 +65,5 @@
     <div class="empty">暂无公告</div>
   {% endif %}
 
-  {{ web_macro.paginator(paginator) }}
+  {{ admin_macro.paginator(paginator) }}
 {% endblock %}

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
@@ -18,10 +19,10 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
-
+        $orderType  = JoinPointToolkit::load('order');
         if (empty($targetType)
             || empty($targetId)
-            || !in_array($targetType, array("course", "vip", "classroom", "groupSell"))) {
+            || !array_key_exists($targetType, $orderType)) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
@@ -67,7 +68,7 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
-        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
+        $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -168,7 +169,7 @@ class OrderController extends BaseController
                 'coinRate'       => $cashRate,
                 'coinAmount'     => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId'         => $user["id"],
-                'payment'        => 'alipay',
+                'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
@@ -214,7 +215,7 @@ class OrderController extends BaseController
             $code = $request->request->get('code');
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
-                throw new \RuntimeException('优惠码不支持的购买项目。');
+                throw new \RuntimeException('优惠券不支持的购买项目。');
             }
 
             $price = $request->request->get('amount');

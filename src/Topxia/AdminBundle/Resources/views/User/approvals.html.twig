@@ -40,6 +40,7 @@
       <tr>
         <th>ID</th>
         <th>用户名</th>
+        {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
         <th>真实姓名</th>
         <th>身份证号码</th>
         <th>邮件</th>
@@ -52,6 +53,7 @@
         <tr id="user-table-tr-{{ user.id }}">
           <td>{{ user.id }}</td>
           <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
+          {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
           <td>{{ userProfiles[user.id].truename }}</td>
           <td>{{ userProfiles[user.id].idcard }}</td>
           <td>{{ user.email }}</td>
@@ -81,7 +83,7 @@
       </tbody>
     </table>
 
-    {{ web_macro.paginator(paginator) }}
+    {{ admin_macro.paginator(paginator) }}
   {% else %}
     {% if approvalStatus == 'approved' %}
       <div class="empty">暂无已经审核成功的实名认证用户</div>

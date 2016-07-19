@@ -36,12 +36,12 @@
   <div class="form-group">
     <select class="form-control" name="action" id="log-action" data-url="{{path('admin_logs_action_dicts')}}">
        {% if actions|default(null) %}
-          <option value="0">--所有模块--</option>
+          <option value="0">--所有操作--</option>
           {% for key, value in actions %}
                 <option value="{{key}}" {% if app.request.query.get('action') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
           {% endfor %}
         {% else %}
-          <option value="0">--请选择模块--</option>
+          <option value="0">--所有操作--</option>
       {% endif %}
     </select>
   {#   <input type="text" id="action" name="action" value="{{app.request.query.get('action')}}" class="form-control" placeholder="操作名" style="width:100px;"> #}
@@ -94,6 +94,6 @@
     {% endfor %}
   </table>
 
-  {{ web_macro.paginator(paginator) }}
+  {{ admin_macro.paginator(paginator) }}
 
 {% endblock %}

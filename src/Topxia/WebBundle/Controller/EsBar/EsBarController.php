@@ -7,6 +7,13 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class EsBarController extends BaseController
 {
+
+    public function studyCenterAction(Request $request)
+    {
+         return $this->render("TopxiaWebBundle:EsBar:ListContent/study-center.html.twig", array(
+        ));
+    }
+
     public function courseAction(Request $request)
     {
         $user = $this->getCurrentUser();

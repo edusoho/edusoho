@@ -43,7 +43,10 @@
     </td>
 
     <td class="text-center">
-      {{ dict_text('fileType', cloudFile.type) }}
+      <div class="mbs">{{ dict_text('fileType', cloudFile.type) }}</div>
+      {% if cloudFile.mcStatus|default('no') == 'yes' %}
+        <div class="label label-info mtm">已生成MP4</div>
+      {% endif %}
     </td>
     <td class="text-center">
       {{ cloudFile.fileSize|file_size }}
@@ -63,7 +66,7 @@
             <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
           </li>
           <li>
-            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete', {globalId:cloudFile.no}) }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
+            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.no }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
           </li>
         </ul>
       </div>

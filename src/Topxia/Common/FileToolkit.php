@@ -868,8 +868,8 @@ class FileToolkit
             'movie'       => 'video/x-sgi-movie',
             'smv'         => 'video/x-smv',
             'ice'         => 'x-conference/x-cooltalk',
-            'mpg'         => 'video/mpeg'
-
+            'mpg'         => 'video/mpeg',
+            'mp3'         => 'audio/mpeg'
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
@@ -1017,6 +1017,28 @@ class FileToolkit
         }
 
         return $filePaths;
+    }
+
+    public static function reduceImgQuality($fullPath, $level = 10)
+    {
+        $extension = strtolower(substr(strrchr($fullPath, '.'), 1));
+
+        $options = array();
+
+        if (in_array($extension, array('jpg', 'jpeg'))) {
+            $options['jpeg_quality'] = $level * 10;
+        } elseif ($extension == 'png') {
+            $options['png_compression_level'] = $level;
+        } else {
+            return $fullPath;
+        }
+
+        try {
+            $imagine = new Imagine();
+            $image   = $imagine->open($fullPath)->save($fullPath, $options);
+        } catch (\Exception $e) {
+            throw new \Exception("该文件为非图片格式文件，请重新上传。");
+        }
     }
 
     public static function getImgInfo($fullPath, $width, $height)

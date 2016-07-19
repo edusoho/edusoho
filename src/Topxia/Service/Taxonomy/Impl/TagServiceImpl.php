@@ -54,7 +54,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $conditions['orgId'] = isset($user['org']) ? $user['org']['id'] : null;
+            $conditions['orgId'] = !empty($user['org']) ? $user['org']['id'] : null;
         }
 
         return $conditions;
@@ -110,6 +110,10 @@ class TagServiceImpl extends BaseService implements TagService
 
         $user       = $this->getCurrentUser();
         $currentOrg = $user['org'];
+
+        if(empty($currentOrg)){
+            return $tag;
+        }
 
         $tag['orgId']   = $currentOrg['id'];
         $tag['orgCode'] = $currentOrg['orgCode'];

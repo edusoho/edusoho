@@ -36,7 +36,7 @@ class MeChatroomes extends BaseResource
         return $this->wrap($this->filter($chatrooms), $total);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }
@@ -45,5 +45,4 @@ class MeChatroomes extends BaseResource
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }

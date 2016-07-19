@@ -98,4 +98,10 @@ class SimpleValidator
     {
         return !!preg_match('/^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/', $value);
     }
+
+    public static function chineseAndAlphanumeric($value)
+    {
+        return (bool)preg_match('/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9_])*$/u', $value);
+    }
+
 }

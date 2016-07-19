@@ -11,6 +11,7 @@ class HLSController extends BaseController
     {
         $line       = $request->query->get('line', null);
         $levelParam = $request->query->get('level', "");
+        $format     = $request->query->get('format', "");
         $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp   = $request->getClientIp();
@@ -56,6 +57,10 @@ class HLSController extends BaseController
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
+                if (isset($token['data']['hideBeginning'])) {
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
+                }
+
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
             } else {
                 $token['token'] = $this->getTokenService()->makeFakeTokenString();
@@ -80,6 +85,12 @@ class HLSController extends BaseController
         );
         $api = CloudAPIFactory::create('leaf');
 
+        //新版api需要返回json形式的m3u8
+        if (strtolower($format) == 'json') {
+            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
+        }
+
         if ($fromApi) {
             $playlist = $api->get('/hls/playlist', array(
                 'streams'   => $streams,
@@ -93,6 +104,7 @@ class HLSController extends BaseController
 
             return new Response($playlist['playlist'], 200, array(
                 'Content-Type'        => 'application/vnd.apple.mpegurl',
+                'Content-Length'      => strlen($playlist['playlist']),
                 'Content-Disposition' => 'inline; filename="playlist.m3u8"'
             ));
         } else {
@@ -119,8 +131,9 @@ class HLSController extends BaseController
 
     public function streamAction(Request $request, $id, $level, $token)
     {
-        $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
-        $clientIp = $request->getClientIp();
+        $token       = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $streamToken = $token;
+        $clientIp    = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -172,7 +185,8 @@ class HLSController extends BaseController
 
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        if (!$inWhiteList && $this->haveHeadLeader()) {
+        $isHiddenVideoHeader = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
+        if (!$inWhiteList && !$isHiddenVideoHeader && $this->haveHeadLeader()) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
                 'keyencryption' => $keyencryption
@@ -199,6 +213,7 @@ class HLSController extends BaseController
 
         return new Response($stream['stream'], 200, array(
             'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Length'      => strlen($stream['stream']),
             'Content-Disposition' => 'inline; filename="stream.m3u8"'
         ));
     }

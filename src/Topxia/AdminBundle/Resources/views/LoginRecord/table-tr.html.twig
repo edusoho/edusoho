@@ -11,6 +11,7 @@
       暂无
     {% endif %}
   </td>
+  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     <span class="text-sm">{{ logRecord.createdTime|date('Y-n-d H:i:s') }}</span>
     <br>
