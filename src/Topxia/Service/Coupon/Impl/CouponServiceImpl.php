@@ -144,42 +144,42 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('不存在')
+                'message' => $this->getKernel()->trans('优惠码%code%不存在', array('%code%' => $code))
             );
         }
 
         if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('已经被使用')
+                'message' => $this->getKernel()->trans('优惠码%code%已经被使用', array('%code%' => $code))
             );
         }
 
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('已经被其他人领取')
+                'message' => $this->getKernel()->trans('优惠码%code%已经被其他人领取', array('%code%' => $code))
             );
         }
 
         if ($coupon['deadline'] + 86400 < time()) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('已过期')
+                'message' => $this->getKernel()->trans('优惠码%code%已过期', array('%code%' => $code))
             );
         }
 
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('不可用')
+                'message' => $this->getKernel()->trans('优惠码%code%不可用', array('%code%' => $code))
             );
         }
 
         if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
-                'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('不可用')
+                'message' => $this->getKernel()->trans('优惠码%code%不可用', array('%code%' => $code))
             );
         }
 
@@ -187,7 +187,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
                     'useable' => 'no',
-                    'message' => $this->getKernel()->trans('优惠码').$code.$this->getKernel()->trans('不可用')
+                    'message' => $this->getKernel()->trans('优惠码%code%不可用', array('%code%' => $code))
                 );
             }
         }

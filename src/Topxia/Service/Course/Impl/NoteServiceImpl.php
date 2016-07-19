@@ -134,7 +134,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         );
 
         if ($note['userId'] != $currentUser['id']) {
-            $this->getLogService()->info('course', 'delete_note', $this->getKernel()->trans('删除笔记#%id%', array('%id%' => $id)));
+            $this->getLogService()->info('course', 'delete_note', "删除笔记#{$id}");
         }
     }
 

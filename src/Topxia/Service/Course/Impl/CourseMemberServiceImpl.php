@@ -74,7 +74,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
             ));
         }
 
-        $this->getLogService()->info('course', 'add_student', $this->getKernel()->trans('课程《%courseTitle%》(#%courseId%)，添加学员%userNickName%(#%userId%)，备注：%dataRemark%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%userNickName%' =>$user['nickname'], '%userId%' =>$user['id'], '%dataRemark%' =>$data['remark'] )));
+        $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
         return array($course, $member, $order);
     }

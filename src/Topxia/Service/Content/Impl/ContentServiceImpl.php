@@ -77,7 +77,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-        $this->getLogService()->info('content', 'create', $this->getKernel()->trans('创建内容《(%contentTitle%)》(%contentId%)', array('%contentTitle%' =>$content['title'], '%contentId%' =>$content['id'] )), $content);
+		$this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
 		return $content;
 	}
@@ -101,7 +101,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-		$this->getLogService()->info('content', 'update', $this->getKernel()->trans('内容《(%contentTitle%)》(%contentId%)更新', array('%contentTitle%' =>$content['title'], '%contentId%' =>$content['id'] )), $content);
+		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
 
 		return $content;
 	}
@@ -109,19 +109,19 @@ class ContentServiceImpl extends BaseService implements ContentService
 	public function trashContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'trash'));
-		$this->getLogService()->info('content', 'trash', $this->getKernel()->trans('内容#%id%移动到回收站', array('%id%' =>$id )));
+		$this->getLogService()->info('content', 'trash', "内容#{$id}移动到回收站");
 	}
 
 	public function deleteContent($id)
 	{
 		$this->getContentDao()->deleteContent($id);
-		$this->getLogService()->info('content', 'delete', $this->getKernel()->trans('内容#%id%永久删除', array('%id%' =>$id )));
+		$this->getLogService()->info('content', 'delete', "内容#{$id}永久删除");
 	}
 
 	public function publishContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'published'));
-		$this->getLogService()->info('content', 'publish', $this->getKernel()->trans('内容#%id%发布', array('%id%' =>$id )));
+		$this->getLogService()->info('content', 'publish', "内容#{$id}发布");
 	}
 
 	public function isAliasAvaliable($alias)

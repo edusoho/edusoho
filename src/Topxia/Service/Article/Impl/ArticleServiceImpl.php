@@ -101,7 +101,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->filterArticleFields($article, 'add');
         $article = $this->getArticleDao()->addArticle($article);
 
-        $this->getLogService()->info('article', 'create', $this->getKernel()->trans('创建文章《(%articleTitle%)》(%articleId%)', array('%articleTitle%' => $article['title'], '%articleId%' => $article['id'])));
+        $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
         $this->dispatchEvent('article.create', $article);
 
@@ -120,7 +120,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
-        $this->getLogService()->info('article', 'update', $this->getKernel()->trans('修改文章《(%articleTitle%)》(%articleId%)', array('%articleTitle%' => $article['title'], '%articleId%' => $article['id'])));
+        $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
         $this->dispatchEvent('article.update', new ServiceEvent($article));
 
         return $article;
@@ -219,8 +219,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 1;
         $this->getArticleDao()->updateArticle($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('article', 'update_property', $this->getKernel()->trans('文章#%id%,%articleProperty%=>%propertyVal%', array('%id%' => $id, '%articleProperty%' => $article[$property], '%propertyVal%' => $propertyVal)));
-
+        $this->getLogService()->info('article', 'update_property', "文章#{$id},$article[$property]=>{$propertyVal}");
         return $propertyVal;
     }
 
@@ -235,7 +234,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $propertyVal = 0;
         $this->getArticleDao()->updateArticle($id, array("{$property}" => $propertyVal));
 
-        $this->getLogService()->info('article', 'cancel_property', $this->getKernel()->trans('文章#%id%,%articleProperty%=>%propertyVal%', array('%id%' => $id, '%articleProperty%' => $article[$property], '%propertyVal%' => $propertyVal)));
+        $this->getLogService()->info('article', 'cancel_property', "文章#{$id},$article[$property]=>{$propertyVal}");
 
         return $propertyVal;
     }
@@ -249,8 +248,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
-        $this->getLogService()->info('article', 'trash', $this->getKernel()->trans('文章#%id%移动到回收站', array('%id%' => $id)));
         $this->dispatchEvent('article.trash', new ServiceEvent($checkArticle));
+        $this->getLogService()->info('article', 'trash', "文章#{$id}移动到回收站");
     }
 
     public function removeArticlethumb($id)
@@ -276,8 +275,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $res = $this->getArticleDao()->deleteArticle($id);
-        $this->getLogService()->info('article', 'delete', $this->getKernel()->trans('文章#%id%永久删除', array('%id%' => $id)));
         $this->dispatchEvent('article.delete', new ServiceEvent($checkArticle));
+        $this->getLogService()->info('article', 'delete', "文章#{$id}永久删除");
 
         return true;
     }
@@ -296,14 +295,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function publishArticle($id)
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
-        $this->getLogService()->info('article', 'publish', $this->getKernel()->trans('文章#%id%发布', array('%id%' => $id)));
+        $this->getLogService()->info('article', 'publish', "文章#{$id}发布");
         $this->dispatchEvent('article.publish', $article);
     }
 
     public function unpublishArticle($id)
     {
         $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'unpublished'));
-        $this->getLogService()->info('article', 'unpublish', $this->getKernel()->trans('文章#%id%未发布', array('%id%' => $id)));
+        $this->getLogService()->info('article', 'unpublish', "文章#{$id}未发布");
         $this->dispatchEvent('article.unpublish', $article);
     }
 

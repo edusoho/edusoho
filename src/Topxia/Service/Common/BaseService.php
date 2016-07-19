@@ -92,7 +92,7 @@ abstract class BaseService
             if (!empty($fields['orgCode'])) {
                 $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
-                    throw $this->createServiceException("组织机构{$fields['orgCode']}不存在,更新失败");
+                    throw $this->createServiceException($this->getKernel()->trans('组织机构%orgCode%不存在,更新失败',array('%orgCode%' => $fields['orgCode'])));
                 }
                 $fields['orgId']   = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];

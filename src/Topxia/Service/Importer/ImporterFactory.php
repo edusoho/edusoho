@@ -18,10 +18,15 @@ class ImporterFactory
         );
 
         if (!array_key_exists($importerType, $map)) {
-            throw new NotFoundException('UNKNOWN IMPORTER TYPE: ' . $importerType);
+            throw new NotFoundException(self::getKernel()->trans('UNKNOWN IMPORTER TYPE: %importerType%', array('%importerType%' => $importerType)));
         }
 
         $class = $map[$importerType];
         return new $class();
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
