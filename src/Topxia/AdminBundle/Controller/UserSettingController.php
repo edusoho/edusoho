@@ -117,7 +117,7 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新头像设置'), $userDefaultSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新头像设置", $userDefaultSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('头像设置已保存！'));
         }
 
@@ -155,7 +155,7 @@ class UserSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新登录设置'), $loginConnect);
+            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('登录设置已保存！'));
         }
 
@@ -298,7 +298,7 @@ class UserSettingController extends BaseController
             $auth['registerFieldNameArray']    = $request->request->get('registerFieldNameArray');
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新用户信息设置'), $auth);
+            $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户信息设置已保存！'));
         }
 

@@ -80,7 +80,7 @@
                    <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">{{'设置用户组'|trans}}</a></li>
             {% endif %}
        {% else %}
-                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">{{'设置用户组'|trans}}'|trans}}</a></li>
+                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">{{'设置用户组'|trans}}</a></li>
         {% endif %}
 
         {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -93,7 +93,7 @@
 
         <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">{{'发送密码重置邮件'|trans}}</a></li>
 
-        <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">{{'发送Email验证邮件'|trans}}v</a></li>
+        <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">{{'发送Email验证邮件'|trans}}</a></li>
         {% if user.locked %}
           <li><a class="unlock-user" href="javascript:" title="{{'解禁用户'|trans}}{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">{{'解禁用户'|trans}}</a></li>
         {% else %}
