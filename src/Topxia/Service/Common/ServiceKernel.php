@@ -61,7 +61,7 @@ class ServiceKernel
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException(self::trans('ServiceKernel未实例化'));
+            throw new \RuntimeException('ServiceKernel未实例化');
         }
 
         self::$_instance->boot();
