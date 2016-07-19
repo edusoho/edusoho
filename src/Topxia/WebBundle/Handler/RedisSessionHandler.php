@@ -78,7 +78,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        return $this->redis->close();
+        // return $this->redis->close();
     }
 
     /**
