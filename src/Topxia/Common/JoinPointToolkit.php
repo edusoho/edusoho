@@ -1,14 +1,14 @@
 <?php
 namespace Topxia\Common;
 
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Finder\Finder;
+use Topxia\Service\Common\ServiceKernel;
 
 class JoinPointToolkit
 {
-	public static function load($key)
-	{
+    public static function load($key)
+    {
         $pointcutFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/'.ServiceKernel::instance()->getEnvironment().'/join_point.php';
 
         $joinPoints = array();
@@ -27,7 +27,7 @@ class JoinPointToolkit
             foreach ($finder as $dir) {
                 $filepath = $dir->getRealPath().'/join_point.yml';
                 if (file_exists($filepath)) {
-                	$points = Yaml::parse($filepath);
+                    $points     = Yaml::parse($filepath);
                     $joinPoints = array_merge_recursive($joinPoints, $points);
                 }
             }
@@ -38,7 +38,6 @@ class JoinPointToolkit
             }
         }
 
-        return isset($joinPoints[$key])? $joinPoints[$key] : array();
+        return isset($joinPoints[$key]) ? $joinPoints[$key] : array();
     }
-
 }
