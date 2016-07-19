@@ -420,7 +420,7 @@ class CoinController extends BaseController
         if ($send > 0) {
             $data[] = array(
                 'send'       => $this->getServiceKernel()->trans('消费满%rangessend0%元送%rangessend1%', 
-                    array('%rangessend0%' =>$ranges[$send][0] ,'%rangessend1%' =>$ranges[$send][1])),
+                    array('%rangessend0%' => $ranges[$send][0] ,'%rangessend1%' => $ranges[$send][1])),
                 'sendAmount' => "{$ranges[$send][1]}");
         }
 

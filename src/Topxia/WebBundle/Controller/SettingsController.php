@@ -61,15 +61,15 @@ class SettingsController extends BaseController
             $backImg = $request->files->get('backImg');
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
-                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('上传文件过大，请上传较小的文件!'));
                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
                     'profile' => $profile
                 ));
             }
 
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
-                $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                // return $this->createMessageResponse('error', $this->getServiceKernel()->trans('上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'));
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'));
                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
                     'profile' => $profile
                 ));
@@ -77,7 +77,7 @@ class SettingsController extends BaseController
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            // $this->setFlashMessage('success', '实名认证提交成功！');
+            // $this->setFlashMessage('success', $this->getServiceKernel()->trans('实名认证提交成功！'));
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
@@ -392,7 +392,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!empty($user['password'])) {
-            throw new \RuntimeException("登录密码已设置，请勿重复设置");
+            throw new \RuntimeException($this->getServiceKernel()->trans('登录密码已设置，请勿重复设置'));
         }
 
         $form = $this->createFormBuilder()
@@ -856,9 +856,9 @@ class SettingsController extends BaseController
                     );
                     $mail = MailFactory::create($mailOptions);
                     $mail->send();
-                    $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。', array('%dataEmail%' => $data['email'])));
                 } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱变更确认邮件发送失败，请联系管理员。'));
                     $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
                 return $this->redirect($this->generateUrl('settings_email'));
@@ -891,10 +891,10 @@ class SettingsController extends BaseController
             );
             $mail = MailFactory::create($mailOptions);
             $mail->send();
-            $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。', array('%userEmail%' => $user['email'])));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            $this->setFlashMessage('danger', "邮箱验证邮件发送失败，请联系管理员。");
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('邮箱验证邮件发送失败，请联系管理员。'));
         }
 
         return $this->createJsonResponse(true);

@@ -196,7 +196,7 @@ class PayCenterController extends BaseController
 
     public function unbindAuthAction(Request $request)
     {
-        $this->getLogService()->info('order', 'unbind-back', $this->getServiceKernel()->trans('银行卡解绑'));
+        $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
         $fields   = $request->request->all();
         $response = $this->verification($fields);
 
@@ -227,7 +227,7 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
-        $this->getLogService()->info('order', 'pay_result', $this->getServiceKernel()->trans('%name%页面跳转支付通知', array('%name%' => $name)), $request->query->all());
+        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
         $payData  = $response->getPayData();
 

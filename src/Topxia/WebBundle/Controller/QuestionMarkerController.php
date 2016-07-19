@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionMarkerController extends BaseController
 {
-    public function sortQuestionAction(Request $Request, $markerId)
+    public function sortQuestionAction(Request $request, $markerId)
     {
         if (!$this->tryManageQuestionMarker()) {
             return $this->createJsonResponse(false);
@@ -219,7 +219,7 @@ class QuestionMarkerController extends BaseController
         $choices["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
 
         foreach ($lessons as $lesson) {
-            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时%lessonNumber%：%lessonTitle%', array('%lessonNumber%' =>$lesson['number'], '%lessonTitle%' =>$lesson['title'] ));
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时%lessonNumber%：%lessonTitle%', array('%lessonNumber%' => $lesson['number'], '%lessonTitle%' => $lesson['title'] ));
         }
 
         return $choices;

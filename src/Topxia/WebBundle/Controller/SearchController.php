@@ -108,7 +108,7 @@ class SearchController extends BaseController
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,
                 'type'         => $type,
-                'errorMessage' => '在上方搜索框输入关键词进行搜索.'
+                'errorMessage' => $this->getServiceKernel()->trans('在上方搜索框输入关键词进行搜索.')
             ));
         }
         $conditions = array(

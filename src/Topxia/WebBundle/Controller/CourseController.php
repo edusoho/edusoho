@@ -418,9 +418,9 @@ class CourseController extends CourseBaseController
                 $capacity = array();
             }
 
-//            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-//                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请联系EduSoho官方购买直播教室，然后才能开启直播功能！'));
-//            }
+            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('请联系EduSoho官方购买直播教室，然后才能开启直播功能！'));
+            }
         }
 
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
@@ -497,7 +497,7 @@ class CourseController extends CourseBaseController
         }
 
         if (!$this->getCourseService()->canTakeCourse($id)) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%coursetitle%》的学员，请先购买或加入学习。', array('%coursetitle%' =>$course['title'] )), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%courseTitle%》的学员，请先购买或加入学习。', array('%courseTitle%' => $course['title'] )), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         try {

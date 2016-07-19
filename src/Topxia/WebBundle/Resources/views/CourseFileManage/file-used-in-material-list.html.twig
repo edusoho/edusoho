@@ -3,7 +3,7 @@
     <ul>
       {% for fileId,material in materials %}
         {% if  material|length > 0 and loop.index <= 3 %}
-          <li>文件：{{ files[fileId].filename }} 被引用</li>
+          <li>{{'文件：%filename% 被引用'|trans({'%filename%':%files[fileId].filename%})}}</li>
         {% endif %}
       {% endfor %}
       {% if materials|length > 3 %}

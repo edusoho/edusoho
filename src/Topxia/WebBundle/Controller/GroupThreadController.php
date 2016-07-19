@@ -463,7 +463,7 @@ class GroupThreadController extends BaseController
             }
 
             if (empty($trade)) {
-                $this->getCashAccountService()->reward($attach['coin'], $this->getServiceKernel()->trans('下载附件<').$attach['title'].'>', $user->id, 'cut');
+                $this->getCashAccountService()->reward($attach['coin'], $this->getServiceKernel()->trans('下载附件').'<'.$attach['title'].'>', $user->id, 'cut');
 
                 $data = array(
                     'GoodsId'     => $attach['id'],
@@ -479,7 +479,7 @@ class GroupThreadController extends BaseController
 
                 $file = $this->getFileService()->getFile($attach['fileId']);
 
-                $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的附件<').$attach['title'].$this->getServiceKernel()->trans('>被购买下载！'), $file['userId']);
+                $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的附件<%attachTitle%>被购买下载！',array('%attachTitle%' => $attach['title'])), $file['userId']);
             }
         }
 
@@ -681,7 +681,7 @@ class GroupThreadController extends BaseController
                     return $this->createMessageResponse('info', $this->getServiceKernel()->trans('虚拟币余额不足!'));
                 }
 
-                $this->getCashAccountService()->reward($amount, $this->getServiceKernel()->trans('发布悬赏话题<').$thread['title'].'>', $user->id, 'cut');
+                $this->getCashAccountService()->reward($amount, $this->getServiceKernel()->trans('发布悬赏话题').'<'.$thread['title'].'>', $user->id, 'cut');
 
                 $thread['type']       = 'reward';
                 $thread['rewardCoin'] = $amount;
@@ -780,7 +780,7 @@ class GroupThreadController extends BaseController
                 $reward = 1;
             }
 
-            $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的话题<').$thread['title'].$this->getServiceKernel()->trans('>的隐藏内容被查看！'), $thread['userId']);
+            $this->getCashAccountService()->reward(intval($reward), $this->getServiceKernel()->trans('您发表的话题<%threadTitle%>的隐藏内容被查看！',array('%threadTitle%' => $thread['title'])), $thread['userId']);
         }
 
         return $this->render('TopxiaWebBundle:Group:hide-modal.html.twig', array(

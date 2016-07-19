@@ -83,7 +83,7 @@ class TagController extends BaseController
         $tag = $this->getTagService()->getTag($tagId);
 
         if (empty($tag)) {
-            throw $this->createNotFoundException('标签不存在!');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('标签不存在!'));
         }
 
         return $tag;

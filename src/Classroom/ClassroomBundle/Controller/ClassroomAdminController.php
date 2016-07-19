@@ -85,7 +85,7 @@ class ClassroomAdminController extends BaseController
         }
 
         if (!$user->isAdmin()) {
-            return $this->createMessageResponse('info', '只允许管理员创建班级!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('只允许管理员创建班级!'));
         }
 
         if ($request->getMethod() == 'POST') {

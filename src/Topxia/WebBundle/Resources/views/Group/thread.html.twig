@@ -39,7 +39,6 @@
             <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'收藏'|trans}}</a>
           {% endif %}
         </div>
-
         {{'发表于%createdTime%'|trans({'%createdTime%':threadMain.createdTime|smart_time})}} 
         <span class="mll"> {{'%hitNum%次查看'|trans({'%hitNum%':threadMain.hitNum})}}</span>
       </div>

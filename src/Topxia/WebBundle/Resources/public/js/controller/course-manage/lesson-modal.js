@@ -81,7 +81,7 @@ define(function(require, exports, module) {
             }
 
             return true;
-        }, Translator.trans('请选择或上传%display%文件',{display:display}));
+        }, Translator.trans('请选择或上传%display%文件',{display:'{{display}}'}));
 
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
@@ -376,7 +376,7 @@ define(function(require, exports, module) {
             });
 
             if(isUploading){
-                Notify.danger('文件正在上传，等待上传完后再保存。');
+                Notify.danger(Translator.trans('文件正在上传，等待上传完后再保存。'));
                 return false;
             }
 

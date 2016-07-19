@@ -92,6 +92,7 @@
        {% if classroom.status=='draft'%}
       <li><a href="javascript:" class="delete-classroom" title="{{'删除%name%(%title%)'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%title%':classroom.title})}}" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> {{'删除%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
       {% endif %}
+     </ul>
   </div>
  </td>
 </tr>
