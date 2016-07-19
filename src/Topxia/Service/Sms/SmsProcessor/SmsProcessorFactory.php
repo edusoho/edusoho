@@ -9,7 +9,7 @@ class SmsProcessorFactory
 	public static function create($targetType)
     {
     	if(empty($targetType)) {
-    		throw new Exception($this->getKernel()->trans('短信类型不存在'));
+    		throw new Exception(self::getKernel()->trans('短信类型不存在'));
     	}
 
     	$class = __NAMESPACE__ . '\\' . ucfirst($targetType). 'SmsProcessor';
