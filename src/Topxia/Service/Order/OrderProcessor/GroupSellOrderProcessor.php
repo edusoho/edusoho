@@ -15,15 +15,15 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         $group = $this->getGroupSellService()->getGroupSell($targetId);
 
         if (empty($group)) {
-            return array("error" => $this->getKernel()->Trans('找不到要购买的组合!'));
+            return array("error" => $this->getKernel()->trans('找不到要购买的组合!'));
         }
 
         if ($group['startTime'] > time()) {
-            return array("error" => $this->getKernel()->Trans('活动还没有开始'));
+            return array("error" => $this->getKernel()->trans('活动还没有开始'));
         }
 
         if ($group['endTime'] < time()) {
-            return array("error" => $this->getKernel()->Trans('活动已经结束'));
+            return array("error" => $this->getKernel()->trans('活动已经结束'));
         }
 
         return array();
@@ -34,7 +34,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         $group = $this->getGroupSellService()->getGroupSell($targetId);
 
         if (empty($group)) {
-            throw new Exception($this->getKernel()->Trans('找不到要购买的组合!'));
+            throw new Exception($this->getKernel()->trans('找不到要购买的组合!'));
         }
 
         //组合购买不支持使用虚拟币等其他形式

@@ -123,7 +123,7 @@ class MoneyCardServiceImpl extends BaseService
 
         $this->getMoneyCardDao()->addMoneyCard($moneyCards);
 
-        $this->getLogService()->info('money_card', 'batch_create', $this->getKernel()->trans('创建新批次充值卡,卡号前缀为(%cardPrefix%),批次为(%id%)', array('%cardPrefix%' => $batch['cardPrefix'], '%id%' => $batch['id'])));
+        $this->getLogService()->info('money_card', 'batch_create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
 
         return $batch;
     }
@@ -151,7 +151,7 @@ class MoneyCardServiceImpl extends BaseService
 
             $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'invalid'));
 
-            $this->getLogService()->info('money_card', 'lock', $this->getKernel()->trans('作废了卡号为%cardId%的充值卡', array('%cardId%' => $moneyCard['cardId'])));
+            $this->getLogService()->info('money_card', 'lock', "作废了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
             throw $this->createServiceException($this->getKernel()->trans('不能作废已使用状态的充值卡！'));
         }
@@ -186,7 +186,7 @@ class MoneyCardServiceImpl extends BaseService
                 $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
             }
 
-            $this->getLogService()->info('money_card', 'unlock', $this->getKernel()->trans('启用了卡号为%cardId%的充值卡', array('%cardId%' => $moneyCard['cardId'])));
+            $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
             throw $this->createServiceException($this->getKernel()->trans("只能启用作废状态的充值卡！%cardStatus%--%userId%", array('%cardStatus%' => $moneyCard['cardStatus'], '%userId%' => $moneyCard['rechargeUserId'])));
         }
@@ -208,7 +208,7 @@ class MoneyCardServiceImpl extends BaseService
             $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
 
-        $this->getLogService()->info('money_card', 'delete', $this->getKernel()->trans("删除了卡号为%id%的充值卡", array('%id%' => $moneyCard['cardId'])));
+        $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
         // if ($moneyCard['cardStatus'] != 'recharged') {
 
         //     $this->getMoneyCardDao()->deleteMoneyCard($id);

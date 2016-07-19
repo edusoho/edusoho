@@ -26,7 +26,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if (!$classroom['buyable']) {
             $classroomSetting = $this->getSettingService()->get('classroom');
-            return array('error' => $this->getKernel()->trans("该%name%不可购买，如有需要，请联系客服", array('%name%' => $classroomSetting['name'])));
+            return array('error' => $this->getKernel()->trans('该%name%不可购买，如有需要，请联系客服', array('%name%' => $classroomSetting['name'])));
         }
 
         return array();
