@@ -37,7 +37,7 @@ class SiteSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
             $this->getSettingService()->set('site', $site);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新站点设置'), $site);
+            $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('站点信息设置已保存！'));
         }
 
@@ -77,7 +77,7 @@ class SiteSettingController extends BaseController
                 $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
             }
             $this->getSettingService()->set('consult', $consult);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新QQ客服设置'), $consult);
+            $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服设置已保存！'));
         }
         return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
@@ -98,7 +98,7 @@ class SiteSettingController extends BaseController
         if($request->getMethod() == 'POST'){
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新侧边栏设置'), $esBar);
+            $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('侧边栏设置已保存！'));
         }
         return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
@@ -134,7 +134,7 @@ class SiteSettingController extends BaseController
 
         $this->getSettingService()->set('consult', $consult);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新微信二维码'), array('webchatURI' => $consult['webchatURI']));
+        $this->getLogService()->info('system', 'update_settings', '更新微信二维码', array('webchatURI' => $consult['webchatURI']));
 
         $response = array(
             'path' => $consult['webchatURI'],
@@ -158,7 +158,7 @@ class SiteSettingController extends BaseController
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新分享设置'), $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新分享设置', $defaultSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('分享设置已保存！'));
         }
 

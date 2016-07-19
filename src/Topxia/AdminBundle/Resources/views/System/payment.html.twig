@@ -174,23 +174,23 @@
       </div>
     {% else %}
       <div class="alert alert-info text-center" role="alert">
-        因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
+        {{ '因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方'|trans }}
       </div>
     {% endif %}
   </fieldset>
 
   <fieldset>
-    <legend>快捷支付</legend>
+    <legend>{{ '快捷支付'|trans }}</legend>
     {% if setting('magic.quickpay', false) %}
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label>接口状态</label>
+          <label>{{ '接口状态'|trans }}</label>
         </div>
         <div class="controls col-md-3 radios">
-          {{ radios('quickpay_enabled', {1:'开启', 0:'关闭'}, payment.quickpay_enabled) }}
+          {{ radios('quickpay_enabled', {1:'开启'|trans, 0:'关闭'|trans}, payment.quickpay_enabled) }}
         </div>
         <div class="controls col-md-4 radios">
-          <a href="http://www.edusoho.com/files/heepay.zip">下载接口申请说明文档</a>
+          <a href="http://www.edusoho.com/files/heepay.zip">{{ '下载接口申请说明文档'|trans }}</a>
         </div>
       </div>
 
@@ -222,7 +222,7 @@
       </div>
     {% else %}
       <div class="alert alert-info text-center" role="alert">
-        因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
+        {{ '因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方'|trans }}
       </div>
     {% endif %}
 
