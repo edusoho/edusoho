@@ -36,7 +36,7 @@ abstract class Importer
     protected function createDangerResponse($message)
     {
         if(!is_string($message)){
-            throw new ServiceException('message must be a string');
+            throw new ServiceException($this->getKernel()->trans('message must be a string'));
         }
 
         return array(

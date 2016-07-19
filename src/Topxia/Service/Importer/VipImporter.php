@@ -22,7 +22,7 @@ class VipImporter extends Importer
 
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
-                'title'      => '批量导入会员',
+                'title'      => $this->getKernel()->trans('批量导入会员'),
                 'targetType' => 'vip',
                 'targetId'   => $viplevel['id'],
                 'amount'     => '0',
@@ -47,7 +47,7 @@ class VipImporter extends Importer
                 $this->getVipService()->becomeMember($user['id'], $viplevel['id'], $userData['viplevelTime'], 'month', $orderId = 0); //升级会员加入订单
             }
 
-            $message = '您已被管理员添加为'.$userData['viplevelName'].'会员';
+            $message = $this->getKernel()->trans('您已被管理员添加为%viplevelName%会员', array('%viplevelName%' => $userData['viplevelName']));
             $this->getNotificationService()->notify($user['id'], 'default', $message);
         }
 
@@ -63,11 +63,11 @@ class VipImporter extends Importer
         $file        = $request->files->get('excel');
 
         if (!is_object($file)) {
-            return $this->createDangerResponse('请选择上传的文件');
+            return $this->createDangerResponse($this->getKernel()->trans('请选择上传的文件'));
         }
 
         if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
-            return $this->createDangerResponse('Excel格式不正确！');
+            return $this->createDangerResponse($this->getKernel()->trans('Excel格式不正确！'));
         }
 
         $objPHPExcel  = \PHPExcel_IOFactory::load($file);
@@ -78,7 +78,7 @@ class VipImporter extends Importer
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
 
         if ($highestRow > 1000) {
-            return $this->createDangerResponse('Excel超过1000行数据!');
+            return $this->createDangerResponse($this->getKernel()->trans('Excel超过1000行数据!'));
         }
 
         //预设字段
@@ -93,7 +93,7 @@ class VipImporter extends Importer
         $excelField = $strs;
 
         if (!$this->checkNecessaryFields($excelField)) {
-            return $this->createDangerResponse('缺少必要字段');
+            return $this->createDangerResponse($this->getKernel()->trans('缺少必要字段'));
         }
 
         $fieldSort = $this->getFieldSort($excelField, $fieldArray); //字段实际字符
@@ -198,7 +198,7 @@ class VipImporter extends Importer
     {
         $user = $this->getServiceKernel()->getCurrentUser();
         if(!$user->isAdmin()){
-            throw new AccessDeniedException('当前用户没有导入会员权限');
+            throw new AccessDeniedException($this->getKernel()->trans('当前用户没有导入会员权限'));
         }
     }
 
