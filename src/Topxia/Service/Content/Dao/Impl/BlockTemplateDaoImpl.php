@@ -11,7 +11,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
 
     public $serializeFields = array(
         'meta' => 'json',
-        'data' => 'json',
+        'data' => 'json'
     );
 
     public function getBlockTemplate($id)
@@ -19,7 +19,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $sql   = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $block = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
@@ -50,7 +50,7 @@ class BlockTemplateDaoImpl extends BaseDao implements BlockTemplateDao
         $that = $this;
 
         return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
+            $sql           = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
             $blockTemplate = $that->getConnection()->fetchAssoc($sql, array($code));
 
             return $blockTemplate ? $that->createSerializer()->unserialize($blockTemplate, $that->serializeFields) : null;

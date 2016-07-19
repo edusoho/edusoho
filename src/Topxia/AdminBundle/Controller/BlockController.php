@@ -174,7 +174,6 @@ class BlockController extends BaseController
     public function visualEditAction(Request $request, $blockTemplateId)
     {
         $user = $this->getCurrentUser();
-
         if ('POST' == $request->getMethod()) {
             $condation             = $request->request->all();
             $block['data']         = $condation['data'];

@@ -139,7 +139,8 @@ class WebExtension extends \Twig_Extension
 
     public function isWithoutNetwork()
     {
-        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/network.lock');
+        $network = $this->getSetting('developer.without_network', $default = false);
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
