@@ -138,13 +138,24 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'member'     => $member,
-            'notifyNum'  => $notifyNum,
-            'nextLesson' => $nextLesson
-        ));
+        if($this->isMobileClient()){
+            return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'member'     => $member,
+                'notifyNum'  => $notifyNum,
+                'nextLesson' => $nextLesson
+            ));
+        }else{
+            return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'member'     => $member,
+                'notifyNum'  => $notifyNum,
+                'nextLesson' => $nextLesson
+            ));
+        }
+       
     }
 
     public function teachersAction($courseId)

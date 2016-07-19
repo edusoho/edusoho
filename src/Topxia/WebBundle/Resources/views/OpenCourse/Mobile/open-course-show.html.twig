@@ -16,11 +16,11 @@
 
         {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
         
-        <div class="col-md-3 open-course-tab js-open-course-tab">
+      <div class="col-md-3 open-course-tab open-course-mobile-tab js-open-course-tab">
           <ul class="clearfix">
-            <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
+            <li class="tab-header active">推荐课程</li>
             {% if course.type == 'open' %}
-              <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>课时列表</li>
+              <li class="tab-header">课时列表</li>
             {% endif %}
           </ul>
           <div id="content">
@@ -34,7 +34,6 @@
         </div>
       </div>
       
-      {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
       <div class="open-course-detail row">
         <div class="col-md-9">
           <div class="es-section gray-darker editor-text">

@@ -4,17 +4,15 @@
 {% set script_controller = 'open-course/open-course-explore' %}
 
 {% block title %}{{ parent() }}{% endblock %}
-
 {% block top_content %}
-  <section class="es-live-poster swiper-container">
-    <div class="swiper-wrapper">
-      11
-      {{ block_show('open_course_top_banner') }}
-    </div> 
-    <div class="swiper-pager"></div> 
-  </section>
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        公开课列表
+      </div>
+    </div>
+  </div>
 {% endblock %}
-
 {% block content %}
   <div class="open-course-list" data-url="{{ path('open_course_explore_list') }}"></div>
 {% endblock %}
