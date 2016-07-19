@@ -14,11 +14,11 @@ admin_user_org_update:
     router_params:
         id: (user.id)
 
-admin_move_course_to_org:
-    name: 推送课程
-    parent: admin_course_manage
-    router_params:
-        courseId: (course.id)
-    group: groupButton
-    icon: 'glyphicon glyphicon-send'
-    mode: modal
+# admin_move_course_to_org:
+#     name: 推送课程
+#     parent: admin_course_manage
+#     router_params:
+#         courseId: (course.id)
+#     group: groupButton
+#     icon: 'glyphicon glyphicon-send'
+#     mode: modal
