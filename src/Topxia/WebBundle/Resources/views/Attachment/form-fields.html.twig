@@ -1,0 +1,19 @@
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ targetType ) %}
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="thread_title">{{ '附件'|trans }}</label>
+    <div class="col-xs-7 col-xs-10 controls">
+      <ul class="list-unstyled js-attachment-list">
+        {% for attachment in attachments %}
+          <li>{{ attachment.file.filename }}</li>
+        {% endfor %}
+      </ul>
+      <a class="btn btn-primary js-upload-file" data-toggle="modal" data-backdrop="static"
+         data-target="#modal"
+         data-url="{{ path('attachment_upload', {token:uploader_token('attachment', app.user.id, 'private')}) }}"
+         title="上传附件" data-placement="bottom">
+        上传附件
+      </a>
+    </div>
+    <input class="js-file-ids-store" value="{{ attachments|array_column('fileId')|join(',') }}" name="fileIds" type="hidden">
+  </div>
+{% endif %}

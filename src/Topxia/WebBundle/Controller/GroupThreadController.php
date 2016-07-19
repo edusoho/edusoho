@@ -46,9 +46,15 @@ class GroupThreadController extends BaseController
                     'title'   => $threadData['thread']['title'],
                     'content' => $threadData['thread']['content'],
                     'groupId' => $id,
-                    'userId'  => $user['id']);
+                    'userId'  => $user['id']
+                );
 
                 $thread = $this->getThreadService()->addThread($info);
+
+                $fileIds = isset($threadData['fileIds']) ? explode(',', $threadData['fileIds']) : array();
+                if (!empty($fileIds)) {
+                    $this->createAttachments($thread, $fileIds);
+                }
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -96,9 +102,15 @@ class GroupThreadController extends BaseController
                 $threadData = $request->request->all();
                 $fields     = array(
                     'title'   => $threadData['thread']['title'],
-                    'content' => $threadData['thread']['content']);
+                    'content' => $threadData['thread']['content']
+                );
 
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
+
+                $fileIds = isset($threadData['fileIds']) ? explode(',', $threadData['fileIds']) : array();
+                if (!empty($fileIds)) {
+                    $this->createAttachments($thread, $fileIds);
+                }
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -129,7 +141,8 @@ class GroupThreadController extends BaseController
             'groupinfo'      => $groupinfo,
             'thread'         => $thread,
             'attachs'        => $attachs,
-            'is_groupmember' => $this->getGroupMemberRole($id)));
+            'is_groupmember' => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function deleteAttachAction($goodsId)
@@ -359,7 +372,8 @@ class GroupThreadController extends BaseController
             'postFiles'          => $postFiles,
             'postAttachs'        => $postAttachs,
             'threadMainContent'  => $threadMainContent,
-            'is_groupmember'     => $this->getGroupMemberRole($id)));
+            'is_groupmember'     => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function postReplyAction(Request $request, $postId)
@@ -432,9 +446,9 @@ class GroupThreadController extends BaseController
         $goods['title'] = str_replace('+', '%20', $goods['title']);
 
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="' . $goods['title'] . '"');
         } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$goods['title']);
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''" . $goods['title']);
         }
 
         $response->headers->set('Content-type', "application/octet-stream");
@@ -463,12 +477,13 @@ class GroupThreadController extends BaseController
             }
 
             if (empty($trade)) {
-                $this->getCashAccountService()->reward($attach['coin'], '下载附件<'.$attach['title'].'>', $user->id, 'cut');
+                $this->getCashAccountService()->reward($attach['coin'], '下载附件<' . $attach['title'] . '>', $user->id, 'cut');
 
                 $data = array(
                     'GoodsId'     => $attach['id'],
                     'userId'      => $user->id,
-                    'createdTime' => time());
+                    'createdTime' => time()
+                );
                 $this->getThreadService()->addTrade($data);
 
                 $reward = $attach['coin'] * 0.5;
@@ -479,7 +494,7 @@ class GroupThreadController extends BaseController
 
                 $file = $this->getFileService()->getFile($attach['fileId']);
 
-                $this->getCashAccountService()->reward(intval($reward), '您发表的附件<'.$attach['title'].'>被购买下载！', $file['userId']);
+                $this->getCashAccountService()->reward(intval($reward), '您发表的附件<' . $attach['title'] . '>被购买下载！', $file['userId']);
             }
         }
 
@@ -509,7 +524,8 @@ class GroupThreadController extends BaseController
 
         $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
         $content    = array(
-            'content' => $postContent['content'], 'fromUserId' => $fromUserId);
+            'content' => $postContent['content'], 'fromUserId' => $fromUserId
+        );
 
         if (isset($postContent['postId'])) {
             $post = $this->getThreadService()->postThread($content, $groupId, $user['id'], $threadId, $postContent['postId']);
@@ -562,8 +578,10 @@ class GroupThreadController extends BaseController
             $this->getThreadService()->searchThreadsCount(array('status' => 'open', 'title' => $keyWord, 'groupId' => $id)),
             15
         );
-        $threads = $this->getThreadService()->searchThreads(array('status' => 'open', 'title' => $keyWord,
-            'groupId'                                                          => $id),
+        $threads   = $this->getThreadService()->searchThreads(array(
+            'status'  => 'open', 'title' => $keyWord,
+            'groupId' => $id
+        ),
             array(array('createdTime', 'DESC')),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
@@ -583,7 +601,8 @@ class GroupThreadController extends BaseController
             'owner'           => $owner,
             'paginator'       => $paginator,
             'lastPostMembers' => $lastPostMembers,
-            'is_groupmember'  => $this->getGroupMemberRole($id)));
+            'is_groupmember'  => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function setEliteAction($threadId)
@@ -681,7 +700,7 @@ class GroupThreadController extends BaseController
                     return $this->createMessageResponse('info', '虚拟币余额不足!');
                 }
 
-                $this->getCashAccountService()->reward($amount, '发布悬赏话题<'.$thread['title'].'>', $user->id, 'cut');
+                $this->getCashAccountService()->reward($amount, '发布悬赏话题<' . $thread['title'] . '>', $user->id, 'cut');
 
                 $thread['type']       = 'reward';
                 $thread['rewardCoin'] = $amount;
@@ -780,7 +799,7 @@ class GroupThreadController extends BaseController
                 $reward = 1;
             }
 
-            $this->getCashAccountService()->reward(intval($reward), '您发表的话题<'.$thread['title'].'>的隐藏内容被查看！', $thread['userId']);
+            $this->getCashAccountService()->reward(intval($reward), '您发表的话题<' . $thread['title'] . '>的隐藏内容被查看！', $thread['userId']);
         }
 
         return $this->render('TopxiaWebBundle:Group:hide-modal.html.twig', array(
@@ -846,7 +865,7 @@ class GroupThreadController extends BaseController
 
         $url = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $threadId));
 
-        $url = $url."?page=$page#post-$postId";
+        $url = $url . "?page=$page#post-$postId";
         return $url;
     }
 
@@ -869,7 +888,7 @@ class GroupThreadController extends BaseController
         $count   = 0;
 
         foreach ($data as $value) {
-            $value = " ".$value;
+            $value = " " . $value;
             sscanf($value, "%[^#]#[hide=coin%[^]]]%[^$$]", $content, $coin, $hideContent);
 
             sscanf($value, "%[^#]#[hide=reply]%[^$$]", $replyContent, $replyHideContent);
@@ -879,9 +898,9 @@ class GroupThreadController extends BaseController
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId'] || !empty($trade)) {
                 if ($coin) {
                     if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>隐藏区域</span>".$hideContent."</div>";
+                        $context .= $content . "<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>隐藏区域</span>" . $hideContent . "</div>";
                     } else {
-                        $context .= $content.$hideContent;
+                        $context .= $content . $hideContent;
                     }
                 } else {
                     $context .= $content;
@@ -891,9 +910,9 @@ class GroupThreadController extends BaseController
                     $count = 1;
 
                     if ($user['id']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">点击查看</a>本话题隐藏内容</h4></div>";
+                        $context .= $content . "<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">点击查看</a>本话题隐藏内容</h4></div>";
                     } else {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";
+                        $context .= $content . "<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";
                     }
                 } else {
                     $context .= $content;
@@ -928,22 +947,22 @@ class GroupThreadController extends BaseController
 
         if ($replyHideContent) {
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                $context = $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>回复可见区域</span>".$replyHideContent."</div>";
+                $context = $content . "<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>回复可见区域</span>" . $replyHideContent . "</div>";
 
                 return $context;
             }
 
             if (!$user['id']) {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";
+                $context .= $content . "<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";
                 return $context;
             }
 
             $count = $this->getThreadService()->searchPostsCount(array('userId' => $user['id'], 'threadId' => $thread['id']));
 
             if ($count > 0) {
-                $context .= $content.$replyHideContent;
+                $context .= $content . $replyHideContent;
             } else {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">回复</a>本话题可见</h4></div>";
+                $context .= $content . "<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">回复</a>本话题可见</h4></div>";
             }
         }
 
@@ -972,6 +991,21 @@ class GroupThreadController extends BaseController
         unset($record['uri']);
         $record['name'] = $file->getClientOriginalName();
         return new Response(json_encode($record));
+    }
+
+    protected function createAttachments($thread, array $fileIds)
+    {
+        if (!empty($fileIds)) {
+            $attachments = array_map(function ($fileId) use ($thread) {
+                $attachment = array(
+                    'fileId'      => $fileId,
+                    'targetType'  => 'thread',
+                    'targetId'    => $thread['id']
+                );
+                return $attachment;
+            }, $fileIds);
+            $this->getAttachmentService()->creates($attachments);
+        }
     }
 
     protected function isFeatureEnabled($feature)
@@ -1137,5 +1171,10 @@ class GroupThreadController extends BaseController
     protected function getCashAccountService()
     {
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
+    }
+
+    protected function getAttachmentService()
+    {
+        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
     }
 }

@@ -1,0 +1,12 @@
+{% for attachment in attachments %}
+  <div class="well well-sm text-sm color-gray clearfix attachment" style="line-height:20px">
+    <div class="attachment-info">
+      <img src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" width="100px" height="100px">
+      {{ attachment.file.filename }}
+    </div>
+    <div class="pull-right mrm attachment-actions">
+      <a class="attachment-preview" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+      <a class="attachment-download" href="{{ path('attachment_download', {'id': attachment.id}) }}">下载</a>
+    </div>
+  </div>
+{% endfor %}

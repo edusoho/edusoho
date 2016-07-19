@@ -42,6 +42,7 @@
       </div>
 
       {{threadMain.content|raw}}
+      {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'thread', targetId: threadMain.id })) }}
       {% if attachs %}
         <hr>
         <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
