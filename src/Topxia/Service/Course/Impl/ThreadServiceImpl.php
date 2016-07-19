@@ -287,7 +287,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->deleteThread($threadId);
 
         $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
-        $this->getLogService()->info('course', 'delete_thread', $this->getKernel()->trans('删除话题 %threadTitle%(%threadId%)', array('%threadTitle%' => $thread['title'], '%threadId%' => $thread['id'])));
+        $this->getLogService()->info('course', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
     public function stickThread($courseId, $threadId)
