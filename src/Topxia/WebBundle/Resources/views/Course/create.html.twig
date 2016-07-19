@@ -78,7 +78,7 @@
               <span class="mrm"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></span>
             {% endif %}
             <input id="course-create-btn" data-submiting-text="{{'正在创建'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'创建'|trans}}">
-            <a class="btn btn-fat btn-link" href="">取消</a>
+            <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">取消</a>
           </div>
 
           <input type="hidden" name="type" value="normal" />
