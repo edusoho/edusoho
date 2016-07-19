@@ -133,7 +133,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException("该文件格式，不允许上传。");
+            throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
         }
 
         $targetPath = $this->getFilePath($targetType, $targetId, 0);
@@ -172,7 +172,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), $start, $limit);
 
-        return $file;
+        return $files;
     }
 
     public function synData($conditions)
