@@ -74,13 +74,13 @@ class CourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
-            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
+            $name            = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
-                'source' => '',
+                'source' => $lesson['mediaSource'],
                 'name'   => $name,
-                'uri'    => ''
+                'uri'    => $lesson['mediaUri']
             );
         }
 
@@ -119,7 +119,7 @@ class CourseLessonManageController extends BaseController
 
     protected function hasSelfMedia($lesson)
     {
-        return !in_array($lesson['type'], array('text','live','testpaper')) && $lesson['mediaSource'] == 'self';
+        return !in_array($lesson['type'], array('text', 'live', 'testpaper')) && $lesson['mediaSource'] == 'self';
     }
 
     public function createTestPaperAction(Request $request, $id)

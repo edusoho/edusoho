@@ -239,6 +239,7 @@ class Logger
                 'delete'          => '删除',
                 'publish'         => '发布',
                 'unpublish'       => '取消发布'),
+
             self::NOTIFY       => array(
                 'create'     => '创建',
                 'check_fail' => '检测'),

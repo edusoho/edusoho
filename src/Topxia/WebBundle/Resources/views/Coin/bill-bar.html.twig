@@ -2,7 +2,7 @@
 {% if setting('coin.coin_enabled') %}
     {% if setting('coin.coin_enabled') %}
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
-      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': coin.coin_name|default("虚拟币"|trans)} %}我的%coin_name%{% endtrans %}</a>
+      <a href="{{ url('my_coin') }}" >{% trans with {'%coin_name%': setting('coin.coin_name')|default("虚拟币"|trans)} %}我的%coin_name%{% endtrans %}</a>
     </li>
     {% endif %}
 {% endif %}

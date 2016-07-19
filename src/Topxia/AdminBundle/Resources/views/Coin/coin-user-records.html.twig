@@ -84,7 +84,7 @@
     {% if not userIds %}
       <div class="empty">暂无记录</div>{% endif %}
     {% if paginator|default(null) %}
-      {{ web_macro.paginator(paginator) }}
+      {{ admin_macro.paginator(paginator) }}
     {% endif %}
   </div>
 {% endblock %}

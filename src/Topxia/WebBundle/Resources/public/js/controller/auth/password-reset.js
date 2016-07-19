@@ -70,15 +70,15 @@ define(function(require, exports, module) {
                     smsSender.destroy();
                 }
             }
-        }
+        };
 
         if($('.js-find-password li').length > 1){
-            $('.js-find-by-email').hover(function(){
+            $('.js-find-by-email').click(function(){
                 if(!$('.js-find-by-email').hasClass('active')){
                     $('#alertxx').hide();
                 }
             });
-            $('.js-find-by-mobile').hover(function(){
+            $('.js-find-by-mobile').click(function(){
                 if(!$('.js-find-by-mobile').hasClass('active')){
                     $('#alertxx').hide();
                 }
@@ -86,7 +86,7 @@ define(function(require, exports, module) {
         }
 
         makeValidator('email');
-        $('.js-find-by-email').mouseover(function () {
+        $('.js-find-by-email').click(function () {
             $('.js-find-by-email').addClass('active');
             $('.js-find-by-mobile').removeClass('active');
 
@@ -95,7 +95,7 @@ define(function(require, exports, module) {
             $('#password-reset-form').show();
         })
 
-        $('.js-find-by-mobile').mouseover(function () {
+        $('.js-find-by-mobile').click(function () {
             $('.js-find-by-email').removeClass('active');
             $('.js-find-by-mobile').addClass('active');
 

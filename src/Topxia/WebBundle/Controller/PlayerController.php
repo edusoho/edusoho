@@ -52,29 +52,6 @@ class PlayerController extends BaseController
         ));
     }
 
-// protected function getPlayUrl($file)
-
-// {
-
-//     if (!in_array($file["type"], array("audio", "video"))) {
-
-//         throw $this->createAccessDeniedException();
-
-//     }
-
-//     $token = $this->makeToken('hls.playlist', $file['globalId']);
-
-//     $params = array(
-
-//         'globalId' => $file['globalId'],
-
-//         'token'    => $token['token']
-
-//     );
-
-//     return $this->generateUrl('global_file_hls_playlist', $params, true);
-    // }
-
     public function playlistAction(Request $request, $globalId, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);

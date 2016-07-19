@@ -19,19 +19,24 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
-        if (empty($conditions["categoryId"])) {
+        if ($filter == 'vip') {
+            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions["parentId"]              = 0;
+        }
+
+        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
             unset($conditions["categoryId"]);
         }
 
-        if (empty($conditions["status"])) {
+        if (isset($conditions["status"]) && $conditions["status"] == "") {
             unset($conditions["status"]);
         }
 
-        if (empty($conditions["title"])) {
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
             unset($conditions["title"]);
         }
 
-        if (empty($conditions["creator"])) {
+        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
             unset($conditions["creator"]);
         }
         $conditions = $this->fillOrgCode($conditions);
@@ -58,7 +63,7 @@ class CourseController extends BaseController
         );
 
         $classrooms = array();
-
+        $vips       = array();
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
@@ -67,22 +72,36 @@ class CourseController extends BaseController
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
+        } elseif ($filter == 'vip') {
+            if ($this->isPluginInstalled('Vip')) {
+                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
+                $vips = ArrayToolkit::index($vips, 'id');
+            }
         }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (!isset($courseSetting['live_course_enabled'])) {
+            $courseSetting['live_course_enabled'] = "";
+        }
+
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
-            'courses'    => $courses,
-            'users'      => $users,
-            'categories' => $categories,
-            'paginator'  => $paginator,
-            'default'    => $default,
-            'classrooms' => $classrooms,
-            'filter'     => $filter
+            'conditions'     => $conditions,
+            'courses'        => $courses,
+            'users'          => $users,
+            'categories'     => $categories,
+            'paginator'      => $paginator,
+            'liveSetEnabled' => $courseSetting['live_course_enabled'],
+            'default'        => $default,
+            'classrooms'     => $classrooms,
+            'filter'         => $filter,
+            'vips'           => $vips
         ));
     }
 
@@ -165,6 +184,17 @@ class CourseController extends BaseController
 
             if ($classroomCourse) {
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
+            }
+
+            //判断作业插件版本号
+            $homework = $this->getAppService()->findInstallApp("Homework");
+
+            if (!empty($homework)) {
+                $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
+
+                if (!$isDeleteHomework) {
+                    return $this->createJsonResponse(array('code' => 1, 'message' => '作业插件未升级'));
+                }
             }
 
             if ($type) {
@@ -283,7 +313,7 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions                = $request->query->all();
         $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
@@ -324,7 +354,6 @@ class CourseController extends BaseController
 
     public function dataAction(Request $request, $filter)
     {
-
         $conditions = $request->query->all();
 
         if ($filter == 'normal') {
@@ -481,6 +510,7 @@ class CourseController extends BaseController
         $course     = $this->getCourseService()->getCourse($courseId);
         $default    = $this->getSettingService()->get('default', array());
         $classrooms = array();
+        $vips       = array();
 
         if ($fields['filter'] == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
@@ -490,6 +520,11 @@ class CourseController extends BaseController
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
             }
+        } elseif ($fields['filter'] == 'vip') {
+            if ($this->isPluginInstalled('Vip')) {
+                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
+                $vips = ArrayToolkit::index($vips, 'id');
+            }
         }
 
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
@@ -498,7 +533,8 @@ class CourseController extends BaseController
             'course'     => $course,
             'default'    => $default,
             'classrooms' => $classrooms,
-            'filter'     => $fields["filter"]
+            'filter'     => $fields["filter"],
+            'vips'       => $vips
         ));
     }
 
@@ -561,5 +597,10 @@ class CourseController extends BaseController
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getVipLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

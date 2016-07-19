@@ -8,7 +8,7 @@
   <div class="form-group">
     <label for="tags" class="col-sm-2 control-label">标签</label>
     <div class="col-sm-8">
-      <input type="text" class="width-full select2-offscreen" id="tags" name="tags" value="{{ material.tags|join(',') }}" placeholder="标签" data-url="{{ path('tag_match') }}">
+      <input type="text" class="width-full select2-offscreen" id="tags" name="tags" value="{{ material.tags|default('')|join(',') }}" placeholder="标签" data-url="{{ path('tag_match') }}">
       <div class="help-block">{{'标签来自网校课程标签，由网校管理员统一管理。'|trans}}</div>
     </div>
   </div>

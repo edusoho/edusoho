@@ -281,19 +281,22 @@ class EduCloudController extends BaseController
 
         $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
         $api       = CloudAPIFactory::create('root');
-        $status    = $api->get('/me/sms_account');
 
-//启动或者更新短信签名
+        $cloudInfo = $api->get('/me');
+        if (empty($cloudInfo['accessCloud'])) {
+            return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
+        }
+
+        //启动或者更新短信签名
         if (isset($dataUserPosted['sms-open']) || isset($dataUserPosted['sms_school_name'])) {
             $smsStatus                    = array_merge($smsStatus, $settings);
             $smsStatus['sms_enabled']     = 1;
             $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
 
-            if (isset($status['error']) && $status['error'] == '不存在短信账号' || $status['status'] !== 'used') {
-                $info   = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
-                $status = $api->get('/me/sms_account');
-            }
+            $info = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
         }
+
+        $status = $api->get('/me/sms_account');
 
         if (isset($dataUserPosted['sms-close'])) {
             $smsStatus                = array_merge($smsStatus, $settings);

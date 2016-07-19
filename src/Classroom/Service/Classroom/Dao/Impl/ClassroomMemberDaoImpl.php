@@ -224,6 +224,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('role IN (:roles)')
             ->andWhere('userId IN ( :userIds)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime >= :createdTime_GE')
             ->andWhere('createdTime < :startTimeLessThan');
 
         return $builder;

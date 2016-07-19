@@ -45,6 +45,10 @@ define(function(require, exports, module) {
             return false;
         });
 
+        $('.modal').on('hidden.bs.modal', function(){
+            window.location.reload();
+        });
+
     };
 
 });

@@ -32,6 +32,8 @@ interface OrgService
 
     public function sortOrg($ids);
 
+    public function searchOrgs($conditions, $orderBy, $start, $limit);
+
     /**
      * @param  $id
      * @return orgName1->orgName2->orgName3

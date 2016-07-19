@@ -81,7 +81,8 @@ class PayCenterController extends BaseController
                 'sn'       => $order['sn'],
                 'status'   => 'success',
                 'amount'   => $order['amount'],
-                'paidTime' => time()
+                'paidTime' => time(),
+                'payment'  => 'coin'
             );
             list($success, $order) = $this->getPayCenterService()->pay($payData);
 

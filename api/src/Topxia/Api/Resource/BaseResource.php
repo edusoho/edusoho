@@ -6,31 +6,54 @@ use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
 {
-    abstract function filter(&$res);
+    abstract public function filter($res);
 
-    protected function callFilter($name, &$res)
+    protected function callFilter($name, $res)
     {
         global $app;
         return $app["res.{$name}"]->filter($res);
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
-    }
-
-    protected function callSimplify($name, &$res)
-    {
-        global $app;
-        return $app["res.{$name}"]->simplify($res);
     }
 
     protected function simplify($res)
     {
         return $res;
+    }
+
+    protected function callSimplify($name, $res)
+    {
+        global $app;
+        return $app["res.{$name}"]->simplify($res);
+    }
+
+    protected function multicallSimplify($name, $res)
+    {
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callSimplify($name, $one);
+        }
+        return $res;
+    }
+
+    /**
+     * 检查每个API必需参数的完整性
+     */
+    protected function checkRequiredFields($requiredFields, $requestData)
+    {
+        $requestFields = array_keys($requestData);
+        foreach ($requiredFields as $field) {
+            if (!in_array($field, $requestFields)) {
+                throw new \Exception("缺少必需的请求参数{$field}");
+            }
+        }
+
+        return $requestData;
     }
 
     protected function error($code, $message)
@@ -46,7 +69,7 @@ abstract class BaseResource
         if (is_array($total)) {
             return array('resources' => $resources, 'next' => $total);
         } else {
-            return array('resources' => $resources, 'total' => $total);
+            return array('resources' => $resources, 'total' => $total ? : 0);
         }
     }
 
@@ -138,7 +161,7 @@ abstract class BaseResource
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+        $path = $this->getHttpHost()."/files/{$path}";
 
         return $path;
     }
@@ -148,8 +171,25 @@ abstract class BaseResource
         if (empty($path)) {
             return '';
         }
-        $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
+        $path = $this->getHttpHost()."/assets/{$path}";
         return $path;
+    }
+
+    protected function getHttpHost()
+    {
+        return "http://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function generateUrl($route, $parameters = array())
+    {
+        global $app;
+        return $app['url_generator']->generate($route, $parameters);
+    }
+
+    protected function render($templatePath, $args)
+    {
+        global $app;
+        return $app['twig']->render($templatePath, $args);
     }
 
     protected function getCurrentUser()
@@ -161,5 +201,4 @@ abstract class BaseResource
     {
         return ServiceKernel::instance();
     }
-
 }

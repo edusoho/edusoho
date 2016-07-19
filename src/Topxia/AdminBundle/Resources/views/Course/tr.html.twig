@@ -23,8 +23,8 @@
     {% endif %}
 
   </td>
+  <td>{{ course.originPrice }}</td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
-
   {% if filter != 'open' and filter != 'liveOpen' %}
     <td>
       {% if  course.serializeMode =="none" %}
@@ -42,9 +42,11 @@
         <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
       {% endif %}
     </td>
+    {% elseif filter == 'vip' %}
+        {% set vip = vips[course.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
     {% else %}
-    <td>{{ course.studentNum }}</td>
-    <td><span class="money-text">{{ course.income }}</span></td>
+      <td>{{ course.studentNum }}</td>
     {% endif %}
   {% endif %}
 
