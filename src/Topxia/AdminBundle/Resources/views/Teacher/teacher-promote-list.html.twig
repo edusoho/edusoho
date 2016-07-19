@@ -11,7 +11,7 @@
     
     <div class="form-group">
       <input type="text" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}"
-             placeholder="用户名">
+             placeholder="{{'用户名'|trans}}">
     </div>
 
     <button class="btn btn-primary">{{'搜索'|trans}}</button>
