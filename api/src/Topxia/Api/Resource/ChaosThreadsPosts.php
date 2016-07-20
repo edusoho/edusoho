@@ -18,7 +18,6 @@ class ChaosThreadsPosts extends BaseResource
 
         switch ($fields['threadType']) {
             case 'common':
-
                 if (!ArrayToolkit::requireds($fields, array('parentId'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -28,7 +27,6 @@ class ChaosThreadsPosts extends BaseResource
                 break;
 
             case 'course':
-
                 if (!ArrayToolkit::requireds($fields, array('courseId', 'content', 'threadId'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -117,7 +115,7 @@ class ChaosThreadsPosts extends BaseResource
         return ArrayToolkit::parts($course,$keys);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         return $res;

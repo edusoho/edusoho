@@ -105,11 +105,12 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchNavigations($conditions, $start, $limit)
+    public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
 

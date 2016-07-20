@@ -242,9 +242,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialCreate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $material  = $context['material'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $material = $context['material'];
 
         if ($material['lessonId'] && $material['source'] == 'coursematerial') {
             $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
@@ -253,14 +253,19 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialUpdate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $material  = $context['material'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $material = $context['material'];
 
         $lesson = $this->getCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
-        if ($lesson && $material['lessonId'] && $material['source'] == 'coursematerial') {
-            $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
+        if ($material['source'] == 'coursematerial') {
+            if ($material['lessonId']) {
+                $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
+            } elseif ($material['lessonId'] == 0 && isset($argument['lessonId']) && $argument['lessonId']) {
+                $material['lessonId'] = $argument['lessonId'];
+                $this->_waveLessonMaterialNum($material);
+            }
         }
     }
 
@@ -363,13 +368,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $second    = $testPaper['limitedTime'] * 60 + 3600;
 
         $updateRealTimeTestResultStatusJob = array(
-            'name'       => 'updateRealTimeTestResultStatus',
-            'cycle'      => 'once',
-            'jobClass'   => 'Topxia\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
-            'jobParams'  => '',
-            'targetType' => "lesson",
-            'targetId'   => $lesson['id'],
-            'nextExcutedTime'  => $lesson['testStartTime'] + $second
+            'name'            => 'updateRealTimeTestResultStatus',
+            'cycle'           => 'once',
+            'jobClass'        => 'Topxia\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
+            'jobParams'       => '',
+            'targetType'      => "lesson",
+            'targetId'        => $lesson['id'],
+            'nextExcutedTime' => $lesson['testStartTime'] + $second
         );
 
         $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
@@ -425,15 +430,15 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function _waveLessonMaterialNum($material)
     {
-        if($material['lessonId'] && $material['source'] == 'coursematerial'){
+        if ($material['lessonId'] && $material['source'] == 'coursematerial') {
             $count = $this->getMaterialService()->searchMaterialCount(array(
-                    'courseId' => $material['courseId'],
-                    'lessonId' => $material['lessonId'],
-                    'source'   => 'coursematerial'
-                )
+                'courseId' => $material['courseId'],
+                'lessonId' => $material['lessonId'],
+                'source'   => 'coursematerial'
+            )
             );
-           $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
-           return true;
+            $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
+            return true;
         }
 
         return false;

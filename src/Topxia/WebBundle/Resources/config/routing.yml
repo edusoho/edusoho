@@ -678,9 +678,15 @@ course_manage_file_status:
     pattern:  /course/manage/file/status
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
 
-course_manage_upload_course_delete_files:
-    pattern:  /course/{id}/delete/materials
+course_manage_delete_materials:
+    pattern:  /course/{id}/manage/delete/materials
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
+    methods: [POST]
+
+course_manage_delete_materials_show:
+    pattern:  /course/{id}/manage/show/delete/materials
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteMaterialShow }
+    methods: [POST]
 
 course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
@@ -939,10 +945,12 @@ course_manage_testpaper_update:
 course_manage_testpaper_delete:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/delete
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:delete }
+    methods: [POST]
 
 course_manage_testpaper_deletes:
     pattern: /course/{courseId}/manage/testpaper/deletes
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:deletes }
+    methods: [POST]
 
 course_manage_testpaper_publish:
     pattern: /course/{courseId}/manage/testpaper/{id}/publish
@@ -1674,6 +1682,7 @@ group_member:
 group_member_delete:
     pattern:  /group/member/delete/{id}
     defaults: { _controller: TopxiaWebBundle:Group:deleteMembers }
+    methods: [POST]
 group_set_admin:
     pattern:  /group/set/admin/{id}
     defaults: { _controller: TopxiaWebBundle:Group:setAdmin }
@@ -2021,6 +2030,10 @@ esbar_my_notify:
 esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+esbar_my_study_center:
+    pattern:  /esbar/my/study_center
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:studyCenter }
 
 my_cards:
     pattern:  /my/cards

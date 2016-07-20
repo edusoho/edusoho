@@ -44,8 +44,13 @@
         {% if course.parentId == 0 %}
           {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
         {% endif %}
+
         {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
-        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+        
+        {% cache 'course/' ~ course.id ~ '/sidebar/students' 600 %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+        {% endcache %}
+        
         {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
 
       {% endblock %}

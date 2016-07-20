@@ -26,18 +26,23 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         $fields['updateTime'] = time();
 
         $this->getConnection()->update($this->getTable(), $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getOrg($id);
     }
 
     public function getOrg($id)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+        return $this->fetchCached("orgId:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function delete($id)
     {
         $result = $this->getConnection()->delete($this->getTable(), array('id' => $id));
+        $this->clearCached();
         return $result;
     }
 
@@ -65,13 +70,59 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function getOrgByOrgCode($orgCode)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE orgCode = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($orgCode)) ?: array();
+        $that = $this;
+        return $this->fetchCached("orgCode:{$orgCode}", $orgCode, function ($orgCode) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE orgCode = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($orgCode)) ?: array();
+        });
     }
 
-    public function getOrgByCode($value)
+    public function getOrgByCode($code)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE  code = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($value)) ?: array();
+        $that = $this;
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE  code = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($code)) ?: array();
+        });
+    }
+
+   public function searchOrgs($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function findOrgsByIds($ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {  
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                        ->from($this->table, 'org')
+                        ->andWhere('id = :id')
+                        ->andWhere('parentId = :parentId')
+                        ->andWhere('depth = :depth');
+        return $builder;    
     }
 }

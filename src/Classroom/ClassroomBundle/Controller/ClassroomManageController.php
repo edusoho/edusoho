@@ -337,7 +337,7 @@ class ClassroomManageController extends BaseController
                 'targetType' => 'classroom',
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
-                'payment'    => 'none',
+                'payment'    => 'outside',
                 'snPrefix'   => 'CR'
             ));
 
@@ -877,7 +877,7 @@ class ClassroomManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'reviewing'),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
             20
         );
 

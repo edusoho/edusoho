@@ -469,10 +469,10 @@ define( function ( require ) {
                 "pm", "infty", "=", "sim", "times", "div", "!", "<", "ll", ">",
                 "gg", "leq", "geq", "mp", "cong", "equiv", "propto", "approx",
                 "forall", "partial", "surd", "cup", "cap", "varnothing", "%",
-                "circ", "exists", /*"nexists",*/ "in", "ni", "gets", "uparrow",
+                "circ", "exists", "nexists", "in", "ni", "gets", "uparrow",
                 "to", "downarrow", "leftrightarrow", "therefore", "because",
                 "+", "-", "neg", "ast", "cdot", "vdots",/* "ddots",*/ "aleph",
-                /*"beth",*/ "blacksquare"
+                "beth", "blacksquare"
 
             ],
             configList = config[ 2 ].options.box.group[ 0 ].items;
@@ -529,8 +529,8 @@ define( function ( require ) {
                     "gneqq", "nprec", "nsucc", "notin", "nsubseteq", "nsupseteq",
                     "subsetneq", "supsetneq", "lnsim", "gnsim", "precnsim",
                     "succnsim", "ntriangleleft", "ntriangleright", "ntrianglelefteq",
-                    "ntrianglerighteq", "nmid", "nparallel", "nvdash", /*"nVdash",
-                    "nvDash", "nVDash", "nexists"*/
+                    "ntrianglerighteq", "nmid", "nparallel", "nvdash", "nVdash",
+                    "nvDash", "nVDash", "nexists"
                 ]
             } ],
             greekConfigList = config[ 2 ].options.box.group[ 2 ].items;
@@ -546,8 +546,8 @@ define( function ( require ) {
     ( function () {
 
         var list = [
-                "aleph", /*"beth", "daleth", "gimel", "complement",*/ "ell", /*"eth",*/ "hbar",
-                /*"hslash", "mho",*/ "partial", "wp", /*"circledS", "Bbbk", "Finv", "Game",*/
+                "aleph", "beth", "daleth", "gimel", "complement", "ell", "eth", "hbar",
+                "hslash", "mho", "partial", "wp", "circledS", "Bbbk", "Finv", "Game",
                 "Im", "Re"
             ],
             configList = config[ 2 ].options.box.group[ 3 ].items;
@@ -569,14 +569,14 @@ define( function ( require ) {
                 "Longleftarrow", "Longrightarrow", "Longleftrightarrow", "nearrow",
                 "nwarrow", "searrow", "swarrow", "nleftarrow", "nrightarrow",
                 "nLeftarrow", "nRightarrow", "nLeftrightarrow", "leftharpoonup",
-                "leftharpoondown", "rightharpoonup", "rightharpoondown", /*"upharpoonleft",
+                "leftharpoondown", "rightharpoonup", "rightharpoondown", "upharpoonleft",
                 "upharpoonright", "downharpoonleft",
-                "downharpoonright", "leftrightharpoons",*/ "rightleftharpoons", "leftleftarrows",
+                "downharpoonright", "leftrightharpoons", "rightleftharpoons", "leftleftarrows",
                 "rightrightarrows", "upuparrows", "downdownarrows", "leftrightarrows",
-                "rightleftarrows", /*"looparrowleft", "looparrowright", "leftarrowtail",
+                "rightleftarrows", "looparrowleft", "looparrowright", "leftarrowtail",
                 "rightarrowtail", "Lsh", "Rsh", "Lleftarrow", "Rrightarrow", "curvearrowleft",
                 "curvearrowright", "circlearrowleft", "circlearrowright", "multimap",
-                "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"*/
+                "leftrightsquigarrow", "twoheadleftarrow", "twoheadrightarrow", "rightsquigarrow"
             ],
             configList = config[ 2 ].options.box.group[ 4 ].items;
 

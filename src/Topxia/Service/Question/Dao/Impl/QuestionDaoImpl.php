@@ -126,10 +126,10 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $this->checkOrderBy($orderBy, array('createdTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit)
-                        ->orderBy($orderBy[0], $orderBy[1]);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->orderBy($orderBy[0], $orderBy[1]);
         $questions = $builder->execute()->fetchAll() ?: array();
 
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -138,7 +138,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     public function searchQuestionsCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -250,18 +250,22 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             unset($conditions['targetPrefix']);
         }
 
+        if (isset($conditions['type']) && $conditions['type'] == '0') {
+            unset($conditions['type']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'questions')
-                        ->andWhere("target IN ( :targets )")
-                        ->andWhere('target = :target')
-                        ->andWhere('target = :targetPrefix OR target LIKE :targetLike')
-                        ->andWhere('parentId = :parentId')
-                        ->andWhere('difficulty = :difficulty')
-                        ->andWhere('type = :type')
-                        ->andWhere('stem LIKE :stem')
-                        ->andWhere("type IN ( :types )")
-                        ->andwhere("subCount <> :subCount")
-                        ->andWhere("id NOT IN ( :excludeIds ) ");
+            ->from($this->table, 'questions')
+            ->andWhere("target IN ( :targets )")
+            ->andWhere('target = :target')
+            ->andWhere('target = :targetPrefix OR target LIKE :targetLike')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('difficulty = :difficulty')
+            ->andWhere('type = :type')
+            ->andWhere('stem LIKE :stem')
+            ->andWhere("type IN ( :types )")
+            ->andwhere("subCount <> :subCount")
+            ->andWhere("id NOT IN ( :excludeIds ) ");
 
         if (isset($conditions['excludeUnvalidatedMaterial']) && ($conditions['excludeUnvalidatedMaterial'] == 1)) {
             $builder->andStaticWhere(" not( type = 'material' AND subCount = 0 )");

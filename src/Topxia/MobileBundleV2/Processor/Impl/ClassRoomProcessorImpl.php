@@ -356,7 +356,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	public function learnByVip()
 	{
 		$classRoomId = $this->getParam("classRoomId");
-		if (!$this->controller->setting('vip.enabled')) {
+		if (!$this->controller->isinstalledPlugin('Vip') || !$this->controller->setting('vip.enabled')) {
         	return $this->createErrorResponse('not_login', "网校未开启会员体系");
     	}
 
@@ -400,14 +400,14 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $userId = empty($user) ? 0 : $user["id"];
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
 		$vipLevels = array();
-    	if ($this->controller->setting('vip.enabled')) {
+    	if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
         	$vipLevels = $this->controller->getLevelService()->searchLevels(array(
             		'enabled' => 1
         	), 0, 100);
     	}
 
     	$checkMemberLevelResult = null;
-    	if ($this->controller->setting('vip.enabled')) {
+    	if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
         	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
     	}
 

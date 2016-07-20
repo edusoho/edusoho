@@ -63,6 +63,8 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
+    public function batchUpdateOrg($courseIds, $orgCode);
+
     public function updateCourseCounter($id, $counter);
 
     public function changeCoursePicture($courseId, $files);
@@ -131,6 +133,8 @@ interface CourseService
     public function updateCourseDraft($courseId, $lessonId, $userId, $fields);
 
     public function deleteLesson($courseId, $lessonId);
+
+    public function sumLessonGiveCreditByLessonIds($lessonIds);
 
     public function publishLesson($courseId, $lessonId);
 
@@ -248,6 +252,8 @@ interface CourseService
     public function findMemberUserIdsByCourseId($courseId);
 
     public function updateCourseMember($id, $fields);
+
+    public function updateMembers($conditions, $updateFields);
 
     public function isMemberNonExpired($course, $member);
 

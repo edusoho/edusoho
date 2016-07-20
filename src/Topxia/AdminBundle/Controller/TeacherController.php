@@ -9,25 +9,9 @@ class TeacherController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user       = $this->getCurrentUser();
-        $fields     = $request->query->all();
-        $conditions = array(
-            'roles'       => 'ROLE_TEACHER',
-            'likeOrgCode' => $user->getCurrentOrgCode()
-        );
-
-        if (empty($fields)) {
-            $fields = array();
-        }
-
-        $conditions = array_merge($conditions, $fields);
-
-        if(!empty($conditions['orgCode'])){
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-        }
-
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'nickname', 'likeOrgCode'));
-
+        $conditions = $request->query->all();
+        $conditions = $this->fillOrgCode($conditions);
+        $conditions['roles'] = 'ROLE_TEACHER';
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
@@ -78,21 +62,10 @@ class TeacherController extends BaseController
         $fields     = $request->query->all();
         $conditions = array(
             'roles'    => 'ROLE_TEACHER',
-            'promoted' => 1,
-            'likeOrgCode' => $user->getCurrentOrgCode()
+            'promoted' => 1
         );
-
-        if (empty($fields)) {
-            $fields = array();
-        }
-
         $conditions = array_merge($conditions, $fields);
-
-        if(!empty($conditions['orgCode'])){
-            $conditions['likeOrgCode'] = $conditions['orgCode'];
-        }
-
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'nickname', 'likeOrgCode'));
+        $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),

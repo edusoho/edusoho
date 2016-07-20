@@ -33,7 +33,7 @@ class FileServiceImpl extends BaseService implements FileService {
 	 */
 	public function getFileCount($group = null) {
 		if (empty($group)) {
-			return $this->getFileDao->findFileCount();
+			return $this->getFileDao()->findFileCount();
 		}
 
 		$group = $this->getGroupDao()->findGroupByCode($group);

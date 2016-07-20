@@ -379,6 +379,7 @@ define( function ( require ) {
 
                 // 返回结构树进过序列化后所对应的latex表达式， 同时包含有当前光标定位点信息
                 resultStr = this.kfEditor.requestService( "parser.latex.serialization", this.objTree.parsedTree );
+
                 curStrGroup.operand.splice( strEndIndex, 1 );
                 curStrGroup.operand.splice( strStartIndex, 1 );
 

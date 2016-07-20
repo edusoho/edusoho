@@ -49,22 +49,35 @@ DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户Id',
-  `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
-  `mode` enum('html','template') NOT NULL DEFAULT 'html' COMMENT '模式',
-  `template` text COMMENT '模板',
-  `templateName` varchar(255) DEFAULT NULL COMMENT '编辑区模板名字',
-  `templateData` text COMMENT '模板数据',
+  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'),
+  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'),
   `content` text COMMENT '编辑区的内容',
   `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
-  `meta` text COMMENT '编辑区元信息',
   `data` text COMMENT '编辑区内容',
-  `tips` text,
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `block_template`;
+CREATE TABLE `block_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '模版ID',
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `mode` ENUM('html','template') NOT NULL DEFAULT 'html' COMMENT '模式' ,
+  `template` text COMMENT '模板',
+  `templateName` VARCHAR(255)  COMMENT '编辑区模板名字',
+  `templateData` text  COMMENT '模板数据',
+  `content` text COMMENT '默认内容',
+  `data` text COMMENT '编辑区内容',
+  `code` varchar(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
+  `meta` text  COMMENT '编辑区元信息',
+  `tips` VARCHAR( 255 ),
+  `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
+  `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
+  `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)                  
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';
 
 DROP TABLE IF EXISTS `block_history`;
 CREATE TABLE `block_history` (
@@ -276,6 +289,7 @@ CREATE TABLE `announcement` (
   `content` text NOT NULL COMMENT '公告内容',
   `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
   `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
+  `copyId` INT(11) NOT NULL DEFAULT '0' COMMENT '复制的公告ID',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
   PRIMARY KEY (`id`)
@@ -449,7 +463,8 @@ CREATE TABLE `course_member` (
   `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
   `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `courseId` (`courseId`,`userId`)
+  UNIQUE KEY `courseId` (`courseId`,`userId`),
+  KEY `courseId_role_createdTime` (`courseId`,`role`,`createdTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_note`;
@@ -669,8 +684,9 @@ CREATE TABLE `message_conversation` (
   `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型',
   `unreadNum` int(10) unsigned NOT NULL COMMENT '未读数量',
   `createdTime` int(10) unsigned NOT NULL COMMENT '会话创建时间',
-  
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `toId_fromId` (`toId`,`fromId`),
+  KEY `toId_latestMessageTime` (`toId`,`latestMessageTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `message_relation`;
@@ -748,7 +764,7 @@ CREATE TABLE `orders` (
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` varchar(32) NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
@@ -1080,7 +1096,7 @@ CREATE TABLE `user` (
   `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
   `nickname` varchar(64) NOT NULL COMMENT '用户名',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头衔',
   `tags` varchar(255) NOT NULL DEFAULT '' COMMENT '标签',
   `type` varchar(32) NOT NULL COMMENT 'default默认为网站注册, weibo新浪微薄登录',
   `point` int(11) NOT NULL DEFAULT '0' COMMENT '积分',
@@ -1879,6 +1895,26 @@ CREATE TABLE IF NOT EXISTS  `org` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `orgCode` (`orgCode`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
+
+DROP TABLE IF EXISTS `im_conversation`;
+CREATE TABLE `im_conversation` (
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `no` varchar(64) NOT NULL COMMENT 'IM云端返回的会话id',
+    `memberIds` text NOT NULL COMMENT '会话中用户列表(用户id按照小到大排序，竖线隔开)',
+    `memberHash` varchar(32) NOT NULL DEFAULT '' COMMENT 'memberIds字段的hash值，用于优化查询',
+    `createdTime` int(10) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='IM云端会话记录表';
+
+DROP TABLE IF EXISTS `im_my_conversation`;
+CREATE TABLE `im_my_conversation` (
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `no` varchar(64) NOT NULL,
+    `userId` int(10) UNSIGNED NOT NULL,
+    `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
+    `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='用户个人的会话列表';
 
 
 

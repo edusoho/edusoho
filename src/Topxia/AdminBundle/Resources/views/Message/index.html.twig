@@ -6,8 +6,6 @@
 {% block main %}
   <div class="well well-sm">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
-     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
-     
       <div class="form-group">
         <input class="form-control" type="text" id="startDate" name="startDate"
                value="{{ app.request.query.get('startDate') }}" placeholder="起始时间">
@@ -82,7 +80,7 @@
   </div>
 
   <div>
-    {{ web_macro.paginator(paginator) }}
+    {{ admin_macro.paginator(paginator) }}
   </div>
 
 {% endblock %}

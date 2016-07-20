@@ -55,7 +55,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     public function updateAnnouncement($id, $fields)
     {
-        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getAnnouncement($id);
     }
 
@@ -63,16 +63,19 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
     {
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
+            unset($conditions['orgCode']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere("targetType = :targetType")
             ->andWhere("targetId = :targetId")
+            ->andWhere("targetId IN (:targetIds)")
             ->andWhere('startTime <=:startTime')
             ->andWhere('endTime >=:endTime')
             ->andWhere('orgCode =:orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('copyId = :copyId')
             ->andWhere('userId =:userId');
 
         return $builder;

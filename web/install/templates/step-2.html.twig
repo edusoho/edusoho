@@ -11,8 +11,8 @@
     <div class="form-group">
       <label for="database-host-field" class="col-sm-4 control-label">数据库服务器</label>
       <div class="controls col-sm-5">
-        <input type="text" class="form-control" id="database-host-field" name="database_host" value="{{ post.database_host|default('localhost') }}">
-        <div class="help-block">数据库服务器地址，一般为localhost</div>
+        <input type="text" class="form-control" id="database-host-field" name="database_host" value="{{ post.database_host|default('127.0.0.1') }}">
+        <div class="help-block">数据库服务器地址，一般为localhost或者127.0.0.1</div>
       </div>
     </div>
 

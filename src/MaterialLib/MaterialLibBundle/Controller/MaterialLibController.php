@@ -96,15 +96,15 @@ class MaterialLibController extends BaseController
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
-        if($file['storage'] == 'cloud'){
-          return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
-              'request'  => $request,
-              'globalId' => $file['globalId']
-          ));
+        if ($file['storage'] == 'cloud') {
+            return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+                'request'  => $request,
+                'globalId' => $file['globalId']
+            ));
         }
-        
-        return $this->render('MaterialLibBundle:Web:preview.html.twig',array(
-          'file' => $file
+
+        return $this->render('MaterialLibBundle:Web:preview.html.twig', array(
+            'file' => $file
         ));
     }
 
@@ -112,11 +112,11 @@ class MaterialLibController extends BaseController
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
 
-        if($file['storage'] == 'cloud'){
-          return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-              'request'  => $request,
-              'globalId' => $file['globalId']
-          ));
+        if ($file['storage'] == 'cloud') {
+            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+                'request'  => $request,
+                'globalId' => $file['globalId']
+            ));
         }
         return $this->render('MaterialLibBundle:Web:local-player.html.twig', array());
     }
@@ -138,13 +138,13 @@ class MaterialLibController extends BaseController
         $file        = $this->getUploadFileService()->tryAccessFile($fileId);
 
         if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
-            $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
-            $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags,'tagId'));
-            $file['tags'] = ArrayToolkit::column($tags,'name');
+            $fileTags     = $this->getUploadFileTagService()->findByFileId($fileId);
+            $tags         = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags, 'tagId'));
+            $file['tags'] = ArrayToolkit::column($tags, 'name');
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $file,
                 'thumbnails' => "",
-                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
+                'editUrl'    => $this->generateUrl('material_edit', array('fileId' => $file['id']))
             ));
         } else {
             try {
@@ -159,10 +159,9 @@ class MaterialLibController extends BaseController
                 'material'   => $file,
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
                 'params'     => $request->query->all(),
-                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
+                'editUrl'    => $this->generateUrl('material_edit', array('fileId' => $file['id']))
             ));
         }
-
     }
 
     public function showShareFormAction(Request $request)
@@ -412,7 +411,7 @@ class MaterialLibController extends BaseController
 
     public function editAction(Request $request, $fileId)
     {
-        $this->getUploadFileService()->tryAccessFile($fileId);
+        $this->getUploadFileService()->tryManageFile($fileId);
 
         $fields = $request->request->all();
 
@@ -426,6 +425,22 @@ class MaterialLibController extends BaseController
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $fileId
+        ));
+    }
+
+    public function deleteModalShowAction(Request $request)
+    {
+        $fileIds = $request->request->get('ids');
+
+        $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
+        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files     = ArrayToolkit::index($files, 'id');
+
+        return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
+            'materials'     => $materials,
+            'files'         => $files,
+            'ids'           => $fileIds,
+            'deleteFormUrl' => $this->generateUrl('material_batch_delete')
         ));
     }
 
@@ -536,5 +551,10 @@ class MaterialLibController extends BaseController
     protected function getCloudFileService()
     {
         return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 }

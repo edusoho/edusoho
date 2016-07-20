@@ -3,7 +3,6 @@ namespace Topxia\Service\Coupon\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Coupon\CouponService;
 
 class CouponServiceImpl extends BaseService implements CouponService
@@ -145,42 +144,42 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (empty($coupon)) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不存在'
+                'message' => '优惠券'.$code.'不存在'
             );
         }
 
         if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已经被使用'
+                'message' => '优惠券'.$code.'已经被使用'
             );
         }
 
         if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已经被其他人领取'
+                'message' => '优惠券'.$code.'已经被其他人领取'
             );
         }
 
         if ($coupon['deadline'] + 86400 < time()) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'已过期'
+                'message' => '优惠券'.$code.'已过期'
             );
         }
 
         if ($targetType != $coupon['targetType'] && $coupon['targetType'] != 'all' && $coupon['targetType'] != 'fullDiscount') {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不可用'
+                'message' => '优惠券'.$code.'不可用'
             );
         }
 
         if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
-                'message' => '优惠码'.$code.'不可用'
+                'message' => '优惠券'.$code.'不可用'
             );
         }
 
@@ -188,7 +187,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
                     'useable' => 'no',
-                    'message' => '优惠码'.$code.'不可用'
+                    'message' => '优惠券'.$code.'不可用'
                 );
             }
         }
@@ -210,7 +209,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                 'userId' => $currentUser['id'],
                 'status' => 'receive'
             ));
-
+            $this->getLogService()->info('coupon', 'receive', "用户{$currentUser['nickname']}(#{$currentUser['id']})领取了优惠码 {$coupon['code']}", $coupon);
             if (empty($coupon)) {
                 return false;
             }
@@ -242,7 +241,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     public function useCoupon($code, $order)
     {
         $coupon = $this->getCouponDao()->getCouponByCode($code, true);
-
+        $user   = $this->getUserService()->getUser($order['userId']);
         if (empty($coupon)) {
             return null;
         }
@@ -259,7 +258,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             'userId'     => $order['userId'],
             'orderId'    => $order['id']
         ));
-
+        $this->getLogService()->info('coupon', 'use', "用户{$user['nickname']}(#{$user['id']})使用了优惠码 {$coupon['code']}", $coupon);
         $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
@@ -326,5 +325,10 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getNotificationService()
     {
         return $this->createService('User.NotificationService');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

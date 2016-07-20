@@ -10,18 +10,21 @@ class App extends BaseResource
 {
     public function get(Application $app, Request $request, $id)
     {
-    	$schoolUtil = new MobileSchoolUtil();
-    	$app = $schoolUtil->findSchoolAppById($id);
-    	return $this->filter($app);
+        $schoolUtil = new MobileSchoolUtil();
+        $app = $schoolUtil->findSchoolAppById($id);
+
+        return $this->filter($app);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-        if (strpos($res['avatar'], "files/") !== false) {
+        if (strpos($res['avatar'], 'files/') !== false) {
             $res['avatar'] = $this->getFileUrl($res['avatar']);
+
             return $res;
         }
         $res['avatar'] = $this->getAssetUrl($res['avatar']);
+
         return $res;
     }
 }

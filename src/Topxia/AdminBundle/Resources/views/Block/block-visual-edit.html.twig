@@ -30,7 +30,7 @@
     }
   </style>
   {% if app.debug %}
-    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockId:block.id}) }}" target="_blank">查看JSON配置</a>
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">查看JSON配置</a>
   {% endif %}
   {% if block.code != 'jianmo:home_top_banner' and block.code != 'live_top_banner' %}
   <!-- <div class="col-md-6"> -->
@@ -39,6 +39,11 @@
       <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
         {{ web_macro.flash_messages() }}
         {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
+        <input type="hidden" name="blockId" value="{{ block.blockId|default() }}">
+        <input type="hidden" name="code" value="{{ block.code|default() }}">
+        <input type="hidden" name="blockTemplateId" value="{{ block.blockTemplateId|default() }}">
+        <input type="hidden" name="templateName" value="{{ block.templateName|default() }}">
+        <input type="hidden" name="mode" value="{{ block.mode|default() }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
         <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>

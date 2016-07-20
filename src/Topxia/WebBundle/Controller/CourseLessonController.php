@@ -756,7 +756,7 @@ class CourseLessonController extends BaseController
         $media  = array();
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
-            $media = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
+            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
         }
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Part:status-label.html.twig', array(
