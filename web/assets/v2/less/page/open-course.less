@@ -83,8 +83,17 @@
 	.operation-code:hover{
 		background: #ff8a0c;
 	}
-}
 
+}
+.openCourse-detail{
+	position: relative;
+	.btn-setting{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		padding: 0 3px;
+	}
+}
 .openCourse-container{
 	padding: 0;
 }
@@ -477,202 +486,6 @@
 		}
 	}
 }
-// .open-course-header {
-// 	position: relative;
-// 	margin-top: 20px;
-// 	@media(max-width:@screen-sm-max)  {
-// 		padding: 0;
-// 	}
-// 	.course-img {
-// 		@media(min-width:@screen-md-min)  {
-// 		width: 12.5%;
-// 		padding-left: 0;
-// 		}
-// 		// @media(max-width:@screen-sm-max)  {
-// 		// 	text-align: center;
-// 		// }
-// 		img {
-// 			.border-radius(5px);
-// 			@media(min-width:@screen-md-min) {
-// 				width: 120px;
-// 			}
-// 			@media(max-width:@screen-sm-max)   {
-// 				width: 100%;
-// 			}
-// 		}
-// 	}
-// 	.title {
-// 		margin-top: 8px;
-// 		margin-bottom: 10px;
-// 		font-size: 20px;
-// 		@media(max-width:@screen-sm-max) {
-// 			margin-top: 15px;
-// 			// text-align: center;
-// 		}
-// 	}
-// 	.matas {
-// 		// @media(max-width:@screen-sm-max)  {
-// 		// 	text-align: center;
-// 		// }
-// 		span{
-// 			color: @gray;
-// 			&:first-child {
-// 				padding-right: 25px;
-// 			}
-// 		}
-// 	} 
-// 	.course-operation {
-// 		// padding-top: 15px;
-// 		color: @gray;
-// 		// float: right;
-// 		ul {
-// 			// float: right;
-// 			// width: 90%;
-// 			padding: 0;
-//     	margin-bottom: 0;
-//     	list-style-type: none;
-//     	// @media(max-width:@screen-sm-max) {
-//     	// 	float: left;
-//     	// }
-// 		}
-// 		li {
-// 			float: left;
-// 			// width: 145px;
-// 			width: 25%;
-// 			padding: 10px 0 10px 20px;
-// 			margin-top: 5px;
-// 			line-height: 35px;
-// 			border-right: 1px solid #f1f1f1;
-// 			@media(max-width:@screen-sm-max)  {
-// 				width: 33.33%;
-// 				height: 55px;
-// 				padding: 10px 0;
-// 				&:nth-child(5) {
-// 					border-right: 0;
-// 				}
-// 			}
-// 			@media(max-width:@screen-sm-max) {
-// 				border-right: 0;
-// 			}
-// 			// @media(max-width:@screen-xs-min)  {
-// 			// 	width: 25%;
-// 			// 	height: auto;
-// 			// 	text-align: center;
-// 			// 	&:nth-child(3) {
-// 			// 		border-right: 1px solid #f1f1f1;
-// 			// 	}
-// 			// }
-// 			&:last-child {
-// 				border-right: 0;
-// 			}
-// 			.operation-icon {
-// 				float: left;
-// 			    display: block;
-// 			    width: 35px;
-// 			    height: 35px;
-// 			    margin: 0 10px 5px;
-// 			    font-size: 22px;
-// 			    line-height: 35px;
-// 			    vertical-align: middle;
-// 			    border-radius: 50%;
-// 			    color: #fff;
-// 			    text-align: center;
-// 			    @media(max-width:@screen-xs-max) {
-// 			    	margin: 0 5px 5px;
-// 			    }
-// 		    .es-transition;
-// 			}
-// 			.unoperation-list {
-// 				&:hover,&:active {
-// 					.unoperation-list {
-// 						display: none;
-// 					}
-// 					.operation-list {
-// 						display: block;
-// 					}
-// 				}
-// 				.unoperation-icon {
-// 				background-color: @gray;
-// 				}
-// 				.operation-list {
-// 					background-color: #e85749;
-// 				}
-// 			}
-// 			.es-icon {
-// 				background-color: @gray;
-// 			}
-// 			.es-icon-thumbup:hover, .es-icon-thumbup.active{
-// 				background-color: #e85749;
-// 			}
-// 			.es-icon-bookmarkoutline:hover {
-// 				background-color: #53c3f5;
-// 			}
-// 			.es-icon.es-icon-bookmark {
-// 				background-color: #53c3f5;
-// 			}
-// 			.es-icon-share:hover,.es-icon-share.active {
-// 				background-color: #83d460;
-// 			}
-// 			.es-icon-phone1:hover,.es-icon-phone1.active {
-// 				background-color: #ff8a0c;
-// 			}
-// 			.open-course-qrcode {
-// 				position: relative;
-// 				cursor: pointer;
-// 				.qrcode-popover {
-// 					position: absolute;
-// 					left: 0;
-// 					top: 0;
-// 					width: 110px;
-// 					height: 110px;
-// 					display: none;
-// 					z-index: 10;
-// 				}
-// 				&:hover .qrcode-popover{
-// 					display: block;
-// 				}
-// 			}
-// 			.es-share.top .dropdown-menu {
-// 				left: 15px;
-// 				a {
-// 			    		margin: 3px 2px 2px 5px !important;
-// 			    		.es-icon {
-// 			    			background-color: transparent;
-// 			    		}
-// 				}
-// 			}
-// 			.qrcode-popover.top .qrcode-content{
-// 				left: -123px;
-// 				background-color: @gray-lighter;
-// 				&:after {
-// 					border-top-color: @gray-lighter;
-// 				}
-// 			}
-// 		}
-// 	}
-// 	.setting {
-// 		position: absolute;
-// 		top: 10px;
-// 		right: 10px;
-// 		padding: 0 3px;
-// 	}
-// }
-
-// .open-course-detail {
-// 	.es-section {
-// 		padding: 15px 20px;
-// 	}
-// }
-
-// .course-intro {
-// 	color: @gray-darker;
-// 	padding: 15px 20px;
-// 	img {
-// 		display: block;
-// 		width: 188px;
-// 		margin-top: 10px;
-// 	}
-// }
 .open-course-detail .intro-img {
 	width: 186px;
 	display: block;
@@ -705,7 +518,7 @@
 		}
 	}
 }
- .open-starttime {
+.open-starttime {
 	position: absolute;
 	left: 0;
 	right: 0;

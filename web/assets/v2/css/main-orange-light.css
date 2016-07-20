@@ -13716,6 +13716,15 @@ textarea {
 .openCourse-detail-operation .operation-code:hover {
   background: #ff8a0c;
 }
+.openCourse-detail {
+  position: relative;
+}
+.openCourse-detail .btn-setting {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0 3px;
+}
 .openCourse-container {
   padding: 0;
 }

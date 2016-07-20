@@ -1,4 +1,4 @@
-<div class="es-section clearfix">
+<div class="es-section openCourse-detail clearfix">
   <div class="openCourse-detail-main media hidden-sm hidden-xs">
     <div class="media-left">
       <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}"
@@ -47,13 +47,11 @@
         </a>
       </div>
       {{ '二维码'|trans }}
-
-      {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default setting hidden-xs hidden-sm"
-           title="课程管理">
-          <i class="es-icon es-icon-setting"></i>
-        </a>
-      {% endif %}
     </div>
-  </div>
+   </div>
+  {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default btn-setting hidden-xs hidden-sm" title="课程管理">
+      <i class="es-icon es-icon-setting"></i>
+    </a>
+  {% endif %}
 </div>
