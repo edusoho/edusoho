@@ -36,11 +36,14 @@ define(function(require, exports, module) {
         },
         show: function () {
             var ua = navigator.userAgent.toLowerCase(); 
-            if((/android/.test(ua))){
+           if( (/android/.test(ua)) && (ua.match(/MicroMessenger/i) == 'micromessenger')){
                 document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display="none";
-            }
+           }
             this.$el.modal({
                 backdrop: false
+            });
+            this.$el.on('hide.bs.modal', function () {
+                document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display="block";
             });
         },
         
