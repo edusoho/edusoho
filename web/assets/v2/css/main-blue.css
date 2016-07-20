@@ -13700,8 +13700,13 @@ textarea {
 .openCourse-detail-operation .operation-img i {
   font-size: 18px;
 }
-.openCourse-detail-operation .operation-zan.active {
+.openCourse-detail-operation .operation-zan.active,
+.openCourse-detail-operation .operation-zan:hover {
   background: #e85749;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .openCourse-detail-operation .operation-share:hover {
   background: #83d460;
@@ -13710,11 +13715,20 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.openCourse-detail-operation .operation-collection.active {
+.openCourse-detail-operation .operation-collection.active,
+.openCourse-detail-operation .operation-collection:hover {
   background: #53c3f5;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .openCourse-detail-operation .operation-code:hover {
   background: #ff8a0c;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .openCourse-detail {
   position: relative;
