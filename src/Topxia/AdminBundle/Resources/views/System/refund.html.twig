@@ -56,14 +56,12 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
-{% verbatim %}
 <div class="alert alert-info">
   <p><strong>{{'通知变量说明：'|trans}}</strong></p>
   <ul>
-    <li>{{item}}: {{'需退款的课程或班级'|trans}}</li>
-    <li>{{amount}}: {{'退款金额'|trans}}</li>
+    <li>{% verbatim %}{{item}}{% endverbatim %}: {{'需退款的课程或班级'|trans}}</li>
+    <li>{% verbatim %}{{amount}}{% endverbatim %}: {{'退款金额'|trans}}</li>
   </ul>
 </div>
-{% endverbatim %}
 
 {% endblock %}
