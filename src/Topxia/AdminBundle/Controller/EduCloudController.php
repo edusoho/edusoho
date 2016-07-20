@@ -842,7 +842,7 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('mailer', $mailer);
                 $mailerWithoutPassword             = $mailer;
                 $mailerWithoutPassword['password'] = '******';
-                $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('开启云邮件关闭第三方邮件服务器设置'), $mailerWithoutPassword);
+                $this->getLogService()->info('system', 'update_settings', '开启云邮件关闭第三方邮件服务器设置', $mailerWithoutPassword);
             }
         }
 
