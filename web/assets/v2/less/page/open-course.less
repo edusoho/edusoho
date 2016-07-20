@@ -70,18 +70,21 @@
     	font-size: 18px;
     }
 	}
-	.operation-zan.active{
+	.operation-zan.active,.operation-zan:hover{
 		background: #e85749;
+		.es-transition;
 	}
 	.operation-share:hover{
 		background: #83d460;
 		.es-transition;
 	}
-	.operation-collection.active{
+	.operation-collection.active,.operation-collection:hover{
 		background: #53c3f5;
+		.es-transition;
 	}
 	.operation-code:hover{
 		background: #ff8a0c;
+		.es-transition;
 	}
 
 }
@@ -224,6 +227,7 @@
 		bottom: 0;
 		width: 100%;
 		height: 100%;
+		z-index: 9999;
 		background-color: rgba(0, 0, 0, .9);
 		.mask-content {
 			position: absolute;
