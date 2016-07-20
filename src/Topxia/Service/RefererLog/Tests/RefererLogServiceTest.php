@@ -24,11 +24,39 @@ class RefererLogServiceTest extends BaseTestCase
 
     public function testAnalysisSummary()
     {
+        $course           = $this->createCourse();
         $refererlog       = $this->moocReferelog();
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererlog       = $this->moocReferelog($course, 'baidu.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererlog       = $this->moocReferelog($course, 'baidu.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+        $refererlog       = $this->moocReferelog($course, 'baidu.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, 'weibo.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, 'sina.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course = null, 'qq.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, 'bing.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, 'yaho.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, 'su.com');
+        $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
+
+        $refererlog       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
         $refererlog       = $this->moocReferelog($course = null, $_SERVER['HTTP_HOST']);
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
-        $refererlog       = $this->moocReferelog();
+        $refererlog       = $this->moocReferelog($course, $_SERVER['HTTP_HOST']);
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
 
         $timeRange  = $this->getTimeRange();
@@ -36,8 +64,8 @@ class RefererLogServiceTest extends BaseTestCase
 
         $summary = $this->getRefererLogService()->analysisSummary($conditions);
 
-        $this->assertEquals(3, count($summary));
-        $this->assertEquals(0, $summary[2]['count']);
+        $this->assertEquals(7, count($summary));
+        $this->assertEquals(3, $summary[1]['count']);
     }
 
     public function testSearchAnalysisSummaryList()
@@ -53,6 +81,8 @@ class RefererLogServiceTest extends BaseTestCase
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
         $refererlist = $this->getRefererLogService()->searchAnalysisSummaryList($conditions, 'targetId', 0, 2);
+
+        var_dump($refererlist);
         $this->assertEquals(2, count($refererlist));
     }
 
@@ -169,7 +199,8 @@ class RefererLogServiceTest extends BaseTestCase
         $refererlog = array(
             'targetId'   => $course['id'],
             'targetType' => 'course',
-            'refererUrl' => empty($refererUrl) ? 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd' : $refererUrl
+            'refererUrl' => empty($refererUrl) ? 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=symfony3&rsv_spt=1&oq=sdfsadfsdfsd&rsv_pq=81bbcee100030f47&rsv_t=5b30KXbnTOC01lM%2B7P8apVzBOGbh%2B8ETweQAF1q%2BaFspbHSjNifvQ2ZAdINVnNjpbfcM&rqlang=cn&rsv_enter=1&rsv_sug3=7&rsv_sug1=7&rsv_sug7=100&bs=sdfsadfsdfsd' : $refererUrl,
+            'userAgent'  => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
         );
         return $refererlog;
     }
