@@ -27,7 +27,7 @@
 
   <div class="form-group">
     <select class="form-control" name="module" id="log-module">
-        <option value="0">--{{'所有模块'|trans}}--</option>
+        <option value="0">{{'--所有模块--'|trans}}</option>
         {% for key, value in moduleDicts %}
               <option value="{{key}}"  {% if app.request.query.get('module') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
         {% endfor %}
@@ -37,12 +37,12 @@
   <div class="form-group">
     <select class="form-control" name="action" id="log-action" data-url="{{path('admin_logs_action_dicts')}}">
        {% if actions|default(null) %}
-          <option value="0">--{{'所有操作'|trans}}--</option>
+          <option value="0">{{'--所有操作--'|trans}}</option>
           {% for key, value in actions %}
                 <option value="{{key}}" {% if app.request.query.get('action') == key %}selected="{{key}}" {% endif %}>{{value}}</option>
           {% endfor %}
         {% else %}
-          <option value="0">--{{'所有操作'|trans}}--</option>
+          <option value="0">{{'--所有操作--'|trans}}</option>
       {% endif %}
     </select>
   {#   <input type="text" id="action" name="action" value="{{app.request.query.get('action')}}" class="form-control" placeholder="操作名" style="width:100px;"> #}

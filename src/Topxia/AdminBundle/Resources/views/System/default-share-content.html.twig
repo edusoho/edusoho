@@ -8,13 +8,11 @@
         <div class="controls col-md-8">
           <textarea id="courseShareContent" name="articleShareContent" class="form-control" rows="5">{{ defaultSetting.articleShareContent }}</textarea>
           <div class="help-block">
-            {% verbatim %}
             <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{articletitle}} {{'为资讯标题'|trans}}</li>
-              <li>{{sitename}} {{'为网校名称'|trans}}</li>
+              <li>{% verbatim %}{{articletitle}}{% endverbatim %} {{'为资讯标题'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网校名称'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>
@@ -26,12 +24,10 @@
         <div class="controls col-md-8">
           <textarea id="courseShareContent" name="courseShareContent" class="form-control" rows="5">{{ defaultSetting.courseShareContent }}</textarea>
           <div class="help-block">
-            {% verbatim %}
             <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{course}} {{'为课程名称'|trans}}</li>
+              <li>{% verbatim %}{{course}}{% endverbatim %} {{'为课程名称'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>
@@ -43,13 +39,11 @@
         <div class="controls col-md-8">
           <textarea id="groupShareContent" name="groupShareContent" class="form-control" rows="5">{{ defaultSetting.groupShareContent }}</textarea>
           <div class="help-block">
-            {% verbatim %}
             <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{groupname}} {{'为小组名称'|trans}}</li>
-              <li>{{threadname}} {{'为话题名称'|trans}}</li>
+              <li>{% verbatim %}{{groupname}}{% endverbatim %} {{'为小组名称'|trans}}</li>
+              <li>{% verbatim %}{{threadname}}{% endverbatim %} {{'为话题名称'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>
@@ -61,12 +55,10 @@
         <div class="controls col-md-8">
           <textarea id="classroomShareContent" name="classroomShareContent" class="form-control" rows="5">{{ defaultSetting.classroomShareContent }}</textarea>
           <div class="help-block">
-            {% verbatim %}
             <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{classroom}} {{'为班级名称'|trans}}</li>
+              <li>{% verbatim %}{{classroom}}{% endverbatim %} {{'为班级名称'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>

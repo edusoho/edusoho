@@ -77,7 +77,7 @@ class SiteSettingController extends BaseController
                 $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
             }
             $this->getSettingService()->set('consult', $consult);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新QQ客服设置'), $consult);
+            $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服设置已保存！'));
         }
         return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
@@ -98,7 +98,7 @@ class SiteSettingController extends BaseController
         if($request->getMethod() == 'POST'){
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新侧边栏设置'), $esBar);
+            $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('侧边栏设置已保存！'));
         }
         return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
@@ -134,7 +134,7 @@ class SiteSettingController extends BaseController
 
         $this->getSettingService()->set('consult', $consult);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新微信二维码'), array('webchatURI' => $consult['webchatURI']));
+        $this->getLogService()->info('system', 'update_settings', '更新微信二维码', array('webchatURI' => $consult['webchatURI']));
 
         $response = array(
             'path' => $consult['webchatURI'],
@@ -158,7 +158,7 @@ class SiteSettingController extends BaseController
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新分享设置'), $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新分享设置', $defaultSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('分享设置已保存！'));
         }
 
@@ -174,10 +174,10 @@ class SiteSettingController extends BaseController
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent' => $this->getServiceKernel()->trans('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'),
-            'courseShareContent' => $this->getServiceKernel()->trans('我正在学习{{course}}，收获巨大哦，一起来学习吧！'),
-            'groupShareContent' => $this->getServiceKernel()->trans('我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!'),
-            'classroomShareContent' => $this->getServiceKernel()->trans('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'),
+            'articleShareContent' => $this->getServiceKernel()->trans('我正在看%articletitle%，关注%sitename%，分享知识，成就未来。', array('%articletitle%' => '{{articletitle}}','%sitename%' => '{{sitename}}' )),
+            'courseShareContent' => $this->getServiceKernel()->trans('我正在学习%course%，收获巨大哦，一起来学习吧！', array('%course%' => '{{course}}' )),
+            'groupShareContent' => $this->getServiceKernel()->trans('我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!', array('%groupname%' =>'{{groupname}}','%threadname%' => '{{threadname}}' )),
+            'classroomShareContent' => $this->getServiceKernel()->trans('我正在学习%classroom%，收获巨大哦，一起来学习吧！', array('%classroom%' =>'{{classroom}}' )),
             'user_name' => $this->getServiceKernel()->trans('学员'),
             'chapter_name' => $this->getServiceKernel()->trans('章'),
             'part_name' => $this->getServiceKernel()->trans('节'),
