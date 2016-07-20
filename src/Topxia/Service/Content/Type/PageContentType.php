@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Content\Type;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class PageContentType extends ContentType
 {
 	public function getBasicFields()

@@ -88,7 +88,7 @@
         <div id="mobile-banner1-container">{% if mobile.banner1 %}<img src="{{ asset(mobile.banner1) }}">{% endif %}</div>
 
         <button class="btn btn-default btn-sm" id="mobile-banner1-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner1'}) }}">{{'上传'|trans}}</button>
-        <button class="btn btn-default btn-sm" id="mobile-banner1-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner1'}) }}" {% if not mobile.banner1 %}style="display:none;"{% endif %}>{{'删除'|trans}}/button>
+        <button class="btn btn-default btn-sm" id="mobile-banner1-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner1'}) }}" {% if not mobile.banner1 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
 
