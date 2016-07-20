@@ -1,5 +1,4 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
-{# {% set panel = 'dashboard' %}#}
 {% set nav = nav|default(null) %} 
 
 {% do load_script('open-course-analysis/index') %}
@@ -15,10 +14,11 @@
 				<label for="endDate">截止日期</label>
 				<input class="form-control" type="text" id="endTime" name="endTime" value="{{dateRange.endTime}}" placeholder="结束时间">
 			 </div>
+
 		 	<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range','week') ==  'day'%}active {% endif %}"type="button" id="btn-yesterday-range" data-type= "day" data-start="{{dateRange.yesterdayStart}}" data-end="{{dateRange.yesterdayEnd}}">昨天</button>
 		 	<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range','week') ==  'week'%}active {% endif %}" type="button" id="btn-lastWeek-range" data-type= "week"  data-start="{{dateRange.lastWeekStart}}" data-end="{{dateRange.lastWeekEnd}}">最近七天</button>
 			<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range','week') ==  'month'%}active {% endif %}" type="button" id="btn-lastMonth-range" data-type= "month"  data-start="{{dateRange.lastMonthStart}}" data-end="{{dateRange.lastMonthEnd}}">最近30天</button>
-			<input name="date-range" type="hidden">
+			<input name="date-range" type="hidden" value="{{app.request.query.get('date-range','week')}}">
 		  	<button class="btn btn-primary" type="submit">搜索</button>
 		</form>
 	{% endblock form %}

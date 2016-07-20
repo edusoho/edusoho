@@ -112,8 +112,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $totalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
         $othertotalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
         $otherOrdertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
-
-        array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererName' => '其他'));
+        if (!empty($otherAnalysisDatas)) {
+            array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererName' => '其他'));
+        }
 
         return array_map(function ($data) use ($totalCount) {
             $data['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
@@ -162,6 +163,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
                 return $value;
             }
         }
+        return $existsKey;
     }
 
     private function getRefererMap()
