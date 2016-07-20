@@ -268,14 +268,14 @@
       </div>
       <div class="row form-group">
         <div class="col-md-3 control-label">
-          <label for="support_mobile">手机浏览器MP4视频</label>
+          <label for="support_mobile">{{'手机浏览器MP4视频'|trans}}</label>
         </div>
         <div class="controls col-md-8 radios">
           {{ radios('support_mobile', {'1':'开启', '0':'关闭'}, storageSetting.support_mobile) }}
           <div class="help-block">
-            MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；<br/>
-            开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；<br/>
-            <span style="color: red">注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。</span>
+            {{'MP4文件较适合在不同手机机型下使用不同手机浏览器进行视频播放；'|trans}}<br/>
+            {{'开启后，新上传视频文件会生成一个MP4格式视频，并且在手机浏览器下默认使用MP4播放；'|trans}}<br/>
+            <span style="color: red">{{'注：MP4视频防盗性较差，且已生成MP4的文件关闭后也会存在，请慎重考虑。'|trans}}</span>
           </div>
         </div>
       </div>
@@ -286,11 +286,11 @@
       <div class="controls col-md-8 radios">
         <p>
           <span class="form-control-static text-info">{{'画质'|trans}}</span>
-          {{ radios('video_quality', {'low':'流畅|trans <span class="text-muted">({适合PPT讲解)|trans</span>', 'normal':'标准|trans <span class="text-muted">(适合屏幕录制、摄像头拍摄)|trans</span>', 'high': '精细 |trans<span class="text-muted">(适合动态电影)|trans</span>'}, storageSetting.video_quality) }}
+          {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
         </p>
 
         <p>
-          <span class="form-control-static text-info">音质</span>
+          <span class="form-control-static text-info">{{'音质'|trans}}</span>
           {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality) }}
         </p>
 
@@ -423,9 +423,9 @@
 
           <div class="alert alert-info">
             <ul>
-              <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>10 MB</strong>。</li>
-              <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-              <li>视频将上传到<strong>云视频服务器</strong>，上传后会对视频进行格式转换，转换过程需要一定的时间。</li>
+              <li>{{'支持'|trans}}<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>{{'格式的视频文件上传，文件大小不能超过'|trans}}<strong>10 MB</strong>。</li>
+              <li>{{'支持'|trans}}<strong>{{'断点续传'|trans}}</strong>{{'（仅支持HTML5浏览器）。'|trans}}</li>
+              <li>{{'视频将上传到'|trans}}<strong>{{'云视频服务器'|trans}}</strong>{{'，上传后会对视频进行格式转换，转换过程需要一定的时间。'|trans}}</li>
             </ul>
           </div>
         </div>

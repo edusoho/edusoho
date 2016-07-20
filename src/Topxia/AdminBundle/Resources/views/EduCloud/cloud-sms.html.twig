@@ -10,7 +10,7 @@
       </div>
     {% else %}
       <p class="text-muted">{{'剩余短信:%remainCount%条  '|trans({'%remainCount%': overview.service.sms.remainCount|default(0) })}}      
-        <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank" style="margin-left:20px">购买</a>
+        <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank" style="margin-left:20px">{{'购买'|trans}}</a>
       </p>
       {% if overview.service.sms.status|default(null) == 'used' and 0 < overview.service.sms.remainCount and  overview.service.sms.remainCount < 100 %}
         <p class="text-warning text-sm">{{'您的云短信包剩余不足100条短信，请尽快续购'|trans}}</p>

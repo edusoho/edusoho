@@ -42,7 +42,7 @@
         {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
         {% if currentHost not in info.licenseDomains|split(';') %}
           <div class="alert alert-danger">
-            {{'当前域名{{ currentHost }} 与授权域名不符'|trans}}，{{'将会影响%EduSoho%系统功能的使用；请使用授权域名访问此系统。'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}
+            {{'当前域名 %currentHost% 与授权域名不符，将会影响%EduSoho%系统功能的使用；请使用授权域名访问此系统。'|trans({'%currentHost%':currentHost,'%EduSoho%': 'EduSoho'|copyright_less})}}
           </div>
         {% endif %}
       </div>
