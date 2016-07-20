@@ -3,7 +3,7 @@
             <tr>
               <th>{{'课程'|trans}}</th>
              <th>{{'创建者'|trans}}</th>
-              <th>{% if setting('default.user_name') %}{{'%user_name%数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}数</th>
+              <th>{% if setting('default.user_name') %}{{'%user_name%数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}{{'数'|trans}}</th>
               <th>{{'价格'|trans}}</th>
             </tr>
           </thead>
