@@ -308,7 +308,7 @@ class Logger
             self::ANNOUNCEMENT => array(
                 'delete' => '删除公告'
             ),
-            self::OPEN_COURSE => array(
+            self::OPEN_COURSE  => array(
                 'create_course'           => '创建公开课',
                 'update_course'           => '更新公开课',
                 'delete_course'           => '删除课程',

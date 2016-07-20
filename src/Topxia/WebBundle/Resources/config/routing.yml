@@ -641,10 +641,6 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
-open_course_manage_students:
-    pattern: /open/course/{id}/manage/students
-    defaults: { _controller: TopxiaWebBundle:OpenCourseStudentManage:index}
-
 #课程同步
 course_manage_course_sync:
     pattern:  /course/manage/course/sync/{id}/{type}
@@ -748,7 +744,7 @@ course_manage_teachers_match:
 
 course_manage_live_open_time_set:
     pattern:  /course/{id}/manage/live/open/time
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }    
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
 
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson

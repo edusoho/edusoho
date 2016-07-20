@@ -264,7 +264,6 @@ abstract class BaseController extends Controller
 
     protected function fillOrgCode($conditions)
     {
-
         if ($this->setting('magic.enable_org')) {
             if (!isset($conditions['orgCode'])) {
                 $conditions['likeOrgCode'] = $this->getCurrentUser()->getSelectOrgCode();
@@ -277,7 +276,6 @@ abstract class BaseController extends Controller
                 unset($conditions['orgCode']);
             }
         }
-
         return $conditions;
     }
 }

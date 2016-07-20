@@ -1,0 +1,36 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% set showPaginator = showPaginator|default(1) %}
+{% set showRefererName = showRefererName|default(0) %}
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>来源</th>
+			<th>来源数</th>
+			<th>占比</th>
+			<th>购买转化数</th>
+			<th>购买转化率</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for refererlog in refererloglist %}
+			<tr>
+				<th scope="row">
+					{% if showRefererName %}{{ refererlog.refererName }} {% else %}{{refererlog.refererUrl}}{% endif %}
+				</th>
+				<th>{{refererlog.count}}</th>
+				<th>{{refererlog.percent}}</th>
+				<th>{{refererlog.orderCount}}</th>
+				<th>{{refererlog.orderPercent}}</th>
+			</tr>
+			{% else %} 
+			  <tr><td colspan="20"><div class="empty">暂无记录</div></td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if showPaginator %}
+	{{web_macro.paginator(paginator)}}
+	<input id="pageinator-url"  type="hidden" value="{{path('admin_opencourse_analysis_referer_detail_list',{id:targetId})}}">
+{% endif %}

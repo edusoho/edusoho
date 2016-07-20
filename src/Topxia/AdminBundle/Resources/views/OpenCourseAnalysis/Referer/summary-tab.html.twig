@@ -1,0 +1,4 @@
+<div class= "" >
+	<a class="btn btn-default {% if tab == 'summary' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_summary',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">汇总</a>
+	<a class="btn btn-default {% if tab == 'list' %}active{% endif %}" href="{{path('admin_opencourse_analysis_referer_summary_list',{startTime:dateRange.startTime,endTime:dateRange.endTime})}}" role="button">明细</a>
+</div>
