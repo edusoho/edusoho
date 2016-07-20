@@ -1,66 +1,76 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     var ThreadShowWidget = require('../thread/thread-show.js');
     var Notify = require('common/bootstrap-notify');
     var main = {
-        init : function(){
-            main.clickThumb();
-            main.clickfavorite();
-            main.mouseoverQrcode();
-            main.clickHeader();
+        init: function () {
+            main.onClickThumb();
+            main.onClickfavorite();
+            main.onMouseoverQrcode();
+            main.onClickHeader();
         },
-        clickThumb : function(){
-            $('.js-like-num').on('click',function(){
-                var _self = $(this);
-                if(_self.parent().hasClass('active')){
-                    $.post(_self.data('cancelLikeUrl'),function(res){
-                      _self.parent().next().html(res.number);
-                      _self.parent().removeClass('active')
-                    })
-                }else{
-                    $.post(_self.data('likeUrl'),function(res){
-                        _self.parent().next().html(res.number);
-                        _self.parent().addClass('active')
-                    })
-                }
-            })
-        },
-        clickfavorite : function(){
-            $('.js-favorite-num').on('click',function(){
-                var _self = $(this);
-                if(_self.parent().hasClass('active')){
-                    $.post(_self.data('cancelFavoriteUrl'),function(){
-                        _self.parent().next().html('收藏');
-                        _self.parent().removeClass('active');
-                    })
-                }else{
-                    $.post(_self.data('favoriteUrl'),function(res){
-                        _self.parent().next().html('已收藏');
-                        _self.parent().addClass('active');
-                    })
-                }
-            })
-        },
-        mouseoverQrcode : function(){
-            $('.js-qrcode').on('mouseover',function(){
-                var $self = $(this);
-                var qrcodeUrl = $(this).data('url');
+        onClickThumb: function () {
+            $('.js-like-num').on('click', function () {
+                var self = $(this);
 
-                $.post(qrcodeUrl,function(response){
-                    $self.find('img').attr('src',response.img);
+                var isLiked = self.parent().hasClass('active');
+                var url, action;
+                if (isLiked) {
+                    url = self.data('cancelLikeUrl');
+                    action = 'removeClass';
+                } else {
+                    url = self.data('likeUrl');
+                    action = 'addClass';
+                }
+
+                $.post(url, function (res) {
+                    self.parent().next().html(res.number);
+                    self.parent()[action]('active');
+                });
+            })
+        },
+        onClickfavorite: function () {
+            $('.js-favorite-num').on('click', function () {
+                var self = $(this);
+
+                var isFavorited = self.parent().hasClass('active');
+                var url, action, text;
+                if (isFavorited) {
+                    text = '收藏';
+                    url = self.data('cancelFavoriteUrl');
+                    action = 'removeClass';
+                } else {
+                    url = self.data('favoriteUrl');
+                    action = 'addClass';
+                    text = '已收藏';
+                }
+
+                $.post(url, function () {
+                    self.parent().next().html(text);
+                    self.parent()[action]('active');
                 })
             })
         },
-        clickHeader : function(){
-           $('.tab-header').on('click', function() {
+        onMouseoverQrcode: function () {
+            $('.js-qrcode').on('mouseover', function () {
+                var $self = $(this);
+                var qrcodeUrl = $(this).data('url');
+
+                $.post(qrcodeUrl, function (response) {
+                    $self.find('img').attr('src', response.img);
+                })
+            })
+        },
+        onClickHeader: function () {
+            $('.tab-header').on('click', function () {
                 var $this = $(this);
                 var index = $this.index();
                 $this.addClass('active').siblings().removeClass('active');
                 $('#content').find('ul').eq(index).show().siblings().hide();
-            }); 
+            });
         }
 
     }
-	exports.run = function() {
+    exports.run = function () {
         main.init();
         if (!$('#open-course-comment').find('[type=submit]').hasClass('disabled')) {
             var threadShowWidget = new ThreadShowWidget({

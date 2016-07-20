@@ -78,8 +78,6 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        //$member = $this->_memberOperate($request, $courseId);
-
         if($this->isMobileClient()){
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig", array(
                 'course'   => $course,
