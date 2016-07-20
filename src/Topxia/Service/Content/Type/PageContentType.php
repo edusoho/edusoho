@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Content\Type;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class PageContentType extends ContentType
 {
 	public function getBasicFields()
@@ -17,5 +19,10 @@ class PageContentType extends ContentType
 	{
 		return $this->getKernel()->trans('页面');
 	}
+
+	protected function getKernel()
+	{
+    return  ServiceKernel::instance();
+  }
 
 }
