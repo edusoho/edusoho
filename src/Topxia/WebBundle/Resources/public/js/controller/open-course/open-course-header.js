@@ -34,8 +34,11 @@ define(function(require, exports, module) {
 
             this.$el.find('.modal-body').html(html);
         },
-
         show: function () {
+            var ua = navigator.userAgent.toLowerCase(); 
+            if((/android/.test(ua))){
+                document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display="none";
+            }
             this.$el.modal({
                 backdrop: false
             });
@@ -43,6 +46,7 @@ define(function(require, exports, module) {
         
         hide: function () {
             this.$el.modal('hide');
+           document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display="block";
         }
     });
 
