@@ -17,7 +17,7 @@
 		 	<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'day'%}active {% endif %}"type="button" id="btn-yesterday-range" data-type= "day" data-start="{{dateRange.yesterdayStart}}" data-end="{{dateRange.yesterdayEnd}}">昨天</button>
 		 	<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'week'%}active {% endif %}" type="button" id="btn-lastWeek-range" data-type= "week"  data-start="{{dateRange.lastWeekStart}}" data-end="{{dateRange.lastWeekEnd}}">最近七天</button>
 			<button class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'month'%}active {% endif %}" type="button" id="btn-lastMonth-range" data-type= "month"  data-start="{{dateRange.lastMonthStart}}" data-end="{{dateRange.lastMonthEnd}}">最近30天</button>
-			<input name="date-range" type="hidden" value="{{app.request.query.get('date-range','week')}}">
+			<input name="date-range" type="hidden" value="">
 		  <button class="btn btn-primary" type="submit">搜索</button>
 		</form>
 	{% endblock form %}
