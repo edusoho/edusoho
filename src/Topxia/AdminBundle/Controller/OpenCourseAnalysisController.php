@@ -71,8 +71,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailGraphAction(Request $request, $id)
     {
-        $timeRange  = $this->getTimeRange($request->query->all());
-        $conditions = array(
+        $timeRange         = $this->getTimeRange($request->query->all());
+        $conditions        = array(
             'targetType' => 'openCourse',
             'targetId'   => $id,
             'startTime'  => $timeRange['startTime'],
@@ -113,26 +113,30 @@ class OpenCourseAnalysisController extends BaseController
         $timeRange          = $this->getTimeRange($request->query->all());
         $startTime          = $timeRange['startTime'];
         $endTime            = $timeRange['endTime'];
-        $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount(array(
+        $type               = $request->query->get('type');
+
+        $countConditions = array(
             'status' => 'published'
-        ));
+        );
+        $totalWatchConditions = array(
+            'targetType'      => 'openCourse'
+        );
 
-        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount(array(
-            'targetType' => 'openCourse'
-        ));
-
-        $conditions = array(
+        $groupByConditions = array(
             'startTime'  => $startTime,
             'endTime'    => $endTime,
             'targetType' => 'openCourse'
         );
 
-        $type = $request->query->get('type');
         if (!empty($type)) {
-            $conditions['targetInnerType'] = $type;
+            $groupByConditions['targetInnerType'] = $type;
+            $totalWatchConditions['targetInnerType'] = $type;
+            $countConditions['type'] = $type;
         }
 
-        $logsGroupByDate = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
+        $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount($countConditions);
+        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount($totalWatchConditions);
+        $logsGroupByDate = $this->getRefererLogService()->findRefererLogsGroupByDate($groupByConditions);
 
         $watchData = array(
             'date'     => array_keys($logsGroupByDate),
@@ -154,7 +158,7 @@ class OpenCourseAnalysisController extends BaseController
 
     private function getDetailList($conditions)
     {
-        $paginator = new Paginator(
+        $paginator      = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'refererUrl'),
             20
@@ -176,8 +180,8 @@ class OpenCourseAnalysisController extends BaseController
             'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
-            'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
-            'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time()))),
+            'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
+            'lastWeekEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
             'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 30 * 24 * 3600),
             'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())))
@@ -187,9 +191,9 @@ class OpenCourseAnalysisController extends BaseController
     protected function getTimeRange($fields)
     {
         if (empty($fields['startTime']) && empty($fields['endTime'])) {
-            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));
+            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()) . ' 23:59:59'));
         }
-        return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'].' 23:59:59')));
+        return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'] . ' 23:59:59')));
     }
 
     public function conversionAction(Request $request)
