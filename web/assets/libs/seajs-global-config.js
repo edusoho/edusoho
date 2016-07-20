@@ -72,7 +72,7 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'video-player-new': 'http://bj-pub.bdcdn.edusoho.net/js-sdk/video-player/1.0.1/sdk.js',
+        'video-player-new': 'http://cdn.qiqiuyun.net/js-sdk/video-player/v1/sdk.js',
         'echarts': 'echarts/3.1.2/echarts.min.js',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
@@ -114,6 +114,11 @@ seajs.on('fetch', function(data) {
         return ;
     }
 
+    if (data.uri.indexOf('js-sdk/video-player') > 0) {
+        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
+        return ;
+    }
+    
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 
 });
