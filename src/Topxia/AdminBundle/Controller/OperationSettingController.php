@@ -22,7 +22,7 @@ class OperationSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', $this->getServiceKernel()->trans('更新资讯频道设置'), $articleSetting);
+            $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('资讯频道设置已保存！'));
         };
 

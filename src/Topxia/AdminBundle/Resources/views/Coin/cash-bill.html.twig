@@ -25,8 +25,8 @@
     </form>
 
     <p class="text-muted">
-      <span class="mrl">{{'收入：<strong class="inflow-num"> %amountInflow% </strong> 元'|trans({'%amountInflow%':amountInflow})}}</span>
-      <span class="mrl">{{'支出：<strong class="outflow-num"> %amountOutflow% </strong> 元'|trans({'%amountInflow%':amountOutflow})}}</span>
+      <span class="mrl">{{'收入：'|trans}}<strong class="inflow-num">{{ amountInflow }}</strong> {{ '元'|trans }}</span>
+      <span class="mrl">{{'支出：'|trans}}<strong class="outflow-num">{{ amountOutflow }}</strong> {{ '元'|trans }}</span>
     </p>
 
     <div class="table-responsive">

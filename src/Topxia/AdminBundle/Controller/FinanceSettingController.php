@@ -44,7 +44,7 @@ class FinanceSettingController extends BaseController
             $payment = ArrayToolkit::trim($payment);
 
             $this->getSettingService()->set('payment', $payment);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更支付方式设置'), $payment);
+            $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('支付方式设置已保存！'));
         }
 
@@ -68,7 +68,7 @@ class FinanceSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新退款设置'), $refundSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新退款设置', $refundSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('退款设置已保存！'));
         }
 

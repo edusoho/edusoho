@@ -37,7 +37,7 @@ class SiteSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $site = $request->request->all();
             $this->getSettingService()->set('site', $site);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新站点设置'), $site);
+            $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('站点信息设置已保存！'));
         }
 

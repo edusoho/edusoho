@@ -65,10 +65,10 @@ define(function(require, exports, module) {
                 $(".js-email-send-check").addClass('hidden');
             }
             return app.arguments.emailVerified == 1;
-        }, '开启前,请先验证您的邮箱')
+        }, Translator.trans('开启前,请先验证您的邮箱'))
 
         $('.js-email-send-check').on('click', function() {
-            $(".js-email-status").removeClass().addClass('alert alert-info js-email-status').html('正在检测.....');
+            $(".js-email-status").removeClass().addClass('alert alert-info js-email-status').html(Translator.trans('正在检测.....'));
 
             $.ajax({
                     url: $('.js-email-send-check').data('url'),
@@ -79,14 +79,14 @@ define(function(require, exports, module) {
                     } else {
                         $('input[name="email_enabled"][value="closed"]').prop("checked", true);
                         $('.js-email-send-check').addClass("hidden");
-                        $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="' + $('.js-email-status').data('url') + '">邮件服务器设置</a>是否正确</span>');
+                        $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">'+Translator.trans('邮件发送异常,请检查')+'<a  target="_blank" href="' + $('.js-email-status').data('url') + '">'+Translator.trans('邮件服务器设置')+'</a>'+Translator.trans('是否正确')+'</span>');
                     }
                 })
                 .fail(function(resp) {
                     console.log('fail');
                     $('input[name="email_enabled"][value="closed"]').prop("checked", true);
                     $('.js-email-send-check').addClass("hidden");
-                    $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="' + $('.js-email-status').data('url') + '">邮件服务器设置</a>是否正确</span>');
+                    $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">'+Translator.trans('邮件发送异常,请检查')+'<a  target="_blank" href="' + $('.js-email-status').data('url') + '">'+Translator.trans('邮件服务器设置')+'</a>'+Translator.trans('是否正确')+'</span>');
                 })
         })
 
@@ -113,7 +113,7 @@ define(function(require, exports, module) {
                     $('[data-modle="' + old_modle_value + '"]').addClass("btn-primary");
                     modle = old_modle_value;
 
-                    Notify.danger("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~");
+                    Notify.danger(Translator.trans('请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~'));
                 }
             }
 

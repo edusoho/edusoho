@@ -99,7 +99,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片', array('%type%' => $type)), array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', '更新网校$type图片', array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],

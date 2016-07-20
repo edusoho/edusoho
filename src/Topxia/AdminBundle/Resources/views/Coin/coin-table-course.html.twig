@@ -38,12 +38,12 @@
               <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
             </td>
             <td>
-              <span id="deRmb{{item.id}}">{{ (item.maxRate * item.originPrice / 100)|number_format(2, '.') }}</sapn>
+              <span id="deRmb{{item.id}}">{{ (item.maxRate * item.originPrice / 100)|number_format(2, '.') }}</span>
             </td>
           {% endif %}
           <td>
             {% if set.cash_model =="deduction" %}
-              <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.originPrice * set.cash_rate)|number_format(2, '.', ',') }}</sapn>
+              <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.originPrice * set.cash_rate)|number_format(2, '.', ',') }}</span>
             {% else %}
               <div class="form-group">
                 <div class="controls">

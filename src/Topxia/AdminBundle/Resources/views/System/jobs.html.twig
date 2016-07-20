@@ -25,7 +25,7 @@
 
   <div class="form-group">
     <select class="form-control" name="cycle">
-        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--') }}
+        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--'|trans) }}
     </select>
   </div>
 

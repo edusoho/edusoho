@@ -35,9 +35,9 @@
         </div>
         <div class="controls col-md-8 radios">
           {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
-         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">检测邮箱服务</button>
-         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">正在检测.....</div>
-         <div class="help-block">开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置</div>
+         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">{{ '检测邮箱服务'|trans }}</button>
+         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">{{ '正在检测.....'|trans }}</div>
+         <div class="help-block">{{ '开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置'|trans }}</div>
         </div>
       </div>
 
@@ -59,15 +59,13 @@
         <div class="controls col-md-8">
           <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
           <div class="help-block">
-            {% verbatim %}
             <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{nickname}} {{'为接收方用户昵称'|trans}}</li>
-              <li>{{sitename}} {{'为网站名称'|trans}}</li>
-              <li>{{siteurl}} {{'为网站的地址'|trans}}</li>
-              <li>{{verifyurl}} {{'为邮箱验证地址'|trans}}</li>
+              <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户昵称'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网站名称'|trans}}</li>
+              <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'为网站的地址'|trans}}</li>
+              <li>{% verbatim %}{{verifyurl}}{% endverbatim %} {{'为邮箱验证地址'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>
@@ -170,15 +168,13 @@
       <div class="controls col-md-8">
         <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
         <div class="help-block">
-          {% verbatim %}
           <div>{{'注意： 私信长度不能超过1000个字符'|trans}}</div>
           <div>{{'变量说明：'|trans}}</div>
           <ul>
-            <li>{{nickname}} {{'为接收方用户用户名'|trans}}</li>
-            <li>{{sitename}} {{'为网站名称'|trans}}</li>
-            <li>{{siteurl}} {{'为网站的地址'|trans}}</li>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户用户名'|trans}}</li>
+            <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网站名称'|trans}}</li>
+            <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'为网站的地址'|trans}}</li>
           </ul>
-          {% endverbatim %}
         </div>
       </div>
     </div>

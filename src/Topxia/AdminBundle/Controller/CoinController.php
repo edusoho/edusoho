@@ -50,7 +50,7 @@ class CoinController extends BaseController
             ));
 
             $this->getSettingService()->set('coin', $coinSettingsPosted);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新Coin虚拟币设置'), $coinSettingsPosted);
+            $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('虚拟币设置已保存！'));
 
             return $this->settingsRenderedPage($coinSettingsPosted);
@@ -234,7 +234,7 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新虚拟币图片'), array('coin_picture' => $coin['coin_picture']));
+        $this->getLogService()->info('system', 'update_settings', '更新虚拟币图片', array('coin_picture' => $coin['coin_picture']));
 
         $response = array(
             'path'               => $coin['coin_picture'],
@@ -259,7 +259,7 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除虚拟币图片'));
+        $this->getLogService()->info('system', 'update_settings', '移除虚拟币图片');
 
         return $this->createJsonResponse(true);
     }
@@ -648,7 +648,13 @@ class CoinController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = $this->getServiceKernel()->trans('流水号,账目名称,购买者,姓名,收支,支付方式,创建时间');
+        $str = $this->getServiceKernel()->trans('流水号').','
+            . $this->getServiceKernel()->trans('账目名称').','
+            . $this->getServiceKernel()->trans('购买者').','
+            . $this->getServiceKernel()->trans('姓名').','
+            . $this->getServiceKernel()->trans('收支').','
+            . $this->getServicekernel()->trans('支付方式').','
+            . $this->getServiceKernel()->trans('创建时间');
 
         $str .= "\r\n";
 
