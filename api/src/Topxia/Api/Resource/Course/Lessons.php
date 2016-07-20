@@ -2,10 +2,9 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
+use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class Lessons extends BaseResource
 {
@@ -17,18 +16,17 @@ class Lessons extends BaseResource
         $limit = $request->query->get('limit', 20);
 
         if (isset($conditions['cursor'])) {
-            $conditions['status'] = 'published';
+            $conditions['status']         = 'published';
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $lessons = $this->getCourseService()->searchLessons($conditions, array('updatedTime','ASC'), $start, $limit);
-            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
+            $lessons                      = $this->getCourseService()->searchLessons($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
             return $this->wrap($this->filter($lessons), $next);
         } else {
-            $total = $this->getCourseService()->searchLessonCount($conditions);
-            $start = $start == -1 ? rand(0, $total - 1) : $start;
-            $lessons = $this->getCourseService()->searchLessons($conditions, array('createdTime','ASC'), $start, $limit);
+            $total   = $this->getCourseService()->searchLessonCount($conditions);
+            $start   = $start == -1 ? rand(0, $total - 1) : $start;
+            $lessons = $this->getCourseService()->searchLessons($conditions, array('createdTime', 'ASC'), $start, $limit);
             return $this->wrap($this->filter($lessons), $total);
         }
-
     }
 
     public function filter($res)
@@ -39,8 +37,9 @@ class Lessons extends BaseResource
     protected function multicallFilter($name, $res)
     {
         foreach ($res as $key => $one) {
-            $res[$key] = $this->callFilter($name, $one);
-            $res[$key]['body'] = '';
+            $res[$key]            = $this->callFilter($name, $one);
+            $res[$key]['body']    = '';
+            $res[$key]['content'] = '';
         }
         return $res;
     }
