@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                     playbackRates: {
                         enable : true,
                         source : needMp4ForPlaybackRate ? 'mp4' : 'hls',
-                        rates : [0.5, 0.75, 1, 1.25, 1.5, 2],
+                        rates : [ 0.75, 1, 1.2, 1.3, 1.5, 1.8, 2],
                         src : getPlaybackRatesSrc()
                     }
                 });
