@@ -35,9 +35,9 @@
         </div>
         <div class="controls col-md-8 radios">
           {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
-         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">检测邮箱服务</button>
-         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">正在检测.....</div>
-         <div class="help-block">开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置</div>
+         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">{{'检测邮箱服务'|trans}}</button>
+         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">{{'正在检测'|trans}}.....</div>
+         <div class="help-block">{{'开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置'|trans}}</div>
         </div>
       </div>
 
