@@ -76,7 +76,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $announcement = $this->getAnnouncement($id);
         if (empty($announcement)) {
-            $this->createNotFoundException("公告#{$id}不存在。");
+            $this->createNotFoundException($this->getKernel()->trans('公告#%id%不存在。', array('%id%' => $id)));
         }
 
         $this->getAnnouncementDao()->deleteAnnouncement($id);

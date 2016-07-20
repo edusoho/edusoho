@@ -10,7 +10,7 @@ class DetailFactory
     public static function create($cardType)
     {
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
-            throw new Exception($this->getKernel()->trans('卡的类型不存在'));
+            throw new Exception(self::getKernel()->trans('卡的类型不存在'));
         }
 
         if ($cardType == "coupon") {

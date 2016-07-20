@@ -134,7 +134,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $this->calculateCourseRating($review['courseId']);
 
-        $this->getLogService()->info('course', 'delete_review', $this->getKernel()->trans('删除评价#%id%', array('%id%' => $id)));
+        $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
     }
 
     protected function calculateCourseRating($courseId)

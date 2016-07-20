@@ -38,7 +38,7 @@
         </div>
         <div class="controls col-md-7 "> 
           <div class="checkbox">
-            <input type="checkbox" id="get_coupon_setting" name="get_coupon_setting" value="1" {% if inviteSetting.get_coupon_setting == 1 %} checked="checked" {% endif %} >{{ '被邀请人有消费行为后才能获得优惠券'|trans }}
+            <input type="checkbox" id="get_coupon_setting" name="get_coupon_setting" value="1" {% if inviteSetting.get_coupon_setting == 1 %} checked="checked" {% endif %} >{{'被邀请人有消费行为后才能获得优惠券'|trans}}
           </div>
         </div>
       </div>
@@ -72,12 +72,11 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
 
-
 <div class="alert alert-info">
   <p><strong>{{'通知变量说明：'|trans}}</strong></p>
   <ul>
-    <li>{% verbatim %}{{siteName}}{% endverbatim %}:{{'网校名称'|trans}}</li>
-    <li>{% verbatim %}{{registerUrl}}{% endverbatim %}:{{'注册链接的地址'|trans}}</li>
+    <li>{% verbatim %}{{siteName}}:{% endverbatim %}{{'网校名称'|trans}}</li>
+    <li>{% verbatim %}{{registerUrl}}:{% endverbatim %}{{'注册链接的地址'|trans}}</li>
   </ul>
 </div>
 

@@ -558,7 +558,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function finishedUpload($file, $params)
     {
         if (empty($file['globalId'])) {
-            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
+            throw $this->createServiceException($this->getKernel()->trans('文件不存在(global id: #%globalId%)，完成上传失败！', array('%globalId%' => $params['globalId'])));
         }
 
         $params = array(

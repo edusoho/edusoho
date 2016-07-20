@@ -280,7 +280,7 @@ class AppServiceImpl extends BaseService implements AppService
             $package = $this->getCenterPackageInfo($packageId);
 
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
-                $errors[] = $this->getKernel()->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为', array('%packageEdusohoMinVersion%' =>$package['edusohoMinVersion'] )).System::VERSION.$this->getKernel()->trans('，请先升级EduSoho');
+                $errors[] = $this->getKernel()->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION ));
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
@@ -450,7 +450,7 @@ class AppServiceImpl extends BaseService implements AppService
             try {
                 $this->_deleteFilesForPackageUpdate($package, $packageDir);
             } catch (\Exception $e) {
-                $errors[] = $this->getKernel()->trans('删除文件时发生了错误：%getMessage%', array('%getMessage%' =>$e->getMessage() ));
+                $errors[] = $this->getKernel()->trans('删除文件时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage() ));
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
@@ -458,7 +458,7 @@ class AppServiceImpl extends BaseService implements AppService
             try {
                 $this->_replaceFileForPackageUpdate($package, $packageDir);
             } catch (\Exception $e) {
-                $errors[] = $this->getKernel()->trans('复制升级文件时发生了错误：%getMessage%', array('%getMessage%' =>$e->getMessage() ));
+                $errors[] = $this->getKernel()->trans('复制升级文件时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage() ));
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
@@ -471,7 +471,7 @@ class AppServiceImpl extends BaseService implements AppService
                 goto last;
             }
         } catch (\Exception $e) {
-            $errors[] = $this->getKernel()->trans('执行升级/安装脚本时发生了错误：%getMessage%', array('%getMessage%' =>$e->getMessage() ));
+            $errors[] = $this->getKernel()->trans('执行升级/安装脚本时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage() ));
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             goto last;
         }
@@ -486,7 +486,7 @@ class AppServiceImpl extends BaseService implements AppService
                 $filesystem->mkdir($cachePath.'/annotations/topxia');
             }
         } catch (\Exception $e) {
-            $errors[] = $this->getKernel()->trans('应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限', array('%cachePath%' =>$cachePath ));
+            $errors[] = $this->getKernel()->trans('应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限', array('%cachePath%' => $cachePath ));
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             goto last;
         }

@@ -9,17 +9,18 @@ class AnnouncementProcessorFactory
 	public static function create($target)
     {
     	if(empty($target) || !in_array($target,array('course','classroom'))) {
-    		throw new Exception($this->getKernel()->trans('公告类型不存在'));
+    		throw new Exception(self::getKernel()->trans('公告类型不存在'));
     	}
 
     	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'AnnouncementProcessor';
 
     	return new $class();
     }
-       protected function getKernel(){
-    
+	
+    protected function getKernel()
+	{
         return  ServiceKernel::instance();
-   }
+    }
 
 }
 

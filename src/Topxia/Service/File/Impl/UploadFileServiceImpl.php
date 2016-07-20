@@ -111,7 +111,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getUploadFileDao()->getFile($id);
 
         if (empty($file)) {
-            return array('error' => 'not_found', 'message' => '文件不存在，不能下载！');
+            return array('error' => 'not_found', 'message' => $this->getKernel()->trans('文件不存在，不能下载！'));
         }
 
         return $this->getFileImplementor($file['storage'])->getDownloadFile($file);
@@ -122,7 +122,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            throw $this->createServiceException("用户未登录，上传初始化失败！");
+            throw $this->createServiceException($this->getKernel()->trans('用户未登录，上传初始化失败！'));
         }
 
         $setting           = $this->getSettingService()->get('storage');
@@ -139,11 +139,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            throw $this->createServiceException("用户未登录，上传初始化失败！");
+            throw $this->createServiceException($this->getKernel()->trans('用户未登录，上传初始化失败！'));
         }
 
         if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'hash'))) {
-            throw $this->createServiceException("参数缺失，上传初始化失败！");
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，上传初始化失败！'));
         }
 
         $params['userId'] = $user['id'];
@@ -224,7 +224,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $result = $implementor->finishedUpload($file, $params);
 
             if (empty($result) || !$result['success']) {
-                throw $this->createServiceException("uploadFile失败，完成上传失败！");
+                throw $this->createServiceException($this->getKernel()->trans('uploadFile失败，完成上传失败！'));
             }
 
             $file = $this->getUploadFileDao()->updateFile($file['id'], array(
@@ -327,29 +327,29 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $file = $this->getFile($id);
 
         if (empty($file)) {
-            return array('error' => 'file_not_found', 'message' => "文件(#{$id})不存在");
+            return array('error' => 'file_not_found', 'message' => $this->getKernel()->trans('文件(#%id%)，不存在。', array('%id%' => $id)));
         }
 
         if ($file['storage'] != 'cloud') {
-            return array('error' => 'not_cloud_file', 'message' => "文件(#{$id})，不是云文件。");
+            return array('error' => 'not_cloud_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是云文件。', array('%id%' => $id)));
         }
 
         if ($file['type'] != 'video') {
-            return array('error' => 'not_video_file', 'message' => "文件(#{$id})，不是视频文件。");
+            return array('error' => 'not_video_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是视频文件。', array('%id%' => $id)));
         }
 
         if ($file['targetType'] != 'courselesson') {
-            return array('error' => 'not_course_file', 'message' => "文件(#{$id})，不是课时文件。");
+            return array('error' => 'not_course_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是课时文件。', array('%id%' => $id)));
         }
 
         $target = $this->createService('Course.CourseService')->getCourse($file['targetId']);
 
         if (empty($target)) {
-            return array('error' => 'course_not_exist', 'message' => "文件(#{$id})所属的课程已删除。");
+            return array('error' => 'course_not_exist', 'message' => $this->getKernel()->trans('文件(#%id%)所属的课程已删除。', array('%id%' => $id)));
         }
 
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            return array('error' => 'already_converted', 'message' => "文件(#{$id})已转换");
+            return array('error' => 'already_converted', 'message' => $this->getKernel()->trans('文件(#%id%)已转换', array('%id%' => $id)));
         }
 
         $fileNeedUpdateFields = array();
@@ -388,7 +388,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $convertHash = $this->getFileImplementor($file['storage'])->reconvertOldFile($file, $convertCallback, $pipeline);
 
         if (empty($convertHash)) {
-            return array('error' => 'convert_request_failed', 'message' => "文件(#{$id})转换请求失败！");
+            return array('error' => 'convert_request_failed', 'message' => $this->getKernel()->trans('文件(#%id%)转换请求失败！', array('%id%' => $id)));
         }
 
         $fileNeedUpdateFields['convertHash'] = $convertHash;
@@ -412,7 +412,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function collectFile($userId, $fileId)
     {
         if (empty($userId) || empty($fileId)) {
-            throw $this->createServiceException("参数错误，请重新输入");
+            throw $this->createServiceException($this->getKernel()->trans('参数错误，请重新输入'));
         }
 
         $collection = $this->getUploadFileCollectDao()->getCollectonByUserIdandFileId($userId, $fileId);
@@ -723,7 +723,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此文件！'));
         }
 
         $file = $this->getFullFile($fileId);
@@ -737,7 +737,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此页面'));
         }
 
         return $file;
@@ -748,7 +748,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此文件！'));
         }
 
         $file = $this->getFileByGlobalId($globalFileId);
@@ -762,7 +762,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此页面'));
         }
 
         return $file;
@@ -802,7 +802,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
         }
 
-        throw $this->createAccessDeniedException('您无权访问此文件！');
+        throw $this->createAccessDeniedException($this->getKernel()->trans('您无权访问此文件！'));
     }
 
     public function canManageFile($fileId)
@@ -1127,7 +1127,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (in_array($order, $orderArray)) {
             return $orderArray[$order];
         } else {
-            throw $this->createServiceException('参数sort不正确。');
+            throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
         }
     }
 }

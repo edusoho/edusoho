@@ -11,7 +11,7 @@
      
 	<div class="form-group">
 		<select style="width:150px;" class="form-control" name="categoryId">
-            <option value="0">--{{'所属栏目'|trans}}--</option>
+            <option value="0">{{'--所属栏目--'|trans}}</option>
             {% for tree in categoryTree %}
                 <option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
             {% endfor %}
@@ -30,7 +30,7 @@
 		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--发布状态--'|trans) }}
 		</select>
 	</div>
-	<button class="btn btn-primary" type="submit">搜索</button>
+	<button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
 </form>
 
 <div id="aticle-table-container">
@@ -47,9 +47,9 @@
 	                <a class="glyphicon glyphicon-question-sign text-muted pull-center " id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">
 	                </a>
 		            <div id="article-property-tips-html" style="display:none;">
-		                <p>设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。</p>
-		                <p>设为“<strong>头条</strong>”后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。</p>
-		                <p>设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。</p>
+		                <p>{{'设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。'|trans}}</p>
+		                <p>{{'设为“<strong>头条</strong>”后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。'|trans}}</p>
+		                <p>{{'设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。'|trans}}</p>
 		            </div>
 				</th>
 				<th>{{'状态'|trans}}</th>

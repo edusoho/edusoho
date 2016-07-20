@@ -48,7 +48,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
             $account = $this->getAccountDao()->getAccountByUserId($userId, true);
             if (empty($account)) {
-                throw $this->createServiceException("Account #{$userId} is not exist.");
+                throw $this->createServiceException($this->getKernel()->trans('Account #%userId% is not exist.',array('%userId%' => $userId)));
             }
 
             $inflow = array();

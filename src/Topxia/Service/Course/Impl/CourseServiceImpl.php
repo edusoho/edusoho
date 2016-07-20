@@ -424,7 +424,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourse($course['id']);
 
         $this->dispatchEvent("course.create", $course);
-        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('创建课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
+        $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
 
         return $course;
     }
@@ -440,7 +440,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->_filterCourseFields($fields);
 
-        $this->getLogService()->info('course', 'update', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)的信息', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])), $fields);
+        $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
@@ -545,7 +545,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->deleteNotUsedPictures($course);
 
-        $this->getLogService()->info('course', 'update_picture', $this->getKernel()->trans('更新课程《%courseTitle%》(#%courseId%)图片', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])), $fields);
+        $this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
 
         $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
 
@@ -588,7 +588,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedTime' => time()
         ));
 
-        $this->getLogService()->info('course', 'recommend', $this->getKernel()->trans('推荐课程《%courseTitle%》(#%courseId%),序号为%number%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%number%' => $number)));
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
 
         return $course;
     }
@@ -620,7 +620,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedSeq'  => 0
         ));
 
-        $this->getLogService()->info('course', 'cancel_recommend', $this->getKernel()->trans('取消推荐课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
+        $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
     }
 
     public function deleteCourse($id)
@@ -638,7 +638,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
         }
 
-        $this->getLogService()->info('course', 'delete', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
+        $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
         $this->dispatchEvent("course.delete", $course);
 
@@ -658,7 +658,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
-        $this->getLogService()->info('course', 'publish', $this->getKernel()->trans('发布课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
+        $this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent('course.publish', $course);
     }
 
@@ -675,7 +675,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
-        $this->getLogService()->info('course', 'close', $this->getKernel()->trans('关闭课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'])));
+        $this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent('course.close', $course);
     }
 
@@ -1104,7 +1104,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
 
-        $this->getLogService()->info('course', 'add_lesson', $this->getKernel()->trans('添加课时《%lessonTitle%》(%lessonId%)', array('%lessonTitle%' => $lesson['title'], '%lessonId%' => $lesson['id'])), $lesson);
+        $this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("course.lesson.create", array('argument' => $argument, 'lesson' => $lesson));
 
         return $lesson;
@@ -1271,7 +1271,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
 
-        $this->getLogService()->info('course', 'update_lesson', $this->getKernel()->trans('更新课时《%updatedLessonTitle%》(%updatedLessonId%)', array('%updatedLessonTitle%' => $updatedLesson['title'], '%updatedLessonId%' => $updatedLesson['id'])), $updatedLesson);
+        $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
         $updatedLesson['fields'] = $lesson;
         $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson, 'sourceLesson' => $lesson));
@@ -1322,7 +1322,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
 
-        $this->getLogService()->info('course', 'delete_lesson', $this->getKernel()->trans('删除课程《%courseTitle%》(#%courseId%)的课时 %lessonTitle%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%lessonTitle%' => $lesson['title'])));
+        $this->getLogService()->info('course', 'delete_lesson', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
         $this->dispatchEvent("course.lesson.delete", array(
             "courseId" => $courseId,
@@ -1546,7 +1546,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
 
-        $this->getLogService()->info('course', 'create', $this->getKernel()->trans('%nickName%观看课时《%lessonTitle%》', array('%nickName%' => $this->getCurrentUser()->nickname, '%lessonTitle%' => $lesson['title'])));
+        $this->getLogService()->info('course', 'create', "{$this->getCurrentUser()->nickname}观看课时《{$lesson['title']}》");
 
         return $lessonView;
     }
@@ -2107,7 +2107,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        $this->getLogService()->info('course', 'update_teacher', $this->getKernel()->trans('更新课程#%courseId%的教师', array('%courseId%' => $courseId)), $teacherMembers);
+        $this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
         // 更新课程的teacherIds，该字段为课程可见教师的ID列表
         $fields = array('teacherIds' => $visibleTeacherIds);
@@ -2139,7 +2139,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseDao()->updateCourse($member['courseId'], CourseSerialize::serialize($fields));
         }
 
-        $this->getLogService()->info('course', 'cancel_teachers_all', $this->getKernel()->trans('取消用户#%userId%所有的课程老师角色', array('%userId%' => $userId)));
+        $this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的课程老师角色");
     }
 
     public function remarkStudent($courseId, $userId, $remark)
@@ -2331,7 +2331,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
 
-        $this->getLogService()->info('course', 'remove_student', $this->getKernel()->trans('课程《%courseTitle%》(#%courseId%)，移除学员#%memberId%', array('%courseTitle%' => $course['title'], '%courseId%' => $course['id'], '%memberId%' => $member['id'])));
+        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'course.quit',
             new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))

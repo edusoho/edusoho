@@ -46,7 +46,7 @@
         {{ select_options(options, request.get('keywordType')) }}
       </select>
 
-    <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="关键词">
+    <input class="form-control" type="text" name="keyword" value="{{ request.get('keyword') }}" placeholder="{{'关键词'|trans}}">
     </div>
 
     <button class="btn btn-primary">{{'搜索'|trans}}</button>
