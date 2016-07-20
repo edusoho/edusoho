@@ -78,7 +78,7 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        if($this->isMobileClient()){
+        if($this->isWxClient()){
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig", array(
                 'course'   => $course,
                 'lessonId' => $lessonId
@@ -136,7 +136,7 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if($this->isMobileClient()){
+        if($this->isWxClient()){
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
                 'course'     => $course,
                 'lesson'     => $lesson,
@@ -286,7 +286,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if($this->isMobileClient()){
+        if($this->isWxClient()){
             return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
                 'course'    => $course,
                 'posts'     => $posts,

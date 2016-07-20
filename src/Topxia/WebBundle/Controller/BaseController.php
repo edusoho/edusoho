@@ -194,6 +194,15 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * 判断是否微信内置浏览器访问
+     * @return bool
+     */
+    protected function isWxClient()
+    {
+        return $this->isMobileClient() && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
+    }
+
+    /**
      * 是否移动端访问访问
      *
      * @return bool
