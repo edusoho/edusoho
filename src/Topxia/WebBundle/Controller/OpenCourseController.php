@@ -757,7 +757,6 @@ class OpenCourseController extends BaseController
     protected function createRefererLog(Request $request, Response $response, $course)
     {
         $refererUrl      = $request->server->get('HTTP_REFERER');
-        $refererUrl      = empty($refererUrl) ? $request->getUri() : $refererUrl;
         $refererLogToken = $this->getRefererLogToken($request, $response);
 
         $fields = array(
