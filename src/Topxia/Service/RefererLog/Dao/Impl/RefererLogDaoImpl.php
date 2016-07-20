@@ -48,10 +48,10 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
     {
-        $sql = "SELECT a.targetId, b.hitNum,b.orderCount FROM (SELECT id,targetId from {$this->table} WHERE targetType = ?
+        $sql = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount FROM (SELECT id,targetId from {$this->table} WHERE targetType = ?
                 GROUP BY targetId) AS a LEFT JOIN (SELECT id,targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
                 WHERE targetType = ? AND createdTime >= ? and createdTime <= ?
-                GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+                GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($targetType, $targetType, $startTime, $endTime));
     }
