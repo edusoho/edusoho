@@ -288,13 +288,24 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
-            'course'    => $course,
-            'posts'     => $posts,
-            'users'     => $users,
-            'paginator' => $paginator,
-            'service'   => $this->getThreadService()
-        ));
+        if($this->isMobileClient()){
+            return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
+                'course'    => $course,
+                'posts'     => $posts,
+                'users'     => $users,
+                'paginator' => $paginator,
+                'service'   => $this->getThreadService()
+            ));
+        }else{
+            return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
+                'course'    => $course,
+                'posts'     => $posts,
+                'users'     => $users,
+                'paginator' => $paginator,
+                'service'   => $this->getThreadService()
+            ));
+        }
+       
     }
 
     public function postAction(Request $request, $id)
