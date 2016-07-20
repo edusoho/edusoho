@@ -171,10 +171,10 @@ class OpenCourseAnalysisController extends BaseController
     protected function getDataInfo($timeRange)
     {
         return array(
-            'startTime'      => date("Y-m-d", $timeRange['startTime']),
-            'endTime'        => date("Y-m-d", $timeRange['endTime']),
-            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
-            'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
+            'startTime'      => empty($timeRange['startTime']) ? "" : date("Y-m-d", $timeRange['startTime']),
+            'endTime'        => empty($timeRange['endTime']) ? "" : date("Y-m-d", $timeRange['endTime']),
+            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 2 * 24 * 3600),
+            'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
 
             'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
             'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time()))),
@@ -186,10 +186,13 @@ class OpenCourseAnalysisController extends BaseController
 
     protected function getTimeRange($fields)
     {
-        if (empty($fields['startTime']) && empty($fields['endTime'])) {
-            return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));
+        if (isset($fields['startTime']) || isset($fields['endTime'])) {
+            return array(
+                'startTime' => empty($fields['startTime']) ? false : strtotime($fields['startTime']),
+                'endTime'   => empty($fields['endTime']) ? false : (strtotime($fields['endTime'].' 23:59:59'))
+            );
         }
-        return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime'].' 23:59:59')));
+        return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));
     }
 
     public function conversionAction(Request $request)
