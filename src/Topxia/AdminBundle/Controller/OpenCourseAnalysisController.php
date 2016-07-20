@@ -9,7 +9,7 @@ class OpenCourseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary'));
+        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary', array('date-range' => 'week')));
     }
 
     public function summaryAction(Request $request)
@@ -110,29 +110,33 @@ class OpenCourseAnalysisController extends BaseController
 
     public function watchAction(Request $request)
     {
-        $timeRange          = $this->getTimeRange($request->query->all());
-        $startTime          = $timeRange['startTime'];
-        $endTime            = $timeRange['endTime'];
-        $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount(array(
+        $timeRange = $this->getTimeRange($request->query->all());
+        $startTime = $timeRange['startTime'];
+        $endTime   = $timeRange['endTime'];
+        $type      = $request->query->get('type');
+
+        $countConditions = array(
             'status' => 'published'
-        ));
-
-        $totalWatchNum = $this->getRefererLogService()->searchRefererLogCount(array(
+        );
+        $totalWatchConditions = array(
             'targetType' => 'openCourse'
-        ));
+        );
 
-        $conditions = array(
+        $groupByConditions = array(
             'startTime'  => $startTime,
             'endTime'    => $endTime,
             'targetType' => 'openCourse'
         );
 
-        $type = $request->query->get('type');
         if (!empty($type)) {
-            $conditions['targetInnerType'] = $type;
+            $groupByConditions['targetInnerType']    = $type;
+            $totalWatchConditions['targetInnerType'] = $type;
+            $countConditions['type']                 = $type;
         }
 
-        $logsGroupByDate = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
+        $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount($countConditions);
+        $totalWatchNum      = $this->getRefererLogService()->searchRefererLogCount($totalWatchConditions);
+        $logsGroupByDate    = $this->getRefererLogService()->findRefererLogsGroupByDate($groupByConditions);
 
         $watchData = array(
             'date'     => array_keys($logsGroupByDate),
