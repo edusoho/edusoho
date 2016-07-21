@@ -51,8 +51,15 @@ class OpenCourseController extends BaseController
     public function showAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        $preview = $request->query->get('as');
 
-        if ($request->query->get('as') === 'preview') {
+        if($preview === 'wxpreview' || $this->isWxClient()){
+            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
+        }else{
+            $template = 'TopxiaWebBundle:OpenCourse:open-course-show.html.twig';
+        }
+
+        if ($preview === 'preview' || $preview === 'wxpreview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
             if (!$this->_checkPublishedLessonExists($courseId)) {
@@ -60,7 +67,7 @@ class OpenCourseController extends BaseController
                 return $this->createMessageResponse('error', $message);
             }
 
-            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+            return $this->render($template, array(
                 'course' => $course
             ));
         }
@@ -75,17 +82,10 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
-            return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig", array(
-                'course'   => $course,
-                'lessonId' => $lessonId
-            ));
-        }else{
-            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
-                'course'   => $course,
-                'lessonId' => $lessonId
-            ));
-        }
+        return $this->render($template, array(
+            'course'   => $course,
+            'lessonId' => $lessonId
+        ));
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
