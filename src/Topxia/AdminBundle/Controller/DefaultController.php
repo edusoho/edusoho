@@ -92,6 +92,19 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
+    public function noticeAction(Request $request)
+    {
+        $token = $request->cookies->get('refererLogToken');
+        if (empty($token)) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
+        $engine  = $this->container->get('templating');
+        $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
+
+        return $this->createJsonResponse(array('result' => true, 'html' => $content));
+    }
+
     public function feedbackAction(Request $request)
     {
         $site  = $this->getSettingService()->get('site');
@@ -99,7 +112,7 @@ class DefaultController extends BaseController
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
         $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         $site  = urlencode(http_build_query($site));
-        return $this->redirect("http://www.edusoho.com/question?site=" . $site . "");
+        return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
     public function inspectAction(Request $request)
@@ -338,31 +351,31 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'todayUserSum'           => $todayUserSum,
-            'yesterdayUserSum'       => $yesterdayUserSum,
-            'todayCourseSum'         => $todayCourseSum,
-            'yesterdayCourseSum'     => $yesterdayCourseSum,
-            'todayRegisterNum'       => $todayRegisterNum,
-            'yesterdayRegisterNum'   => $yesterdayRegisterNum,
-            'todayLoginNum'          => $todayLoginNum,
-            'yesterdayLoginNum'      => $yesterdayLoginNum,
-            'todayCourseNum'         => $todayCourseNum,
-            'yesterdayCourseNum'     => $yesterdayCourseNum,
-            'todayLessonNum'         => $todayLessonNum,
-            'yesterdayLessonNum'     => $yesterdayLessonNum,
-            'todayJoinLessonNum'     => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum' => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'      => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'  => $yesterdayBuyLessonNum,
+            'todayUserSum'                 => $todayUserSum,
+            'yesterdayUserSum'             => $yesterdayUserSum,
+            'todayCourseSum'               => $todayCourseSum,
+            'yesterdayCourseSum'           => $yesterdayCourseSum,
+            'todayRegisterNum'             => $todayRegisterNum,
+            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
+            'todayLoginNum'                => $todayLoginNum,
+            'yesterdayLoginNum'            => $yesterdayLoginNum,
+            'todayCourseNum'               => $todayCourseNum,
+            'yesterdayCourseNum'           => $yesterdayCourseNum,
+            'todayLessonNum'               => $todayLessonNum,
+            'yesterdayLessonNum'           => $yesterdayLessonNum,
+            'todayJoinLessonNum'           => $todayJoinLessonNum,
+            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
+            'todayBuyLessonNum'            => $todayBuyLessonNum,
+            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
 
-            'todayBuyClassroomNum'     => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum' => $yesterdayBuyClassroomNum,
+            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
 
-            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
+            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
 
-            'todayAllVideoViewedNum'     => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum' => $yesterdayAllVideoViewedNum,
+            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
 
             'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
             'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
@@ -370,20 +383,20 @@ class DefaultController extends BaseController
             'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
             'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
 
-            'todayNetVideoViewedNum'     => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum' => $yesterdayNetVideoViewedNum,
+            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
 
-            'todayIncome'              => $todayIncome,
-            'yesterdayIncome'          => $yesterdayIncome,
-            'todayCourseIncome'        => $todayCourseIncome,
-            'yesterdayCourseIncome'    => $yesterdayCourseIncome,
-            'todayClassroomIncome'     => $todayClassroomIncome,
-            'yesterdayClassroomIncome' => $yesterdayClassroomIncome,
-            'todayVipIncome'           => $todayVipIncome,
-            'yesterdayVipIncome'       => $yesterdayVipIncome,
-            'todayExitLessonNum'       => $todayExitLessonNum,
-            'yesterdayExitLessonNum'   => $yesterdayExitLessonNum,
-            'keyCheckResult'           => $keyCheckResult
+            'todayIncome'                  => $todayIncome,
+            'yesterdayIncome'              => $yesterdayIncome,
+            'todayCourseIncome'            => $todayCourseIncome,
+            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
+            'todayClassroomIncome'         => $todayClassroomIncome,
+            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
+            'todayVipIncome'               => $todayVipIncome,
+            'yesterdayVipIncome'           => $yesterdayVipIncome,
+            'todayExitLessonNum'           => $todayExitLessonNum,
+            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
+            'keyCheckResult'               => $keyCheckResult
         ));
     }
 
@@ -472,7 +485,7 @@ class DefaultController extends BaseController
     private function getToken()
     {
         $site = $this->getSettingService()->get('site');
-        return 'token_' . date('Ymd', time()) . $site['url'];
+        return 'token_'.date('Ymd', time()).$site['url'];
     }
 
     public function weekday($time)

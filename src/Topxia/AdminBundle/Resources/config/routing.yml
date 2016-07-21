@@ -6,6 +6,10 @@ admin_inspect:
     pattern:  /inspect
     defaults: { _controller: TopxiaAdminBundle:Default:inspect }
 
+admin_modal_notice:
+    pattern:  /modal/notice
+    defaults: { _controller: TopxiaAdminBundle:Default:notice }
+
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
