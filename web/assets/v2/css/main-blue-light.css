@@ -3370,7 +3370,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -4393,7 +4393,7 @@ a.homework-essay-textarea-pack-up {
   font-size: 100%;
 }
 .quality-switcher-control {
-  margin: 10px 0 10px 20px;
+  margin: 10px 0;
   display: none;
 }
 .quality-switcher-control-open {
@@ -10921,7 +10921,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -14185,13 +14185,16 @@ textarea {
 .panel-create-course .course-select:hover {
   border: 2px solid #4bbbfa;
 }
-.panel-create-course .course-select.active,
-.panel-create-course .course-select:active {
+.panel-create-course .course-select.disabled {
+  border: 0px;
+  color: #d9d7d7;
+  cursor: help;
+}
+.panel-create-course .course-select.active {
   background-color: #4bbbfa;
   color: #fff;
 }
-.panel-create-course .course-select.active .course-type,
-.panel-create-course .course-select:active .course-type {
+.panel-create-course .course-select.active .course-type {
   border-bottom: 1px solid white;
 }
 .panel-create-course .course-select .es-icon {
