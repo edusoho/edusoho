@@ -5,8 +5,8 @@ namespace Topxia\Service\OpenCourse\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\OpenCourse\OpenCourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\OpenCourse\OpenCourseService;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -286,7 +286,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getLessonItems($courseId)
     {
-        $lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);
+        //$lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);
+        $lessons = $this->searchLessons(array('courseId' => $courseId), array('seq', 'ASC'), 0, 1);
 
         $items = array();
 
@@ -537,13 +538,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getNextLesson($courseId, $lessonId)
     {
-        $lesson      = $this->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
 
-        if(empty($lesson)){
+        if (empty($lesson)) {
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions  = array(
+        $conditions = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -875,7 +876,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int)$item['id'];
+                $item = (int) $item['id'];
             }
 
             );
