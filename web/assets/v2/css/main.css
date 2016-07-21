@@ -13747,26 +13747,14 @@ textarea {
 }
 .openCourse-wechat-preview .openCourse-container .openCourse-wechat-qrcode {
   position: absolute;
-  right: 300px;
-  top: 300px;
+  right: 50%;
+  top: 100px;
+  background: #fff;
+  margin-right: -500px;
 }
-.openCourse-wechat-preview .openCourse-container .openCourse-wechat-qrcode .qrcode-popover .qrcode-content {
-  display: block \9;
-  -webkit-transform: scale(1, 1);
-  -moz-transform: scale(1, 1);
-  -ms-transform: scale(1, 1);
-  -o-transform: scale(1, 1);
-  transform: scale(1, 1);
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.openCourse-wechat-preview .openCourse-container .openCourse-wechat-qrcode .qrcode-popover .qrcode-content img {
+.openCourse-wechat-preview .openCourse-container .openCourse-wechat-qrcode img {
   width: 120px;
   height: 120px;
-  margin-bottom: 10px;
-}
-.openCourse-wechat-preview .openCourse-container .openCourse-wechat-qrcode .qrcode-popover.top .qrcode-content:after {
-  border-top-color: transparent;
 }
 .openCourse-panel {
   margin: 15px 0;
