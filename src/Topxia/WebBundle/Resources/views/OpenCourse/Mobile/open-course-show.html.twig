@@ -1,6 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set script_controller = 'open-course/open-course' %}
 
+{% block title %}
+  {{ setting('site.name', 'EduSoho网校') }}
+{% endblock %}
+
 {% block full_content %}
   {% block top_content %}{% endblock %}
 
