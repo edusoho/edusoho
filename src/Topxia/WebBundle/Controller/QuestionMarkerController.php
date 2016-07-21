@@ -15,12 +15,14 @@ class QuestionMarkerController extends BaseController
         $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
+            $isChoice = in_array($questionMaker['type'], array('choice', 'single_choice', 'uncertain_choice'));
+
             $result[$index]['id']       = $questionMaker['id'];
             $result[$index]['markerId'] = $questionMaker['markerId'];
             $result[$index]['time']     = $questionMaker['second'];
             $result[$index]['type']     = $questionMaker['type'];
             $result[$index]['question'] = $questionMaker['stem'];
-            if (in_array($questionMaker['type'], array('choice', 'single_choice'))) {
+            if ($isChoice) {
                 $questionMetas = json_decode($questionMaker['metas'], true);
                 if (!empty($questionMetas['choices'])) {
                     foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
@@ -31,7 +33,7 @@ class QuestionMarkerController extends BaseController
             }
             $answers = json_decode($questionMaker['answer'], true);
             foreach ($answers as $answerIndex => $answer) {
-                $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
+                $result[$index]['answer'][$answerIndex] = $isChoice ? chr(65 + $answer) : $answer;
             }
             $result[$index]['analysis'] = $questionMaker['analysis'];
         }
