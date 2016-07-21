@@ -35,9 +35,7 @@ class CourseSettingController extends BaseController
             'allowAnonymousPreview'    => '1',
             "copy_enabled"             => '0',
             "testpaperCopy_enabled"    => '0',
-            "custom_chapter_enabled"   => '1',
-            'open_course_enabled'      => '0',
-            'live_open_course_enabled' => '0'
+            "custom_chapter_enabled"   => '1'
         );
 
         $this->getSettingService()->set('course', $courseSetting);
