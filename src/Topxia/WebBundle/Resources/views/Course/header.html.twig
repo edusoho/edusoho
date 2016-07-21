@@ -4,7 +4,11 @@
   <a href="{{ path('course_show', {id:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>
-  <h1 class="title"><a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+  <h1 class="title">
+    {% if course.type != 'normal' %}
+      [{{ dict('courseType')[course.type] }}]
+    {% endif %}
+    <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
     {% if course.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}

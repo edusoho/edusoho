@@ -27,14 +27,14 @@ class ApiAuth
         $method = strtolower($request->headers->get('X-Auth-Method'));
 
         if ($method == 'keysign') {
-            $decoded = $this->decodeKeysign($token);
-
             $this->setCurrentUser(array(
                 'id'        => 0,
                 'nickname'  => '游客',
                 'currentIp' => $request->getClientIp(),
                 'roles'     => array()
             ));
+
+            $decoded = $this->decodeKeysign($token);
         } else {
             $whilelist = isset($this->whilelist[$request->getMethod()]) ? $this->whilelist[$request->getMethod()] : array();
 

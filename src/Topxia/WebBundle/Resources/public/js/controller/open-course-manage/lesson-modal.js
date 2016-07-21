@@ -154,6 +154,8 @@ define(function(require, exports, module) {
                     }else{
                         $("#course-item-list").append(html);
                     }
+                    $('.lesson-manage-panel').find('.only-one-lesson-notify').hide();
+                    $('.lesson-manage-panel').find('#lesson-create-btn').attr('disabled',true);
                     Notify.success('添加课时成功');
                 }
                 $(id).find('.btn-link').tooltip();

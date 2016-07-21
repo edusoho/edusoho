@@ -9,6 +9,7 @@
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
+    <meta content="{{ csrf_token('site') }}" name="csrf-token" />
 
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
   </head>
@@ -28,7 +29,7 @@
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"
           {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-            data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+            data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
             data-fingerprint="{{ finger_print() }}"
@@ -41,7 +42,9 @@
           {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-markerurl="{{ context.markerUrl|default('')}}"
+            data-question-markers='{{ render(controller('TopxiaWebBundle:QuestionMarker:showQuestionMakers', {mediaId: file.id})) }}'
             data-starttime="{{ context.starttime|default('')}}"
+            data-lesson-id="{{ context.lessonId|default(0)}}"
             style="height:100%"
           ></div>
         </div>

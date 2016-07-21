@@ -103,11 +103,7 @@ define(function(require, exports, module) {
                 param.push(markerJson.questionMarkers[i].id);
             }
 
-            $.post(url, {
-                questionIds: param
-            }, function(data) {
-
-            });
+            $.post(url, {questionIds: param});
         }
     });
 

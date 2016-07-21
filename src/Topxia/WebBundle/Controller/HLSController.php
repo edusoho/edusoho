@@ -11,9 +11,7 @@ class HLSController extends BaseController
     {
         $line       = $request->query->get('line', null);
         $levelParam = $request->query->get('level', "");
-        $format     = $request->query->get('format', "");
         $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp   = $request->getClientIp();
 
         if (empty($token)) {
@@ -42,8 +40,7 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id'      => $file['id'].$level,
-                        'fromApi' => $fromApi
+                        'id' => $file['id'].$level
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
@@ -85,37 +82,20 @@ class HLSController extends BaseController
         );
         $api = CloudAPIFactory::create('leaf');
 
-        //新版api需要返回json形式的m3u8
-        if (strtolower($format) == 'json') {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
-            return $this->createJsonResponse($playlist);
+        $playlist = $api->get('/hls/playlist', array(
+            'streams'   => $streams,
+            'qualities' => $qualities,
+            'clientIp'  => $clientIp
+        ));
+
+        if (empty($playlist['playlist'])) {
+            return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
-        if ($fromApi) {
-            $playlist = $api->get('/hls/playlist', array(
-                'streams'   => $streams,
-                'qualities' => $qualities,
-                'clientIp'  => $clientIp
-            ));
-
-            if (empty($playlist['playlist'])) {
-                return $this->createMessageResponse('error', '生成视频播放列表失败！');
-            }
-
-            return new Response($playlist['playlist'], 200, array(
-                'Content-Type'        => 'application/vnd.apple.mpegurl',
-                'Content-Length'      => strlen($playlist['playlist']),
-                'Content-Disposition' => 'inline; filename="playlist.m3u8"'
-            ));
-        } else {
-            $playlist = $api->get('/hls/playlist/json', array(
-                'streams'   => $streams,
-                'qualities' => $qualities,
-                'clientIp'  => $clientIp
-            ));
-
-            return $this->createJsonResponse($playlist);
-        }
+        return new Response($playlist['playlist'], 200, array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+        ));
     }
 
     protected function haveHeadLeader()
@@ -166,7 +146,7 @@ class HLSController extends BaseController
 
         $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
-        $keyencryption = $token['data']['fromApi'] || $inWhiteList ? 0 : 1;
+        $keyencryption = $inWhiteList ? 0 : 1;
         $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],

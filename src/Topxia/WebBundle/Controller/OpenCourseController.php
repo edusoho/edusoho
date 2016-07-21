@@ -75,18 +75,17 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        $member = $this->_memberOperate($request, $courseId);
-
-        $content = $this->renderView("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
-            'course'   => $course,
-            'lessonId' => $lessonId
-        ));
-
-        $response = new Response($content);
-
-        $this->createRefererLog($request, $response, $course);
-
-        return $response;
+        if($this->isWxClient()){
+            return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig", array(
+                'course'   => $course,
+                'lessonId' => $lessonId
+            ));
+        }else{
+            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+                'course'   => $course,
+                'lessonId' => $lessonId
+            ));
+        }
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -134,13 +133,24 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'member'     => $member,
-            'notifyNum'  => $notifyNum,
-            'nextLesson' => $nextLesson
-        ));
+        if($this->isWxClient()){
+            return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'member'     => $member,
+                'notifyNum'  => $notifyNum,
+                'nextLesson' => $nextLesson
+            ));
+        }else{
+            return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'member'     => $member,
+                'notifyNum'  => $notifyNum,
+                'nextLesson' => $nextLesson
+            ));
+        }
+       
     }
 
     public function teachersAction($courseId)
@@ -273,13 +283,24 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
-            'course'    => $course,
-            'posts'     => $posts,
-            'users'     => $users,
-            'paginator' => $paginator,
-            'service'   => $this->getThreadService()
-        ));
+        if($this->isWxClient()){
+            return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
+                'course'    => $course,
+                'posts'     => $posts,
+                'users'     => $users,
+                'paginator' => $paginator,
+                'service'   => $this->getThreadService()
+            ));
+        }else{
+            return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
+                'course'    => $course,
+                'posts'     => $posts,
+                'users'     => $users,
+                'paginator' => $paginator,
+                'service'   => $this->getThreadService()
+            ));
+        }
+       
     }
 
     public function postAction(Request $request, $id)
