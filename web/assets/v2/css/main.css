@@ -14188,6 +14188,7 @@ textarea {
 .panel-create-course .course-select.disabled {
   border: 0px;
   color: #d9d7d7;
+  cursor: help;
 }
 .panel-create-course .course-select.active {
   background-color: #46c37b;

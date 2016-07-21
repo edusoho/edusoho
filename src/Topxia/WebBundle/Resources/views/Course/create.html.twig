@@ -30,7 +30,8 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="live">
+              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="live"
+                   title="云直播开启后可用">
                 <i class="es-icon es-icon-zhibokecheng "></i>
                 <div class="course-type">直播课程</div>
                 <div class="course-intro">纯直播形式教学的完整课程</div>
@@ -46,7 +47,9 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="liveOpen">
+              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}"
+                   data-type="liveOpen"
+                   title="云直播开启后可用">
                 <i class="es-icon es-icon-zhibokecheng2"></i>
                 <div class="course-type">直播公开课</div>
                 <div class="course-intro">直播形式的公开课</div>
