@@ -3,7 +3,7 @@
 {% block analysis_content %}
   {% set tab = 'list' %}
   {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Referer:summary-tab.html.twig' with { tab: tab } %}
-  <table class="table table-hover">
+  <table class="table table-hover" style="word-break:break-all;">
     <thead>
       <tr>
         <th width="40%">公开课名称</th>
@@ -28,8 +28,8 @@
               {{ hitNum }} 次
             </th>
             <th>
-              <a href="javascript:;" data-toggle="modal" data-target="#modal"
-                 data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">来源和转化详情</a>
+              <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+                 data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
             </th>
           </tr>
         {% else %}
