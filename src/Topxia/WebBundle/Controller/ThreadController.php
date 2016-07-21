@@ -261,20 +261,27 @@ class ThreadController extends BaseController
 
             $post = $this->getThreadService()->createPost($post);
 
+            if ($targetType == 'openCourse') {
+                $postReplyUrl = $this->container->get('router')->generate('open_course_post_reply', array('id' => $targetId, 'postId' => $post['id'], 'targetType' => 'openCourse'));
+            } else {
+                $postReplyUrl = $this->container->get('router')->generate('thread_post_reply', array('threadId' => $post['threadId'], 'postId' => $post['id']));
+            }
+
             return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
                 'post'         => $post,
                 'author'       => $user,
                 'service'      => $this->getThreadService(),
+                'postReplyUrl' => $postReplyUrl
             ));
         }
     }
 
     public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom')
     {
-        $fields             = $request->request->all();
-        $fields['content']  = $this->autoParagraph($fields['content']);
-        $fields['threadId'] = $threadId;
-        $fields['parentId'] = $postId;
+        $fields               = $request->request->all();
+        $fields['content']    = $this->autoParagraph($fields['content']);
+        $fields['threadId']   = $threadId;
+        $fields['parentId']   = $postId;
         $fields['targetType'] = $targetType;
 
         $post = $this->getThreadService()->createPost($fields);
