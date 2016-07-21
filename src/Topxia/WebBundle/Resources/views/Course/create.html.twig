@@ -30,61 +30,66 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="live"
-                   title="云直播开启后可用">
-                <i class="es-icon es-icon-zhibokecheng "></i>
-                <div class="course-type">直播课程</div>
-                <div class="course-intro">纯直播形式教学的完整课程</div>
+              {% if not setting('live-course.live_course_enabled') %}
+              <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="云直播开启后可用"
+                   data-type="live">
+                {% else %}
+                <div class="course-select" data-type="live">
+                  {% endif %}
+                  <i class="es-icon es-icon-zhibokecheng "></i>
+                  <div class="course-type">直播课程</div>
+                  <div class="course-intro">纯直播形式教学的完整课程</div>
+                </div>
               </div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="course-select " data-type="open">
-                <i class="es-icon es-icon-lubogongkaike"></i>
-                <div class="course-type">录播公开课</div>
-                <div class="course-intro">无门槛观看、结构简单的课程，常用于营销推广</div>
+              <div class="col-md-3">
+                <div class="course-select " data-type="open">
+                  <i class="es-icon es-icon-lubogongkaike"></i>
+                  <div class="course-type">录播公开课</div>
+                  <div class="course-intro">无门槛观看、结构简单的课程，常用于营销推广</div>
+                </div>
               </div>
-            </div>
 
-            <div class="col-md-3">
-              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}"
-                   data-type="liveOpen"
-                   title="云直播开启后可用">
-                <i class="es-icon es-icon-zhibokecheng2"></i>
-                <div class="course-type">直播公开课</div>
-                <div class="course-intro">直播形式的公开课</div>
+              <div class="col-md-3">
+                {% if not setting('live-course.live_course_enabled') %}
+                  <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="云直播开启后可用"
+                     data-type="liveOpen">
+                  {% else %}
+                    <div class="course-select" data-type="liveOpen">
+                  {% endif %}
+                  <i class="es-icon es-icon-zhibokecheng2"></i>
+                  <div class="course-type">直播公开课</div>
+                  <div class="course-intro">直播形式的公开课</div>
+                </div>
               </div>
-            </div>
 
-          </div>
+              {% include 'OrgBundle:Org:course-create-org-tree-select.html.twig' %}
 
-          {% include 'OrgBundle:Org:course-create-org-tree-select.html.twig' %}
-
-          <div class="course-title row">
-            <div class="col-md-2 controls-label text-lg">
-              <div class="course-piece title">
-                {{ '课程标题'|trans }}
+              <div class="course-title row">
+                <div class="col-md-2 controls-label text-lg">
+                  <div class="course-piece title">
+                    {{ '课程标题'|trans }}
+                  </div>
+                </div>
+                <div class="col-md-10 controls">
+                  <input type="text" id="course_title" name="title" required="required" class="form-control"
+                         data-widget-cid="widget-1" data-explain="">
+                  <div class="help-block" style="display:none;"></div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-10 controls">
-              <input type="text" id="course_title" name="title" required="required" class="form-control"
-                     data-widget-cid="widget-1" data-explain="">
-              <div class="help-block" style="display:none;"></div>
-            </div>
-          </div>
 
-          <div class="text-center">
-            {% if not setting('copyright.owned') %}
-              <span class="mrm"><a href="http://www.qiqiuyu.com/course/22" class="text-muted"
-                                   target="_blank">{{ '如何创建课程？'|trans }}</a></span>
-            {% endif %}
-            <input id="course-create-btn" data-submiting-text="{{ '正在创建'|trans }}" class="btn btn-fat btn-primary"
-                   type="submit" value="{{ '创建'|trans }}">
-            <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">取消</a>
-          </div>
+              <div class="text-center">
+                {% if not setting('copyright.owned') %}
+                  <span class="mrm"><a href="http://www.qiqiuyu.com/course/22" class="text-muted"
+                                       target="_blank">{{ '如何创建课程？'|trans }}</a></span>
+                {% endif %}
+                <input id="course-create-btn" data-submiting-text="{{ '正在创建'|trans }}" class="btn btn-fat btn-primary"
+                       type="submit" value="{{ '创建'|trans }}">
+                <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">取消</a>
+              </div>
 
-          <input type="hidden" name="type" value="normal"/>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+              <input type="hidden" name="type" value="normal"/>
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
 
       {% endif %}

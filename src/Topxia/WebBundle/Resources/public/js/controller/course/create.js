@@ -14,6 +14,7 @@ define(function (require, exports, module) {
         });
 
     exports.run = function () {
+        $('[data-toggle="tooltip"]').tooltip();
 
         var $form = $('#course-create-form');
 
@@ -41,8 +42,8 @@ define(function (require, exports, module) {
                 $this = $(this);
                 var courseType = $this.data('type');
                 $this.not('.disabled').addClass('active').parent().siblings().find('.course-select').removeClass('active');
-
                 $form.find('input[name="type"]').val(courseType);
+                validator.execute();
             })
         }
     };
