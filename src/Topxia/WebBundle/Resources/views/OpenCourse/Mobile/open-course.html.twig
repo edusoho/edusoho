@@ -1,5 +1,4 @@
-<div class="container openCourse-container">
-  {% block content %}
+{% block content %}
   {{ render(controller('TopxiaWebBundle:OpenCourse:header',{request:app.request, course:course, lessonId:lessonId|default(null)})) }}
   <div class="panel panel-default openCourse-panel">
     <div class="panel-heading">
@@ -24,6 +23,4 @@
     </div>
     {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
   </div>
-</div>
 {% endblock %}
-</div>

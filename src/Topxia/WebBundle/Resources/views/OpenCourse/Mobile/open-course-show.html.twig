@@ -7,14 +7,21 @@
   {% if app.request.get('as') == 'wxpreview' %}
     {% block header %}{% endblock %}
     <div class="openCourse-wechat-preview">
-      {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+      <div class="container openCourse-container">
+        {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+        <div class="openCourse-wechat-qrcode">
+          <img src="" alt="">
+          <p class="text-center color-gray text-sm">微信扫一扫</p>
+        </div>
+      </div>
     </div>
-     {% block footer %}{% endblock %}
+    {% block footer %}{% endblock %}
+
   {% else %}
+  <div class="container openCourse-container">
     {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+  </div>
   {% endif %}
-
-
   {% block bottom_content %}{% endblock %}
 {% endblock %}
     
