@@ -19,9 +19,10 @@ class PageContentType extends ContentType
 	{
 		return $this->getKernel()->trans('页面');
 	}
+
 	protected function getKernel()
-    	{
-        		return ServiceKernel::instance();
-    	}
+	{
+    return  ServiceKernel::instance();
+  }
 
 }
