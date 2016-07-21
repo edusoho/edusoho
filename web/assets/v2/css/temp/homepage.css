@@ -25,11 +25,22 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.homepage .teachers ul,
 .homepage .vip ul {
-  margin-right: -10px;
-  margin-left: -10px;
   padding-left: 0px;
   list-style: none;
+}
+.homepage .teachers ul li,
+.homepage .vip ul li {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+@media (max-width: 767px) {
+  .homepage .teachers ul li,
+  .homepage .vip ul li {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
 }
 .homepage .hot-group img {
   width: 58px;

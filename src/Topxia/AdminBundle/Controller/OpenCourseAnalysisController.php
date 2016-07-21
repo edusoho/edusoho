@@ -9,7 +9,7 @@ class OpenCourseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary', array('date-range' => 'week')));
+        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary_list', array('date-range' => 'week')));
     }
 
     public function summaryAction(Request $request)
@@ -31,9 +31,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function summaryListAction(Request $request)
     {
-        $query     = $request->query->all();
-        $timeRange = $this->getTimeRange($query);
-
+        $query                             = $request->query->all();
+        $timeRange                         = $this->getTimeRange($query);
         list($refererlogDatas, $paginator) = $this->getRefererLogData($request, $timeRange, array('hitNum', 'DESC'));
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
@@ -192,8 +191,8 @@ class OpenCourseAnalysisController extends BaseController
     {
         if (isset($fields['startTime']) || isset($fields['endTime'])) {
             return array(
-                'startTime' => empty($fields['startTime']) ? false : strtotime($fields['startTime']),
-                'endTime'   => empty($fields['endTime']) ? false : (strtotime($fields['endTime'].' 23:59:59'))
+                'startTime' => empty($fields['startTime']) ? null : strtotime($fields['startTime']),
+                'endTime'   => empty($fields['endTime']) ? null : (strtotime($fields['endTime'].' 23:59:59'))
             );
         }
         return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));

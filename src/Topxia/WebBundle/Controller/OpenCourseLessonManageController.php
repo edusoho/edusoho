@@ -53,6 +53,10 @@ class OpenCourseLessonManageController extends BaseController
         $course   = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $parentId = $request->query->get('parentId');
 
+        if ($this->lessonExists($id)) {
+            return $this->createJsonResponse(array('result' => 'lessonExists'));
+        }
+
         if ($request->getMethod() == 'POST') {
             $lesson             = $request->request->all();
             $lesson['courseId'] = $course['id'];
@@ -177,7 +181,7 @@ class OpenCourseLessonManageController extends BaseController
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
-            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
+            $name            = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
                 'id'     => 0,
                 'status' => 'none',
@@ -328,18 +332,17 @@ class OpenCourseLessonManageController extends BaseController
                 'course'   => $course
             ));
         }
-
     }
 
     public function materialDeleteAction(Request $request, $courseId, $materialId)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
-        
+
         $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
         if ($material) {
-            $this->getMaterialService()->updateMaterial($materialId,array('lessonId'=>0),array('lessonId'=>0,'materialId'=>$materialId,'fileId'=>$material['fileId']));
+            $this->getMaterialService()->updateMaterial($materialId, array('lessonId' => 0), array('lessonId' => 0, 'materialId' => $materialId, 'fileId' => $material['fileId']));
         }
-        
+
         return $this->createJsonResponse(true);
     }
 
@@ -348,9 +351,9 @@ class OpenCourseLessonManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
         return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
-                'request'  => $request,
-                'courseId' => $courseId
-            ));
+            'request'  => $request,
+            'courseId' => $courseId
+        ));
     }
 
     protected function textToSeconds($minutes, $seconds)
@@ -368,6 +371,16 @@ class OpenCourseLessonManageController extends BaseController
     protected function hasSelfMedia($lesson)
     {
         return !in_array($lesson['type'], array('liveOpen')) && $lesson['mediaSource'] == 'self';
+    }
+
+    protected function lessonExists($courseId)
+    {
+        $lessons = $this->getOpenCourseService()->searchLessons(array('courseId' => $courseId), array('seq', 'ASC'), 0, 1);
+        if ($lessons) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getAppService()

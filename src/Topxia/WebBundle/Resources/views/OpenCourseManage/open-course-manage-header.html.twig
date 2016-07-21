@@ -5,7 +5,9 @@
   <a href="{{ path('open_course_show', {courseId:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>
-  <h1 class="title"><a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+  <h1 class="title">
+    [{{ dict('courseType')[course.type] }}]
+    <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     {% if course.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}
@@ -37,7 +39,8 @@
       </div>
     {% endif %}
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">预览</a>
+      <a class="btn btn-default btn-sm mrs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">预览</a>
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'wxpreview'}) }}" target="_blank">微信端预览</a>
     </div>
   </div>
 </div>

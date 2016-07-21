@@ -64,7 +64,17 @@ class OpenCourseController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
-        $this->getOpenCourseService()->publishCourse($id);
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        $result = $this->getOpenCourseService()->publishCourse($id);
+
+        if ($course['type'] == 'liveOpen' && !$result['result']) {
+            return $this->createJsonResponse(array('message' => '请先设置直播时间'));
+        }
+
+        if ($course['type'] == 'open' && !$result['result']) {
+            return $this->createJsonResponse(array('message' => '请先创建课时'));
+        }
 
         return $this->renderOpenCourseTr($id, $request);
     }

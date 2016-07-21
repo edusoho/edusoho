@@ -156,7 +156,7 @@ class OpenCourseManageController extends BaseController
 
         $students = $this->getOpenCourseService()->searchMembers(
             $condition,
-            array('createdTime', 'DESC'),
+            array('lastEnterTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -203,6 +203,8 @@ class OpenCourseManageController extends BaseController
 
                 $liveLesson = $this->getOpenCourseService()->createLesson($liveLesson);
             }
+
+            $this->setFlashMessage('success', '直播时间设置已保存！');
         }
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:live-open-time-set.html.twig', array(

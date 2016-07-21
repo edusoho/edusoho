@@ -100,7 +100,7 @@ define(function (require, exports, module) {
             }
         });
 
-        Validator.addRule('romote_check',
+        Validator.addRule('remote_check',
             function (options, commit) {
 
                 var element = $('#live_lesson_time_check');
@@ -115,7 +115,8 @@ define(function (require, exports, module) {
                 } else {
                     return true;
                 }
-            });
+            }
+        );
 
         Validator.addRule('live_date_check',
             function () {
@@ -166,7 +167,7 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name=timeLength]',
             required: true,
-            rule: 'integer romote_check',
+            rule: 'positive_integer remote_check',
             display: '直播时长',
             onItemValidated: function (error, message, elem) {
                 if (error) {
