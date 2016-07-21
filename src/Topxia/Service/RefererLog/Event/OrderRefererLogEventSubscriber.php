@@ -24,7 +24,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $order = $event->getSubject();
 
-        if (empty($refererLogToken)) {
+        if (empty($refererLogToken) || $order['totalPrice'] == 0) {
             return false;
         }
 

@@ -14357,13 +14357,16 @@ textarea {
 .panel-create-course .course-select:hover {
   border: 2px solid #f9b469;
 }
-.panel-create-course .course-select.active,
-.panel-create-course .course-select:active {
+.panel-create-course .course-select.disabled {
+  border: 0px;
+  color: #d9d7d7;
+  cursor: help;
+}
+.panel-create-course .course-select.active {
   background-color: #f9b469;
   color: #fff;
 }
-.panel-create-course .course-select.active .course-type,
-.panel-create-course .course-select:active .course-type {
+.panel-create-course .course-select.active .course-type {
   border-bottom: 1px solid white;
 }
 .panel-create-course .course-select .es-icon {

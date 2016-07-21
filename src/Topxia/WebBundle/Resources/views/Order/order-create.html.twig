@@ -29,25 +29,16 @@
         <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="order-detail-bg" style="border:none">
-        {% if targetType == "course" and course|default(null) %}
-          {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
-        {% endif %}
-        {% if targetType == "vip" %}
-          {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
-        {% endif %}
-        {% if targetType == "classroom" %}
-          {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
-        {% endif %}
-        {% if targetType == "groupSell" %}
-          {% include 'GroupSellBundle:GroupSell:Order/group_sell.html.twig' %}
-        {% endif %}
+          {% if check_order_type(targetType) %}
+            {% include check_order_type(targetType) %}
+          {% endif %}
         </div>
 
-        {% if targetType in ['course','vip','classroom'] %}
+        {% if check_order_type(targetType) %}
           <div class="order-detail-bg">
 
-            {% if (is_plugin_installed("Coupon") and setting('coupon.enabled')) 
-                or setting('invite.invite_code_setting')|default(false) 
+            {% if (is_plugin_installed("Coupon") and setting('coupon.enabled'))
+                or setting('invite.invite_code_setting')|default(false)
             %}
               {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
             {% endif %}

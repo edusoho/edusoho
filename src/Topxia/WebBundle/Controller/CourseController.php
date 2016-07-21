@@ -892,8 +892,6 @@ class CourseController extends CourseBaseController
 
         if ($type == 'live' && empty($courseSetting['live_course_enabled'])) {
             throw new \RuntimeException('请前往后台开启直播,尝试创建！');
-        } elseif ($type == 'liveOpen' && empty($courseSetting['live_open_course_enabled'])) {
-            throw new \RuntimeException('请前往后台开启公开课直播,尝试创建！');
         }
 
         $client   = new EdusohoLiveClient();

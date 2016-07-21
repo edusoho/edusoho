@@ -166,6 +166,13 @@ admin_open_course:
     parent: admin_open_course_manage
     router_name: admin_open_course
 
+admin_open_course_add:
+    name: 创建课程
+    parent: admin_open_course
+    router_name: course_create
+    group: 2
+    blank: 1
+
 admin_open_course_recommend:
     name: 公开课推荐
     parent: admin_open_course_manage
@@ -509,9 +516,6 @@ admin_cloud_file:
     name: 云资源
     parent: admin_app
     before: admin_setting_cloud
-#admin_edu_cloud_search:
-#   name: 云搜索设置
-#   parent: admin_setting_cloud_video
 admin_batch_notification:
     name: 全站站内通知
     parent: admin_operation

@@ -232,6 +232,11 @@ class ServiceKernel
         $this->_moduleDirectories[] = $dir;
     }
 
+    public function getModuleDirectories()
+    {
+        return $this->_moduleDirectories;
+    }
+
     public function getModuleConfig($key, $default = null)
     {
         if (!isset($this->_moduleConfig[$key])) {
