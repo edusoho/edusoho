@@ -62,7 +62,7 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'seq'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'seq', 'lastEnterTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
