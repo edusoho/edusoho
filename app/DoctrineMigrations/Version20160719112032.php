@@ -23,7 +23,6 @@ class Version20160719112032 extends AbstractMigration
         if($this->isFieldExist('referer_log', 'targetInnerType') && $this->isFieldExist('referer_log', 'targetId')){
             $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");    
         }
-        
     }
 
     /**

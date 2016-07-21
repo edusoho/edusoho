@@ -15,11 +15,6 @@ define(function(require, exports, module) {
 
     var rules = [
         [
-            'integer',
-            /[0-9]*/,
-            '{{display}}必须是数字'
-        ],
-        [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             '{{display}}不能全为数字'
@@ -185,8 +180,13 @@ define(function(require, exports, module) {
         ], 
         [
             'positive_integer',
-            /^[0-9]*[1-9][0-9]*$/,
+            /^[1-9]\d*$/,
             '{{display}}必须为正整数'
+        ],
+        [
+            'unsigned_integer',
+            /^([1-9]\d*|0)$/,
+            '{{display}}必须为非负整数'
         ],
         [
             'arithmetic_number',
