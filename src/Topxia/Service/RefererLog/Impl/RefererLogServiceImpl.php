@@ -12,7 +12,6 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if ($this->ignoreLog($refererlog)) {
             return false;
         }
-
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
             throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
         }
@@ -20,19 +19,15 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
-        $user                            = $this->getCurrentUser();
-        list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['userAgent']);
-
-        $refererlog['refererUrl']    = empty($refererlog['refererUrl']) ? $refererHost : $refererlog['refererUrl'];
-        $refererlog['refererHost']   = $refererHost;
-        $refererlog['refererName']   = $refererName;
+        $user                        = $this->getCurrentUser();
+        $refererlog                  = $this->prepareRefererUrl($refererlog);
         $refererlog['createdUserId'] = $user['id'];
         return $this->getRefererLogDao()->addRefererLog($refererlog);
     }
 
     private function ignoreLog($refererlog)
     {
-        if ((empty($refererlog['refererUrl']) && strpos($refererlog['userAgent'], 'MicroMessenger') == false) || strpos($refererlog['refererUrl'], 'manage/lesson')) {
+        if (strpos($refererlog['refererUrl'], 'my/courses/favorited') || strpos($refererlog['refererUrl'], 'manage/lesson')) {
             return true;
         }
         return false;
@@ -136,39 +131,45 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }, $analysisDatas);
     }
 
-    private function prepareRefererUrl($refererUrl, $userAgent)
+    private function prepareRefererUrl($refererlog)
     {
+        $host       = $this->getKernel()->getEnvVariable('host');
         $refererMap = $this->getRefererMap();
-        if (strpos($userAgent, 'MicroMessenger') !== false && $refererUrl == null) {
-            $refererHost = 'mp.weixin.qq.com';
-            $refererName = $this->arrayFind($refererMap, $refererHost);
-            return array($refererHost, $refererName);
+        //微信访问url
+        if (strpos($refererlog['userAgent'], 'MicroMessenger') !== false) {
+            $refererlog['refererUrl'] = empty($refererlog['refererUrl']) ? $refererlog['uri'] : $refererlog['refererUrl'];
+            if (strpos($refererlog['refererUrl'], $host) !== false) {
+                $refererlog['refererHost'] = 'mp.weixin.qq.com';
+                $refererlog['refererUrl']  = 'mp.weixin.qq.com';
+                $refererlog['refererName'] = $this->arrayFind($refererMap, $refererlog['refererHost']);
+            }
+        }
+        //直接访问url
+        if ($refererlog['refererUrl'] == null) {
+            $refererlog['refererUrl']  = $refererlog['uri'];
+            $refererlog['refererHost'] = $host;
+            $refererlog['refererName'] = '直接访问';
         }
 
-        $refererHost = null;
-        $refererName = null;
-        $outerVisit  = true;
-
-        $host = $this->getKernel()->getEnvVariable('host');
-
         $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
-        preg_match($patten, $refererUrl, $matches);
-
+        preg_match($patten, $refererlog['refererUrl'], $matches);
+        $outerVisit = true;
         array_walk($matches, function ($value) use ($host, &$outerVisit) {
             if ($value == $host) {
                 $outerVisit = false;
             }
         });
-        //站外
         if ($outerVisit) {
-            $refererHost = $refererName = $matches[0];
+            $refererlog['refererHost'] = $matches[0];
+            $refererlog['refererName'] = $matches[0];
+            $refererlog['refererName'] = $this->arrayFind($refererMap, $refererlog['refererHost']);
         } else {
-            $refererHost = $refererName = $refererUrl;
+            $refererlog['refererHost'] = $host;
+            $refererlog['refererName'] = $host;
+            $refererlog['refererName'] = $this->arrayFind($refererMap, $refererlog['refererUrl']);
         }
 
-        $refererName = $this->arrayFind($refererMap, $refererHost);
-
-        return array($refererHost, $refererName);
+        return $refererlog;
     }
 
     private function arrayFind($array, $existsKey)
@@ -185,15 +186,15 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     {
         $host = $this->getKernel()->getEnvVariable('host');
         return array(
-            'open/course/explore'  => '公开课列表',
-            'open/course'          => '公开课详情页',
-            'my/courses/favorited' => '收藏页面',
-            $host                  => '首页',
-            'baidu.com'            => '百度',
-            'www.so.com'           => '360搜索',
-            'www.sogou.com'        => '搜狗搜索',
-            'mp.weixin.qq.com'     => '微信',
-            'weibo.com'            => '微博'
+            'open/course/explore' => '公开课列表',
+            'open/course'         => '公开课详情页',
+            $host                 => '首页',
+
+            'baidu.com'           => '百度',
+            'www.so.com'          => '360搜索',
+            'www.sogou.com'       => '搜狗搜索',
+            'mp.weixin.qq.com'    => '微信',
+            'weibo.com'           => '微博'
         );
     }
 }

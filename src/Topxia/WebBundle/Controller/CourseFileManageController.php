@@ -11,10 +11,14 @@ class CourseFileManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course     = $this->getCourseService()->tryManageCourse($id);
+        $conditions = array(
+            'courseId' => $course['id'],
+            'type'     => 'course'
+        );
 
         if ($course['parentId'] > 0 && $course['locked'] == 1) {
-            $course['id'] = $course['parentId'];
+            $conditions['courseId'] = $course['parentId'];
         }
 
         $paginator = new Paginator(
@@ -23,8 +27,9 @@ class CourseFileManageController extends BaseController
             20
         );
 
-        $files = $this->getMaterialService()->findMaterialsGroupByFileId(
-            $course['id'],
+        $files = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

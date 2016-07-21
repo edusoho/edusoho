@@ -3,6 +3,12 @@ courseStatus:
     published: 已发布
     closed: 已关闭
 
+courseType:
+    live: 直播课程
+    open: 录播公开课
+    liveOpen: 直播公开课
+    normal: 普通课程
+
 classroomStatus:
     draft: 未发布
     published: 已发布
