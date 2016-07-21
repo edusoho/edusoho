@@ -17,8 +17,8 @@ class Version20160719112032 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
 
-        $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
-        $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");
+        /* $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
+    $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");*/
     }
 
     /**
