@@ -40,6 +40,9 @@ define(function (require, exports, module) {
             this.$el.find('.modal-body').html(html);
         },
         show: function () {
+            if(this.$el.parent().find('.openCourse-wechat-qrcode').length > 0 ){
+                return;
+            }
             if (isWxAndroidBrowser()) {
                 document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display = "none";
                 this.$el.on('hide.bs.modal', function () {

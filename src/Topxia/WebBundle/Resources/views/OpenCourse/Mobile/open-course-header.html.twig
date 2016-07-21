@@ -4,7 +4,7 @@
 
 <div class="open-course-title open-course-mobile-title">
   {{ lesson.title }}
-  <p><a href="">EduSoho网校</a></p>
+  <p><a href="{{ path('homepage') }}" target="_blank">{{ setting('site.name', 'EduSoho网校') }}</a></p>
 </div>
 <div class="open-course-mask  modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
   <div class="modal-dialog" role="document">
@@ -37,7 +37,7 @@
     
   </div>
 {% elseif course.type == 'liveOpen' %}
-  <div class="col-md-9 open-course-views">
+  <div class="open-course-views">
     <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="" style="height:100%;">
     <div class="mask">
       {% if lesson.startTime > ("now"|date("U")) %}

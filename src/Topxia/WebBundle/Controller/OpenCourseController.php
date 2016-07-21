@@ -51,8 +51,15 @@ class OpenCourseController extends BaseController
     public function showAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        $preview = $request->query->get('as');
 
-        if ($request->query->get('as') === 'preview') {
+        if($preview === 'wxpreview' || $this->isWxClient()){
+            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
+        }else{
+            $template = 'TopxiaWebBundle:OpenCourse:open-course-show.html.twig';
+        }
+
+        if ($preview === 'preview' || $preview === 'wxpreview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
             if (!$this->_checkPublishedLessonExists($courseId)) {
@@ -60,7 +67,7 @@ class OpenCourseController extends BaseController
                 return $this->createMessageResponse('error', $message);
             }
 
-            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+            return $this->render($template, array(
                 'course' => $course
             ));
         }
@@ -75,12 +82,7 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        if ($this->isWxClient()) {
-            $url = "TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig";
-        } else {
-            $url = "TopxiaWebBundle:OpenCourse:open-course-show.html.twig";
-        }
-        $content = $this->renderView($url, array(
+        $content = $this->renderView($template, array(
             'course'   => $course,
             'lessonId' => $lessonId
         ));
@@ -137,7 +139,7 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if ($this->isWxClient()) {
+        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
                 'course'     => $course,
                 'lesson'     => $lesson,
@@ -286,7 +288,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($this->isWxClient()) {
+        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
             return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
                 'course'    => $course,
                 'posts'     => $posts,

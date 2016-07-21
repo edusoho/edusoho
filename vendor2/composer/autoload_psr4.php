@@ -16,5 +16,6 @@ return array(
     'Incenteev\\ParameterHandler\\' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src', $vendorDir . '/endroid/qrcode/tests'),
+    'Endroid\\Bundle\\QrCodeBundle\\'         => array($vendorDir . '/endroid/qrcode-bundle/src'),
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
 );

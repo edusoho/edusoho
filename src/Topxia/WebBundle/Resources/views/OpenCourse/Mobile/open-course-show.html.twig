@@ -1,46 +1,31 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set script_controller = 'open-course/open-course' %}
 
+{% block title %}
+  {{ setting('site.name', 'EduSoho网校') }}
+{% endblock %}
+
 {% block full_content %}
   {% block top_content %}{% endblock %}
 
+  {% if app.request.get('as') == 'wxpreview' %}
+    {% block header %}{% endblock %}
+    <div class="openCourse-wechat-preview">
+      <div class="container openCourse-container">
+        {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+        <div class="openCourse-wechat-qrcode hidden-md hidden-sm hidden-xs">
+          {# 二维码地址去掉url的query部分 #}
+          <img src="{{ qrcode_data_uri(app.request.uri|split('?')[0]) }}">
+          <p class="text-center">微信扫一扫预览</p>
+        </div>
+      </div>
+    </div>
+    {% block footer %}{% endblock %}
+  {% else %}
   <div class="container openCourse-container">
-  {% block content %}
-    {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
-    <div class="panel panel-default openCourse-panel">
-      <div class="panel-heading">
-        推荐课程
-      </div>
-      <div class="panel-body">
-        {% include 'TopxiaWebBundle:OpenCourse:Mobile/recommend-course-list.html.twig' %}
-      </div>
-    </div>
-    <div class="open-course-detail">
-      <div class="panel panel-default openCourse-panel ">
-        <div class="panel-heading">
-          课程介绍
-        </div>
-        <div class="panel-body openCourse-intro">
-          {% if course.about %}
-            {{ course.about|raw }}
-          {% else %}
-            <div class="empty">暂无简介</div>
-          {% endif %}
-        </div>
-      </div>
-      {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
-    </div>
-    <div class="col-md-3 hidden-sm hidden-xs">
-      {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-
-      {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
-    </div>
-    </div>
-
-
-  {% endblock %}
+    {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
   </div>
-
+  {% endif %}
   {% block bottom_content %}{% endblock %}
 {% endblock %}
     
