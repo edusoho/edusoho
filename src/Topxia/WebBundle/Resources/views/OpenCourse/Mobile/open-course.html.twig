@@ -1,6 +1,6 @@
 <div class="container openCourse-container">
   {% block content %}
-  {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+  {{ render(controller('TopxiaWebBundle:OpenCourse:header',{request:app.request, course:course, lessonId:lessonId|default(null)})) }}
   <div class="panel panel-default openCourse-panel">
     <div class="panel-heading">
       推荐课程

@@ -133,7 +133,7 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if($this->isWxClient()){
+        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
                 'course'     => $course,
                 'lesson'     => $lesson,
@@ -283,7 +283,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if($this->isWxClient()){
+        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
             return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
                 'course'    => $course,
                 'posts'     => $posts,
