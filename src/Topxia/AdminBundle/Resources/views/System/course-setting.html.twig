@@ -11,9 +11,9 @@
 <form class="form-horizontal" method="post" id="course-form" novalidate>
 
   <fieldset>
-    <div class="form-group">
+    < class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'给新'|trans}}{% if setting('default.user_name') %}{{'%user_name%发送欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}/label>
+        <label >{{'给新'|trans}}{% if setting('default.user_name') %}{{'%user_name%发送欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('welcome_message_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.welcome_message_enabled) }}
@@ -28,13 +28,13 @@
       <div class="controls col-md-8">
         <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5">{{ courseSetting.welcome_message_body }}</textarea>
         <div class="help-block">
-          {% verbatim %}
+
           <div>{{'变量说明：'|trans}}</div>
           <ul>
-            <li>{{nickname}} {{'为接收方用户用户名'|trans}}</li>
-            <li>{{course}} {{'为课程名称'|trans}}</li>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户用户名'|trans}}</li>
+            <li>{% verbatim %}{{course}}{% endverbatim %} {{'为课程名称'|trans}}</li>
           </ul>
-          {% endverbatim %}
+
         </div>
       </div>
     </div>

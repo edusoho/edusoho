@@ -88,7 +88,7 @@ class UserSettingController extends BaseController
             $auth = array_merge($auth, $authUpdate);
             $this->getSettingService()->set('auth', $auth);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新注册设置'), $auth);
+            $this->getLogService()->info('system', 'update_settings', '更新注册设置', $auth);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('注册设置已保存！'));
         }
 

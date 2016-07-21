@@ -13,7 +13,7 @@
     </div>
     <div class="controls col-md-8">
       <input id="max-refund-days-field" class="form-control" name="maxRefundDays" type="text"   value="{{refundSetting.maxRefundDays}}">
-      <div class="help-block">{{'用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。'|trans}}<br/><span style="color:red">系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。</span></div>
+      <div class="help-block">{{'用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。'|trans}}<br/><span style="color:red">{{ '系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。'|trans }}</span></div>
     </div>
   </div>
 
@@ -56,14 +56,12 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
-{% verbatim %}
 <div class="alert alert-info">
   <p><strong>{{'通知变量说明：'|trans}}</strong></p>
   <ul>
-    <li>{{item}}: {{'需退款的课程或班级'|trans}}</li>
-    <li>{{amount}}: {{'退款金额'|trans}}</li>
+    <li>{% verbatim %}{{item}}{% endverbatim %}: {{'需退款的课程或班级'|trans}}</li>
+    <li>{% verbatim %}{{amount}}{% endverbatim %}: {{'退款金额'|trans}}</li>
   </ul>
 </div>
-{% endverbatim %}
 
 {% endblock %}

@@ -8,7 +8,7 @@
 {{ web_macro.flash_messages() }}
 
 <div class="page-header clearfix">
-  <h1 class="pull-left">云搜索</h1>
+  <h1 class="pull-left">{{'云搜索'|trans}}</h1>
 </div>
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
@@ -29,23 +29,23 @@
           </div>
         {% elseif data.status == 'unbinded' %}
           <div class="col-md-2">
-            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'启用云搜索'|trans}}</button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm" >未绑定授权域名不能开通云搜索！</span>
-            <p><a href="{{path('admin_setting_cloud')}}">立即设置</a></p>
+            <span class="text-danger text-sm" >{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
+            <p><a href="{{path('admin_setting_cloud')}}">{{'立即设置'|trans}}</a></p>
           </div>
         {% elseif data.status == 'binded_error' %}
           <div class="col-md-2">
-            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'启用云搜索'|trans}}</button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm" >当前域名与授权域名不符，不能开通云搜索！</span>
-            <p><a href="{{path('admin_setting_cloud')}}" target="_blank">立即设置</a></p>
+            <span class="text-danger text-sm" >{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
+            <p><a href="{{path('admin_setting_cloud')}}" target="_blank">{{'立即设置'|trans}}</a></p>
           </div>
         {% elseif data.status == 'closed' %}
             <div class="col-md-2">
-              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
+              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'启用云搜索'|trans}}</a>
           </div>
 
         {% else %}
@@ -68,7 +68,7 @@
 
           {% if setting('developer.debug')%}
             <div class="col-md-2">
-              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_reapply') }}">重建索引</a>
+              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_reapply') }}">{{'重建索引'|trans}}</a>
             </div>
           {% endif %}
         {% endif %}
@@ -76,12 +76,12 @@
 
       <div class="help-block">{{'云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、话题、老师、资讯。'|trans}}</div>
 
-      <h4>搜索范围说明</h4>
+      <h4>{{'搜索范围说明'|trans}}</h4>
 
-      －课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。<br>
-      －教师：教师姓名、教师头衔。<br>
-      －小组话题：包括话题标题、正文等关键词全文搜索。<br>
-      －资讯：包括资讯标题、正文等关键词全文搜索。<br>
+      －{{'课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。'|trans}}<br>
+      －{{'教师：教师姓名、教师头衔。'|trans}}<br>
+      －{{'小组话题：包括话题标题、正文等关键词全文搜索。'|trans}}<br>
+      －{{'资讯：包括资讯标题、正文等关键词全文搜索。'|trans}}<br>
     {% endif %}
 
 

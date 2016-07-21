@@ -35,7 +35,7 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新开发者设置'), $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新开发者设置', $developerSetting);
 
             $this->dealServerConfigFile();
             $this->dealNetworkLockFile($developerSetting);
@@ -100,7 +100,7 @@ class DeveloperSettingController extends BaseController
             }
 
             $this->getSettingService()->set('magic', $setting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新Magic设置'), $setting);
+            $this->getLogService()->info('system', 'update_settings', '更新Magic设置', $setting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
@@ -130,7 +130,7 @@ class DeveloperSettingController extends BaseController
                 file_exists($redisConfigFile) && unlink($redisConfigFile);
             }
 
-            $this->getLogService()->info('system', 'update_redis', $this->getServiceKernel()->trans('更新redis设置'), $redis);
+            $this->getLogService()->info('system', 'update_redis', '更新redis设置', $redis);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 

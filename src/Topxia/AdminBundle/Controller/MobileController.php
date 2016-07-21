@@ -51,7 +51,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
@@ -91,7 +91,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
@@ -128,7 +128,7 @@ class MobileController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片',array('%type%'=>$type)), array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', "更新网校{$type}图片", array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],
@@ -145,7 +145,7 @@ class MobileController extends BaseController
 
         $this->getSettingService()->set('mobile', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片',array('%type%'=>$type)));
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
 
         return $this->createJsonResponse(true);
     }
@@ -156,7 +156,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw new \RuntimeException("参数不正确");
+            throw new \RuntimeException($this->getServiceKernel()->trans('参数不正确'));
         }
 
         $api = CloudAPIFactory::create('root');

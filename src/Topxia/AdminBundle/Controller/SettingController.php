@@ -17,7 +17,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新PostNumSetting设置'), $setting);
+            $this->getLogService()->info('system', 'update_settings', '更新PostNumSetting设置', $setting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
@@ -63,7 +63,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新移动客户端设置'), $mobile);
+            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
@@ -99,7 +99,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $mobile);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新网校%type%图片', array('%type%' => $type)), array($type => $mobile[$type]));
+        $this->getLogService()->info('system', 'update_settings', '更新网校$type图片', array($type => $mobile[$type]));
 
         $response = array(
             'path' => $mobile[$type],
@@ -116,7 +116,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('mobile', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除网校%type%图片', array('%type%' => $type)));
+        $this->getLogService()->info('system', 'update_settings', "移除网校{$type}图片");
 
         return $this->createJsonResponse(true);
     }
@@ -146,7 +146,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新站点LOGO'), array('logo' => $site['logo']));
+        $this->getLogService()->info('system', 'update_settings', '更新站点LOGO', array('logo' => $site['logo']));
 
         $response = array(
             'path' => $site['logo'],
@@ -170,7 +170,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除站点LOGO'));
+        $this->getLogService()->info('system', 'update_settings', '移除站点LOGO');
 
         return $this->createJsonResponse(true);
     }
@@ -200,7 +200,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新直播LOGO'), array('live_logo' => $site['live_logo']));
+        $this->getLogService()->info('system', 'update_settings', '更新直播LOGO', array('live_logo' => $site['live_logo']));
 
         $response = array(
             'path' => $site['live_logo'],
@@ -224,7 +224,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除直播LOGO'));
+        $this->getLogService()->info('system', 'update_settings', '移除直播LOGO');
 
         return $this->createJsonResponse(true);
     }
@@ -257,7 +257,7 @@ class SettingController extends BaseController
         //浏览器图标覆盖默认图标
         copy($this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新浏览器图标'), array('favicon' => $site['favicon']));
+        $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', array('favicon' => $site['favicon']));
 
         $response = array(
             'path' => $site['favicon'],
@@ -281,7 +281,7 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($fileId);
         }
 
-        $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('移除站点浏览器图标'));
+        $this->getLogService()->info('system', 'update_settings', '移除站点浏览器图标');
 
         return $this->createJsonResponse(true);
     }
@@ -317,7 +317,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mailer', $mailer);
             $mailerWithoutPassword             = $mailer;
             $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新邮件服务器设置'), $mailerWithoutPassword);
+            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('电子邮件设置已保存！'));
         }
 
@@ -379,7 +379,7 @@ class SettingController extends BaseController
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新系统默认设置'), $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新系统默认设置', $defaultSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('系统默认设置已保存！'));
         }
 
@@ -421,7 +421,7 @@ class SettingController extends BaseController
             $data       = $request->request->all();
             $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
             $this->getSettingService()->set('blacklist_ip', $ips);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新IP黑名单'), $ips);
+            $this->getLogService()->info('system', 'update_settings', '更新IP黑名单', $ips);
 
             $ips        = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] = join("\n", $ips['ips']);
@@ -450,7 +450,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $customerServiceSetting = $request->request->all();
             $this->getSettingService()->set('customerService', $customerServiceSetting);
-            $this->getLogService()->info('system', 'customerServiceSetting', $this->getServiceKernel()->trans('客服管理设置'), $customerServiceSetting);
+            $this->getLogService()->info('system', 'customerServiceSetting', '客服管理设置', $customerServiceSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('客服管理设置已保存！'));
         }
 
@@ -505,7 +505,7 @@ class SettingController extends BaseController
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
-            $this->getLogService()->info('system', 'setting_userCenter', $this->getServiceKernel()->trans('用户中心设置'), $setting);
+            $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户中心设置已保存！'));
         }
 
@@ -572,7 +572,7 @@ class SettingController extends BaseController
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $courseSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $courseSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
@@ -610,7 +610,7 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('system', 'questions_settings', $this->getServiceKernel()->trans('更新题库设置'), $questionsSetting);
+            $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('题库设置已保存！'));
         }
 

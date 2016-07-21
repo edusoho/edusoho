@@ -73,7 +73,7 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $courseSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $courseSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
@@ -100,7 +100,7 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程默认图片设置'), $defaultSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新课程默认图片设置', $defaultSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程默认图片设置已保存！'));
         }
 
@@ -144,7 +144,7 @@ class CourseSettingController extends BaseController
 
             $this->getSettingService()->set('menu_hiddens', $hiddenMenus);
 
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新课程设置'), $setting);
+            $this->getLogService()->info('system', 'update_settings', '更新课程设置', $setting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程设置已保存！'));
         }
 
@@ -169,7 +169,7 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
-            $this->getLogService()->info('system', 'questions_settings', $this->getServiceKernel()->trans('更新题库设置'), $questionsSetting);
+            $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('题库设置已保存！'));
         }
 

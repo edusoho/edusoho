@@ -25,12 +25,12 @@
           <td>
             <span id="deRmb{{item.id}}">
               {{ (item.maxRate * item.price / 100)|number_format(2,'.') }}
-            </sapn>
+            </span>
           </td>
           <td>
             <span id="cash{{item.id}}">
               {{ (item.maxRate / 100 * item.price * set.cash_rate)|number_format(2, '.') }}
-            </sapn>
+            </span>
           </td>
         </tr>
       {% endfor %}
