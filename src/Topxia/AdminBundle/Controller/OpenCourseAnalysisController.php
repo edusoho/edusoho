@@ -9,7 +9,7 @@ class OpenCourseAnalysisController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary', array('date-range' => 'week')));
+        return $this->redirect($this->generateUrl('admin_opencourse_analysis_referer_summary_list', array('date-range' => 'week')));
     }
 
     public function summaryAction(Request $request)
