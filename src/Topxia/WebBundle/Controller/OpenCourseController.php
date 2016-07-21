@@ -50,12 +50,12 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $course  = $this->getOpenCourseService()->getCourse($courseId);
         $preview = $request->query->get('as');
 
-        if($preview === 'wxpreview' || $this->isWxClient()){
+        if ($preview === 'wxpreview' || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-show.html.twig';
-        }else{
+        } else {
             $template = 'TopxiaWebBundle:OpenCourse:open-course-show.html.twig';
         }
 
@@ -80,6 +80,7 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '请先创建课时并发布！');
         }
 
+        $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $content = $this->renderView($template, array(
@@ -139,7 +140,7 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
+        if ($this->isWxClient() || $request->query->get('as') === 'wxpreview') {
             return $this->render("TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig", array(
                 'course'     => $course,
                 'lesson'     => $lesson,
@@ -288,7 +289,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if($this->isWxClient() || $request->query->get('as') === 'wxpreview'){
+        if ($this->isWxClient() || $request->query->get('as') === 'wxpreview') {
             return $this->render('TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig', array(
                 'course'    => $course,
                 'posts'     => $posts,
