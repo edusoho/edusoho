@@ -9,6 +9,10 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 {
     public function addRefererLog($refererlog)
     {
+        if ($this->ignoreLog($refererlog)) {
+            return false;
+        }
+
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
             throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
         }
@@ -19,10 +23,19 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $user                            = $this->getCurrentUser();
         list($refererHost, $refererName) = $this->prepareRefererUrl($refererlog['refererUrl'], $refererlog['userAgent']);
 
+        $refererlog['refererUrl']    = empty($refererlog['refererUrl']) ? $refererHost : $refererlog['refererUrl'];
         $refererlog['refererHost']   = $refererHost;
         $refererlog['refererName']   = $refererName;
         $refererlog['createdUserId'] = $user['id'];
         return $this->getRefererLogDao()->addRefererLog($refererlog);
+    }
+
+    private function ignoreLog($refererlog)
+    {
+        if ((empty($refererlog['refererUrl']) && strpos($refererlog['userAgent'], 'MicroMessenger') == false) || strpos($refererlog['refererUrl'], 'manage/lesson')) {
+            return true;
+        }
+        return false;
     }
 
     public function getRefererLogById($id)
@@ -125,12 +138,18 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function prepareRefererUrl($refererUrl, $userAgent)
     {
+        $refererMap = $this->getRefererMap();
+        if (strpos($userAgent, 'MicroMessenger') !== false && $refererUrl == null) {
+            $refererHost = 'mp.weixin.qq.com';
+            $refererName = $this->arrayFind($refererMap, $refererHost);
+            return array($refererHost, $refererName);
+        }
+
         $refererHost = null;
         $refererName = null;
         $outerVisit  = true;
 
-        $host       = $this->getKernel()->getEnvVariable('host');
-        $refererMap = $this->getRefererMap();
+        $host = $this->getKernel()->getEnvVariable('host');
 
         $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';
         preg_match($patten, $refererUrl, $matches);
@@ -144,11 +163,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if ($outerVisit) {
             $refererHost = $refererName = $matches[0];
         } else {
-            if (strpos($userAgent, 'MicroMessenger') === false) {
-                $refererHost = $refererName = $refererUrl;
-            } else {
-                $refererHost = $refererName = 'mp.weixin.qq.com';
-            }
+            $refererHost = $refererName = $refererUrl;
         }
 
         $refererName = $this->arrayFind($refererMap, $refererHost);
