@@ -126,12 +126,14 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function createBlock($block)
     {
-        if (!ArrayToolkit::requireds($block, array('code', 'data', 'content', 'userId', 'blockTemplateId', 'orgId'))) {
+        if (!ArrayToolkit::requireds($block, array('code', 'data', 'content', 'blockTemplateId'))) {
             throw $this->createServiceException('创建编辑区失败，缺少必要的字段');
         }
-
+        $user                 = $this->getCurrentUser();
         $block['createdTime'] = time();
         $block['updateTime']  = time();
+        $block['userId']      = $user['id'];
+        $block['orgId']       = $user['orgId'];
         unset($block['mode']);
         $createdBlock = $this->getBlockDao()->addBlock($block);
 

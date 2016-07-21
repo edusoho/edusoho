@@ -6,14 +6,18 @@ use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
-class Lessons extends BaseResource
+class LessonsToBeDelete extends BaseResource
 {
-    public function get(Application $app, Request $request)
+    public function get(Application $app, Request $request, $courseId)
     {
         $conditions = $request->query->all();
 
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
+
+        if (empty($conditions['courseId'])) {
+            $conditions['courseId'] = $courseId;
+        }
 
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';

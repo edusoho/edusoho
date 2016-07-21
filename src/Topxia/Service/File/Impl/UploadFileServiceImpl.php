@@ -726,7 +726,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getFile($fileId);
+        $file = $this->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -771,7 +771,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     // TODO
     public function tryAccessFile($fileId)
     {
-        $file = $this->getFile($fileId);
+        $file = $this->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();

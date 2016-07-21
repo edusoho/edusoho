@@ -7,9 +7,17 @@ use Topxia\Service\Common\ServiceException;
 
 class ArticleServiceTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->getSettingService()->set('site', array('name' => 'name', 'slogan' => 'slogan'));
+        $this->getSettingService()->set('mobile', array('about' => 'about', 'logo' => 'logo'));
+    }
+
     public function testgetArticle()
     {
-        $user = $this->getCurrentUser();
+        $user       = $this->getCurrentUser();
         $newArticle = $this->createArticle();
         $getArticle = $this->getArticleService()->getArticle($newArticle['id']);
         $this->assertEquals('test article', $getArticle['title']);
@@ -25,7 +33,7 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testgetArticleNext()
     {
-        $newArticle     = $this->createArticle();
+        $newArticle = $this->createArticle();
         sleep(1);
         $newArticlesend = $this->createArticle();
         $getArticle     = $this->getArticleService()->getArticleNext($newArticle['id']);
@@ -37,14 +45,11 @@ class ArticleServiceTest extends BaseTestCase
     {
         $newArticle     = $this->createArticle();
         $newArticlesend = $this->createArticle();
-        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'],$newArticlesend['id']));
-
+        $this->getArticleService()->deleteArticlesByIds(array($newArticle['id'], $newArticlesend['id']));
 
         $this->assertEquals(null, $this->getArticleService()->getArticle($newArticle['id']));
         $this->assertEquals(null, $this->getArticleService()->getArticle($newArticlesend['id']));
-        
     }
-
 
     public function testfindAllArticles()
     {
@@ -291,9 +296,9 @@ class ArticleServiceTest extends BaseTestCase
 
     public function testFindRelativeArticles()
     {
-        $tag1 = $this->getTagService()->addTag(array('name' => 'tag1'));
-        $tag2 = $this->getTagService()->addTag(array('name' => 'tag2'));
-        $tag3 = $this->getTagService()->addTag(array('name' => 'tag3'));
+        $tag1     = $this->getTagService()->addTag(array('name' => 'tag1'));
+        $tag2     = $this->getTagService()->addTag(array('name' => 'tag2'));
+        $tag3     = $this->getTagService()->addTag(array('name' => 'tag3'));
         $article1 = array(
             'publishedTime' => 'now',
             'title'         => 'test article1',
@@ -335,7 +340,6 @@ class ArticleServiceTest extends BaseTestCase
             'tags'          => sprintf('%s', $tag3['name'])
         );
         $article3 = $this->getArticleService()->createArticle($article3);
-
 
         $relativeArticles = $this->getArticleService()->findRelativeArticles($article1['id'], 3);
         $this->assertEquals(count($relativeArticles), 1);
@@ -414,5 +418,10 @@ class ArticleServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

@@ -58,7 +58,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             return $this->createErrorResponse('no_vip', '网校未安装vip插件');
         }
 
-        if (! $this->controller->setting('vip.enabled')) {
+        if (! $this->controller->isinstalledPlugin('Vip') || ! $this->controller->setting('vip.enabled')) {
             return $this->createMessageResponse('vip_closed', '会员专区已关闭');
         }
 

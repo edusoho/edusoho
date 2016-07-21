@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -33,10 +33,10 @@ class Version20160607153959 extends AbstractMigration
                   `createdTime` int(11) UNSIGNED NOT NULL COMMENT '创建时间',
                   `updateTime` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   PRIMARY KEY (`id`),
-                  UNIQUE KEY `code` (`code`)                  
+                  UNIQUE KEY `code` (`code`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='编辑区模板';"
         );
-        $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'");
+        $this->addSql("ALTER TABLE  `block` ADD  `orgId` INT(11) NOT NULL  DEFAULT 1 COMMENT '组织机构Id'");
         $this->addSql("ALTER TABLE  `block` ADD  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'");
         $this->addSql("INSERT INTO `block_template`( `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime`) select `title`, `mode`,`template`,`templateName`,`templateData`,`content`,`data`,`code`, `meta`, `tips`, `category`, `createdTime`,`updateTime` from `block`;");
         $this->addSql("UPDATE `block` join `block_template` on block.code = block_template.code SET block.blockTemplateId = block_template.id;");
