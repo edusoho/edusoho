@@ -22,7 +22,7 @@ class ArticleContentType extends ContentType
 
 	protected function getKernel()
 	{
-    return  ServiceKernel::instance();
-  }
+        return  ServiceKernel::instance();
+    }
 
 }
