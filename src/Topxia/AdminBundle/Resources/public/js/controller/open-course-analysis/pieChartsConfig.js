@@ -29,34 +29,24 @@ define(function(require, exports, module) {
 					trigger: 'item',
 					formatter: this.config.formatter
 				},
-				legend: {
+				/*legend: {
 					orient: 'vertical',
 					x: 'left',
 					data: this.legendData()
-				},
+				},*/
 				series: [{
 					name: this.config.name,
 					type: 'pie',
 					radius: '55%',
 					center: ['50%', '60%'],
-					avoidLabelOverlap: false,
-					label: {
-						normal: {
-							show: false,
-						},
-						emphasis: {
-							show: false,
-							textStyle: {
-								fontSize: '30',
-								fontWeight: 'bold'
-							}
-						}
-					},
-					labelLine: {
-						normal: {
-							show: false
-						}
-					},
+					itemStyle: {
+		                emphasis: {
+		                    shadowBlur: 10,
+		                    shadowOffsetX: 0,
+		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+		                }
+		            },
+					color:['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
 					data: this.seriesData()
 				}]
 			};

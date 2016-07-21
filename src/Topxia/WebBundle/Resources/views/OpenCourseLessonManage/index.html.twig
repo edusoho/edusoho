@@ -3,17 +3,19 @@
 {% block title %}{{'课时管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'lesson' %}
-{% set script_controller = 'course-manage/lesson' %}
+{% set script_controller = 'open-course-manage/lesson' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col lesson-manage-panel">
 	<div class="panel-heading">
 		<div class="pull-right">
-			<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>
+			<button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>
 		</div>
 		{{'课时管理'|trans}}
 	</div>
+
+	<div class="alert alert-warning only-one-lesson-notify" {% if items %}style="display:none;"{% endif %}>公开课当前仅支持添加一个课时！</div>
 
 	{% if items is empty %}
 

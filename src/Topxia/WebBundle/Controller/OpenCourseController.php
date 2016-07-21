@@ -82,10 +82,16 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
-        return $this->render($template, array(
+        $content = $this->renderView($template, array(
             'course'   => $course,
             'lessonId' => $lessonId
         ));
+
+        $response = new Response($content);
+
+        $this->createRefererLog($request, $response, $course);
+
+        return $response;
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -141,7 +147,7 @@ class OpenCourseController extends BaseController
                 'notifyNum'  => $notifyNum,
                 'nextLesson' => $nextLesson
             ));
-        }else{
+        } else {
             return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
                 'course'     => $course,
                 'lesson'     => $lesson,
@@ -150,7 +156,6 @@ class OpenCourseController extends BaseController
                 'nextLesson' => $nextLesson
             ));
         }
-       
     }
 
     public function teachersAction($courseId)
@@ -291,7 +296,7 @@ class OpenCourseController extends BaseController
                 'paginator' => $paginator,
                 'service'   => $this->getThreadService()
             ));
-        }else{
+        } else {
             return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
                 'course'    => $course,
                 'posts'     => $posts,
@@ -300,7 +305,6 @@ class OpenCourseController extends BaseController
                 'service'   => $this->getThreadService()
             ));
         }
-       
     }
 
     public function postAction(Request $request, $id)
@@ -777,13 +781,13 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog(Request $request, Response $response, $course)
     {
-        $refererUrl      = $request->server->get('HTTP_REFERER');
         $refererLogToken = $this->getRefererLogToken($request, $response);
 
         $fields = array(
             'targetId'        => $course['id'],
             'targetType'      => 'openCourse',
-            'refererUrl'      => $refererUrl,
+            'refererUrl'      => $request->server->get('HTTP_REFERER'),
+            'uri'             => $request->getUri(),
             'targetInnerType' => $course['type'],
             'token'           => $refererLogToken,
             'ip'              => $request->getClientIp(),
