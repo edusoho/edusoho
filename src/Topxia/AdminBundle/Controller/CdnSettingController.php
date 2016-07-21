@@ -25,7 +25,7 @@ class CdnSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $cdn = $request->request->all();
             $this->getSettingService()->set('cdn', $cdn);
-            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('CDN设置'), $cdn);
+            $this->getLogService()->info('system', 'update_settings', 'CDN设置', $cdn);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('CDN设置已保存！'));
         }
 
