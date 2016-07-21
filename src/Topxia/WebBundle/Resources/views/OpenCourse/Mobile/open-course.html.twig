@@ -24,11 +24,6 @@
     </div>
     {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
   </div>
-  <div class="col-md-3 hidden-sm hidden-xs">
-    {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-
-    {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
-  </div>
 </div>
 {% endblock %}
 </div>

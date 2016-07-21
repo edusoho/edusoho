@@ -13742,6 +13742,9 @@ textarea {
 .openCourse-container {
   padding: 0;
 }
+.openCourse-wechat-preview .openCourse-container {
+  width: 740px;
+}
 .openCourse-panel {
   margin: 15px 0;
   border-color: transparent;

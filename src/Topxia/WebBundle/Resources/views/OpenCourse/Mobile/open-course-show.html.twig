@@ -5,9 +5,11 @@
   {% block top_content %}{% endblock %}
 
   {% if app.request.get('as') == 'wxpreview' %}
-    <div style="width: 375px;">
+    {% block header %}{% endblock %}
+    <div class="openCourse-wechat-preview">
       {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
     </div>
+     {% block footer %}{% endblock %}
   {% else %}
     {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
   {% endif %}
