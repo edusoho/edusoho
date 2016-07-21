@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
@@ -18,10 +19,10 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
-
+        $orderType  = JoinPointToolkit::load('order');
         if (empty($targetType)
             || empty($targetId)
-            || !in_array($targetType, array("course", "vip", "classroom", "groupSell"))) {
+            || !array_key_exists($targetType, $orderType)) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
