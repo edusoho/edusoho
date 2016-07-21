@@ -95,11 +95,6 @@ admin_operation_analysis_register:
     router_params: { tab: trend , analysisDateType:register }
     after: admin_operation_content
     group: 3
-admin_opencourse_analysis:
-    name: 公开课数据统计
-    parent: admin_operation
-    after: admin_operation_analysis_register
-    group: 3
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article_manage
@@ -160,7 +155,6 @@ admin_open_course_manage:
     name: 公开课管理
     parent: admin_course
     router_name: admin_open_course
-
 admin_open_course:
     name: 公开课管理
     parent: admin_open_course_manage
@@ -177,6 +171,10 @@ admin_open_course_recommend:
     name: 公开课推荐
     parent: admin_open_course_manage
     router_name: admin_open_course_recommend_list
+
+admin_opencourse_analysis:
+    name: 公开课统计
+    parent: admin_open_course_manage
 
 admin_course_thread:
     name: 话题管理

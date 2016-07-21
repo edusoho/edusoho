@@ -23,13 +23,6 @@
     </div>
   </div>
 </div>
- {#  <li class="tab-recommand clearfix">
-    <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}"><img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}"></a>
-    <div class="open-course-info">
-      <a class="title" href="{{ showUrl }}" target="_blank" title="{{ course.title }}">{{ course.title }}</a>
-      <div class="num">{{ course.studentNum }}人在学习</div>
-    </div>
-  </li>#}
 {% else %}
  <div class="empty">暂无推荐记录</div>
 {% endfor %}
