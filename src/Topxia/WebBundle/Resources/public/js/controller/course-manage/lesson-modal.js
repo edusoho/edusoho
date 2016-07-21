@@ -197,7 +197,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#lesson-minute-field',
                     required: true,
-                    rule: 'integer',
+                    rule: 'unsigned_integer',
                     display: '时长'
                 });
 
