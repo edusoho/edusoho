@@ -30,7 +30,7 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select disabled" data-type="live">
+              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="live">
                 <i class="es-icon es-icon-zhibokecheng "></i>
                 <div class="course-type">直播课程</div>
                 <div class="course-intro">纯直播形式教学的完整课程</div>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select" data-type="open">
+              <div class="course-select " data-type="open">
                 <i class="es-icon es-icon-lubogongkaike"></i>
                 <div class="course-type">录播公开课</div>
                 <div class="course-intro">无门槛观看、结构简单的课程，常用于营销推广</div>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="col-md-3">
-              <div class="course-select" data-type="liveOpen">
+              <div class="course-select {% if not setting('live_course_enabled') %}disabled{% endif %}" data-type="liveOpen">
                 <i class="es-icon es-icon-zhibokecheng2"></i>
                 <div class="course-type">直播公开课</div>
                 <div class="course-intro">直播形式的公开课</div>
