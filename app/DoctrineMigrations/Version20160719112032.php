@@ -16,9 +16,13 @@ class Version20160719112032 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-
-        /* $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
-    $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");*/
+        if(!$this->isFieldExist('referer_log', 'targetInnerType')){
+            $this->addSql("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
+        }
+        
+        if($this->isFieldExist('referer_log', 'targetInnerType') && $this->isFieldExist('referer_log', 'targetId')){
+            $this->addSql("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型' AFTER targetId;");    
+        }
     }
 
     /**
@@ -27,5 +31,13 @@ class Version20160719112032 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql    = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->connection->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
     }
 }

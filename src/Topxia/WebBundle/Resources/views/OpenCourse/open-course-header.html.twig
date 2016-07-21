@@ -1,101 +1,96 @@
-<link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
 
 {% do load_script('open-course/open-course-header') %}
-
-<div class="open-course-title">{{ lesson.title }}</div>
 {% if course.type == 'open' %}
-  <div class="col-md-9 open-course-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
-    {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
-    <div class="mask modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="open-course-ad-modal-title">课时学习完成</h4>
-          </div>
-          <div class="modal-body">
-            <div class='empty'>如果喜欢课程内容，赶紧分享给好友吧</div>
-          </div>
-          <div class="modal-footer">
-            <div class="es-share top">
-              <a href="javascript:;" class="btn-link color-gray prl js-player-replay"><i class="es-icon es-icon-refresh prs"></i>重播</a>
-              <a href="" class="btn btn-lg share-btn dropdown-toggle mrm" data-toggle="dropdown">
-                <i class="es-icon es-icon-share prs"></i>{{'分享'|trans}}</a>
-              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
-              {% if nextLesson is not empty %}
-                <a href="{{ path('open_course_lesson_learn', {'lessonId': nextLesson.id, 'courseId': course.id}) }}" class="btn btn-lg next-btn">
-                  <i class="es-icon es-icon-arrowforward prs"></i>下一课
-                </a>
-              {% endif %}
+    <div class="col-md-9 open-course-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
+      {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
+      <div class="mask modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="open-course-ad-modal-title">课时学习完成</h4>
+            </div>
+            <div class="modal-body">
+              <div class='empty'>如果喜欢课程内容，赶紧分享给好友吧</div>
+            </div>
+            <div class="modal-footer">
+              <div class="es-share top">
+                <a href="javascript:;" class="btn-link color-gray prl js-player-replay"><i class="es-icon es-icon-refresh prs"></i>重播</a>
+                <a href="" class="btn btn-lg share-btn dropdown-toggle mrm" data-toggle="dropdown">
+                  <i class="es-icon es-icon-share prs"></i>{{'分享'|trans}}</a>
+                {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+                {% if nextLesson is not empty %}
+                  <a href="{{ path('open_course_lesson_learn', {'lessonId': nextLesson.id, 'courseId': course.id}) }}" class="btn btn-lg next-btn">
+                    <i class="es-icon es-icon-arrowforward prs"></i>下一课
+                  </a>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="mask" style="display:none" id="media-error-dialog">
-      <div class="modal-dialog" style="width:200px;margin:22% auto;">
-        <div class="modal-content">
-          <div class="modal-header" style="padding:5px 15px;">
-            <h4 class="modal-title">提示</h4>
-          </div>
-          <div class="modal-body clearfix">
-            该课时资源文件被删除
+      <div class="mask" style="display:none" id="media-error-dialog">
+        <div class="modal-dialog" style="width:200px;margin:22% auto;">
+          <div class="modal-content">
+            <div class="modal-header" style="padding:5px 15px;">
+              <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body clearfix">
+              该课时资源文件被删除
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
   </div>
-{% elseif course.type == 'liveOpen' %}
-  <div class="col-md-9 open-course-views">
-    <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="" style="height:100%;">
-    <div class="mask">
-      {% if lesson.startTime > ("now"|date("U")) %}
-        <div class="mask-content">
-          <h2>{{'直播将于'|trans}}<span class="phm">{{ lesson.startTime|date('m') }}{{ '月'|trans }}{{ lesson.startTime|date('d') }}{{ '日'|trans }} {{ lesson.startTime|date('H:i') }}</span>{{'开始'|trans}}</h2>
-          
-          {% if lesson.startTimeLeft <= 3600 %}
-            <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
-          {% else %}
-            <button id="alerted-btn" class="btn btn-info btn-lg active {% if not member or (member and not member.isNotified ) %}hidden{% endif %}">
-              {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
-            </button>
+  {% elseif course.type == 'liveOpen' %}
+    <div class="col-md-9 open-course-views">
+      <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="" style="height:100%;">
+      <div class="mask">
+        {% if lesson.startTime > ("now"|date("U")) %}
+          <div class="mask-content">
+            <h2>{{'直播将于'|trans}}<span class="phm">{{ lesson.startTime|date('m') }}{{ '月'|trans }}{{ lesson.startTime|date('d') }}{{ '日'|trans }} {{ lesson.startTime|date('H:i') }}</span>{{'开始'|trans}}</h2>
+            
+            {% if lesson.startTimeLeft <= 3600 %}
+              <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
+            {% else %}
+              <button id="alerted-btn" class="btn btn-info btn-lg active {% if not member or (member and not member.isNotified ) %}hidden{% endif %}">
+                {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
+              </button>
 
-            {% if setting('cloud_sms.sms_enabled') %}
-              {% if app.request.get('as')|default('') == 'preview' %}
-                <a href="javascript:;" class="btn btn-info btn-lg mask-btn" disabled="disabled">
-                  {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
-                </a>
-              {% else %}
-                <a id="alert-btn" class="btn btn-info btn-lg mask-btn {% if member and member.isNotified %}hidden{% endif %}" 
-                  data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal" >
-                  {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
-                </a>
+              {% if setting('cloud_sms.sms_enabled') %}
+                {% if app.request.get('as')|default('') == 'preview' %}
+                  <a href="javascript:;" class="btn btn-info btn-lg mask-btn" disabled="disabled">
+                    {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
+                  </a>
+                {% else %}
+                  <a id="alert-btn" class="btn btn-info btn-lg mask-btn {% if member and member.isNotified %}hidden{% endif %}" 
+                    data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal" >
+                    {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
+                  </a>
+                {% endif %}
               {% endif %}
             {% endif %}
-          {% endif %}
 
-          <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
-        </div>
-      {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
-        <div class="mask-content">
-          <h2>{{'直播已经开始，直播将于'|trans}}<span class="phm">{{ lesson.endTime|date('m') }}{{ '月'|trans }}{{ lesson.endTime|date('d') }}{{ '日'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{'结束'|trans}}</h2>
-          <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
-          
-        </div>
-      {% else %}
-        <div class="mask-content">
-          <h2>{{'直播已经结束'|trans}}</h2>
-          {% for replay in lesson.replays if replay %}
-            <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
-          {% endfor %}
-        </div>
-      {% endif %}
+            <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
+          </div>
+        {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
+          <div class="mask-content">
+            <h2>{{'直播已经开始，直播将于'|trans}}<span class="phm">{{ lesson.endTime|date('m') }}{{ '月'|trans }}{{ lesson.endTime|date('d') }}{{ '日'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{'结束'|trans}}</h2>
+            <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
+            
+          </div>
+        {% else %}
+          <div class="mask-content">
+            <h2>{{'直播已经结束'|trans}}</h2>
+            {% for replay in lesson.replays if replay %}
+              <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
     </div>
-  </div>
-  
-{% endif %}
+  {% endif %}
 
 
 
