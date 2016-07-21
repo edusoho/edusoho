@@ -35,7 +35,11 @@
 		&:hover {
 			border: 2px solid @brand-primary;
 		}
-		&.active, &:active {
+		&.disabled {
+			border: 0px;
+			color: #d9d7d7;
+		}
+		&.active {
 			background-color: @brand-primary;
 			color: #fff;
 			.course-type {
