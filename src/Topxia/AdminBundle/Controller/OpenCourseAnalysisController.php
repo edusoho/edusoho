@@ -314,7 +314,7 @@ class OpenCourseAnalysisController extends BaseController
             } elseif ($orderLog['targetType'] == 'classroom') {
                 $orderLogs[$key]['target'] = $this->getClassroomTarget($orderLog['targetId']);
             } elseif ($orderLog['targetType'] == 'vip') {
-                $orderLogs[$key]['target'] = $this->getVipTargt($orderLog['targetId']);
+                $orderLogs[$key]['target'] = $this->getVipTarget($orderLog['targetId']);
             }
         }
 
@@ -343,7 +343,7 @@ class OpenCourseAnalysisController extends BaseController
         return $target;
     }
 
-    protected function getVipTargt($targetId)
+    protected function getVipTarget($targetId)
     {
         $target = array();
         if ($this->isPluginInstalled('Vip')) {
