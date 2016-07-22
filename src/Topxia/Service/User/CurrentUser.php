@@ -9,6 +9,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 {
     protected $data;
 
+    protected $rootOrgId = 1;
+
     public function __set($name, $value)
     {
         if (array_key_exists($name, $this->data)) {
@@ -184,6 +186,9 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function fromArray(array $user)
     {
+        if (empty($user['org'])) {
+            $user['org'] = array('id' => $this->rootOrgId);
+        }
         $this->data = $user;
         return $this;
     }

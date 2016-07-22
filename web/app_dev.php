@@ -60,8 +60,7 @@ $currentUser->fromArray(array(
     'id'        => 0,
     'nickname'  => '游客',
     'currentIp' => $request->getClientIp(),
-    'roles'     => array(),
-    'org'       => array('id' => 1)
+    'roles'     => array()
 ));
 $serviceKernel->setCurrentUser($currentUser);
 // END: init service kernel
