@@ -149,12 +149,6 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if ($this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig';
-        } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-header.html.twig';
-        }
-
         return $this->render($template, array(
             'course'     => $course,
             'lesson'     => $lesson,
