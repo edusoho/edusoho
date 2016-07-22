@@ -19,9 +19,10 @@ class ProxyFramework
      */
     public function __construct($object)
     {
-        $this->object = $object;
+        $this->object      = $object;
         $this->annotations = AnnotationsLoader::load(get_class($object));
     }
+
     /**
      * 获取类变量.
      *
@@ -31,6 +32,7 @@ class ProxyFramework
     {
         return $this->object->$name;
     }
+
     /**
      * 设置类变量.
      *
@@ -41,6 +43,7 @@ class ProxyFramework
     {
         return $this->object->$name = $value;
     }
+
     /**
      * 调用类方法.
      * 通过注解传入aspect参数控制注解的执行顺序，默认是before
@@ -62,19 +65,15 @@ class ProxyFramework
                 case 'before':
                     $annot->invoke($this->object, $name, $arguments);
                     return call_user_func_array(array($this->object, $name), $arguments);
-                    break;
                 case 'around':
                     return $annot->invoke($this->object, $name, $arguments);
-                    break;
                 case 'after':
                     $result = call_user_func_array(array($this->object, $name), $arguments);
                     $annot->invoke($this->object, $name, $arguments);
                     return $result;
-                    break;
                 default:
                     break;
             }
-            
         }
 
         return call_user_func_array(array($this->object, $name), $arguments);
