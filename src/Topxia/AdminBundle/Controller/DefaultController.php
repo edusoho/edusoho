@@ -99,6 +99,13 @@ class DefaultController extends BaseController
             return $this->createJsonResponse(array('result' => false));
         }
 
+        $api       = CloudAPIFactory::create('root');
+        $cloudInfo = $api->get('/me');
+
+        /*if (empty($cloudInfo['accessCloud'])) {
+        return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
+        }*/
+
         $engine  = $this->container->get('templating');
         $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
 
