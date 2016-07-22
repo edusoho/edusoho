@@ -114,11 +114,8 @@ class OpenCourseAnalysisController extends BaseController
         $endTime   = $timeRange['endTime'];
         $type      = $request->query->get('type');
 
-        $countConditions      = array(
+        $countConditions = array(
             'status' => 'published'
-        );
-        $totalWatchConditions = array(
-            'targetType' => 'openCourse'
         );
 
         $groupByConditions = array(
@@ -127,9 +124,11 @@ class OpenCourseAnalysisController extends BaseController
             'targetType' => 'openCourse'
         );
 
+        $totalWatchConditions = $groupByConditions;
+
         if (!empty($type)) {
             $groupByConditions['targetInnerType']    = $type;
-            $totalWatchConditions['targetInnerType'] = $type;
+            $totalWatchConditions['targetInnerType'] = $groupByConditions;
             $countConditions['type']                 = $type;
         }
 
