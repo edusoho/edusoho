@@ -49,8 +49,8 @@ DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户Id',
-  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID'),
-  `orgId` INT(11) NOT NULL COMMENT '组织机构Id'),
+  `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID',
+  `orgId` INT(11) NOT NULL COMMENT '组织机构Id',
   `content` text COMMENT '编辑区的内容',
   `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
   `data` text COMMENT '编辑区内容',
