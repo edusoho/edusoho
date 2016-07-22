@@ -209,7 +209,7 @@ class UserSettingController extends BaseController
             }
 
             $this->getLogService()->info('system', 'setting_userCenter', "用户中心设置", $setting);
-            $this->setFlashMessage('success', '用户中心设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('用户中心设置已保存！'));
         }
 
         if (file_exists($discuzConfigPath)) {

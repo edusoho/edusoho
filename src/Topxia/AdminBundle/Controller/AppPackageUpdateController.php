@@ -78,7 +78,7 @@ class AppPackageUpdateController extends BaseController
     {
         try {
             if (empty($code)) {
-                $errors[] = '参数缺失,更新应用包失败';
+                $errors[] = $this->getServiceKernel()->trans('参数缺失,更新应用包失败');
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',
@@ -103,7 +103,7 @@ class AppPackageUpdateController extends BaseController
             }
 
             if (empty($apps[$code]['package']['id']) || empty($apps[$code]['package']['toVersion'])) {
-                $errors[] = '获取当前最新应用包信息失败';
+                $errors[] = $this->getServiceKernel()->trans('获取当前最新应用包信息失败');
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',
