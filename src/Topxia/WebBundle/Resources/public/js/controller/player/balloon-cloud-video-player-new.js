@@ -144,8 +144,7 @@ define(function(require, exports, module) {
         },
 
         getCurrentTime: function(){
-            console.log('getCurrentTime');
-            this.get("player").getCurrentTime();
+            return this.get("player").getCurrentTime();
         },
 
         isPlaying: function() {
