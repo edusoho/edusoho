@@ -17,7 +17,9 @@
 		{% for refererlog in refererloglist %}
 			<tr>
 				<th scope="row">
-					{% if showRefererName %}{{ refererlog.refererName }} {% else %}{{refererlog.refererUrl}}{% endif %}
+					{% if showRefererName %}{{ refererlog.refererName }} {% else %}
+						<a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="" data-html="true" data-content="<a>{{ refererlog.refererUrl }}</a>" data-original-title="访问地址:">{{refererlog.refererHost}}/...</a>
+					{% endif %}
 				</th>
 				<th>{{refererlog.count}}</th>
 				<th>{{refererlog.percent}}</th>
