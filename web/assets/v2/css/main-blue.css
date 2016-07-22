@@ -13945,6 +13945,9 @@ textarea {
   border-radius: 0;
   margin-top: 10px;
 }
+.open-course-views.openCourse-wechat-views {
+  padding-top: 40px;
+}
 .open-course-views {
   position: relative;
   padding: 0;
