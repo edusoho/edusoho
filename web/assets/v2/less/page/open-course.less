@@ -48,6 +48,10 @@
 		display: inline-block;
 		width: 24%;
 		text-align: center;
+		border-right: 1px solid #f1f1f1;
+		&:last-child{
+			border-right: none;
+		}
 		@media(max-width:@screen-sm-max)  {
 			width: 32%;
 		}
@@ -296,12 +300,25 @@
 			}
 		}
 	}
+.open-course-views.openCourse-wechat-views{
+	padding-top: 40px;
+}
 .open-course-views {
 	position: relative;
 	padding: 0;
 	background-color: #000;
 	@media(min-width:@screen-md-min) {
 		height: 500px;
+	}
+	.mask-img{
+		width: 100%;
+		padding-top: 10px;
+		@media(max-width:@screen-md-max) {
+			padding-top: 50px;
+		}
+		@media(max-width:@screen-sm-max) {
+			padding: 0;
+		}
 	}
 	.lesson-content { 
 		height: 100%;
