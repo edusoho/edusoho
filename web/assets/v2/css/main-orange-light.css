@@ -13696,6 +13696,7 @@ textarea {
 }
 .openCourse-detail-operation .operation-img a {
   color: #fff;
+  display: block;
 }
 .openCourse-detail-operation .operation-img i {
   font-size: 18px;
@@ -14334,6 +14335,18 @@ textarea {
   width: 40px;
   height: 50px;
   background: url(../img/tag_open_live.png) no-repeat;
+}
+@media (max-width: 991px) {
+  .openCourse-sms-form .openCourse-form-control {
+    width: 66%;
+    float: left;
+  }
+}
+@media (max-width: 991px) {
+  .openCourse-sms-form .openCourse-form-btn {
+    width: 17%;
+    float: left;
+  }
 }
 .panel-create-course .panel-heading h2 {
   padding-bottom: 20px;
