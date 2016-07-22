@@ -3,12 +3,36 @@
 {% set modalSize = 'large' %}
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}公开课提示{% endblock %}
+
 {% block body %}
-  <div>hello</div>
-{% endblock %}
-
-
-{% block footer %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <style>
+  .modal-header{
+    border-bottom: none;
+    display: inline-block;
+    padding: 0;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 999;
+  }
+  .modal-header .close{
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border-radius: 50%;
+    line-height: 30px;
+  }
+  .modal-footer{
+    border-top: none;
+    padding: 0;
+    margin: 0;
+  }
+  .modal-body{
+    padding: 0;
+  }
+  .modal-body img{
+    width: 100%;
+  }
+</style>
+  <img class="img-responsive" src="{{asset('bundles/topxiaadmin/img/openCourse.jpg')}}">
 {% endblock %}
