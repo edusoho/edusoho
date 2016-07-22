@@ -8,7 +8,7 @@
 {% block full_content %}
   {% block top_content %}{% endblock %}
 
-  {% if app.request.get('as') == 'wxpreview' %}
+  {% if app.request.get('previewType') == 'wx' %}
     {% block header %}{% endblock %}
     <div class="openCourse-wechat-preview">
       <div class="container openCourse-container">
