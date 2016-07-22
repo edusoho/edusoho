@@ -13673,6 +13673,10 @@ textarea {
   display: inline-block;
   width: 24%;
   text-align: center;
+  border-right: 1px solid #f1f1f1;
+}
+.openCourse-detail-operation .operation-list:last-child {
+  border-right: none;
 }
 @media (max-width: 991px) {
   .openCourse-detail-operation .operation-list {
@@ -13941,6 +13945,9 @@ textarea {
   border-radius: 0;
   margin-top: 10px;
 }
+.open-course-views.openCourse-wechat-views {
+  padding-top: 40px;
+}
 .open-course-views {
   position: relative;
   padding: 0;
@@ -13949,6 +13956,20 @@ textarea {
 @media (min-width: 992px) {
   .open-course-views {
     height: 500px;
+  }
+}
+.open-course-views .mask-img {
+  width: 100%;
+  padding-top: 10px;
+}
+@media (max-width: 1199px) {
+  .open-course-views .mask-img {
+    padding-top: 50px;
+  }
+}
+@media (max-width: 991px) {
+  .open-course-views .mask-img {
+    padding: 0;
   }
 }
 .open-course-views .lesson-content {
