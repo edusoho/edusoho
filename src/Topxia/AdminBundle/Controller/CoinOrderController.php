@@ -123,7 +123,15 @@ class CoinOrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = $this->getServiceKernel()->trans('订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间');
+        $str = $this->getServiceKernel()->trans('订单号').','
+                . $this->getServiceKernel()->trans('订单状态').','
+                . $this->getServiceKernel()->trans('订单名称').','
+                . $this->getServiceKernel()->trans('购买者').','
+                . $this->getServiceKernel()->trans('姓名').','
+                . $this->getServiceKernel()->trans('实付价格').','
+                . $this->getServiceKernel()->trans('支付方式').','
+                . $this->getServiceKernel()->trans('创建时间').','
+                . $this->getServiceKernel()->trans('付款时间');
 
         $str .= "\r\n";
 
