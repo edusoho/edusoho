@@ -159,7 +159,7 @@ class OpenCourseAnalysisController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'refererUrl'),
+            $this->getRefererLogService()->countDistinctLogsByField($conditions, $field = 'refererUrl'),
             20
         );
         $refererloglist = $this->getRefererLogService()->searchAnalysisSummaryList(
@@ -247,7 +247,7 @@ class OpenCourseAnalysisController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->countDitinctLogsByField($conditions, 'targetId'),
+            $this->getRefererLogService()->countDistinctLogsByField($conditions, 'targetId'),
             10
         );
 

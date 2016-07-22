@@ -33,7 +33,7 @@ interface RefererLogService
      * @param  [type] $field          [description]
      * @return [type] [description]
      */
-    public function countDitinctLogsByField($conditions, $field);
+    public function countDistinctLogsByField($conditions, $field);
 
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 
