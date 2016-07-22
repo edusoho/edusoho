@@ -12,6 +12,8 @@ order:
   vip:
     processor: Topxia\Service\Order\OrderProcessor\VipOrderProcessor
     order_show_template: TopxiaWebBundle:Order:vip.html.twig
+  coin:
+    processor: Topxia\Service\Order\OrderProcessor\CoinOrderProcessor
   groupSell:
     processor: Topxia\Service\Order\OrderProcessor\GroupSellOrderProcessor
     order_show_template: GroupSellBundle:GroupSell:Order/group_sell.html.twig

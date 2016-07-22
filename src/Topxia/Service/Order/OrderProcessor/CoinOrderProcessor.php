@@ -83,6 +83,12 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return true;
     }
 
+    public function callbackUrl($order, $container)
+    {
+        $goto = $container->get('router')->generate('my_coin', array(), true);
+        return $goto;
+    }
+
     protected function getCashOrdersService()
     {
         return ServiceKernel::instance()->createService('Cash.CashOrdersService');
