@@ -3,7 +3,7 @@
 {% block title %} {{'短信验证码'|trans}} {% endblock %}
 
 {% block body %}
-    <form id = "js-sms-modal-form" method="post" action="{{ path('open_course_member_sms',{id:course.id}) }}">
+    <form id = "js-sms-modal-form" class="openCourse-sms-form" method="post" action="{{ path('open_course_member_sms',{id:course.id}) }}">
       <div class = "form-group">
         <div class = "controls row" >
           <div class = "col-md-2 col-md-offset-2" >
@@ -24,11 +24,11 @@
         </div>
         <br>
         <div class="controls row" >
-          <div class = "col-md-5 col-md-offset-2" >
+          <div class = "col-md-5 col-md-offset-2 openCourse-form-control" >
             <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal"  required="required" placeholder="{{'输入短信验证码'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'system_remind'})}}">
           </div>
-          <div class="col-md-5">
-            <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+          <div class="col-md-5 openCourse-form-btn">
+            <span class="btn btn-default btn-md js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
               <span id="js-time-left"></span>
               <span id="js-fetch-btn-text">{{'获取短信验证码'|trans}}{# 秒后重新获取 #}</span>
            </span>
@@ -37,10 +37,8 @@
             <div class="help-block"></div>
           </div>
         </div>
-
       </div>
     </form>
-
 {% endblock %}
 
 {% block footer %}

@@ -284,6 +284,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $courseFavoriteNum;
     }
 
+    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type)
+    {
+        return $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
+    }
+
     public function getLessonItems($courseId)
     {
         //$lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);
@@ -867,10 +872,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'studentNum'      => 0,
             'updateTime'      => time()
         ));
-
-        if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
-        }
 
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);

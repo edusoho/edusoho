@@ -128,7 +128,7 @@ class OpenCourseAnalysisController extends BaseController
 
         if (!empty($type)) {
             $groupByConditions['targetInnerType']    = $type;
-            $totalWatchConditions['targetInnerType'] = $groupByConditions;
+            $totalWatchConditions['targetInnerType'] = $type;
             $countConditions['type']                 = $type;
         }
 
@@ -168,7 +168,6 @@ class OpenCourseAnalysisController extends BaseController
     {
         $begin = new \DateTime(date('Y-m-d', $startTime));
         $end   = new \DateTime(date('Y-m-d', $endTime));
-
         $interval  = new \DateInterval('P1D');
         $dateRange = new \DatePeriod($begin, $interval, $end);
 
@@ -207,7 +206,7 @@ class OpenCourseAnalysisController extends BaseController
         return array(
             'startTime'      => empty($timeRange['startTime']) ? "" : date("Y-m-d", $timeRange['startTime']),
             'endTime'        => empty($timeRange['endTime']) ? "" : date("Y-m-d", $timeRange['endTime']),
-            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 2 * 24 * 3600),
+            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
 
             'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
@@ -315,7 +314,7 @@ class OpenCourseAnalysisController extends BaseController
             } elseif ($orderLog['targetType'] == 'classroom') {
                 $orderLogs[$key]['target'] = $this->getClassroomTarget($orderLog['targetId']);
             } elseif ($orderLog['targetType'] == 'vip') {
-                $orderLogs[$key]['target'] = $this->getVipTargt($orderLog['targetId']);
+                $orderLogs[$key]['target'] = $this->getVipTarget($orderLog['targetId']);
             }
         }
 
@@ -344,7 +343,7 @@ class OpenCourseAnalysisController extends BaseController
         return $target;
     }
 
-    protected function getVipTargt($targetId)
+    protected function getVipTarget($targetId)
     {
         $target = array();
         if ($this->isPluginInstalled('Vip')) {
