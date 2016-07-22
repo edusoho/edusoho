@@ -206,7 +206,7 @@ class OpenCourseAnalysisController extends BaseController
         return array(
             'startTime'      => empty($timeRange['startTime']) ? "" : date("Y-m-d", $timeRange['startTime']),
             'endTime'        => empty($timeRange['endTime']) ? "" : date("Y-m-d", $timeRange['endTime']),
-            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 2 * 24 * 3600),
+            'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
 
             'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
