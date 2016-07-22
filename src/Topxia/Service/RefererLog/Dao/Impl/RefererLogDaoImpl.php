@@ -70,7 +70,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         $this->filterStartLimit($start, $limit);
         $orderBy = array('count', 'DESC');
         $builder = $this->createQueryBuilder($conditions, $orderBy, $groupBy)
-            ->select("{$groupBy}, count(id) as count , sum(orderCount) as orderCount")
+            ->select("{$groupBy}, refererHost, count(id) as count , sum(orderCount) as orderCount")
             ->setFirstResult($start)
             ->setMaxResults($limit);
 

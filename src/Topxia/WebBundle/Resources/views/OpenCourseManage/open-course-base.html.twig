@@ -58,7 +58,7 @@
       <div class="form-group">
         <div class="col-md-2 control-label"><label>{{'课程简介'|trans}}</label></div>
         <div class="col-md-8 controls">
-          <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'about') }}</textarea>
+          <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ course.about }}</textarea>
         </div>
       </div>
 

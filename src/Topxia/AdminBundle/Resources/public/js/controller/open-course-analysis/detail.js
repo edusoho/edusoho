@@ -11,5 +11,7 @@ define(function(require, exports, module) {
 				$(".referer-log-list").html(html);
 			})
 		});
+
+		$('[data-toggle="popover"]').popover();
 	}
 });

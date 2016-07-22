@@ -2,10 +2,10 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
+use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class Lesson extends BaseResource
 {
@@ -117,7 +117,7 @@ class Lesson extends BaseResource
 
         $lesson['content'] = array(
             'previewUrl' => 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'.$pdfUri,
-            'resource' => $pdfUri
+            'resource'   => $pdfUri
         );
 
         return $lesson;
@@ -125,14 +125,13 @@ class Lesson extends BaseResource
 
     protected function getTestpaperLesson($lesson)
     {
-        $user = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $testpaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
-
         if (empty($testpaper)) {
-            return $this->createErrorResponse('error', '试卷不存在!');
+            return $this->error('error', '试卷不存在!');
         }
 
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($lesson['mediaId'], $user['id']);
+        $testResult        = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($lesson['mediaId'], $user['id']);
         $lesson['content'] = array(
             'status'   => empty($testResult) ? 'nodo' : $testResult['status'],
             'resultId' => empty($testResult) ? 0 : $testResult['id']
@@ -144,7 +143,7 @@ class Lesson extends BaseResource
     private function getTextLesson($lesson)
     {
         $lesson['content'] = $this->filterHtml($lesson['content']);
-        $template = $this->render('course/lesson-text-content.html.twig', array(
+        $template          = $this->render('course/lesson-text-content.html.twig', array(
             'content' => $lesson['content']
         ));
         $lesson['content'] = $template;
@@ -177,7 +176,7 @@ class Lesson extends BaseResource
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                     'data'     => array(
-                                        'id' => $headLeaderInfo['id'],
+                                        'id'      => $headLeaderInfo['id'],
                                         'fromApi' => true
                                     ),
                                     'times'    => 2,
@@ -229,7 +228,7 @@ class Lesson extends BaseResource
                 } else {
                     $token = $this->getTokenService()->makeToken('local.media', array(
                         'data'     => array(
-                            'id'      => $file['id']
+                            'id' => $file['id']
                         ),
                         'duration' => 3600,
                         'userId'   => $this->getCurrentUser()->getId()
@@ -267,7 +266,7 @@ class Lesson extends BaseResource
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $file                  = $this->getUploadFileService()->getFileByTargetType('headLeader');
             $file["convertParams"] = json_decode($file["convertParams"], true);
             $file["metas2"]        = json_decode($file["metas2"], true);
             return $file;
