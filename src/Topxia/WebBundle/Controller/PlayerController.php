@@ -42,7 +42,6 @@ class PlayerController extends BaseController
             }
         } catch (\Exception $e) {
         }
-        var_dump($request->query->get('hideQuestion', 0));
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
