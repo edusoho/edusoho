@@ -192,15 +192,16 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     {
         $host = $this->getKernel()->getEnvVariable('host');
         return array(
-            'open/course/explore' => '公开课列表',
-            'open/course'         => '公开课详情页',
-            $host                 => '首页',
+            'open/course/explore'  => '公开课列表',
+            'open/course'          => '公开课详情页',
+            $host                  => '首页',
+            'my/courses/favorited' => '我的收藏',
 
-            'baidu.com'           => '百度',
-            'www.so.com'          => '360搜索',
-            'www.sogou.com'       => '搜狗搜索',
-            'mp.weixin.qq.com'    => '微信',
-            'weibo.com'           => '微博'
+            'baidu.com'            => '百度',
+            'www.so.com'           => '360搜索',
+            'www.sogou.com'        => '搜狗搜索',
+            'mp.weixin.qq.com'     => '微信',
+            'weibo.com'            => '微博'
         );
     }
 }
