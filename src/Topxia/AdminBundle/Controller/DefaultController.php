@@ -95,6 +95,7 @@ class DefaultController extends BaseController
     public function noticeAction(Request $request)
     {
         $token = $request->cookies->get('refererLogToken');
+
         if (empty($token)) {
             return $this->createJsonResponse(array('result' => false));
         }
@@ -102,14 +103,18 @@ class DefaultController extends BaseController
         $api       = CloudAPIFactory::create('root');
         $cloudInfo = $api->get('/me');
 
-        /*if (empty($cloudInfo['accessCloud'])) {
-        return $this->createMessageResponse('info', '对不起，请先接入教育云！', '', 3, $this->generateUrl('admin_edu_cloud_sms'));
-        }*/
+        if ($cloudInfo && $cloudInfo['copyright'] == 1 && $cloudInfo['thirdCopyright'] == 1) {
+            return $this->createJsonResponse(array('result' => false));
+        }
 
         $engine  = $this->container->get('templating');
         $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
 
-        return $this->createJsonResponse(array('result' => true, 'html' => $content));
+        $jsonResponse = $this->createJsonResponse(array('result' => true, 'html' => $content));
+        $jsonResponse->headers->removeCookie('refererLogToken');
+        $jsonResponse->send();
+
+        return $jsonResponse;
     }
 
     public function feedbackAction(Request $request)
