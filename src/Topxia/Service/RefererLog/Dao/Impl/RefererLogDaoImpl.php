@@ -77,7 +77,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function countDitinctLogsByField($conditions, $field)
+    public function countDistinctLogsByField($conditions, $field)
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");
