@@ -132,7 +132,7 @@ define(function(require, exports, module) {
 
             BalloonCloudVideoPlayer.superclass.setup.call(self);
 
-            // window.BalloonPlayer = this;
+            window.BalloonPlayer = this;
         },
 
         play: function(){
@@ -141,6 +141,10 @@ define(function(require, exports, module) {
 
         pause: function(){
             this.get("player").pause();
+        },
+
+        getCurrentTime: function(){
+            return this.get("player").getCurrentTime();
         },
 
         isPlaying: function() {
@@ -176,6 +180,12 @@ define(function(require, exports, module) {
                 }, {
                     es: 'determine',
                     cloud: 'judge'
+                }, {
+                    es: 'fill',
+                    cloud: 'completion'
+                }, {
+                    es: 'uncertain_choice',
+                    cloud: 'uncertainChoice'
                 }
             ];
 

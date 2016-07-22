@@ -43,6 +43,7 @@ class CourseLessonController extends BaseController
 
         $context['starttime']     = $request->query->get('starttime');
         $context['hideBeginning'] = $request->query->get('hideBeginning', false);
+        $context['hideQuestion']  = $request->query->get('hideQuestion', 0);
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
