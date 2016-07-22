@@ -209,10 +209,10 @@ class OpenCourseAnalysisController extends BaseController
             'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
 
-            'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
+            'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 6 * 24 * 3600),
             'lastWeekEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
-            'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 30 * 24 * 3600),
+            'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 29 * 24 * 3600),
             'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())))
         );
     }
@@ -222,7 +222,7 @@ class OpenCourseAnalysisController extends BaseController
         if (isset($fields['startTime']) || isset($fields['endTime'])) {
             $timeRange = array(
                 'startTime' => empty($fields['startTime']) ? null : strtotime($fields['startTime']),
-                'endTime'   => empty($fields['endTime']) ? null : (strtotime($fields['endTime'] . ' 23:59:59'))
+                'endTime'   => empty($fields['endTime']) ? null : (strtotime($fields['endTime'] . '23:59:59'))
             );
         }else{
             $timeRange = array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()) . ' 23:59:59'));
