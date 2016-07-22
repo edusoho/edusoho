@@ -42,7 +42,7 @@
           {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-markerurl="{{ context.markerUrl|default('')}}"
-          {% if hideQuestion|default(0) == 1 %}
+          {% if context.hideQuestion|default(0) == 0 %}
             data-question-markers='{{ render(controller('TopxiaWebBundle:QuestionMarker:showQuestionMakers', {mediaId: file.id})) }}'
           {% endif %}
             data-starttime="{{ context.starttime|default('')}}"

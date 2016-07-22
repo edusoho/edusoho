@@ -40,7 +40,7 @@ define(function(require, exports, module) {
                 html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
             }
         }else if(fileType == 'audio'){
-            
+
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
             html += '<audio id="lesson-player" width="90%" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';

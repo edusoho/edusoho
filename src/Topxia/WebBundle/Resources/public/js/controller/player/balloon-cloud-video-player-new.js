@@ -181,6 +181,12 @@ define(function(require, exports, module) {
                 }, {
                     es: 'determine',
                     cloud: 'judge'
+                }, {
+                    es: 'fill',
+                    cloud: 'completion'
+                }, {
+                    es: 'uncertain_choice',
+                    cloud: 'uncertainChoice'
                 }
             ];
 
