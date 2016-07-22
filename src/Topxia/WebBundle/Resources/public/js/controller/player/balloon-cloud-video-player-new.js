@@ -83,10 +83,13 @@ define(function(require, exports, module) {
             }
             var needMp4ForPlaybackRate = needMp4ForPlaybackRate();
             function getPlaybackRatesSrc() {
-                if (isIE && $('html').hasClass('lt-ie9')) {
+                if (isIE && $('html').hasClass('lt-ie9') ) {
                     return '';
                 }
                 if (needMp4ForPlaybackRate) {
+                    if (self.get('playbackRatesMP4Url') == '') {
+                        return '';
+                    }
                     return [{src : self.get('playbackRatesMP4Url'), type : 'video/mp4', label : '高清'}];
                 }
                 return self.get('url');
