@@ -31,8 +31,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function summaryListAction(Request $request)
     {
-        $query                             = $request->query->all();
-        $timeRange                         = $this->getTimeRange($query);
+        $query     = $request->query->all();
+        $timeRange = $this->getTimeRange($query);
         list($refererlogDatas, $paginator) = $this->getRefererLogData($request, $timeRange, array('hitNum', 'DESC'));
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
@@ -70,8 +70,8 @@ class OpenCourseAnalysisController extends BaseController
 
     public function detailGraphAction(Request $request, $id)
     {
-        $timeRange  = $this->getTimeRange($request->query->all());
-        $conditions = array(
+        $timeRange         = $this->getTimeRange($request->query->all());
+        $conditions        = array(
             'targetType' => 'openCourse',
             'targetId'   => $id,
             'startTime'  => $timeRange['startTime'],
@@ -117,9 +117,6 @@ class OpenCourseAnalysisController extends BaseController
         $countConditions = array(
             'status' => 'published'
         );
-        $totalWatchConditions = array(
-            'targetType' => 'openCourse'
-        );
 
         $groupByConditions = array(
             'startTime'  => $startTime,
@@ -127,15 +124,18 @@ class OpenCourseAnalysisController extends BaseController
             'targetType' => 'openCourse'
         );
 
+        $totalWatchConditions = $groupByConditions;
+
         if (!empty($type)) {
             $groupByConditions['targetInnerType']    = $type;
-            $totalWatchConditions['targetInnerType'] = $type;
+            $totalWatchConditions['targetInnerType'] = $groupByConditions;
             $countConditions['type']                 = $type;
         }
 
         $totalOpenCourseNum = $this->getOpenCourseService()->searchCourseCount($countConditions);
         $totalWatchNum      = $this->getRefererLogService()->searchRefererLogCount($totalWatchConditions);
         $logsGroupByDate    = $this->getRefererLogService()->findRefererLogsGroupByDate($groupByConditions);
+        $logsGroupByDate    = $this->fillDateRangeWithLogsGroupDate($logsGroupByDate, $startTime, $endTime);
 
         $watchData = array(
             'date'     => array_keys($logsGroupByDate),
@@ -155,9 +155,40 @@ class OpenCourseAnalysisController extends BaseController
         ));
     }
 
+    /**
+     * 补充日期不存在的记录
+     *
+     * @param array $logsGroupByDate 通过日期分组的数据
+     * @param int   $startTime       开始日期
+     * @param int   $endTime         结束日期
+     *
+     * @return array                 完善后的日期分组数据
+     */
+    protected function fillDateRangeWithLogsGroupDate($logsGroupByDate, $startTime, $endTime)
+    {
+        $begin = new \DateTime(date('Y-m-d', $startTime));
+        $end   = new \DateTime(date('Y-m-d', $endTime));
+
+        $interval  = new \DateInterval('P1D');
+        $dateRange = new \DatePeriod($begin, $interval, $end);
+
+        foreach ($dateRange as $date) {
+            $key = $date->format('Y-m-d');
+            if (!isset($logsGroupByDate[$key])) {
+                $logsGroupByDate[$key] = array();
+            }
+        }
+
+        uksort($logsGroupByDate, function ($a, $b) {
+            return $a > $b;
+        });
+
+        return $logsGroupByDate;
+    }
+
     private function getDetailList($conditions)
     {
-        $paginator = new Paginator(
+        $paginator      = new Paginator(
             $this->get('request'),
             $this->getRefererLogService()->countDistinctLogsByField($conditions, $field = 'refererUrl'),
             20
@@ -179,8 +210,8 @@ class OpenCourseAnalysisController extends BaseController
             'yesterdayStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 2 * 24 * 3600),
             'yesterdayEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())) - 1 * 24 * 3600),
 
-            'lastWeekStart'  => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
-            'lastWeekEnd'    => date("Y-m-d", strtotime(date("Y-m-d", time()))),
+            'lastWeekStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 7 * 24 * 3600),
+            'lastWeekEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time()))),
 
             'lastMonthStart' => date("Y-m-d", strtotime(date("Y-m-d", time())) - 30 * 24 * 3600),
             'lastMonthEnd'   => date("Y-m-d", strtotime(date("Y-m-d", time())))
@@ -192,10 +223,10 @@ class OpenCourseAnalysisController extends BaseController
         if (isset($fields['startTime']) || isset($fields['endTime'])) {
             return array(
                 'startTime' => empty($fields['startTime']) ? null : strtotime($fields['startTime']),
-                'endTime'   => empty($fields['endTime']) ? null : (strtotime($fields['endTime'].' 23:59:59'))
+                'endTime'   => empty($fields['endTime']) ? null : (strtotime($fields['endTime'] . ' 23:59:59'))
             );
         }
-        return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()).' 23:59:59'));
+        return array('startTime' => strtotime(date("Y-m-d", time())) - 7 * 24 * 3600, 'endTime' => strtotime(date("Y-m-d", time()) . ' 23:59:59'));
     }
 
     public function conversionAction(Request $request)
