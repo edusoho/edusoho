@@ -132,7 +132,7 @@ define(function(require, exports, module) {
 
             BalloonCloudVideoPlayer.superclass.setup.call(self);
 
-            // window.BalloonPlayer = this;
+            window.BalloonPlayer = this;
         },
 
         play: function(){
@@ -141,6 +141,11 @@ define(function(require, exports, module) {
 
         pause: function(){
             this.get("player").pause();
+        },
+
+        getCurrentTime: function(){
+            console.log('getCurrentTime');
+            this.get("player").getCurrentTime();
         },
 
         isPlaying: function() {

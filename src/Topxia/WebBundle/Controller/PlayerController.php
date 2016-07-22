@@ -48,7 +48,8 @@ class PlayerController extends BaseController
             'url'              => isset($url) ? $url : null,
             'context'          => $context,
             'player'           => $player,
-            'agentInWhiteList' => $agentInWhiteList
+            'agentInWhiteList' => $agentInWhiteList,
+            'hideQuestion'     => $request->query->get('hideQuestion', 0)
         ));
     }
 
