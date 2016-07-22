@@ -451,11 +451,10 @@ define(function(require, exports, module) {
             toolbar: 'Full',
             filebrowserImageUploadUrl: $('#lesson-content-field').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#lesson-content-field').data('flashUploadUrl'),
+            allowedContent: true,
             height: 300
         });
 
-
-        
         validator.on('formValidate', function(elemetn, event) {
             var content = getEditorContent(editor);
             $content.val(content);

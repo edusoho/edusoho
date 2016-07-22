@@ -22,7 +22,7 @@
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
-              <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+              <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}
