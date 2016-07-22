@@ -128,7 +128,7 @@ class OpenCourseAnalysisController extends BaseController
 
         if (!empty($type)) {
             $groupByConditions['targetInnerType']    = $type;
-            $totalWatchConditions['targetInnerType'] = $groupByConditions;
+            $totalWatchConditions['targetInnerType'] = $type;
             $countConditions['type']                 = $type;
         }
 
@@ -168,7 +168,6 @@ class OpenCourseAnalysisController extends BaseController
     {
         $begin = new \DateTime(date('Y-m-d', $startTime));
         $end   = new \DateTime(date('Y-m-d', $endTime));
-
         $interval  = new \DateInterval('P1D');
         $dateRange = new \DatePeriod($begin, $interval, $end);
 

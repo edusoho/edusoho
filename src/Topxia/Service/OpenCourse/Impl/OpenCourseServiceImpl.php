@@ -868,10 +868,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime'      => time()
         ));
 
-        if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
-        }
-
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
