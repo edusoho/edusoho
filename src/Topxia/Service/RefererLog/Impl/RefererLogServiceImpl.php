@@ -27,10 +27,12 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function ignoreLog($refererlog)
     {
+        //公开课管理页面不记录访问日志
         if (!!preg_match('/open\/course\/\d\/manage/', $refererlog['refererUrl'])) {
             return true;
         }
-        if (strpos($refererlog['refererUrl'], 'my/courses/favorited')) {
+        //后台管理页面
+        if (!!preg_match('/admin/', $refererlog['refererUrl'])) {
             return true;
         }
         return false;
@@ -60,7 +62,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
         $analysisSummaryList = $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
-        $totalCount          = array_sum(ArrayToolkit::column($analysisSummaryList, 'count'));
+
+        $totalCount = array_sum(ArrayToolkit::column($analysisSummaryList, 'count'));
         return array_map(function ($referelog) use ($totalCount) {
             $referelog['percent']      = empty($totalCount) ? '0%' : round($referelog['count'] / $totalCount * 100, 2).'%';
             $referelog['orderPercent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
@@ -136,11 +139,11 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function prepareRefererUrl($refererlog)
     {
-        $host       = $this->getKernel()->getEnvVariable('host');
+        $host = $this->getKernel()->getEnvVariable('schemeAndHost');
+
         $refererMap = $this->getRefererMap();
         //微信访问url
         if (strpos($refererlog['userAgent'], 'MicroMessenger') !== false) {
-            $refererlog['refererUrl'] = empty($refererlog['refererUrl']) ? $refererlog['uri'] : $refererlog['refererUrl'];
             if (strpos($refererlog['refererUrl'], $host) !== false) {
                 $refererlog['refererHost'] = 'mp.weixin.qq.com';
                 $refererlog['refererUrl']  = 'mp.weixin.qq.com';
