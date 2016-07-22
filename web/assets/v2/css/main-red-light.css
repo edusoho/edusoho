@@ -13673,6 +13673,10 @@ textarea {
   display: inline-block;
   width: 24%;
   text-align: center;
+  border-right: 1px solid #f1f1f1;
+}
+.openCourse-detail-operation .operation-list:last-child {
+  border-right: none;
 }
 @media (max-width: 991px) {
   .openCourse-detail-operation .operation-list {
