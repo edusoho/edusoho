@@ -518,10 +518,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'orgId'          => 0
         ));
 
-        if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
-        }
-
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);

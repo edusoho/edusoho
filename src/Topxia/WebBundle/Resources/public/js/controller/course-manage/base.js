@@ -118,6 +118,7 @@ define(function(require, exports, module) {
         
         if ($('#course-about-field').length > 0) {
             CKEDITOR.replace('course-about-field', {
+                allowedContent: true,
                 toolbar: 'Detail',
                 filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
             });
