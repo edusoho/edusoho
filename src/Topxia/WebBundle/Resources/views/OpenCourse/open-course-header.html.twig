@@ -83,8 +83,11 @@
         {% else %}
           <div class="mask-content">
             <h2>{{'直播已经结束'|trans}}</h2>
+
             {% for replay in lesson.replays if replay %}
               <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
+              {% else %}
+                <p class="text-info">回放生成中，请稍候再来：）</p>
             {% endfor %}
           </div>
         {% endif %}
