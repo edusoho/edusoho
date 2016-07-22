@@ -13679,6 +13679,9 @@ textarea {
     width: 32%;
   }
 }
+.openCourse-detail-operation .operation-img.operation-share a {
+  display: inline-block;
+}
 .openCourse-detail-operation .operation-img {
   display: inline-block;
   width: 36px;
