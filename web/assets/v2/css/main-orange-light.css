@@ -13955,6 +13955,20 @@ textarea {
     height: 500px;
   }
 }
+.open-course-views .mask-img {
+  width: 100%;
+  padding-top: 10px;
+}
+@media (max-width: 1199px) {
+  .open-course-views .mask-img {
+    padding-top: 50px;
+  }
+}
+@media (max-width: 991px) {
+  .open-course-views .mask-img {
+    padding: 0;
+  }
+}
 .open-course-views .lesson-content {
   height: 100%;
 }
