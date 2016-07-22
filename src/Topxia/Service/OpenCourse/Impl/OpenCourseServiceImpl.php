@@ -284,6 +284,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $courseFavoriteNum;
     }
 
+    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type)
+    {
+        return $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
+    }
+
     public function getLessonItems($courseId)
     {
         //$lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);

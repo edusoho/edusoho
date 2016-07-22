@@ -193,9 +193,13 @@ class OpenCourseController extends BaseController
 
         $member = $this->_getMember($request, $course['id']);
 
+        $user           = $this->getCurrentUser();
+        $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-info-bar-block.html.twig', array(
-            'course' => $course,
-            'member' => $member
+            'course'         => $course,
+            'member'         => $member,
+            'memberFavorite' => $memberFavorite
         ));
     }
 
