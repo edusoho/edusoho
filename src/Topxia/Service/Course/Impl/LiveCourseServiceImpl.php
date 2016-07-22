@@ -2,6 +2,7 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Course\LiveCourseService;
 
