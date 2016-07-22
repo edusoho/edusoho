@@ -3,7 +3,7 @@
 {% set showPaginator = showPaginator|default(1) %}
 {% set showRefererName = showRefererName|default(0) %}
 
-<table class="table table-hover">
+<table class="table table-hover" style="word-break:break-all;">
 	<thead>
 		<tr>
 			<th>来源</th>
@@ -17,7 +17,9 @@
 		{% for refererlog in refererloglist %}
 			<tr>
 				<th scope="row">
-					{% if showRefererName %}{{ refererlog.refererName }} {% else %}{{refererlog.refererUrl}}{% endif %}
+					{% if showRefererName %}{{ refererlog.refererName }} {% else %}
+						<a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="" data-html="true" data-content="<a>{{ refererlog.refererUrl }}</a>" data-original-title="访问地址:">{{refererlog.refererHost}}/...</a>
+					{% endif %}
 				</th>
 				<th>{{refererlog.count}}</th>
 				<th>{{refererlog.percent}}</th>

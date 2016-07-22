@@ -27,7 +27,10 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     private function ignoreLog($refererlog)
     {
-        if (strpos($refererlog['refererUrl'], 'my/courses/favorited') || strpos($refererlog['refererUrl'], 'manage/lesson')) {
+        if (!!preg_match('/open\/course\/\d\/manage/', $refererlog['refererUrl'])) {
+            return true;
+        }
+        if (strpos($refererlog['refererUrl'], 'my/courses/favorited')) {
             return true;
         }
         return false;
@@ -70,9 +73,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->searchAnalysisDetailListCount($conditions);
     }
 
-    public function countDitinctLogsByField($conditions, $field)
+    public function countDistinctLogsByField($conditions, $field)
     {
-        return $this->getRefererLogDao()->countDitinctLogsByField($conditions, $field);
+        return $this->getRefererLogDao()->countDistinctLogsByField($conditions, $field);
     }
 
     protected function prepareConditions($conditions)

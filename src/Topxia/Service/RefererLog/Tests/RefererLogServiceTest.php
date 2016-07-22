@@ -86,7 +86,7 @@ class RefererLogServiceTest extends BaseTestCase
         $this->assertEquals(2, count($refererlist));
     }
 
-    public function testCountDitinctLogsByField()
+    public function testcountDistinctLogsByField()
     {
         $refererlog       = $this->moocReferelog();
         $createRefererLog = $this->getRefererLogService()->addRefererLog($refererlog);
@@ -98,9 +98,9 @@ class RefererLogServiceTest extends BaseTestCase
         $timeRange  = $this->getTimeRange();
         $conditions = array_merge($timeRange, array('targetType' => 'course'));
 
-        $refererCount = $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'targetId');
+        $refererCount = $this->getRefererLogService()->countDistinctLogsByField($conditions, $field = 'targetId');
         $this->assertEquals(3, $refererCount);
-        $refererCount = $this->getRefererLogService()->countDitinctLogsByField($conditions, $field = 'refererUrl');
+        $refererCount = $this->getRefererLogService()->countDistinctLogsByField($conditions, $field = 'refererUrl');
         $this->assertEquals(2, $refererCount);
     }
 
