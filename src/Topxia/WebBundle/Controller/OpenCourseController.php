@@ -68,7 +68,8 @@ class OpenCourseController extends BaseController
             }
 
             return $this->render($template, array(
-                'course' => $course
+                'course'    => $course,
+                'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id'])
             ));
         }
 
@@ -252,7 +253,7 @@ class OpenCourseController extends BaseController
             'times'    => 0,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -260,11 +261,35 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    protected function getWxPreviewQrCodeUrl($id)
+    {
+        $user  = $this->getUserService()->getCurrentUser();
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl(
+                    'open_course_show',
+                    array(
+                        'courseId' => $id,
+                        'as'       => 'preview'
+                    ),
+                    true),
+                'appUrl' => ""
+            ),
+            'times'    => 0,
+            'duration' => 3600
+        ));
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        return $url;
+    }
+
     public function commentAction(Request $request, $courseId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if (!$course) {
+            var_dump('aaaa');
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
@@ -470,7 +495,7 @@ class OpenCourseController extends BaseController
         $response = array('success' => true, 'message' => '');
 
         if ($user->isLogin()) {
-            $mobile                 = $request->query->get('value');
+            $mobile = $request->query->get('value');
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
             if ($result != 'success') {
@@ -613,7 +638,8 @@ class OpenCourseController extends BaseController
     {
         $lessons = $this->getOpenCourseService()->searchLessons(array(
             'courseId' => $courseId,
-            'status'   => 'published'),
+            'status'   => 'published'
+        ),
             array('seq', 'ASC'), 0, 1
         );
 
@@ -627,9 +653,9 @@ class OpenCourseController extends BaseController
     private function _getFavoriteNum($courseId)
     {
         $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
-            'courseId' => $courseId,
-            'type'     => 'openCourse'
-        )
+                'courseId' => $courseId,
+                'type'     => 'openCourse'
+            )
         );
 
         return $favoriteNum;
@@ -680,7 +706,7 @@ class OpenCourseController extends BaseController
             $text  = '';
 
             foreach ($texts as $txt) {
-                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
+                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
             }
 
             $text = preg_replace('|<p>\s*</p>|', '', $text);
@@ -805,9 +831,9 @@ class OpenCourseController extends BaseController
         $refererLogToken = $request->cookies->get('refererLogToken');
 
         if (empty($refererLogToken)) {
-            $refererLogToken = 'refererLog/'.time();
+            $refererLogToken = 'refererLog/' . time();
 
-            $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
+            $expire = strtotime(date('Y-m-d') . ' 23:59:59') - time();
 
             $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken, time() + $expire));
             $response->send();
