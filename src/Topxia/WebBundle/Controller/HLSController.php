@@ -239,7 +239,7 @@ class HLSController extends BaseController
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
             return new Response($stream['key'], 200, array(
-                'Content-Length' => strlen($stream['key(array)'])
+                'Content-Length' => strlen($stream['key'])
             ));
         }
 
