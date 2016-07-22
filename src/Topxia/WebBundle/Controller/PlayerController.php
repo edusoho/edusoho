@@ -42,14 +42,12 @@ class PlayerController extends BaseController
             }
         } catch (\Exception $e) {
         }
-
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
             'context'          => $context,
             'player'           => $player,
-            'agentInWhiteList' => $agentInWhiteList,
-            'hideQuestion'     => $request->query->get('hideQuestion', 0)
+            'agentInWhiteList' => $agentInWhiteList
         ));
     }
 
