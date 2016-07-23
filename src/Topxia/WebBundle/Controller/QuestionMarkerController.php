@@ -12,6 +12,8 @@ class QuestionMarkerController extends BaseController
     {
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
 
+        $baseUrl = $request->getSchemeAndHttpHost();
+
         $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
@@ -21,13 +23,13 @@ class QuestionMarkerController extends BaseController
             $result[$index]['markerId'] = $questionMaker['markerId'];
             $result[$index]['time']     = $questionMaker['second'];
             $result[$index]['type']     = $questionMaker['type'];
-            $result[$index]['question'] = $questionMaker['stem'];
+            $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['stem']);
             if ($isChoice) {
                 $questionMetas = json_decode($questionMaker['metas'], true);
                 if (!empty($questionMetas['choices'])) {
                     foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
                         $result[$index]['options'][$choiceIndex]['option_key'] = chr(65 + $choiceIndex);
-                        $result[$index]['options'][$choiceIndex]['option_val'] = $choice;
+                        $result[$index]['options'][$choiceIndex]['option_val'] = self::convertAbsoluteUrl($baseUrl, $choice);
                     }
                 }
             }
@@ -35,7 +37,7 @@ class QuestionMarkerController extends BaseController
             foreach ($answers as $answerIndex => $answer) {
                 $result[$index]['answer'][$answerIndex] = $isChoice ? chr(65 + $answer) : $answer;
             }
-            $result[$index]['analysis'] = $questionMaker['analysis'];
+            $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['analysis']);
         }
 
         return $this->createJsonResponse($result);
@@ -236,6 +238,15 @@ class QuestionMarkerController extends BaseController
         }
 
         return false;
+    }
+
+    protected function convertAbsoluteUrl($baseUrl, $html)
+    {
+        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
+            return "src=\"{$baseUrl}/{$matches[1]}\"";
+        }, $html);
+
+        return $html;
     }
 
     protected function getQuestionMarkerService()
