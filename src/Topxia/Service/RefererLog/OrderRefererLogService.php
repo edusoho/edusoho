@@ -15,4 +15,5 @@ interface OrderRefererLogService
 
     public function searchOrderRefererLogCount($conditions);
 
+    public function searchDistinctOrderRefererLogCount($conditions, $distinctField);
 }

@@ -1,5 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set script_controller = 'open-course/open-course' %}
+
+{% block title %}
+  {{ course.title }} - {{ parent() }}
+{% endblock %}
+
 {% block content %}
   <ol class="breadcrumb openCourse-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>
