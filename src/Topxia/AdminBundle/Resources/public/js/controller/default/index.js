@@ -73,7 +73,10 @@ define(function(require, exports, module) {
         $.post(noticeUrl, function(data){
             if (data['result']) {
                 $('.modal').html(data['html']);
-                $('.modal').modal('show');
+                $('.modal').modal({
+                    backdrop:'static',
+                    show:true
+                });
             }
         })
     }
