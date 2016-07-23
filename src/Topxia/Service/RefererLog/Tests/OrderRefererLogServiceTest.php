@@ -132,6 +132,41 @@ class OrderRefererLogServiceTest extends BaseTestCase
         $this->assertEquals(1, $logCount);
     }
 
+    public function testSearchDistinctOrderRefererLogCount()
+    {
+        $fields1 = array(
+            'refererLogId'     => 1,
+            'orderId'          => 1,
+            'sourceTargetType' => 'openCourse',
+            'sourceTargetId'   => 1,
+            'targetType'       => 'course',
+            'targetId'         => 1,
+            'createdTime'      => time()
+        );
+        $log1 = $this->getOrderRefererLogService()->addOrderRefererLog($fields1);
+
+        $fields2 = array(
+            'refererLogId'     => 2,
+            'orderId'          => 1,
+            'sourceTargetType' => 'openCourse',
+            'sourceTargetId'   => 1,
+            'targetType'       => 'course',
+            'targetId'         => 1,
+            'createdTime'      => time()
+        );
+        $log2 = $this->getOrderRefererLogService()->addOrderRefererLog($fields2);
+
+        $conditions = array(
+            'targetId'         => 1,
+            'sourceTargetType' => 'openCourse',
+            'sourceTargetId'   => 1
+        );
+
+        $count = $this->getOrderRefererLogService()->searchDistinctOrderRefererLogCount($conditions, 'orderId');
+
+        $this->assertEquals(1, $count);
+    }
+
     private function _createOrderRerfererLog()
     {
         $fields = array(
