@@ -35,9 +35,9 @@
       <div class="alert alert-info mtl" role="alert">
         请谨慎更换授权码。如有疑问请联系官方客服
       </div>
-      {% if not setting('storage.cloud_key_applied') %}
+      {# {% if not setting('storage.cloud_key_applied') %}
         <span class="pull-right"><span class="text-info">还没有授权码?</span> <a href="javascript:;" id="key-apply-btn" class="btn btn-sm btn-warning" data-url="{{ path('admin_setting_cloud_key_apply') }}" data-goto-url="{{ path('admin_setting_cloud_key') }}"  data-loading-text="正在申请授权码，请稍等...">申请授权码</a></span>
-      {% endif %}
+      {% endif %} #}
 
     </div>
   </div>
