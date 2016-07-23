@@ -449,17 +449,17 @@ class OpenCourseController extends BaseController
             'type'            => 'openCourse'
         );
 
-        $paginator = new Paginator(
-            $request,
-            $this->getMaterialService()->searchMaterialCount($conditions),
-            5
-        );
+        /*$paginator = new Paginator(
+        $request,
+        $this->getMaterialService()->searchMaterialCount($conditions),
+        5
+        );*/
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
             array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            PHP_INT_MAX
         );
 
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
@@ -468,8 +468,7 @@ class OpenCourseController extends BaseController
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-material-block.html.twig", array(
             'course'    => $course,
             'lessons'   => $lessons,
-            'materials' => $materials,
-            'paginator' => $paginator
+            'materials' => $materials
         ));
     }
 

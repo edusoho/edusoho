@@ -72,7 +72,9 @@
               {% endif %}
             {% endif %}
 
-            <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
+            {% if setting('cloud_sms.sms_enabled') %}
+              <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
+            {% endif %}
           </div>
         {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
           <div class="mask-content">
