@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -103,6 +104,7 @@ class DefaultController extends BaseController
         $api       = CloudAPIFactory::create('root');
         $cloudInfo = $api->get('/me');
 
+        //高级去版权用户不显示提醒
         if ($cloudInfo && $cloudInfo['copyright'] == 1 && $cloudInfo['thirdCopyright'] == 1) {
             return $this->createJsonResponse(array('result' => false));
         }
@@ -111,7 +113,7 @@ class DefaultController extends BaseController
         $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
 
         $jsonResponse = $this->createJsonResponse(array('result' => true, 'html' => $content));
-        $jsonResponse->headers->removeCookie('refererLogToken');
+        $jsonResponse->headers->setCookie(new Cookie("refererLogToken", $token, time() - 1));
         $jsonResponse->send();
 
         return $jsonResponse;
