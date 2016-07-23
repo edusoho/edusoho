@@ -146,6 +146,16 @@ define(function(require, exports, module) {
         getCurrentTime: function(){
             return this.get("player").getCurrentTime();
         },
+        
+        setCurrentTime: function (time) {
+            this.get("player").currentTime(time);
+            return this;
+        },
+        
+        replay: function () {
+            this.setCurrentTime(0).play();
+            return this;
+        },
 
         isPlaying: function() {
             if(this.get("player") && this.get("player").paused){

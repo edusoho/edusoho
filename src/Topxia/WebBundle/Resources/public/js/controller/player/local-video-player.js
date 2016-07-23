@@ -103,7 +103,13 @@ define(function(require, exports, module) {
 
         setCurrentTime: function(time) {
 			this.get("player").currentTime(time);
+			return this;
         },
+
+		replay: function () {
+			this.setCurrentTime(0).play();
+			return this;
+		},
 
         isPlaying: function() {
         	return !this.get("player").paused();
