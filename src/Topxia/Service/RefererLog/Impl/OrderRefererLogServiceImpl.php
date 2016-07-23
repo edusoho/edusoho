@@ -44,6 +44,11 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
         return $this->getOrderRefererLogDao()->searchOrderRefererLogCount($conditions, $groupBy);
     }
 
+    public function searchDistinctOrderRefererLogCount($conditions, $distinctField)
+    {
+        return $this->getOrderRefererLogDao()->searchDistinctOrderRefererLogCount($conditions, $distinctField);
+    }
+
     protected function prepareConditions($conditions)
     {
         return $conditions;

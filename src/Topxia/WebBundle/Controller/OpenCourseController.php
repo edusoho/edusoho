@@ -12,26 +12,21 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
-    }
-
-    public function pageItemAction(Request $request)
-    {
         $queryParam = $request->query->all();
         $conditions = $this->_filterConditions($queryParam);
+
+        $pageSize = 18;
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->searchCourseCount($conditions),
-            10
+            $pageSize
         );
 
-        $paginator->setBaseUrl($this->generateUrl('open_course_explore_list'));
-
-        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', 10);
+        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
         $teachers = $this->findCourseTeachers($courses);
 
-        return $this->render('TopxiaWebBundle:OpenCourse/Widget:open-course-grid-horizontal.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator,
             'teachers'  => $teachers
