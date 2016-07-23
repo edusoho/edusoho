@@ -5,6 +5,12 @@
   {{ course.title }} - {{ parent() }}
 {% endblock %}
 
+{% block keywords %}
+  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
+{% endblock %}
+
+{% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
+
 {% block content %}
   <ol class="breadcrumb openCourse-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>
