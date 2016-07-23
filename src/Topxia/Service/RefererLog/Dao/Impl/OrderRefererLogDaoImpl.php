@@ -59,6 +59,14 @@ class OrderRefererLogDaoImpl extends BaseDao implements OrderRefererLogDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function searchDistinctOrderRefererLogCount($conditions, $distinctField)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions, array('createdTime', 'DESC'), array())
+            ->select("COUNT(DISTINCT({$distinctField}))");
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
     protected function _createSearchQueryBuilder($conditions, $orderBy, $groupBy)
     {
         $conditions = array_filter($conditions, function ($value) {
