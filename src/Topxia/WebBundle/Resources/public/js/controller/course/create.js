@@ -42,7 +42,7 @@ define(function (require, exports, module) {
                 $this = $(this);
                 var courseType = $this.data('type');
                 $this.not('.disabled').addClass('active').parent().siblings().find('.course-select').removeClass('active');
-                $form.find('input[name="type"]').val(courseType);
+                $('input[name="type"]').val(courseType);
             })
         }
     };
