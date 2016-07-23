@@ -194,8 +194,8 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return array(
             'open/course/explore'  => '公开课列表',
             'open/course'          => '公开课详情页',
-            $host                  => '首页',
             'my/courses/favorited' => '我的收藏',
+            $host                  => '首页',
 
             'baidu.com'            => '百度',
             'www.so.com'           => '360搜索',
