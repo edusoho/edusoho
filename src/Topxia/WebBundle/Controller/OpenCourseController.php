@@ -57,10 +57,10 @@ class OpenCourseController extends BaseController
         if ($preview === 'preview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
-            if (!$this->_checkPublishedLessonExists($courseId)) {
-                $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
-                return $this->createMessageResponse('error', $message);
-            }
+            /*if (!$this->_checkPublishedLessonExists($courseId)) {
+            $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
+            return $this->createMessageResponse('error', $message);
+            }*/
 
             return $this->render($template, array(
                 'course'       => $course,
@@ -72,9 +72,9 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
-        if (!$this->_checkPublishedLessonExists($courseId)) {
-            return $this->createMessageResponse('error', '请先创建课时并发布！');
-        }
+        /*if (!$this->_checkPublishedLessonExists($courseId)) {
+        return $this->createMessageResponse('error', '请先创建课时并发布！');
+        }*/
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
@@ -136,20 +136,22 @@ class OpenCourseController extends BaseController
             $lesson = $this->_checkPublishedLessonExists($course['id']);
         }
 
-        $lesson     = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
-        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member     = $this->_getMember($request, $course['id']);
+        $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
+        //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
+        $member = $this->_getMember($request, $course['id']);
 
-        $lesson['replays'] = $this->_getLiveReplay($lesson);
+        if ($lesson) {
+            $lesson['replays'] = $this->_getLiveReplay($lesson);
+        }
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'member'     => $member,
-            'notifyNum'  => $notifyNum,
-            'nextLesson' => $nextLesson
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'member'    => $member,
+            'notifyNum' => $notifyNum
+            //'nextLesson' => $nextLesson
         ));
     }
 
