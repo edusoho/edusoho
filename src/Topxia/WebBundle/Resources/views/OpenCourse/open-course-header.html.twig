@@ -45,7 +45,7 @@
   </div>
   {% elseif course.type == 'liveOpen' %}
     <div class="col-md-9 open-course-views">
-      <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="" style="height:100%;">
+      <img src="{{ filepath(course.largePicture, 'course.png')}}" class="img-responsive mask-img">
       <div class="mask">
         {% if lesson.startTime > ("now"|date("U")) %}
           <div class="mask-content">
@@ -72,7 +72,9 @@
               {% endif %}
             {% endif %}
 
-            <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
+            {% if setting('cloud_sms.sms_enabled') %}
+              <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
+            {% endif %}
           </div>
         {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
           <div class="mask-content">
@@ -83,8 +85,11 @@
         {% else %}
           <div class="mask-content">
             <h2>{{'直播已经结束'|trans}}</h2>
+
             {% for replay in lesson.replays if replay %}
               <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
+              {% else %}
+                <p class="text-info">回放生成中，请稍候再来：）</p>
             {% endfor %}
           </div>
         {% endif %}

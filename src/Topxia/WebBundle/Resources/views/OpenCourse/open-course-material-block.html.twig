@@ -7,7 +7,7 @@
         {{'课程资料下载'|trans}}
       </h3>
     </div>
-    <div class="panel-body text-center">
+    <div class="panel-body">
       <ul class="media-list">
         {% for material in materials %}
           {% set lesson = lessons[material.lessonId]|default(null) %}

@@ -12,26 +12,21 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
-    }
-
-    public function pageItemAction(Request $request)
-    {
         $queryParam = $request->query->all();
         $conditions = $this->_filterConditions($queryParam);
+
+        $pageSize = 18;
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->searchCourseCount($conditions),
-            10
+            $pageSize
         );
 
-        $paginator->setBaseUrl($this->generateUrl('open_course_explore_list'));
-
-        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', 10);
+        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
         $teachers = $this->findCourseTeachers($courses);
 
-        return $this->render('TopxiaWebBundle:OpenCourse/Widget:open-course-grid-horizontal.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator,
             'teachers'  => $teachers
@@ -149,12 +144,6 @@ class OpenCourseController extends BaseController
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
-        if ($this->isWxClient()) {
-            $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig';
-        } else {
-            $template = 'TopxiaWebBundle:OpenCourse:open-course-header.html.twig';
-        }
-
         return $this->render($template, array(
             'course'     => $course,
             'lesson'     => $lesson,
@@ -193,9 +182,13 @@ class OpenCourseController extends BaseController
 
         $member = $this->_getMember($request, $course['id']);
 
+        $user           = $this->getCurrentUser();
+        $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-info-bar-block.html.twig', array(
-            'course' => $course,
-            'member' => $member
+            'course'         => $course,
+            'member'         => $member,
+            'memberFavorite' => $memberFavorite
         ));
     }
 
@@ -456,17 +449,17 @@ class OpenCourseController extends BaseController
             'type'            => 'openCourse'
         );
 
-        $paginator = new Paginator(
-            $request,
-            $this->getMaterialService()->searchMaterialCount($conditions),
-            5
-        );
+        /*$paginator = new Paginator(
+        $request,
+        $this->getMaterialService()->searchMaterialCount($conditions),
+        5
+        );*/
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
             array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            PHP_INT_MAX
         );
 
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
@@ -475,8 +468,7 @@ class OpenCourseController extends BaseController
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-material-block.html.twig", array(
             'course'    => $course,
             'lessons'   => $lessons,
-            'materials' => $materials,
-            'paginator' => $paginator
+            'materials' => $materials
         ));
     }
 

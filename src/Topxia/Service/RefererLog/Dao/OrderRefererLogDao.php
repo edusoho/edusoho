@@ -16,4 +16,6 @@ interface OrderRefererLogDao
 
     public function searchOrderRefererLogCount($conditions, $groupBy);
 
+    public function searchDistinctOrderRefererLogCount($conditions, $distinctField);
+
 }

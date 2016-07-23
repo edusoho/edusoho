@@ -20,8 +20,6 @@
 {% if course.type == 'open' %}
   <div class="open-course-views open-course-mobile-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
     {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
-   
-
     <div class="open-course-mask" style="display:none" id="media-error-dialog">
       <div class="modal-dialog" style="width:200px;margin:22% auto;">
         <div class="modal-content">
@@ -37,8 +35,8 @@
     
   </div>
 {% elseif course.type == 'liveOpen' %}
-  <div class="open-course-views">
-    <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="" style="height:100%;">
+  <div class="open-course-views openCourse-wechat-views">
+    <img src="{{ filepath(course.largePicture, 'course.png')}}" class="img-responsive mask-img">
     <div class="mask">
       {% if lesson.startTime > ("now"|date("U")) %}
         <div class="mask-content">
