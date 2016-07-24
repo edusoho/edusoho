@@ -186,7 +186,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
                 'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType'      => 'lesson',
+                'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
@@ -198,7 +198,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
                 'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType'      => 'lesson',
+                'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
