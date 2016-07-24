@@ -38,12 +38,24 @@ class LiveOpenCourseController extends BaseController
 
     protected function getRandomNickname($request, $courseId, $lessonId)
     {
-        return $request->getSession()->get("live-open-course-nickname-{$courseId}-{$lessonId}", '游客'.$this->getRandomString(8));
+        $key          = "live-open-course-nickname-{$courseId}-{$lessonId}";
+        $sessionValue = $request->getSession()->get($key);
+        if (empty($sessionValue)) {
+            $sessionValue = '游客'.$this->getRandomString(8);
+            $request->getSession()->set($key, $sessionValue);
+        }
+        return $sessionValue;
     }
 
     protected function getRandomUserId($request, $courseId, $lessonId)
     {
-        return $request->getSession()->get("live-open-course-user-id-{$courseId}-{$lessonId}", $this->getMillisecond());
+        $key          = "live-open-course-user-id-{$courseId}-{$lessonId}";
+        $sessionValue = $request->getSession()->get($key);
+        if (empty($sessionValue)) {
+            $sessionValue = '游客'.$this->getMillisecond(8);
+            $request->getSession()->set($key, $sessionValue);
+        }
+        return $sessionValue;
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
