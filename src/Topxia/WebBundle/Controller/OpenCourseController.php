@@ -815,21 +815,18 @@ class OpenCourseController extends BaseController
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $this->updateRefererLogToken($refererLog, $request, $response);
+        $this->updatevisitRefererToken($refererLog, $request, $response);
     }
 
-    protected function updateRefererLogToken($refererLog, Request $request, Response $response)
+    protected function updatevisitRefererToken($refererLog, Request $request, Response $response)
     {
-        $refererLogToken = unserialize($request->cookies->get('refererLogToken'));
+        $visitRefererToken = unserialize($request->cookies->get('visitRefererToken'));
 
-        $key                   = $refererLog['targetType'].'_'.$refererLog['targetId'];
-        $refererLogToken[$key] = $refererLog['id'];
-        $expire                = strtotime(date('Y-m-d').' 23:59:59') - time();
-        if (empty($refererLogToken)) {
-            $refererLogToken['token'] = 'refererLog/'.time();
-            $response->headers->setCookie(new Cookie("refererLogToken", serialize($refererLogToken), time() + $expire));
-        }
-        $response->headers->setCookie(new Cookie("refererLogToken", serialize($refererLogToken), time() + $expire));
+        $key                     = $refererLog['targetType'].'_'.$refererLog['targetId'];
+        $visitRefererToken[$key] = $refererLog['id'];
+        $expire                  = strtotime(date('Y-m-d').' 23:59:59') - time();
+
+        $response->headers->setCookie(new Cookie("visitRefererToken", serialize($visitRefererToken), time() + $expire));
         $response->send();
     }
 

@@ -16,7 +16,7 @@ class Version20160724165427 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `referer_log` DROP `userAgent`;");
+        $this->addSql("ALTER TABLE `referer_log` DROP `token`;");
     }
 
     /**

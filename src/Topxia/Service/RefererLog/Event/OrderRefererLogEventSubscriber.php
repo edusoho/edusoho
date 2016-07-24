@@ -20,16 +20,16 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $container = $kernel->getContainer();
 
-        $refererLogToken = unserialize($container->get('request')->cookies->get('refererLogToken'));
+        $visitRefererToken = unserialize($container->get('request')->cookies->get('visitRefererToken'));
 
         $order = $event->getSubject();
 
-        if (empty($refererLogToken) || $order['totalPrice'] == 0) {
+        if (empty($visitRefererToken) || $order['totalPrice'] == 0) {
             return false;
         }
 
         $refererLogs = $this->getRefererLogService()->searchRefererLogs(
-            array('ids' => array_values($refererLogToken)),
+            array('ids' => array_values($visitRefererToken)),
             array('createdTime', 'DESC'),
             0, PHP_INT_MAX
         );
