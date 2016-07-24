@@ -44,11 +44,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
                 }
 
-                $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-                if (!empty($jobs)) {
-                    $this->deleteJob($jobs);
-                }
+                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
 
                 $result = $this->getOpenCourseLessonDao()->deleteLesson($lesson['id']);
                 $count += $result;
@@ -130,15 +126,6 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         return $count;
     }
 
-    protected function deleteJob($jobs)
-    {
-        foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
-        }
-    }
-
     protected function getOpenCourseService()
     {
         return $this->createService('OpenCourse.OpenCourseService');
@@ -177,5 +164,10 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function getRecommendCourseDao()
     {
         return $this->createDao('OpenCourse.RecommendedCourseDao');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
     }
 }

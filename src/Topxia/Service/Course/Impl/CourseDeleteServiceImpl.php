@@ -156,11 +156,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
                 }
 
-                $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-                if (!empty($jobs)) {
-                    $this->deleteJob($jobs);
-                }
+                $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
 
                 $result = $this->getLessonDao()->deleteLesson($lesson['id']);
                 $count += $result;
