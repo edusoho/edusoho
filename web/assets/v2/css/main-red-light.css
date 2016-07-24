@@ -14251,7 +14251,13 @@ textarea {
   height: 30px;
   line-height: 30px;
   padding-left: 10px;
+  background-color: #000;
   background-color: rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 1199px) {
+  .open-starttime {
+    font-size: 12px;
+  }
 }
 .open-course-list {
   background-color: #f5f8fa;
