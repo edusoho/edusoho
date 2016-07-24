@@ -14228,6 +14228,8 @@ textarea {
   text-align: left;
   font-size: 12px;
   color: #313131;
+  height: 80px;
+  overflow: hidden;
 }
 .course-comment {
   padding: 15px 20px;
@@ -14378,10 +14380,14 @@ textarea {
     float: left;
   }
 }
+.openCourse-sms-form .openCourse-form-help {
+  text-align: center;
+  margin-right: 57px;
+}
 @media (max-width: 991px) {
-  .openCourse-sms-form .openCourse-form-btn {
-    width: 17%;
-    float: left;
+  .openCourse-sms-form .openCourse-form-help {
+    text-align: left;
+    margin-right: 0;
   }
 }
 .panel-create-course .panel-heading h2 {
