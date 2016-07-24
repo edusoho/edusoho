@@ -24,10 +24,26 @@ class LiveOpenCourseController extends BaseController
         $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
 
         $user               = $this->getCurrentUser();
-        $params['id']       = $user->isLogin() ? $user['id'] : 0;
-        $params['nickname'] = $user->isLogin() ? $user['nickname'] : '游客'.$this->getRandomString(8);
+        $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
+        $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
 
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+    }
+
+    protected function getMillisecond()
+    {
+        list($t1, $t2) = explode(' ', microtime());
+        return (float) sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
+    }
+
+    protected function getRandomNickname($request, $courseId, $lessonId)
+    {
+        return $request->getSession()->get("live-open-course-nickname-{$courseId}-{$lessonId}", '游客'.$this->getRandomString(8));
+    }
+
+    protected function getRandomUserId($request, $courseId, $lessonId)
+    {
+        return $request->getSession()->get("live-open-course-user-id-{$courseId}-{$lessonId}", $this->getMillisecond());
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
