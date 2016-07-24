@@ -23,7 +23,8 @@
           {% endif %}
 
           <tr>
-            <th scope="row">{{ openCourses[refererLog.targetId].title }}</th>
+            {% set openCourse = openCourses[refererLog.targetId]|default(null) %}
+            <th scope="row">{% if openCourse %}{{ openCourse.title }}{% else %}该课程已删除{% endif %}</th>
             <th>
               {{ hitNum }} 次
             </th>
