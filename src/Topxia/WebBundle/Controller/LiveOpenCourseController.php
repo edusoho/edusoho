@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveOpenCourseController extends BaseController
 {
@@ -25,9 +25,21 @@ class LiveOpenCourseController extends BaseController
 
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : 0;
-        $params['nickname'] = $user->isLogin() ? $user['nickname'] : '游客';
+        $params['nickname'] = $user->isLogin() ? $user['nickname'] : '游客'.$this->getRandomString(8);
 
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+    }
+
+    protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    {
+        $s       = '';
+        $cLength = strlen($chars);
+
+        while (strlen($s) < $length) {
+            $s .= $chars[mt_rand(0, $cLength - 1)];
+        }
+
+        return $s;
     }
 
     public function verifyAction(Request $request)
