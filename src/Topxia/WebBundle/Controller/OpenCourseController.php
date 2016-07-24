@@ -806,38 +806,30 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog(Request $request, Response $response, $course)
     {
-        $refererLogToken = $this->getRefererLogToken($request, $response);
-
         $fields = array(
             'targetId'        => $course['id'],
             'targetType'      => 'openCourse',
             'refererUrl'      => $request->server->get('HTTP_REFERER'),
             'uri'             => $request->getUri(),
             'targetInnerType' => $course['type'],
-            'token'           => $refererLogToken,
             'ip'              => $request->getClientIp(),
             'userAgent'       => $request->headers->get("user-agent")
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-
-        return $refererLog;
+        $this->updatevisitRefererToken($refererLog, $request, $response);
     }
 
-    protected function getRefererLogToken(Request $request, Response $response)
+    protected function updatevisitRefererToken($refererLog, Request $request, Response $response)
     {
-        $refererLogToken = $request->cookies->get('refererLogToken');
+        $visitRefererToken = unserialize($request->cookies->get('visitRefererToken'));
 
-        if (empty($refererLogToken)) {
-            $refererLogToken = 'refererLog/'.time();
+        $key                     = $refererLog['targetType'].'_'.$refererLog['targetId'];
+        $visitRefererToken[$key] = $refererLog['id'];
+        $expire                  = strtotime(date('Y-m-d').' 23:59:59') - time();
 
-            $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
-
-            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken, time() + $expire));
-            $response->send();
-        }
-
-        return $refererLogToken;
+        $response->headers->setCookie(new Cookie("visitRefererToken", serialize($visitRefererToken), time() + $expire));
+        $response->send();
     }
 
     protected function getOpenCourseService()
