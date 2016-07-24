@@ -33,9 +33,9 @@
               {% if course.type == 'liveOpen' and lessons %}
                 <div class="mask">
                   {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-                    <i class="es-icon es-icon-videocam prs"></i>{{ lessons[0].startTime|date('H:i') }} 直播
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('H:i') }} 直播
                   {% else %}
-                    <i class="es-icon es-icon-videocam prs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} 直播
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} 直播
                   {% endif %}
                 </div>
               {% endif %}

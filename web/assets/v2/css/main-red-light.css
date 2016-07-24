@@ -992,7 +992,7 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-.course-grid .series-mode-label {
+.course-grid .course-label {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -1116,12 +1116,6 @@
 }
 .course-grid .learn-status .action {
   text-align: center;
-}
-.course-grid .course-status {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 12px;
 }
 .course-wide-list {
   list-style: none;
@@ -13838,7 +13832,7 @@ textarea {
   border: 1px solid #f5f5f5;
 }
 .es-openCourse-list .course-item .title {
-  width: 70%;
+  max-width: 58%;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -13847,6 +13841,16 @@ textarea {
   font-size: 16px;
   margin-top: 20px;
   padding: 0 15px;
+}
+@media (max-width: 767px) {
+  .es-openCourse-list .course-item .title a {
+    font-size: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .es-openCourse-list .course-item .title {
+    margin-top: 5px;
+  }
 }
 .es-openCourse-list .course-item .course-img .img-responsive {
   padding: 0;
@@ -13860,8 +13864,20 @@ textarea {
   color: #fff;
   padding: 10px;
 }
+@media (max-width: 767px) {
+  .es-openCourse-list .course-item .course-img .mask {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
 .es-openCourse-list .course-item .metas {
   padding: 22px 15px;
+}
+@media (max-width: 767px) {
+  .es-openCourse-list .course-item .metas {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
 }
 .open-course-title {
   font-size: 18px;
@@ -14208,11 +14224,7 @@ textarea {
   margin: 0 auto;
 }
 .open-course-teacher .intro {
-  height: 80px;
   line-height: 20px;
-  word-wrap: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
   font-size: 12px;
   color: #313131;
