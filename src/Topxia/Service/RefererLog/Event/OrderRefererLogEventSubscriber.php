@@ -20,7 +20,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $container = $kernel->getContainer();
 
-        $refererLogToken = $container->get('request')->cookies->get('refererLogToken');
+        $refererLogToken = unserialize($container->get('request')->cookies->get('refererLogToken'));
 
         $order = $event->getSubject();
 
@@ -29,10 +29,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         }
 
         $refererLogs = $this->getRefererLogService()->searchRefererLogs(
-            array(
-                'token' => $refererLogToken,
-                'ip'    => $container->get('request')->getClientIp()
-            ),
+            array('ids' => array_values($refererLogToken)),
             array('createdTime', 'DESC'),
             0, PHP_INT_MAX
         );

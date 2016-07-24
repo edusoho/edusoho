@@ -804,38 +804,33 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog(Request $request, Response $response, $course)
     {
-        $refererLogToken = $this->getRefererLogToken($request, $response);
-
         $fields = array(
             'targetId'        => $course['id'],
             'targetType'      => 'openCourse',
             'refererUrl'      => $request->server->get('HTTP_REFERER'),
             'uri'             => $request->getUri(),
             'targetInnerType' => $course['type'],
-            'token'           => $refererLogToken,
             'ip'              => $request->getClientIp(),
             'userAgent'       => $request->headers->get("user-agent")
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-
-        return $refererLog;
+        $this->updateRefererLogToken($refererLog, $request, $response);
     }
 
-    protected function getRefererLogToken(Request $request, Response $response)
+    protected function updateRefererLogToken($refererLog, Request $request, Response $response)
     {
-        $refererLogToken = $request->cookies->get('refererLogToken');
+        $refererLogToken = unserialize($request->cookies->get('refererLogToken'));
 
+        $key                   = $refererLog['targetType'].'_'.$refererLog['targetId'];
+        $refererLogToken[$key] = $refererLog['id'];
+        $expire                = strtotime(date('Y-m-d').' 23:59:59') - time();
         if (empty($refererLogToken)) {
-            $refererLogToken = 'refererLog/'.time();
-
-            $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
-
-            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken, time() + $expire));
-            $response->send();
+            $refererLogToken['token'] = 'refererLog/'.time();
+            $response->headers->setCookie(new Cookie("refererLogToken", serialize($refererLogToken), time() + $expire));
         }
-
-        return $refererLogToken;
+        $response->headers->setCookie(new Cookie("refererLogToken", serialize($refererLogToken), time() + $expire));
+        $response->send();
     }
 
     protected function getOpenCourseService()
