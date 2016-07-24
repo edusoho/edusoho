@@ -1,27 +1,28 @@
 <li class="course-grid">
   <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
     <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
-      {% if course.status == 'draft' %}
-        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-      {% elseif course.status == 'closed' %}
-        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
-      {% endif %}
-      {% if course.status != 'closed' %}
-        {% if course.serializeMode=='serialize' %}
-          <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
-        {% elseif course.serializeMode=='finished' %}
-          <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
+      <span class="course-label">
+        {% if course.status == 'draft' %}
+          <span class="label  label-warning">{{'未发布'|trans}}</span>
+        {% elseif course.status == 'closed' %}
+          <span class="label label-danger">{{'已关闭'|trans}}</span>
         {% endif %}
-      {% endif %}
-      {% if course.type == 'live' %}
-        {% set lesson = course['lesson']|default(null) %}
-        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-          <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
-        {% else %}
-          <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
+        {% if course.status != 'closed' %}
+          {% if course.serializeMode=='serialize' %}
+            <span class="label label-success">{{'更新中'|trans}}</span>
+          {% elseif course.serializeMode=='finished' %}
+            <span class="label label-warning">{{'已完结'|trans}}</span>
+          {% endif %}
         {% endif %}
-      {% endif %}
-
+        {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning">{{'正在直播中'|trans}}</span>
+          {% else %}
+            <span class="label label-success">{{'直播'|trans}}</span>
+          {% endif %}
+        {% endif %}
+      </span>
     <span class="title">{{ course.title }}</span>
     {% if mode in ['default', 'teach'] %}
 
