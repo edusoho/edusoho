@@ -13,7 +13,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             $this->getOpenCourseDao()->getConnection()->beginTransaction();
             $course = $this->getOpenCourseService()->getCourse($courseId);
 
-            $types = array('lessons', 'members', 'course', 'recommend','materials');
+            $types = array('lessons', 'members', 'course', 'recommend', 'materials');
 
             if (!in_array($type, $types)) {
                 throw $this->createServiceException('未知类型,删除失败');
@@ -42,6 +42,12 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             foreach ($lessons as $lesson) {
                 if (!empty($lesson['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
+                }
+
+                $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+
+                if (!empty($jobs)) {
+                    $this->deleteJob($jobs);
                 }
 
                 $result = $this->getOpenCourseLessonDao()->deleteLesson($lesson['id']);
@@ -122,6 +128,15 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         }
 
         return $count;
+    }
+
+    protected function deleteJob($jobs)
+    {
+        foreach ($jobs as $key => $job) {
+            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
+        }
     }
 
     protected function getOpenCourseService()
