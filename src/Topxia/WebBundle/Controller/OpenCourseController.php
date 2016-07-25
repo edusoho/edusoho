@@ -816,7 +816,7 @@ class OpenCourseController extends BaseController
     protected function updatevisitRefererToken($refererLog, Request $request, $uv)
     {
         $uv    = $request->cookies->get('uv', $uv);
-        $token = $this->getRefererLogService()->getTokenByUv($uv);
+        $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
 
         $key                  = $refererLog['targetType'].'_'.$refererLog['targetId'];
         $token['data'][$key]  = $refererLog['id'];

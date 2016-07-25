@@ -16,8 +16,8 @@ class Version20160725151332 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP TABLE IF EXISTS `referer_order_token`;
-            CREATE TABLE `referer_order_token` (
+        $this->addSql("DROP TABLE IF EXISTS `order_referer`;
+            CREATE TABLE `order_referer` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `uv` VARCHAR(64) NOT NULL ,
               `data` text NOT NULL ,

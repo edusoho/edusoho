@@ -19,7 +19,7 @@ class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function getTokenByUv($uv)
+    public function getOrderRefererByUv($uv)
     {
         $sql   = "SELECT * FROM {$this->getTable()} WHERE uv = ?  AND expiredTime >= ? LIMIT 1";
         $token = $this->getConnection()->fetchAssoc($sql, array($uv, time())) ?: null;

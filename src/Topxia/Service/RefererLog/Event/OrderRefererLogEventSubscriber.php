@@ -20,7 +20,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         global $kernel;
         $uv = $kernel->getContainer()->get('request')->cookies->get('uv');
 
-        $token = $this->getRefererLogService()->getTokenByUv($uv);
+        $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
         if (empty($token)) {
             return false;
         }

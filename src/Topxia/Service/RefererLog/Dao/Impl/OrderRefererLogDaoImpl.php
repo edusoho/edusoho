@@ -6,7 +6,7 @@ use Topxia\Service\RefererLog\Dao\OrderRefererLogDao;
 
 class OrderRefererLogDaoImpl extends BaseDao implements OrderRefererLogDao
 {
-    protected $table = 'order_referer_log';
+    protected $table = 'order_referer';
 
     public function getOrderRefererLog($id)
     {
