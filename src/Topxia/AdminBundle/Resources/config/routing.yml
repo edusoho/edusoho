@@ -6,7 +6,7 @@ admin_inspect:
     pattern:  /inspect
     defaults: { _controller: TopxiaAdminBundle:Default:inspect }
 
-admin_modal_notice:
+admin_notice_modal:
     pattern:  /modal/notice
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
 
