@@ -44,7 +44,7 @@
 
   <div class="panel-body">
     <form class="form-horizontal" id="recommend-course-form" method="post" action="{{ path('open_course_manage_marketing',{id:course.id}) }}">
-
+      {% set openCourse = course %}
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="courses-form-group">
@@ -67,7 +67,7 @@
                   <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
                 </a>
 
-                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-id="{{course.id}}">× </button>
+                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{course.id}}">× </button>
 
                 <div class="course-body">
                   <div style="float:right;" class="text-muted mrm mls">

@@ -175,7 +175,7 @@ class OpenCourseController extends BaseController
         $course                = $this->getOpenCourseService()->getCourse($courseId);
         $course['favoriteNum'] = $this->_getFavoriteNum($courseId);
 
-        $member = $this->_getMember($request, $course['id']);
+        $member = $this->_getMember($course['id']);
 
         $user           = $this->getCurrentUser();
         $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
@@ -532,14 +532,14 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse($courses);
     }
 
-    private function _getMember($request, $courseId)
+    private function _getMember($courseId)
     {
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
         } else {
-            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $request->getClientIp());
+            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
         }
 
         return $member;

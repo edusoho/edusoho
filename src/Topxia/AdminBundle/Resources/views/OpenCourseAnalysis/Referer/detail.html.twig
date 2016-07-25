@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 {% set modal_class = 'modal-lg' %}
-{% block title %}{{ course.title }}的转化详情 {{ app.request.get('startTime') }} - {{ app.request.get('endTime') }}{% endblock %}
+{% block title %}{{ course.title }}的转化详情 ({{ app.request.get('startTime') }} 到 {{ app.request.get('endTime') }}){% endblock %}
 
 {% block body %}
 

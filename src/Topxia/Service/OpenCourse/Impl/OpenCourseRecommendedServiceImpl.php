@@ -83,6 +83,11 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return true;
     }
 
+    public function deleteRecommendCourse($recommendId)
+    {
+        return $this->deleteBatchRecommendCourses(array($recommendId));
+    }
+
     protected function deleteBatchRecommendCourses($recommendIds)
     {
         if (empty($recommendIds)) {
