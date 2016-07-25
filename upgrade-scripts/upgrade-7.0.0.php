@@ -207,9 +207,9 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        $smsSetting                  = $this->getSettingService()->get('sms_cloud');
+        $smsSetting                  = $this->getSettingService()->get('cloud_sms');
         $smsSetting['system_remind'] = 'on';
-        $this->getSettingService()->set('sms_cloud', $smsSetting);
+        $this->getSettingService()->set('cloud_sms', $smsSetting);
     }
 
     protected function isFieldExist($table, $filedName)
