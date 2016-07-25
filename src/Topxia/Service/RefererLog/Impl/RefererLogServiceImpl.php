@@ -110,22 +110,22 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
 
     public function getOrderRefererByUv($uv)
     {
-        return $this->getRefererLogTokenDao()->getOrderRefererByUv($uv);
+        return $this->getOrderRefererDao()->getOrderRefererByUv($uv);
     }
 
     public function getOrderRefererLikeByOrderId($orderId)
     {
-        return $this->getRefererLogTokenDao()->getOrderRefererLikeByOrderId($orderId);
+        return $this->getOrderRefererDao()->getOrderRefererLikeByOrderId($orderId);
     }
 
     public function createOrderReferer($token)
     {
-        return $this->getRefererLogTokenDao()->createOrderReferer($token);
+        return $this->getOrderRefererDao()->createOrderReferer($token);
     }
 
     public function updateOrderReferer($id, $fields)
     {
-        return $this->getRefererLogTokenDao()->updateOrderReferer($id, $fields);
+        return $this->getOrderRefererDao()->updateOrderReferer($id, $fields);
     }
 
     protected function getRefererLogDao()
@@ -133,9 +133,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->createDao('RefererLog.RefererLogDao');
     }
 
-    protected function getRefererLogTokenDao()
+    protected function getOrderRefererDao()
     {
-        return $this->createDao('RefererLog.RefererLogTokenDao');
+        return $this->createDao('RefererLog.OrderRefererDao');
     }
 
     private function prepareAnalysisSummary($refererlogDatas)

@@ -2,9 +2,9 @@
 namespace Topxia\Service\RefererLog\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\RefererLog\Dao\RefererLogTokenDao;
+use Topxia\Service\RefererLog\Dao\OrderRefererDao;
 
-class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
+class OrderRefererDaoImpl extends BaseDao implements OrderRefererDao
 {
     protected $table = 'referer_order_token';
 
