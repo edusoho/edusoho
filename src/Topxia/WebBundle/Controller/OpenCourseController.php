@@ -138,7 +138,7 @@ class OpenCourseController extends BaseController
 
         $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
         //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member = $this->_getMember($request, $course['id']);
+        $member = $this->_getMember($course['id']);
 
         if ($lesson) {
             $lesson['replays'] = $this->_getLiveReplay($lesson);
@@ -182,7 +182,7 @@ class OpenCourseController extends BaseController
         $course                = $this->getOpenCourseService()->getCourse($courseId);
         $course['favoriteNum'] = $this->_getFavoriteNum($courseId);
 
-        $member = $this->_getMember($request, $course['id']);
+        $member = $this->_getMember($course['id']);
 
         $user           = $this->getCurrentUser();
         $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
@@ -539,14 +539,14 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse($courses);
     }
 
-    private function _getMember($request, $courseId)
+    private function _getMember($courseId)
     {
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
         } else {
-            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $request->getClientIp());
+            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
         }
 
         return $member;
@@ -806,30 +806,38 @@ class OpenCourseController extends BaseController
 
     protected function createRefererLog(Request $request, Response $response, $course)
     {
+        $refererLogToken = $this->getRefererLogToken($request, $response);
+
         $fields = array(
             'targetId'        => $course['id'],
             'targetType'      => 'openCourse',
             'refererUrl'      => $request->server->get('HTTP_REFERER'),
             'uri'             => $request->getUri(),
             'targetInnerType' => $course['type'],
+            'token'           => $refererLogToken,
             'ip'              => $request->getClientIp(),
             'userAgent'       => $request->headers->get("user-agent")
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $this->updatevisitRefererToken($refererLog, $request, $response);
+
+        return $refererLog;
     }
 
-    protected function updatevisitRefererToken($refererLog, Request $request, Response $response)
+    protected function getRefererLogToken(Request $request, Response $response)
     {
-        $visitRefererToken = unserialize($request->cookies->get('visitRefererToken'));
+        $refererLogToken = $request->cookies->get('refererLogToken');
 
-        $key                     = $refererLog['targetType'].'_'.$refererLog['targetId'];
-        $visitRefererToken[$key] = $refererLog['id'];
-        $expire                  = strtotime(date('Y-m-d').' 23:59:59') - time();
+        if (empty($refererLogToken)) {
+            $refererLogToken = 'refererLog/'.time();
 
-        $response->headers->setCookie(new Cookie("visitRefererToken", serialize($visitRefererToken), time() + $expire));
-        $response->send();
+            $expire = strtotime(date('Y-m-d').' 23:59:59') - time();
+
+            $response->headers->setCookie(new Cookie("refererLogToken", $refererLogToken, time() + $expire));
+            $response->send();
+        }
+
+        return $refererLogToken;
     }
 
     protected function getOpenCourseService()
