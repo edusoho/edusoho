@@ -194,7 +194,7 @@
 .es-openCourse-list{
 	.course-item{
 		.title{
-			width: 70%;
+			max-width: 58%;
 			display: inline-block;
 		  overflow: hidden;
 		  text-overflow: ellipsis;
@@ -203,6 +203,14 @@
 		  font-size: 16px;
 		  margin-top: 20px;
     	padding: 0 15px;
+    	a{
+    		@media (max-width:@screen-xs-max){
+    			font-size: 12px;
+    		}
+    	}
+    	@media (max-width:@screen-xs-max){
+    		margin-top: 5px;	
+    	}
 		}
 		.course-img{
 			.img-responsive{
@@ -216,10 +224,18 @@
 				background: rgba(0, 0, 0, 0.5);
 				color: #fff;
 				padding: 10px;
+				@media (max-width:@screen-xs-max){
+					font-size: 12px;
+					padding: 6px;
+				}
 			}
 		} 
 		.metas{
 			padding: 22px 15px;
+			@media (max-width:@screen-xs-max){
+				padding: 10px 15px;
+				font-size: 12px;	
+			}
 		}
 	} 
 }
@@ -536,14 +552,12 @@
 		margin: 0 auto;
 	}
 	.intro {
-		height: 80px;
 		line-height: 20px;
-    word-wrap: normal;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		text-align: left;
 		font-size: 12px;
 		color: @gray-darker;
+		height: 70px;
+		overflow: hidden;
 	}
 }
 .course-comment {
@@ -566,7 +580,12 @@
 	height: 30px;
 	line-height: 30px;
 	padding-left: 10px;
+	background-color: #000;
 	background-color:rgba(0,0,0,0.5);
+
+	@media (max-width:@screen-md-max){
+		font-size: 12px;
+	}
 }
 //频道页
 .open-course-list {
@@ -677,17 +696,24 @@
 
 
 .openCourse-sms-form{
-	.openCourse-form-control{
-		@media (max-width:@screen-sm-max){
-			width: 66%;
-    	float: left;
+	.help-block{
+		margin-top: 47px;
+		margin-left: 200px;
+		@media(max-width:@screen-sm-max){
+			margin:0;
 		}
 	}
-	.openCourse-form-btn{
-		@media (max-width:@screen-sm-max){
-		  width: 17%;
-   	 	float: left;
-		}
+}
+.openCourse-form-control{
+	@media(max-width:@screen-sm-max){
+		width: 67%;
+    display: inline-block;
+	}
+}
+.openCourse-form-btn{
+	@media(max-width:@screen-sm-max){
+		width: 30%;
+    display: inline-block;
 	}
 }
 

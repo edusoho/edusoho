@@ -6,9 +6,9 @@
   <table class="table table-hover" style="word-break:break-all;">
     <thead>
       <tr>
-        <th width="40%">公开课名称</th>
+        <th width="60%">公开课名称</th>
         <th width="20%">访问数</th>
-        <th width="40%">详情</th>
+        <th width="20%">详情</th>
       </tr>
     </thead>
     <tbody>
@@ -23,13 +23,16 @@
           {% endif %}
 
           <tr>
-            <th scope="row">{{ openCourses[refererLog.targetId].title }}</th>
+            {% set openCourse = openCourses[refererLog.targetId]|default(null) %}
+            <th scope="row">{% if openCourse %}{{ openCourse.title }}{% else %}该课程已删除{% endif %}</th>
             <th>
               {{ hitNum }} 次
             </th>
             <th>
-              <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+              {% if openCourse %}
+                <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
                  data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+              {% endif %}
             </th>
           </tr>
         {% else %}

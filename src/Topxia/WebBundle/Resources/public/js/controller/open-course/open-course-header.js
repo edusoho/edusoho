@@ -192,8 +192,7 @@ define(function (require, exports, module) {
             if (player === undefined) {
                 window.location.reload();
             } else {
-                player.setCurrentTime(0);
-                player.play();
+                player.replay();
                 this.get('adView').hide();
             }
         },

@@ -13,7 +13,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             $this->getOpenCourseDao()->getConnection()->beginTransaction();
             $course = $this->getOpenCourseService()->getCourse($courseId);
 
-            $types = array('lessons', 'members', 'course', 'recommend','materials');
+            $types = array('lessons', 'members', 'course', 'recommend', 'materials');
 
             if (!in_array($type, $types)) {
                 throw $this->createServiceException('未知类型,删除失败');
@@ -43,6 +43,8 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 if (!empty($lesson['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
                 }
+
+                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
 
                 $result = $this->getOpenCourseLessonDao()->deleteLesson($lesson['id']);
                 $count += $result;
@@ -162,5 +164,10 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function getRecommendCourseDao()
     {
         return $this->createDao('OpenCourse.RecommendedCourseDao');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
     }
 }

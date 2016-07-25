@@ -5,6 +5,24 @@
   {{ course.title }} - {{ parent() }}
 {% endblock %}
 
+{% block keywords %}
+  {% set tags = data('Tags', {tagIds: course.tags}) %}
+  {% for tag in tags %}
+    {{tag.name}}
+    {% if not loop.last%},{% endif %}
+  {% else %}
+    {{ parent() }}
+  {% endfor %}
+{% endblock %}
+
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   <ol class="breadcrumb openCourse-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>
@@ -22,8 +40,8 @@
           {% endif %}#}
         </ul>
         <div id="content">
-          <ul id="recommand-tab" >
-            {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig'%}
+          <ul id="recommand-tab">
+            {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig' %}
           </ul>
           <ul id="live-tab" style="display:none">
             {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig' with {currentLessonId:lessonId|default(null)} %}
@@ -33,23 +51,23 @@
     </div>
   </div>
   {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
-      <div class="open-course-detail row">
-        <div class="col-md-9">
-          <div class="es-section gray-darker editor-text">
-            {% if course.about %}
-              {{ course.about|raw }}
-            {% else %}
-              <div class="empty">暂无简介</div>
-            {% endif %}
-          </div>
-          {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
-        </div>
-        <div class="col-md-3 hidden-sm hidden-xs">
-          {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-
-          {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
-        </div>
+  <div class="open-course-detail row">
+    <div class="col-md-9">
+      <div class="es-section gray-darker editor-text">
+        {% if course.about %}
+          {{ course.about|raw }}
+        {% else %}
+          <div class="empty">暂无简介</div>
+        {% endif %}
       </div>
+      {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+    </div>
+    <div class="col-md-3 hidden-sm hidden-xs">
+      {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+
+      {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
+    </div>
+  </div>
 
 
 {% endblock %}
