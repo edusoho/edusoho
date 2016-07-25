@@ -12,6 +12,10 @@ define(function(require, exports, module) {
             remeberLastPos: true,
             disableControlBar: false,
             disableProgressBar: false,
+            controlBar: {
+                disableVolumeButton: false,
+                disablePlaybackButton: false
+            },
             questions: [],
             enablePlaybackRates: false,
             playbackRatesMP4Url: ''
@@ -97,6 +101,7 @@ define(function(require, exports, module) {
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),
+                controlBar: self.get('controlBar'),
                 playlist: self.get('url'),
                 remeberLastPos : self.get('remeberLastPos')
             }, extConfig));
