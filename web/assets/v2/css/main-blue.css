@@ -14382,7 +14382,24 @@ textarea {
 }
 .openCourse-sms-form .help-block {
   margin-top: 47px;
-  margin-left: 110px;
+  margin-left: 200px;
+}
+@media (max-width: 991px) {
+  .openCourse-sms-form .help-block {
+    margin: 0;
+  }
+}
+@media (max-width: 991px) {
+  .openCourse-form-control {
+    width: 67%;
+    display: inline-block;
+  }
+}
+@media (max-width: 991px) {
+  .openCourse-form-btn {
+    width: 30%;
+    display: inline-block;
+  }
 }
 .panel-create-course .panel-heading h2 {
   padding-bottom: 20px;
