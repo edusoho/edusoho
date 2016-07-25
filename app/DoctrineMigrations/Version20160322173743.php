@@ -15,7 +15,7 @@ class Version20160322173743 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if (!$this->isTableExist('open_course')) {
+        if (!$this->isTableExist('open_course_recommend')) {
             $this->addSql("
                 CREATE TABLE `open_course_recommend` (
                  `id` int(10) NOT NULL AUTO_INCREMENT,
