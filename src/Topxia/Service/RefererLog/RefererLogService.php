@@ -58,5 +58,5 @@ interface RefererLogService
 
     public function createOrderReferer($userRefererOrder);
 
-    public function updateToken($id, $fields);
+    public function updateOrderReferer($id, $fields);
 }

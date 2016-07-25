@@ -46,7 +46,7 @@ class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
         return $this->geToken($this->getConnection()->lastInsertId());
     }
 
-    public function updateToken($id, $fields)
+    public function updateOrderReferer($id, $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
 

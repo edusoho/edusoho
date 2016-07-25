@@ -825,7 +825,7 @@ class OpenCourseController extends BaseController
             $token['uv'] = $uv;
             $this->getRefererLogService()->createOrderReferer($token);
         } else {
-            $this->getRefererLogService()->updateToken($token['id'], $token);
+            $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
         }
     }
 

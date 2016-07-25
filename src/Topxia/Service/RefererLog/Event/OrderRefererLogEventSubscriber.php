@@ -30,7 +30,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
         $token['orderIds'] = implode($orderIds, "|");
 
-        $this->getRefererLogService()->updateToken($token['id'], $token);
+        $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
     }
 
     public function onOrderPaid(ServiceEvent $event)
