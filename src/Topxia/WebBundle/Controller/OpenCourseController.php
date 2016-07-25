@@ -56,10 +56,10 @@ class OpenCourseController extends BaseController
         if ($preview === 'preview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
-            if (!$this->_checkPublishedLessonExists($courseId)) {
-                $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
-                return $this->createMessageResponse('error', $message);
-            }
+            /*if (!$this->_checkPublishedLessonExists($courseId)) {
+            $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
+            return $this->createMessageResponse('error', $message);
+            }*/
 
             return $this->render($template, array(
                 'course'       => $course,
@@ -71,9 +71,9 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
-        if (!$this->_checkPublishedLessonExists($courseId)) {
-            return $this->createMessageResponse('error', '请先创建课时并发布！');
-        }
+        /*  if (!$this->_checkPublishedLessonExists($courseId)) {
+        return $this->createMessageResponse('error', '请先创建课时并发布！');
+        }*/
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
