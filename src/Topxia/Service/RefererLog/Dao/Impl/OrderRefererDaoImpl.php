@@ -6,13 +6,13 @@ use Topxia\Service\RefererLog\Dao\OrderRefererDao;
 
 class OrderRefererDaoImpl extends BaseDao implements OrderRefererDao
 {
-    protected $table = 'referer_order_token';
+    protected $table = 'order_referer';
 
     private $serializeFields = array(
         'data' => 'phpserialize'
     );
 
-    public function geToken($id)
+    public function getOrderReferer($id)
     {
         $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
         $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
@@ -43,7 +43,7 @@ class OrderRefererDaoImpl extends BaseDao implements OrderRefererDao
             throw $this->createDaoException('Insert referer_order_token error.');
         }
 
-        return $this->geToken($this->getConnection()->lastInsertId());
+        return $this->getOrderReferer($this->getConnection()->lastInsertId());
     }
 
     public function updateOrderReferer($id, $fields)
@@ -51,6 +51,6 @@ class OrderRefererDaoImpl extends BaseDao implements OrderRefererDao
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
 
         $this->getConnection()->update($this->getTable(), $fields, array('id' => $id));
-        return $this->geToken($id);
+        return $this->getOrderReferer($id);
     }
 }

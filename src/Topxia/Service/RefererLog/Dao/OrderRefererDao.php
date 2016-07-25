@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\RefererLog\Dao;
 
-interface RefererLogTokenDao
+interface OrderRefererDao
 {
     public function getOrderRefererByUv($uv);
 
