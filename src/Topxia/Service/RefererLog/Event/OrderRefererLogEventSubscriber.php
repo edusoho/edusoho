@@ -37,7 +37,7 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
     {
         $order = $event->getSubject();
 
-        $token = $this->getRefererLogService()->getTokenLikeByOrderId($order['id']);
+        $token = $this->getRefererLogService()->getOrderRefererLikeByOrderId($order['id']);
 
         if (empty($token) || $order['totalPrice'] == 0) {
             return false;

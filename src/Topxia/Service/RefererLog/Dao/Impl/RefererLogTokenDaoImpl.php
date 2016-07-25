@@ -26,7 +26,7 @@ class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function getTokenLikeByOrderId($orderId)
+    public function getOrderRefererLikeByOrderId($orderId)
     {
         $likeOrderIds = '%|'.$orderId;
         $sql          = "SELECT * FROM {$this->getTable()} WHERE orderIds like ?  LIMIT 1";

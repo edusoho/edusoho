@@ -54,7 +54,7 @@ interface RefererLogService
 
     public function getOrderRefererByUv($uv);
 
-    public function getTokenLikeByOrderId($orderId);
+    public function getOrderRefererLikeByOrderId($orderId);
 
     public function addToken($userRefererOrder);
 
