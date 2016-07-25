@@ -14,8 +14,8 @@
       {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if  setting('copyright.owned','0') != '1' or setting('copyright.thirdCopyright')|default(0) == 2 %} - Powered By EduSoho{% endif %}
     {%- endblock -%}
   </title>
-  <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
-  <meta name="description" content="{% block description %}{{ setting('site.seo_description') }}{% endblock %}" />
+  <meta name="keywords" content="{% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}" />
+  <meta name="description" content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login" />
   <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
@@ -30,7 +30,7 @@
     {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
 
   {% endblock %}
-  
+
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
@@ -48,17 +48,17 @@
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
     {% endblock %}
-    
+
     {% block full_content %}
       {% block top_content %}{% endblock %}
-      
+
       <div id="content-container" class="container">
         {% block content %}{% endblock %}
       </div>
-      
+
       {% block bottom_content %}{% endblock %}
     {% endblock %}
-    
+
     {% block footer %}
       {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
     {% endblock %}
@@ -82,7 +82,7 @@
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
-  
+
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

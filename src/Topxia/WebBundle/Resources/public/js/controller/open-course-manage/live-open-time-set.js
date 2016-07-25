@@ -6,8 +6,6 @@ define(function(require, exports, module) {
     
     exports.run = function() {
        
-       require('../course-manage/header').run();
-
         var $content = $("#live-lesson-content-field");
         var $form = $('#live-open-course-form');
 

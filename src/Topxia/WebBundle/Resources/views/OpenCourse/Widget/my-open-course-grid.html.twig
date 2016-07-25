@@ -1,21 +1,22 @@
 <li class="course-grid">
   <a href="{{ path('open_course_show', {courseId:course.id}) }}" class="grid-body">
     <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
+      <span class="course-label">
       {% if course.status == 'draft' %}
-        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
+        <span class="label  label-warning">{{'未发布'|trans}}</span>
       {% elseif course.status == 'closed' %}
-        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
+        <span class="label label-danger">{{'已关闭'|trans}}</span>
       {% endif %}
 
       {% if course.type == 'liveOpen' %}
         {% set lesson = course['lesson']|default(null) %}
         {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-          <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
+          <span class="label label-warning">{{'正在直播中'|trans}}</span>
         {% else %}
-          <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
+          <span class="label label-success">{{'直播'|trans}}</span>
         {% endif %}
       {% endif %}
-
+    </span>
     <span class="title">{{ course.title }}</span>
     {% if mode in ['default', 'teach'] %}
 

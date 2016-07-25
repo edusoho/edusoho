@@ -1,5 +1,3 @@
-{% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
-
 {% for course in recommendCourses if course %}
   {% set teacher = data('User',{userId:course.userId}) %}
   {% if course.type == 'open' or course.type == 'liveOpen' %}

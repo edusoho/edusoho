@@ -89,7 +89,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course = $this->tryAdminCourse($id);
 
         $this->getOpenCourseMemberDao()->deleteMembersByCourseId($id);
-        $this->getOpenCourseLessonDao()->deleteLessonsByCourseId($id);
+        $this->deleteLessonsByCourseId($id);
 
         $this->getOpenCourseDao()->deleteCourse($id);
 
@@ -793,6 +793,18 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->deleteMember($id);
     }
 
+    protected function deleteLessonsByCourseId($courseId)
+    {
+        $lessons = $this->findLessonsByCourseId($courseId);
+        $this->getOpenCourseLessonDao()->deleteLessonsByCourseId($courseId);
+
+        if ($lessons) {
+            foreach ($lessons as $key => $lesson) {
+                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
+            }
+        }
+    }
+
     protected function fillLessonMediaFields(&$lesson)
     {
         if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
@@ -1025,5 +1037,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
     }
 }

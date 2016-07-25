@@ -8,23 +8,28 @@
 {% if refererLog.hitNum is null %}
   {% set hitNum = 0 %}
 {% endif %}
-<tr id="course-tr-{{ course.id }}">
-  <td>
-    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
-    {% if course.type == 'live' or course.type == 'liveOpen' %}
-      <span class="label label-success live-label mls">{{ '直播'|trans }}</span>
-    {% endif %}
-  </td>
-  
-  <td>
-    {{ orderCount }} 次
-  </td>
-  <td>{{ hitNum }} 次</td>
-  <td>
-    {% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
-  </td>
-  <td>
-    <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-       data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
-  </td>
-</tr>
+
+{% if course %}
+  <tr id="course-tr-{{ course.id }}">
+    <td>
+      <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+      {% if course.type == 'live' or course.type == 'liveOpen' %}
+        <span class="label label-success live-label mls">{{ '直播'|trans }}</span>
+      {% endif %}
+    </td>
+    
+    <td>
+      {{ orderCount }} 次
+    </td>
+    <td>{{ hitNum }} 次</td>
+    <td>
+      {% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
+    </td>
+    <td>
+      <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+         data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+    </td>
+  </tr>
+{% else %}
+  <tr><td colspan="20">该课程已删除</td></tr>
+{% endif %}

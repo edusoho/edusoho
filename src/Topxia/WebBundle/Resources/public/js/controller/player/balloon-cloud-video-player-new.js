@@ -148,7 +148,7 @@ define(function(require, exports, module) {
         },
         
         setCurrentTime: function (time) {
-            this.get("player").currentTime(time);
+            this.get("player").setCurrentTime(time);
             return this;
         },
         
