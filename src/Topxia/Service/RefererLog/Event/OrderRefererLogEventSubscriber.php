@@ -21,14 +21,15 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
         $uv = $kernel->getContainer()->get('request')->cookies->get('uv');
 
         $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
+
         if (empty($token)) {
             return false;
         }
         $order    = $event->getSubject();
-        $orderIds = explode("|", $token['orderIds']);
+        $orderIds = explode("|", trim($token['orderIds'], "|"));
         array_push($orderIds, $order['id']);
 
-        $token['orderIds'] = implode($orderIds, "|");
+        $token['orderIds'] = '|'.implode($orderIds, "|").'|';
 
         $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
     }
