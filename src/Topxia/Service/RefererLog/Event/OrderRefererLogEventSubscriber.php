@@ -17,14 +17,14 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
 
     public function onOrderCreated(ServiceEvent $event)
     {
-        $order = $event->getSubject();
-        if (empty($order['uv'])) {
-            return false;
-        }
-        $token = $this->getRefererLogService()->getTokenByUv($order['uv']);
+        global $kernel;
+        $uv = $kernel->getContainer()->get('request')->cookies->get('uv');
+
+        $token = $this->getRefererLogService()->getTokenByUv($uv);
         if (empty($token)) {
             return false;
         }
+        $order    = $event->getSubject();
         $orderIds = explode("|", $token['orderIds']);
         array_push($orderIds, $order['id']);
 

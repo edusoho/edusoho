@@ -61,7 +61,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['totalPrice'] = $info["totalPrice"];
             $order['coinRate']   = $info['coinRate'];
             $order['coinAmount'] = $info['coinAmount'];
-            $order['uv']         = $info['uv'];
             $courseSetting       = $this->getSettingService()->get('course', array());
 
             if (array_key_exists("coursesPrice", $courseSetting)) {

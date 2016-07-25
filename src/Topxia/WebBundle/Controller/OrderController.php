@@ -172,8 +172,7 @@ class OrderController extends BaseController
                 'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
-                'uv'             => $request->cookies->get('uv')
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
