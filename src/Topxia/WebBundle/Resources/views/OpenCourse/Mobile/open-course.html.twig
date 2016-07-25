@@ -1,28 +1,28 @@
 {% block content %}
   {{ render(controller('TopxiaWebBundle:OpenCourse:header',{request:app.request, course:course, lessonId:lessonId|default(null)})) }}
-  <div class="open-course-detail">
-    <div class="panel panel-default openCourse-panel ">
+  {% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
+  {% if recommendCourses %}
+    <div class="panel panel-default openCourse-panel">
       <div class="panel-heading">
-        课程介绍
+        推荐课程
       </div>
-      <div class="panel-body openCourse-intro">
-        {% if course.about %}
+      <div class="panel-body">
+        {% include 'TopxiaWebBundle:OpenCourse:Mobile/recommend-course-list.html.twig' with {recommendCourses: recommendCourses} %}
+      </div>
+    </div>
+  {% endif %}
+  {% if course.about %}
+    <div class="open-course-detail">
+      <div class="panel panel-default openCourse-panel ">
+        <div class="panel-heading">
+          课程介绍
+        </div>
+        <div class="panel-body openCourse-intro">
           {{ course.about|raw }}
-        {% else %}
-          <div class="empty">暂无简介</div>
-        {% endif %}
+        </div>
       </div>
     </div>
-  </div>
-  <div class="panel panel-default openCourse-panel">
-    <div class="panel-heading">
-      推荐课程
-    </div>
-    <div class="panel-body">
-      {% include 'TopxiaWebBundle:OpenCourse:Mobile/recommend-course-list.html.twig' %}
-    </div>
-  </div>
-
+  {% endif %}
   {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
 
 {% endblock %}
