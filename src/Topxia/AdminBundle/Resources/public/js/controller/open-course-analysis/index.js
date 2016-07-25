@@ -22,7 +22,7 @@ define(function (require, exports, module) {
     };
     
     var nextYear = function (date_str) {
-        var date = new Date(date_str.val());
+        var date = new Date(date_str);
         date.setFullYear(date.getFullYear() + 1);
         date.setDate(date.getDate() - 1);
         return date2Str(date);
