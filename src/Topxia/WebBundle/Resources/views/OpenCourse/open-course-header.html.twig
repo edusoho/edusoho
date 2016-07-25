@@ -74,7 +74,7 @@
                 {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
               </button>
 
-              {% if setting('cloud_sms.sms_enabled') %}
+              {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
                 {% if app.request.get('as')|default('') == 'preview' %}
                   <a href="javascript:;" class="btn btn-info btn-lg mask-btn" disabled="disabled">
                     {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
