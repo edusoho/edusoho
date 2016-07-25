@@ -7,12 +7,7 @@
 
 {% block keywords %}
   {% set tags = data('Tags', {tagIds: course.tags}) %}
-  {% for tag in tags %}
-    {{tag.name}}
-    {% if not loop.last%},{% endif %}
-  {% else %}
-    {{ parent() }}
-  {% endfor %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
 {% block description %}
@@ -26,7 +21,7 @@
 {% block content %}
   <ol class="breadcrumb openCourse-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>
-    <li><a href="{{ path('open_course_explore') }}" target="_blank">公开课</a></li>
+    <li><a href="{{ path('open_course_explore') }}" >公开课</a></li>
     <li>{{ course.title }}</li>
   </ol>
   <div class="openCourse-header">
