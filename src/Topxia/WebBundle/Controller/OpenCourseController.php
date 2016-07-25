@@ -820,6 +820,8 @@ class OpenCourseController extends BaseController
 
     protected function updatevisitRefererToken($refererLog, Request $request, Response $response)
     {
+        $createUser
+        $token = $this->getRefererLogService()->geToken($);
         $visitRefererToken = unserialize($request->cookies->get('visitRefererToken'));
 
         $key                     = $refererLog['targetType'].'_'.$refererLog['targetId'];
