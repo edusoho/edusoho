@@ -29,8 +29,10 @@
               {{ hitNum }} 次
             </th>
             <th>
-              <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+              {% if openCourse %}
+                <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
                  data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+              {% endif %}
             </th>
           </tr>
         {% else %}
