@@ -14380,20 +14380,25 @@ textarea {
   height: 50px;
   background: url(../img/tag_open_live.png) no-repeat;
 }
+.openCourse-sms-form .help-block {
+  margin-top: 47px;
+  margin-left: 200px;
+}
 @media (max-width: 991px) {
-  .openCourse-sms-form .openCourse-form-control {
-    width: 66%;
-    float: left;
+  .openCourse-sms-form .help-block {
+    margin: 0;
   }
 }
-.openCourse-sms-form .openCourse-form-help {
-  text-align: center;
-  margin-right: 57px;
+@media (max-width: 991px) {
+  .openCourse-form-control {
+    width: 67%;
+    display: inline-block;
+  }
 }
 @media (max-width: 991px) {
-  .openCourse-sms-form .openCourse-form-help {
-    text-align: left;
-    margin-right: 0;
+  .openCourse-form-btn {
+    width: 30%;
+    display: inline-block;
   }
 }
 .panel-create-course .panel-heading h2 {

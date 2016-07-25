@@ -44,14 +44,23 @@ define(function(require, exports, module) {
                     $('.js-sms-send').addClass('disabled');
                     return;
                 } else {
-                    $('.js-sms-send').removeClass('disabled');
-                    var smsSender = new SmsSender({
-                        element: '.js-sms-send',
-                        url: $('.js-sms-send').data('url'),
-                        smsType:'system_remind' 
-                    });
+                    canSmsSend();
                 }
             }              
+        });
+
+        smsValidator.addItem({
+            element: '[name="captcha_code"]',
+            required: true,
+            rule: 'alphanumeric remote',
+            onItemValidated: function(error, message, eleme) {
+                if (message == "验证码错误"){
+                    //$("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+                    $('.js-sms-send').addClass('disabled');
+                } else {
+                    canSmsSend();
+                }
+            }                
         });
 		
         smsValidator.addItem({
@@ -75,6 +84,31 @@ define(function(require, exports, module) {
 	    	return false;
 	    });
 
+        $("#getcode_num").click(function(){ 
+            $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+        }); 
+
+        function canSmsSend()
+        {
+            var mobileError = $.trim($('[name="mobile"]').closest('.controls').find('.help-block').html());
+            var mobileVal = $('[name="mobile"]').val();
+            if (mobileVal == '' || (mobileVal != '' && mobileError != '')){
+                return false;
+            }
+
+            var captchaError = $.trim($('#captcha_code').closest('.controls').find('.help-block').html());
+            var captchaVal = $('#captcha_code').val();
+            if (captchaVal == '' || (captchaVal != '' && captchaError != '')) {
+                return false;
+            }
+
+            $('.js-sms-send').removeClass('disabled');
+            var smsSender = new SmsSender({
+                element: '.js-sms-send',
+                url: $('.js-sms-send').data('url'),
+                smsType:'system_remind'
+            });
+        }
 	}
 
 });
