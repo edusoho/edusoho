@@ -6,6 +6,7 @@ interface RefererLogService
     public function addRefererLog($refererlog);
 
     public function getRefererLogById($id);
+
     /**
      * [searchAnalysisSummary 公开课数据统计 ->来源分析->汇总]
      * @param  [type] $conditions     [description]
@@ -13,6 +14,7 @@ interface RefererLogService
      * @return [type] [description]
      */
     public function analysisSummary($conditions);
+
     /**
      * [searchAnalysisSummaryList 统计公开课的列表信息]
      * @param  [type] $conditions     [description]
@@ -49,4 +51,12 @@ interface RefererLogService
      * @return mixed
      */
     public function findRefererLogsGroupByDate($conditions);
+
+    public function getOrderRefererByUv($uv);
+
+    public function getOrderRefererLikeByOrderId($orderId);
+
+    public function createOrderReferer($userRefererOrder);
+
+    public function updateOrderReferer($id, $fields);
 }

@@ -757,7 +757,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($user->isLogin()) {
             $member['userId'] = $user['id'];
-            $member['mobile'] = isset($user['verifiedMobile']) ?: '';
+            $member['mobile'] = isset($user['verifiedMobile']) ? $user['verifiedMobile'] : '';
         } else {
             $member['userId'] = 0;
         }

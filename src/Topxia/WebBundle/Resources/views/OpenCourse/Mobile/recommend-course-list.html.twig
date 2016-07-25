@@ -5,14 +5,14 @@
   {% else %}
     {% set showUrl = path('course_show',{id:course.id}) %}
   {% endif %}
-  <div class="openCourse-recommend clearfix">
-    <div class="openCourse-img">
+  <div class="open-course-recommend clearfix">
+    <div class="open-course-img">
       <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
         <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}"
              alt="{{ course.title }}">
       </a>
     </div>
-    <div class="openCourse-content">
+    <div class="open-course-content">
       <div class="title">
         <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
       </div>

@@ -11,6 +11,7 @@ define(function(require, exports, module) {
                 Notify.success('提醒教师的通知，发送成功！');
             });
         });
+        noticeModal();
         step1();
     };
 
@@ -65,6 +66,19 @@ define(function(require, exports, module) {
         $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html("登录人数："+res.loginCount+"人");
         });
+    }
+
+    function noticeModal() {
+        var noticeUrl = $('#admin-notice').val();
+        $.post(noticeUrl, function(data){
+            if (data['result']) {
+                $('.modal').html(data['html']);
+                $('.modal').modal({
+                    backdrop:'static',
+                    show:true
+                });
+            }
+        })
     }
 
 });

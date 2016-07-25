@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\CourseOrderService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Course\CourseOrderService;
 
 class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 {
@@ -19,7 +19,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $connection = ServiceKernel::instance()->getConnection();
         try {
             $connection->beginTransaction();
-            
+
             $user = $this->getCurrentUser();
             if (!$user->isLogin()) {
                 throw $this->createServiceException('用户未登录，不能创建订单');
@@ -46,63 +46,60 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
             $order = array();
 
-            $order['userId'] = $user['id'];
-            $order['title'] = "购买课程《{$course['title']}》";
+            $order['userId']     = $user['id'];
+            $order['title']      = "购买课程《{$course['title']}》";
             $order['targetType'] = 'course';
-            $order['targetId'] = $course['id'];
-            if(!empty($course['discountId'])){
+            $order['targetId']   = $course['id'];
+            if (!empty($course['discountId'])) {
                 $order['discountId'] = $course['discountId'];
-                $order['discount'] = $course['discount'];
+                $order['discount']   = $course['discount'];
             }
 
-            $order['payment'] = $info['payment'];
-            $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
-            $order['priceType'] = $info['priceType'];
+            $order['payment']    = $info['payment'];
+            $order['amount']     = empty($info['amount']) ? 0 : $info['amount'];
+            $order['priceType']  = $info['priceType'];
             $order['totalPrice'] = $info["totalPrice"];
-            $order['coinRate'] = $info['coinRate'];
+            $order['coinRate']   = $info['coinRate'];
             $order['coinAmount'] = $info['coinAmount'];
-
-            $courseSetting=$this->getSettingService()->get('course',array());
+            $courseSetting       = $this->getSettingService()->get('course', array());
 
             if (array_key_exists("coursesPrice", $courseSetting)) {
                 $notShowPrice = $courseSetting['coursesPrice'];
-            }else{
+            } else {
                 $notShowPrice = 0;
             }
 
-            if($notShowPrice == 1) {
-                $order['amount'] = 0;
+            if ($notShowPrice == 1) {
+                $order['amount']     = 0;
                 $order['totalPrice'] = 0;
             }
 
             $order['snPrefix'] = 'C';
 
             if (!empty($info['coupon'])) {
-                $order['coupon'] = $info['coupon'];
+                $order['coupon']         = $info['coupon'];
                 $order['couponDiscount'] = $info['couponDiscount'];
             }
 
             if (!empty($info['note'])) {
                 $order['data'] = array('note' => $info['note']);
             }
-
             $order = $this->getOrderService()->createOrder($order);
             if (empty($order)) {
                 throw $this->createServiceException('创建课程订单失败！');
             }
-
             // 免费课程或VIP用户，就直接将订单置为已购买
-            if ((intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon']))||!empty($info["becomeUseMember"])) {
+            if ((intval($order['amount'] * 100) == 0 && intval($order['coinAmount'] * 100) == 0 && empty($order['coupon'])) || !empty($info["becomeUseMember"])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
-                    'sn' => $order['sn'],
-                    'status' => 'success', 
-                    'amount' => $order['amount'], 
+                    'sn'       => $order['sn'],
+                    'status'   => 'success',
+                    'amount'   => $order['amount'],
                     'paidTime' => time()
                 ));
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
                 );
                 $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
@@ -114,7 +111,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $connection->rollBack();
             throw $e;
         }
-
     }
 
     public function doSuccessPayOrder($id)
@@ -126,22 +122,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
         $info = array(
             'orderId' => $order['id'],
-            'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
+            'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
         );
 
         if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'],"pay_success", "当前用户已经是课程学员，支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是课程学员，支付成功。", $order);
             $this->getLogService()->warning("course_order", "pay_success", "当前用户已经是课程学员，支付成功。", $order);
         }
 
-        return ;
+        return;
     }
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
-        $user = $this->getCurrentUser();
+        $user  = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
@@ -152,9 +148,9 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if ($refund['status'] == 'created') {
             $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
 
-            $setting = $this->getSettingService()->get('refund');
-            $message = (empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
-            $course = $this->getCourseService()->getCourse($order["targetId"]);
+            $setting   = $this->getSettingService()->get('refund');
+            $message   = (empty($setting) || empty($setting['applyNotification'])) ? '' : $setting['applyNotification'];
+            $course    = $this->getCourseService()->getCourse($order["targetId"]);
             $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
             if ($message) {
                 $variables = array(
@@ -165,17 +161,16 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$courseUrl}'>{$course['title']}</a>".'课程，请审核。';
-            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
-            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
-                foreach ($admins as $key => $admin) {
-                    $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
-                }
+            $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
+            $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id', 'DESC'), 0, $adminCount);
+            foreach ($admins as $key => $admin) {
+                $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+            }
         } elseif ($refund['status'] == 'success') {
             $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
         }
 
         return $refund;
-
     }
 
     public function cancelRefundOrder($id)
@@ -192,22 +187,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         }
     }
 
-    public function updateOrder($id, $orderFileds) 
+    public function updateOrder($id, $orderFileds)
     {
         $orderFileds = array(
-            'priceType' => $orderFileds["priceType"],
+            'priceType'  => $orderFileds["priceType"],
             'totalPrice' => $orderFileds["totalPrice"],
-            'amount' => $orderFileds['amount'],
-            'coinRate' => $orderFileds['coinRate'],
+            'amount'     => $orderFileds['amount'],
+            'coinRate'   => $orderFileds['coinRate'],
             'coinAmount' => $orderFileds['coinAmount'],
-            'userId' => $orderFileds["userId"],
-            'payment' => $orderFileds["payment"],
-            'targetId' => $orderFileds["courseId"]
+            'userId'     => $orderFileds["userId"],
+            'payment'    => $orderFileds["payment"],
+            'targetId'   => $orderFileds["courseId"]
         );
 
         return $this->getOrderService()->updateOrder($id, $orderFileds);
     }
-    
+
     protected function getCashService()
     {
         return $this->createService('Cash.CashService');
@@ -247,5 +242,4 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         return $this->createService('User.NotificationService');
     }
-
 }
