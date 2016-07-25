@@ -4,7 +4,6 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -95,12 +94,6 @@ class DefaultController extends BaseController
 
     public function noticeAction(Request $request)
     {
-        $token = $request->cookies->get('refererLogToken');
-
-        if (empty($token)) {
-            return $this->createJsonResponse(array('result' => false));
-        }
-
         $api       = CloudAPIFactory::create('root');
         $cloudInfo = $api->get('/me');
 
@@ -109,14 +102,24 @@ class DefaultController extends BaseController
             return $this->createJsonResponse(array('result' => false));
         }
 
+        $user       = $this->getCurrentUser();
+        $userNotice = $this->getUpgradeNoticeService()->getNoticeByUserIdAndVersionAndCode($user['id'], '7.0.0', 'MAIN');
+
+        if ($userNotice) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
+        $noticeFields = array(
+            'userId'  => $user['id'],
+            'version' => '7.0.0',
+            'code'    => 'MAIN'
+        );
+        $this->getUpgradeNoticeService()->addNotice($noticeFields);
+
         $engine  = $this->container->get('templating');
         $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
 
-        $jsonResponse = $this->createJsonResponse(array('result' => true, 'html' => $content));
-        $jsonResponse->headers->setCookie(new Cookie("refererLogToken", $token, time() - 1));
-        $jsonResponse->send();
-
-        return $jsonResponse;
+        return $this->createJsonResponse(array('result' => true, 'html' => $content));
     }
 
     public function feedbackAction(Request $request)
@@ -560,5 +563,10 @@ class DefaultController extends BaseController
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getUpgradeNoticeService()
+    {
+        return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
     }
 }
