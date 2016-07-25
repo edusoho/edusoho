@@ -105,9 +105,9 @@ class DefaultController extends BaseController
         $user       = $this->getCurrentUser();
         $userNotice = $this->getUpgradeNoticeService()->getNoticeByUserIdAndVersionAndCode($user['id'], '7.0.0', 'MAIN');
 
-        if ($userNotice) {
-            return $this->createJsonResponse(array('result' => false));
-        }
+        // if ($userNotice) {
+        //     return $this->createJsonResponse(array('result' => false));
+        // }
 
         $noticeFields = array(
             'userId'  => $user['id'],
