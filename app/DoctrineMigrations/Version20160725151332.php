@@ -21,7 +21,7 @@ class Version20160725151332 extends AbstractMigration
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `uv` VARCHAR(64) NOT NULL ,
               `data` text NOT NULL ,
-              `orderSN`  varchar(32),
+              `orderIds` text,
               `expiredTime`  int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '过期时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';");

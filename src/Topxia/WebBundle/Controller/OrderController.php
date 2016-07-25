@@ -172,11 +172,11 @@ class OrderController extends BaseController
                 'payment'        => 'none',
                 'targetId'       => $targetId,
                 'coupon'         => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
+                'uv'             => $request->cookies->get('uv')
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-
             if ($order["status"] == "paid") {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }

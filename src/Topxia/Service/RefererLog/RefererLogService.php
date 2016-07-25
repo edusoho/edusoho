@@ -52,7 +52,9 @@ interface RefererLogService
      */
     public function findRefererLogsGroupByDate($conditions);
 
-    public function geTokenByUv($uv);
+    public function getTokenByUv($uv);
+
+    public function getTokenLikeByOrderId($orderId);
 
     public function addToken($userRefererOrder);
 

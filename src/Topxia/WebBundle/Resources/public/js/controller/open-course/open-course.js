@@ -79,7 +79,7 @@ define(function (require, exports, module) {
             });
         }
         if (!Cookie.get("uv")) {
-            Cookie.set("uv", $("#uv").val());
+            Cookie.set("uv", $("#uv").val(),{path: '/'});
         }
 
     };

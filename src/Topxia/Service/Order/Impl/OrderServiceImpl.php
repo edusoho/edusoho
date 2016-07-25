@@ -41,8 +41,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (!ArrayToolkit::requireds($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment'))) {
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
-
-        $order = ArrayToolkit::parts($order, array(
+        $originOrder = $order;
+        $order       = ArrayToolkit::parts($order, array(
             'userId',
             'title',
             'amount',
@@ -100,6 +100,8 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrderDao()->addOrder($order);
 
         $this->_createLog($order['id'], 'created', '创建订单');
+        $originOrder = array_merge($originOrder, $order);
+        $this->getDispatcher()->dispatch('order.service.created', new ServiceEvent($originOrder));
         return $order;
     }
 

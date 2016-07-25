@@ -10,26 +10,43 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'order.service.paid' => 'onOrderPaid'
+            'order.service.paid'    => 'onOrderPaid',
+            'order.service.created' => 'onOrderCreated'
         );
+    }
+
+    public function onOrderCreated(ServiceEvent $event)
+    {
+        $order = $event->getSubject();
+        if (empty($order['uv'])) {
+            return false;
+        }
+        $token = $this->getRefererLogService()->getTokenByUv($order['uv']);
+        if (empty($token)) {
+            return false;
+        }
+        $orderIds = explode("|", $token['orderIds']);
+        array_push($orderIds, $order['id']);
+
+        $token['orderIds'] = implode($orderIds, "|");
+
+        $this->getRefererLogService()->updateToken($token['id'], $token);
     }
 
     public function onOrderPaid(ServiceEvent $event)
     {
-        global $kernel;
-
-        $container = $kernel->getContainer();
-
-        $visitRefererToken = unserialize($container->get('request')->cookies->get('visitRefererToken'));
-
         $order = $event->getSubject();
 
-        if (empty($visitRefererToken) || $order['totalPrice'] == 0) {
+        $token = $this->getRefererLogService()->getTokenLikeByOrderId($order['id']);
+
+        if (empty($token) || $order['totalPrice'] == 0) {
             return false;
         }
 
+        $refererOrderIds = array_values($token['data']);
+
         $refererLogs = $this->getRefererLogService()->searchRefererLogs(
-            array('ids' => array_values($visitRefererToken)),
+            array('ids' => $refererOrderIds),
             array('createdTime', 'DESC'),
             0, PHP_INT_MAX
         );

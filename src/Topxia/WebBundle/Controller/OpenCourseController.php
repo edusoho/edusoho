@@ -77,12 +77,12 @@ class OpenCourseController extends BaseController
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
-
-        $this->createRefererLog($request, $course);
+        $uv     = uniqid($prefix = "refererToken");
+        $this->createRefererLog($request, $course, $uv);
         return $this->render($template, array(
             'course'   => $course,
             'lessonId' => $lessonId,
-            'uv'       => uniqid($prefix = "refererToken")
+            'uv'       => $uv
         ));
     }
 
@@ -797,7 +797,7 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function createRefererLog(Request $request, $course)
+    protected function createRefererLog(Request $request, $course, $uv)
     {
         $fields = array(
             'targetId'        => $course['id'],
@@ -810,23 +810,22 @@ class OpenCourseController extends BaseController
         );
 
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $this->updatevisitRefererToken($refererLog, $request);
+        $this->updatevisitRefererToken($refererLog, $request, $uv);
     }
 
-    protected function updatevisitRefererToken($refererLog, Request $request)
+    protected function updatevisitRefererToken($refererLog, Request $request, $uv)
     {
-        $uv    = $request->cookies->get('uv');
-        $token = $this->getRefererLogService()->geTokenByUv($uv);
+        $uv    = $request->cookies->get('uv', $uv);
+        $token = $this->getRefererLogService()->getTokenByUv($uv);
 
         $key                  = $refererLog['targetType'].'_'.$refererLog['targetId'];
         $token['data'][$key]  = $refererLog['id'];
         $token['expiredTime'] = strtotime(date('Y-m-d').' 23:59:59');
         if (empty($token['id'])) {
             $token['uv'] = $uv;
-            $token       = $this->getRefererLogService()->addToken($token);
+            $this->getRefererLogService()->addToken($token);
         } else {
-            var_dump($uv, $token);
-            $token = $this->getRefererLogService()->updateToken($token['id'], $token);
+            $this->getRefererLogService()->updateToken($token['id'], $token);
         }
     }
 

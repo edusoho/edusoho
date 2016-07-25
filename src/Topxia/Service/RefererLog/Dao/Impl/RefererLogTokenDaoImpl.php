@@ -11,17 +11,26 @@ class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
     private $serializeFields = array(
         'data' => 'phpserialize'
     );
-    public function geTokenByUv($uv)
+
+    public function geToken($id)
+    {
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
+    }
+
+    public function getTokenByUv($uv)
     {
         $sql   = "SELECT * FROM {$this->getTable()} WHERE uv = ?  AND expiredTime >= ? LIMIT 1";
         $token = $this->getConnection()->fetchAssoc($sql, array($uv, time())) ?: null;
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-    public function geToken($id)
+    public function getTokenLikeByOrderId($orderId)
     {
-        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $likeOrderIds = '%|'.$orderId;
+        $sql          = "SELECT * FROM {$this->getTable()} WHERE orderIds like ?  LIMIT 1";
+        $token        = $this->getConnection()->fetchAssoc($sql, array($likeOrderIds)) ?: null;
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
@@ -40,6 +49,7 @@ class RefererLogTokenDaoImpl extends BaseDao implements RefererLogTokenDao
     public function updateToken($id, $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+
         $this->getConnection()->update($this->getTable(), $fields, array('id' => $id));
         return $this->geToken($id);
     }
