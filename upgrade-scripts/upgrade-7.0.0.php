@@ -172,15 +172,19 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                 CREATE TABLE `referer_log` (
                   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-                  `targetId` int(11) NOT NULL COMMENT '模块ID',
+                  `targetId` VARCHAR(64)  DEFAULT NUll COMMENT '模块ID',
                   `targetType` varchar(64) NOT NULL COMMENT '模块类型',
                   `targetInnerType` VARCHAR(64) NULL COMMENT '模块自身的类型',
-                  `sourceUrl`  varchar(255) DEFAULT '' COMMENT '访问来源Url',
-                  `sourceHost` varchar(80)  DEFAULT '' COMMENT '访问来源HOST',
-                  `sourceName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
+                  `refererUrl` VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url',
+                  `refererHost` VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url',
+                  `refererName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
                   `orderCount` int(10) unsigned  DEFAULT '0'  COMMENT '促成订单数',
-                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
+                  `ip` VARCHAR(64) DEFAULT NULL  COMMENT '访问者IP',
+                  `userAgent` text COMMENT '浏览器的标识',
+                  `uri` VARCHAR(1024) DEFAULT '' COMMENT '访问Url',
                   `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '更新时间',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
             ");
@@ -197,88 +201,15 @@ class EduSohoUpgrade extends AbstractUpdater
                   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '订单的对象类型',
                   `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的对象ID',
                   `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '订单支付时间',
-                  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '订单支付者',
+                  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单支付者',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单促成日志';
             ");
         }
 
-        if ($this->isFieldExist('referer_log', 'sourceUrl')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` CHANGE `sourceUrl` `refererUrl` text NOT NULL  COMMENT '访问来源Url';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'sourceHost')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` CHANGE `sourceHost` `refererHost` VARCHAR(80)  NOT NULL COMMENT '访问来源HOST';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'sourceName')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` CHANGE `sourceName` `refererName` VARCHAR(64)  DEFAULT NUll  COMMENT '访问来源站点名称';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'updatedTime')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` ADD `updatedTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '更新时间';");
-        }
-
-        if ($this->isFieldExist('order_referer_log', 'createdUser')) {
-            $this->getConnection()->exec("ALTER TABLE `order_referer_log` CHANGE `createdUser` `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单支付者';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'targertId')) {
-            $this->getConnection()->exec(" ALTER TABLE `referer_log` CHANGE `targertId` `targetId` VARCHAR(64)  DEFAULT NUll  COMMENT '访问来源站点名称';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'targertType')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` CHANGE `targertType` `targetType` VARCHAR(64)  DEFAULT NUll  COMMENT '访问来源站点名称';");
-        }
-
-        if (!$this->isFieldExist('order_referer_log', 'sourceTargetId')) {
-            $this->getConnection()->exec("ALTER TABLE `order_referer_log` ADD `sourceTargetId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '来源ID' ;");
-        }
-
-        if (!$this->isFieldExist('order_referer_log', 'sourceTargetType')) {
-            $this->getConnection()->exec("ALTER TABLE `order_referer_log` ADD `sourceTargetType` varchar(64) NOT NULL DEFAULT ''  COMMENT '来源类型';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'targetInnerType')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
-            $this->getConnection()->exec("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'token')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD token VARCHAR(64) DEFAULT NULL  COMMENT '当前访问的token值';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'ip')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD ip VARCHAR(64) DEFAULT NULL  COMMENT '访问者IP';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'targetInnerType')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD targetInnerType VARCHAR(64) NULL;");
-        }
-
-        if ($this->isFieldExist('referer_log', 'targetInnerType')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log MODIFY COLUMN targetInnerType VARCHAR(64) COMMENT '模块自身的类型';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'userAgent')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD userAgent text COMMENT '浏览器的标识';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'refererUrl')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log MODIFY COLUMN refererUrl VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url';");
-        }
-
-        if ($this->isFieldExist('referer_log', 'refererHost')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log MODIFY COLUMN refererHost VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url';");
-        }
-
-        if (!$this->isFieldExist('referer_log', 'uri')) {
-            $this->getConnection()->exec("ALTER TABLE referer_log ADD uri VARCHAR(1024) DEFAULT '' COMMENT '访问Url'");
-        }
-
-        if ($this->isFieldExist('referer_log', 'token')) {
-            $this->getConnection()->exec("ALTER TABLE `referer_log` DROP `token`;");
-        }
+        $smsSetting                  = $this->getSettingService()->get('sms_cloud');
+        $smsSetting['system_remind'] = 'on';
+        $this->getSettingService()->set('sms_cloud', $smsSetting);
     }
 
     protected function isFieldExist($table, $filedName)
