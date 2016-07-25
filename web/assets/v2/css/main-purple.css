@@ -14380,21 +14380,9 @@ textarea {
   height: 50px;
   background: url(../img/tag_open_live.png) no-repeat;
 }
-@media (max-width: 991px) {
-  .openCourse-sms-form .openCourse-form-control {
-    width: 66%;
-    float: left;
-  }
-}
-.openCourse-sms-form .openCourse-form-help {
-  text-align: center;
-  margin-right: 57px;
-}
-@media (max-width: 991px) {
-  .openCourse-sms-form .openCourse-form-help {
-    text-align: left;
-    margin-right: 0;
-  }
+.openCourse-sms-form .help-block {
+  margin-top: 47px;
+  margin-left: 110px;
 }
 .panel-create-course .panel-heading h2 {
   padding-bottom: 20px;
