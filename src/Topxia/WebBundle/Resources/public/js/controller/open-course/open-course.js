@@ -1,6 +1,7 @@
 define(function (require, exports, module) {
     var ThreadShowWidget = require('../thread/thread-show.js');
     var Notify = require('common/bootstrap-notify');
+    var Cookie = require('cookie');
     var main = {
         init: function () {
             main.onClickThumb();
@@ -77,5 +78,9 @@ define(function (require, exports, module) {
                 element: '#open-course-comment',
             });
         }
+        if (!Cookie.get("uv")) {
+            Cookie.set("uv", $("#uv").val());
+        }
+
     };
 });

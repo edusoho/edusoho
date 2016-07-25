@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -19,13 +19,12 @@ class Version20160725151332 extends AbstractMigration
         $this->addSql("DROP TABLE IF EXISTS `referer_order_token`;
             CREATE TABLE `referer_order_token` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-              `token` int(11) NOT NULL COMMENT '模块ID',
-              `ip` varchar(64) NOT NULL,
-              `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
-              `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
+              `uv` VARCHAR(64) NOT NULL ,
+              `data` text NOT NULL ,
+              `orderSN`  varchar(32),
               `expiredTime`  int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '过期时间',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';");
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';");
     }
 
     /**

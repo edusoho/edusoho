@@ -108,9 +108,29 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return ArrayToolkit::group($timeRangeRefererLogs, 'createdTime');
     }
 
+    public function geTokenByUv($uv)
+    {
+        return $this->getRefererLogTokenDao()->geTokenByUv($uv);
+    }
+
+    public function addToken($token)
+    {
+        return $this->getRefererLogTokenDao()->addToken($token);
+    }
+
+    public function updateToken($id, $fields)
+    {
+        return $this->getRefererLogTokenDao()->updateToken($id, $fields);
+    }
+
     protected function getRefererLogDao()
     {
         return $this->createDao('RefererLog.RefererLogDao');
+    }
+
+    protected function getRefererLogTokenDao()
+    {
+        return $this->createDao('RefererLog.RefererLogTokenDao');
     }
 
     private function prepareAnalysisSummary($refererlogDatas)
