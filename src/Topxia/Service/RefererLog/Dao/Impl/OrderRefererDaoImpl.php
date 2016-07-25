@@ -28,7 +28,7 @@ class OrderRefererDaoImpl extends BaseDao implements OrderRefererDao
 
     public function getOrderRefererLikeByOrderId($orderId)
     {
-        $likeOrderIds = '%|'.$orderId.'|';
+        $likeOrderIds = '%|'.$orderId.'|%';
         $sql          = "SELECT * FROM {$this->getTable()} WHERE orderIds like ?  LIMIT 1";
         $token        = $this->getConnection()->fetchAssoc($sql, array($likeOrderIds)) ?: null;
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
