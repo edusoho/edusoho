@@ -10,10 +10,10 @@
 
   {% if app.request.get('previewType') == 'wx' %}
     {% block header %}{% endblock %}
-    <div class="openCourse-wechat-preview">
-      <div class="container openCourse-container">
+    <div class="open-course-wechat-preview">
+      <div class="container open-course-container">
         {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
-        <div class="openCourse-wechat-qrcode hidden-md hidden-sm hidden-xs">
+        <div class="open-course-wechat-qrcode hidden-md hidden-sm hidden-xs">
           {# 二维码地址去掉url的query部分 #}
           <img src="{{ qrcode_data_uri(wxPreviewUrl) }}">
           <p class="text-center">微信扫一扫预览</p>
@@ -22,7 +22,7 @@
     </div>
     {% block footer %}{% endblock %}
   {% else %}
-  <div class="container openCourse-container">
+  <div class="container open-course-container">
     {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
   </div>
   {% endif %}
