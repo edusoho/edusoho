@@ -6,7 +6,7 @@
     <form id = "js-sms-modal-form" class="openCourse-sms-form" method="post" action="{{ path('open_course_member_sms',{id:course.id}) }}">
       <div class = "form-group">
         <div class = "controls row" >
-          <div class = "col-md-2" >
+          <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm">{{'手机号码'|trans}} </label>
           </div>
           {% if app.user and app.user.verifiedMobile %}
@@ -18,18 +18,18 @@
             </div>
           {% else %}
             <div class = "col-md-3">
-              <input type="text" class="form-control" name="mobile" data-url="{{path('open_course_mobile_check')}}" />
+              <input type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check')}}" />
             </div>
           {% endif %}
            <div class="help-block"></div>
         </div>
         <br/>
         <div class="controls row" >
-          <div class = "col-md-2 " >
-            <label class="control-label mtm" for="captcha_code">{{'验证码'|trans}} </label>
+          <div class = "col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for="captcha_code">{{'图形验证码'|trans}} </label>
           </div>
           <div class = "col-md-3  openCourse-form-control" >
-            <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+            <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'输入图片中的字符，不区分大小写'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
           </div>
           <div class="col-md-3">
             <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'看不清，点击换一张'|trans}}" style="cursor:pointer;height:40px;width:100%">
@@ -39,7 +39,7 @@
         </div>
         <br>
         <div class="controls row" >
-          <div class = "col-md-2" >
+          <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm">{{'短信验证码'|trans}} </label>
           </div>
           <div class = "col-md-3  openCourse-form-control" >
