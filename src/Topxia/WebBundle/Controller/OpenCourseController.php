@@ -823,7 +823,7 @@ class OpenCourseController extends BaseController
         $token['expiredTime'] = strtotime(date('Y-m-d').' 23:59:59');
         if (empty($token['id'])) {
             $token['uv'] = $uv;
-            $this->getRefererLogService()->addToken($token);
+            $this->getRefererLogService()->createOrderReferer($token);
         } else {
             $this->getRefererLogService()->updateToken($token['id'], $token);
         }

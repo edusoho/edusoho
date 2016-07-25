@@ -7,7 +7,7 @@ interface RefererLogTokenDao
 
     public function getOrderRefererLikeByOrderId($orderId);
 
-    public function addToken($userRefererOrder);
+    public function createOrderReferer($userRefererOrder);
 
     public function updateToken($id, $fields);
 }

@@ -118,9 +118,9 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogTokenDao()->getOrderRefererLikeByOrderId($orderId);
     }
 
-    public function addToken($token)
+    public function createOrderReferer($token)
     {
-        return $this->getRefererLogTokenDao()->addToken($token);
+        return $this->getRefererLogTokenDao()->createOrderReferer($token);
     }
 
     public function updateToken($id, $fields)
