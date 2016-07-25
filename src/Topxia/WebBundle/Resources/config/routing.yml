@@ -2171,6 +2171,11 @@ open_course_manage_course_pick:
     pattern: /open/course/{id}/manage/recommend/pick/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
+open_course_manage_recommend_course_delete:
+    path: /open/course/{id}/manage/recommend/{recommendId}/delete
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:deleteRecommendCourse}
+    methods: [POST]
+
 open_course_manage_lesson_replays_edit:
     pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/replays/edit
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:editLessonReplay }
