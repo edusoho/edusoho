@@ -5,22 +5,23 @@
   {% else %}
     {% set showUrl = path('course_show',{id:course.id}) %}
   {% endif %}
-<div class="openCourse-recommend clearfix">
-  <div class="openCourse-img">
-    <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-      <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}">
-    </a>
-  </div>
-  <div class="openCourse-content">
-    <div class="title"> 
-      <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
+  <div class="openCourse-recommend clearfix">
+    <div class="openCourse-img">
+      <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
+        <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}"
+             alt="{{ course.title }}">
+      </a>
     </div>
-    <div class="metas">
-      <span class="pull-right">{{ course.studentNum }}人在学习</span>
-      {{teacher.nickname}}
+    <div class="openCourse-content">
+      <div class="title">
+        <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
+      </div>
+      <div class="metas">
+        <span class="pull-right">{{ course.studentNum }}人在学习</span>
+        {{ teacher.nickname }}
+      </div>
     </div>
   </div>
-</div>
 {% else %}
- <div class="empty">暂无推荐记录</div>
+  <div class="empty">暂无推荐记录</div>
 {% endfor %}
