@@ -7,9 +7,9 @@
 			</td>
 		
 			<td>
-				{% if discoveryColumn.type == 'classroom' %}班级
-				{% elseif discoveryColumn.type == 'course' %}普通课程
-				{% else %}直播课程
+				{% if discoveryColumn.type == 'classroom' %}{{ '班级'|trans }}
+				{% elseif discoveryColumn.type == 'course' %}{{ '普通课程'|trans }}
+				{% else %}{{ '直播课程'|trans }}
 				{% endif %}
 			</td>
 
