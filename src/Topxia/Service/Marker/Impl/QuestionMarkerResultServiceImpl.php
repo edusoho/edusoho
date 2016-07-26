@@ -29,7 +29,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
     {
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
         if (in_array($type, array('single_choice', 'determine'))) {
-            $status = empty(array_diff($answer, $questionMarker['answer'])) ? 'right' : 'wrong';
+            $status = array_diff($answer, $questionMarker['answer']) ? 'right' : 'wrong';
         }
 
         if ($type == 'uncertain_choice') {
