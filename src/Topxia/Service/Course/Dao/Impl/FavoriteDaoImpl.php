@@ -17,8 +17,11 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type = 'course')
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? AND type = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ?: null;
+        $self = $this;
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:type:{$type}", $userId, $courseId, $type, function ($userId, $courseId, $type) use ($self){
+            $sql = "SELECT * FROM {$self->getTable()} WHERE userId = ? AND courseId = ? AND type = ? LIMIT 1";
+            return $self->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ?: null;
+        });
     }
 
     public function findCourseFavoritesByUserId($userId, $start, $limit)

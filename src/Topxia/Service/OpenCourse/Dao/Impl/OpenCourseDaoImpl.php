@@ -105,11 +105,17 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 
         $currentTime = time();
 
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $this->getConnection()->executeQuery($sql, array($diff, $id));
 
-        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $this->clearCached();
-        return $this->getCourse($id);
+        $current = $this->getCourse($id);
+        if($currentTime - $current['updatedTime'] > (60 * 10)){  //十分钟清一次缓存
+            $sql = "UPDATE {$this->table} SET updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+            $this->getConnection()->executeQuery($sql, array($diff, $id));
+            $this->clearCached();
+        }
+
+        return $current;
     }
 
     protected function _createSearchQueryBuilder($conditions)
