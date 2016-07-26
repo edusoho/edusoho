@@ -17,7 +17,8 @@ class QuestionMarkerController extends BaseController
         $result = array();
 
         foreach ($questionMakers as $index => $questionMaker) {
-            $isChoice = in_array($questionMaker['type'], array('choice', 'single_choice', 'uncertain_choice'));
+            $isChoice    = in_array($questionMaker['type'], array('choice', 'single_choice', 'uncertain_choice'));
+            $isDetermine = $questionMaker['type'] == 'determine';
 
             $result[$index]['id']       = $questionMaker['id'];
             $result[$index]['markerId'] = $questionMaker['markerId'];
@@ -35,7 +36,13 @@ class QuestionMarkerController extends BaseController
             }
             $answers = json_decode($questionMaker['answer'], true);
             foreach ($answers as $answerIndex => $answer) {
-                $result[$index]['answer'][$answerIndex] = $isChoice ? chr(65 + $answer) : $answer;
+                if ($isChoice) {
+                    $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
+                } elseif ($isDetermine) {
+                    $result[$index]['answer'][$answerIndex] = $answer == 1 ? 'T' : 'F';
+                } else {
+                    $result[$index]['answer'][$answerIndex] = $answer;
+                }
             }
             $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['analysis']);
         }
