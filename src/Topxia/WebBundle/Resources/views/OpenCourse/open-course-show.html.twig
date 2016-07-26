@@ -26,7 +26,11 @@
   </ol>
   <div class="open-course-header">
     <div class="row">
-      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+
+      {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
+        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+      {% endcache %}
+
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
           <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
@@ -38,9 +42,9 @@
           <ul id="recommand-tab">
             {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig' %}
           </ul>
-          <ul id="live-tab" style="display:none">
+          {# <ul id="live-tab" style="display:none">
             {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig' with {currentLessonId:lessonId|default(null)} %}
-          </ul>
+          </ul> #}
         </div>
       </div>
     </div>
@@ -57,11 +61,13 @@
       </div>
       {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
     </div>
+
+    {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-
       {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
     </div>
+    {% endcache %}
   </div>
   <input id="uv" type="hidden" value="{{ uv }}">
 

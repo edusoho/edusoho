@@ -232,27 +232,6 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse(array('result' => true, 'number' => $course['likeNum']));
     }
 
-    public function qrcodeAction(Request $request, $id)
-    {
-        $user  = $this->getUserService()->getCurrentUser();
-        $host  = $request->getSchemeAndHttpHost();
-        $token = $this->getTokenService()->makeToken('qrcode', array(
-            'userId'   => $user['id'],
-            'data'     => array(
-                'url'    => $this->generateUrl('open_course_show', array('courseId' => $id), true),
-                'appUrl' => ""
-            ),
-            'times'    => 0,
-            'duration' => 3600
-        ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
-
-        $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
-        );
-        return $this->createJsonResponse($response);
-    }
-
     protected function getWxPreviewQrCodeUrl($id)
     {
         $user  = $this->getUserService()->getCurrentUser();
@@ -310,7 +289,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($this->isWxClient()) {
+        if ($isWxpreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
         } else {
             $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
