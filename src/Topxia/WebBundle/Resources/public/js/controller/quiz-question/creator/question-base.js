@@ -102,7 +102,8 @@ define(function(require, exports, module) {
 
             validator = new Validator({
                 element: $form,
-                autoSubmit: false
+                autoSubmit: false,
+                autoFocus: false
             });
 
             validator.addItem({
