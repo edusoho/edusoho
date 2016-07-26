@@ -38,8 +38,9 @@ class PlayerController extends BaseController
             // 临时修复手机浏览器端视频不能播放的问题
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                $player = "local-video-player";
-                $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
+                $player                  = "local-video-player";
+                $url                     = isset($result['mp4url']) ? $result['mp4url'] : '';
+                $context['hideQuestion'] = 1; //手机浏览器不弹题
             }
         } catch (\Exception $e) {
         }
