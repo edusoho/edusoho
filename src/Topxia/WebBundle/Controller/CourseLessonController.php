@@ -28,8 +28,9 @@ class CourseLessonController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $context             = array();
-        $context['lessonId'] = $lessonId;
+        $context                 = array();
+        $context['lessonId']     = $lessonId;
+        $context['hideQuestion'] = ($isPreview || $request->query->get('hideQuestion', 0) == 1) ? 1 : 0;
 
         if ($isPreview && !empty($course['tryLookable'])) {
             $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
@@ -43,7 +44,6 @@ class CourseLessonController extends BaseController
 
         $context['starttime']     = $request->query->get('starttime');
         $context['hideBeginning'] = $request->query->get('hideBeginning', false);
-        $context['hideQuestion']  = $request->query->get('hideQuestion', 0);
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],

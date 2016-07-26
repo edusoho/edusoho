@@ -24,12 +24,11 @@
     <li><a href="{{ path('open_course_explore') }}" >公开课</a></li>
     <li>{{ course.title }}</li>
   </ol>
+  {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
   <div class="open-course-header">
     <div class="row">
 
-      {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
-        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
-      {% endcache %}
+      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
 
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
@@ -49,7 +48,10 @@
       </div>
     </div>
   </div>
+  {% endcache %}
+
   {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
+
   <div class="open-course-detail row">
     <div class="col-md-9">
       <div class="es-section gray-darker editor-text">
