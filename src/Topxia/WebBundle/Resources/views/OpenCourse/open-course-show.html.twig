@@ -24,7 +24,7 @@
     <li><a href="{{ path('open_course_explore') }}" >公开课</a></li>
     <li>{{ course.title }}</li>
   </ol>
-  {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
+  {# {% cache 'open/course/' ~ course.id ~ '/header' 600 %} #}
   <div class="open-course-header">
     <div class="row">
 
@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  {% endcache %}
+  {# {% endcache %} #}
 
   {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
 
@@ -64,12 +64,12 @@
       {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
     </div>
 
-    {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %}
+    {# {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %} #}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
       {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
     </div>
-    {% endcache %}
+    {# {% endcache %} #}
   </div>
   <input id="uv" type="hidden" value="{{ uv }}">
 
