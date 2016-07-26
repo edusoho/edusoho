@@ -19,30 +19,41 @@
           {% set orderCount = 0 %}
         {% endif %}
         {% if refererLog.hitNum is null %}
-            {% set hitNum = 0 %}
-          {% endif %}
+          {% set hitNum = 0 %}
+        {% endif %}
 
-          <tr>
-            {% set openCourse = openCourses[refererLog.targetId]|default(null) %}
-            <th scope="row">{% if openCourse %}{{ openCourse.title }}{% else %}该课程已删除{% endif %}</th>
-            <th>
-              {{ hitNum }} 次
-            </th>
-            <th>
-              {% if openCourse %}
-                <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-                 data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+        {% set openCourse = openCourses[refererLog.targetId]|default(null) %}
+        <tr {% if not openCourse %}style="text-decoration:line-through"{% endif %}>
+          <th scope="row">
+            {% if openCourse %}
+              <a href="{{ path('open_course_show', {courseId:openCourse.id}) }}" target="_blank"><strong>{{ openCourse.title }}</strong></a>
+              {% if openCourse.type == 'live' or openCourse.type == 'liveOpen' %}
+                <span class="label label-success live-label mls">{{ '直播'|trans }}</span>
               {% endif %}
-            </th>
-          </tr>
-        {% else %}
-          <tr>
-            <td colspan="20">
-              <div class="empty">暂无记录</div>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+            {% else %}
+              该课程已删除
+            {% endif %}
+          </th>
+          <th>
+            {{ hitNum }} 次
+          </th>
+          <th>
+            {% if openCourse %}
+              <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+               data-url="{{ path('admin_opencourse_analysis_referer_detail',{id:refererLog.targetId, startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+            {% endif %}
+          </th>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">暂无记录</div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <span>注：列表结果中，不会包含没有访问过的课程</span>
     {{ web_macro.paginator(paginator) }}
 {% endblock %}

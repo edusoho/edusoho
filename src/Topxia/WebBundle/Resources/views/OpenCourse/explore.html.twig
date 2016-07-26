@@ -15,7 +15,7 @@
 {% endblock %}
 {% block content %}
   <div class="open-course-list">
-    <div class="row course-list es-openCourse-list">
+    <div class="row course-list es-open-course-list">
       {% for course in courses if course %}
         {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
         <div class="col-md-4 col-xs-6">
@@ -25,7 +25,7 @@
                  target="{{ course.title }}">
                 {% if course.type == 'liveOpen' %}
                   <span class="tags">
-            <span class="tag-open-live"></span>
+            <span class="tag-live"></span>
           </span>
                 {% endif %}
                 {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}

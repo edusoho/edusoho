@@ -28,7 +28,7 @@ define(function(require, exports, module) {
         var questionMarkers = videoHtml.data('questionMarkers');
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
-
+        var playerControlBar = videoHtml.data('playerControlBar');
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
@@ -63,7 +63,8 @@ define(function(require, exports, module) {
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList,
                 timelimit: timelimit,
-                questions: questionMarkers
+                questions: questionMarkers,
+                controlBar: playerControlBar
                 // enablePlaybackRates: true
             }
         );

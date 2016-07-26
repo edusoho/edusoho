@@ -7,10 +7,12 @@ define(function(require, exports, module) {
         require('../course-manage/header').run();
         
         $(".course-list-group").on('click','.close',function(){
-
+            var recommendId = $(this).data('recommendId');
             var courseId = $(this).data('id');
+            $.post($(this).data('cancelUrl')).done(function () {
 
-            $('.item-'+courseId).remove();
+                $('.item-'+courseId).remove();
+            });
         });
 
         var $list = $(".course-list-group").sortable({

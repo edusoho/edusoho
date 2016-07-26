@@ -265,6 +265,13 @@ class OpenCourseManageController extends BaseController
         ));
     }
 
+    public function deleteRecommendCourseAction(Request $request, $id, $recommendId)
+    {
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $this->getOpenCourseRecommendedService()->deleteRecommendCourse($recommendId);
+        return $this->createJsonResponse(true);
+    }
+
     public function searchAction(Request $request, $id, $filter)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);

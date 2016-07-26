@@ -19,12 +19,12 @@
 {% endblock %}
 
 {% block content %}
-  <ol class="breadcrumb openCourse-breadcrumb">
+  <ol class="breadcrumb open-course-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>
     <li><a href="{{ path('open_course_explore') }}" >公开课</a></li>
     <li>{{ course.title }}</li>
   </ol>
-  <div class="openCourse-header">
+  <div class="open-course-header">
     <div class="row">
 
       {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
@@ -69,7 +69,7 @@
     </div>
     {% endcache %}
   </div>
-
+  <input id="uv" type="hidden" value="{{ uv }}">
 
 {% endblock %}
     
