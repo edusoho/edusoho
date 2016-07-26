@@ -19,7 +19,7 @@
 
 <div class="eduyun-main">
   <div class="page-header clearfix">
-    <h1 class="pull-left">云资源</h1>
+    <h1 class="pull-left">{{ '云资源'|trans }}</h1>
   </div>
   <form class="form-inline es-materials-manage" id="materials-form">
     {% include 'TopxiaAdminBundle:CloudFile/Form:course-user-search.html.twig' %}
@@ -37,14 +37,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">×</button>
-        <h4 class="modal-title">标签设置</h4>
+        <h4 class="modal-title">{{ '标签设置'|trans }}</h4>
       </div>
       <div class="modal-body">
         <form class="form-horizontal" id="tag-form" action="{{ path('admin_cloud_file_tag_show') }}" method="post" >
           <div class="form-group" id="form">
 
 
-            <label class="col-md-2 control-label">标签</label>
+            <label class="col-md-2 control-label">{{ '标签'|trans }}</label>
             <div class="col-md-8 controls">
               <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}"name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans}}">
               <div class="help-block">{{'标签来自网校课程标签，由网校管理员统一管理。'|trans}}</div>
@@ -56,8 +56,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-        <button id="tag-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form ">保存</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal">{{ '取消'|trans }}</button>
+        <button id="tag-create-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form ">{{ '保存'|trans }}</button>
       </div>
     </div>
   </div>
