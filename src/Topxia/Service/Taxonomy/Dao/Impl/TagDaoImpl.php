@@ -22,18 +22,20 @@ class TagDaoImpl extends BaseDao implements TagDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert tag error.');
         }
-
+        $this->clearCached();
         return $this->getTag($this->getConnection()->lastInsertId());
     }
 
     public function updateTag($id, array $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getTag($id);
     }
 
     public function deleteTag($id)
     {
+        $this->clearCached();
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -43,9 +45,17 @@ class TagDaoImpl extends BaseDao implements TagDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        uasort($ids, function ($a, $b){
+            return $a < $b;
+        });
+
+        $self = $this;
+
+        return $this->fetchCached("ids:".implode('|', $ids), $ids, function ($ids) use ($self){
+            $marks = str_repeat('?,', count($ids) - 1).'?';
+            $sql   = "SELECT * FROM {$self->getTable()} WHERE id IN ({$marks});";
+            return $self->getConnection()->fetchAll($sql, $ids);
+        });
     }
 
     public function findTagsByNames(array $names)

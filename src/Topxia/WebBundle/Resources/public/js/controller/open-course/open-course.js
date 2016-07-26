@@ -22,8 +22,10 @@ define(function (require, exports, module) {
                     action = 'addClass';
                 }
 
-                $.post(url, function (res) {
-                    self.parent().next().html(res.number);
+                $.post(url, function () {
+                    var $number = self.parent().next();
+                    var currentNum = $number.html();
+                    $number.html(parseInt(currentNum)+1);
                     self.parent()[action]('active');
                 });
             })
