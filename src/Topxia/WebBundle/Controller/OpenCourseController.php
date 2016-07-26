@@ -93,7 +93,7 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if ('liveOpen' != $course['type']) {
-            $this->createRefererLog($request, $course, $uv);
+            $this->createRefererLog($request, $course);
         }
         return $response;
     }
