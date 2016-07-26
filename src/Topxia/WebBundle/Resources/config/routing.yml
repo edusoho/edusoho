@@ -2251,10 +2251,6 @@ open_course_unlike:
     defaults: { _controller: TopxiaWebBundle:OpenCourse:unlike }
     methods: [POST]
 
-open_course_qrcode:
-    pattern:  /open/course/{id}/qrcode
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:qrcode }
-
 open_course_post:
     pattern:  /open/course/{id}/post
     defaults: { _controller: TopxiaWebBundle:OpenCourse:post }
