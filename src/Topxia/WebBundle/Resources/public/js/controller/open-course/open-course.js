@@ -78,9 +78,5 @@ define(function (require, exports, module) {
                 element: '#open-course-comment',
             });
         }
-        if (!Cookie.get("uv")) {
-            Cookie.set("uv", $("#uv").val(),{path: '/'});
-        }
-
     };
 });

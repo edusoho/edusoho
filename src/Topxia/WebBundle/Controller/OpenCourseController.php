@@ -4,7 +4,9 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpenCourseController extends BaseOpenCourseController
 {
@@ -77,16 +79,23 @@ class OpenCourseController extends BaseOpenCourseController
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
-        $uv     = uniqid($prefix = "refererToken");
+
+        $response = $this->renderView($template, array(
+            'course'   => $course,
+            'lessonId' => $lessonId
+        ));
+        $response = new Response($response);
+
+        if (!$request->cookies->get('uv')) {
+            $expire = strtotime(date('Y-m-d').' 23:59:59');
+            $response->headers->setCookie(new Cookie("uv", uniqid($prefix = "refererToken"), $expire));
+            $response->send();
+        }
+
         if ('liveOpen' != $course['type']) {
             $this->createRefererLog($request, $course, $uv);
         }
-
-        return $this->render($template, array(
-            'course'   => $course,
-            'lessonId' => $lessonId,
-            'uv'       => $uv
-        ));
+        return $response;
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -136,7 +145,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
         //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member = $this->_getMember($request, $course['id']);
+        $member = $this->_getMember($course['id']);
         if ($lesson) {
             $lesson['replays'] = $this->_getLiveReplay($lesson);
         }
