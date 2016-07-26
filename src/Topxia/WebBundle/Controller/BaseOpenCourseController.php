@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BaseOpenCourseController extends BaseController
 {
-    protected function createRefererLog(Request $request, $course, $uv = null)
+    protected function createRefererLog(Request $request, $course)
     {
         $fields = array(
             'targetId'        => $course['id'],
@@ -23,14 +23,16 @@ class BaseOpenCourseController extends BaseController
             'ip'              => $request->getClientIp(),
             'userAgent'       => $request->headers->get("user-agent")
         );
-
+        $uv = $request->cookies->get('uv');
+        if (empty($uv)) {
+            return false;
+        }
         $refererLog = $this->getRefererLogService()->addRefererLog($fields);
         $this->updatevisitRefererToken($refererLog, $request, $uv);
     }
 
     protected function updatevisitRefererToken($refererLog, Request $request, $uv)
     {
-        $uv    = $request->cookies->get('uv', $uv);
         $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
 
         $key                  = $refererLog['targetType'].'_'.$refererLog['targetId'];
