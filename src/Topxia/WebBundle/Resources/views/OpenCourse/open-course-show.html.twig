@@ -26,7 +26,11 @@
   </ol>
   <div class="openCourse-header">
     <div class="row">
-      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+
+      {% cache 'open/course/' ~ course.id ~ '/header' 600 %}
+        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+      {% endcache %}
+
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
           <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
@@ -57,11 +61,13 @@
       </div>
       {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
     </div>
+
+    {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-
       {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
     </div>
+    {% endcache %}
   </div>
 
 
