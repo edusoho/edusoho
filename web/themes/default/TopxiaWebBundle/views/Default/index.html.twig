@@ -17,7 +17,7 @@
 
     <div class="col-md-9">
       
-      {% set openCourses = data('OpenCourses',{ count:5, orderType:'recommendedSeq' }) %}
+      {% set openCourses = data('OpenCourses',{ count:5, orderBy:'recommendedSeq' }) %}
       {% if openCourses %}
         <div class="es-box">
           <div class="es-box-heading">
