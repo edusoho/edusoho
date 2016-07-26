@@ -7,7 +7,7 @@
 
 {% block main %}
 
-<div class="panel panel-default panel-col lesson-manage-panel">
+<div class="panel panel-default panel-col lesson-manage-panel" data-file-status-url={{path('course_manage_file_status')}}>
 	<div class="panel-heading">
 		<div class="pull-right">
 			<button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>

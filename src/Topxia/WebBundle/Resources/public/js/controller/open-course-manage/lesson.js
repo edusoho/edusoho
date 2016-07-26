@@ -207,21 +207,37 @@ define(function(require, exports, module) {
     function asyncLoadFiles()
     {
         var url=$('.lesson-manage-panel').data('file-status-url');
-        $.get(url,'',function(data){
+
+        var fileIds = new Array();
+        $('.lesson-list .item-lesson').each(function(){
+            if(!isNaN($(this).data('file-id'))){
+                fileIds.push($(this).data('file-id'));
+            }
+        });
+
+        if(fileIds.length==0){
+          return ;
+        }
+
+        $.post(url,{'ids':fileIds.join(",")},function(data){
+
             if(!data||data.length==0){
                 return ;
             }
             
             for(var i=0;i<data.length;i++){
-              var file=data[i];
-              if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
-                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
-              }else if(file.convertStatus=='error'){
-                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
-              } else if (file.convertStatus == 'success') {
-                $("li[data-file-id="+file.id+"]").find('.mark-manage').show();
-                $("li[data-file-id="+file.id+"]").find('.mark-manage-divider').show();
-              }
+                var file=data[i];
+                
+                if($.inArray(file.type, ['video','ppt','document'])>-1){
+                    if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
+                        $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
+                    }else if(file.convertStatus=='error'){
+                        $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+                    } else if (file.convertStatus == 'success') {
+                        $("li[data-file-id="+file.id+"]").find('.mark-manage').show();
+                        $("li[data-file-id="+file.id+"]").find('.mark-manage-divider').show();
+                    }
+                }
             }
         });
     }

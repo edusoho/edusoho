@@ -6,7 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
-class OpenCourseController extends BaseController
+class OpenCourseController extends BaseOpenCourseController
 {
     public function exploreAction(Request $request)
     {
@@ -78,7 +78,10 @@ class OpenCourseController extends BaseController
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
         $uv     = uniqid($prefix = "refererToken");
-        $this->createRefererLog($request, $course, $uv);
+        if ('liveOpen' != $course['type']) {
+            $this->createRefererLog($request, $course, $uv);
+        }
+
         return $this->render($template, array(
             'course'   => $course,
             'lessonId' => $lessonId,
@@ -289,7 +292,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($this->isWxClient()) {
+        if ($isWxpreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
         } else {
             $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
@@ -776,38 +779,6 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function createRefererLog(Request $request, $course, $uv)
-    {
-        $fields = array(
-            'targetId'        => $course['id'],
-            'targetType'      => 'openCourse',
-            'refererUrl'      => $request->server->get('HTTP_REFERER'),
-            'uri'             => $request->getUri(),
-            'targetInnerType' => $course['type'],
-            'ip'              => $request->getClientIp(),
-            'userAgent'       => $request->headers->get("user-agent")
-        );
-
-        $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $this->updatevisitRefererToken($refererLog, $request, $uv);
-    }
-
-    protected function updatevisitRefererToken($refererLog, Request $request, $uv)
-    {
-        $uv    = $request->cookies->get('uv', $uv);
-        $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
-
-        $key                  = $refererLog['targetType'].'_'.$refererLog['targetId'];
-        $token['data'][$key]  = $refererLog['id'];
-        $token['expiredTime'] = strtotime(date('Y-m-d').' 23:59:59');
-        if (empty($token['id'])) {
-            $token['uv'] = $uv;
-            $this->getRefererLogService()->createOrderReferer($token);
-        } else {
-            $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
-        }
-    }
-
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
@@ -851,11 +822,6 @@ class OpenCourseController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function getRefererLogService()
-    {
-        return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
 
     protected function getOpenCourseRecommendedService()
