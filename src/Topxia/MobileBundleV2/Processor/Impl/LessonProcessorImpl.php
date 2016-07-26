@@ -81,11 +81,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 'lessonId' => $lessonId,
                 'source'   => 'coursematerial',
                 'type'     => 'course'
-            ), 
-            array('createdTime','DESC'), 
+            ),
+            array('createdTime', 'DESC'),
             0, 1000
         );
-        $files           = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
+        $files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
 
         return array(
             "start" => $start,
@@ -170,8 +170,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                     'lessonId' => $lessonId,
                     'source'   => 'coursematerial',
                     'type'     => 'course'
-                ), 
-                array('createdTime','DESC'), 
+                ),
+                array('createdTime', 'DESC'),
                 0, 1
             );
 
@@ -229,8 +229,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
         // $files = $this->getUploadFiles($courseId);
         $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
-        $files = array_map(function ($file) {
+        $files   = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+        $files   = array_map(function ($file) {
             $file['convertParams'] = null; //过滤convertParams防止移动端报错
             return $file;
         }, $files);
@@ -434,7 +434,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $enablePlayRate = $this->controller->setting('magic.enable_playback_rates');
+                    $enablePlayRate = $this->controller->setting('storage.enable_playback_rates');
                     if ($enablePlayRate && $file['mcStatus'] && $file['mcStatus'] == 'yes') {
                         $player = $this->controller->getMaterialLibService()->player($file['globalId']);
                         if (isset($player['mp4url'])) {
@@ -442,7 +442,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             return $lesson;
                         }
                     }
-                    
+
                     //do mp4
                     $lesson['mediaConvertStatus'] = $file['status'];
 

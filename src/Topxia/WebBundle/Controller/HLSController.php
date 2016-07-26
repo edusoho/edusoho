@@ -33,7 +33,7 @@ class HLSController extends BaseController
 
         $streams        = array();
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $enablePlayRate = $this->setting('magic.enable_playback_rates');
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
@@ -142,7 +142,7 @@ class HLSController extends BaseController
         }
 
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $enablePlayRate = $this->setting('magic.enable_playback_rates');
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
         $keyencryption  = ($inWhiteList || $enablePlayRate) ? 0 : 1;
         $tokenFields    = array(
             'data'     => array(
@@ -197,7 +197,7 @@ class HLSController extends BaseController
     public function clefAction(Request $request, $id, $token)
     {
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $enablePlayRate = $this->setting('magic.enable_playback_rates');
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
         $token          = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {

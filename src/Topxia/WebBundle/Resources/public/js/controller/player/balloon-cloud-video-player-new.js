@@ -72,7 +72,7 @@ define(function(require, exports, module) {
                     }
                 });
             }
-
+            
             if(self.get('enablePlaybackRates') != false && self.isBrowserSupportPlaybackRates() ) {
                 extConfig = $.extend(extConfig, {
                     playbackRates: {
@@ -176,7 +176,8 @@ define(function(require, exports, module) {
             }
 
             var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
-            if (matched && matched[1] < 47) {
+            console.log(matched);
+            if (matched && matched[1] <= 47) {
                 return false;
             }
 
