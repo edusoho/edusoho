@@ -36,7 +36,7 @@
     </div>
   </div>
 {% elseif course.type == 'liveOpen' %}
-  <div class="open-course-views openCourse-wechat-views">
+  <div class="open-course-views open-course-wechat-views">
     <img src="{{ filepath(course.largePicture, 'course.png')}}" class="img-responsive mask-img">
     <div class="mask">
       {% if lesson.startTime > ("now"|date("U")) %}
