@@ -136,7 +136,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
         //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member = $this->_getMember($request, $course['id']);
+        $member = $this->_getMember($course['id']);
         if ($lesson) {
             $lesson['replays'] = $this->_getLiveReplay($lesson);
         }
