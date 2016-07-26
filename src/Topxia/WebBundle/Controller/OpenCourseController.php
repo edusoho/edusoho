@@ -289,7 +289,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($this->isWxClient()) {
+        if ($isWxpreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
         } else {
             $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
