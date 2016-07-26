@@ -308,15 +308,15 @@ class CourseLessonController extends BaseController
                         'courseId' => $course['id'],
                         'lessonId' => $lesson['id']
                     ));
+                }
 
-                    if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
-                        $user        = $this->getCurrentUser();
-                        $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                    $user        = $this->getCurrentUser();
+                    $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
 
-                        if ($watchStatus['status'] == 'error') {
-                            $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
-                            $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
-                        }
+                    if ($watchStatus['status'] == 'error') {
+                        $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                        $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
                     }
                 }
             } else {
