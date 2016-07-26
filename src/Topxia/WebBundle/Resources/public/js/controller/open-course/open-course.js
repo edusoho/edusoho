@@ -44,9 +44,18 @@ define(function (require, exports, module) {
                     text = '已收藏';
                 }
 
-                $.post(url, function () {
-                    self.parent().next().html(text);
-                    self.parent()[action]('active');
+                $.post(url, function (data) {
+                    if (data['result']) {
+                        self.parent().next().html(text);
+                        self.parent()[action]('active');
+                   } else if (!data['result'] && data['message'] == 'Access Denied'){
+                       $('#modal').html();
+                       $('#modal').load('/login/ajax');
+                       $('#modal').modal('show');
+                    } else {
+                        Notify.danger(data['message']);
+                    }
+                    
                 })
             })
         },
