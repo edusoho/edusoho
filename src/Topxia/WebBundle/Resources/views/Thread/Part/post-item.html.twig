@@ -28,9 +28,8 @@
       </div>
 
       {% if service.canAccess('post.create', post) and app.user %}
-        {% if not postReplyUrl is defined %}
-          {% set postReplyUrl =  path('thread_post_reply', {threadId:post.threadId, postId:post.id}) %}
-        {% endif %}
+      
+        {% set postReplyUrl =  postReplyUrl|default(path('thread_post_reply', {threadId:post.threadId, postId:post.id})) %}
         <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
           <div class="form-group">
             <div class="controls">

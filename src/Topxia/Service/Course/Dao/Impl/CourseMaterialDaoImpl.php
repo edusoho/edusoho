@@ -13,35 +13,17 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     public function getMaterial($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-    }
-
-    public function findMaterialsByCourseId($courseId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql ="SELECT * FROM {$this->table} WHERE courseId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
-    }
-
-    public function findMaterialsByLessonId($lessonId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql ="SELECT * FROM {$this->table} WHERE lessonId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($lessonId)) ? : array();
-    }
-
-    public function getMaterialCountByCourseId($courseId)
-    {
-        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
     public function addMaterial($material)
     {
         $affected = $this->getConnection()->insert($this->table, $material);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert material error.');
         }
+
         return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
@@ -71,46 +53,21 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteMaterialsByLessonId($lessonId)
+    public function deleteMaterialsByLessonId($lessonId, $courseType)
     {
-        $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($lessonId));
+        $sql = "DELETE FROM {$this->table} WHERE lessonId = ? AND type = ?";
+        return $this->getConnection()->executeUpdate($sql, array($lessonId, $courseType));
     }
 
-    public function deleteMaterialsByCourseId($courseId)
+    public function deleteMaterialsByCourseId($courseId, $courseType)
     {
-        $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($courseId));
+        $sql = "DELETE FROM {$this->table} WHERE courseId = ? AND type = ?";
+        return $this->getConnection()->executeUpdate($sql, array($courseId, $courseType));
     }
 
     public function deleteMaterialsByFileId($fileId)
     {
         return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
-    }
-
-    public function getLessonMaterialCount($courseId,$lessonId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
-    } 
-
-    public function getMaterialCountByFileId($fileId)
-    {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($fileId)); 
-    }
-
-    public function findMaterialsGroupByFileId($courseId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? and fileId != 0 GROUP BY fileId ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
-    }
-
-    public function findMaterialCountGroupByFileId($courseId)
-    {
-        $sql = "SELECT COUNT(DISTINCT(fileId)) FROM {$this->table} WHERE courseId = ? and fileId != 0 ";
-        return $this->getConnection()->fetchColumn($sql, array($courseId),0); 
     }
 
     public function searchMaterials($conditions, $orderBy, $start, $limit)
@@ -131,6 +88,28 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchMaterialsGroupByFileId($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->groupBy('fileId')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchMaterialCountGroupByFileId($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(DISTINCT(fileId))');
         return $builder->execute()->fetchColumn(0);
     }
 

@@ -31,10 +31,11 @@ class PlayerController extends BaseController
                 $player = "audio-player";
             }
 
-            $url = $this->getPlayUrl($id, $context);
+            $url    = $this->getPlayUrl($id, $context);
             $api    = CloudAPIFactory::create("leaf");
             $result = $api->get("/resources/{$file['globalId']}/player");
-            // todo delete
+
+            // 临时修复手机浏览器端视频不能播放的问题
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                 $player = "local-video-player";
@@ -42,11 +43,9 @@ class PlayerController extends BaseController
             }
         } catch (\Exception $e) {
         }
-
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
-            'mp4Url'           => isset($result['mp4url']) ? $result['mp4url'] : null,
             'context'          => $context,
             'player'           => $player,
             'agentInWhiteList' => $agentInWhiteList

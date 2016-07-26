@@ -148,6 +148,24 @@
         {% endif %}
       {% endif %}
 
+      {# 公开课 #}
+      {% set openCourses = data('OpenCourses',{ count:5, orderType:'recommendedSeq' }) %}
+      {% if openCourses %}
+        <div class="panel panel-autumn panel-autumn-primary">
+          <div class="panel-heading panel-heading-important">
+            <h2 class="panel-title">公开课 / <small>Open Course</small></h2>
+            <a class="pull-right more-autumn-primary" href="{{ path('open_course_explore') }}">More&gt;</a>
+          </div>
+          <div class="panel-body">
+            <ul class="autumn-grids clearfix">             
+              {% for course in openCourses %}
+                {% include 'TopxiaWebBundle:Default:open-course-grid.html.twig' %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
       {# 最新资讯 #}
 
       {% set articles = data('LatestArticles',{'count':4}) %}

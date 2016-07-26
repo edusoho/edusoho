@@ -244,12 +244,45 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function postReplyAction(Request $request, $threadId, $postId)
+    public function postSaveAction(Request $request, $targetType, $targetId)
     {
-        $fields             = $request->request->all();
-        $fields['content']  = $this->autoParagraph($fields['content']);
-        $fields['threadId'] = $threadId;
-        $fields['parentId'] = $postId;
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能评论!');
+        }
+
+        if ($request->getMethod() == "POST") {
+            $fields = $request->request->all();
+
+            $post['content']    = $this->autoParagraph($fields['content']);
+            $post['targetType'] = $targetType;
+            $post['targetId']   = $targetId;
+
+            $post = $this->getThreadService()->createPost($post);
+
+            if ($targetType == 'openCourse') {
+                $postReplyUrl = $this->container->get('router')->generate('open_course_post_reply', array('id' => $targetId, 'postId' => $post['id'], 'targetType' => 'openCourse'));
+            } else {
+                $postReplyUrl = $this->container->get('router')->generate('thread_post_reply', array('threadId' => $post['threadId'], 'postId' => $post['id']));
+            }
+
+            return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
+                'post'         => $post,
+                'author'       => $user,
+                'service'      => $this->getThreadService(),
+                'postReplyUrl' => $postReplyUrl
+            ));
+        }
+    }
+
+    public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom')
+    {
+        $fields               = $request->request->all();
+        $fields['content']    = $this->autoParagraph($fields['content']);
+        $fields['threadId']   = $threadId;
+        $fields['parentId']   = $postId;
+        $fields['targetType'] = $targetType;
 
         $post = $this->getThreadService()->createPost($fields);
 

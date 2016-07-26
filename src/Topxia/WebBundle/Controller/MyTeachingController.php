@@ -19,8 +19,9 @@ class MyTeachingController extends BaseController
             'userId' => $user['id']
         );
 
-        if ($filter == 'normal') {
+        if ($filter == 'normal' || $filter == 'live') {
             $conditions["parentId"] = 0;
+            $conditions["type"]     = $filter;
         }
 
         if ($filter == 'classroom') {
@@ -30,7 +31,7 @@ class MyTeachingController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($conditions, false),
-            12
+            10
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
@@ -55,11 +56,40 @@ class MyTeachingController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
-            'courses'             => $courses,
-            'classrooms'          => $classrooms,
-            'paginator'           => $paginator,
-            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled'],
-            'filter'              => $filter
+            'courses'    => $courses,
+            'classrooms' => $classrooms,
+            'paginator'  => $paginator,
+            'filter'     => $filter
+        ));
+    }
+
+    public function openCoursesAction(Request $request, $filter)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
+        }
+
+        $conditions = $this->_createSearchConitons($filter);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getOpenCourseService()->searchCourseCount($conditions),
+            10
+        );
+
+        $OpenCourses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:MyTeaching:open-course.html.twig', array(
+            'courses'   => $OpenCourses,
+            'paginator' => $paginator,
+            'filter'    => $filter
         ));
     }
 
@@ -162,6 +192,35 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    private function _createSearchConitons($filter)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'type' => $filter
+        );
+
+        if ($user->isAdmin()) {
+            $conditions['userId'] = $user['id'];
+        } else {
+            $conditions['courseIds'] = array(-1);
+            $members                 = $this->getOpenCourseService()->searchMembers(
+                array('userId' => $user['id'], 'role' => 'teacher'),
+                array('createdTime', 'ASC'),
+                0,
+                999
+            );
+
+            if ($members) {
+                foreach ($members as $key => $member) {
+                    $conditions['courseIds'][] = $member['courseId'];
+                }
+            }
+        }
+
+        return $conditions;
+    }
+
     protected function getCourseThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
@@ -190,5 +249,10 @@ class MyTeachingController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 }

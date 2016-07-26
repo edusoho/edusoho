@@ -16,6 +16,20 @@
   <div class="row row-9-3">
 
     <div class="col-md-9">
+      
+      {% set openCourses = data('OpenCourses',{ count:5, orderType:'recommendedSeq' }) %}
+      {% if openCourses %}
+        <div class="es-box">
+          <div class="es-box-heading">
+            <h2>公开课</h2>
+            <a class="pull-right" href="{{ path('open_course_explore') }}">更多&gt;</a>
+          </div>
+          <div class="es-box-body">
+            {{ _self.open_course_lists(openCourses) }}
+          </div>
+        </div>
+      {% endif %}
+
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
       {% if classrooms %}
       <div class="es-box">
@@ -332,6 +346,67 @@
         </div>
       </div>
     </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro open_course_lists(openCourses) %}
+  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+  <ul class="course-wide-list clearfix">
+    {% for course in openCourses %}
+      <li class="course-item clearfix">
+        <a class="course-picture-link" href="{{ path('open_course_show', {courseId:course.id}) }}">
+          {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
+          
+          {% if course.type == 'liveOpen' %}
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              <span class="label label-warning series-mode-label">正在直播中</span>
+            {% else %}
+              <span class="label label-success series-mode-label">直播</span>
+            {% endif %}
+          {% endif %}
+          </a>
+
+        <div class="course-body">
+          
+          <h4 class="course-title">
+            <a href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+          </h4>
+
+          <div class="course-price-info"></div>
+
+          {% if course.type == 'liveOpen' %}
+            {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+
+            <div class="live-course-lesson mbs">
+              {% if lessons %}
+                <span class="text-success fsm mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
+              {% endif %}
+            </div>
+            
+          {% else %}
+            <div class="course-about ellipsis">{{ course.subtitle }}</div>
+          {% endif %}
+
+          <div class="course-footer clearfix">
+
+            {% set teacher = course.teachers|first|default(null) %}
+            {% if teacher %}
+              <div class="teacher">
+                {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
+                <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+              </div>
+            {% endif %}
+            <div class="course-metas">
+              <span class="text-muted mrm"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+              <span class="text-muted mrm"><i class="es-icon es-icon-thumbup"></i>{{ course.likeNum }}</span>
+              <span class="text-muted mrm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+            </div>
+          </div>
+        </div>
+      </li>
     {% endfor %}
   </ul>
 {% endmacro %}

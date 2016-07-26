@@ -31,8 +31,8 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $streams = array();
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $streams        = array();
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
         $enablePlayRate = $this->setting('magic.enable_playback_rates');
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
@@ -141,10 +141,10 @@ class HLSController extends BaseController
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
         $enablePlayRate = $this->setting('magic.enable_playback_rates');
-        $keyencryption = ($inWhiteList || $enablePlayRate) ? 0 : 1;
-        $tokenFields   = array(
+        $keyencryption  = ($inWhiteList || $enablePlayRate) ? 0 : 1;
+        $tokenFields    = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
@@ -196,9 +196,9 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
         $enablePlayRate = $this->setting('magic.enable_playback_rates');
-        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $token          = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
             return $this->makeFakeTokenString();
@@ -235,11 +235,15 @@ class HLSController extends BaseController
 
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
-            return new Response($stream['key']);
+            return new Response($stream['key'], 200, array(
+                'Content-Length' => strlen($stream['key'])
+            ));
         }
 
         $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
-        return new Response($file['metas2'][$token['data']['level']]['hlsKey']);
+        return new Response($file['metas2'][$token['data']['level']]['hlsKey'], 200, array(
+            'Content-Length' => strlen($file['metas2'][$token['data']['level']]['hlsKey'])
+        ));
     }
 
     protected function makeFakeTokenString()

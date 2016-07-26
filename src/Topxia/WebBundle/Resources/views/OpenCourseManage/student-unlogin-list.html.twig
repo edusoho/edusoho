@@ -1,0 +1,26 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+  
+<table class="table table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="40%">IP</th>
+      <th width="30%">{{'最近进入'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      <tr id="student-tr">
+        <td class="media" style="vertical-align: middle;">
+          {{ student.ip }}
+        </td>
+
+        <td style="vertical-align: middle;">
+          {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
+        </td>
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{'暂无记录'|trans}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+

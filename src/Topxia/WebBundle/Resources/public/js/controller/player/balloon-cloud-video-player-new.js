@@ -9,13 +9,16 @@ define(function(require, exports, module) {
             fingerprint: '',
             watermark: '',
             agentInWhiteList: '',
-            timelimit: 10,
+            timelimit: '',
             remeberLastPos: true,
             disableControlBar: false,
             disableProgressBar: false,
+            controlBar: {
+                disableVolumeButton: false,
+                disablePlaybackButton: false
+            },
             questions: [],
-            enablePlaybackRates: false,
-            playbackRatesMP4Url: ''
+            enablePlaybackRates: false
         },
 
         events: {},
@@ -69,39 +72,13 @@ define(function(require, exports, module) {
                     }
                 });
             }
-            var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
-            function needMp4ForPlaybackRate(){
-                // IE9以下不支持倍数播放，IE9及以上不支持HLS
-                if (isIE && !$('html').hasClass('lt-ie9')) {
-                    return true;
-                }
-                // 低版本(47以下)的 chrome使用mp4方式倍速播放
-                var re = /Chrome\/(\d{0,3})/i;
-                var found = navigator.userAgent.match(re);
-                return found && found[1] < 47;
 
-            }
-            var needMp4ForPlaybackRate = needMp4ForPlaybackRate();
-            function getPlaybackRatesSrc() {
-                if (isIE && $('html').hasClass('lt-ie9') ) {
-                    return '';
-                }
-                if (needMp4ForPlaybackRate) {
-                    if (self.get('playbackRatesMP4Url') == '') {
-                        return '';
-                    }
-                    return [{src : self.get('playbackRatesMP4Url'), type : 'video/mp4', label : '高清'}];
-                }
-                return self.get('url');
-            }
-
-            if(self.get('enablePlaybackRates') != false && getPlaybackRatesSrc() != '') {
+            if(self.get('enablePlaybackRates') != false && self.isBrowserSupportPlaybackRates() ) {
                 extConfig = $.extend(extConfig, {
                     playbackRates: {
                         enable : true,
-                        source : needMp4ForPlaybackRate ? 'mp4' : 'hls',
-                        rates : [ 0.75, 1, 1.2, 1.3, 1.5, 1.8, 2],
-                        src : getPlaybackRatesSrc()
+                        source : 'hls',
+                        src : self.get('url')
                     }
                 });
             }
@@ -110,6 +87,7 @@ define(function(require, exports, module) {
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),
+                controlBar: self.get('controlBar'),
                 playlist: self.get('url'),
                 remeberLastPos : self.get('remeberLastPos')
             }, extConfig));
@@ -145,7 +123,7 @@ define(function(require, exports, module) {
 
             BalloonCloudVideoPlayer.superclass.setup.call(self);
 
-            // window.BalloonPlayer = this;
+            window.BalloonPlayer = this;
         },
 
         play: function(){
@@ -154,6 +132,20 @@ define(function(require, exports, module) {
 
         pause: function(){
             this.get("player").pause();
+        },
+
+        getCurrentTime: function(){
+            return this.get("player").getCurrentTime();
+        },
+        
+        setCurrentTime: function (time) {
+            this.get("player").setCurrentTime(time);
+            return this;
+        },
+        
+        replay: function () {
+            this.setCurrentTime(0).play();
+            return this;
         },
 
         isPlaying: function() {
@@ -177,7 +169,20 @@ define(function(require, exports, module) {
             return questions;
         },
 
-        //todo delete
+        isBrowserSupportPlaybackRates: function() {
+            // IE不支持，低版本(47以下)的chrome不支持
+            if (navigator.userAgent.toLowerCase().indexOf('msie')>0) {
+                return false;
+            }
+
+            var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
+            if (matched && matched[1] < 47) {
+                return false;
+            }
+
+            return true;
+        },
+
         convertQuestionType: function(source, from) {
             var map = [ //云播放器弹题的字段值跟ES不太一致
                 {
@@ -189,6 +194,12 @@ define(function(require, exports, module) {
                 }, {
                     es: 'determine',
                     cloud: 'judge'
+                }, {
+                    es: 'fill',
+                    cloud: 'completion'
+                }, {
+                    es: 'uncertain_choice',
+                    cloud: 'uncertainChoice'
                 }
             ];
 

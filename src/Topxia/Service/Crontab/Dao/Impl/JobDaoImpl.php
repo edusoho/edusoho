@@ -5,19 +5,19 @@ namespace Topxia\Service\Crontab\Dao\Impl;
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Crontab\Dao\JobDao;
 
-class JobDaoImpl extends BaseDao implements JobDao 
+class JobDaoImpl extends BaseDao implements JobDao
 {
     protected $table = 'crontab_job';
 
     private $serializeFields = array(
-        'jobParams' => 'json',
+        'jobParams' => 'json'
     );
 
     public function getJob($id, $lock = false)
     {
         $forUpdate = $lock ? "FOR UPDATE" : "";
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1 {$forUpdate}";
-        $job = $this->getConnection()->fetchAssoc($sql, array($id));
+        $sql       = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1 {$forUpdate}";
+        $job       = $this->getConnection()->fetchAssoc($sql, array($id));
         return $job ? $this->createSerializer()->unserialize($job, $this->getSerializeFields()) : null;
     }
 
@@ -30,7 +30,7 @@ class JobDaoImpl extends BaseDao implements JobDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        $threads = $builder->execute()->fetchAll() ? : array();
+        $threads = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($threads, $this->serializeFields);
     }
 
@@ -64,17 +64,22 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function deleteJobs($targetId, $targetType)
+    {
+        return $this->getConnection()->delete($this->table, array('targetId' => $targetId, 'targetType' => $targetType));
+    }
+
     public function findJobByTargetTypeAndTargetId($targetType, $targetId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        $job = $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ? : array();
+        $job = $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ?: array();
         return $this->createSerializer()->unserialize($job, $this->serializeFields);
     }
 
     public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE name = ? AND targetType = ? AND targetId = ?";
-        $job = $this->getConnection()->fetchAssoc($sql, array($jobName, $targetType, $targetId)) ? : array();
+        $job = $this->getConnection()->fetchAssoc($sql, array($jobName, $targetType, $targetId)) ?: array();
         return $this->createSerializer()->unserialize($job, $this->serializeFields);
     }
 
@@ -97,5 +102,4 @@ class JobDaoImpl extends BaseDao implements JobDao
     {
         return $this->serializeFields;
     }
-
 }

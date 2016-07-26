@@ -21,7 +21,6 @@ define(function(require, exports, module) {
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
-        var mp4Url = videoHtml.data('mp4Url');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
@@ -30,26 +29,22 @@ define(function(require, exports, module) {
         var questionMarkers = videoHtml.data('questionMarkers');
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
-
+        var playerControlBar = videoHtml.data('playerControlBar');
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                if(!swfobject.hasFlashPlayerVersion('11')){
-                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器，以便正常播放视频。', 5);
+                if (!swfobject.hasFlashPlayerVersion('11')  && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器，以便正常播放视频。',10);
                 }
                 html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
             }
         }else if(fileType == 'audio'){
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
-            if (playerType == 'local-video-player'){
-                html += '<audio id="lesson-player" width="90%" height="50">';
-                html += '<source src="' + url + '" type="audio/mp3" />';
-                html += '</audio>';
-            } else {
-                html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
-            }
+            html += '<audio id="lesson-player" width="90%" height="50">';
+            html += '<source src="' + url + '" type="audio/mp3" />';
+            html += '</audio>';
         }
 
         videoHtml.html(html);
@@ -70,7 +65,7 @@ define(function(require, exports, module) {
                 timelimit: timelimit,
                 questions: questionMarkers,
                 enablePlaybackRates: enablePlaybackRates,
-                playbackRatesMP4Url: mp4Url
+                controlBar: playerControlBar
             }
         );
 

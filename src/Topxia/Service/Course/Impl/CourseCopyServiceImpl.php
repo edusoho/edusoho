@@ -301,8 +301,13 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyMaterials($courseId, $newCourse, $newLessons)
     {
-        $count     = $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
-        $materials = $this->getMaterialDao()->findMaterialsByCourseId($courseId, 0, $count);
+        $conditions = array('courseId' => $courseId, 'type' => 'course');
+        $count      = $this->getMaterialDao()->searchMaterialCount($conditions);
+        $materials  = $this->getMaterialDao()->searchMaterials(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0, $count
+        );
 
         $map = array();
 

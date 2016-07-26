@@ -1,0 +1,93 @@
+<li class="course-grid">
+  <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+    <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
+      <span class="course-label">
+        {% if course.status == 'draft' %}
+          <span class="label  label-warning">{{'未发布'|trans}}</span>
+        {% elseif course.status == 'closed' %}
+          <span class="label label-danger">{{'已关闭'|trans}}</span>
+        {% endif %}
+        {% if course.status != 'closed' %}
+          {% if course.serializeMode=='serialize' %}
+            <span class="label label-success">{{'更新中'|trans}}</span>
+          {% elseif course.serializeMode=='finished' %}
+            <span class="label label-warning">{{'已完结'|trans}}</span>
+          {% endif %}
+        {% endif %}
+        {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning">{{'正在直播中'|trans}}</span>
+          {% else %}
+            <span class="label label-success">{{'直播'|trans}}</span>
+          {% endif %}
+        {% endif %}
+      </span>
+    <span class="title">{{ course.title }}</span>
+    {% if mode in ['default', 'teach'] %}
+
+      {% if course.type == 'live' %}
+        {% set lesson = course['lesson']|default(null) %}
+        {% if lesson %}
+          <span class="live-course-lesson metas">
+            <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+          </span>
+        {% endif %}
+      {% endif %}
+
+      <span class="metas clearfix">
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+        {% endif %}
+        <span class="comment mlm"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+        {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['price'] } %}
+      </span>
+    {% endif %}
+
+    {% if mode in ['learn'] %}
+      <div class="learn-status">
+          <div class="mbm">
+          {% if course.classroomCount > 0 %}
+            {% set classroom = course.classroom %}
+            <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
+            {% if course.classroomCount > 1 %}
+            {{'等'|trans}}
+            {% endif %}</span>
+          {% endif %}
+          </div>
+
+
+
+        {% if course.memberIsLearned %}
+          <div class="progress">
+            <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
+          </div>
+          {{'学习总时长'|trans}}:{{course.learnTime}}
+          <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
+        {% else %}
+          <div class="progress">
+            <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>
+          </div>
+          <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
+        {% endif %}
+      </div>
+      {% if course.status == 'draft' %}
+        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
+      {% elseif course.status == 'closed' %}
+        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if mode == 'teach' %}
+      {% if course.status == 'published' %}
+        <span class="label label-success course-status">{{'已发布'|trans}}</span>
+      {% elseif course.status == 'draft' %}
+        <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
+      {% elseif course.status == 'closed' %}
+        <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
+      {% endif %}
+    {% endif %}
+
+  </a>
+</li>

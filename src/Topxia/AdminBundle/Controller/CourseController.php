@@ -306,7 +306,7 @@ class CourseController extends BaseController
             ));
         }
 
-        if ($target == 'normal_index') {
+        if ($target == 'normal_index' || $target == 'open_index') {
             return $this->renderCourseTr($id, $request);
         }
     }

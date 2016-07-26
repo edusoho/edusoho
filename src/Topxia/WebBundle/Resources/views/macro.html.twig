@@ -1,7 +1,15 @@
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
   <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
-    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ filepath(user.smallAvatar, 'avatar.png') }}">
+    {% if imgClass == 'avatar-md' %}
+      {% set userAvatar = user.mediumAvatar %}
+    {% elseif imgClass == 'avatar-lg' %}
+      {% set userAvatar = user.largeAvatar %}
+    {% else %}
+      {% set userAvatar = user.smallAvatar %}
+    {% endif %}
+    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ filepath(userAvatar, 'avatar.png') }}">
+
   </a>
   {% else %}
     <a class="{{ class }}" href="javascript:;">
@@ -89,5 +97,17 @@
       <i class="es-icon es-icon-star"></i>
     {% endfor %}
   {% endif %}
+{% endmacro %}
 
+{% macro ajaxCoursePaginator(paginator) %}
+  {% if paginator.lastPage > 1 %}
+    {% if paginator.currentPage == paginator.lastPage %}
+    {% else %}
+      <div class="section-more-btn">
+        <a class="btn btn-default btn-lg" href="javascript:;"  data-url="{{ paginator.getPageUrl(paginator.nextPage) }}">
+          查看更多({{paginator.itemCount - paginator.perPageCount * paginator.currentPage}}) <i class="mrs-o es-icon es-icon-chevronright"></i>
+        </a>
+      </div>
+    {% endif %}
+  {% endif %}
 {% endmacro %}

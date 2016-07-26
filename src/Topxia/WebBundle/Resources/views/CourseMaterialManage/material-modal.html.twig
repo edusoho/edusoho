@@ -5,7 +5,13 @@
 {% block title %}{{'添加资料'|trans}}{% endblock %}
 {% block body %}
 
-<form id="course-material-form" class="form-horizontal" action="{{ path('course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) }}" enctype="multipart/form-data" method="post">
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set uploadUrl = path('open_course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
+{% else %}
+  {% set uploadUrl = path('course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
+{% endif %}
+
+<form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1  controls">
       <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
@@ -19,6 +25,8 @@
     </div>
   </div>
 
+  {% set targetType = targetType|default('coursematerial') %}
+  {% set targetId   = course.id %}
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
       {% include 'TopxiaWebBundle:CourseMaterialManage:file-chooser.html.twig' %}

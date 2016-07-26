@@ -162,6 +162,7 @@ class LiveCourseLessonManageController extends BaseController
     public function editLessonReplayAction(Request $request, $lessonId, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if ($request->getMethod() == 'POST') {
             $ids = $request->request->get("visibleReplaies");
@@ -178,7 +179,8 @@ class LiveCourseLessonManageController extends BaseController
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
             'lessonId'      => $lessonId,
-            'courseId'      => $courseId
+            'courseId'      => $courseId,
+            'lesson'        => $lesson
         ));
     }
 

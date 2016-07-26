@@ -1,4 +1,9 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set layout = 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+{% else %}
+  {% set layout = 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% endif %}
+{% extends layout %}
 
 {% block title %}{{'课程图片'|trans}} - {{ parent() }}{% endblock %}
 
@@ -24,10 +29,17 @@
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
-          <button class="btn btn-fat btn-primary"
+        {% if course.type == 'open' or course.type == 'liveOpen' %}
+         <button class="btn btn-fat btn-primary"
+          data-url="{{path('open_course_manage_picture_crop', {id: course.id})}}"
+          data-goto-url="{{path('open_course_manage_picture',{id: course.id})}}"
+          id="upload-picture-btn">{{'保存'|trans}}</button>
+        {% else %}
+         <button class="btn btn-fat btn-primary"
           data-url="{{path('course_manage_picture_crop', {id: course.id})}}"
           data-goto-url="{{path('course_manage_picture',{id: course.id})}}"
           id="upload-picture-btn">{{'保存'|trans}}</button>
+        {% endif %}
           <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
         </div>
       </div>

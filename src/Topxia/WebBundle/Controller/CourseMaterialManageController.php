@@ -14,7 +14,7 @@ class CourseMaterialManageController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         $materials = $this->getMaterialService()->searchMaterials(
-            array('lessonId' => $lesson['id'], 'source' => 'coursematerial'),
+            array('lessonId' => $lesson['id'], 'source' => 'coursematerial', 'type' => 'course'),
             array('createdTime', 'DESC'), 0, 100
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
@@ -40,6 +40,8 @@ class CourseMaterialManageController extends BaseController
 
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lessonId;
+            $fields['type']     = 'course';
+            $fields['source']   = 'coursematerial';
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
@@ -70,13 +72,33 @@ class CourseMaterialManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
+                'request'  => $request,
+                'courseId' => $courseId
+            ));
+    }
+
+    public function materialBrowserAction(Request $request, $courseId)
+    {
         $conditions = array();
         $type       = $request->query->get('type');
         if (!empty($type)) {
             $conditions['type'] = $type;
         }
 
-        $courseMaterials   = $this->getMaterialService()->findMaterialsGroupByFileId($course['id'], 0, PHP_INT_MAX);
+        $courseType = $request->query->get('courseType');
+        $courseType = empty($courseType) ? 'course' : $courseType;
+
+        $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+            array(
+                'courseId' => $courseId,
+                'type'     => $courseType
+            ),
+            array('createdTime','DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $paginator         = new Paginator(
             $request,
