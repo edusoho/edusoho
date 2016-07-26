@@ -13,8 +13,8 @@
             <div class = "col-md-3">
               <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}"  />
             </div>
-            <div class = "col-md-3" >
-              <a class="text-sm text-muted" href="{{path('settings_bind_mobile')}}" target="_blank">{{'修改手机号码'|trans}}</a>
+            <div class = "col-md-3 mts" >
+              <a class="text-sm text-muted modify_mobile" href="javascript:;">{{'修改手机号码'|trans}}</a>
             </div>
           {% else %}
             <div class = "col-md-3">
@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class = "form-group">
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
         <div class="controls row" >
           <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm" for="captcha_code">{{'图形验证码'|trans}} </label>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class = "form-group">
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
         <div class="controls row" >
           <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm" for='sms-code-modal'>{{'短信验证码'|trans}} </label>

@@ -49,27 +49,29 @@ define(function(require, exports, module) {
             }              
         });
 
-        smsValidator.addItem({
-            element: '[name="captcha_code"]',
-            required: true,
-            rule: 'alphanumeric remote',
-            onItemValidated: function(error, message, eleme) {
-                if (message == "验证码错误"){
-                    //$("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
-                    $('.js-sms-send').addClass('disabled');
-                } else {
-                    canSmsSend();
-                }
-            }                
-        });
-		
-        smsValidator.addItem({
-            element: '[name="sms_code_modal"]',
-            required: true,
-            triggerType: 'submit',
-            rule: 'integer fixedLength{len:6} remote',
-            display: '短信验证码'           
-        });
+        if ($('input[name="mobile"]').attr('readonly') == true) {
+            smsValidator.addItem({
+                element: '[name="captcha_code"]',
+                required: true,
+                rule: 'alphanumeric remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (message == "验证码错误"){
+                        //$("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+                        $('.js-sms-send').addClass('disabled');
+                    } else {
+                        canSmsSend();
+                    }
+                }                
+            });
+    		
+            smsValidator.addItem({
+                element: '[name="sms_code_modal"]',
+                required: true,
+                triggerType: 'submit',
+                rule: 'integer fixedLength{len:6} remote',
+                display: '短信验证码'           
+            });
+        }
 
 	    $('.js-confirm').click(function(e){
 	    	smsValidator.execute(function(error, results, element) {
@@ -109,6 +111,34 @@ define(function(require, exports, module) {
                 smsType:'system_remind'
             });
         }
+
+        $('.modify_mobile').click(function(){
+            $(this).hide();
+            $('input[name="mobile"]').attr('readonly',false);
+            $('.form-group').show();
+
+            smsValidator.addItem({
+                element: '[name="captcha_code"]',
+                required: true,
+                rule: 'alphanumeric remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (message == "验证码错误"){
+                        //$("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+                        $('.js-sms-send').addClass('disabled');
+                    } else {
+                        canSmsSend();
+                    }
+                }                
+            });
+            
+            smsValidator.addItem({
+                element: '[name="sms_code_modal"]',
+                required: true,
+                triggerType: 'submit',
+                rule: 'integer fixedLength{len:6} remote',
+                display: '短信验证码'           
+            });
+        })
 	}
 
 });
