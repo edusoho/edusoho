@@ -13,7 +13,7 @@
         {{ web_macro.user_avatar(teacher, '', 'avatar-lg') }}
         <h4 class="mtl">{{ web_macro.user_link(teacher, '', false) }}</h4>
         <p class="color-gray">{{ teacher.title }}</p>
-        <div class="intro" title="{{ userProfile.about|default(null)|raw }}">
+        <div class="intro">
           {{ userProfile.about|default(null)|raw|plain_text(55) }}
         </div>
       {% endif %}
