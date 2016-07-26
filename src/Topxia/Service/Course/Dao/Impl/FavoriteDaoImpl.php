@@ -43,11 +43,13 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course favorite error.');
         }
+        $this->clearCached();
         return $this->getFavorite($this->getConnection()->lastInsertId());
     }
 
     public function deleteFavorite($id)
     {
+        $this->clearCached();
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 

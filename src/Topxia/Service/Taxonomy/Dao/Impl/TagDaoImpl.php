@@ -22,18 +22,20 @@ class TagDaoImpl extends BaseDao implements TagDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert tag error.');
         }
-
+        $this->clearCached();
         return $this->getTag($this->getConnection()->lastInsertId());
     }
 
     public function updateTag($id, array $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getTag($id);
     }
 
     public function deleteTag($id)
     {
+        $this->clearCached();
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
