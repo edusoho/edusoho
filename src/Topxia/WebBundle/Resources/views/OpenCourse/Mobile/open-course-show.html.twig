@@ -5,6 +5,10 @@
   {{ setting('site.name', 'EduSoho网校') }}
 {% endblock %}
 
+{% block img %}
+  <img width="0" height="0" src="{{ filepath(course.largePicture|default(''), 'course.png') }}" >
+{% endblock %}
+
 {% block full_content %}
   {% block top_content %}{% endblock %}
 
