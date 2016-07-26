@@ -134,20 +134,21 @@ class OpenCourseController extends BaseOpenCourseController
             $lesson = $this->_checkPublishedLessonExists($course['id']);
         }
 
-        $lesson     = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
-        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member     = $this->_getMember($request, $course['id']);
-
-        $lesson['replays'] = $this->_getLiveReplay($lesson);
+        $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
+        //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
+        $member = $this->_getMember($request, $course['id']);
+        if ($lesson) {
+            $lesson['replays'] = $this->_getLiveReplay($lesson);
+        }
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'member'     => $member,
-            'notifyNum'  => $notifyNum,
-            'nextLesson' => $nextLesson
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'member'    => $member,
+            'notifyNum' => $notifyNum
+            // 'nextLesson' => $nextLesson
         ));
     }
 
