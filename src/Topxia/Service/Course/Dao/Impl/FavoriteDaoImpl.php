@@ -18,7 +18,7 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type = 'course')
     {
         $self = $this;
-        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:type:{$type}", $userId, $courseId, $type, function ($userId, $courseId, $type) use ($self){
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:type:{$type}", $userId, $courseId, $type, function ($userId, $courseId, $type) use ($self) {
             $sql = "SELECT * FROM {$self->getTable()} WHERE userId = ? AND courseId = ? AND type = ? LIMIT 1";
             return $self->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ?: null;
         });
@@ -49,8 +49,9 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
 
     public function deleteFavorite($id)
     {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return $result;
     }
 
     public function searchCourseFavoriteCount($conditions)

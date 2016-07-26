@@ -35,8 +35,9 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function deleteTag($id)
     {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return $result;
     }
 
     public function findTagsByIds(array $ids)
@@ -45,13 +46,13 @@ class TagDaoImpl extends BaseDao implements TagDao
             return array();
         }
 
-        uasort($ids, function ($a, $b){
+        uasort($ids, function ($a, $b) {
             return $a < $b;
         });
 
         $self = $this;
 
-        return $this->fetchCached("ids:".implode('|', $ids), $ids, function ($ids) use ($self){
+        return $this->fetchCached("ids:".implode('|', $ids), $ids, function ($ids) use ($self) {
             $marks = str_repeat('?,', count($ids) - 1).'?';
             $sql   = "SELECT * FROM {$self->getTable()} WHERE id IN ({$marks});";
             return $self->getConnection()->fetchAll($sql, $ids);
