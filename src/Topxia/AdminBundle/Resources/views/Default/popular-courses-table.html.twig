@@ -14,8 +14,8 @@
 					<td>
 						<a href="{{ path('course_show', {id: sortedcourse.courseId}) }}" target="_blank">{{ sortedcourse.title }}</a>
 					</td>
-					<td>{{ sortedcourse['addedStudentNum'] }} 人 </td>
-					<td>{{ sortedcourse['studentNum'] }} 人</td>
+					<td>{{ sortedcourse['addedStudentNum'] }} {{ '人'|trans }} </td>
+					<td>{{ sortedcourse['studentNum'] }} {{ '人'|trans }}</td>
 					<td class="money-text">{{sortedcourse['addedMoney'] }} {{'元'|trans}} </td>
 				</tr>
 			{% endfor %}
