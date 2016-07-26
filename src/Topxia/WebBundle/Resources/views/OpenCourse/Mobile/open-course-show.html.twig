@@ -5,6 +5,14 @@
   {{ setting('site.name', 'EduSoho网校') }}
 {% endblock %}
 
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% block full_content %}
   {% block top_content %}{% endblock %}
 

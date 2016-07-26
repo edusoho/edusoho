@@ -149,7 +149,7 @@
       {% endif %}
 
       {# 公开课 #}
-      {% set openCourses = data('OpenCourses',{ count:5, orderType:'recommendedSeq' }) %}
+      {% set openCourses = data('OpenCourses',{ count:6, orderBy:'recommendedSeq' }) %}
       {% if openCourses %}
         <div class="panel panel-autumn panel-autumn-primary">
           <div class="panel-heading panel-heading-important">

@@ -169,10 +169,11 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $refererMap = $this->getRefererMap();
         //微信访问url
         if (strpos($refererlog['userAgent'], 'MicroMessenger') !== false) {
-            if (strpos($refererlog['refererUrl'], $host) !== false) {
+            if ($refererlog['refererUrl'] == null || strpos($refererlog['refererUrl'], $host) !== false) {
                 $refererlog['refererHost'] = 'mp.weixin.qq.com';
                 $refererlog['refererUrl']  = 'mp.weixin.qq.com';
                 $refererlog['refererName'] = $this->arrayFind($refererMap, $refererlog['refererHost']);
+                return $refererlog;
             }
         }
         //直接访问url
@@ -180,6 +181,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             $refererlog['refererUrl']  = $refererlog['uri'];
             $refererlog['refererHost'] = $host;
             $refererlog['refererName'] = '直接访问';
+            return $refererlog;
         }
 
         $patten = '/^(https|http)?(:\/\/)?([^\/]+)/';

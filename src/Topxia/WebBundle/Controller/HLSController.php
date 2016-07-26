@@ -91,8 +91,11 @@ class HLSController extends BaseController
         }
 
         return new Response($playlist['playlist'], 200, array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
+            'Access-Control-Allow-Origin'  => '*',
+            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS',
+            'Content-Type'                 => 'application/vnd.apple.mpegurl',
+            'Content-Disposition'          => 'inline; filename="playlist.m3u8"'
         ));
     }
 
@@ -188,9 +191,12 @@ class HLSController extends BaseController
         }
 
         return new Response($stream['stream'], 200, array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Length'      => strlen($stream['stream']),
-            'Content-Disposition' => 'inline; filename="stream.m3u8"'
+            'Content-Type'                 => 'application/vnd.apple.mpegurl',
+            'Content-Length'               => strlen($stream['stream']),
+            'Content-Disposition'          => 'inline; filename="stream.m3u8"',
+            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
+            'Access-Control-Allow-Origin'  => '*',
+            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
         ));
     }
 
@@ -236,13 +242,19 @@ class HLSController extends BaseController
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
             return new Response($stream['key'], 200, array(
-                'Content-Length' => strlen($stream['key'])
+                'Content-Length'               => strlen($stream['key']),
+                'Access-Control-Allow-Headers' => 'origin, content-type, accept',
+                'Access-Control-Allow-Origin'  => '*',
+                'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
             ));
         }
 
         $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
         return new Response($file['metas2'][$token['data']['level']]['hlsKey'], 200, array(
-            'Content-Length' => strlen($file['metas2'][$token['data']['level']]['hlsKey'])
+            'Content-Length'               => strlen($file['metas2'][$token['data']['level']]['hlsKey']),
+            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
+            'Access-Control-Allow-Origin'  => '*',
+            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
         ));
     }
 

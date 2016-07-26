@@ -13860,6 +13860,7 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
+  background: #000;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   padding: 10px;
@@ -13907,6 +13908,7 @@ textarea {
   width: 100%;
   height: 100%;
   z-index: 9999;
+  background: #000;
   background-color: rgba(0, 0, 0, 0.9);
 }
 .open-course-mask .mask-content {
@@ -13999,6 +14001,7 @@ textarea {
   bottom: 0;
   width: 100%;
   height: 100%;
+  background: #000;
   background-color: rgba(0, 0, 0, 0.9);
 }
 .open-course-views .mask .mask-content {

@@ -5,12 +5,12 @@ use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class LiveOpenCourseController extends BaseController
+class LiveOpenCourseController extends BaseOpenCourseController
 {
     public function entryAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
-
+        $course = $this->getOpenCourseService()->getCourse($courseId);
         $result = $this->getLiveCourseService()->checkLessonStatus($lesson);
 
         if (!$result['result']) {
@@ -21,12 +21,10 @@ class LiveOpenCourseController extends BaseController
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($lesson);
 
-        $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
-
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
-
+        $this->createRefererLog( $request, $course);
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
