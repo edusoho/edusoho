@@ -6,7 +6,6 @@ define(function (require, exports, module) {
         init: function () {
             main.onClickThumb();
             main.onClickfavorite();
-            main.onMouseoverQrcode();
             main.onClickHeader();
         },
         onClickThumb: function () {
@@ -48,16 +47,6 @@ define(function (require, exports, module) {
                 $.post(url, function () {
                     self.parent().next().html(text);
                     self.parent()[action]('active');
-                })
-            })
-        },
-        onMouseoverQrcode: function () {
-            $('.js-qrcode').on('mouseover', function () {
-                var $self = $(this);
-                var qrcodeUrl = $(this).data('url');
-
-                $.post(qrcodeUrl, function (response) {
-                    $self.find('img').attr('src', response.img);
                 })
             })
         },

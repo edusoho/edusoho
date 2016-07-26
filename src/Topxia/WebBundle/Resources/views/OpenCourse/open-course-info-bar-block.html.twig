@@ -42,7 +42,8 @@
         <a class="js-qrcode qrcode-popover top" data-url="{{ path('open_course_qrcode',{id: course.id}) }}"> <i
               class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
-            <img src="" alt="">
+
+            <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
           </div>
         </a>
       </div>
