@@ -13850,6 +13850,8 @@ textarea {
 @media (max-width: 767px) {
   .es-open-course-list .course-item .title {
     margin-top: 5px;
+    width: 100%;
+    display: block;
   }
 }
 .es-open-course-list .course-item .course-img .img-responsive {
@@ -13878,6 +13880,7 @@ textarea {
   .es-open-course-list .course-item .metas {
     padding: 10px 15px;
     font-size: 12px;
+    width: 100%;
   }
 }
 .open-course-title {
