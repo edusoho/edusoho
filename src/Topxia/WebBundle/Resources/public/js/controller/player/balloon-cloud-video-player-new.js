@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             url: '',
             fingerprint: '',
             watermark: '',
-            timelimit: 10,
+            timelimit: '',
             remeberLastPos: true,
             disableControlBar: false,
             disableProgressBar: false,
