@@ -30,8 +30,11 @@
 	          {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
 	          {% include 'TopxiaWebBundle:Course:Widget/my-course-grid.html.twig' %}
 	        {% elseif courseFavorite.type == 'openCourse' %}
-	          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId}) %}
-	          {% include 'TopxiaWebBundle:OpenCourse/Widget:my-open-course-grid.html.twig' %}
+	          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
+						{% if course %}
+							{% include 'TopxiaWebBundle:OpenCourse/Widget:my-open-course-grid.html.twig' %}
+						{% endif %}
+	          
 	        {% endif %}
 			  {% else %}
 			    <div class="empty">{{'暂无已收藏的课程'|trans}}</div>

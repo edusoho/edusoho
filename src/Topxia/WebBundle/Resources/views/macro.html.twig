@@ -98,16 +98,3 @@
     {% endfor %}
   {% endif %}
 {% endmacro %}
-
-{% macro ajaxCoursePaginator(paginator) %}
-  {% if paginator.lastPage > 1 %}
-    {% if paginator.currentPage == paginator.lastPage %}
-    {% else %}
-      <div class="section-more-btn">
-        <a class="btn btn-default btn-lg" href="javascript:;"  data-url="{{ paginator.getPageUrl(paginator.nextPage) }}">
-          查看更多({{paginator.itemCount - paginator.perPageCount * paginator.currentPage}}) <i class="mrs-o es-icon es-icon-chevronright"></i>
-        </a>
-      </div>
-    {% endif %}
-  {% endif %}
-{% endmacro %}
