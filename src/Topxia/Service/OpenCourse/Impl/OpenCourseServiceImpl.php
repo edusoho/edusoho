@@ -447,7 +447,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testStartTime' => 0,
             'suggestHours'  => '1.0',
             'replayStatus'  => 'ungenerated',
-            'status'        => 'unpublished'
+            'status'        => 'unpublished',
+            'materialNum'   => 0
         ));
 
         if (isset($fields['title'])) {

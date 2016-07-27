@@ -14,6 +14,7 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             'open.course.lesson.delete' => 'onLessonDelete',
             'open.course.member.create' => 'onMemberCreate',
             'course.material.create'    => 'onMaterialCreate',
+            'course.material.update'    => 'onMaterialUpdate',
             'course.material.delete'    => 'onMaterialDelete'
         );
     }
@@ -59,14 +60,19 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialUpdate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $material  = $context['material'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $material = $context['material'];
 
         $lesson = $this->getOpenCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
-        if ($lesson && $material['lessonId'] && $material['source'] == 'opencoursematerial') {
-            $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
+        if ($material['source'] == 'opencoursematerial') {
+            if ($material['lessonId']) {
+                $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
+            } elseif ($material['lessonId'] == 0 && isset($argument['lessonId']) && $argument['lessonId']) {
+                $material['lessonId'] = $argument['lessonId'];
+                $this->_waveLessonMaterialNum($material);
+            }
         }
     }
 
@@ -80,11 +86,28 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
             if ($material['lessonId'] && $material['source'] == 'opencourselesson' && $material['type'] == 'openCourse') {
                 $this->getOpenCourseService()->resetLessonMediaId($material['lessonId']);
             }
-            
-            if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse'){
-               $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
+
+            if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
+                $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
             }
         }
+    }
+
+    private function _waveLessonMaterialNum($material)
+    {
+        if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
+            $count = $this->getMaterialService()->searchMaterialCount(array(
+                'courseId' => $material['courseId'],
+                'lessonId' => $material['lessonId'],
+                'source'   => 'opencoursematerial',
+                'type'     => 'openCourse'
+            )
+            );
+            $this->getOpenCourseService()->updateLesson($material['courseId'], $material['lessonId'], array('materialNum' => $count));
+            return true;
+        }
+
+        return false;
     }
 
     protected function getNoteService()
@@ -95,5 +118,10 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
     protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+    }
+
+    protected function getMaterialService()
+    {
+        return ServiceKernel::instance()->createService('Course.MaterialService');
     }
 }

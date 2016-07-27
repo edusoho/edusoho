@@ -61,6 +61,10 @@
     {% if lesson.status == 'unpublished' %}
       <span class="unpublish-warning text-warning">({{'未发布'|trans}})</span>
     {% endif %}
+
+    {% if lesson.materialNum > 0 %}
+      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'资料'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
+    {% endif %}
   </div>
   
   <div class="item-actions">
