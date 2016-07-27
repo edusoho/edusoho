@@ -471,17 +471,22 @@ class OpenCourseController extends BaseOpenCourseController
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
-    public function mobileCheckAction(Request $request)
+    public function mobileCheckAction(Request $request, $courseId)
     {
         $user     = $this->getCurrentUser();
         $response = array('success' => true, 'message' => '');
+        $mobile   = $request->query->get('value', '');
+
+        $member = $this->getOpenCourseService()->getCourseMemberByMobile($courseId, $mobile);
+        if ($member && $member['isNotified']) {
+            return $this->createJsonResponse(array('success' => false, 'message' => '该手机号已报名'));
+        }
 
         if ($user->isLogin()) {
-            $mobile                 = $request->query->get('value');
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
             if ($result != 'success') {
-                $response = array('success' => false, 'message' => $message);
+                return $this->createJsonResponse(array('success' => false, 'message' => $message));
             }
         }
 
@@ -525,13 +530,14 @@ class OpenCourseController extends BaseOpenCourseController
 
     private function _getMember($courseId)
     {
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
+        $member = array();
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
-        } else {
-            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
-        }
+        } /* else {
+        $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
+        }*/
 
         return $member;
     }
@@ -670,6 +676,12 @@ class OpenCourseController extends BaseOpenCourseController
             $openCourseMember = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $userIp);
         } else {
             $openCourseMember = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
+            if (!empty($user['verifiedMobile'])) {
+                $member = $this->getOpenCourseService()->getCourseMemberByMobile($courseId, $user['verifiedMobile']);
+                if ($member) {
+                    $openCourseMember = $this->getOpenCourseService()->updateMember($member['id'], array('userId' => $user['id']));
+                }
+            }
         }
 
         if ($openCourseMember) {

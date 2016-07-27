@@ -151,7 +151,8 @@ class EduCloudController extends BaseController
         }
 
         $mobile = $request->query->get('mobile') ? $request->query->get('mobile') : '';
-        if ($mobile != '' && $mobile != $targetSession['to']) {
+
+        if ($mobile != '' && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
             return $this->createJsonResponse(array('success' => false, 'message' => '验证码和手机号码不匹配'));
         }
 

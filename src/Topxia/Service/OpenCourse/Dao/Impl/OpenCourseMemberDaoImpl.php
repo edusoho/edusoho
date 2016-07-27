@@ -44,6 +44,18 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         );
     }
 
+    public function getCourseMemberByMobile($courseId, $mobile)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:mobile:{$mobile}", $courseId, $mobile, function ($courseId, $mobile) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND mobile = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $mobile)) ?: null;
+        }
+
+        );
+    }
+
     public function findMembersByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
