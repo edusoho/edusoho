@@ -17,11 +17,12 @@ class DeveloperSettingController extends BaseController
         $default = array(
             'debug'                  => '0',
             'without_network'        => '0',
-            'app_api_url'            => '',
             'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'cloud_file_server'      => '',
             'cloud_api_tui_server'   => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
             'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
+            'app_api_url'            => '',
+            'cloud_sdk_cdn'          => '',
             'hls_encrypted'          => '1'
         );
 
