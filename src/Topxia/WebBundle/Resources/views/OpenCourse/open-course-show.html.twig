@@ -28,7 +28,7 @@
   <div class="open-course-header">
     <div class="row">
 
-      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{request: app.request,course:course, lessonId:lessonId|default(null)})) }}
+      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
 
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
