@@ -80,7 +80,7 @@ seajs.config({
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
         'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
-        'jweixin':'/web/assets/libs/edusoho/wxrs/1.0.0/jweixin-1.0.0'
+        'jweixin':'edusoho/wxrs/1.0.0/jweixin.js'
     },
 
     // 预加载项

@@ -1,3 +1,26 @@
- {% do load_script('common/weixin-share') %}
- {% set wxconfig = wx_js_sdk_config() %}
-  <input type="text" id="weixin-config" value ="{{wxconfig}}">
+{% set wxconfig = wx_js_sdk_config() %}
+{% if wxconfig|default(null) %}
+	{% do load_script('common/weixin-share') %}
+	{# 	
+		title: '', // 分享标题
+		desc: '', // 分享描述
+		link: '', // 分享链接
+		imgUrl: '', // 分享图标
+		type: 'link', // 分享类型,music、video或link，不填默认为link
+		dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空 
+	#}
+ 	{% if type == 'open-course' %}
+ 		<div class="hidden jweixin-data" 
+ 			data-config="{{wxconfig}}"
+	 		data-title="{{course.title}}" 
+	 		data-desc="{{course.about}}" 
+	 		data-link="{{app.request.uri}}" 
+	 		data-img-url="{{fileurl(course.largePicture)}}" 
+	 		data-type="" 
+	 		data-data-url="">
+ 		</div>
+ 	{% elseif type == 'course'%}
+ 	
+ 	{% endif %}
+{% endif %}
+ 	
