@@ -298,13 +298,13 @@
     </div>
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="enable_playback_rates">倍数播放</label>
+        <label for="enable_playback_rates">倍速播放</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('enable_playback_rates', {'1':'开启', '0':'关闭'}, storageSetting.enable_playback_rates) }}
         <div class="help-block">
-          开启后，云视频课时支持倍数播放；<br/>
-          <span style="color: red">注：暂不支持IE浏览器以及谷歌47版本及以下浏览器。</span>
+          开启后，云视频课时支持倍速播放；<br/>
+          <span style="color: red">注：仅支持高版本谷歌浏览器，火狐浏览器以及QQ浏览器（极速模式）。</span>
         </div>
       </div>
     </div>
