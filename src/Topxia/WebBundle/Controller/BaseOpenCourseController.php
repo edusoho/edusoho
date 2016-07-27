@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 16/7/26
- * Time: 09:21
- */
-
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,19 +7,22 @@ class BaseOpenCourseController extends BaseController
 {
     protected function createRefererLog(Request $request, $course)
     {
-        if(!empty($request->query->get('refererUrl'))){
-            $refererUrl = $request->query->get('refererUrl');
-        }else{
+        $uri        = $request->getUri();
+        $clientIp   = $request->getClientIp();
+        $userAgent  = $request->headers->get("user-agent");
+        $refererUrl = $request->query->get('refererUrl', '');
+        if (empty($refererUrl)) {
             $refererUrl = $request->server->get('HTTP_REFERER');
         }
+
         $fields = array(
             'targetId'        => $course['id'],
             'targetType'      => 'openCourse',
             'refererUrl'      => $refererUrl,
-            'uri'             => $request->getUri(),
+            'uri'             => $uri,
             'targetInnerType' => $course['type'],
-            'ip'              => $request->getClientIp(),
-            'userAgent'       => $request->headers->get("user-agent")
+            'ip'              => $clientIp,
+            'userAgent'       => $userAgent
         );
 
         $uv = $request->cookies->get('uv');
