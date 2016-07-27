@@ -36,9 +36,8 @@
           {% endif %}
 
           <input type="hidden" name="userType" value="{{ app.request.get('userType') }}"/>
-          <span>是否报名：</span>
           <select class="form-control" name="isNotified">
-            {{ select_options({0:'全部', 1: '是'}, app.request.get('isNotified')) }}
+            {{ select_options({0:'全部学员', 1: '报名学员'}, app.request.get('isNotified')) }}
           </select>&nbsp;&nbsp;
           <button class="btn btn-primary">{{ '搜索'|trans }}</button>
         </div>

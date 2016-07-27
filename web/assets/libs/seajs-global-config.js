@@ -72,14 +72,15 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'video-player-new': 'http://cdn.qiqiuyun.net/js-sdk/video-player/v1/sdk.js',
+        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/video-player/v1/sdk.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
-        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
+        'jweixin':'edusoho/wxrs/1.0.0/jweixin.js'
     },
 
     // 预加载项

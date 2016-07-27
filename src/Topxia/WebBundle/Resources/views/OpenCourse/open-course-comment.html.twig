@@ -12,7 +12,7 @@
     </form>
   {% else %}
     <div class="empty">
-      {{'你还没有登录，请先'|trans}}<a href="{{ path('login') }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register') }}">{{'注册'|trans}}</a>！
+      {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
     </div>
   {% endif %}
 
@@ -20,6 +20,7 @@
     {% for post in posts %}
       {% set author = users[post.userId] %}
       {% set postReplyUrl = path('open_course_post_reply', {id:course.id, postId:post.id, targetType:'openCourse'}) %}
+      {% set goto = goto|default(path('homepage')) %}
       {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
     {% else %}
       <li class="empty">{{'还没有人评论，欢迎说说您的想法！'|trans}}</li>
