@@ -35,5 +35,11 @@
   </div>
   {% endif %}
   {% block bottom_content %}{% endblock %}
+  {% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
+  'title': course.title,
+  'desc': course.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(course.largePicture,'course.png'),
+  }%}
 {% endblock %}
     
