@@ -46,7 +46,8 @@ class CourseMaterialManageController extends BaseController
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
             return $this->render('TopxiaWebBundle:CourseMaterialManage:list-item.html.twig', array(
-                'material' => $material
+                'material' => $material,
+                'course'   => $course
             ));
         }
 
@@ -73,9 +74,9 @@ class CourseMaterialManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
-                'request'  => $request,
-                'courseId' => $courseId
-            ));
+            'request'  => $request,
+            'courseId' => $courseId
+        ));
     }
 
     public function materialBrowserAction(Request $request, $courseId)
@@ -94,7 +95,7 @@ class CourseMaterialManageController extends BaseController
                 'courseId' => $courseId,
                 'type'     => $courseType
             ),
-            array('createdTime','DESC'),
+            array('createdTime', 'DESC'),
             0,
             PHP_INT_MAX
         );
