@@ -81,7 +81,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
             ");
-            $this->getConnection()->exec("ALTER TABLE `open_course` ADD INDEX `updatedTime` (`updatedTime`);");
+
+            if(!$this->isIndexExist('open_course', 'updatedTime', 'updatedTime')){
+                $this->getConnection()->exec("ALTER TABLE `open_course` ADD INDEX `updatedTime` (`updatedTime`);");
+            }
+
         }
 
         if (!$this->isTableExist('open_course_lesson')) {
@@ -128,7 +132,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             ");
-            $this->getConnection()->exec("ALTER TABLE `open_course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
+
+            if(!$this->isIndexExist('open_course_lesson', 'updatedTime', 'updatedTime')){
+                $this->getConnection()->exec("ALTER TABLE `open_course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
+            }
+
         }
 
         if (!$this->isTableExist('open_course_member')) {
