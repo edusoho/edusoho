@@ -84,7 +84,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="mobile"]',
                 required: true,
-                rule: 'phone',
+                rule: 'phone remote',
                 display: '手机号码',
                 onItemValidated: function(error, message, eleme) {
                     if (error) {
