@@ -10,6 +10,7 @@ class HLSController extends BaseController
     public function playlistAction(Request $request, $id, $token)
     {
         $line       = $request->query->get('line', null);
+        $format     = $request->query->get('format', "");
         $levelParam = $request->query->get('level', "");
 
         $token    = $this->getTokenService()->verifyToken('hls.playlist', $token);
@@ -79,6 +80,12 @@ class HLSController extends BaseController
             'audio' => $file['convertParams']['audioQuality']
         );
         $api = CloudAPIFactory::create('leaf');
+
+        //新版api需要返回json形式的m3u8
+        if (strtolower($format) == 'json') {
+            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
+        }
 
         $playlist = $api->get('/hls/playlist', array(
             'streams'   => $streams,
