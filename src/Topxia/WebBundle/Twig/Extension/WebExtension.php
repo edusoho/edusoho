@@ -139,11 +139,10 @@ class WebExtension extends \Twig_Extension
         }
 
         $config = array(
-            'debug'     => true,
             'appId'     => $key,
             'timestamp' => time(),
             'nonceStr'  => uniqid($prefix = "edusoho"),
-            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage')
+            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ')
         );
 
         $jsapi_ticket        = $jsApiTicket['data']['ticket'];
