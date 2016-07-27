@@ -312,7 +312,8 @@ class OpenCourseController extends BaseOpenCourseController
             'posts'     => $posts,
             'users'     => $users,
             'paginator' => $paginator,
-            'service'   => $this->getThreadService()
+            'service'   => $this->getThreadService(),
+            'goto'      => $this->generateUrl('open_course_show', array('courseId' => $course['id']))
         ));
     }
 
