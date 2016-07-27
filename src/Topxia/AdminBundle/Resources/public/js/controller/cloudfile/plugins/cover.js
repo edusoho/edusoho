@@ -57,18 +57,18 @@ define(function(require, exports, module) {
                     }, 3000);
                 } else {
                     $target.button('reset');
-                    Notify.danger('生成截图失败！');
+                    Notify.danger(Translator.trans('生成截图失败！'));
                 }
 
             }).fail(function() {
                 $target.button('reset');
-                Notify.danger('生成截图失败！');
+                Notify.danger(Translator.trans('生成截图失败！'));
             });
 
         },
         _successGeneratePic: function($btn, resp) {
             $btn.button('reset');
-            Notify.success('生成截图成功!');
+            Notify.success(Translator.trans('生成截图成功!'));
             var $coverTab = $btn.closest('#cover-tab');
             $coverTab.find('.js-cover-img').attr('src', resp.url);
             $coverTab.find('#thumbNo').val(resp.no);
@@ -109,14 +109,14 @@ define(function(require, exports, module) {
                     url: $target.attr('action'),
                     data: $target.serialize()
                 }).done(function() {
-                    Notify.success('保存成功！');
+                    Notify.success(Translator.trans('保存成功！'));
                 }).fail(function() {
-                    Notify.danger('保存失败！');
+                    Notify.danger(Translator.trans('保存失败！'));
                 }).always(function() {
                     $target.find('#save-btn').button('reset');
                 });
             } else {
-                Notify.success('保存成功！');
+                Notify.success(Translator.trans('保存成功！'));
                 $target.find('#save-btn').button('reset');
             }
 

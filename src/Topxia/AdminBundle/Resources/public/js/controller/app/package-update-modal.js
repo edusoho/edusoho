@@ -100,7 +100,7 @@ define(function(require, exports, module) {
                 progressBar.error(Translator.trans('%title%时，发生了未知错误。',{title:title}));
                 $(document).clearQueue('update_step_queue');
             } else {
-                progressBar.setProgress(endProgress, title + '完成');
+                progressBar.setProgress(endProgress, title + Translator.trans('完成'));
                 $(document).dequeue('update_step_queue');
             }
         });
