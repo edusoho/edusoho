@@ -683,6 +683,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->getCourseMemberByIp($courseId, $ip);
     }
 
+    public function getCourseMemberByMobile($courseId, $mobile)
+    {
+        return $this->getOpenCourseMemberDao()->getCourseMemberByMobile($courseId, $mobile);
+    }
+
     public function findMembersByCourseIds($courseIds)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIds($courseIds);
@@ -774,6 +779,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function updateMember($id, $member)
     {
         $member = ArrayToolkit::filter($member, array(
+            'userId'        => 0,
             'learnedNum'    => '',
             'learnTime'     => '',
             'role'          => '',

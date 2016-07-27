@@ -11,14 +11,14 @@
           </div>
           {% if app.user and app.user.verifiedMobile %}
             <div class = "col-md-3">
-              <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}" data-url="{{path('open_course_mobile_check')}}"  />
+              <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}"  />
             </div>
             <div class = "col-md-3 mts" >
               <a class="text-sm text-muted modify_mobile" href="javascript:;">{{'修改手机号码'|trans}}</a>
             </div>
           {% else %}
             <div class = "col-md-3">
-              <input id='mobile' type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check')}}" />
+              <input id='mobile' type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}" />
             </div>
           {% endif %}
            <div class="help-block"></div>
