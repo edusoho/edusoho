@@ -85,7 +85,7 @@ class PlayerController extends BaseController
 
             $tokenFields = array(
                 'data'     => array(
-                    'globalId' => $file['no'].$level
+                    'globalId' => $file['no'] . $level
                 ),
                 'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                 'duration' => 3600
@@ -127,7 +127,7 @@ class PlayerController extends BaseController
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
 
-        if ($dataId != ($globalId.$level)) {
+        if ($dataId != ($globalId . $level)) {
             throw $this->createNotFoundException();
         }
 
