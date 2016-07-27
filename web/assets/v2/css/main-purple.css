@@ -3364,7 +3364,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3384,7 +3384,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -8532,6 +8532,9 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.open-course-list-section .course-item .course-img .img-responsive {
+  padding: 0;
+}
 .dynamic-section-main .panel {
   height: 300px;
 }
@@ -10915,7 +10918,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -14264,9 +14267,6 @@ textarea {
   .open-starttime {
     font-size: 12px;
   }
-}
-.open-course-list {
-  background-color: #f5f8fa;
 }
 .open-course-list .course-block {
   padding: 20px;

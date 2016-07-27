@@ -18,6 +18,11 @@ class OrderRefererLogEventSubscriber implements EventSubscriberInterface
     public function onOrderCreated(ServiceEvent $event)
     {
         global $kernel;
+
+        if(empty($kernel)){
+            return false;
+        }
+
         $uv = $kernel->getContainer()->get('request')->cookies->get('uv');
 
         $token = $this->getRefererLogService()->getOrderRefererByUv($uv);

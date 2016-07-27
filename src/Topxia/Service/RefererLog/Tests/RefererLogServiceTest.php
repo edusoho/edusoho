@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course\Tests;
+namespace Topxia\Service\RefererLog\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
@@ -82,7 +82,6 @@ class RefererLogServiceTest extends BaseTestCase
 
         $refererlist = $this->getRefererLogService()->searchAnalysisSummaryList($conditions, 'targetId', 0, 2);
 
-        var_dump($refererlist);
         $this->assertEquals(2, count($refererlist));
     }
 
@@ -155,29 +154,32 @@ class RefererLogServiceTest extends BaseTestCase
 
     public function testFindRefererLogsGroupByTargetId()
     {
-        $refererlog1 = array(
+        $refererlog1       = array(
             'targetId'   => 1,
             'targetType' => 'course',
-            'refererUrl' => 'http://demo.edusoho.com/course/explore'
+            'refererUrl' => 'http://demo.edusoho.com/course/explore',
+            'userAgent'  => 'iOS10'
         );
         $createRefererLog1 = $this->getRefererLogService()->addRefererLog($refererlog1);
 
-        $refererlog2 = array(
+        $refererlog2       = array(
             'targetId'   => 1,
             'targetType' => 'openCourse',
-            'refererUrl' => 'http://demo.edusoho.com/open/course/explore'
+            'refererUrl' => 'http://demo.edusoho.com/open/course/explore',
+            'userAgent'  => 'iOS10'
         );
         $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
 
-        $refererlog3 = array(
+        $refererlog3       = array(
             'targetId'   => 1,
             'targetType' => 'openCourse',
-            'refererUrl' => 'http://demo.edusoho.com'
+            'refererUrl' => 'http://demo.edusoho.com',
+            'userAgent'  => 'iOS10'
         );
         $createRefererLog3 = $this->getRefererLogService()->addRefererLog($refererlog3);
 
         $startTime   = strtotime(date('Y-m-d', strtotime('-1 day', time())));
-        $endTime     = strtotime(date('Y-m-d', time()).' 23:59:59');
+        $endTime     = strtotime(date('Y-m-d', time()) . ' 23:59:59');
         $refererLogs = $this->getRefererLogService()->findRefererLogsGroupByTargetId('openCourse', array('hitNum', 'DESC'), $startTime, $endTime, 0, 10);
 
         $this->assertEquals(1, count($refererLogs));
