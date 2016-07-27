@@ -62,6 +62,7 @@
           </div>
         </div>
       {% else %}
+        {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
         <div class="mask">
         {% if lesson.startTime > ("now"|date("U")) %}
           <div class="mask-content">
@@ -95,14 +96,12 @@
         {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
           <div class="mask-content">
             <h2>{{'直播已经开始，直播将于'|trans}}<span class="phm">{{ lesson.endTime|date('m') }}{{ '月'|trans }}{{ lesson.endTime|date('d') }}{{ '日'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{'结束'|trans}}</h2>
-            {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
             <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id, refererUrl:refererUrl})}}" target="_blank">{{'进入直播教室'|trans}}</a>
             
           </div>
         {% else %}
           <div class="mask-content">
             <h2>{{'直播已经结束'|trans}}</h2>
-
             {% for replay in lesson.replays if replay %}
               <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
               {% else %}
