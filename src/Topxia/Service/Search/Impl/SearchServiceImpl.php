@@ -7,19 +7,19 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Search\Adapter\SearchAdapterFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-
 class SearchServiceImpl extends BaseService implements SearchService
 {
     public function cloudSearch($type, $conditions = array())
     {
-        $api    = CloudAPIFactory::create('leaf');
-        $result = $api->get('/search', $conditions);
+        $api        = CloudAPIFactory::create('leaf');
+        $conditions = $this->searchBase64Encode($conditions);
+        $result     = $api->get('/search', $conditions);
 
         if (empty($result['success'])) {
             throw new \RuntimeException("搜索失败，请稍候再试.", 1);
         }
 
-        if(empty($result['body']['datas'])){
+        if (empty($result['body']['datas'])) {
             return array(array(), 0);
         }
 
@@ -33,15 +33,14 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     public function refactorAllDocuments()
     {
-        $api    = CloudAPIFactory::create('root');
-        $conditions = array('categorys'=>'course,user,thread,article');
+        $api        = CloudAPIFactory::create('root');
+        $conditions = array('categorys' => 'course,user,thread,article');
         return $api->post('/search/refactor_documents', $conditions);
     }
 
     public function applySearchAccount($callbackRouteUrl)
     {
-
-        $siteUrl        = $this->getSiteUrl();
+        $siteUrl = $this->getSiteUrl();
 
         $api  = CloudAPIFactory::create('root');
         $urls = array(
@@ -54,7 +53,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         $urls = urlencode(json_encode($urls));
 
         $callbackUrl = $siteUrl.$callbackRouteUrl;
-        $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
+        $sign        = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
         $callbackUrl .= '?sign='.rawurlencode($sign);
 
         $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
@@ -68,21 +67,37 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function getSiteUrl()
     {
-        $siteSetting        = $this->getSettingService()->get('site');
-        $siteUrl            = $siteSetting['url'];
-        if(strpos($siteUrl, 'http://') !== 0){
-            $siteUrl ='http://'.$siteUrl;
+        $siteSetting = $this->getSettingService()->get('site');
+        $siteUrl     = $siteSetting['url'];
+        if (strpos($siteUrl, 'http://') !== 0) {
+            $siteUrl = 'http://'.$siteUrl;
         }
-        return  rtrim(rtrim($siteUrl), '/');
+        return rtrim(rtrim($siteUrl), '/');
     }
 
     protected function setCloudSearchWaiting()
     {
-        $searchSetting  = array(
-            'search_enabled' => 1, 
-            'status'         =>'waiting'
+        $searchSetting = array(
+            'search_enabled' => 1,
+            'status'         => 'waiting'
         );
         $this->getSettingService()->set('cloud_search', $searchSetting);
+    }
+
+    private function searchBase64Encode($conditions = array())
+    {
+        if (!empty($conditions['type'])) {
+            $conditions['type'] = base64_encode($conditions['type']);
+        }
+        if (!empty($conditions['words'])) {
+            $conditions['words'] = base64_encode($conditions['words']);
+        }
+        if (!empty($conditions['page'])) {
+            $conditions['page'] = base64_encode($conditions['page']);
+        }
+
+        $conditions['method'] = 'base64';
+        return $conditions;
     }
 
     protected function getSettingService()
