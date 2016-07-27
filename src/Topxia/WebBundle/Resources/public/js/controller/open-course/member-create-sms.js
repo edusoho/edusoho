@@ -6,6 +6,15 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        Validator.addRule('smsCodeCheck', function(options, commit) {
+            var mobile = $('input[name="mobile"]').val();
+            var element = options.element,
+                url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+            $.get(url, {value:element.val(),mobile:mobile}, function(response) {
+                commit(response.success, response.message);
+            }, 'json');
+        })
+
     	var $form = $('#js-sms-modal-form');
 
 		var smsValidator = new Validator({
@@ -105,7 +114,7 @@ define(function(require, exports, module) {
                 element: '[name="sms_code_modal"]',
                 required: true,
                 triggerType: 'submit',
-                rule: 'integer fixedLength{len:6} remote',
+                rule: 'integer fixedLength{len:6} smsCodeCheck',
                 display: '短信验证码'           
             });
         }
