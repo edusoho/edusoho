@@ -118,21 +118,6 @@
               <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
             {% endif %}
           </div>
-          {% if course.status == 'draft' %}
-            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-          {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
-          {% endif %}
-        {% endif %}
-
-        {% if mode == 'teach' %}
-          {% if course.status == 'published' %}
-            <span class="label label-success course-status">{{'已发布'|trans}}</span>
-          {% elseif course.status == 'draft' %}
-            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-          {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
-          {% endif %}
         {% endif %}
 
       </a>
