@@ -237,6 +237,34 @@ class EduSohoUpgrade extends AbstractUpdater
           ");
         }
 
+        if (!$this->isTableExist('order_referer')) {
+            $this->getConnection()->exec("DROP TABLE IF EXISTS `order_referer`;
+            CREATE TABLE `order_referer` (
+              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+              `uv` VARCHAR(64) NOT NULL ,
+              `data` text NOT NULL ,
+              `orderIds` text,
+              `expiredTime`  int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '过期时间',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';");
+        }
+
+        if(!$this->isIndexExist("order_referer", "uv", "order_referer_uv_expiredTime_index")){
+            $this->getConnection()->exec("CREATE INDEX order_referer_uv_expiredTime_index ON order_referer (uv, expiredTime);");
+        }
+        if(!$this->isIndexExist("open_course_member", "ip", "open_course_member_ip_courseId_index")){
+            $this->getConnection()->exec("CREATE INDEX open_course_member_ip_courseId_index ON open_course_member (ip, courseId);");
+        }
+        if(!$this->isIndexExist("open_course_recommend", "openCourseId", "open_course_recommend_openCourseId_index")){
+            $this->getConnection()->exec("CREATE INDEX open_course_recommend_openCourseId_index ON open_course_recommend (openCourseId);");
+        }
+        if(!$this->isIndexExist("block", "code", "block_code_orgId_index")){
+            $this->getConnection()->exec("CREATE INDEX block_code_orgId_index ON block (code, orgId);");
+        }
+        if(!$this->isIndexExist("course_favorite", "userId", "course_favorite_userId_courseId_type_index")){
+            $this->getConnection()->exec("CREATE INDEX course_favorite_userId_courseId_type_index ON course_favorite (userId, courseId, type);");
+        }
+
         $smsSetting                  = $this->getSettingService()->get('cloud_sms');
         $smsSetting['system_remind'] = 'on';
         $this->getSettingService()->set('cloud_sms', $smsSetting);
