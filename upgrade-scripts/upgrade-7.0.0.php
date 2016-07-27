@@ -207,23 +207,6 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
-        if (!$this->isTableExist('order_referer_log')) {
-            $this->getConnection()->exec("
-                CREATE TABLE `order_referer_log` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-                  `refererLogId` int(11) NOT NULL COMMENT '促成订单的访问日志ID',
-                  `orderId` int(10) unsigned  DEFAULT '0'  COMMENT '订单ID',
-                  `sourceTargetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '来源ID',
-                  `sourceTargetType` varchar(64) NOT NULL DEFAULT '' COMMENT '来源类型',
-                  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '订单的对象类型',
-                  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的对象ID',
-                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '订单支付时间',
-                  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单支付者',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单促成日志';
-            ");
-        }
-
         if (!$this->isTableExist('upgrade_notice')) {
             $this->getConnection()->exec("
               CREATE TABLE `upgrade_notice` (
@@ -238,7 +221,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isTableExist('order_referer')) {
-            $this->getConnection()->exec("DROP TABLE IF EXISTS `order_referer`;
+            $this->getConnection()->exec("
             CREATE TABLE `order_referer` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `uv` VARCHAR(64) NOT NULL ,
