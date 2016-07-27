@@ -178,7 +178,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
-
+        $this->createRefererLog($request, $course);
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
             'url'    => $this->generateUrl('live_open_course_live_replay_url', array(

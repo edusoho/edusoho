@@ -8,6 +8,7 @@ use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
 
@@ -111,8 +112,46 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
-            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
+            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
+            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig'))
         );
+    }
+
+    public function weixinConfig()
+    {
+        $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
+        if (!(bool) $weixinmob_enabled) {
+            return null;
+        }
+        $ApiTicket = ServiceKernel::instance()->createService('User.TokenService')->getTokenByType('jsapi.ticket');
+
+        $key    = $this->getSetting('login_bind.weixinmob_key');
+        $secret = $this->getSetting('login_bind.weixinmob_secret');
+
+        if (empty($jsapiTicket)) {
+            $config      = array('key' => $key, 'secret' => $secret);
+            $weixinshare = new WeixinShare($config);
+            $token       = $weixinshare->getJsapiTicket();
+
+            $jsapiTicket = ServiceKernel::instance()->createService('User.TokenService')->makeToken(
+                'jsapi.ticket',
+                array('data' => $token, 'duration' => $token['expires_in'])
+            );
+        }
+
+        $config = array(
+            'appId'     => $key,
+            'timestamp' => time(),
+            'nonceStr'  => uniqid($prefix = "edusoho"),
+            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage')
+        );
+
+        $jsapi_ticket        = $jsapiTicket['data']['ticket'];
+        $url                 = $this->container->get('request')->getUri();
+        $string              = "jsapi_ticket=".$jsapi_ticket."&noncestr=".$config['nonceStr']."&timestamp=".$config['timestamp']."&url=".$url;
+        $config['string']    = $string;
+        $config['signature'] = sha1($string);
+        return json_encode($config);
     }
 
     public function renderNotification($notification)
