@@ -148,8 +148,13 @@ class OpenCourseManageController extends BaseController
         }
 
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            $user                = $this->getUserService()->getUserByNickname($fields['keyword']);
-            $condition['userId'] = $user ? $user['id'] : -1;
+            $users = $this->getUserService()->searchUsers(
+                array('nickname' => $fields['keyword']),
+                array('createdTime', 'DESC'),
+                0, PHP_INT_MAX
+            );
+            $userIds              = ArrayToolkit::column($users, 'id');
+            $condition['userIds'] = $userIds ? $userIds : array(-1);
         }
 
         $paginator = new Paginator(
