@@ -2297,7 +2297,7 @@ open_course_lesson_player:
     defaults: { _controller: TopxiaWebBundle:OpenCourse:player }
 
 open_course_mobile_check:
-    pattern:  /open/course/mobile/check
+    pattern:  /open/course/{courseId}/mobile/check
     defaults: { _controller: TopxiaWebBundle:OpenCourse:mobileCheck }
 
 open_course_ad_modal_recommend_course:

@@ -81,6 +81,8 @@ interface OpenCourseService
 
     public function getCourseMemberByIp($courseId, $ip);
 
+    public function getCourseMemberByMobile($courseId, $mobile);
+
     public function findMembersByCourseIds($courseIds);
 
     public function searchMemberCount($conditions);
