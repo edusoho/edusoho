@@ -12,8 +12,7 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
-        $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-
+        // todo delete try catche
         try {
             $file = $this->getUploadFileService()->getFullFile($id);
 
@@ -21,28 +20,31 @@ class PlayerController extends BaseController
                 throw $this->createNotFoundException();
             }
 
+            $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+
             if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
                 if (!empty($file['convertParams']['hasVideoWatermark'])) {
                     $file['videoWatermarkEmbedded'] = 1;
                 }
 
                 $player = "balloon-cloud-video-player";
+
+                $api    = CloudAPIFactory::create("leaf");
+                $result = $api->get("/resources/{$file['globalId']}/player");
+
+                // 临时修复手机浏览器端视频不能播放的问题
+                if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                    $player                  = "local-video-player";
+                    $url                     = isset($result['mp4url']) ? $result['mp4url'] : '';
+                    $context['hideQuestion'] = 1; //手机浏览器不弹题
+                }
             } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
                 $player = "local-video-player";
             } elseif ($file["type"] == 'audio') {
                 $player = "audio-player";
             }
 
-            $url    = $this->getPlayUrl($id, $context);
-            $api    = CloudAPIFactory::create("leaf");
-            $result = $api->get("/resources/{$file['globalId']}/player");
-
-            // 临时修复手机浏览器端视频不能播放的问题
-            if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                $player                  = "local-video-player";
-                $url                     = isset($result['mp4url']) ? $result['mp4url'] : '';
-                $context['hideQuestion'] = 1; //手机浏览器不弹题
-            }
+            $url = $this->getPlayUrl($id, $context);
         } catch (\Exception $e) {
         }
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
