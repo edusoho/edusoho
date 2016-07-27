@@ -35,7 +35,7 @@ class WeixinShare
         );
     }
 
-    public function getJsapiTicket()
+    public function getJsApiTicket()
     {
         $token = $this->getAccessToken();
 
