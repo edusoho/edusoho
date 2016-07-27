@@ -96,7 +96,6 @@ define(function(require, exports, module) {
 
             var $tabcontent = $('.tab-content-img');
             $tabcontent.find('.tab-pane-img.active').removeClass('active');
-            console.log($target.data('target'));
             $tabcontent.find($target.data('target')).addClass('active');
 
         },

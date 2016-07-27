@@ -1,0 +1,85 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<style>
+.locked li a{
+  padding:10px 15px 10px 0px !important;
+}
+.locked li a>span{
+  display:inline-block;
+  width:35px;
+  padding:0px 10px;
+}
+</style>
+  {% include 'TopxiaWebBundle:OpenCourseManage:open-course-manage-header.html.twig' %}
+
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+      {% set side_nav = side_nav|default(null) %}
+      <div class="sidenav locked">
+        <ul class="list-group">
+          <li class="list-group-heading">{{'课程信息'|trans}}</li>
+          <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+            <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'基本信息'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+            <a href="{{ path('open_course_manage_picture', {id:course.id}) }}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程图片'|trans}}
+            </a>
+          </li>
+          {% if course.type == 'liveOpen' %}
+            <li class="list-group-item {% if side_nav == 'liveTimeSet' %}active{% endif %}">
+              <a href="{{ path('open_course_manage_live_time_set', {id:course.id}) }}">
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'直播时间设置'|trans}}
+              </a>
+            </li>
+            <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
+              <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'录播管理'|trans}}</a>
+            </li>
+          {% endif %}
+          {% if course.type == 'open' %}
+            <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
+              <a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课时管理'|trans}}
+              </a>
+            </li>
+            <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
+              <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'文件管理'|trans}}
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">{{'课程设置'|trans}}</li>
+          <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}">
+            <a href="{{ path('open_course_manage_marketing', {id:course.id}) }}">
+              <span></span>{{'推荐设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
+            <a href="{{ path('open_course_manage_teachers', {id:course.id}) }}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'教师设置'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
+            <a href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
+              <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% endif %}{{'管理'|trans}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

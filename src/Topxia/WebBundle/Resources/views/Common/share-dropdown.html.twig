@@ -26,6 +26,13 @@
   {% set url = url('group_thread_show', {id:group.id, threadId:thread.id}) %}
   {% set picture = '' %}
   {% set id = group.id%}
+{% elseif type == 'open_course' %}
+  {% set title = course.title %}
+  {% set summary = course.about|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|default('我正在学习{{course}}，收获巨大哦，一起来学习吧！'|trans)|simple_template({course: '《' ~ course.title ~ '》'}) %}
+  {% set url = url('open_course_show', {courseId:course.id}) %}
+  {% set picture = filepath(course.largePicture, 'course.png') %}
+  {% set id = course.id%}
 {% endif %}
 
 <div class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">

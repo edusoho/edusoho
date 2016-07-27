@@ -3,8 +3,6 @@ define(function(require, exports, module) {
     var Store = require('store');
     var Class = require('class');
     var Messenger = require('./messenger');
-    var swfobject = require('swfobject');
-    var Notify  = require('common/bootstrap-notify');
 
     exports.run = function() {
 
@@ -20,24 +18,22 @@ define(function(require, exports, module) {
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
+        var questionMarkers = videoHtml.data('questionMarkers');
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
-
-        var markers = [{'id':0,text:'',time:-1}];
+        var playerControlBar = videoHtml.data('playerControlBar');
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                if(!swfobject.hasFlashPlayerVersion('11')){
-                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器，以便正常播放视频。',5);
-                }
-                html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
+                html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
             }
         }else if(fileType == 'audio'){
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
@@ -61,7 +57,10 @@ define(function(require, exports, module) {
                 watermark: watermark,
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList,
-                timelimit:timelimit
+                timelimit: timelimit,
+                questions: questionMarkers,
+                enablePlaybackRates: enablePlaybackRates,
+                controlBar: playerControlBar
             }
         );
 
@@ -71,31 +70,46 @@ define(function(require, exports, module) {
             type: 'child'
         });
 
-        player.on("timechange", function(e){
-            if(parseInt(player.getCurrentTime()) != parseInt(player.getDuration())){
-                DurationStorage.set(userId, fileId, player.getCurrentTime());
-            }
+        //为了不把播放器对象暴露到其他js中，所以把设置操作message过来
+        messenger.on('setPlayerPause', function() {
+            player.pause();
         });
 
-        player.on("firstplay", function(){
- 
+        messenger.on('setPlayerPlay', function() {
+            player.play();
         });
         
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
-            var time = DurationStorage.get(userId, fileId);
-            if(time>0){
-                player.setCurrentTime(DurationStorage.get(userId, fileId));
+            if (playerType == 'local-video-player') { //@todo 云播放器和本地播放器要统一
+                var time = DurationStorage.get(userId, fileId);
+                if(time>0){
+                    player.setCurrentTime(DurationStorage.get(userId, fileId));
+                }
+                player.play();
             }
-            player.play();
-        });
-        player.on("onMarkerReached",function(markerId,questionId){
-            // $('.vjs-break-overlay-text').html("");
-            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
         });
 
-        player.on("timechange", function(){
-            messenger.sendToParent("timechange", {pause: true});
+        player.on('answered', function(data) {
+            // @todo delete lessonId
+            var finishUrl = '/course/lesson/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
+            $.post(finishUrl, {
+                "answer": data.answer,
+                "type": data.type,
+                "lessonId": lessonId
+            }, function(result) {
+
+            }, 'json');
+
+        });
+
+        player.on("timechange", function(data){
+            messenger.sendToParent("timechange", {pause: true, currentTime: data.currentTime});
+            if (playerType == 'local-video-player'){
+                if(parseInt(player.getCurrentTime()) != parseInt(player.getDuration())){
+                    DurationStorage.set(userId, fileId, player.getCurrentTime());
+                }
+            }
         });
 
         player.on("paused", function(){
@@ -108,7 +122,9 @@ define(function(require, exports, module) {
 
         player.on("ended", function(){
             messenger.sendToParent("ended", {stop: true});
-            DurationStorage.del(userId, fileId);
+            if (playerType == 'local-video-player') {
+                DurationStorage.del(userId, fileId);
+            }
         });
 
     };

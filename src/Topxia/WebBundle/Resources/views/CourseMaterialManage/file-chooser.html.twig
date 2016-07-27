@@ -180,6 +180,7 @@
 
 {% set showCourseMaterialPane = showCourseMaterialPane|default(1) %}
 {% set showLinkPane = showLinkPane|default(1) %}
+{% set courseType = courseType|default('course') %}
 
 <div class="file-chooser">
   <div class="file-chooser-bar" style="display:none;">
@@ -200,7 +201,7 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="file-chooser-upload-pane">
-        {% set token = uploader_token('coursematerial', course.id, 'private') %}
+        {% set token = uploader_token(targetType, course.id, 'private') %}
         <div class="balloon-uploader" id="batch-uploader"
           data-init-url="{{ path('uploader_init', {token:token}) }}"
           data-finish-url="{{ path('uploader_finished', {token:token}) }}"
@@ -238,9 +239,14 @@
         </div>
       </div>
 
+      {% if course.type in ['open','liveOpen'] %}
+        {% set materialBrowserUrl = path('open_course_manage_material_browser', {courseId:targetId,courseType:courseType}) %}
+      {% else %}
+        {% set materialBrowserUrl = path('course_manage_material_browser', {courseId:targetId,courseType:courseType}) %}
+      {% endif %}
       <div class="tab-pane" id="file-chooser-course-pane">
           <div id="file-browser" data-role="course-file-browser"
-            data-url="{{ path('course_manage_material_browser', {courseId:targetId}) }}"
+            data-url="{{ materialBrowserUrl }}"
             data-empty="{{'暂无文件，请先上传。'|trans}}">
           </div>
       </div>

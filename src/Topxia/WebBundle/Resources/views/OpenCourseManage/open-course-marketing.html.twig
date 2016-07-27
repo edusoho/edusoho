@@ -1,0 +1,188 @@
+{% extends 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+
+{% set script_controller = 'open-course-manage/recommend-course' %}
+
+{% block title %}{{'推荐设置'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'marketing' %}
+
+
+{% block main %}
+
+<style>
+
+.course-grid {
+    display: inline-block;
+    vertical-align: top;
+    margin: 15px 15px 15px 0;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+.course-grid .add-course {
+    font-size: 80px;
+    height: 148px;
+    text-align: center;
+    padding-top: 30px;
+}
+.sort{
+    padding-top: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.price{
+  color: #e57259;
+  font-size: 16px;
+}
+</style>
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'推荐设置'|trans}}
+    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">添加课程</button>
+  </div>
+
+  <div class="panel-body">
+    <form class="form-horizontal" id="recommend-course-form" method="post" action="{{ path('open_course_manage_marketing',{id:course.id}) }}">
+      {% set openCourse = course %}
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group" id="courses-form-group">
+        <div class="col-md-12 controls">
+          <ul class="course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
+
+            {% for recommendId,course in courses %}
+
+              {% if course.type == 'normal' or course.type == 'live' %}
+                {% set showUrl = path('course_show',{id:course.id}) %}
+              {% else %}
+                {% set showUrl = path('open_course_show',{courseId:course.id}) %}
+              {% endif %}
+
+              <li class="course-item item-{{course.id}} clearfix" data-role="item" >
+                <input type="hidden" name="recommendIds[]" value="{{ recommendId }}" />
+                
+                <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
+                <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
+                  <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+                </a>
+
+                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{course.id}}">× </button>
+
+                <div class="course-body">
+                  <div style="float:right;" class="text-muted mrm mls">
+                    {% if course.type == 'normal' or course.type == 'live' %}
+                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                        <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.coinPrice }}">
+                          {% if course.coinPrice > 0 %}
+                            {{ course.coinPrice }}{{setting('coin.coin_name')}}
+                          {% else %}
+                            免费
+                          {% endif %}
+                        </span>
+
+                      {% else %}
+                        <span class="course-price course-price-{{course.id}}" data-price="{{ course.price }}">
+                          {% if course.price > 0 %}
+                            {{ course.price }} 元
+                          {% else %}
+                            免费
+                          {% endif %}
+                        </span>
+                      {% endif %}
+                    {% endif %}    
+                  </div>
+
+                  <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ course.title }}</a>
+                  {% if course.type == 'normal' or course.type == 'live' %}
+                    {% if course.serializeMode=='serialize' %}
+                      <span class="label label-success ">更新中</span>
+                    {% elseif course.serializeMode=='finished' %}
+                      <span class="label label-warning ">已完结</span>
+                    {% endif %}
+                  {% endif %}
+
+                  {% if course.type == 'live' %}
+                    {% set lesson = course['lesson']|default(null) %}
+                    {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                      <span class="label label-warning">正在直播中</span>
+                    {% else %}
+                      <span class="label label-success">直播</span>
+                    {% endif %}
+                  {% endif %}
+                  </h4>
+
+                  {% if course.type == 'live' %}
+                    {% set lesson = course.lesson|default(null) %}
+                    {% if lesson %}
+                      <div class="live-course-lesson mbm">
+                        <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                        <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+                      </div>
+                    {% endif %}
+                  {% else %}
+                    <div class="course-about ellipsis">{{ course.subtitle }}</div>
+                  {% endif %}
+
+                  <div class="course-footer clearfix">
+                    {% set teacher = users[course.teacherIds|first]|default(null) %}
+                    {% if teacher %}
+                      <div class="teacher">
+                        <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+                        <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                        <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+                      </div>
+                    {% endif %}
+
+                    <div class="course-metas">  
+
+                      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+                        <span class="text-muted text-sm">{{ course.studentNum }}{{setting('default.user_name', '学员')}}</span>
+                        <span class="divider"></span>
+                      {% endif %}  
+
+                        <span class="text-muted text-sm">
+                            {{course.lessonNum}}个课时
+                        </span>
+                         {% if course.type == 'normal' or course.type == 'live' %}
+                        <span class="divider"></span>
+                       
+                        <span class="text-muted text-sm">
+                          有效期:
+                          {% if course.expiryDay %}
+                            {{course.expiryDay}}天
+                          {% else %}
+                            永久
+                          {% endif %}
+                        </span>
+                      {% endif %}
+                    </div>
+
+                  </div>
+
+                </div>
+              </li>
+
+            {% endfor %}
+
+          </ul>
+        </div>  
+      </div>
+
+      {% if courses %}
+        <div class="form-group">
+          <div class="col-md-offset-9 col-md-3 controls">
+            <button type="submit" class="btn btn-fat btn-primary pull-right">保存修改</button>
+          </div>  
+        </div>
+      {% else %}
+        <div class="empty">赶紧添加课程吧！</div>
+      {% endif %}
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
