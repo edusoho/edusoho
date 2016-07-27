@@ -123,11 +123,10 @@ class WebExtension extends \Twig_Extension
         if (!(bool) $weixinmob_enabled) {
             return null;
         }
-        $ApiTicket = ServiceKernel::instance()->createService('User.TokenService')->getTokenByType('jsapi.ticket');
+        $jsapiTicket = ServiceKernel::instance()->createService('User.TokenService')->getTokenByType('jsapi.ticket');
 
         $key    = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
-
         if (empty($jsapiTicket)) {
             $config      = array('key' => $key, 'secret' => $secret);
             $weixinshare = new WeixinShare($config);
