@@ -177,7 +177,7 @@ define(function(require, exports, module) {
 
             var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
             console.log(matched);
-            if (matched && matched[1] <= 47) {
+            if (matched && matched[1] < 47) {
                 return false;
             }
 
