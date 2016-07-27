@@ -7,7 +7,7 @@ admin_inspect:
     defaults: { _controller: TopxiaAdminBundle:Default:inspect }
 
 admin_notice_modal:
-    pattern:  /modal/notice
+    pattern:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
 
 admin_popular_courses:
@@ -363,6 +363,7 @@ admin_course_delete:
 admin_open_course_delete:
     pattern: /open/course/{courseId}/delete/{type}
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete, type:'' }
+    methods: [POST]
 
 admin_check_password:
     pattern:  /check/password

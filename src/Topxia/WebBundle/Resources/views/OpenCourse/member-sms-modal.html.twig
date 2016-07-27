@@ -11,21 +11,21 @@
           </div>
           {% if app.user and app.user.verifiedMobile %}
             <div class = "col-md-3">
-              <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}"  />
+              <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}"  />
             </div>
-            <div class = "col-md-3" >
-              <a class="text-sm text-muted" href="{{path('settings_bind_mobile')}}" target="_blank">{{'修改手机号码'|trans}}</a>
+            <div class = "col-md-3 mts" >
+              <a class="text-sm text-muted modify_mobile" href="javascript:;">{{'修改手机号码'|trans}}</a>
             </div>
           {% else %}
             <div class = "col-md-3">
-              <input id='mobile' type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check')}}" />
+              <input id='mobile' type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}" />
             </div>
           {% endif %}
            <div class="help-block"></div>
         </div>
       </div>
 
-      <div class = "form-group">
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
         <div class="controls row" >
           <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm" for="captcha_code">{{'图形验证码'|trans}} </label>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class = "form-group">
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
         <div class="controls row" >
           <div class = "col-md-2 col-md-offset-2" >
             <label class="control-label mtm" for='sms-code-modal'>{{'短信验证码'|trans}} </label>
@@ -50,10 +50,10 @@
             <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal"  required="required" placeholder="{{'输入短信验证码'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'system_remind'})}}">
           </div>
           <div class="open-course-form-btn">
-            <span class="btn btn-default btn-md js-sms-send disabled" data-url="{{ path('edu_cloud_sms_send') }}">
+            <button type="button" class="btn btn-default btn-md js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}" disabled>
               <span id="js-time-left"></span>
               <span id="js-fetch-btn-text">{{'获取短信验证码'|trans}}{# 秒后重新获取 #}</span>
-           </span>
+           </button>
           </div>
           <div class="help-block mtm"></div>
         </div>

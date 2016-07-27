@@ -18,10 +18,6 @@
   {% endif %}
 {% endblock %}
 
-{% block img %}
-  <img width="0" height="0" src="{{ filepath(course.largePicture|default(''), 'course.png') }}" >
-{% endblock %}
-
 {% block content %}
   <ol class="breadcrumb open-course-breadcrumb">
     <li><a href="{{ path('homepage') }}">首页</a></li>

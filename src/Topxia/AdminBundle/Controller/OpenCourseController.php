@@ -195,7 +195,7 @@ class OpenCourseController extends BaseController
             ));
         }
 
-        if ($target == 'normal_index' || $target == 'open_index') {
+        if ($target == 'open_index') {
             return $this->renderOpenCourseTr($id, $request);
         }
     }

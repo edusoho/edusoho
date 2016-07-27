@@ -10,9 +10,11 @@ class HLSController extends BaseController
     public function playlistAction(Request $request, $id, $token)
     {
         $line       = $request->query->get('line', null);
+        $format     = $request->query->get('format', "");
         $levelParam = $request->query->get('level', "");
-        $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $clientIp   = $request->getClientIp();
+
+        $token    = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $clientIp = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -30,8 +32,9 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $streams = array();
-
+        $streams        = array();
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
@@ -42,7 +45,7 @@ class HLSController extends BaseController
                     'data'     => array(
                         'id' => $file['id'].$level
                     ),
-                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'times'    => ($inWhiteList || $enablePlayRate) ? 0 : 1,
                     'duration' => 3600
                 );
 
@@ -52,10 +55,6 @@ class HLSController extends BaseController
 
                 if (isset($token['data']['watchTimeLimit'])) {
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
-                }
-
-                if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -81,6 +80,12 @@ class HLSController extends BaseController
             'audio' => $file['convertParams']['audioQuality']
         );
         $api = CloudAPIFactory::create('leaf');
+
+        //新版api需要返回json形式的m3u8
+        if (strtolower($format) == 'json') {
+            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
+        }
 
         $playlist = $api->get('/hls/playlist', array(
             'streams'   => $streams,
@@ -114,9 +119,8 @@ class HLSController extends BaseController
 
     public function streamAction(Request $request, $id, $level, $token)
     {
-        $token       = $this->getTokenService()->verifyToken('hls.stream', $token);
-        $streamToken = $token;
-        $clientIp    = $request->getClientIp();
+        $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $clientIp = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -147,16 +151,16 @@ class HLSController extends BaseController
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-
-        $keyencryption = $inWhiteList ? 0 : 1;
-        $tokenFields   = array(
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
+        $keyencryption  = ($inWhiteList || $enablePlayRate) ? 0 : 1;
+        $tokenFields    = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
                 'keyencryption' => $keyencryption
             ),
-            'times'    => $inWhiteList ? 0 : 1,
+            'times'    => ($inWhiteList || $enablePlayRate) ? 0 : 1,
             'duration' => 3600
         );
 
@@ -168,8 +172,7 @@ class HLSController extends BaseController
 
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        $isHiddenVideoHeader = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
-        if (!$inWhiteList && !$isHiddenVideoHeader && $this->haveHeadLeader()) {
+        if (!$inWhiteList && $this->haveHeadLeader()) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
                 'keyencryption' => $keyencryption
@@ -206,14 +209,15 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
+        $token          = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        if (!$inWhiteList && !empty($token['userId'])) {
+        if (!$inWhiteList && !empty($token['userId']) && !$enablePlayRate) {
             if (!($this->getCurrentUser()->isLogin()
                 && $this->getCurrentUser()->getId() == $token['userId'])) {
                 return $this->makeFakeTokenString();

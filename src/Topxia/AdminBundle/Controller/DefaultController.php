@@ -94,11 +94,9 @@ class DefaultController extends BaseController
 
     public function noticeAction(Request $request)
     {
-        $api       = CloudAPIFactory::create('root');
-        $cloudInfo = $api->get('/me');
-
         //高级去版权用户不显示提醒
-        if ($cloudInfo && $cloudInfo['copyright'] == 1 && $cloudInfo['thirdCopyright'] == 1) {
+        $copyright = $this->setting('copyright', array());
+        if (!empty($copyright) && $copyright['owned'] == 1 && $copyright['thirdCopyright'] == 1) {
             return $this->createJsonResponse(array('result' => false));
         }
 
