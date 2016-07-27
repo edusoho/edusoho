@@ -49,7 +49,7 @@
   app.uploadUrl = '{{path("file_upload")}}';
   app.imgCropUrl = '{{path("file_img_crop")}}';
   app.lessonCopyEnabled = '{{setting("course.copy_enabled","0")}}';
-
+  app.cloudSdkCdn = '{{ setting("developer.cloud_sdk_cdn") }}';
   app.mainScript = '{{ script_main }}';
 </script>
 {% if setting('cdn.enabled') %} {% set cdnUrl = setting('cdn.url') %} {% else %} {% set cdnUrl = '' %} {% endif %}
