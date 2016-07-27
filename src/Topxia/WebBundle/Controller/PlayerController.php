@@ -12,6 +12,8 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+
         try {
             $file = $this->getUploadFileService()->getFullFile($id);
 
@@ -36,7 +38,6 @@ class PlayerController extends BaseController
             $result = $api->get("/resources/{$file['globalId']}/player");
 
             // 临时修复手机浏览器端视频不能播放的问题
-            $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                 $player                  = "local-video-player";
                 $url                     = isset($result['mp4url']) ? $result['mp4url'] : '';

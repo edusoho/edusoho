@@ -170,16 +170,23 @@ define(function(require, exports, module) {
         },
 
         isBrowserSupportPlaybackRates: function() {
+            var nUserAgent = navigator.userAgent.toLowerCase();
             // IE不支持，低版本(47以下)的chrome不支持
-            console.log(navigator.userAgent);
-            if (navigator.userAgent.toLowerCase().indexOf('msie')>0) {
+            console.log(nUserAgent);
+            var isIE = nUserAgent.indexOf('msie') > 0;
+            var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
+            var isSafari = nUserAgent.indexOf('safari') > 0 && !isChrome;
+            var isChrome = nUserAgent.indexOf('chrome') > 0;
+
+            if (isIE11 || isIE || isSafari) {
                 return false;
             }
 
-            var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
-            console.log(matched);
-            if (matched && matched[1] < 47) {
-                return false;
+            if (isChrome) {
+                var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
+                if (matched && matched[1] < 47) {
+                    return false;
+                }
             }
 
             return true;
