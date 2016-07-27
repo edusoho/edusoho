@@ -13,7 +13,7 @@
  		<div class="hidden jweixin-data" 
  			data-config="{{wxconfig}}"
 	 		data-title="{{course.title}}" 
-	 		data-desc="{{course.about}}" 
+	 		data-desc='{{course.about|striptags|purify_and_trim_html}}'
 	 		data-link="{{app.request.uri}}" 
 	 		data-img-url="{{fileurl(course.largePicture)}}" 
 	 		data-type="" 
