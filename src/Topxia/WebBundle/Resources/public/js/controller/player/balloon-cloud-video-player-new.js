@@ -171,6 +171,7 @@ define(function(require, exports, module) {
 
         isBrowserSupportPlaybackRates: function() {
             // IE不支持，低版本(47以下)的chrome不支持
+            console.log(navigator.userAgent);
             if (navigator.userAgent.toLowerCase().indexOf('msie')>0) {
                 return false;
             }
