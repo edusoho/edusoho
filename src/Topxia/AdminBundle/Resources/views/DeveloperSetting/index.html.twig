@@ -56,7 +56,7 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>Event API地址</label>
+      <label>Event API{{ '地址'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
       <input class="form-control" type="text" name="cloud_api_event_server" value="{{ developerSetting.cloud_api_event_server|default('') }}">
@@ -65,7 +65,7 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>HLS加密视频</label>
+      <label>{{ 'HLS加密视频'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('hls_encrypted', {1:'开启'|trans, 0:'关闭'|trans}, developerSetting.hls_encrypted) }}

@@ -28,9 +28,9 @@
     	</div>
 			<div class="col-md-7 controls radios">
         <input type="radio" id="course" name="type" checked="checked" value="course">
-        <label for="course">普通课程</label>
+        <label for="course">{{ '普通课程'|trans }}</label>
         <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live">
-        <label for="live">直播课程</label>
+        <label for="live">{{ '直播课程'|trans }}</label>
         <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
         <label for="classroom">{{'班级'|trans}}</label>
     	</div>
@@ -52,11 +52,11 @@
     	</div>
 			<div class="col-md-7 controls radios">
         <input type="radio" id="new" name="orderType" checked="checked" value="new">
-        <label for="new">最新</label>
+        <label for="new">{{ '最新'|trans }}</label>
         <input type="radio" id="hot" name="orderType" {% if discoveryColumn.orderType|default(0) == 'hot' %}checked="checked" {% endif %}value="hot">
-        <label for="hot">最热</label>
+        <label for="hot">{{ '最热'|trans }}</label>
         <input type="radio" id="recommend" name="orderType" {% if discoveryColumn.orderType|default(0) == 'recommend' %}checked="checked" {% endif %}value="recommend">
-        <label for="recommend">推荐</label>
+        <label for="recommend">{{ '推荐'|trans }}</label>
     	</div>
     </div>
 
