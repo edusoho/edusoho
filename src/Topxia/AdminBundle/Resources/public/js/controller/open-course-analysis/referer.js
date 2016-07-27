@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 	require('echarts-debug');
-	var EchartsConfig = require('./pieChartsConfig');
+	var EchartsConfig = require('./pie-charts-config');
 	exports.run = function() {
 		var myChart = echarts.init(document.getElementById('echats-pie'));
 		var config = new EchartsConfig();
