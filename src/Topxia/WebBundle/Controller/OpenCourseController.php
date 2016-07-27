@@ -126,7 +126,6 @@ class OpenCourseController extends BaseOpenCourseController
     public function headerAction(Request $request, $course, $lessonId)
     {
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
-
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig';
         } else {
