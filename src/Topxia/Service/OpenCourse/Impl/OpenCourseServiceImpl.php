@@ -683,6 +683,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->getCourseMemberByIp($courseId, $ip);
     }
 
+    public function getCourseMemberByMobile($courseId, $mobile)
+    {
+        return $this->getOpenCourseMemberDao()->getCourseMemberByMobile($courseId, $mobile);
+    }
+
     public function findMembersByCourseIds($courseIds)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIds($courseIds);
@@ -774,6 +779,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function updateMember($id, $member)
     {
         $member = ArrayToolkit::filter($member, array(
+            'userId'        => 0,
             'learnedNum'    => '',
             'learnTime'     => '',
             'role'          => '',
@@ -885,16 +891,18 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'updateTime'      => time()
         ));
 
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
-            }
+        if (isset($fields['tags'])) {
+            if (!empty($fields['tags'])) {
+                $fields['tags'] = explode(',', $fields['tags']);
+                $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
+                array_walk($fields['tags'], function (&$item, $key) {
+                    $item = (int) $item['id'];
+                }
 
-            );
-        } else {
-            $fields['tags'] = array();
+                );
+            } else {
+                $fields['tags'] = array();
+            }
         }
 
         return $fields;

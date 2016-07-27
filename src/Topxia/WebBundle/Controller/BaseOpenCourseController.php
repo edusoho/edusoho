@@ -7,10 +7,15 @@ class BaseOpenCourseController extends BaseController
 {
     protected function createRefererLog(Request $request, $course)
     {
-        $refererUrl = $request->server->get('HTTP_REFERER');
-        $uri        = $request->getUri();
-        $clientIp   = $request->getClientIp();
-        $userAgent  = $request->headers->get("user-agent");
+        $uri       = $request->getUri();
+        $clientIp  = $request->getClientIp();
+        $userAgent = $request->headers->get("user-agent");
+
+        if (!empty($request->query->get('refererUrl'))) {
+            $refererUrl = $request->query->get('refererUrl');
+        } else {
+            $refererUrl = $request->server->get('HTTP_REFERER');
+        }
 
         $fields = array(
             'targetId'        => $course['id'],
@@ -21,6 +26,7 @@ class BaseOpenCourseController extends BaseController
             'ip'              => $clientIp,
             'userAgent'       => $userAgent
         );
+
         $uv = $request->cookies->get('uv');
         if (empty($uv)) {
             return false;
