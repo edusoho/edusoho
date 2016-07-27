@@ -89,7 +89,7 @@
               {% endif %}
             {% endif %}
 
-            {% if setting('cloud_sms.sms_enabled') %}
+            {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
               <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
             {% endif %}
           </div>
