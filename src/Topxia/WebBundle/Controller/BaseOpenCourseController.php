@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 16/7/26
- * Time: 09:21
- */
-
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
