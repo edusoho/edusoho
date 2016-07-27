@@ -185,13 +185,12 @@ define(function(require, exports, module) {
             console.log(nUserAgent);
             var isIE = nUserAgent.indexOf('msie') > 0;
             var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
-            var isSafari = nUserAgent.indexOf('safari') > 0 && !isChrome;
             var isChrome = nUserAgent.indexOf('chrome') > 0;
+            var isSafari = nUserAgent.indexOf('safari') > 0 && !isChrome;
 
             if (isIE11 || isIE || isSafari) {
                 return false;
             }
-
             if (isChrome) {
                 var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
                 if (matched && matched[1] < 47) {
