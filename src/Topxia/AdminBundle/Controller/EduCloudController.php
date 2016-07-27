@@ -148,6 +148,7 @@ class EduCloudController extends BaseController
             'upload_mode'                 => 'local',
             'cloud_bucket'                => '',
             'support_mobile'              => 0,
+            'enable_playback_rates'       => 0,
             'video_quality'               => 'low',
             'video_audio_quality'         => 'low',
             'video_watermark'             => 0,

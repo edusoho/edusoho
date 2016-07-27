@@ -6,6 +6,15 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        Validator.addRule('smsCodeCheck', function(options, commit) {
+            var mobile = $('input[name="mobile"]').val();
+            var element = options.element,
+                url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+            $.get(url, {value:element.val(),mobile:mobile}, function(response) {
+                commit(response.success, response.message);
+            }, 'json');
+        })
+
     	var $form = $('#js-sms-modal-form');
 
 		var smsValidator = new Validator({
@@ -17,6 +26,7 @@ define(function(require, exports, module) {
                 }
 
                 $.post($form.attr('action'),$form.serialize(),function(response){
+                    $('#modal').modal('hide');
 	                $("#alert-btn").addClass('hidden');
 	                $("#alerted-btn").removeClass('hidden');
                     $('.member-num').text(parseInt(response.number));
@@ -24,64 +34,12 @@ define(function(require, exports, module) {
             }
         });
 
-        var mobileRule = 'phone remote';
-        if ($('[name="mobile"]').attr('readonly') == 'readonly') {
-            var smsSender = new SmsSender({
-                element: '.js-sms-send',
-                url: $('.js-sms-send').data('url'),
-                smsType:'system_remind' 
-            });
-            mobileRule = 'phone';
+        if ($('input[name="mobile"]').attr('readonly') != 'readonly') {
+            validatorItems(smsValidator);
         }
 
-        smsValidator.addItem({
-            element: '[name="mobile"]',
-            required: true,
-            rule: mobileRule,
-            display: '手机号码',
-            onItemValidated: function(error, message, eleme) {
-                if (error) {
-                    $('.js-sms-send').addClass('disabled');
-                    return;
-                } else {
-                    canSmsSend();
-                }
-            }              
-        });
-
-        smsValidator.addItem({
-            element: '[name="captcha_code"]',
-            required: true,
-            rule: 'alphanumeric remote',
-            onItemValidated: function(error, message, eleme) {
-                if (message == "验证码错误"){
-                    //$("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
-                    $('.js-sms-send').addClass('disabled');
-                } else {
-                    canSmsSend();
-                }
-            }                
-        });
-		
-        smsValidator.addItem({
-            element: '[name="sms_code_modal"]',
-            required: true,
-            triggerType: 'submit',
-            rule: 'integer fixedLength{len:6} remote',
-            display: '短信验证码'           
-        });
-
 	    $('.js-confirm').click(function(e){
-	    	smsValidator.execute(function(error, results, element) {
-                if (error) {
-                    return false;
-                }
-                var smsCode = $('[name="sms_code_modal"]').val();	    	
-		    	$('[name="sms_code"]').val(smsCode);
-		    	$('#modal').modal('hide');
-		    	$('#order-create-form').submit();
-            });	            
-	    	return false;
+            $form.submit();
 	    });
 
         $("#getcode_num").click(function(){ 
@@ -93,20 +51,71 @@ define(function(require, exports, module) {
             var mobileError = $.trim($('[name="mobile"]').closest('.controls').find('.help-block').html());
             var mobileVal = $('[name="mobile"]').val();
             if (mobileVal == '' || (mobileVal != '' && mobileError != '')){
+                $('.js-sms-send').attr('disabled',true);
                 return false;
             }
 
             var captchaError = $.trim($('#captcha_code').closest('.controls').find('.help-block').html());
             var captchaVal = $('#captcha_code').val();
             if (captchaVal == '' || (captchaVal != '' && captchaError != '')) {
+                $('.js-sms-send').attr('disabled',true);
                 return false;
             }
 
-            $('.js-sms-send').removeClass('disabled');
+            $('.js-sms-send').attr('disabled',false);
             var smsSender = new SmsSender({
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'system_remind'
+            });
+        }
+
+        $('.modify_mobile').click(function(){
+            $(this).hide();
+            $('input[name="mobile"]').attr('readonly',false);
+            $('.form-group').show();
+
+            validatorItems(smsValidator);
+
+        })
+
+        function validatorItems(validator)
+        {
+            validator.addItem({
+                element: '[name="mobile"]',
+                required: true,
+                rule: 'phone remote',
+                display: '手机号码',
+                onItemValidated: function(error, message, eleme) {
+                    if (error) {
+                        $('.js-sms-send').attr('disabled',true);
+                        return;
+                    } else {
+                        canSmsSend();
+                    }
+                }              
+            });
+
+            validator.addItem({
+                element: '[name="captcha_code"]',
+                required: true,
+                rule: 'alphanumeric remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (message == "验证码错误"){
+                        $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+                        $('.js-sms-send').attr('disabled',true);
+                    } else {
+                        canSmsSend();
+                    }
+                }                
+            });
+            
+            validator.addItem({
+                element: '[name="sms_code_modal"]',
+                required: true,
+                triggerType: 'submit',
+                rule: 'integer fixedLength{len:6} smsCodeCheck',
+                display: '短信验证码'           
             });
         }
 	}

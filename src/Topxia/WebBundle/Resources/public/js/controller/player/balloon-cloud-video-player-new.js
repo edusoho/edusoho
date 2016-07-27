@@ -8,6 +8,7 @@ define(function(require, exports, module) {
             url: '',
             fingerprint: '',
             watermark: '',
+            agentInWhiteList: '',
             timelimit: '',
             remeberLastPos: true,
             disableControlBar: false,
@@ -17,8 +18,7 @@ define(function(require, exports, module) {
                 disablePlaybackButton: false
             },
             questions: [],
-            enablePlaybackRates: false,
-            playbackRatesMP4Url: ''
+            enablePlaybackRates: false
         },
 
         events: {},
@@ -72,27 +72,13 @@ define(function(require, exports, module) {
                     }
                 });
             }
-
-            function getPlaybackRatesSrc() {
-                // IE9以下不支持倍数播放，IE9及以上不支持HLS
-                var isIE = navigator.userAgent.toLowerCase().indexOf('msie')>0;
-                if (isIE) {
-                    if ($('html').hasClass('lt-ie9')) {
-                        return '';
-                    } else {
-                        return self.get('playbackRatesMP4Url');
-                    }
-                }
-
-                return self.get('url');
-            }
-
-            if(self.get('enablePlaybackRates') != false && getPlaybackRatesSrc() != '') {
+            
+            if(self.get('enablePlaybackRates') != false && self.isBrowserSupportPlaybackRates() ) {
                 extConfig = $.extend(extConfig, {
                     playbackRates: {
                         enable : true,
                         source : 'hls',
-                        src : getPlaybackRatesSrc()
+                        src : self.get('url')
                     }
                 });
             }
@@ -183,7 +169,29 @@ define(function(require, exports, module) {
             return questions;
         },
 
-        //todo delete
+        isBrowserSupportPlaybackRates: function() {
+            var nUserAgent = navigator.userAgent.toLowerCase();
+            // IE不支持，低版本(47以下)的chrome不支持
+            console.log(nUserAgent);
+            var isIE = nUserAgent.indexOf('msie') > 0;
+            var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
+            var isSafari = nUserAgent.indexOf('safari') > 0 && !isChrome;
+            var isChrome = nUserAgent.indexOf('chrome') > 0;
+
+            if (isIE11 || isIE || isSafari) {
+                return false;
+            }
+
+            if (isChrome) {
+                var matched = navigator.userAgent.match(/Chrome\/(\d{0,3})/i);
+                if (matched && matched[1] < 47) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
         convertQuestionType: function(source, from) {
             var map = [ //云播放器弹题的字段值跟ES不太一致
                 {

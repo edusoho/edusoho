@@ -122,11 +122,3 @@ global_file_ppt:
 global_file_document:
     pattern:  /global_file/{globalId}/document
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:document }
-
-json_query_courses:
-    pattern:  /json/courses
-    defaults: { _controller: MaterialLibBundle:JSONAPI:courses }
-
-json_query_users:
-    pattern:  /json/users
-    defaults: { _controller: MaterialLibBundle:JSONAPI:users }

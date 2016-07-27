@@ -20,6 +20,7 @@ define(function(require, exports, module) {
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
@@ -35,12 +36,11 @@ define(function(require, exports, module) {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
                 if (!swfobject.hasFlashPlayerVersion('11')  && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器，以便正常播放视频。',10);
+                    Notify.danger('您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器，以便正常播放视频。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p></div>',10);
                 }
                 html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
             }
         }else if(fileType == 'audio'){
-
             videoHtml.parent().css({"margin-top":"-25px","top":"50%"});
             html += '<audio id="lesson-player" width="90%" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
@@ -64,8 +64,8 @@ define(function(require, exports, module) {
                 agentInWhiteList: agentInWhiteList,
                 timelimit: timelimit,
                 questions: questionMarkers,
+                enablePlaybackRates: enablePlaybackRates,
                 controlBar: playerControlBar
-                // enablePlaybackRates: true
             }
         );
 

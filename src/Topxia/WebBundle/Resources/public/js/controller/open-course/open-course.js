@@ -6,7 +6,6 @@ define(function (require, exports, module) {
         init: function () {
             main.onClickThumb();
             main.onClickfavorite();
-            main.onMouseoverQrcode();
             main.onClickHeader();
         },
         onClickThumb: function () {
@@ -23,8 +22,10 @@ define(function (require, exports, module) {
                     action = 'addClass';
                 }
 
-                $.post(url, function (res) {
-                    self.parent().next().html(res.number);
+                $.post(url, function () {
+                    var $number = self.parent().next();
+                    var currentNum = $number.html();
+                    $number.html(parseInt(currentNum)+1);
                     self.parent()[action]('active');
                 });
             })
@@ -45,19 +46,18 @@ define(function (require, exports, module) {
                     text = '已收藏';
                 }
 
-                $.post(url, function () {
-                    self.parent().next().html(text);
-                    self.parent()[action]('active');
-                })
-            })
-        },
-        onMouseoverQrcode: function () {
-            $('.js-qrcode').on('mouseover', function () {
-                var $self = $(this);
-                var qrcodeUrl = $(this).data('url');
-
-                $.post(qrcodeUrl, function (response) {
-                    $self.find('img').attr('src', response.img);
+                $.post(url, function (data) {
+                    if (data['result']) {
+                        self.parent().next().html(text);
+                        self.parent()[action]('active');
+                   } else if (!data['result'] && data['message'] == 'Access Denied'){
+                       $('#modal').html();
+                       $('#modal').load('/login/ajax');
+                       $('#modal').modal('show');
+                    } else {
+                        Notify.danger(data['message']);
+                    }
+                    
                 })
             })
         },
@@ -78,9 +78,5 @@ define(function (require, exports, module) {
                 element: '#open-course-comment',
             });
         }
-        if (!Cookie.get("uv")) {
-            Cookie.set("uv", $("#uv").val(),{path: '/'});
-        }
-
     };
 });

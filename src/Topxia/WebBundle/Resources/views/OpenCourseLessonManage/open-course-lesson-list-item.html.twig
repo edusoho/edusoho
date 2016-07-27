@@ -1,4 +1,4 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}" style="word-break: break-all;" >
   <div class="item-line"></div>
   <div class="item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
@@ -46,6 +46,7 @@
       <span class="text-muted">{{ lesson.startTime|date_format }}</span>
     {% endif %}
 
+    <span data-role="mediaStatus"></span>
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}

@@ -12,7 +12,7 @@
       {{ setting('default.user_name')|default('学员'|trans) }}{{ '管理'|trans }}
       {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
         <a class="btn btn-info btn-sm pull-right mhs"
-           href="{{ path('open_course_manage_student_export_csv', {id:course.id,userType:app.request.get('userType')}) }}"><i
+           href="{{ path('open_course_manage_student_export_csv', {id:course.id,userType:app.request.get('userType'),isNotified:app.request.get('isNotified')}) }}"><i
               class="glyphicon glyphicon-export"></i> 导出{{ setting('default.user_name')|default('学员'|trans) }}</a>
       {% endif %}
     </div>
@@ -27,19 +27,23 @@
         </li>
       </ul>
 
-      {% if app.request.get('userType') == 'login' %}
-        <form class="form-inline well well-sm " action="{{ path('open_course_manage_students',{id:course.id}) }}"
-              method="get" novalidate>
-          <div class="form-group col-md-7">
+      
+      <form class="form-inline well well-sm " action="{{ path('open_course_manage_students',{id:course.id}) }}" method="get" novalidate>
+        <div class="form-group col-md-7">
+          {% if app.request.get('userType') == 'login' %}
             <input class="form-control " type="text" style="width:45%" placeholder="{{ '请输入用户名'|trans }}" name="keyword"
-                   value="{{ app.request.get('keyword') }}">
+                 value="{{ app.request.get('keyword') }}">
+          {% endif %}
 
-            <input type="hidden" name="userType" value="login"/>
-            <button class="btn btn-primary">{{ '搜索'|trans }}</button>
-          </div>
-          <div class="clearfix"></div>
-        </form>
-      {% endif %}
+          <input type="hidden" name="userType" value="{{ app.request.get('userType') }}"/>
+          <span>是否报名：</span>
+          <select class="form-control" name="isNotified">
+            {{ select_options({0:'全部', 1: '是'}, app.request.get('isNotified')) }}
+          </select>&nbsp;&nbsp;
+          <button class="btn btn-primary">{{ '搜索'|trans }}</button>
+        </div>
+        <div class="clearfix"></div>
+      </form>
 
       {% if app.request.get('userType') == 'unlogin' %}
         {% include 'TopxiaWebBundle:OpenCourseManage:student-unlogin-list.html.twig' %}

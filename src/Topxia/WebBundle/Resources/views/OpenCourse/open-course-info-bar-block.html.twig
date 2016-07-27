@@ -39,10 +39,10 @@
     </div>
     <div class="operation-list hidden-xs">
       <div class="operation-img  operation-code">
-        <a class="js-qrcode qrcode-popover top" data-url="{{ path('open_course_qrcode',{id: course.id}) }}"> <i
+        <a class="js-qrcode qrcode-popover top"> <i
               class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
-            <img src="" alt="">
+            <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
           </div>
         </a>
       </div>

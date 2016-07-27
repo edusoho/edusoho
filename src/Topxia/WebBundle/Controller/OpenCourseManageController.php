@@ -143,6 +143,10 @@ class OpenCourseManageController extends BaseController
             $condition['userId'] = 0;
         }
 
+        if (isset($fields['isNotified']) && $fields['isNotified'] == 1) {
+            $condition['isNotified'] = 1;
+        }
+
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $user                = $this->getUserService()->getUserByNickname($fields['keyword']);
             $condition['userId'] = $user ? $user['id'] : -1;
@@ -335,10 +339,15 @@ class OpenCourseManageController extends BaseController
 
         $conditions = array('courseId' => $course['id'], 'role' => 'student');
 
-        if ($request->query->get('userType', '') == 'login') {
+        $userType = $request->query->get('userType', '');
+        if ($userType == 'login') {
             $conditions['userIdGT'] = 0;
-        } elseif ($request->query->get('userType', '') == 'unlogin') {
+        } elseif ($userType == 'unlogin') {
             $conditions['userId'] = 0;
+        }
+
+        if ($request->query->get('isNotified', 0) == 1) {
+            $conditions['isNotified'] = 1;
         }
 
         $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 20000);
@@ -361,7 +370,7 @@ class OpenCourseManageController extends BaseController
 
         $progresses = array();
 
-        $str = "用户名,Email,加入学习时间,上次进入时间,IP,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
+        $str = "用户名,Email,手机号,加入学习时间,上次进入时间,IP,姓名,性别,QQ号,微信号,公司,职业,头衔";
 
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
@@ -374,9 +383,10 @@ class OpenCourseManageController extends BaseController
         foreach ($courseMembers as $courseMember) {
             $member = "";
 
-            if ($courseMember['userId'] != 0) {
+            if ($userType == 'login') {
                 $member .= $users[$courseMember['userId']]['nickname'].",";
                 $member .= $users[$courseMember['userId']]['email'].",";
+                $member .= $users[$courseMember['userId']]['verifiedMobile'] ? $users[$courseMember['userId']]['verifiedMobile']."," : "-,";
                 $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
                 $member .= date('Y-n-d H:i:s', $courseMember['lastEnterTime']).",";
                 $member .= $courseMember['ip'].",";
@@ -384,7 +394,6 @@ class OpenCourseManageController extends BaseController
                 $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
                 $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
                 $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-                $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
                 $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
                 $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
                 $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
@@ -394,12 +403,11 @@ class OpenCourseManageController extends BaseController
                 }
             } else {
                 $member .= "-,-,";
+                $member .= $courseMember['mobile'] ? $courseMember['mobile'].',' : '-,';
                 $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
                 $member .= date('Y-n-d H:i:s', $courseMember['lastEnterTime']).",";
                 $member .= $courseMember['ip'].",";
-                $member .= "-,-,-,-,";
-                $member .= $courseMember['mobile'] ? $courseMember['mobile'].',' : '-,';
-                $member .= "-,-,-,";
+                $member .= "-,-,-,-,-,-,-,";
                 $member .= str_repeat('-,', count($fields) - 1).'-,';
             }
 

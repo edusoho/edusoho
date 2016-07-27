@@ -4,9 +4,11 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class OpenCourseController extends BaseController
+class OpenCourseController extends BaseOpenCourseController
 {
     public function exploreAction(Request $request)
     {
@@ -77,13 +79,23 @@ class OpenCourseController extends BaseController
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
-        $uv     = uniqid($prefix = "refererToken");
-        $this->createRefererLog($request, $course, $uv);
-        return $this->render($template, array(
+
+        $response = $this->renderView($template, array(
             'course'   => $course,
-            'lessonId' => $lessonId,
-            'uv'       => $uv
+            'lessonId' => $lessonId
         ));
+        $response = new Response($response);
+
+        if (!$request->cookies->get('uv')) {
+            $expire = strtotime(date('Y-m-d').' 23:59:59');
+            $response->headers->setCookie(new Cookie("uv", uniqid($prefix = "refererToken"), $expire));
+            $response->send();
+        }
+
+        if ('liveOpen' != $course['type']) {
+            $this->createRefererLog($request, $course);
+        }
+        return $response;
     }
 
     public function lessonShowAction(Request $request, $courseId, $lessonId)
@@ -114,7 +126,6 @@ class OpenCourseController extends BaseController
     public function headerAction(Request $request, $course, $lessonId)
     {
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
-
         if ($isWxPreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse/Mobile:open-course-header.html.twig';
         } else {
@@ -131,20 +142,21 @@ class OpenCourseController extends BaseController
             $lesson = $this->_checkPublishedLessonExists($course['id']);
         }
 
-        $lesson     = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
-        $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
-        $member     = $this->_getMember($request, $course['id']);
-
-        $lesson['replays'] = $this->_getLiveReplay($lesson);
+        $lesson = $lesson ? $this->_getLessonVedioInfo($request, $lesson) : array();
+        //$nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson['id']);
+        $member = $this->_getMember($course['id']);
+        if ($lesson) {
+            $lesson['replays'] = $this->_getLiveReplay($lesson);
+        }
 
         $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'member'     => $member,
-            'notifyNum'  => $notifyNum,
-            'nextLesson' => $nextLesson
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'member'    => $member,
+            'notifyNum' => $notifyNum
+            // 'nextLesson' => $nextLesson
         ));
     }
 
@@ -232,27 +244,6 @@ class OpenCourseController extends BaseController
         return $this->createJsonResponse(array('result' => true, 'number' => $course['likeNum']));
     }
 
-    public function qrcodeAction(Request $request, $id)
-    {
-        $user  = $this->getUserService()->getCurrentUser();
-        $host  = $request->getSchemeAndHttpHost();
-        $token = $this->getTokenService()->makeToken('qrcode', array(
-            'userId'   => $user['id'],
-            'data'     => array(
-                'url'    => $this->generateUrl('open_course_show', array('courseId' => $id), true),
-                'appUrl' => ""
-            ),
-            'times'    => 0,
-            'duration' => 3600
-        ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
-
-        $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
-        );
-        return $this->createJsonResponse($response);
-    }
-
     protected function getWxPreviewQrCodeUrl($id)
     {
         $user  = $this->getUserService()->getCurrentUser();
@@ -310,7 +301,7 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        if ($this->isWxClient()) {
+        if ($isWxpreview || $this->isWxClient()) {
             $template = 'TopxiaWebBundle:OpenCourse:Mobile/open-course-comment.html.twig';
         } else {
             $template = 'TopxiaWebBundle:OpenCourse:open-course-comment.html.twig';
@@ -480,17 +471,22 @@ class OpenCourseController extends BaseController
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
-    public function mobileCheckAction(Request $request)
+    public function mobileCheckAction(Request $request, $courseId)
     {
         $user     = $this->getCurrentUser();
         $response = array('success' => true, 'message' => '');
+        $mobile   = $request->query->get('value', '');
+
+        $member = $this->getOpenCourseService()->getCourseMemberByMobile($courseId, $mobile);
+        if ($member && $member['isNotified']) {
+            return $this->createJsonResponse(array('success' => false, 'message' => '该手机号已报名'));
+        }
 
         if ($user->isLogin()) {
-            $mobile                 = $request->query->get('value');
             list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
             if ($result != 'success') {
-                $response = array('success' => false, 'message' => $message);
+                return $this->createJsonResponse(array('success' => false, 'message' => $message));
             }
         }
 
@@ -534,13 +530,14 @@ class OpenCourseController extends BaseController
 
     private function _getMember($courseId)
     {
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
+        $member = array();
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
-        } else {
-            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
-        }
+        } /* else {
+        $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $user['currentIp']);
+        }*/
 
         return $member;
     }
@@ -679,6 +676,12 @@ class OpenCourseController extends BaseController
             $openCourseMember = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $userIp);
         } else {
             $openCourseMember = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
+            if (!empty($user['verifiedMobile'])) {
+                $member = $this->getOpenCourseService()->getCourseMemberByMobile($courseId, $user['verifiedMobile']);
+                if ($member) {
+                    $openCourseMember = $this->getOpenCourseService()->updateMember($member['id'], array('userId' => $user['id']));
+                }
+            }
         }
 
         if ($openCourseMember) {
@@ -797,38 +800,6 @@ class OpenCourseController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function createRefererLog(Request $request, $course, $uv)
-    {
-        $fields = array(
-            'targetId'        => $course['id'],
-            'targetType'      => 'openCourse',
-            'refererUrl'      => $request->server->get('HTTP_REFERER'),
-            'uri'             => $request->getUri(),
-            'targetInnerType' => $course['type'],
-            'ip'              => $request->getClientIp(),
-            'userAgent'       => $request->headers->get("user-agent")
-        );
-
-        $refererLog = $this->getRefererLogService()->addRefererLog($fields);
-        $this->updatevisitRefererToken($refererLog, $request, $uv);
-    }
-
-    protected function updatevisitRefererToken($refererLog, Request $request, $uv)
-    {
-        $uv    = $request->cookies->get('uv', $uv);
-        $token = $this->getRefererLogService()->getOrderRefererByUv($uv);
-
-        $key                  = $refererLog['targetType'].'_'.$refererLog['targetId'];
-        $token['data'][$key]  = $refererLog['id'];
-        $token['expiredTime'] = strtotime(date('Y-m-d').' 23:59:59');
-        if (empty($token['id'])) {
-            $token['uv'] = $uv;
-            $this->getRefererLogService()->createOrderReferer($token);
-        } else {
-            $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
-        }
-    }
-
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
@@ -872,11 +843,6 @@ class OpenCourseController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function getRefererLogService()
-    {
-        return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
 
     protected function getOpenCourseRecommendedService()
