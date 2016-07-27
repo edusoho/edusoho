@@ -140,6 +140,7 @@ class WebExtension extends \Twig_Extension
         }
 
         $config = array(
+            //'debug'     => true,
             'appId'     => $key,
             'timestamp' => time(),
             'nonceStr'  => uniqid($prefix = "edusoho"),
