@@ -21,7 +21,6 @@ class PlayerController extends BaseController
             }
 
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-
             if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
                 if (!empty($file['convertParams']['hasVideoWatermark'])) {
                     $file['videoWatermarkEmbedded'] = 1;
@@ -33,10 +32,12 @@ class PlayerController extends BaseController
                 $result = $api->get("/resources/{$file['globalId']}/player");
 
                 // 临时修复手机浏览器端视频不能播放的问题
-                if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                    $player                  = "local-video-player";
-                    $url                     = isset($result['mp4url']) ? $result['mp4url'] : '';
+                if ($agentInWhiteList) {
                     $context['hideQuestion'] = 1; //手机浏览器不弹题
+                    if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                        $player = "local-video-player";
+                        $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
+                    }
                 }
             } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
                 $player = "local-video-player";
@@ -85,7 +86,7 @@ class PlayerController extends BaseController
 
             $tokenFields = array(
                 'data'     => array(
-                    'globalId' => $file['no'] . $level
+                    'globalId' => $file['no'].$level
                 ),
                 'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                 'duration' => 3600
@@ -127,7 +128,7 @@ class PlayerController extends BaseController
 
         $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
 
-        if ($dataId != ($globalId . $level)) {
+        if ($dataId != ($globalId.$level)) {
             throw $this->createNotFoundException();
         }
 
