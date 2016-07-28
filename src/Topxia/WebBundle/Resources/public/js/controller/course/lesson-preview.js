@@ -65,7 +65,7 @@ define(function(require, exports, module) {
                 html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
                 html += '<span aria-hidden="true">×</span>';
                 html += '</button>';
-                html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>';
                 html += '</div>';
                 player.html(html);
             } else {

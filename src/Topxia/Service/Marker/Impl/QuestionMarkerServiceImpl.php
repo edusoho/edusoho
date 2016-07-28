@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Marker\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Marker\QuestionMarkerService;
 
@@ -31,6 +32,30 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     public function findQuestionMarkersByMarkerIds($markerIds)
     {
         return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerIds($markerIds);
+    }
+
+    public function findQuestionMarkersMetaByMediaId($mediaId)
+    {
+        $markers = $this->getMarkerService()->findMarkersByMediaId($mediaId);
+
+        if (empty($markers)) {
+            return array();
+        }
+
+        $markersGroups = ArrayToolkit::index($markers, 'id');
+
+        $markerIds = ArrayToolkit::column($markers, 'id');
+
+        $questionMarkers = $this->findQuestionMarkersByMarkerIds($markerIds);
+
+        foreach ($questionMarkers as &$questionMarker) {
+            if (!empty($markersGroups[$questionMarker['markerId']])) {
+                $questionMarker['mediaId'] = $markersGroups[$questionMarker['markerId']]['mediaId'];
+                $questionMarker['second']  = $markersGroups[$questionMarker['markerId']]['second'];
+            }
+        }
+
+        return $questionMarkers;
     }
 
     public function findQuestionMarkersByQuestionId($questionId)

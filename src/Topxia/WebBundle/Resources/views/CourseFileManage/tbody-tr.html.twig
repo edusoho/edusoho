@@ -25,11 +25,12 @@
   <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
   <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
-    {% if 'courselesson' in fileQuotes %}
+    {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
       <span class="label label-success tip">{{'课时'|trans}}</span>
     {% endif %}
-    {% if 'coursematerial' in fileQuotes %}
-      <span class="label label-info tip">{{'资料'|trans}}</span>
+
+    {% if 'coursematerial' in fileQuotes or 'opencoursematerial' in fileQuotes %}
+      <span class="label label-success tip">{{'资料'|trans}}</span>
     {% endif %}
   </td>
   <td>

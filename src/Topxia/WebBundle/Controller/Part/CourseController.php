@@ -1,77 +1,87 @@
 <?php
 namespace Topxia\WebBundle\Controller\Part;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-
 use Topxia\WebBundle\Controller\BaseController;
 
 class CourseController extends BaseController
 {
     public function headerAction($course, $member)
     {
-        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+        if (($course['discountId'] > 0) && ($this->isPluginInstalled("Discount"))) {
             $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
         }
 
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
-
-        $user = $this->getCurrentUser();
+        $user          = $this->getCurrentUser();
         $userVipStatus = $courseVip = null;
+
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+
             if ($courseVip) {
                 $userVipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
             }
         }
 
         $nextLearnLesson = $member ? $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']) : null;
-        $learnProgress = $member ? $this->calculateUserLearnProgress($course, $member) : null;
+        $learnProgress   = $member ? $this->calculateUserLearnProgress($course, $member) : null;
 
         $previewLesson = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
-            'course' => $course,
-            'member' => $member,
-            'hasFavorited' => $hasFavorited,
-            'courseVip' => $courseVip,
-            'userVipStatus' => $userVipStatus,
+            'course'          => $course,
+            'member'          => $member,
+            'hasFavorited'    => $hasFavorited,
+            'courseVip'       => $courseVip,
+            'userVipStatus'   => $userVipStatus,
             'nextLearnLesson' => $nextLearnLesson,
-            'learnProgress' => $learnProgress,
-            'previewLesson' => empty($previewLesson) ? null : $previewLesson[0],
+            'learnProgress'   => $learnProgress,
+            'previewLesson'   => empty($previewLesson) ? null : $previewLesson[0],
+            'breadcrumbs'     => $breadcrumbs
+        ));
+    }
+
+    public function opeCourseHeaderAction($course)
+    {
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
+
+        return $this->render('TopxiaWebBundle:Course:Part/open-course-header.html.twig', array(
+            'course'      => $course,
             'breadcrumbs' => $breadcrumbs
         ));
     }
 
     public function teachersAction($course)
     {
-        $course = $this->getCourse($course);
+        $course         = $this->getCourse($course);
         $teachersNoSort = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         $teachers = array();
+
         foreach ($course['teacherIds'] as $key => $teacherId) {
             $teachers[$teacherId] = $teachersNoSort[$teacherId];
         }
-        
+
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
-            'course' => $course,
-            'teachers' => $teachers,
+            'course'   => $course,
+            'teachers' => $teachers
         ));
     }
 
     public function studentsAction($course)
     {
-        $course = $this->getCourse($course);
-        $members = $this->getCourseService()->findCourseStudents($course['id'], 0, 15);
+        $course   = $this->getCourse($course);
+        $members  = $this->getCourseService()->findCourseStudents($course['id'], 0, 15);
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
-            'course' => $course,
+            'course'   => $course,
             'students' => $students,
-            'members' => $members
+            'members'  => $members
         ));
     }
 
@@ -80,14 +90,14 @@ class CourseController extends BaseController
         $classrooms = $this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
         foreach ($classrooms as $key => $classroom) {
-            if($classroom["status"] != "published"){
+            if ($classroom["status"] != "published") {
                 unset($classrooms[$key]);
             }
         }
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
-            'course' => $course,
-            'classrooms' => $classrooms,
+            'course'     => $course,
+            'classrooms' => $classrooms
         ));
     }
 
@@ -102,26 +112,29 @@ class CourseController extends BaseController
 
     public function recommendClassroomsAction($course)
     {
-        $classrooms = array();
-        $classrooms = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
+        $classrooms               = array();
+        $classrooms               = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
-        $conditions = array(
+        $conditions               = array(
             'categoryIds' => array($course['categoryId']),
-            'showable' => 1
-            );
+            'showable'    => 1
+        );
+
         if ($course['categoryId'] > 0) {
             $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 8));
         }
+
         $conditions = array(
             'recommended' => 1,
-            'showable' => 1, 
-            'status'=>'published'
-            );
+            'showable'    => 1,
+            'status'      => 'published'
+        );
 
         $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
-        foreach ($classrooms as $key =>  $classroom) {
+
+        foreach ($classrooms as $key => $classroom) {
             if (isset($recommends[$classroom['id']])) {
                 continue;
             }
@@ -134,7 +147,7 @@ class CourseController extends BaseController
                 $classroom['belogCourse'] = true;
             }
 
-            if($classroom['status'] == 'published') {
+            if ($classroom['status'] == 'published') {
                 $recommends[$classroom['id']] = $classroom;
             }
         }
@@ -142,7 +155,6 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
             'classrooms' => $recommends
         ));
-
     }
 
     protected function getCourse($course)
@@ -196,14 +208,12 @@ class CourseController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
-        return array (
+        return array(
             'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum']
+            'number'  => $member['learnedNum'],
+            'total'   => $course['lessonNum']
         );
     }
-
 }
-

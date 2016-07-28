@@ -50,7 +50,7 @@ class InitCommand extends BaseCommand
 
     private function initFolders()
     {
-        $rootDir = realpath($this->getKernel()->getParameter('kernel.root_dir').'/..');
+        $rootDir = realpath($this->getServiceKernel()->getParameter('kernel.root_dir').'/..');
 
         $folders = array(
             $rootDir.'/app/data/udisk',

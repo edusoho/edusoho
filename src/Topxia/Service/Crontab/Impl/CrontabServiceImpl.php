@@ -133,6 +133,13 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $deleted;
     }
 
+    public function deleteJobs($targetId, $targetType)
+    {
+        $deleted = $this->getJobDao()->deleteJobs($targetId, $targetType);
+        $this->refreshNextExecutedTime();
+        return $deleted;
+    }
+
     public function scheduleJobs()
     {
         $conditions = array(

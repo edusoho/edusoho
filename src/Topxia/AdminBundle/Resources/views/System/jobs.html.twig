@@ -61,6 +61,10 @@
             {% set lesson = data('CourseLesson',{lessonId:job.targetId}) %}
             {% set course = data('Course',{courseId:lesson.courseId}) %}
             课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.title}}</a>》,课时：{{lesson.title}}
+          {% elseif job.targetType == 'liveOpenLesson' %}
+            {% set lesson = data('OpenCourseLesson',{lessonId:job.targetId}) %}
+            {% set course = data('OpenCourse',{courseId:lesson.courseId}) %}
+            公开课：《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,课时：{{lesson.title}}
           {% else %}--{% endif %}
         </td>
         <td>

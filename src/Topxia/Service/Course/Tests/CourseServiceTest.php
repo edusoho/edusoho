@@ -111,6 +111,27 @@ class CourseServiceTest extends BaseTestCase
         $this->assertNotEmpty($result);
     }
 
+    public function testFindRandomCourses()
+    {
+        $empty = $this->getCourseService()->findRandomCourses(array(), 10);
+        $this->assertEquals(empty($empty), true);
+        $this->assertEquals(count($empty), 0);
+        foreach (range(0, 9) as $i){
+            $course = array(
+                'title' => 'test course'.$i
+            );
+            $course = $this->getCourseService()->createCourse($course);
+            if($i % 2 == 0){
+                $this->getCourseService()->recommendCourse($course['id'], $i);
+            }
+        }
+        $conditions = array(
+            'recommended' => 1
+        );
+        $randomCourses = $this->getCourseService()->findRandomCourses($conditions, 10);
+        $this->assertEquals(count($randomCourses), 5);
+    }
+
     public function testFindCoursesByTagIdsAndStatus()
     {
         $tags = array(
@@ -3684,7 +3705,7 @@ $this->getCourseService()->tryLearnCourse($createCourse['id']);
         $courseLessonReplay = array('lessonId' => 1, 'courseId' => 1, 'title' => '录播回放', 'replayId' => '1', 'userId' => '1', 'createdTime' => time());
         $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
-        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1, 1);
+        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1, 1, 'live');
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
     }
 

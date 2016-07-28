@@ -35,6 +35,7 @@
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-markerurl="{{ context.markerUrl|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
+          data-player-control-bar='{"disableVolumeButton": true, "disablePlaybackButton": true}'
           {% endif %}
         {% elseif file.type == 'audio' %}
           class="lesson-content-audio"

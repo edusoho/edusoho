@@ -6,7 +6,7 @@ interface FavoriteDao
 {
     public function getFavorite($id);
 
-    public function getFavoriteByUserIdAndCourseId($userId, $courseId);
+    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type);
 
     public function findCourseFavoritesByUserId($userId, $start, $limit);
 

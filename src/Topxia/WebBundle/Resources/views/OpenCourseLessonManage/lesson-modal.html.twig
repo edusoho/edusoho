@@ -1,0 +1,99 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% set lesson = lesson|default(null) %}
+
+
+{% block title %}
+  {% if lesson %}{{'编辑课时'|trans}}{{ lesson.number }}{% else %}{{'添加课时'|trans}}{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+  data-create-draft-url="{{path('course_draft_create')}}"
+  {% if lesson %}
+    action="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
+  {% else %}
+    action="{{ path('open_course_manage_lesson_create', {id:course.id}) }}"
+  {% endif %}
+  >
+
+  <div class="form-group" style="display:none;">
+    <div class="col-md-2 control-label"><label>{{'类型'|trans}}</label></div>
+    <div class="col-md-9 controls">
+      <div class="radios">
+        <label><input type="radio" name="type" value="video" checked="checked" /> {{'视频'|trans}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}" >
+    <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
+    <div class="col-md-9 controls">
+      <div class="row">
+        <div class="col-md-10">
+          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
+        </div>
+      </div>
+    </div>
+  </div>
+   
+  <div class="form-group for-text-type">
+
+    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">{{'内容'|trans}}</label></div>
+    <div class="col-md-9 controls">
+
+      {% if draft|default(false) %}
+      <a id ="see-draft-btn" class="btn btn-link" data-url="{{path('course_draft_view')}}" >
+        <small>
+        {{'您有一段自动保存内容，继续编辑请点击'|trans}}
+        </small>
+      </a>
+      {% endif %}
+
+      <textarea class="form-control" id="lesson-content-field" name="content"
+      data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+      >{{ lesson.content|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %} ">
+    <div class="col-md-2 control-label for-video-type"><label>{{'视频'|trans}}</label></div>
+    <div class="col-md-2 control-label for-audio-type"><label>{{'音频'|trans}}</label></div>
+    <div class="col-md-2 control-label for-ppt-type"><label>PPT</label></div>
+    <div class="col-md-2 control-label for-document-type"><label>{{'文档'|trans}}</label></div>
+    <div class="col-md-2 control-label for-flash-type"><label>Flash</label></div>
+    <div class="col-md-9 controls">
+      {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
+      <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
+    </div>
+  </div>
+
+  <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
+      <div class="col-md-2 control-label for-video-type"><label>{{'视频时长'|trans}}</label></div>
+      <div class="hide"><label for="lesson-length-field">{{'视频时长或'|trans}}</label></div>
+      <div class="col-md-2 control-label for-audio-type"><label for="lesson-length-field">{{'音频时长'|trans}}</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">{{'分'|trans}}
+      <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">{{'秒'|trans}}
+      <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+
+<script>app.load('open-course-manage/lesson-modal')</script>
+
+
+{% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">{{'取消'|trans}}</button>
+    <button id="course-lesson-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}{{'保存'|trans}}{% else %}{{'添加'|trans}}{% endif %}</button>
+{% endblock %}
+
+{% set hideFooter = true %}

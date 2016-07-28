@@ -197,7 +197,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '#lesson-minute-field',
                     required: true,
-                    rule: 'integer',
+                    rule: 'unsigned_integer',
                     display: '时长'
                 });
 
@@ -233,13 +233,14 @@ define(function(require, exports, module) {
                 });
                 break;
         }
-
-        validator.addItem({
-            element: '#lesson-suggest-period-field',
-            required: true,
-            rule: 'arithmetic_number',
-            display: '建议学习时长'
-        });
+        if ($('#lesson-suggest-period-field').length > 0){
+            validator.addItem({
+                element: '#lesson-suggest-period-field',
+                required: true,
+                rule: 'arithmetic_number',
+                display: '建议学习时长'
+            });
+        }
     }
 
     exports.run = function() {
@@ -450,11 +451,10 @@ define(function(require, exports, module) {
             toolbar: 'Full',
             filebrowserImageUploadUrl: $('#lesson-content-field').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#lesson-content-field').data('flashUploadUrl'),
+            allowedContent: true,
             height: 300
         });
 
-
-        
         validator.on('formValidate', function(elemetn, event) {
             var content = getEditorContent(editor);
             $content.val(content);

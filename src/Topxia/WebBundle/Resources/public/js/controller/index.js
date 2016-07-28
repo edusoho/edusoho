@@ -24,8 +24,10 @@ define(function(require, exports, module) {
 
         $("body").on('click','.js-course-filter',function(){
              var $btn = $(this);
+             var courseType = $btn.data('type');
+             
              $.get($btn.data('url'),function(html){
-               $('#course-list-section').after(html).remove();
+               $('#'+courseType+'-list-section').after(html).remove();
                Lazyload.init();
             })
         })

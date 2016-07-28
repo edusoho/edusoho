@@ -1,0 +1,50 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="es-section course-manage-header clearfix">
+
+  <a href="{{ path('open_course_show', {courseId:course.id}) }}">
+    <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
+  </a>
+  <h1 class="title">
+    [{{ dict('courseType')[course.type] }}]
+    <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+    {% if course.status=='closed' %}
+      <span class="label label-danger ">{{'已关闭'|trans}}</span>
+    {% elseif course.status=='draft' %}
+      <span class="label label-warning ">{{'未发布'|trans}}</span>
+    {% elseif course.status=='published' %}    
+      <span class="label label-warning ">{{'已发布'|trans}}</span> 
+    {% endif %}
+  </h1>
+
+  <div class="teachers">
+    {% if course.teacherIds|default(null) %}
+      {{'教师：'|trans}}
+      {% for id in course.teacherIds if id %}
+        {% set user = data('User',{userId:id}) %}
+        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
+      {% endfor %}
+    {% endif  %}
+  </div>
+
+  <div class="toolbar hidden-xs">
+    
+    {% if course.status == 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'返回课程主页'|trans}}</a>
+      </div>
+    {% else %}
+      <div class="btn-group">
+        <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'发布课程'|trans}}</button>
+      </div>
+    {% endif %}
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm mrs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">预览</a>
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">微信端预览</a>
+    </div>
+  </div>
+</div>
+
+{% do load_script('course-manage/header') %}
+
+

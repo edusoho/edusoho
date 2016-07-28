@@ -7,6 +7,10 @@ admin_inspect:
     defaults: { _controller: TopxiaAdminBundle:Default:inspect }
     permissions: [admin]
 
+admin_notice_modal:
+    pattern:  /notice/modal
+    defaults: { _controller: TopxiaAdminBundle:Default:notice }
+
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
@@ -37,6 +41,39 @@ admin_dashboard:
     pattern:  /dashboard
     defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
     permissions: [admin]
+
+admin_opencourse_analysis:
+    pattern:  /opencourse/analysis
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:index }
+
+admin_opencourse_analysis_referer_summary:
+    pattern:  /opencourse/analysis/referer/summary
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summary }
+
+admin_opencourse_analysis_referer_watch_statistics:
+    path: /opencourse/analysis/watch
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:watch }
+
+admin_opencourse_analysis_referer_summary_list:
+    pattern:  /opencourse/analysis/referer/list
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:summaryList }
+
+admin_opencourse_analysis_referer_detail:
+    pattern:  /opencourse/{id}/analysis/referer/detail
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detail }
+
+admin_opencourse_analysis_referer_detail_list:
+    pattern:  /opencourse/{id}/analysis/referer/detailList
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:detailList }
+
+admin_opencourse_analysis_conversion:
+    pattern:  opencourse/analysis/conversion
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversion }
+
+admin_opencourse_analysis_conversion_result:
+    pattern:  /opencourse/{courseId}/analysis/conversion/result
+    defaults: { _controller: TopxiaAdminBundle:OpenCourseAnalysis:conversionResult }
+
 
 admin_content:
     pattern:  /content
@@ -355,6 +392,11 @@ admin_course_delete:
     defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
     permissions: [admin_course_manage]
 
+admin_open_course_delete:
+    pattern: /open/course/{courseId}/delete/{type}
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete, type:'' }
+    methods: [POST]
+
 admin_check_password:
     pattern:  /check/password
     defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
@@ -366,11 +408,34 @@ admin_course_publish:
     methods: [POST]
     permissions: [admin_course_manage]
 
+admin_open_course_publish:
+    pattern: /open/course/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:publish }
+    methods: [POST]
+
 admin_course_close:
     pattern: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
     permissions: [admin_course_manage]
+
+admin_open_course_close:
+    pattern: /open/course/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:close }
+    methods: [POST]
+
+admin_open_course_recommend_list:
+    pattern: /open/course/recommend/list
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommendList }
+
+admin_open_course_recommend:
+    pattern: /open/course/{id}/recommend
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommend }
+
+admin_open_course_cancel_recommend:
+    pattern: /open/course/{id}/recommend/cancel/{target}
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:cancelRecommend }
+    methods: [POST]
 
 admin_course_copy:
     pattern: /course/{id}/copy
@@ -449,6 +514,10 @@ admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
     permissions: [admin_live_course_manage]
+
+admin_open_course:
+    pattern: /open/course/{filter}
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:index, filter:'open' }
 
 admin_live_get_max_online:
     pattern: /livecourse/get/maxOnline

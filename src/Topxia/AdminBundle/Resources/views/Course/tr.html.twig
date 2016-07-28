@@ -1,12 +1,12 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-{% set target = 'normal_index' %}
+{% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
   {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
   <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     
-    {% if course.type == 'live' %}
+    {% if course.type == 'live' or course.type == 'liveOpen' %}
       <span class="label label-success live-label mls">直播</span>
     {% endif %}
 
@@ -25,30 +25,29 @@
   </td>
   <td>{{ course.originPrice }}</td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
-  <td>
-    {% if  course.serializeMode =="none" %}
-    <span class="text-info">非连载课程</span>
-    {% elseif course.serializeMode =="serialize" %}
-    <span class="text-info">连载中</span>
-    {% elseif course.serializeMode =="finished" %}
-    <span class="text-info">已完结</span>
+  {% if filter != 'open' and filter != 'liveOpen' %}
+    <td>
+      {% if  course.serializeMode =="none" %}
+      <span class="text-info">非连载课程</span>
+      {% elseif course.serializeMode =="serialize" %}
+      <span class="text-info">连载中</span>
+      {% elseif course.serializeMode =="finished" %}
+      <span class="text-info">已完结</span>
+      {% endif %}
+    </td>
+    {% if filter == 'classroom' %}
+    <td>
+      {% set classroom = classrooms[course.id]|default(null) %}
+      {% if classroom %}
+        <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+      {% endif %}
+    </td>
+    {% elseif filter == 'vip' %}
+        {% set vip = vips[course.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
+    {% else %}
+      <td>{{ course.studentNum }}</td>
     {% endif %}
-  </td>
-  {% if filter == 'classroom' %}
-  <td>
-    {% set classroom = classrooms[course.id]|default(null) %}
-    {% if classroom %}
-      <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
-    {% endif %}
-  </td>
-  {% else %}
-    <td>{{ course.studentNum }}</td>
-  {% endif %}
-  {% if filter == 'course' %}
-    <td><span class="money-text">{{ course.income }}</span></td>
-  {% elseif filter == 'vip' %}
-    {% set vip = vips[course.vipLevelId]|default(null) %}
-    <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
   {% endif %}
 
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
