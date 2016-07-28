@@ -31,16 +31,16 @@ define(function(require, exports, module) {
             var exportAllowCountFormat = $btn.data('exportAllowCountFormat');
 
             if (exportCount > exportAllowCount) {
-                Notify.danger("您的导出结果数量（" + exportCountFormat + "条）已超出最大值（" + exportAllowCountFormat + "条），请调整筛选范围后分批导出");
+                Notify.danger(Translator.trans('您的导出结果数量（%exportCountFormat%条）已超出最大值（%exportAllowCountFormat%条），请调整筛选范围后分批导出',{'exportCountFormat': exportCountFormat,exportAllowCountFormat: exportAllowCountFormat}));
                 event.preventDefault();
                 return false;
             }
             if (exportCount == 0) {
-                Notify.danger("没有可导出的数据");
+                Notify.danger(Translator.trans('没有可导出的数据'));
                 event.preventDefault();
                 return false;
             }
-            Notify.success("正在导出数据，请稍候...");
+            Notify.success(Translator.trans('正在导出数据，请稍候...'));
         })
 
     };

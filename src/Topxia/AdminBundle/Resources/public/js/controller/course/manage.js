@@ -35,9 +35,8 @@ define(function(require, exports, module) {
 			var part_name = $(this).data('part');
 			var user_name = $(this).data('user');
 			var $this = $(this);
-			if (!confirm(Translator.trans('删除课程，将删除课程的%chapter% %part%、课时、%user%等信息。真的要删除该课程吗？',{chapter:chapter_name,part:part_name,user:user_name}))) 
-				return;
-			}
+			if (!confirm(Translator.trans('删除课程，将删除课程的%chapter% %part%、课时、%user%等信息。真的要删除该课程吗？',{chapter:chapter_name,part:part_name,user:user_name})))
+					return;
 			var $tr = $this.parents('tr');
 			$.post($this.data('url'), function(data) {
 				if (data.code > 0) {

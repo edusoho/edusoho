@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 progressRange: [3, 6]
             },
             {
-                title: Translator.trans('删除试卷',
+                title: Translator.trans('删除试卷'),
                 url: urls.testpaperDeleteUrl,
                 progressRange: [7, 10]
             },
