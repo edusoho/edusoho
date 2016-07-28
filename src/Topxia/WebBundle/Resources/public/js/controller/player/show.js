@@ -26,10 +26,11 @@ define(function(require, exports, module) {
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
-        var questionMarkers = videoHtml.data('questionMarkers');
         var starttime = videoHtml.data('starttime');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
-        var playerControlBar = videoHtml.data('playerControlBar');
+        var disableVolumeButton = videoHtml.data('disableVolumeButton');
+        var disablePlaybackButton = videoHtml.data('disablePlaybackButton');
+        var disableResolutionSwitcher = videoHtml.data('disableResolutionSwitcher');
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
@@ -63,9 +64,12 @@ define(function(require, exports, module) {
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList,
                 timelimit: timelimit,
-                questions: questionMarkers,
                 enablePlaybackRates: enablePlaybackRates,
-                controlBar: playerControlBar
+                controlBar: {
+                    disableVolumeButton: disableVolumeButton,
+                    disablePlaybackButton: disablePlaybackButton,
+                    disableResolutionSwitcher: disableResolutionSwitcher
+                }
             }
         );
 
@@ -86,12 +90,18 @@ define(function(require, exports, module) {
         
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
-            if (playerType == 'local-video-player') { //@todo 云播放器和本地播放器要统一
+            if (playerType == 'local-video-player') {
                 var time = DurationStorage.get(userId, fileId);
                 if(time>0){
                     player.setCurrentTime(DurationStorage.get(userId, fileId));
                 }
                 player.play();
+            } else if (playerType == 'balloon-cloud-video-player'){
+                if (markerUrl) {
+                    $.getJSON(markerUrl, function(questions) {
+                        player.setQuestions(questions);
+                    });
+                }
             }
         });
 
