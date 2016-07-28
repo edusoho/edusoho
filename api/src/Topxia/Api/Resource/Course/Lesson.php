@@ -232,7 +232,7 @@ class Lesson extends BaseResource
                             'id' => $file['id']
                         ),
                         'duration' => 3600,
-                        'userId'   => $this->getCurrentUser()->getId()
+                        'userId'   => 0
                     ));
                     $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
                 }

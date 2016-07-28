@@ -300,8 +300,7 @@ class PlayerController extends BaseController
         }
 
         $token = $this->getTokenService()->verifyToken('local.media', $token);
-
-        if ($token['userId'] != $this->getCurrentUser()->getId()) {
+        if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
             throw $this->createAccessDeniedException();
         }
 

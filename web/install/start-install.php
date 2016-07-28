@@ -11,9 +11,9 @@
 // 5.包太大可能导致上传脚本失败
 // 6.打包代码都在feature/install-data
 
-require __DIR__.'/../../vendor2/autoload.php';
+require __DIR__ . '/../../vendor2/autoload.php';
 
-$loader = new Twig_Loader_Filesystem(__DIR__.'/templates');
+$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
@@ -24,7 +24,7 @@ $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
-$functionName = 'install_step'.$step;
+$functionName = 'install_step' . $step;
 
 $functionName($init_data);
 
@@ -41,7 +41,7 @@ function check_installed()
         $_COOKIE['nokey'] = 1;
     }
 
-    if (file_exists(__DIR__.'/../../app/data/install.lock')) {
+    if (file_exists(__DIR__ . '/../../app/data/install.lock')) {
         exit('already install.');
     }
 }
@@ -83,7 +83,8 @@ function install_step1($init_data = 0)
         !$env['maxExecutionTimeOk'] ||
         !$env['mbstringOk'] ||
         !$env['curlOk'] ||
-        !$env['gdOk']) {
+        !$env['gdOk']
+    ) {
         $pass = false;
     }
 
@@ -101,7 +102,7 @@ function install_step1($init_data = 0)
     $checkedPaths = array();
 
     foreach ($paths as $path) {
-        $checkedPath = __DIR__.'/../../'.$path;
+        $checkedPath = __DIR__ . '/../../' . $path;
         $checked     = is_executable($checkedPath) && is_writable($checkedPath) && is_readable($checkedPath);
 
         if (PHP_OS == 'WINNT') {
@@ -164,7 +165,7 @@ function install_step3($init_data = 0)
 
     $serviceKernel = ServiceKernel::create('prod', true);
     $serviceKernel->setParameterBag(new ParameterBag(array(
-        'kernel.root_dir' => realpath(__DIR__.'/../../app')
+        'kernel.root_dir' => realpath(__DIR__ . '/../../app')
     )));
     $serviceKernel->setConnection($connection);
 
@@ -192,8 +193,8 @@ function install_step3($init_data = 0)
             $init->initOrg();
         } else {
             $init->deleteKey();
-            $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
-            $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
+            $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '" . $_POST['nickname'] . "');");
+            $connection->exec("update `user` set id = 1 where nickname = '" . $_POST['nickname'] . "';");
         }
 
         $init->initFolders();
@@ -262,7 +263,7 @@ function install_step999($init_data = 0)
         $connection    = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
         $serviceKernel->setParameterBag(new ParameterBag(array(
-            'kernel.root_dir' => realpath(__DIR__.'/../../app')
+            'kernel.root_dir' => realpath(__DIR__ . '/../../app')
         )));
 
         $serviceKernel->setConnection($connection);
@@ -323,7 +324,7 @@ function _create_database($config, $replace)
             $index++;
             $filesystem = new Filesystem();
 
-            if (!$filesystem->exists('edusoho_init_'.$index.'.sql')) {
+            if (!$filesystem->exists('edusoho_init_' . $index . '.sql')) {
                 _init_auto_increment($pdo, $config);
                 return array('success' => true);
             }
@@ -339,7 +340,7 @@ function _create_database($config, $replace)
 
 function _init_data($pdo, $config, $index)
 {
-    $sql    = file_get_contents('./edusoho_init_'.$index.'.sql');
+    $sql    = file_get_contents('./edusoho_init_' . $index . '.sql');
     $result = $pdo->exec($sql);
 }
 
@@ -383,13 +384,13 @@ function _create_config($config)
     secret: {$secret}
     user_partner: none";
 
-    file_put_contents(__DIR__."/../../app/config/parameters.yml", $config);
+    file_put_contents(__DIR__ . "/../../app/config/parameters.yml", $config);
 }
 
 function _create_connection()
 {
     $factory    = new \Doctrine\Bundle\DoctrineBundle\ConnectionFactory(array());
-    $parameters = file_get_contents(__DIR__."/../../app/config/parameters.yml");
+    $parameters = file_get_contents(__DIR__ . "/../../app/config/parameters.yml");
     $parameters = \Symfony\Component\Yaml\Yaml::parse($parameters);
     $parameters = $parameters['parameters'];
 
@@ -403,7 +404,8 @@ function _create_connection()
             'password'      => $parameters['database_password'],
             'charset'       => 'UTF8',
             'driver'        => $parameters['database_driver'],
-            'driverOptions' => array())
+            'driverOptions' => array()
+        )
         ,
         new \Doctrine\DBAL\Configuration(),
         null,
@@ -420,7 +422,7 @@ class SystemInit
     public function initAdmin($user)
     {
         $user['emailVerified'] = 1;
-        $user                  = $user                  = $this->getUserService()->register($user);
+        $user                  = $user = $this->getUserService()->register($user);
         $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
         $user['currentIp']     = '127.0.0.1';
 
@@ -550,11 +552,12 @@ EOD;
                 'alipay_secret'  => ''
             ),
             'storage'        => array(
-                'upload_mode'      => 'local',
-                'cloud_access_key' => '',
-                'cloud_secret_key' => '',
-                'cloud_api_server' => 'http://api.edusoho.net',
-                'cloud_bucket'     => ''
+                'upload_mode'           => 'local',
+                'cloud_access_key'      => '',
+                'cloud_secret_key'      => '',
+                'cloud_api_server'      => 'http://api.edusoho.net',
+                'cloud_bucket'          => '',
+                'enable_playback_rates' => 0
             ),
             'post_num_rules' => array(
                 'rules' => array(
@@ -594,6 +597,9 @@ EOD;
                 'export_allow_count' => 100000,
                 'export_limit'       => 10000,
                 'enable_org'         => 0
+            ),
+            'cloud_sms'      => array(
+                'system_remind' => 'on'
             )
         );
 
@@ -757,7 +763,7 @@ EOD;
 
     public function initBlocks()
     {
-        $themeDir = realpath(__DIR__.'/../themes/');
+        $themeDir = realpath(__DIR__ . '/../themes/');
 
         $metaFiles = array(
             'system'  => "{$themeDir}/block.json",
@@ -777,16 +783,16 @@ EOD;
                     $data[$key] = $item['default'];
                 }
 
-                $filename = __DIR__.'/blocks/'."block-".md5($code).'.html';
+                $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
 
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
                     $content = preg_replace_callback('/(<img[^>]+>)/i', function ($matches) {
                         preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
                         preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/'.INSTALL_URI.'.*/i', '', $_SERVER['REQUEST_URI']);
+                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
                         $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI.trim($src);
+                        $src = $URI . trim($src);
 
                         $img = "<img src='{$src}'";
 
@@ -852,9 +858,9 @@ EOD;
     public function initFolders()
     {
         $folders = array(
-            __DIR__.'/../../app/data/udisk',
-            __DIR__.'/../../app/data/private_files',
-            __DIR__.'/../../web/files'
+            __DIR__ . '/../../app/data/udisk',
+            __DIR__ . '/../../app/data/private_files',
+            __DIR__ . '/../../web/files'
         );
 
         $filesystem = new Filesystem();
@@ -868,7 +874,7 @@ EOD;
 
     public function initLockFile()
     {
-        file_put_contents(__DIR__.'/../../app/data/install.lock', '');
+        file_put_contents(__DIR__ . '/../../app/data/install.lock', '');
     }
 
     private function getCrontabService()

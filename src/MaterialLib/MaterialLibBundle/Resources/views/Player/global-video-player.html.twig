@@ -32,10 +32,9 @@
           class="local-video-player "
           {% else %}
           class="ballon-video-player"
-          data-timelimit="{{ context.watchTimeLimit|default('')}}"
-          data-markerurl="{{ context.markerUrl|default('')}}"
-          data-starttime="{{ context.starttime|default('')}}"
-          data-player-control-bar='{"disableVolumeButton": true, "disablePlaybackButton": true}'
+          data-disable-volume-button="{{ params.disableVolumeButton|default(false) }}"
+          data-disable-playback-button="{{ params.disablePlaybackButton|default(false) }}"
+          data-disable-resolution-switcher="{{ params.disableResolutionSwitcher|default(false) }}"
           {% endif %}
         {% elseif file.type == 'audio' %}
           class="lesson-content-audio"
