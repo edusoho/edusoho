@@ -58,7 +58,6 @@ class RoleServiceImpl extends BaseService implements RoleService
                 throw $this->createServiceException('参数sort不正确。');
                 break;
         }
-
         $roles = $this->getRoleDao()->searchRoles($conditions, $sort, $start, $limit);
 
         return $roles;
@@ -87,7 +86,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         if (empty($conditions['name'])) {
             unset($conditions['name']);
         } else {
-            $conditions['name'] = '%'.$conditions['name'].'%';
+            $conditions['nameLike'] = '%'.$conditions['name'].'%';
         }
 
         return $conditions;
