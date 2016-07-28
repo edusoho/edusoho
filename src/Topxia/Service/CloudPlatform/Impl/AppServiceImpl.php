@@ -71,7 +71,7 @@ class AppServiceImpl extends BaseService implements AppService
         $app['description']   = empty($app['description']) ? '' : $app['description'];
         $app['icon']          = empty($app['icon']) ? '' : $app['icon'];
         $app['developerId']   = 0;
-        $app['developerName'] = empty($app['author']) ? $this->getKernel()->trans('未知') : $app['author'];
+        $app['developerName'] = empty($app['author']) ? '未知' : $app['author'];
         $app['installedTime'] = time();
         $app['updatedTime']   = time();
 
