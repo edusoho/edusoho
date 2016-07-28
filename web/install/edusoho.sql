@@ -50,13 +50,14 @@ CREATE TABLE `block` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户Id',
   `blockTemplateId` INT(11) NOT NULL COMMENT '模版ID',
-  `orgId` INT(11) NOT NULL COMMENT '组织机构Id',
+  `orgId` INT(11) NOT NULL DEFAULT 1 COMMENT '组织机构Id',
   `content` text COMMENT '编辑区的内容',
   `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
   `data` text COMMENT '编辑区内容',
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `block_code_orgId_index` (`code`,`orgId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_template`;
@@ -328,7 +329,9 @@ CREATE TABLE `course_favorite` (
   `courseId` int(10) unsigned NOT NULL COMMENT '收藏课程的ID',
   `userId` int(10) unsigned NOT NULL COMMENT '收藏人的ID',
   `createdTime` int(10) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
+  PRIMARY KEY (`id`),
+  KEY `course_favorite_userId_courseId_type_index` (`userId`,`courseId`,`type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户的收藏数据表';
 
 DROP TABLE IF EXISTS `course_lesson`;
@@ -404,6 +407,7 @@ CREATE TABLE IF NOT EXISTS `course_lesson_replay` (
   `userId` int(10) unsigned NOT NULL COMMENT '创建者',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   `hidden` tinyint(1) unsigned DEFAULT '0' COMMENT '观看状态',
+  `type` varchar(50) NOT NULL DEFAULT 'live' COMMENT '课程类型',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -437,6 +441,7 @@ CREATE TABLE `course_material` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
+  `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -869,8 +874,9 @@ CREATE TABLE `setting` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统设置ID',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '系统设置名',
   `value` longblob COMMENT '系统设置值',
+  `namespace` varchar(255) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`, `namespace`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `shortcut`;
@@ -1037,7 +1043,7 @@ CREATE TABLE `upload_files` (
   `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
   `etag` varchar(256) NOT NULL DEFAULT '' COMMENT 'ETAG',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '长度（音视频则为时长，PPT/文档为页数）',
-  `description` text,
+  `description` text DEFAULT NUll,
   `convertHash` varchar(128) NOT NULL DEFAULT '' COMMENT '文件转换时的查询转换进度用的Hash值',
   `convertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '文件转换状态',
   `convertParams` text COMMENT '文件转换参数',
@@ -1916,5 +1922,164 @@ CREATE TABLE `im_my_conversation` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 COMMENT='用户个人的会话列表';
 
+DROP TABLE IF EXISTS `open_course_recommend`;
+CREATE TABLE `open_course_recommend` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `openCourseId` int(10) NOT NULL COMMENT '公开课id',
+  `recommendCourseId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐课程id',
+  `seq` int(10) NOT NULL DEFAULT '0' COMMENT '序列',
+  `type` varchar(255) NOT NULL COMMENT '类型',
+  `createdTime` int(10) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `open_course_recommend_openCourseId_index` (`openCourseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公开课推荐课程表';
+
+DROP TABLE IF EXISTS `open_course`;
+CREATE TABLE `open_course` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
+  `title` varchar(1024) NOT NULL COMMENT '课程标题',
+  `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '课程副标题',
+  `status` enum('draft','published','closed') NOT NULL DEFAULT 'draft' COMMENT '课程状态',
+  `type` varchar(255) NOT NULL DEFAULT 'normal' COMMENT '课程类型',
+  `lessonNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时数',
+  `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID',
+  `tags` text COMMENT '标签IDs',
+  `smallPicture` varchar(255) NOT NULL DEFAULT '' COMMENT '小图',
+  `middlePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '中图',
+  `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
+  `about` text COMMENT '简介',
+  `teacherIds` text COMMENT '显示的课程教师IDs',
+  `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
+  `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
+  `likeNum` int(10) NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `postNum` int(10) NOT NULL DEFAULT '0' COMMENT '评论数',
+  `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
+  `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
+  `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+  `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
+  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
+  `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `updatedTime` (`updatedTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+
+DROP TABLE IF EXISTS `open_course_lesson`;
+CREATE TABLE `open_course_lesson` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
+  `courseId` int(10) unsigned NOT NULL COMMENT '课时所属课程ID',
+  `chapterId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时所属章节ID',
+  `number` int(10) unsigned NOT NULL COMMENT '课时编号',
+  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时在课程中的序号',
+  `free` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为免费课时',
+  `status` enum('unpublished','published') NOT NULL DEFAULT 'published' COMMENT '课时状态',
+  `title` varchar(255) NOT NULL COMMENT '课时标题',
+  `summary` text COMMENT '课时摘要',
+  `tags` text COMMENT '课时标签',
+  `type` varchar(64) NOT NULL DEFAULT 'text' COMMENT '课时类型',
+  `content` text COMMENT '课时正文',
+  `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课时获得的学分',
+  `requireCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习课时前，需达到的学分',
+  `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
+  `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
+  `mediaName` varchar(255) NOT NULL DEFAULT '' COMMENT '媒体文件名称',
+  `mediaUri` text COMMENT '媒体文件资源名',
+  `homeworkId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作业iD',
+  `exerciseId` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '练习ID',
+  `length` int(11) unsigned DEFAULT NULL COMMENT '时长',
+  `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
+  `quizNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '测验题目数量',
+  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学的学员数',
+  `viewedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看数',
+  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
+  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
+  `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
+  `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `maxOnlineNum` INT NULL DEFAULT '0' COMMENT '直播在线人数峰值',
+  `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
+  `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
+  `suggestHours` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '建议学习时长',
+  `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式',
+  `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间',
+  PRIMARY KEY (`id`),
+  KEY `updatedTime` (`updatedTime`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `open_course_member`;
+CREATE TABLE `open_course_member` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',
+  `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员ID',
+  `mobile` varchar(32) NOT NULL DEFAULT  '' COMMENT '手机号码',
+  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
+  `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
+  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序序号',
+  `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '可见与否，默认为可见',
+  `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '课程会员角色',
+  `ip` varchar(64) COMMENT 'IP地址',
+  `lastEnterTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次进入时间',
+  `isNotified` int(10) NOT NULL DEFAULT '0' COMMENT '直播开始通知',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
+  PRIMARY KEY (`id`),
+  KEY `open_course_member_ip_courseId_index` (`ip`,`courseId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `referer_log`;
+CREATE TABLE `referer_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `targetId` VARCHAR(64)  DEFAULT NUll COMMENT '模块ID',
+  `targetType` varchar(64) NOT NULL COMMENT '模块类型',
+  `targetInnerType` VARCHAR(64) NULL COMMENT '模块自身的类型',
+  `refererUrl` VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url',
+  `refererHost` VARCHAR(1024) DEFAULT '' COMMENT '访问来源Url',
+  `refererName` varchar(64)  DEFAULT '' COMMENT '访问来源站点名称',
+  `orderCount` int(10) unsigned  DEFAULT '0'  COMMENT '促成订单数',
+  `ip` VARCHAR(64) DEFAULT NULL  COMMENT '访问者IP',
+  `userAgent` text COMMENT '浏览器的标识',
+  `uri` VARCHAR(1024) DEFAULT '' COMMENT '访问Url',
+  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问者',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '访问时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
+
+DROP TABLE IF EXISTS `order_referer_log`;
+CREATE TABLE `order_referer_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `refererLogId` int(11) NOT NULL COMMENT '促成订单的访问日志ID',
+  `orderId` int(10) unsigned  DEFAULT '0'  COMMENT '订单ID',
+  `sourceTargetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '来源ID',
+  `sourceTargetType` varchar(64) NOT NULL DEFAULT '' COMMENT '来源类型',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '订单的对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单的对象ID',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '订单支付时间',
+  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单支付者',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单促成日志';
+
+DROP TABLE IF EXISTS `upgrade_notice`;
+CREATE TABLE `upgrade_notice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `code` varchar(100) NOT NULL COMMENT '编码',
+  `version` varchar(100) NOT NULL COMMENT '版本号',
+  `createdTime` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户升级提示查看';
+
+DROP TABLE IF EXISTS `order_referer`;
+CREATE TABLE `order_referer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `uv` VARCHAR(64) NOT NULL ,
+  `data` text NOT NULL ,
+  `orderIds` text,
+  `expiredTime`  int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '过期时间',
+  PRIMARY KEY (`id`),
+  KEY `order_referer_uv_expiredTime_index` (`uv`,`expiredTime`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';
 
 
