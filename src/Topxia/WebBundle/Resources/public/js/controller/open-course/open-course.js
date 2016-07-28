@@ -22,10 +22,15 @@ define(function (require, exports, module) {
                     action = 'addClass';
                 }
 
-                $.post(url, function () {
+                $.post(url, function (res) {
                     var $number = self.parent().next();
                     var currentNum = $number.html();
-                    $number.html(parseInt(currentNum)+1);
+                    if (isLiked) {
+                        $number.html(parseInt(currentNum)-1);
+                    } else {
+                        $number.html(parseInt(currentNum)+1);
+                    }
+                    
                     self.parent()[action]('active');
                 });
             })

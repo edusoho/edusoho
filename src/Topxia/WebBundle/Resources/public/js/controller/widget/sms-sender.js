@@ -28,34 +28,35 @@ define(function(require, exports, module) {
             }
         },
         postData: function(url, data) {
-        var refreshTimeLeft = function(){
-            var leftTime = $('#js-time-left').html();
-            $('#js-time-left').html(leftTime-1);
-            if (leftTime-1 > 0) {
-                setTimeout(refreshTimeLeft, 1000);
-            } else {
-                $('#js-time-left').html('');
-                $('#js-fetch-btn-text').html('获取短信验证码');
-                self.element.removeClass('disabled');
-            }
-        };
-
-        var self = this;
-        $.post(url,data,function(response){
-            if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
-                $('#js-time-left').html('120');
-                $('#js-fetch-btn-text').html('秒后重新获取');
-                Notify.success('发送短信成功');
-                self.element.addClass('disabled');
-                refreshTimeLeft();
-            } else {
-                if ("undefined" != typeof response['error']){
-                    Notify.danger(response['error']);
-                }else{
-                    Notify.danger('发送短信失败，请联系管理员');
+            var refreshTimeLeft = function(){
+                var leftTime = $('#js-time-left').html();
+                $('#js-time-left').html(leftTime-1);
+                if (leftTime-1 > 0) {
+                    setTimeout(refreshTimeLeft, 1000);
+                } else {
+                    $('#js-time-left').html('');
+                    $('#js-fetch-btn-text').html('获取短信验证码');
+                    self.element.removeClass('disabled');
                 }
-            }
-        });
+            };
+
+            var self = this;
+            self.element.addClass('disabled');
+            $.post(url,data,function(response){
+                if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
+                    $('#js-time-left').html('120');
+                    $('#js-fetch-btn-text').html('秒后重新获取');
+                    Notify.success('发送短信成功');
+                    
+                    refreshTimeLeft();
+                } else {
+                    if ("undefined" != typeof response['error']){
+                        Notify.danger(response['error']);
+                    }else{
+                        Notify.danger('发送短信失败，请联系管理员');
+                    }
+                }
+            });
             return this;
         },
 
