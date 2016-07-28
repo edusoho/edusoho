@@ -57,7 +57,10 @@ class RoleController extends BaseController
         }
 
         $res = PermissionBuilder::instance()->getOriginPermissionTree();
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($res),
+            'model' => 'create'
+        ));
     }
 
     public function editAction(Request $request, $id)
@@ -80,7 +83,11 @@ class RoleController extends BaseController
             }
         }
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($originPermissions), 'model' => 'edit', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($originPermissions),
+            'model' => 'edit',
+            'role'  => $role
+        ));
     }
 
     public function deleteAction(Request $request, $id)
@@ -102,7 +109,11 @@ class RoleController extends BaseController
             $re['chkDisabled'] = 'true';
         }
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($res),
+            'model' => 'show',
+            'role'  => $role
+        ));
     }
 
     protected function dataPrepare($position)
