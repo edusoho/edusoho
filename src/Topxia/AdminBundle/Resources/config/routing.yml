@@ -1546,3 +1546,11 @@ admin_report_status_ucenter:
 admin_report_status_email_send:
     pattern: /reports/status/email/send
     defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }
+
+admin_cloud_attachment:
+    pattern: /cloud_attachment
+    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
+
+admin_cloud_attachment_render:
+    pattern: /cloud_attachment/render
+    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }

@@ -156,7 +156,7 @@ class EduCloudController extends BaseController
         if ($request->getMethod() == 'POST') {
             $attachment = $request->request->all();
 
-            if ($attachment['attachment_enable'] == 0) {
+            if ($attachment['enable'] == 0) {
                 $attachment = array_merge($attachment, array('article' => 0, 'thread' => 0, 'group' => 0, 'question' => 0));
             }
             $attachment = array_merge($default, $attachment);

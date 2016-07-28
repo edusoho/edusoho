@@ -15,16 +15,16 @@
                          </div>
                          <div class="controls col-md-8 radios">
                              <label class="">
-                                 <input type="radio" name="attachment_enable" id="attachment_enable"
-                                        value="1" {% if attachment.attachment_enable %} checked {% endif %}> 开启
+                                 <input type="radio" name="enable"
+                                        value="1" {% if attachment.enable %} checked {% endif %}> 开启
                              </label>
                              <label class="radio-inline">
-                                 <input type="radio" name="attachment_enable" id="attachment_disaable"
-                                        value="0" {% if not attachment.attachment_enable %} checked {% endif %}> 关闭
+                                 <input type="radio" name="enable"
+                                        value="0" {% if not attachment.enable %} checked {% endif %}> 关闭
                              </label>
                          </div>
                      </div>
-                     <div class="form-group attachement_detail {% if not attachment.attachment_enable %} hidden {% endif %}">
+                     <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
                          <div class="col-md-3 control-label">
                              <label>业务设置</label>
                          </div>
