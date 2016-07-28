@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        $("input[name='attachment_enable']").on('click', function() {
+        $("input[name='enable']").on('click', function() {
             if ($(this).val() == 1) {
                 $('.attachement_detail').removeClass('hidden');
             } else {
