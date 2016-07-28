@@ -2,10 +2,9 @@
 
 namespace Topxia\Service\Attachment\Impl;
 
-
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Attachment\AttachmentService;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Attachment\AttachmentService;
 
 class AttachmentServiceImpl extends BaseService implements AttachmentService
 {
@@ -55,7 +54,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
         $conditions = array(
             'type'       => self::TYPE,
             'targetType' => $targetType,
-            'targetId'   => $targetId,
+            'targetId'   => $targetId
         );
 
         $limit       = $this->getFileUsedDao()->count($conditions);
@@ -69,6 +68,31 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
         $attachment = $this->getFileUsedDao()->get($id);
         $this->bindFile($attachment);
         return $attachment;
+    }
+
+    public function delete($id)
+    {
+        $attachment = $this->getFileUsedDao()->get($id);
+        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+        if (empty($file)) {
+            $this->createNotFoundException("该附件不存在,或已被删除");
+        }
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin() || $file['createdUserId'] != $user['id'] || !$user->isAdmin()) {
+            $this->createAccessDeniedException("您无全删除改附件");
+        }
+
+        try {
+            $this->getFileUsedDao()->getConnection()->beginTransaction();
+
+            $this->getUploadFileService()->deleteFile($file['id']);
+            $this->getFileUsedDao()->delete($id);
+
+            $this->getFileUsedDao()->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getFileUsedDao()->getConnection()->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -93,8 +117,8 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
      */
     protected function bindFiles(array &$attachments)
     {
-        $files       = $this->getUploadFileService()->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'), 1);
-        $files       = ArrayToolkit::index($files, 'id');
+        $files = $this->getUploadFileService()->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'), 1);
+        $files = ArrayToolkit::index($files, 'id');
         array_walk($attachments, function (&$attachment) use ($files) {
             if (isset($files[$attachment['fileId']])) {
                 $attachment['file'] = $files[$attachment['fileId']];

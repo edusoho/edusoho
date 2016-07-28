@@ -370,7 +370,6 @@ define(function(require, exports, module) {
                 }
             }
             params.output = extOutput;
-            console.log(params);
             return params;
         },
 

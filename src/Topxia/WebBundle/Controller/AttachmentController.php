@@ -65,6 +65,12 @@ class AttachmentController extends BaseController
         ));
     }
 
+    public function deleteAction($id){
+
+        $this->getAttachmentService()->delete($id);
+        return $this->createJsonResponse(array('msg'=>'ok'));
+    }
+
     protected function getAttachmentService()
     {
         return $this->getServiceKernel()->createService('Attachment.AttachmentService');

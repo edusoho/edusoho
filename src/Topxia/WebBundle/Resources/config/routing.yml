@@ -180,6 +180,12 @@ attachment_download:
     defaults: { _controller: TopxiaWebBundle:Attachment:download }
     methods: [GET]
 
+attachment_delete:
+    path: /attachment/{id}/delete
+    defaults: { _controller: TopxiaWebBundle:Attachment:delete }
+    methods: [POST]
+
+
 attachment_form_fields:
     path: /attachment/{targetType}/{targetId}/formFields
     defaults: { _controller: TopxiaWebBundle:Attachment:formFields , targetId:0}
