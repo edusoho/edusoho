@@ -14,7 +14,7 @@ class CloudAttachmentController extends BaseController
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->get("/me");
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:CloudFile:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:CloudAttachment:api-error.html.twig', array());
         }
 
         $storageSetting = $this->getSettingService()->get('storage', array());
@@ -23,7 +23,7 @@ class CloudAttachmentController extends BaseController
             return $this->render('TopxiaAdminBundle:CloudAttachment:index.html.twig');
         }
 
-        return $this->render('TopxiaAdminBundle:CloudFile:error.html.twig', array());
+        return $this->render('TopxiaAdminBundle:CloudAttachment:error.html.twig', array());
     }
 
     public function renderAction(Request $request)
