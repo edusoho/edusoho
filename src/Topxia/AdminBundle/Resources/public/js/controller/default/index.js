@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                     data: postData,
                     type: 'post'
                 }).done(function(data) {
-                    $('.upgrade-status').html('<span class="label label-warning">升级受理中</span>');
+                    $('.upgrade-status').html('<span class="label label-warning">'+Translator.trans('升级受理中')+'</span>');
                 }).fail(function(xhr, textStatus) {
                     Notify.danger(xhr.responseJSON.error.message);
                 }).always(function(xhr, textStatus) {

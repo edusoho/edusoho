@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
