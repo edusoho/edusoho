@@ -83,6 +83,12 @@ class RoleController extends BaseController
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($originPermissions), 'model' => 'edit', 'role' => $role));
     }
 
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getRoleService()->deleteRole($id);
+        return $this->createJsonResponse(array('result' => true));
+    }
+
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);

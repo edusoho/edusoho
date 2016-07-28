@@ -62,6 +62,12 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         return $this->getRole($id);
     }
 
+    public function deleteRole($id)
+    {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        return $result;
+    }
+
     public function searchRoles($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

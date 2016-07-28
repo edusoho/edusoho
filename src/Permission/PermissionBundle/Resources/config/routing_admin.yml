@@ -1,28 +1,33 @@
 admin_roles:
-    pattern:  /setting/roles
+    pattern:  /roles
     defaults: { _controller: PermissionBundle:Role:index }
     permissions: [admin_role_namage]
 
 admin_role_create:
-    pattern:  /setting/role/create
+    pattern:  /role/create
     defaults: { _controller: PermissionBundle:Role:create }
 
 admin_role_edit:
-    pattern:  /setting/role/{id}/edit
+    pattern:  /role/{id}/edit
     defaults: { _controller: PermissionBundle:Role:edit }
-    permissions: [admin_role_namage]
+
+admin_role_delete:
+    pattern:  /role/{id}/delete
+    defaults: { _controller: PermissionBundle:Role:delete }
+    methods: [POST]
 
 admin_role_show:
-    pattern:  /setting/role/{id}/show
+    pattern:  /role/{id}/show
     defaults: { _controller: PermissionBundle:Role:show }
     permissions: [admin_role_namage]
 
 admin_role_check_name:
-    pattern:  /setting/role/checkName
+    pattern:  /role/checkName
     defaults: { _controller: PermissionBundle:Role:checkName }
-    permissions: [admin_role_namage,admin_role_create]
+    permissions: [admin_role_namage]
 
 admin_role_check_code:
-    pattern:  /setting/role/checkCode
+    pattern:  /role/checkCode
     defaults: { _controller: PermissionBundle:Role:checkCode }
-    permissions: [admin_role_namage,admin_role_create]
+    permissions: [admin_role_namage]
+

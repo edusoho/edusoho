@@ -42,6 +42,15 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $role;
     }
 
+    public function deleteRole($id)
+    {
+        $role = $this->getRoleDao()->getRole($id);
+        if (!empty($role)) {
+            $this->getRoleDao()->deleteRole($id);
+            $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
+        }
+    }
+
     public function searchRoles($conditions, $sort, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
