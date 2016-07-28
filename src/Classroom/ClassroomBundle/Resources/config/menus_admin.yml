@@ -24,7 +24,7 @@ admin_classroom_refunds:
     after: admin_course_refunds
     children:
         admin_classroom_refunds_manage:
-            name: 管理
+            name: 班级退款管理
             router_name: admin_order_refunds
             router_params:
                 targetType: classroom
