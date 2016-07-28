@@ -248,7 +248,8 @@ class BuildCommand extends BaseCommand
             'twig/twig/lib',
             'twig/extensions/lib',
             'endroid/qrcode/src',
-            'endroid/qrcode/assets'
+            'endroid/qrcode/assets',
+            'endroid/qrcode-bundle'
         );
 
         foreach ($directories as $dir) {
