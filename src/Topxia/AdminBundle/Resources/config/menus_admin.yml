@@ -159,12 +159,6 @@ admin:
                                     router_name: course_create
                                     group: topBtn
                                     blank: 1
-                                admin_live_course_add:
-                                    name: 创建直播课程
-                                    router_name: course_create
-                                    router_params:
-                                        flag: isLive
-                                    group: topBtn
                                 admin_course_recommend:
                                     name: 推荐课程
                                     router_params:
