@@ -9,7 +9,7 @@ class AttachmentController extends BaseController
 {
     public function uploadAction(Request $request)
     {
-        $token  = $request->query->get('token');
+        $token = $request->query->get('token');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 
@@ -25,7 +25,9 @@ class AttachmentController extends BaseController
 
     public function formFieldsAction(Request $request, $targetType, $targetId)
     {
+        $targets = explode(".", $targetType);
         return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
+            'target'      => $targets[0],
             'targetType'  => $targetType,
             'attachments' => $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId)
         ));
@@ -65,10 +67,11 @@ class AttachmentController extends BaseController
         ));
     }
 
-    public function deleteAction($id){
+    public function deleteAction($id)
+    {
 
         $this->getAttachmentService()->delete($id);
-        return $this->createJsonResponse(array('msg'=>'ok'));
+        return $this->createJsonResponse(array('msg' => 'ok'));
     }
 
     protected function getAttachmentService()
