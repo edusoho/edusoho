@@ -53,6 +53,7 @@ CREATE TABLE `block` (
   `orgId` INT(11) NOT NULL DEFAULT 1 COMMENT '组织机构Id',
   `content` text COMMENT '编辑区的内容',
   `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
+  `meta` text COMMENT '编辑区元信息',
   `data` text COMMENT '编辑区内容',
   `createdTime` int(11) unsigned NOT NULL,
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
