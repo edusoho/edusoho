@@ -6,7 +6,7 @@ define(function(require, exports, module){
             if(attachment_remove){
                 $.post($(this).data('url'), function (result) {
 
-                }).done(function(data){
+                }).done(function(result){
                     if(result.msg == 'ok'){
                         Notify.success('附件已删除');
                     }else{

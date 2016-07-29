@@ -49,10 +49,15 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $article         = $request->request->all();
-            $article['tags'] = array_filter(explode(',', $article['tags']));
+            $formData         = $request->request->all();
+            $article['tags'] = array_filter(explode(',', $formData['tags']));
 
-            $article = $this->getArticleService()->createArticle($article);
+            $article = $this->getArticleService()->createArticle($formData);
+
+            $fileIds = empty($formData['fileIds'])? array() : explode(',',$formData['fileIds']);
+            if(!empty($fileIds)){
+                $this->createAttachments($article, $formData['targetType'],  $fileIds);
+            }
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
@@ -88,6 +93,11 @@ class ArticleController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article  = $this->getArticleService()->updateArticle($id, $formData);
+
+            $fileIds = empty($formData['fileIds'])? array() : explode(',',$formData['fileIds']);
+            if(!empty($fileIds)){
+                $this->createAttachments($article, $formData['targetType'],  $fileIds);
+            }
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -183,6 +193,21 @@ class ArticleController extends BaseController
         ));
     }
 
+    protected function createAttachments($thread, $targetType, array $fileIds)
+    {
+        if (!empty($fileIds)) {
+            $attachments = array_map(function ($fileId) use ($thread, $targetType) {
+                $attachment = array(
+                    'fileId'     => $fileId,
+                    'targetType' => $targetType,
+                    'targetId'   => $thread['id']
+                );
+                return $attachment;
+            }, $fileIds);
+            $this->getAttachmentService()->creates($attachments);
+        }
+    }
+
     protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
@@ -206,5 +231,10 @@ class ArticleController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAttachmentService()
+    {
+        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
     }
 }
