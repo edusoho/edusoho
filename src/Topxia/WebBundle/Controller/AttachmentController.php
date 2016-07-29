@@ -1,15 +1,14 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Util\UploaderToken;
+use Symfony\Component\HttpFoundation\Request;
 
 class AttachmentController extends BaseController
 {
     public function uploadAction(Request $request)
     {
-        $token = $request->query->get('token');
+        $token  = $request->query->get('token');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 
@@ -43,7 +42,7 @@ class AttachmentController extends BaseController
     public function previewAction(Request $request, $id)
     {
         $attachment = $this->getAttachmentService()->get($id);
-        $file = $this->getUploadFileService()->getFile($attachment['fileId']);
+        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
 
         if ($file['storage'] == 'cloud') {
             return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
@@ -60,7 +59,7 @@ class AttachmentController extends BaseController
     public function downloadAction(Request $request, $id)
     {
         $attachment = $this->getAttachmentService()->get($id);
-        $file = $this->getUploadFileService()->getFile($attachment['fileId']);
+        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $file['id']
@@ -69,7 +68,6 @@ class AttachmentController extends BaseController
 
     public function deleteAction($id)
     {
-
         $this->getAttachmentService()->delete($id);
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
