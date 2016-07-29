@@ -10,13 +10,11 @@ define(function(require, exports, module) {
         },
         onClickThumb: function() {
             $('.js-like-num').on('click', function() {
-                 $('.js-like-num').off('click');
                 var self = $(this);
                 var url, action;
-                self.css('cursor','default');
+                self.off('click').css('cursor','default');
                 url = self.data('likeUrl');
                 action = 'addClass';
-
                 $.post(url, function(res) {
                     var $number = self.parent().next();
                     var currentNum = $number.html();
