@@ -18,8 +18,8 @@
     <tr>
       <th width="30%">IP</th>
       <th width="20%">{{'最近进入'|trans}}</th>
-      <th width="20%">手机号</th>
-      {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+      {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+        <th width="20%">手机号</th>
         <th width="20%">是否提醒</th>
       {% endif %}
     </tr>
@@ -33,9 +33,9 @@
         <td style="vertical-align: middle;">
           {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
         </td>
-        <td>{{ student.mobile }}</td>
 
-        {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+        {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+          <td>{{ student.mobile }}</td>
           <td style="vertical-align: middle;">
             {% if student.isNotified %}已设置提醒{% else %}未设置{% endif %}
           </td>

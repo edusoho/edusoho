@@ -6,7 +6,7 @@
 
     <input type="hidden" name="userType" value="login"/>
 
-    {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+    {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
       <select class="form-control" name="isNotified">
         {{ select_options({0:'全部学员', 1: '设置提醒的学员'}, app.request.get('isNotified')) }}
       </select>&nbsp;&nbsp;
@@ -22,7 +22,7 @@
       <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
       <th width="20%">{{'最近进入'|trans}}</th>
       <th width="20%">{{'手机号'|trans}}</th>
-      {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+      {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
         <th>{{'是否提醒'|trans}}</th>
       {% endif %}
       <th>{{'操作'|trans}}</th>
@@ -44,7 +44,7 @@
 
         <td style="vertical-align: middle;">{{ student.mobile }}</td>
 
-        {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+        {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
           <td style="vertical-align: middle;">
             {% if student.isNotified %}已设置提醒{% else %}未设置{% endif %}
           </td>
