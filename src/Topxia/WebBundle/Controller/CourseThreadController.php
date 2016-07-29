@@ -391,11 +391,18 @@ class CourseThreadController extends CourseBaseController
             $userId = $currentUser->id;
 
             if ($form->isValid()) {
+                $formData = $request->request->all();
                 $postData = $form->getData();
 
                 list($postData, $users) = $this->replaceMention($postData);
 
                 $post = $this->getThreadService()->createPost($postData);
+
+                $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
+
+                if (!empty($fileIds)) {
+                    $this->createAttachments($post, $formData['targetType'], $fileIds);
+                }
 
                 $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $id), true);
                 $threadUrl .= "#post-".$post['id'];
@@ -508,10 +515,17 @@ class CourseThreadController extends CourseBaseController
         $form = $this->createPostForm($post);
 
         if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
             $form->bind($request);
 
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
+
+                $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
+
+                if (!empty($fileIds)) {
+                    $this->createAttachments($post, $formData['targetType'], $fileIds);
+                }
 
                 if ($user->isAdmin()) {
                     $message = array(
