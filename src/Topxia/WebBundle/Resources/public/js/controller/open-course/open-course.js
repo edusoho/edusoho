@@ -1,42 +1,34 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     var ThreadShowWidget = require('../thread/thread-show.js');
     var Notify = require('common/bootstrap-notify');
     var Cookie = require('cookie');
     var main = {
-        init: function () {
+        init: function() {
             main.onClickThumb();
             main.onClickfavorite();
             main.onClickHeader();
         },
-        onClickThumb: function () {
-            $('.js-like-num').on('click', function () {
+        onClickThumb: function() {
+            $('.js-like-num').on('click', function() {
+                 $('.js-like-num').off('click');
                 var self = $(this);
-
-                var isLiked = self.parent().hasClass('active');
                 var url, action;
-                if (isLiked) {
-                    url = self.data('cancelLikeUrl');
-                    action = 'removeClass';
-                } else {
-                    url = self.data('likeUrl');
-                    action = 'addClass';
-                }
+                self.css('cursor','default');
+                url = self.data('likeUrl');
+                action = 'addClass';
 
-                $.post(url, function (res) {
+                $.post(url, function(res) {
                     var $number = self.parent().next();
                     var currentNum = $number.html();
-                    if (isLiked) {
-                        $number.html(parseInt(currentNum)-1);
-                    } else {
-                        $number.html(parseInt(currentNum)+1);
-                    }
-                    
+
+                    $number.html(parseInt(currentNum) + 1);
+
                     self.parent()[action]('active');
                 });
             })
         },
-        onClickfavorite: function () {
-            $('.js-favorite-num').on('click', function () {
+        onClickfavorite: function() {
+            $('.js-favorite-num').on('click', function() {
                 var self = $(this);
 
                 var isFavorited = self.parent().hasClass('active');
@@ -51,23 +43,23 @@ define(function (require, exports, module) {
                     text = '已收藏';
                 }
 
-                $.post(url, function (data) {
+                $.post(url, function(data) {
                     if (data['result']) {
                         self.parent().next().html(text);
                         self.parent()[action]('active');
-                   } else if (!data['result'] && data['message'] == 'Access Denied'){
-                       $('#modal').html();
-                       $('#modal').load('/login/ajax');
-                       $('#modal').modal('show');
+                    } else if (!data['result'] && data['message'] == 'Access Denied') {
+                        $('#modal').html();
+                        $('#modal').load('/login/ajax');
+                        $('#modal').modal('show');
                     } else {
                         Notify.danger(data['message']);
                     }
-                    
+
                 })
             })
         },
-        onClickHeader: function () {
-            $('.tab-header').on('click', function () {
+        onClickHeader: function() {
+            $('.tab-header').on('click', function() {
                 var $this = $(this);
                 var index = $this.index();
                 $this.addClass('active').siblings().removeClass('active');
@@ -76,7 +68,7 @@ define(function (require, exports, module) {
         }
 
     }
-    exports.run = function () {
+    exports.run = function() {
         main.init();
         if (!$('#open-course-comment').find('[type=submit]').hasClass('disabled')) {
             var threadShowWidget = new ThreadShowWidget({
