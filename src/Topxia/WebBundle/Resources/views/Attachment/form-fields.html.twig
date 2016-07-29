@@ -1,4 +1,4 @@
-{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ targetType ) %}
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) %}
   {% do load_script('attachment/upload-form') %}
   <div class="form-group">
     <label class="col-xs-2 control-label" for="thread_title">{{ '附件'|trans }}</label>
@@ -15,6 +15,8 @@
         上传附件
       </a>
     </div>
+    {# 应该标记该附件是否新增,或者修改 #}
     <input class="js-file-ids-store" value="{{ attachments|array_column('fileId')|join(',') }}" name="fileIds" type="hidden">
+    <input class="js-attachment-targetType-store" value="{{ targetType }}" name="targetType" type="hidden">
   </div>
 {% endif %}
