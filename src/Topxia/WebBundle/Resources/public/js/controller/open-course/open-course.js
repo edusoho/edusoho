@@ -47,7 +47,7 @@ define(function(require, exports, module) {
                         self.parent()[action]('active');
                     } else if (!data['result'] && data['message'] == 'Access Denied') {
                         $('#modal').html();
-                        $('#modal').load('/login/ajax');
+                        $('#modal').load(self.data('loginUrl'));
                         $('#modal').modal('show');
                     } else {
                         Notify.danger(data['message']);
