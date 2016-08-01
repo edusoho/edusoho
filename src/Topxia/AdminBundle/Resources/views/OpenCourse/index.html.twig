@@ -1,0 +1,41 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_open_course' %}
+
+{% set script_controller = 'course/manage' %}
+{%
+  set script_arguments = {
+    tagMatchUrl: path('tag_match')
+  }
+%}
+{% block main %}
+  {% include 'TopxiaAdminBundle:OpenCourse:course-search-form.html.twig' with {actionUrl:path('admin_open_course'),showStatusSelect:1} %}
+  
+  {% if not setting('cloud_sms.sms_enabled',0) or (setting('cloud_sms.sms_enabled',0) and setting('cloud_sms.sms_live_play_one_day') == 'off' and setting('cloud_sms.sms_live_play_one_hour') == 'off') %}
+    <div class="alert alert-warning">尚未开启云短信的直播通知开关，开启后直播公开课将支持短信提醒功能&nbsp;&nbsp;{% if 'ROLE_SUPER_ADMIN' in app.user.roles%}<a href="{{ path('admin_edu_cloud_sms') }}">去开启</a>{% endif %}</div>
+  {% endif %}
+
+  <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th width="49%">名称</th>      
+      <th>状态</th>
+      <th>创建者</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+        {% set user = users[course.userId]|default(null) %}
+        {% set category = categories[course.categoryId]|default(null) %}
+        {% include 'TopxiaAdminBundle:OpenCourse:tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

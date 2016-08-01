@@ -45,6 +45,10 @@ class BaseTestCase extends WebTestCase
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $connection = $kernel->getContainer()->get('database_connection');
         $serviceKernel->setConnection(new TestCaseConnection($connection));
+        $serviceKernel->setEnvVariable(array(
+            'host'          => 'test.com',
+            'schemeAndHost' => 'http://test.com'
+        ));
         static::$serviceKernel = $serviceKernel;
     }
 
@@ -97,7 +101,7 @@ class BaseTestCase extends WebTestCase
         ));
         static::$serviceKernel->setCurrentUser($currentUser);
 
-        $user = $userService->register(array(
+        $user  = $userService->register(array(
             'nickname'  => 'admin',
             'email'     => 'admin@admin.com',
             'password'  => 'admin',
@@ -117,8 +121,9 @@ class BaseTestCase extends WebTestCase
 
     /**
      * mock对象
+     *
      * @param $name                                       mock的类名
-     * @param $params,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     * @param $params                                     ,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
 
     protected function mock($objectName, $params = array())

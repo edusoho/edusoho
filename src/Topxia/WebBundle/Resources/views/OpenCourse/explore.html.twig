@@ -1,0 +1,66 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set bodyClass = 'bg-blank' %}
+
+{% set siteNav = 'course/explore' %}
+{% set script_controller = 'open-course/open-course-explore' %}
+
+{% block title %} 公开课 - {{ parent() }}{% endblock %}
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        公开课列表
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block content %}
+  <div class="open-course-list">
+    <div class="row course-list es-open-course-list">
+      {% for course in courses if course %}
+        {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+        <div class="col-md-4 col-xs-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
+                 target="{{ course.title }}">
+                {% if course.type == 'liveOpen' %}
+                  <span class="tags">
+            <span class="tag-live"></span>
+          </span>
+                {% endif %}
+                {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+              </a>
+              {% if course.type == 'liveOpen' and lessons %}
+                <div class="mask">
+                  {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('H:i') }} 直播
+                  {% else %}
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} 直播
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="course-info clearfix">
+              <div class="title">
+                <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
+                   title="{{ course.title }}">
+                  {{ course.title }}
+                </a>
+              </div>
+              <div class="metas pull-right">
+                <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+                <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">{{ '暂无公开课'|trans }}</div>
+      {% endfor %}
+    </div>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course' %}
+
+{% block title %}
+  {{ setting('site.name', 'EduSoho网校') }}
+{% endblock %}
+
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+
+  {% if app.request.get('previewType') == 'wx' %}
+    {% block header %}{% endblock %}
+    <div class="open-course-wechat-preview">
+      <div class="container open-course-container">
+        {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+        <div class="open-course-wechat-qrcode hidden-md hidden-sm hidden-xs">
+          {# 二维码地址去掉url的query部分 #}
+          <img src="{{ qrcode_data_uri(wxPreviewUrl) }}">
+          <p class="text-center">二维码只用于微信扫一<br>扫预览，不可用于分享</p>
+        </div>
+      </div>
+    </div>
+    {% block footer %}{% endblock %}
+  {% else %}
+  <div class="container open-course-container">
+    {% include 'TopxiaWebBundle:OpenCourse/Mobile:open-course.html.twig' %}
+  </div>
+  {% endif %}
+  {% block bottom_content %}{% endblock %}
+  {% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
+  'title': course.title,
+  'desc': course.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(course.largePicture,'course.png'),
+  }%}
+{% endblock %}
+    

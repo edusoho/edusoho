@@ -5,11 +5,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LessonMaterialPluginController extends BaseController
 {
-
-    public function initAction (Request $request)
+    public function initAction(Request $request)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
-        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
+        $lesson                = $this->getCourseService()->getCourseLesson($course['id'], $request->query->get('lessonId'));
 
         if ($lesson['mediaId'] > 0) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -18,14 +17,15 @@ class LessonMaterialPluginController extends BaseController
         }
 
         $lessonMaterials = $this->getMaterialService()->searchMaterials(
-            array('lessonId' => $lesson['id'], 'source' => 'coursematerial'),
-            array('createdTime','DESC'), 0, 100
+            array('lessonId' => $lesson['id'], 'source' => 'coursematerial', 'type' => 'course'),
+            array('createdTime','DESC'), 
+            0, 100
         );
         return $this->render('TopxiaWebBundle:LessonMaterialPlugin:index.html.twig',array(
             'materials' => $lessonMaterials,
-            'course' => $course,
-            'lesson' => $lesson,
-            'file' => $file,
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'file'      => $file
         ));
     }
 

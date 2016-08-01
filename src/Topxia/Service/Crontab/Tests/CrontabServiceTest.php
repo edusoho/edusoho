@@ -73,6 +73,13 @@ class CrontabServiceTest extends BaseTestCase
         $this->assertEquals($result, $job['id']);
     }
 
+    public function testDeleteJobs()
+    {
+        $job    = $this->createJob();
+        $result = $this->getCrontabService()->deleteJobs(1, 'test');
+        $this->assertEquals($result, $job['id']);
+    }
+
     public function testScheduleJobs()
     {
         $job = $this->createJob();

@@ -1,0 +1,67 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %} {{'短信验证码'|trans}} {% endblock %}
+
+{% block body %}
+    <form id = "js-sms-modal-form" class="open-course-sms-form" method="post" action="{{ path('open_course_member_sms',{id:course.id}) }}">
+      <div class = "form-group">
+        <div class = "controls row" >
+          <div class = "col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for='mobile'>{{'手机号码'|trans}} </label>
+          </div>
+          {% if app.user and app.user.verifiedMobile %}
+            <div class = "col-md-3">
+              <input id='mobile' type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'输入手机号码'|trans}}" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}"  />
+            </div>
+            <div class = "col-md-3 mts" >
+              <a class="text-sm text-muted modify_mobile" href="javascript:;">{{'修改手机号码'|trans}}</a>
+            </div>
+          {% else %}
+            <div class = "col-md-3">
+              <input id='mobile' type="text" class="form-control" placeholder="{{'输入手机号码'|trans}}"  name="mobile" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}" />
+            </div>
+          {% endif %}
+           <div class="help-block"></div>
+        </div>
+      </div>
+
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
+        <div class="controls row" >
+          <div class = "col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for="captcha_code">{{'图形验证码'|trans}} </label>
+          </div>
+          <div class = "col-md-3  open-course-form-control" >
+            <input type="text" class="form-control" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'输入图形验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+          </div>
+          <div class="col-md-3 open-course-form-btn">
+            <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'看不清，点击换一张'|trans}}" style="cursor:pointer;height:40px;width:100%">
+           </span>
+          </div>
+          <div class="help-block"></div>
+        </div>
+      </div>
+
+      <div class = "form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
+        <div class="controls row" >
+          <div class = "col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for='sms-code-modal'>{{'短信验证码'|trans}} </label>
+          </div>
+          <div class = "col-md-3  open-course-form-control" >
+            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal"  required="required" placeholder="{{'输入短信验证码'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'system_remind'})}}">
+          </div>
+          <div class="open-course-form-btn">
+            <button type="button" class="btn btn-default btn-md js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}" disabled>
+              <span id="js-time-left"></span>
+              <span id="js-fetch-btn-text">{{'获取短信验证码'|trans}}{# 秒后重新获取 #}</span>
+           </button>
+          </div>
+          <div class="help-block mtm"></div>
+        </div>
+      </div>
+    </form>
+{% endblock %}
+
+{% block footer %}
+  <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
+  <script>app.load('open-course/member-create-sms');</script>
+{% endblock %}

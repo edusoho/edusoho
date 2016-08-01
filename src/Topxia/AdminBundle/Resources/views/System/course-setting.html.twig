@@ -11,6 +11,7 @@
 <form class="form-horizontal" method="post" id="course-form" novalidate>
 
   <fieldset>
+    <legend>课程规则</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >给新{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}发送欢迎私信</label>
@@ -39,6 +40,19 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>课程详情页显示相关课程</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}
+        <div class="help-block">根据课程的标签，显示相关课程</div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>权限与版权</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >允许教师设置课程价格</label>
@@ -98,25 +112,6 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>课程详情页显示相关课程</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}
-        <div class="help-block">根据课程的标签，显示相关课程</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>免费课时允许未登录用户观看</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('allowAnonymousPreview', {1:'允许', 0:'不允许'}, courseSetting.allowAnonymousPreview) }}
-        <div class="help-block">如果允许此项设置,未登录用户（游客）可观看免费课时</div>
-      </div>
-    </div>
-
      <div class="form-group">
       <div class="col-md-3 control-label">
         <label>图文、文档课时防复制</label>
@@ -137,6 +132,20 @@
       </div>
     </div>
 
+  </fieldset>
+
+  <fieldset>
+    <legend>课程运营模式</legend>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>免费课时允许未登录用户观看</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('allowAnonymousPreview', {1:'允许', 0:'不允许'}, courseSetting.allowAnonymousPreview) }}
+        <div class="help-block">如果允许此项设置,未登录用户（游客）可观看免费课时</div>
+      </div>
+    </div>
 
     <div class="form-group">
       <label class="col-md-3 control-label">课程中允许显示{{setting('default.user_name', '学员')}}人数</label>
@@ -146,6 +155,7 @@
     </div>
 
   </fieldset>
+
   <fieldset>
       <legend>名称设置</legend>
 

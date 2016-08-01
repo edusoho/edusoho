@@ -163,6 +163,7 @@ class Lesson extends BaseResource
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
+                $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
                     $factory = new CloudClientFactory();
                     $client  = $factory->createClient();
@@ -231,7 +232,7 @@ class Lesson extends BaseResource
                             'id' => $file['id']
                         ),
                         'duration' => 3600,
-                        'userId'   => $this->getCurrentUser()->getId()
+                        'userId'   => 0
                     ));
                     $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
                 }

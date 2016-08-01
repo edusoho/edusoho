@@ -27,10 +27,10 @@
         <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="text-muted">还有{{ post.subposts - 5 }}条回复，</span><a href="javascript:;" class="js-post-more">点击查看</a></span>
       </div>
 
+      {% set goto = goto|default(path('homepage')) %}
       {% if service.canAccess('post.create', post) and app.user %}
-        {% if not postReplyUrl is defined %}
-          {% set postReplyUrl =  path('thread_post_reply', {threadId:post.threadId, postId:post.id}) %}
-        {% endif %}
+      
+        {% set postReplyUrl =  postReplyUrl|default(path('thread_post_reply', {threadId:post.threadId, postId:post.id})) %}
         <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
           <div class="form-group">
             <div class="controls">
@@ -44,7 +44,7 @@
         </form>
       {% else %}
         <div class="empty">
-          你还没有登录，请先<a href="{{ path('login') }}">登录</a>或<a href="{{ path('register') }}">注册</a>！
+          你还没有登录，请先<a href="{{ path('login',{goto:goto}) }}">登录</a>或<a href="{{ path('register',{goto:goto}) }}">注册</a>！
         </div>
       {% endif %}
 

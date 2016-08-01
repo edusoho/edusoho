@@ -1,0 +1,130 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {% if targetType == 'courselesson' or targetType == 'opencourselesson' %}
+  		{{'上传课时文件'|trans}}
+  {% elseif targetType == 'coursematerial' %}
+  		{{'上传资料文件'|trans}}
+  {% elseif targetType == 'materiallib' %}
+  		{{'上传素材文件'|trans}}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+
+<style type="text/css">
+  .filePrew {
+    display: block;
+    position: absolute;
+    top: 10;
+    left: 0;
+    width: 400px;
+    height: 40px;
+    opacity: 0;
+  }
+</style>
+<div>
+  <div id="selectFiles"
+      data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+      data-target-type="{{targetType}}"
+      data-target-id="{{targetId}}"
+      data-upload-mode="{{ storageSetting.upload_mode }}"
+      data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
+      data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}"
+      data-get-video-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
+      data-get-audio-info="{{path('uploadfile_cloud_get_media_info',{type:'audio'})}}"
+      data-file-exts="{{fileExts}}">
+    <button
+      class="btn_addPic uploadBtn btn btn-default btn-lg">
+      <span>
+          <i class="glyphicon glyphicon-plus ">
+          {{'添加待上传文件'|trans}}
+          </i>
+      </span>
+    </button>
+    <button id="btn_upload" class="btn_addPic btn btn-default btn-lg">
+      <span>
+          {{'上传'|trans}}
+      </span>
+    </button>
+    <input data-role='fileSelected' multiple="multiple" name="pic" class="filePrew" type="file" style="display:none"/>
+  </div>
+
+  <div id="fileList">
+    <table style="margin-top:20px;" class="table table-bordered table-striped table-condensed">
+      <thead>
+        <tr>
+          <td>{{'文件名称'|trans}}</td>
+          <td width="15%">{{'文件大小'|trans}}</td>
+          <td width="60%">{{'进度'|trans}}</td>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+  {% if targetType == 'courselesson' or  targetType == 'materiallib' or targetType == 'opencourselesson'  %}
+    <div class="alert alert-info">
+      <ul>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          {{'<li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>'|trans|raw}}
+          {{'<li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
+        {% else %}
+          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {% if storageSetting.upload_mode == 'cloud' %}
+    <div class="quality-switcher">
+      <div class="quality-switcher-bar">
+        {{'视频转码类型'|trans}}<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> {{'设置'|trans}}</a>
+      </div>
+      <div class="quality-switcher-control">
+        <div class="video-quality radios">
+          {{'画质：'|trans}}
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans|raw, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans|raw, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans|raw}, storageSetting.video_quality|default('low')) }}
+        </div>
+
+        <div class="audio-quality radios">
+          {{'音质：'|trans}}
+          {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality|default('low')) }}
+        </div>
+
+        <div class="quality-actions">
+          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">{{'确定'|trans}}</a>
+          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">{{'取消'|trans}}</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  {% elseif targetType == 'coursematerial' %}
+    <div class="alert alert-info">
+      <ul>
+        <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
+        {% if storageSetting.upload_mode == 'cloud' %}
+          {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans|raw}}
+          {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
+        {% else %}
+          <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>app.load('course-manage-file/batch-upload-course-files')</script>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
+{% endblock %}
+
