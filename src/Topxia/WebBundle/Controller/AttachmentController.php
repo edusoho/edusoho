@@ -8,16 +8,18 @@ class AttachmentController extends BaseController
 {
     public function uploadAction(Request $request)
     {
-        $token  = $request->query->get('token');
+        $query  = $request->query->all();
         $parser = new UploaderToken();
-        $params = $parser->parse($token);
+        $params = $parser->parse($query['token']);
 
         if (!$params) {
             return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
         }
 
         return $this->render('TopxiaWebBundle:Attachment:upload-modal.html.twig', array(
-            'token'      => $token,
+            'token'      => $query['token'],
+            'idsClass'   => $query['idsClass'],
+            'listClass'  => $query['listClass'],
             'targetType' => $params['targetType']
         ));
     }
@@ -25,9 +27,12 @@ class AttachmentController extends BaseController
     public function formFieldsAction(Request $request, $targetType, $targetId)
     {
         $targets = explode(".", $targetType);
+
         return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
-            'target'      => $targets[0],
+            'target'      => array_shift($targets),
             'targetType'  => $targetType,
+            'type'        => array_pop($targets),
+            'useType'     => $request->query->get('useType', false),
             'attachments' => $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId)
         ));
     }
