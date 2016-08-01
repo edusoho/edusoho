@@ -51,10 +51,7 @@ class GroupThreadController extends BaseController
 
                 $thread = $this->getThreadService()->addThread($info);
 
-                $fileIds = isset($threadData['fileIds']) ? explode(',', $threadData['fileIds']) : array();
-                if (!empty($fileIds)) {
-                    $this->createAttachments($thread, $threadData['targetType'], $fileIds);
-                }
+                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -107,10 +104,7 @@ class GroupThreadController extends BaseController
 
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
 
-                $fileIds = isset($threadData['fileIds']) ? explode(',', $threadData['fileIds']) : array();
-                if (!empty($fileIds)) {
-                    $this->createAttachments($thread, $threadData['targetType'], $fileIds);
-                }
+                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -537,10 +531,7 @@ class GroupThreadController extends BaseController
             }
         }
 
-        $fileIds = isset($postContent['fileIds']) ? explode(',', $postContent['fileIds']) : array();
-        if (!empty($fileIds)) {
-            $this->createAttachments($post, $postContent['targetType'], $fileIds);
-        }
+        $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
 
         $message = array(
             'id'       => $groupId,
@@ -994,21 +985,6 @@ class GroupThreadController extends BaseController
         unset($record['uri']);
         $record['name'] = $file->getClientOriginalName();
         return new Response(json_encode($record));
-    }
-
-    protected function createAttachments($thread, $targetType, array $fileIds)
-    {
-        if (!empty($fileIds)) {
-            $attachments = array_map(function ($fileId) use ($thread, $targetType) {
-                $attachment = array(
-                    'fileId'     => $fileId,
-                    'targetType' => $targetType,
-                    'targetId'   => $thread['id']
-                );
-                return $attachment;
-            }, $fileIds);
-            $this->getAttachmentService()->creates($attachments);
-        }
     }
 
     protected function isFeatureEnabled($feature)

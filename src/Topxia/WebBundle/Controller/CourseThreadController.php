@@ -159,11 +159,7 @@ class CourseThreadController extends CourseBaseController
             if ($form->isValid()) {
                 try {
                     $thread = $this->getThreadService()->createThread($form->getData());
-
-                    $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
-                    if (!empty($fileIds)) {
-                        $this->createAttachments($thread, $formData['targetType'], $fileIds);
-                    }
+                    $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
 
                     return $this->redirect($this->generateUrl('course_thread_show', array(
                         'courseId' => $thread['courseId'],
@@ -214,12 +210,8 @@ class CourseThreadController extends CourseBaseController
 
                 if ($form->isValid()) {
                     $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
+                    $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
 
-                    $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
-
-                    if (!empty($fileIds)) {
-                        $this->createAttachments($thread, $formData['targetType'], $fileIds);
-                    }
                     if ($user->isAdmin()) {
                         $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
                         $message   = array(
@@ -398,11 +390,7 @@ class CourseThreadController extends CourseBaseController
 
                 $post = $this->getThreadService()->createPost($postData);
 
-                $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
-
-                if (!empty($fileIds)) {
-                    $this->createAttachments($post, $formData['targetType'], $fileIds);
-                }
+                $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
 
                 $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $id), true);
                 $threadUrl .= "#post-".$post['id'];
@@ -521,11 +509,7 @@ class CourseThreadController extends CourseBaseController
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
 
-                $fileIds = empty($formData['fileIds']) ? array() : explode(',', $formData['fileIds']);
-
-                if (!empty($fileIds)) {
-                    $this->createAttachments($post, $formData['targetType'], $fileIds);
-                }
+                $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
 
                 if ($user->isAdmin()) {
                     $message = array(
@@ -626,21 +610,6 @@ class CourseThreadController extends CourseBaseController
         }
 
         return $conditions;
-    }
-
-    protected function createAttachments($thread, $targetType, array $fileIds)
-    {
-        if (!empty($fileIds)) {
-            $attachments = array_map(function ($fileId) use ($thread, $targetType) {
-                $attachment = array(
-                    'fileId'     => $fileId,
-                    'targetType' => $targetType,
-                    'targetId'   => $thread['id']
-                );
-                return $attachment;
-            }, $fileIds);
-            $this->getAttachmentService()->creates($attachments);
-        }
     }
 
     protected function getNotifiactionService()

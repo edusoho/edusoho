@@ -49,15 +49,12 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $formData         = $request->request->all();
+            $formData        = $request->request->all();
             $article['tags'] = array_filter(explode(',', $formData['tags']));
 
             $article = $this->getArticleService()->createArticle($formData);
 
-            $fileIds = empty($formData['fileIds'])? array() : explode(',',$formData['fileIds']);
-            if(!empty($fileIds)){
-                $this->createAttachments($article, $formData['targetType'],  $fileIds);
-            }
+            $this->getAttachmentService()->proxyCreate($article, $request->request->get('attachment'));
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
@@ -94,10 +91,7 @@ class ArticleController extends BaseController
             $formData = $request->request->all();
             $article  = $this->getArticleService()->updateArticle($id, $formData);
 
-            $fileIds = empty($formData['fileIds'])? array() : explode(',',$formData['fileIds']);
-            if(!empty($fileIds)){
-                $this->createAttachments($article, $formData['targetType'],  $fileIds);
-            }
+            $this->getAttachmentService()->proxyCreate($article, $request->request->get('attachment'));
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -191,21 +185,6 @@ class ArticleController extends BaseController
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
         ));
-    }
-
-    protected function createAttachments($thread, $targetType, array $fileIds)
-    {
-        if (!empty($fileIds)) {
-            $attachments = array_map(function ($fileId) use ($thread, $targetType) {
-                $attachment = array(
-                    'fileId'     => $fileId,
-                    'targetType' => $targetType,
-                    'targetId'   => $thread['id']
-                );
-                return $attachment;
-            }, $fileIds);
-            $this->getAttachmentService()->creates($attachments);
-        }
     }
 
     protected function getArticleService()
