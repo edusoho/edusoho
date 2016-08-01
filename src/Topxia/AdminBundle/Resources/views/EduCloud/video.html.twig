@@ -379,6 +379,15 @@
         <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的用户名。</div>
       </div>
     </div>
+    <div class="row form-group" >
+      <div class="col-md-3 control-label">
+        <label>云视频指纹显示时间</label>
+      </div>  
+      <div class="controls col-md-8">
+        <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small" name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> 秒
+        <div class="help-block">建议时长在0.5 - 1.5秒之间</div>
+      </div>
+    </div>
     {% if storageSetting.upload_mode == 'cloud' %}
     
     <hr>

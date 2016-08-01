@@ -35,6 +35,7 @@
           {% if setting('storage.video_fingerprint') and app.user %}
             data-fingerprint="{{ finger_print() }}"
             data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+            data-fingerprint-time="{{ setting('storage.video_fingerprint_time')}}"
           {% endif %}
           {% if file.storage == 'cloud' %}
             class="ballon-video-player"

@@ -156,6 +156,7 @@ class EduCloudController extends BaseController
             'video_embed_watermark_image' => '',
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
+            'video_fingerprint_time'      => 0.5,
             'video_header'                => null
         );
 
