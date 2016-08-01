@@ -1,108 +1,823 @@
 提示: Tips
-您尚未成为%name%成员,请先成为%name%成员: 'You are not a member yet, please sign up at first.'
-加入旁听生: 'Join as guest'
-您尚未成为%title%学员,请先成为%title%学员: 'You are not a student yet, please join the course at first.'
-加入学习: 'Join'
+您尚未成为%name%成员,请先成为%name%成员: You are not a member yet, please sign up at first.
+加入旁听生: Join as guest
+您尚未成为%title%学员,请先成为%title%学员: You are not a student yet, please join the course at first.
+加入学习: Join
 编辑: Edit
-删除: 'Delete'
-暂无公告: 'No announcement'
-公告管理: 'Announcement'
-编辑公告: 'Edit'
-添加公告: 'Add'
-历史公告: 'History'
-查看本课程的所有公告: 'View all'
-创建者: 'Created by'
-公告内容: 'Content'
+删除: Delete
+暂无公告: No announcement
+公告管理: Announcement
+编辑公告: Edit
+添加公告: Add
+历史公告: History
+查看本课程的所有公告: View all
+创建者: Created by
+公告内容: Content
 创建时间: Created at
 更新时间: Updated at
 尚未更新: No update
 退出: Exit
-公告: 'Announcement'
+公告: Announcement
 发表于: Published at
-发布时间: Published at
+发布时间: Publish Time
 结束时间: End time
 给%user_name%发送系统通知: Send system message to %user_name%
 取消: Cancel
 保存: Save
-全部: 'All'
+全部: All
 正文: Content
-文章来源: 'Source'
+文章来源: Source
 原文链接: Source link
-文章评论: 'Comments'
+文章评论: Comments
 您的想法: What do you think?
 登录: Sign in
 后发表看法: Add comment
 正在评论: Adding comment
 发表评论: Publish my comment
 还没有人评论，欢迎说说您的想法！: No comment yet. Tell us what do you think.
-标签：: 'Label'
+标签：: Label
 前往设置: Settings
 还没有任何资讯: No article
 上一页: Previous
 下一页: Next
 热门资讯: Hot article
-暂无热门资讯: 'No hot article'
+暂无热门资讯: No hot article
 推荐资讯: Recommended article
-暂无推荐资讯: 'No recommended article'
+暂无推荐资讯: No recommended article
 月: Month
 热门评论: Hot comments
 评论于: Commented at
 一个评论都没有！: No comment
-热门标签: 'Hot label'
+热门标签: Hot label
 邮箱地址验证失败: Failed to verify your mail address.
 邮箱地址验证失败，请重试。: Failed to verify your mail address, please try again.
 返回首页: Home
 设置新邮箱: Set new mail address
 新邮箱: New mail address
-网站登录密码: 'Sign in password'
-设置新的登录邮箱，需要校验当前的网站登录密码: 'We need to verify your current sign in password to set a new mail address.'
+网站登录密码: Sign in password
+设置新的登录邮箱，需要校验当前的网站登录密码: We need to verify your current sign in password to set a new mail address.
 提交: Submit
 升级您的浏览器: Upgrade your browser
 您的浏览器版本过低，请升级您的浏览器后，再访问%name%。: Your are using an older version browser, please upgrade to a modern browser to visit our web site.
-推荐使用以下浏览器：: 'Recommended browsers:'
-可用于抵扣全站课程: 'For any course'
+推荐使用以下浏览器：: Recommended browsers:
+可用于抵扣全站课程: For any course
 用于抵扣指定课程: For specified courses
-可用于抵扣全站班级: 'For any classroom'
-可用于抵扣全站会员: 'For any level of VIP membership'
+可用于抵扣全站班级: For any classroom
+可用于抵扣全站会员: For any level of VIP membership
 用于抵扣指定会员: For specified level of VIP membership
-可用于抵扣全站所有类型消费: 'For any purchase on our web site'
+可用于抵扣全站所有类型消费: For any purchase on our web site
 有效期截止：: Expired on
-使用条件：: 'Requirements:'
+使用条件：: Requirements:
 可用于抵扣指定班级: For specified classrooms
 去购买课程: Buy a course
 去开通会员: Become a VIP
 去购买班级: Buy a classroom
 去消费: Go to buy something
-此课程优惠券已使用: 'This course coupon was used already.'
-此班级优惠券已使用: 'This classroom coupon was used already.'
-此会员优惠券已使用: 'This VIP coupon was used already.'
-此抵价优惠券已使用: 'This coupon was used already.'
-优惠券: 'Coupon'
-学习卡: 'Learning card'
+此课程优惠券已使用: This course coupon was used already.
+此班级优惠券已使用: This classroom coupon was used already.
+此会员优惠券已使用: This VIP coupon was used already.
+此抵价优惠券已使用: This coupon was used already.
+优惠券: Coupon
+学习卡: Learning card
 未使用: Not used
 已使用: Used
 已过期: Expired
 已作废: Disabled
 没有搜索到符合条件的: No match
-网站没有开启%coin_name%功能,学习卡功能暂时没法使用: 'The %coin_name% feature is not enabled. The learning card cannot be used.'
-我的卡包: 'My wallet'
-学习卡可以用于账户充值: 'Learning card can be used to recharge your account balance.'
+网站没有开启%coin_name%功能,学习卡功能暂时没法使用: The %coin_name% feature is not enabled. The learning card cannot be used.
+我的卡包: My wallet
+学习卡可以用于账户充值: Learning card can be used to recharge your account balance.
 立即使用: Use it now
-您领取了一张: 'You got a new'
-已添加至“我的卡包“: 'Added to “card bundles“'
+您领取了一张: You got a new
+已添加至“我的卡包“: Added to “card bundles“
 您还没有登录，请在登录后领取。: You cannot receive the cards without logging in。
 登录查看: Sign in to check out
-视频转码类型：: 'Video transcoding type：'
+视频转码类型：: Video transcoding type：
 画质：: Video quality
 音质：: Audio quality
 确定: OK
 我的%coin_name%: My
 我的现金账单: Bills in cash
-我的邀请码: 'My invitation code'
-收入：: 'Income'
-元: 'Chinese yuan'
+我的邀请码: My invitation code
+收入：: Income
+元: Chinese yuan
 支出：: Outcome
-价格: 'Price'
+流水号: Transaction Code
+名称: Name
+成交时间: Transaction time
+收支: Balance
+支付方式: Payment method
+订单号：: Order number
+网校支付: Net school payment
+暂无记录: No record
+兑换: Redeem
+可兑换金额: Convertible Amount
+已兑换: Redeemed
+消费赠送: Bonus
+暂无可兑换信息: No redeem information
+消费: Payment
+累计赠送: Bonus In total
+正在提交: Submitting
+说明: Directions
+当前页面尚未编辑内容，请在管理后台编辑。: The current page has not been edited yet ,please edit in the control panel
+状态: Status
+价格: Price
+购买者: Buyer
+暂无虚拟币订单记录: No virtual currency Order History
+账户余额: Balance
+充&nbsp;值: Recharge
+使用学习卡: Use learnig cards
+全部记录: All records
+充值记录: Recharge record
+消费记录: Payment record
+学习卡充值: Learning card recharge
+余额支付: Recharge
+TA的邀请码: Invitation code
+邀请好友: Invite a friend
+给TA分享您的邀请码或者邀请链接: Send invitation code or  link to your friends
+，TA注册后将获得%promoted_user_value%元优惠券: The invited user  will get a coupon worthing %promoted_user_value% Chinese yuan after registeration
+TA在消费后您将获得%promote_user_value%元优惠券: You will get a coupon worthing %promote_user_value% Chinese yuan when he or she  make a payment
+同时您将获得%promote_user_value%元优惠券: And you will get a coupon worthing %promote_user_value% Chinese yuan
+。: .
+邀请对象: Invited
+邀请时间: invited date
+邀请奖励: Rewards
+奖励获取时间: Rewarded date
+暂无邀请用户: No Invited users
+邀请码功能已关闭: Invitation code feature is off
+账户中心: Account center
+我的账户: My account
+我的订单: My order
+会员记录: Membership record
+分享邀请链接: Share invitation link
+复制到剪贴板: Copy to clipboard
+由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功。: Since the trading method you choose for payment is "secured transactions"  please make a delivery confirmation on Alipay (the system have completed virtual delivery automatically),so that your payment will succeed
+点击进入支付宝: Alipay
+正在跳转到支付网关: Redirecting to the payment vendor
+填写TA的邀请码: Input invitation code
+邀请码: Invitation code
+填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。: Please fill the invitation code ,the invitor will got a bonus when you make a initial payment
+填写TA的邀请码，TA会获得邀请奖励。: Input the invitation code ,the invitor will be rewarded
+发表: Post
+您尚未登录，不能评论，请先: You can't comment without registeration please first
+或: Or
+注册。: Register
+未发布: Unpublished
+已发布: Published
+已关闭: Closed
+视频: Video
+音频: Audio
+文档: Documents
+图片: Image
+其他: Others
+未付款: Unpaid
+已付款: Paid
+退款中: Refunding
+已退款: Refunded
+已申请: Requested
+退款成功: Refund succeeded
+退款失败: Refund failed
+已取消: Cancelled
+警告: Attention
+错误: Error
+回收站: Recycler
+未开始: Not started
+进行中: In progress
+已结束: Ended
+流畅: Smooth
+适合PPT讲解: Suitable for PPT presentation
+标准: Standard
+适合屏幕录制、摄像头拍摄: Suitable for screen record or camera capture
+精细: Fine quality
+适合动态电影: Suitable for motion pictures
+分享到微信: Share on wechat
+分享到新浪微博: Share on sina weibo
+分享到QQ好友: Share to QQ
+分享到QQ空间: Share on QQ zone
+请创建模版文件: Please create a template file
+自定义: Custom
+课程: Course
+最新文章: Newest post
+发布于: Published at
+属于: Of
+分类: Category
+课程公告: Announcement
+修改: Modify
+暂无课程公告: No announcement
+发表于%createdTime%: Published at %createdTime%
+发送系统通知给该课程的%user.name%: Send a system notice to %user.name% in the course
+课程存档: Archived courses
+教师：: Instructor
+目前暂时无课程: No couses have been found
+简介: About this course
+课程目标: What you'll learn
+适合人群: Who is this course for
+课程标签：: Course tag
+查看课程: View courses
+课时列表: Lectures
+课程暂无相关课时: No relevant lectures in this course
+'%title%课程的数据': 'data of course %title%'
+用户名: User name
+加入课程时间: Date added
+完成课程时间: Completed at
+课程学习天数: Days for the course learning
+课程学习时长（分）:  Course length(min)
+提问数: Questions
+笔记数: Notes
+收费: Charged
+订单名称：%title%: Order name
+订单号：%sn%: Order number
+订单价格：: Order price
+价格：: Price
+免费: Free
+更新中: Updating
+已完结: Ended
+正在直播中: Live now
+直播: Live
+找不到相关课程！: No relevant courses
+选择课程: Select a course
+课程名称: Course name
+搜索: Search
+全部课程: All courses
+添加: Add
+评价: Reviews
+无评价: No reviews
+学习总时长:%learnTime%: Time learnt:%learnTime%
+继续学习: Continue
+创建课程: Create a course
+创建直播课程: Create a live course
+标题: Tittle
+课程购买: Course payment
+关闭后课程将无法在线购买加入、由教师/管理员后台导入。: The course cannot be purchased online or imported by the teacher/site  administrator when closed
+正在创建: Creating
+创建: Create
+如何创建课程？: How to publish a course？
+课程列表: Course list
+查看%name%: View
+最新: Newest
+最热: Most popular
+推荐: What we reconmmend
+会员课程: Premium Courses
+直播课程: Live course
+免费课程: Free courses
+该分类下无课程: No courses in this category
+取消收藏: Cancel
+收藏课程: Favorite
+查看%user_name%的学习进度, 还可以发私信进行联系: Check out the learnnig progress of %user_name, or send a message directly
+分享到: Share to
+退出学习: Quit
+课程管理: Course management
+返回课程主页: back to course HomePage
+预览: Preview
+作为 已购买用户: As  users who have paid
+作为 未购买用户: As users who have not paid
+发布课程: Publish a course
+您已经不是会员，不能学习此课程！: This course is not accessible without membership！
+请重新: Please try again
+开通会员: Join a membership
+返回课程首页: Back to the course home page
+您的会员已过期，不能学习此课程，请先: You can not learn this course since Your membership has expired, please
+续费: Renewals
+会员等级不够，不能学习此课程。请先: Your membership level is not qualified to access this course. Please
+升级会员: Upgrade
+此课程已不支持会员免费学，: This course is no longer suported Free Via Membership
+您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击: The course you bought has expired ,you can not add a lesson or post a question .if you have any questions please contact the teacher or just click the
+重新购买: Repurchase
+重新加入: Add again
+课程信息: Overview
+标签: Tag
+暂无标签: No tags
+暂无课程简介: No introduction
+分类：: Category
+学员: Student
+返回班级: Back to class
+返回课程: Back to course
+上一课时: Previous
+下一课时: Next
+第: Number
+章: Chapter
+节: Section
+课时: Lesson
+正在加载: Loading
+当前课时正在编辑中，暂时无法观看。: The current course in not accessible while being edited
+学过了: Learned
+扫一扫: QR scan
+扫二维码继续学习: Scan the QR code to resume the course
+学习进度提示: Notice for learning progress
+赞一个，这个课程你已经都学完啦，你可以再回顾一下或者去看看别的课程: Well done!you have completed the course ,you can review the course or check out other courses
+回课程主页: Back to the  course HomePage
+媒体课时学习提示: Notice for media Course
+此课时设置了必须完整播放完整个课时才能学完: You can only complete the lesson after finishing the whole video
+作业未完成提示: Notice for assignment unfinished
+此课时设置了必须做完本课时作业并提交后才能学完: You can only complete the lesson after finishing and submmitting the assignments
+关注: Follow
+已关注: Followed
+发私信: Message
+已学%number%课时: Already learned %number% lessons
+本课程暂时还没有学生: This course has no students
+课程介绍: Overview
+全部课时: All lessons
+排序：: Order
+最新笔记: Latest notes
+点赞最多: Most favorited
+展开全文: Full articles
+暂无笔记记录: No note
+下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。: The next live course session  will start at 10:30 am on this Friday , please make sure your assignments of last session be ready for assessment
+该课程为限制课程: Limited access
+请联系客服: Please contact customer service
+购买课程: Buy the course
+该课程属于: This course is of
+首页: Homepage
+您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。: Your refund requested succeeded ,please wait for proccessing ,courses are not accessible during the refund proccess
+取消退款，继续学习！: Cancel the refund and resume courses
+完成课时：: completed lesson：
+下一课时：: Next lesson：
+组合购买课程不能退出: Recommended%name%
+推荐%name%: Recommended%name%
+会员: Membership
+免费学: Free
+<a href="%href%" target="_blank">升级会员</a>: Upgrade membership
+<a href="%href%" target="_blank">加入会员</a>: Join membership
+有效期: Expiration date
+您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击: The course you bought has expired ,you can not add a lesson or post a question .if you have any questions please contact the teacher or just click the
+天: Day
+原价: Original price
+活动: Promotions
+名额已满: Full
+'%maxStudentNum%名额': '%maxStudentNum% students'
+'%lessonNum%课时': 'Lesson %lessonNum%'
+已收藏: Favorited
+收藏: Favorite
+分享: Share
+课程概览: Overview
+笔记: Notes
+讨论区: Reviews
+资料区: Course materials
+概览: Overview
+最新学员: Newcommer
+暂无学员: No students
+授课教师: Instructor
+暂无教师: No instructor
+发话题: Start a topic
+提问题: Ask a question
+问答: Q&A
+精华: Digest post
+最后回复: Last reply
+最新发帖: Newest post
+限免: Free for limited time
+学习进度: Learnnig progress
+您已完成全部课时的学习: You have completed the course
+继续学习：%title%: Resume learning：%title%
+已学: Learned
+获得学分：: Aquired credits：
+相关课程: You may also like
+添加 课时: Add  lesson
+添加 直播课时: add  live session
+添加 试卷: Add  test paper
+文件移除: File removed
+文件将从该课程中移除关联: The file will be removed from the course
+同时在我的教学资料中删除相关文件: And remove relevant documents from the from the teaching materials
+文件若被引用，移除或删除会引起引用课时无法正常使用: The lesson will not work properly if the file is referenced removed or deleted
+确认: OK
+文件：%filename% 被引用: File：%filename% is referenced
+课程文件: Course materials
+添加课程文件: Add course materials
+文件名: File name
+类型: Type
+大小: Size
+使用: Usage
+最后更新: Last update
+无文件记录: No file record
+全选: Select all
+文件记录: File record
+移除: Remove
+上传课时文件: Upload course materials
+上传资料文件: Upload documents
+上传文件到教学资料库: Upload documents to the course materials libiray
+支持: Suport
+mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf: mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf
+格式的文件上传，文件大小不能超过: Upload file format, the file size can not exceed
+1 GB: 1 GB
+视频将上传到: Video will be uploaded to
+mp4, mp3: mp4,mp3
+格式的文件上传，且文件大小不能超过: Upload file format, the file size can not exceed
+MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。: MP4 video should be transcoded using AVC(H264) encoder ,or the video will not playable by the browser
+网站服务器: Website server
+，如需使用%Edusoho%云视频,点击: ，if %Edusoho%云视频,click on
+这里: Here
+了解详情。: Learn more
+视频转码类型: Video transcoding type
+设置: Settings
+支持常见文档、图片、音视频、压缩包文件格式。: Support for common documents, pictures, audio and video, compressed file format.
+且文件大小不能超过: And the file size can not exceed
+<li>文件将上传到<strong>云服务器</strong>。</li>: <li>files will be uploaded to the <strong>cloud server</strong>。</li>
+关闭: Close
+云文件: Files on cloud server
+重新转换(调试模式): Re-Conversion (debug mode)
+资料: Materials
+课时的数据: Lesson data
+加入课时时间: Lesson add date
+完成课时时间: Lesson completed date
+音视频时长（分）: Audio/video duration(min)
+音视频学习时长（分）: Time for the audio/video lesson (min)
+最近考试得分: Recent test scores
+第%number%: Number
+作业、练习: Assignment.exercise
+还剩: Left
+已达最大可看时长: Reached its maximum length
+视频时长: Video duration
+视频课程: Video courses
+音频时长: Audio length
+音频课程: Audio courses
+图文课程: Non-multmedia courses
+图文: Non-multmedia
+考试倒计时: Exam countdown
+考试已开始: Exam started
+考试已结束: Exam ended
+试卷: Test paper
+PPT课程: Courses in PPT format
+文档课程: Documentation Course
+flash课程: Courses in flash video format
+回放: Playback
+直播结束: Live course ended
+敬请期待: Stay tuned
+试看: Try for free
+课时预览: Preview
+立刻购买本课程，即可获得全部完整学习内容。: Buy the course now to enjoy the full content
+课时尚未发布，无法预览！: The course is not available for preview since it's has'nt been published yet
+免费加入学习: Enroll for free
+登录后加入学习: Enroll after logging in
+觉得不错？点击加入此课程: Wonderful is'nt it? Enroll now
+觉得不错？点击购买此课程: Wonderful is'nt it? buy it now
+登录后购买学习完整的课程: Buy the whole course after signing in
+抱歉，该课程为限制课程，请联系客服。: Limited access,please contact the customer services
+抱歉，课程%title%已关闭！: Sorry about that ,this course has closed
+课时管理: Course management
+直播课时: Live session
+添加%chapter_name%: add  %chapter_name%
+添加%part_name%: Add %part_name%
+暂无课时内容！: This lesson got nothing
+编辑课时%number%: Edit lesson %number%
+添加课时: Add a lesson
+免费课时: Free lesson
+内容: Content
+您有一段自动保存内容，继续编辑请点击: You have a unfinished content which has been saved automatiacally ,click EDIT to coutinue
+PPT课时需要开通EduSoho云文档服务才能使用,: To use the PPT feature ,please activate Cloud Document Service powered by EduSoho
+点击: Click
+文档课时需要开通EduSoho云文档服务才能使用,: To use the document feature ,please activate Cloud Document Service powered by EduSoho
+Flash课时需要开通EduSoho云视频服务才能使用,: To use the flash content feature ,please activate Cloud Document Service powered by EduSoho
+视频时长或: Video duration or
+分: Sec
+秒: Min
+时长必须为整数。: Time duration has to be a decimal
+学分: Credits
+学完此课时，可获得的学分: Credits you can get after the lesson
+建议学习时长: Recommending time
+小时: hours
+（如未设置，则默认学习时长为视频时长3倍取整。）: (The default time for learning is 3 times of the video duration if not set)
+（如未设置，则默认学习时长为音频时长3倍取整。）: (The default time for learning is 3 times of the audio duration if not set.)
+（如未设置，则默认学习时长1小时。）: (The default time for learning is 1 hour if not set)
+课时文件已删除: Course deleted
+无效课时: Invalid lesson
+'%giveCredit%学分': '%giveCredit% Credits'
+需%giveCredit%学分: needs %giveCredit% credits
+正在等待: Waitting
+格式转换: Format Conversion
+正在转换: Converting
+格式: Format
+格式转换失败: Format conversion failed
+更多: More
+编辑作业: Edit Assignment
+预览作业: Preview
+移除作业: Remove
+布置作业: Post Assignment
+移除练习: Remove
+新增练习: Add
+弹题管理: Pop-up questions management
+添加资料: Add materials
+发布: Publish
+取消发布: Cancel
+正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。: The video is being  transcoded which takes some time and the video is not accessible during the proccess
+转换完成后将以站内消息通知您。: We will notice you after the transcoding process completed
+上传视频: Upload video
+从资料库中选择: Select from the library
+从课程文件中选择: Select from course documents
+导入网络视频: Import video clips from the internet
+mp4, avi, flv, wmv, mov, m4v: mp4, avi, flv, wmv, mov, m4v
+格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。: The size of the uploading video can not exceed <strong>2 GB</strong>
+断点续传: Multithreading breakpoint transmissionM
+（仅支持HTML5浏览器）。: (Only supports HTML5 browser)
+云视频服务器: cloud-video server
+，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。: The video will be transcoded which takes some time and the video is not accessible during the proccess.
+mp4: mp4
+格式的视频文件上传，文件大小不能超过: The size of the uploading video can not exceed
+。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。: MP4 video should be transcoded using AVC(H264) encoder ,or the video will not be playable by the browser
+。如需使用%Edusoho%云视频,点击: ，to use %Edusoho% cloud-video feature ,click on the
+了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。: Learn more,% Edusoho% Cloud video will provide you with a stable, secure, economical and convenient video hosting service as well as high-quality video playback experience.
+暂无视频文件，请先上传。: No video file, please upload.
+支持优酷、土豆、腾讯、网易公开课的视频页面地址导入: Open online course from Youku, Tudou, Tencent, Netease is now suported
+正在导入，请稍等: Improting please wait
+导入: Import
+腾讯和网易的视频不支持手机端播放: Videos from Tencent and Netease  is not supported on mobile
+上传音频: Upload audio
+mp3: mp3
+格式的音频文件上传，且文件大小不能超过: The  size of the audio can not exceed
+500M: 500M
+音频将上传到: Upload audio files to
+云服务器: Cloud server
+，%Edusoho%点击: ，%Edusoho% click
+暂无音频文件，请先上传。: No audio file ,please upload
+ppt, pptx: ppt, pptx
+格式的PPT文件上传，且文件大小不能超过: Upload PPT and the file size can not exceed
+100 MB: 100MB
+PPT将上传到: Upload PPT file to
+暂无PPT文件，请先上传。: No PPT file , please upload
+上传文档: Upload a document
+pdf,doc,docx: pdf,doc,docx
+格式的文档上传，且文件大小不能超过: Upload document and the file size can not exceed
+文档将上传到: Upload document file to
+暂无文档，请先上传。: No document file ,please upload
+上传Flash: Upload flash file
+Flash将上传到: Upload flash files to
+暂无Flash，请先上传。: No flash  file ,please upload
+基本信息: Basic info
+副标题: Subtittile
+用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理: Used for course search by tags and unified management by the administrator
+直播最大%user_name%数: Capacity
+设置该值后，%user_name%只能在有效期内进行课程的相关操作，统默认会在到期前10天提醒。该值为0，则不做此限制。:  After this value is set, %user_name%  can only make related operations within the valid period.By default the system will alert within 10 days before the expiration;If the value is 0,then there is no such limitations
+连载状态: To be continued
+视频观看时间限制: Time limit
+倍单视频总时长: Video duration
+0表示不限制。: 0 means no limitations
+实名认证: Real-name authentication
+设置该值后，学员购买课程前，必须先去申请实名认证。: After the value has been set ,users must complete the real-name authentication to buy a course
+直播“桌面分享”插件下载: Download plugin for live "Desktop Sharing"
+添加选择题: Add Multiple Choice
+课程订单查询: Course Order Tracking
+导出订单: Export orders
+起始时间: Starts at
+筛选条件: Filters
+关键词: Keywords
+实时同步中。如需更改内容可以选择对原课程进行更改。: Syncing.To change the course content please select the original course
+如需解除同步单独编辑本课程，可点击下方按钮解除同步。: To  edit the course separately ,click the button below to end the synchronization
+注意：本操作不可逆！: Attention : this operation is not reversible!
+解除同步: Abort synchronization
+解除确认: Confirm
+解除后本课程将停止同步更新,本操作不可逆！: This course won't be updated after abort synchronization and it's irreversible
+详细信息: Details
+课程简介: About this course
+适应人群: Who should take the course
+课程图片: Image
+录播管理: Recorded course management
+课程设置: Settings
+价格设置: Price settings
+教师设置: Instructor settings
+管理: Management
+题库: Exam library
+题目管理: Management
+题目导入/导出: Import/Export
+试卷管理: Test paper management
+试卷批阅: Paper marking
+作业批改: Assignments Review
+课程运营: Course operation
+课程学习数据: Course learning data
+课程名: Course name
+课程学习人数: students enrolled
+课程完成人数: students completed
+课程平均学习时长(分): Average time for this course
+课程提问总数: Total questions
+课程笔记总数: Total notes
+课时名: Lesson Name
+课时学习人数: Total students entrolled
+课时完成人数: Total students who finished the lesson
+课时平均学习时长(分): Average time for the lesson(min)
+音视频时长(分): Media duration
+音视频平均观看时长(分): Average playing duration
+测试平均得分: Average test score
+（图文）: Non-multmedia
+（视频）: Video
+（音频）: Audio
+（试卷）: Test paper
+无: None
+注：网络视频的观看时长无法获取: Note : unable to get the played duration of online videos
+提示：请选择图片裁剪区域。: Tip:Please select an image crop area
+重新选择图片: Reselect an image
+你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。: You can upload jpg, gif, png format, image size is recommended at least 480x270.
+文件大小不能超过: File size can not exceed
+2M: 2M
+选择要上传的图片: Select an image to upload
+'%coin_name%价格': '%coin_name%Price'
+当前课程正处于%name%打折活动中。: This course is now under discount promotions
+折扣: Discount
+折后价: Price after discount
+会员课程设置: Premium Course Settings
+设置会员课程后，该会员及更高等级会员，可免费学习。: After setting the course membership ,members on this level or higher can learn the course for free
+开启视频试看: Activate video preview  feature
+视频试看功能仅云视频支持: Previewing feature is only suported for cloud-video
+试看时长: Previewing Time
+分钟: Mins
+抱歉，您无权设置课程价格，如有需要请联系网站管理员！: Sorry, you have no right to set the price of the course, if necessary, please contact the Administrator!
+已添加教师: Teachers Added
+只能添加有教师权限的用户: Can only add users who are also authorized teachers
+课时未发布，不能下载该资料: Unable to download the files since the course is not started
+网络链接资料: Internet refrence links
+课时%number%: Lesson%number%
+上传于: Uploaded
+课程暂无资料: No flies for this course
+课程资料: Course materials
+此课程暂无资料: No flies for this course
+重新选择: Reselect
+上传文件: Upload files
+网络链接: Links
+请将文件拖到这里，或点击添加文件按钮: Please drag files here ,or click the Upload button
+文件将上传到: Files will be upload to
+暂无文件，请先上传。: No flies ,please upload
+资料链接地址: Materials link addresses
+上传课程文件: Upload files
+暂无资料，请上传。: No flies ,please upload
+填写资料简介 (可选): Input file info Here(optional)
+购买该课程需要通过实名认证，您还没有完成实名认证，赶快去认证吧~: Buying the course needs real-name authentication which you haven't done yet .Do it now~
+去认证: Complete the real-name authentication
+注意：请在30分钟内完成支付，否则订单将会过期失效: Note: Please complete the payment within 30 minutes, otherwise the order will be expired.
+会员免费: Free for members
+您还没有头像，设置以后才能加入学习: You have no avatar,please set an avatar to enroll courses
+拥有一个独有的头像，老师和同学们能更容易关注到你哦～～: An unique avatar makes it easier to draw attentions from your teachers or classmates~~
+点击设置: Click to set
+此课程为免费课程，无需购买，可直接加入学习。: This course is for free, no need to purchase, you can enroll directly
+预览模式无法支付: You can't pay under the previewing mode
+去支付: Pay
+正在加入: Entrolling
+正在创建订单: Creating the order
+预览模式无法加入学习: You can't entroll the course under previewing mode
+真不巧，已经有人抢在你前面下单了，请继续关注: Sorrg about that but someone have ordered the course already ,please keep informed
+您已有该课程未支付的订单，请点击支付完成购买！: You already have an unpaid order for the course ,click here to complete the purchase
+点击支付: Pay
+取消此订单: Cancel the order
+题目类别管理: Questions types management
+添加类别: Add a category
+操作: Operation
+暂无分类，请添加: No category ,please add one
+编辑题目类别: Edit question category
+添加题目类别: Add question category
+选择题: Multiple-choices
+填空题: Fill in the blank
+判断题: True or False
+问答题: Q&A
+材料题: Questions based on materials
+展开: Expand
+收起: Collapse
+题干: Statement
+一道题都没有，请点击右上角按钮，按不同的题型录入题目: No questions,click the button on the top right，add questions statement according to categories
+题目: Questions
+共%getItemCount()%题: '%getItemCount()%Questions in total'
+上传题目附件: Upload attachment
+新增选项:  Add an Option
+不定项选择题: Multiple-choices
+答案: Answers
+编辑题目: Edit questions
+添加题目: Add questions
+从属: Subordinate
+可以针对本课程或者某个课时出题: Add questions according to this course or a lesson in the course
+难度: Difficulty
+显示/隐藏 高级选项: Show / Hide advanced options
+解析: Analyze
+分值: Scores
+保存并继续添加: Save and continue
+返回: Back
+保存并添加子题: Save and add sub questions
+从属于%simple_name%: is of %simple_name%
+从属于 本课程: is of the course
+未完成: Unfinished
+子题: Sub questions
+管理子题: manage sub qustions
+含子题: Sub questions included
+邮箱/手机/用户名: Emails/Phone numbers/Username
+只能添加系统中已注册的用户: Can only add user who have already registered
+购买价格: Price
+本课程的价格为: Price for the course
+备注: Note
+选填: Optional
+课程不能添加: This course cannot be added
+请课程发布后再添加。: Please add the course when it is published
+正在保存: Saving
+个人详细信息: Personal details
+姓名: Name
+暂无: None
+性别: Gender
+男: Male
+女: Female
+职业: Occupation
+公司: Company
+手机号码: phone number
+头衔: Titile
+个人签名: What's up
+自我介绍: About me
+微博: Sina blog
+微信: Wechat
+选择要导入的文件: Select a file to import
+浏览: View
+点击下载示例说明文件: Click to download sample documentation
+支持从Excel文件导入: Suport import from Excel file
+导出: Export
+批量导入: Batch Import
+课程未发布,不可导入学员: Unpublished course, students can not be imported
+正式学员: Official participants
+退出记录: Quit record
+加入课程时间：: Course Add at
+退款取消: Cancel Refund
+学员名称: Student name
+退出原因: Reason
+退出日期: Quit At
+退款状态: Refund Status
+退款金额: Refund Amount
+仅显示通过现金购买加入的学员退款记录: Only show refund history of students who enrolled via cash
+班级课程退款情况请在班级管理中查看: Please view the course refund  in Class Management Section
+无学员记录: NO Students
+请填写: Please fill in
+的备注信息: Notes for
+增加: Add
+课程有效期: Expiration date
+课程标题: Tittle
+增加天数: Days Added
+课程不能增加: The course can't be added
+有效期，请课程发布后再增加。: Please add the expiration dates for the course when it is published
+个人主页: My homepage
+电话: Phone number
+个人网站: Personal websites
+学员管理: Student management
+请输入用户名/邮箱/手机号: Please fill in your username/email/phone number
+记录: Records
+加入时间：%createdTime%: Added at: %createdTime%
+有效期至：%deadline%: Expire before :%deadline%
+查看资料: View materials
+增加有效期: Expand the expiration date
+创建试卷: Create testpaper
+保存，下一步: Save .next
+题目统计: Questions in totals
+时间限制: Time limit
+更新人/时间: Updated at
+还没有试卷，请点击右上角按钮，: No Testpaper yet,click the button on the upper right corner to add
+创建一个新试卷: New testpaper
+提示：试卷一旦发布不能修改，发布后的试卷需要: Tip: Once published papers can not be modified,after published it needs
+添加到课时: Add to lesson
+单选题: Multiple choice
+多选题: Multiple choice
+不定向选择题: Multiple-choices
+题数: Questions
+分数: Scores
+'%subCount%子题': '%subCount%Sub questions'
+从属：: Subordinate
+本课程: This course
+替换: Replace
+选择: Select
+无题目记录: No question records
+重新生成试卷题目: Receate Test questions
+试卷题目管理: Questions management
+新增试题: New Testpaper
+题号: Question number
+这是一份纯客观题的试卷, 达到: This is a purely objective question paper，when scored
+分（含）可以自动审阅通过考试。: Points(included)can pass actomatically
+确认试卷题目信息: Confirm the paper info
+题目类型: Question Type
+题目数量: Questions in totals
+总分值: Total score
+试卷名称: Paper title
+试卷说明: Directions
+0分钟，表示无限制: 0 means no limitations
+生成方式: methods for creation
+试卷难度: Difficulty
+如果某个难度的题目数不够，将会随机选择题目来补充。: If questions of the difficulty areinsufficient,then randomly added questions will be selected for supplement.
+出题范围: Questions Scope
+到: to
+题目设置: Question Settings
+题目分值: Scores
+编辑试卷课时%number%: Edit lesson %number%
+添加试卷课时: Add a test lesson
+如果找不到试卷，请先确定该试卷已经发布: If you can not find the paper, make sure that the test paper has been published
+实时考试: Real-time test
+开始时间: Starts at
+限制学分: Credits limits
+参加此次考试所需的学分，０分则不限制。: Credits required for the test, 0 means none
+学习时长: Learning duration
+建议: Suggestions
+（如未设置，则默认完成时长为：客观题每题5分钟、主观题每题30分钟。合计取整）: if no set ，the default time are ：5mins for each objective question,30mins for each subjective question.Total rounding
+尚未创建试卷，请先: No test paper created,please first
+草稿: Drafts
+'%itemCount%题': 'Question %itemCount%'
+'%score%分': '%score%Scores'
+及格%passedScore%分: passing score is %passedScore% points
+'%limitedTime%分钟': '%limitedTime%mins'
+无限制: No limits
+发布试卷%name%: Publish the test paper %name%
+发布试卷: Publish a test paper
+关闭试卷%name%: Close the test paper %name%
+关闭试卷: Close a test paper
+编辑试卷信息: Edit the test paper info
+管理题目: Manage the test questions
+重新生成题目: R
+个人设置: Personal settings
+我的教学: My teaching
+我的学习: my course learning
 管理后台: Administration
 通知: Notice
 私信: Message
@@ -117,80 +832,80 @@
 名师风采: Teacher Info
 去老师主页看看: View teacher`s homepage
 更多教师: More teachers
-为了帐号的安全，以及更好的使用体验，请设置您的Email地址。: 'Please setup your mail address to improve the security of your account.'
-现在就去设置: 'Setup now '
+为了帐号的安全，以及更好的使用体验，请设置您的Email地址。: Please setup your mail address to improve the security of your account.
+现在就去设置: Setup now
 手机端: Mobile
 回到顶端: Back to TOP
 电话客服: Phone customer service
 我的课程/%name%: My courses/%name%
 我的考试/作业: My exam/homework
 QQ客服及QQ群: QQ customer service
-学<br>习<br>中<br>心: 'Learning<br> Center'
+学<br>习<br>中<br>心: Learning<br> Center
 点击这里给我发消息: Send me a message
 工作时间：%worktime%: Worktime：%worktime%
 '%name%:%number%': '%name%: %number%'
 邮箱：: Mailbox
-暂无通知: 'No notice'
+暂无通知: No notice
 考试: Exam
-暂无考试: 'No exam'
+暂无考试: No exam
 作业: Homework
 '%title %第%number%课时': '%title %Number%number%lesson'
-暂无作业: 'No homework'
+暂无作业: No homework
 已提交: Submitted
-已批阅: 'Marked'
-学习中心: 'Learning center'
+已批阅: Marked
+学习中心: Learning center
 预告板: Notice board
-学习任务: 'Mission'
+学习任务: Mission
 '%name%:%title%': '%name%:%title%'
 课时%number%-%title%: Lesson%number%-%title%
 课程:%title%: 'Course:%title%'
-暂未发现还有未学习课时。: 'No more lessons.'
+暂未发现还有未学习课时。: No more lessons.
 去逛逛: Check it out
-立即加入: 'Join Now'
+立即加入: Join Now
 共%courseNum%门课程: '%courseNum%courses in total'
-暂无%name%: 'No %name% have been found'
-暂无课程: 'No couses have been found'
+暂无%name%: No %name% have been found
+暂无课程: No couses have been found
 QQ客服: QQ customer service
 QQ群: QQ group
-微信公众号: 'Wechat subscription'
+微信公众号: Wechat subscription
 电子邮箱: Mailbox
 服务时间：: Service time
-新加组员: 'New member'
+新加组员: New member
 还没有小组成员！: No members!
 正在修改: Editting
-插入隐藏内容: 'Insert hidden content'
-请输入要隐藏的内容: 'Please type in what you want to hide'
+插入隐藏内容: Insert hidden content
+请输入要隐藏的内容: Please type in what you want to hide
 查看所需%coin_name%: See %coin_name% price
 回复话题后可见: Visbile after replied
-隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户: '50% of the %coin_name% will be transfered to your account after the topic was hidden'
-插入: 'Insert'
+隐藏话题获得的%coin_name%会在扣除50%之后添加到您的账户: 50% of the %coin_name% will be transfered to your account after the topic was hidden
+插入: Insert
 下载附件: Download the attachment
 所需%name%: '%name% needed'
-充值: 'recharge'
+充值: recharge
 您已购买该附件: You have already bought the attachment.
-购买: 'Buy '
+购买: Buy
 立即下载: Download Now
-加入小组: 'Join the group'
+加入小组: Join the group
 退出小组: Quit the group
 '%memberNum%个成员': '%memberNum% members'
 '%threadNum%个话题': '%threadNum% topics'
-创建时间：%createdTime%: 'Time created: %createdTime%'
+创建时间：%createdTime%: Time created: %createdTime%
 我的小组: My group
-我加入的小组: 'Groups I joined'
+我加入的小组: Groups I joined
 我发起的话题: Topics I launched
 回复的话题: Topics replied
 收藏的话题: Topics collected
 我管理的小组: Groups I managed
 小组主页: Homepage of groups
-加入的小组: 'Groups joined'
+加入的小组: Groups joined
 发起的话题: Topics launched
 '%title%小组': 'Group %title%'
 话题搜索: Search the topic
-组内搜索: 'Search within the group'
+组内搜索: Search within the group
 创建小组: Create a group
 小组名称: Group name
 小组介绍: Group introduction
-暂无简介: 'No introduction'
+暂无简介: No introduction
 小组首页: Group homepage
 小组成员: Group member
 小组设置: Group setting
@@ -201,20 +916,20 @@ QQ群: QQ group
 副组长: Deputy group leader
 小组组长: Group leader
 '%title%': '%title%'
-暂无小组信息！: 'No group information !'
+暂无小组信息！: No group information !
 撤消副组长: Deputy group leader dismissed
 还没有副组长！: No deputy group leader yet !
 踢出成员: Remove member
 设置副组长: Set deputy leader
 回复了话题: Replied to the topic
-暂无回复！: 'No reply yet !'
+暂无回复！: No reply yet !
 奖: Reward
 发起了问题: Launched the topic
-暂无话题！: 'No topic yet !'
+暂无话题！: No topic yet !
 查看隐藏帖: View the hidden reply
 所需%coin_name%: '%coin_name% needed'
 立即查看: View now
-暂无话题信息！: 'No topic information yet !'
+暂无话题信息！: No topic information yet !
 小组: Group
 最近话题: Recent topic
 管理的小组: Groups I manage
@@ -222,39 +937,189 @@ QQ群: QQ group
 我也要说: I will say
 还有%postReplyCount%条回复: '%postReplyCount% replies left'
 点击查看: Click to view
-回复内容: 'Reply'
+回复内容: Reply
 正在发表回复: Replying
 悬赏额: Amount of reward
 所有小组: All groups
-暂无小组信息: 'No group information yet'
+暂无小组信息: No group information yet
 '%groupinfo%小组': 'Group %groupinfo% '
 当前背景: Current background
-你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过: 'You may upload JPG/GIF/PNG,  with file size no more than'
-。推荐大小（1140*150）: '. picture size recommended (1140*150)'
-正在上传: 'Uploading'
-上传新背景: 'Upload new background'
+你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过: You may upload JPG/GIF/PNG,  with file size no more than
+。推荐大小（1140*150）: . picture size recommended (1140*150)
+正在上传: Uploading
+上传新背景: Upload new background
 编辑小组: Set the group
-图标设置: 'Icon setting'
+图标设置: Icon setting
 背景设置: Background setting
-当前图标: 'Current icon'
-。推荐大小（180*180）: '. Picture size recommended (180*180)'
-上传新图标: 'Upload new icon'
+当前图标: Current icon
+。推荐大小（180*180）: . Picture size recommended (180*180)
+上传新图标: Upload new icon
 小组搜索: Search the group
-悬赏:%rewardCoin%%coin_name%: 'Reward: %rewardCoin%%coin_name%'
+悬赏:%rewardCoin%%coin_name%: Reward: %rewardCoin%%coin_name%
 '%hitNum%次查看': '%hitNum% times viewed'
 附件下载: Download the attachment
-描述：%description%: 'Descrition: %description%'
-上传于 %createdTime%: 'Uploaded at %createdTime%'
-售价:%coin%%coin_name%: 'Price: %coin%%coin_name%'
-下载次数：%hitNum%: '%hitNum% times downloaded'
-查看隐藏内容: 'View the hidden'
+描述：%description%: Descrition: %description%
+上传于 %createdTime%: Uploaded at %createdTime%
+售价:%coin%%coin_name%: Price: %coin%%coin_name%
+下载次数：%hitNum%: %hitNum% times downloaded
+查看隐藏内容: View the hidden
 取消悬赏: Cancel the reward
-查看全部: 'View all'
+查看全部: View all
 只看楼主: Noiseless
 顺序查看: View in order
 倒序查看: View in reverse order
 最佳回答: Best reply
-所教%name%: 'teach %name% '
+'%postNum%回复': '%postNum% replies'
+'%postCount%楼': '# %postCount%'
+'%loop.index%楼': '# %loop.index%'
+确定删除这条回复: Sure to delete this reply
+确定采纳这条回复: Sure to adopt this reply
+采纳: Adopt
+上传于%createdTime%: Uploaded at %createdTime%
+售价: Price
+确定删除此附件: Sure to delete this attachment
+发表回复: Post comment
+正在回复: Commenting
+你还没有登录，请先: Not log-in yet, please
+话题作者: Topic author
+上传附件: Upload attachment
+上传: Upload
+(大小不能超过: (File size no more than
+MB，文件类型支持png ,jpg ,gif ,doc ,xls ,txt ,rar ,zip .): MB, png, jpg, gif, doc, xls, txt, rar, zip only.)
+描述: Description
+用户下载附件扣除的%name%会在扣除50%之后添加到您的账户: 50% of %name% paid on downloading attachment will be added to your account
+课时简介: Lesson introduction
+此课时无简介。: No introduction for this lesson.
+课时音视频文件下载: Audio-Video download
+点击下载: Click to download
+课时资料: Lesson material
+此课时无资料: No material for this lesson
+此课时尚未发布，不能下载课时资料: Cannot download the material since the lesson is not yet released
+保存笔记: Save note
+分享笔记: Share note
+提交问题: Submit the question
+提问: Question
+'%postNum%回答': '%postNum% answers'
+此课时还没有问题: No question in this lesson
+老师: Teacher
+回答: Answer
+添加答案: Add an answer
+正在打开教室，请稍后: Classroom entering, pleas wait
+正在直播 今天: On live today
+即将直播: On live soon
+直播预告: Live preview
+进入直播: Enter live
+查看回放: View Playback
+暂无直播课程: No live courses yet
+直播回放: Playback
+暂无回放直播: No playback
+今日直播: On live today
+今日暂无直播: No on live today
+正在直播课时: Lesson on live
+即将直播课时: Lesson soon on live
+好评课程: Favourable Course
+推荐课程: Recommended course
+暂无推荐课程: No recommended course yet
+编辑直播课时: Live course setting
+新增直播课时: Add new live course
+直播开始时间: Start time of live
+教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。: Teachers may enter classroom for preparation 1 hour before live starts.
+直播时长: Live duration
+直播说明: Live direction
+直播未结束: Live not finished
+未录制回放: Playback not recorded
+已录制回放: Playback recorded
+录制: Record
+重新录制: Record again
+录播显示编辑: Edit when record
+直播教室: Broadcast classroom
+登录%name%: '%name% log-in'
+密码: Password
+记住密码: Remember password
+找回密码: Retrieve password
+还没有注册帐号？: Not registered?
+立即注册: Register now
+Email / 手机: Email / Mobile
+请填写在%name%注册时填写的Email地址/手机号码: Please enter Email/Mobile same as %name% registered
+Email地址: Email address
+请填写在%name%注册时填写的Email地址: Please enter Email address same as %name% registered
+确认绑定: Sure to bind
+绑定新帐号: Bind new account
+您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。: Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">
+头像: Avatar
+自动获取头像失败，请稍后在自行上传头像: Fail to auto gain avatar, please upload your avatar later
+用户名最长18个英文或者9个汉字: User name no more than 18 english letters or 9 Chinese characters
+邮箱地址: Email address
+我已阅读并同意: Read and agreed
+《服务协议》: Service agreements
+正在登录: Logging in
+注册帐号: Register account
+绑定已有帐号: Bind existing account
+绑定到已有帐号: Bind existing account
+绑定: Bind
+登录帐号: Log-in account
+帐号: Account
+用户不存在: User does not exist
+尾页: Last page
+正确答案: Correct answer
+完成: Done
+下一题: Next question
+正确: Correct
+填空(%index%):正确答案: Fill in the blanks (%index%): Correct answer
+答题进度: Status
+将右侧题目拖至时间轴添加视频驻点: drag exercises from the right side to the timeline to add a video key point
+释放后设置将自动保存: Settings will be auto saved after released.
+提 交: Submit
+填空(%index%)答案，请填在这里: Please enter your answer(%index%) here to fill in the blanks
+返回课时管理: Back to lesson management
+预览弹题: Preview the popup exercise
+本页面所有操作自动保存: Auto save on this page
+已添加: Added
+一道题都没有: No exercise yet
+题型: Question type
+返回我的私信: Back to my message
+与%nickname%的私信对话: Messages with %nickname%
+发送: Send
+写私信: Write a message
+正在发送...: Sending...
+暂无私信: No message yet
+我：: Me:
+发送私信: Send message
+发送中...: Sending...
+发给: Send to
+'%unreadNum%条未读': '%unreadNum% unread'
+共%messageNum%条: '%messageNum% messages in total'
+移动学习: Mobile learning
+阔知学堂: Kuozhi Xuetang
+将学校装进口袋，移动学习，随时随地。: Learning anytime anywhere!
+下载APP: Download APP
+登录网校: Log in
+'第一步:': 'Step1:'
+扫描二维码，下载手机APP。: Scan QR code to download APP
+客户端: Client
+'第二步: 打开阔知学堂APP，扫描网校二维码。': Step2: open Kuozhi Xuetang APP, scan school QR code.
+扫一扫登录客户端: Scan to log in
+金额: Amount
+充值方式: Recharge way
+交易号: Transaction ID number
+充值时间: Time of recharge
+'%transactionNo%元': '%transactionNo% dollars'
+无充值记录: No recharge history
+余额: Balance
+立即充值: Recharge now
+充值帮助: Recharge help
+消费金额: Consumption amount
+消费时间: Consumption time
+无消费记录: No consumption history
+您还没有头像: No avatar yet
+拥有一个独有的头像，老师和同学们能更容易关注到你哦: Own an avatar to get more attention
+个人中心: Personal Center
+你还没有学习任何课程，: Not learning any courses yet,
+来探索更多课程吧！: let`s explore more courses!
+我的网校: My online school
+我的成长: My progress
+在教课程: Teaching courses
+所教%name%: teaching %name%
 教学资料库: data housewareis
 我的课程: my courses
 我的%name%: my %name%
@@ -265,29 +1130,29 @@ QQ群: QQ group
 我的作业: my homework
 我的考试: my examination
 我的任务: my task
-暂无已收藏的课程: 'no favourite courses'
+暂无已收藏的课程: no favourite courses
 已学完: learning complished
-暂无已学完的课程: 'no complished courses'
-学习中: 'learning'
-暂无学习中的课程: 'no learning course'
-没有等待开始的直播课: 'no live courses waiting to start'
-共 %noteNum% 篇笔记: '…notes in total'
+暂无已学完的课程: no complished courses
+学习中: learning
+暂无学习中的课程: no learning course
+没有等待开始的直播课: no live courses waiting to start
+共 %noteNum% 篇笔记: …notes in total
 最后更新%noteLastUpdateTime%: last updated notes
 查看笔记: check over the notes
-你还没有写过笔记: 'you have not write a note'
+你还没有写过笔记: you have not write a note
 《%title%》的笔记: notes of 《%title%》
 课时%number%：%title%: '%number% classes:'
-该课时已删除: 'the lesson has been deleted'
-共%length%字: '…words in total'
-删除笔记: 'delete notes'
-订单详情: 'order detail'
+该课时已删除: the lesson has been deleted
+共%length%字: …words in total
+删除笔记: delete notes
+订单详情: order detail
 订单号: order number
 订单状态: order status
 申请退款: application for refund
 订单名称: order name
-订单价格: 'order price'
-优惠码: 'coupon code'
-优惠金额: 'discount amount'
+订单价格: order price
+优惠码: coupon code
+优惠金额: discount amount
 虚拟币支付: Virtual currency payment
 现金支付: cash payment
 银行编号: bank no.
@@ -296,147 +1161,147 @@ QQ群: QQ group
 特殊操作: special operation
 日志信息: log information
 操作人: operator
-暂无交易日志: 'no transaction log'
-全部订单: 'all orders'
-待付款: 'waiting for payment'
+暂无交易日志: no transaction log
+全部订单: all orders
+待付款: waiting for payment
 退款记录: refund record
 退款订单: refund order
 退款申请时间: request time of refund
 没有退款记录: no refund record
 考试记录: examination record
 收藏的题目: collected questions
-未批阅: 'unremarked'
+未批阅: unremarked
 来自课程《%title%》: from course of 《%title%》
-共%score%分 / %itemCount%道题: 'total %score% scores/%itemCount% problems'
+共%score%分 / %itemCount%道题: total %score% scores/%itemCount% problems
 交卷: hand in paper
-批阅: 'mark'
+批阅: mark
 总分: total score
-客观题%objectiveScore%分 / 主观题%subjectiveScore%分: 'objective question…points/subjective question…points'
+客观题%objectiveScore%分 / 主观题%subjectiveScore%分: objective question…points/subjective question…points
 批于: mark at
-还没有等待批阅的试卷: 'no paper wait for marking'
-还没有已经批阅的试卷: 'no paper marked'
-正确答案：%answer%: 'correct answer:'
-解析：%analysis%: 'Analysis:'
-正确答案：%keys%: 'Correct answer:'
-正确答案：: 'Correct answer:'
+还没有等待批阅的试卷: no paper wait for marking
+还没有已经批阅的试卷: no paper marked
+正确答案：%answer%: correct answer:
+解析：%analysis%: Analysis:
+正确答案：%keys%: Correct answer:
+正确答案：: Correct answer:
 来自试卷《%name%》: from Examination paper
 收藏于: collected from
 还没有收藏的题目: no collected questions
 来自课程: from course of
 开始考试时间: start time of the examination
-正在批阅: 'marking'
+正在批阅: marking
 得分: score
 做对: correct
-题 / 共: 'questions/total'
+题 / 共: questions/total
 未交卷: paper not hand in
 继续考试: continue the test
 再做一次: try again
 查看结果: view the result
-该试卷已删除: 'the paper has been deleted'
+该试卷已删除: the paper has been deleted
 我的考试记录: my examination record
-还没有参加过任何考试: 'no examination attended'
-我的批阅: 'my marks'
+还没有参加过任何考试: no examination attended
+我的批阅: my marks
 我的任务日历: my task calendar
 所教%classroom.name%: teach…%classroom.name%
 管理%classroom.name%: manage…%classroom.name%
-共%coursesCount%课: 'total courses%coursesCount%'
+共%coursesCount%课: total courses%coursesCount%
 今日新增: new... today
 学员%allCount%: students…%allCount%
 话题%threadCount%: topic…
-课时完成学习%todayFinishedLessonNum%: 'finished %todayFinishedLessonNum%'
+课时完成学习%todayFinishedLessonNum%: finished %todayFinishedLessonNum%
 找不到所教%classroom.name%！: can not find teached %todayFinishedLessonNum%
 普通课程: normal courses
 课程%user_name%话题: course%user_name%topic
-价格(元): 'price(yuan)'
+价格(元): price(yuan)
 已移除: removed
 文件管理: file management
-暂无在教的课程: 'no teaching course'
+暂无在教的课程: no teaching course
 您的课程中还没有: there's no…in your course
 提问过...: have questioned…
 话题...: discuss…
-你还没有发表过话题: 'no issued topic'
-暂无提问的记录: 'no question record'
+你还没有发表过话题: no issued topic
+暂无提问的记录: no question record
 课程话题: course topic
 '%classroom.name%话题': 'topic of %classroom.name%'
 问答帖: Q&A posts
 精华帖: sticky posts
-课程已删除: 'course deleted'
-你还没提过问题: 'you have no question'
-你还没发表过话题: 'you have no topic issued'
+课程已删除: course deleted
+你还没提过问题: you have no question
+你还没发表过话题: you have no topic issued
 系统通知: system notification
-通知已经被管理员删除: 'notification has been deleted by administrator'
+通知已经被管理员删除: notification has been deleted by administrator
 在资讯: in info
-的回复中提到了你。: 'mentioned you in reply'
-的回复了你。: 'replied you'
-详情: 'details'
+的回复中提到了你。: mentioned you in reply
+的回复了你。: replied you
+详情: details
 日志: log
 订单确认: order confirmation
-订单支付: 'order payment '
+订单支付: order payment
 订单完成: order completed
 应付金额：: amount payable
 '%coin_name% ÷ 汇率(%cashRate%) = ': '%coin_name% ÷ exchange rate(%cashRate%) ='
 提交订单: submit the order
-（1元 = %cashRate%%coin_name%）: '1 yuan= %cashRate%%coin_name%'
+（1元 = %cashRate%%coin_name%）: 1 yuan= %cashRate%%coin_name%
 本次使用: this time use
 账户余额：: account balance
-为了保障账户资金安全，请先: ' to ensure the security of your account assets, please…'
-设置支付密码: 'set payment password'
-设置登录密码: 'set login password'
-请输入支付密码: 'please type in payment password'
-忘记密码？: 'forget password'
+为了保障账户资金安全，请先:  to ensure the security of your account assets, please…
+设置支付密码: set payment password
+设置登录密码: set login password
+请输入支付密码: please type in payment password
+忘记密码？: forget password
 抵扣: deduction
 本订单最高可以使用: this order can use up to
-（没有使用优惠码）: 'coupon code have not been used'
-优惠码 抵扣%rate%元: 'coupon code …yuan deductible'
-优惠码 抵价%rate%折: 'coupon code …discount'
-不使用优惠码: 'do not use coupon code'
-输入优惠码: 'enter coupon code'
-请输入优惠码: 'please enter coupon code'
-短信验证码: 'SMS verification code'
-已绑定手机号码%blur_phone_number%: 'phone number has been bound%blur_phone_number%'
-修改手机号码: 'change mobile phone number'
-输入短信验证码: 'enter SMS verification code'
-获取短信验证码: 'get SMS verification code'
+（没有使用优惠码）: coupon code have not been used
+优惠码 抵扣%rate%元: coupon code %rate%yuan deductible
+优惠码 抵价%rate%折: coupon code %rate%discount
+不使用优惠码: do not use coupon code
+输入优惠码: enter coupon code
+请输入优惠码: please enter coupon code
+短信验证码: SMS verification code
+已绑定手机号码%blur_phone_number%: phone number has been bound%blur_phone_number%
+修改手机号码: change mobile phone number
+输入短信验证码: enter SMS verification code
+获取短信验证码: get SMS verification code
 您还未绑定手机号: you have not bind mobile phone number
 去绑定: go to bind
-实付元: 'actual pay …yuan'
+实付元: actual pay …yuan
 取消退款: cancel refund
 取消订单: cancel order
-暂无订单记录: 'no order record'
+暂无订单记录: no order record
 您已购买过：: you have bought
-抵扣：: 'deduction:'
+抵扣：: deduction:
 会员升级为：%level.name%: membership upgrade to：%level.name%
-'%level.name% 会员续费 x %duration%': '%level.name% member renew x %duration%'''
+'%level.name% 会员续费 x %duration%': '%level.name% member renew x %duration%'
 个月: months
 年: years
-购买 %level.name%会员 x %duration%: 'purchase membership'
-请输入您的退学原因: 'please enter your reason for drop out'
-（购买时的价格：%amount%元）: 'price when purchase, …yuan'
-已经超出了退款期限%maxRefundDays%天，不能申请退款。: 'beyond refund deadline more than…days, can not apply for refund'
+购买 %level.name%会员 x %duration%: purchase membership
+请输入您的退学原因: please enter your reason for drop out
+（购买时的价格：%amount%元）: (price when purchase, %amount%yuan)
+已经超出了退款期限%maxRefundDays%天，不能申请退款。: beyond refund deadline more than %maxRefundDays% days, can not apply for refund
 正在退出: be quitting
-密码重设失败: 'password reset failed'
-密码重设地址无效或已过期，请重试。: 'reset address invalid or expired, please try again'
-重设密码: 'reset password'
-请输入你在%name%注册时填写的邮箱地址: 'please enter your registered email address '
-正在发送重设密码邮件: 'sending reset password email'
+密码重设失败: password reset failed
+密码重设地址无效或已过期，请重试。: reset address invalid or expired, please try again
+重设密码: reset password
+请输入你在%name%注册时填写的邮箱地址: please enter your registered email address
+正在发送重设密码邮件: sending reset password email
 提交中...: submitting
 亲爱的: dear
-您的密码重设要求已经得到验证。请点击以下链接输入您新的密码：: 'your require for resetting password has been authenticated, please click the link below and enter your new password'
-如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器(例如IE)的地址栏进入: 'if your email program do not support clicking, please copy the link to web broswer address field and enter'
+您的密码重设要求已经得到验证。请点击以下链接输入您新的密码：: your require for resetting password has been authenticated, please click the link below and enter your new password
+如果您的email程序不支持链接点击，请将上面的地址拷贝至您的浏览器(例如IE)的地址栏进入: if your email program do not support clicking, please copy the link to web broswer address field and enter
 这是一封自动产生的email，请勿回复。: this email is automatically sent, please do not reply
 请到: please go to …to check the email, and reset your password from the email
 登录邮箱查收邮件: log into email and receive letters
-重设密码成功: 'reset password successed'
-新密码设置成功，请重新登录。: 'set new password successed and re-login'
-请再输入一次密码: 're-enter your ypassword'
+重设密码成功: reset password successed
+新密码设置成功，请重新登录。: set new password successed and re-login
+请再输入一次密码: re-enter your ypassword
 支付中心: payment center
-订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>: 'order payment successed, jump within …seconds'
-由于网校使用的为“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。: '"as network school use ""secured transaction"",you need to ""CINFIRM RECEIPT"" at Alipay website(system has virtually delivered the goods), after confirmation the payment will be successed, and you can start learning the courses"'
-由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。: '"as you used ""secured transaction"" for payment,you need to ""CINFIRM RECEIPT"" at Alipay website(system has virtually delivered the goods), after confirmation the payment will be successed, and you can starting learning the courses"'
-核实银行预留手机: 'confirm the bank reserved mobile phone '
+订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>: order payment successed, jump within …seconds
+由于网校使用的为“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。: "as network school use ""secured transaction"",you need to ""CINFIRM RECEIPT"" at Alipay website(system has virtually delivered the goods), after confirmation the payment will be successed, and you can start learning the courses"
+由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。: "as you used ""secured transaction"" for payment,you need to ""CINFIRM RECEIPT"" at Alipay website(system has virtually delivered the goods), after confirmation the payment will be successed, and you can starting learning the courses"
+核实银行预留手机: confirm the bank reserved mobile phone
 银行预留手机号: bank reserved mobile phone number
-订单已提交，请在４８小时内完成支付！逾期订单将被取消。: 'order has been submitted, please complish the payment within 48 hours'
-如需使用支付宝支付，请在其他浏览器中重新下单。: 'if use Alipay for the payment, please re-order in other web broswers'
+订单已提交，请在４８小时内完成支付！逾期订单将被取消。: order has been submitted, please complish the payment within 48 hours
+如需使用支付宝支付，请在其他浏览器中重新下单。: if use Alipay for the payment, please re-order in other web broswers
 复制地址: copy address
 支付方式未开启，请联系管理员。: payment method unopened, please contact administrator
 储蓄卡: debit card
@@ -445,11 +1310,11 @@ QQ群: QQ group
 确认支付: confirm payment
 微信支付: WeChat payment
 请使用微信扫一扫: please use WeChat scanning
-扫描二维码支付: 'scan QR code to pay'
-请长按二维码支付: 'long press QR code to pay'
-选择其他支付方式: 'choose other payment methods'
-转码失败，请联系管理员。: 'transcoding failed, please contact administrator'
-正在转码，请稍后尝试。: 'transcoding, please wait'
+扫描二维码支付: scan QR code to pay
+请长按二维码支付: long press QR code to pay
+选择其他支付方式: choose other payment methods
+转码失败，请联系管理员。: transcoding failed, please contact administrator
+正在转码，请稍后尝试。: transcoding, please wait
 该浏览器不支持云视频播放，请前往: current broswer do not support clould player, please go to
 下载App: download App
 好知网: Howzhi
@@ -457,35 +1322,35 @@ QQ群: QQ group
 收起解析: fold analysis
 （单选）: multiple choice（single answer）
 （多选）: multiple choice(multiple answer)
-你答对了: 'you are right'
-你答错了,你选择了: 'your are wrong, your choice is'
-你部分答对,你选择了: 'you are partly right, your choice is'
-你未答题: 'you have no answer'
+你答对了: you are right
+你答错了,你选择了: your are wrong, your choice is
+你部分答对,你选择了: you are partly right, your choice is
+你未答题: you have no answer
 选择了: you choose
-部分答对,选择了: 'partly right, you choose'
+部分答对,选择了: partly right, you choose
 未答题: unanswered question
-正确答案是: 'correct answer is '
-你答错了: 'you are wrong'
+正确答案是: correct answer is
+你答错了: you are wrong
 老师评语: teacher's comment
 未回答: unanswered
 评语: comment
-老师正在批阅！: 'teacher is marking'
-填空(%index%)： 正确答案: 'blank filling, right answer:'
+老师正在批阅！: teacher is marking
+填空(%index%)： 正确答案: blank filling, right answer:
 回答是: answer is
-此题已删除。: 'question deleted'
+此题已删除。: question deleted
 （不定项）: indefinite term
 回答正确: answer correct
-你的答案是: 'your answer is'
+你的答案是: your answer is
 。回答部分正确。得分：%testResult.score%分: answer partly correct. This question score
 回答错误: wrong answer
-你: 'your answer is wrong'
+你: your answer is wrong
 参考答案: reference answer
 参考答案：: reference answer
-你的回答：: 'your answer'
-得分：: 'score:'
-评语：: 'comment:'
-。你未回答: 'you have not answered'
-，你的答案: 'your answer'
+你的回答：: your answer
+得分：: score:
+评语：: comment:
+。你未回答: you have not answered
+，你的答案: your answer
 回答正确。: answer correct
 回答部分正确，本题得分：%testResult.score%分。: answer partly correct. This question score
 回答错误。: answer is wrong
@@ -493,9 +1358,9 @@ QQ群: QQ group
 暂停: pause
 考试已暂停，请尽快回来哦~: examination pause, please go back as soon as possible
 继续: continue
-共%total.number%题，共%total.score%分: 'total questions,total points,total miss scores'
-标记: 'mark'
-取消标记: 'unmark'
+共%total.number%题，共%total.score%分: total questions,total points,total miss scores
+标记: mark
+取消标记: unmark
 题目预览: preview
 下次再做: do...next time
 时间不限: time unlimited
@@ -505,129 +1370,129 @@ QQ群: QQ group
 用时：: total time
 考试结束: the test is finished
 考试已结束，请点击下面的按钮查看结果: the test is finished, please click the following button to see result
-请输入评语: 'please enter comment'
+请输入评语: please enter comment
 常用评语: common comment
 继续努力，继续进步！: keep trying and make progress
 不错，有进步，再努力些就会更棒！: great!you have progerssed, try hard and you will be better
-你真棒！我为你骄傲！: 'you''re great! I''m proud of you!'
-有点松懈了吧？继续加油吧！: 'don''t slack off, keep challenging'
-用心、专注、坚持，你能做的更好的！: 'keep mind, stay focus and keep challenging, you will do better'
+你真棒！我为你骄傲！: you're great! I'm proud of you!
+有点松懈了吧？继续加油吧！: don't slack off, keep challenging
+用心、专注、坚持，你能做的更好的！: keep mind, stay focus and keep challenging, you will do better
 试卷得分: test score
 确认交卷: confirm hand in paper
 您真的要交卷吗？: are you sure to hand in paper?
-正在交卷, 请稍等: 'now submitting, please wait'
-总分%score%分: 'total score:'
-（其中有%accuracy[type].partRight%道漏选）: '...miss-selection'
+正在交卷, 请稍等: now submitting, please wait
+总分%score%分: total score:
+（其中有%accuracy[type].partRight%道漏选）: ...miss-selection
 未答: not answered
-批阅完成: 'mark complished'
-批阅中: 'marking'
+批阅完成: mark complished
+批阅中: marking
 您未通过考试，请: you not pass the exam, please
-重新参加考试: 'retake the exam or restudy the course'
+重新参加考试: retake the exam or restudy the course
 恭喜您已通过本次考试。: congratulations, you have passed this examination
-待批阅: 'wait  for mark'
+待批阅: wait  for mark
 未做: unfinished
 只看错题: see wrong questions only
-请完成以下题目的批阅：: 'please remark the following questions'
+请完成以下题目的批阅：: please remark the following questions
 试卷预览中: paper previewing
 答题中: answering
-共 %paper.itemCount% 题，总分 %paper.score% 分: 'total…questions ,total...points'
-及格为 %paper.passedScore% 分: 'passing score is %paper.passedScore% points'
-请在 %paper.limitedTime% 分钟内作答: 'please answer in …minutes'
-请输入验证码: 'please enter verification code'
-验证码: 'verification code'
-看不清，点击换一张: 'not clear？Click to change'
+共 %paper.itemCount% 题，总分 %paper.score% 分: total…questions ,total...points
+及格为 %paper.passedScore% 分: passing score is %paper.passedScore% points
+请在 %paper.limitedTime% 分钟内作答: please answer in …minutes
+请输入验证码: please enter verification code
+验证码: verification code
+看不清，点击换一张: not clear？Click to change
 邮箱验证失败: email verification failed
 验证地址已过期！: address expired
 邮箱验证成功: email verified
 正在跳转到首页: We are now redirecting to the home page for you.
-点此直接进入: 'click here to enter'
+点此直接进入: click here to enter
 注册还需一步: only one step needed to register
 正在发送注册验证邮件，请稍等...: sending confirmation letter, please wait
-注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证，验证后才可以登录．: 'confirmation letter has been sent to your email,you need to click the confirm link to complish email verification'
+注册确认信已经发到你的邮箱<strong>%email%</strong>，你需要点击邮件中的确认链接来完成邮箱验证，验证后才可以登录．: confirmation letter has been sent to your email,you need to click the confirm link to complish email verification
 没有收到确认信怎么办？: if not receive a confirmation letter?
 检查一下上面Email地址是否正确，错了就重新: check the email address above, if wrong, then try again
 看看是否在邮箱的垃圾箱里: check if it is in the trash
-稍等几分钟，若仍旧没收到确认信，那就: 'please wait a minute, if still not receive confirmation letter ,then'
+稍等几分钟，若仍旧没收到确认信，那就: please wait a minute, if still not receive confirmation letter ,then
 重发: resend a letter
 原邮箱已失效？: original mailbox is invalid
 重新绑定: rebind
-完成验证后，你还可以：: 'after verification, you can '
+完成验证后，你还可以：: after verification, you can
 返回原页面: back to previous page
 浏览首页: visit the home page
-填写你常用的邮箱作为登录帐号: 'use frequently used email address as login account'
-填写你常用的手机号码作为登录帐号: 'use frequently used mobile phone number as login account'
+填写你常用的邮箱作为登录帐号: use frequently used email address as login account
+填写你常用的手机号码作为登录帐号: use frequently used mobile phone number as login account
 手机/邮箱: mobile phone number/email address
-填写你常用的邮箱或手机号码作为登录帐号: 'use frequently used email address or mobile phone number as login account'
+填写你常用的邮箱或手机号码作为登录帐号: use frequently used email address or mobile phone number as login account
 中、英文均可，最长18个英文或9个汉字: either in English or Chinese, up to 18 English letters or 9 Chinese characters
 5-20位英文、数字、符号，区分大小写: 5-20 bit English letters, numbers, symbols, case sensitive
-填写你的短信验证码: 'type in your SMS verification code'
-如果您有邀请码，请填写您的邀请码: 'if you have invitation code, please type in'
+填写你的短信验证码: type in your SMS verification code
+如果您有邀请码，请填写您的邀请码: if you have invitation code, please type in
 服务协议: severice agreements
-系统暂时关闭注册，请联系管理员: 'registration stopped, please contact administrator'
+系统暂时关闭注册，请联系管理员: registration stopped, please contact administrator
 重置邮箱: reset email
 '原邮箱地址:': 'previous email address'
 '网校密码:': 'network school password'
-请输入网校密码: 'please type in network school password'
+请输入网校密码: please type in network school password
 上一步: previous step
 下一步: next step
 管理员尚未设置邮件服务器，不能重置邮箱地址。: mail server has not been set by administrator, can not reset email
 邮箱重置: reset email
 '新邮箱地址:': 'new email address'
-请输入新的邮箱地址: 'please type in new email address'
+请输入新的邮箱地址: please type in new email address
 验证: verification
 注册成功: registration succeeded
 正在发送注册验证邮件，请稍等: sending confirmation letter, please wait
-注册确认信已经发到你的邮箱: 'confirmation letter has been sent to your email'
-，你需要点击邮件中的确认链接来完成邮箱验证。: 'you need to click the confirm button to complish email verification'
+注册确认信已经发到你的邮箱: confirmation letter has been sent to your email
+，你需要点击邮件中的确认链接来完成邮箱验证。: you need to click the confirm button to complish email verification
 重新评价: reevaluate
 请打分：: please score against …
-评价详细内容: 'details of the evaluation'
+评价详细内容: details of the evaluation
 评价已保存！: evalutation has been saved
-收起全文: 'fold the whole text'
-暂无评价: 'no evaluate on...'
+收起全文: fold the whole text
+暂无评价: no evaluate on...
 搜索结果: search result
-常用关键词: 'frequently used keywords'
-搜索：: 'search:'
+常用关键词: frequently used keywords
+搜索：: search:
 可搜索课程、教师、话题、资讯: searchable courses\teachers\topics\info
 教师: teacher
 小组话题: group topic
 资讯: information
-共找到: '… related courses searched '
-相关: 'related '
-没有搜到相关课程，请换个关键词试试！: 'cannot find related courses, please change your keyword'
+共找到: … related courses searched
+相关: related
+没有搜到相关课程，请换个关键词试试！: cannot find related courses, please change your keyword
 为您找到资讯结果约: about…results found for you
 正在学: now learning
 '%course.ratingNum%人评价%course.studentNum%人学习': '…comment on,…study…'
 '课时 %lesson.number%: %lesson.title%': 'lesson %lesson.number%'
-为您找到课程结果约: 'courses found for you are '
+为您找到课程结果约: courses found for you are
 推荐教师: recommended teacher
-暂无推荐教师信息！: 'no information about recommended teacher'
-暂无头衔: 'no title'
+暂无推荐教师信息！: no information about recommended teacher
+暂无头衔: no title
 为您找到教师结果约: the number of the teachers found for you is
 为您找到话题结果约: the topics found for you are
 来自: from
 正在实名认证中，管理员会尽快答复您。: real name is being verified，administrator will reply soon
 恭喜您，已通过实名认证！: congratulations, real name has been verified
 您尚未实名认证: your real name has not been verified
-实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。: 'real name verification not passed, please modify according to the advice and then try again'
+实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。: real name verification not passed, please modify according to the advice and then try again
 真实姓名: real name
 身份证号: ID number
-照片要求: 'photo requirements'
-<p class="text-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>: 'credentials must be clear in color anf digital format copied directly from the original ones, either with a scanner or digital camera, image formats can be jpg、gif、png ，size of each image should not larger than 2M'
-身份证正面照: 'front photo of ID card'
-身份证反面照: 'back photo of ID card'
+照片要求: photo requirements
+<p class="text-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>: credentials must be clear in color anf digital format copied directly from the original ones, either with a scanner or digital camera, image formats can be jpg、gif、png ，size of each image should not larger than 2M
+身份证正面照: front photo of ID card
+身份证反面照: back photo of ID card
 头像图片: profile photo
 头像设置: profile photo setting
 请设置自定义头像。: please set custom profile photo
 当前头像: current profile photo
-上传新头像: 'upload new profile photo'
+上传新头像: upload new profile photo
 论坛头像: forum profile photo
 使用该头像: set as profile photo
 绑定手机: bind mobile phone
-安全设置: 'security setting'
-手机号码绑定: 'bind phone number'
+安全设置: security setting
+手机号码绑定: bind phone number
 已绑定手机号: bound phone number
-您的登录密码: 'your login password'
+您的登录密码: your login password
 第三方登录: login with third party account
 取消绑定: unbind
 微信登录: WeChat Login
@@ -635,37 +1500,335 @@ QQ群: QQ group
 未绑定: unbound
 场景未开启: scene unopened
 该使用场景未开启: this usage scenario is unopened
+您的登录邮箱重设要求已经收到。请点击以下链接进行验证：: Your request of mailbox login resetting has been received. Please click the url below to verify.
+如果以上链接无法点击，请将上面的地址复制到你的浏览器(如IE)的地址栏中打开，该链接地址24小时内打开有效。: If the url above cannot be click, please copy it into your Web browser (such as IE) and open it, the url is effective within 24 hours。
+(这是一封自动产生的email，请勿回复。): (This is a auto－generated email, please do not reply.)
+请点击下面的链接完成邮箱的验证：: Please click the url below to complete the verification：
+感谢对 %site.name% 的支持！: Thanks for supporting %site.name%！
+邮箱设置:  set E-mail address
+当前登录邮箱: Current email
+已验证: Verified
+邮箱地址尚未验证，:  Mail address hasn't been verified
+去验证: Verify
+您还未设置邮箱，请在下方设置你的新邮箱。: You haven't set your email, please set your new email below.
+管理员尚未设置邮件服务器，不能更改邮箱地址。: administrator haven't set email server, do not change the email address.
+支付密码: payment password
+找回支付密码: Find payment password
+修改手机号？: Modify phone number？
+安全问题答案: security question answer
+基础信息: basic information
+教师资格申请: teaching certifition application
+用户名修改:  Modify user_name
+密码修改: Modify password
+登录密码修改: Login password modification
+当前帐号从第三方帐号直接登录时创建，尚未设置密码。: Current account is created from a third party directly hasn't set a password。
+为了帐号的安全，请通过邮箱找回密码的方式，重设密码！: For the safety of account, please find the password by email and reset the password！
+现在就去重设密码！: reset the password now！
+重设支付密码成功: Payment password resetting successfully
+新支付密码设置成功。: New payment password setting successfully。
+返回安全设置: Back to security setting
+当前帐号从第三方帐号直接登录时创建，尚未设置登录密码。: Current account is created from a third party directly hasn't set a password。
+为了帐号的安全，请通过邮箱找回密码的方式，重设登录密码！: For the safety of account, please find the password by email and reset the password！
+现在就去重设登录密码！: reset the password now！
+设置头衔、自我介绍并保存后，即可开始创建课程。:  You can create a course after setting till and self-introduction.
+还没绑定手机号，: Haven't bound phone number，
+前去绑定: to bound phone number
+最大值为9位整数: Maximum is 9-bit integer
+保留到2位小数: Reservations to 2 decimal places
+通过安全问题找回: Find password by security question
+通过手机找回: Find password by phone
+忘记支付密码？: Forget payment password？
+安全问题: security question
+设置安全问题: set securtiy question
+安全问题一经设置，不可再次修改。: securtiy question cannot be modified when it is set。
+安全问题1: securtiy question 1
+安全问题1答案: securtiy question answer 1
+安全问题2: securtiy question 2
+安全问题2答案: securtiy question answer 2
+安全问题3: securtiy question 3
+安全问题3答案: securtiy question answer 3
+查看安全问题: View securtiy question
+安全等级：高: securtiy level：High
+安全等级：中: securtiy：Medium
+安全等级：低: securtiy：Low
+登录密码: Login password
+登录网校时需要输入的密码: You need enter password when signing in system
+在网校进行消费行为时需要输入的密码: You need enter password when purchasing in system
+重置:  reset
+通过设置并且验证安全问题，保护帐号密码安全。: To protect the securtiy of account by setting and verifying securtiy quesiong。
+查看: view
+手机绑定: Bound phone number
+增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。: To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.
+为了帐号的安全以及更好的使用体验，请设置以下信息。: For accuracy safety and better experience, please set the information below.
+该帐号已经设置过密码，不能再次设置！: This account has set the password, cannot be set again！
+设置帐号: Set account
+用户名一旦保存，就不能再修改了: user_name cannot be modified when it is saved.
+该帐号已经设置过Email地址和用户名，不能再次设置！: This account has set the Emall address and user_name, you need not to set again！
+请再输入一次支付密码: Please enter the payment password again
+请输入用户登录密码: Please enter the login password
+重设支付密码: reset payment password
+请先完成以下设置，才能创建课程：: Please complete the following settings, then you can create courses：
+设置头像。: upload pictuer
+已完成: completed
+设置头衔 、自我介绍。: set title, self-introduction.
+用户头像: user picter
+<p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>: <p class="help-block">you can upload the file of JPG,GIF,PNG，and the file size should less then <strong>2M</strong>。</p>
+短信推送: Send massage
+发送对象: send object
+'%classroom.name%内': in %classroom.name%
+用户: user
+预计发送量: Expected massages sending volume
+条: the number of
+发送内容: text
+'%classroom.name%': %classroom.name%
+：: ':'
+《: 《
+》: 》
+现已开始报名: In registering
+链接地址: link address
+短信发送准备中: prepare to send massages
+请联系超级管理员，开启云短信相关设置。: Please connect the super administrator to open the cloud-massage.
+正在发送，请不要关闭当前窗口: the massages is sending, please do not close current window
+正在发送, 请稍等: the massages is sending, please wait.
+发送完成: complete
+还没有动态:  no lebel yet
+当前还没有标签: no tag now
+没有搜到相关课程，请换个标签试试！: No relative courses, please change another tag and try again！
+标签不存在，请重新输入！: The tag is not existed, please change anohter tag and try angin！
+师资介绍: teacher introduction
+师资介绍%name%: teacher introduction%name%
+'%name%的师资介绍。': teacher introduction of %name%。
+所有教师: All teachers
+自定义名称: Custom name
+副标题名称: subtitle name
+课程数量设置: coures number setting
+课程分类数量设置: Course category number setting
+排序设置: sort settings
+背景颜色设置: background color settings
+灰色: gray
+白色: white
+默认: default
+是否启用模块: Enable the module
+班级数量设置: class number settings
+教师数量设置: teacher number settings
+问题: question
+话题标题: topic title
+活动标题: activity title
+活动时间: activity time
+活动开始时间: activity start time
+活动地点:  activity location
+封面图片: cover picture
+推荐图片大小200*112: Recommended image size 200*112
+浏览...: view
+最大人数: maximum people
+不限: Unlimited
+其他活动: other acitvity
+'%memberNum%人报名': %memberNum%  people have applied
+时间: time
+地点： %location%: location： %location%
+报名人数: application number
+'%memberNum% 人 (名额不限)': %memberNum% (quota unlimited)
+'%memberNum% 人 (剩余 %num%人)': %memberNum% (left %num%quota)
+取消报名: cancel apply
+我要报名: apply
+已报名: applied
+好友在参加: Friend applied
+最新成员(%membersCount%): new member(%membersCount%)
+暂无话题: no topic yet
+所有回复: all replys
+一个回复都没有！: no reply！
+置顶帖: sticky post
+发起了该%dict_text% ·: start the %dict_text% ·
+精彩回复:  popular reply
+一个精彩回复都没有！: no popular reply！
+发起了%dict_text%: start %dict_text%
+我也说一句: comment
+还有%post.subposts%条回复，: ohter %post.subposts% replys，
+正在发表: posting
+导出成员: export users
+发: post
+只有学员才能回复！: only students can reply！
+作者其他话题: other posts of this poster
+加入活动: participate in activity
+手机: phone
+未回复的话题: unanswered post
+添加文件: Add file
+开始上传: uploading
+资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。: Repository support a variety of file formats to upload， share， download，single file size should less then <strong>2GB</strong>。
+视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。: video will be uploaded to <strong> cloud-video server </strong>，and converted to cloud-video which prepare for creating ES video courses.If you need to modify the type of transcode of cloud-video ，please set the type of transcode first。You need waiting when transcoding, and the video cannot be played when transcoding。
+支持<strong>断点续传</strong>（仅支持HTML5浏览器）。: support <strong> breakpoint resume</strong>（only support HTML5 explore）。
+支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。: support upload filetype of <strong>mp4, mp3</strong>，the file size should less than <strong>2.0GB</strong>。<br>please use the code of AVC(H264) when the filetype is MP4，or the explore cannot play。
+视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。: videos will be uploaded to<strong> web server</strong>，if you need cloud-video, click <a href="http://open.edusoho.com/show/cloud/video" target="_blank"> here </a> know more information。
+暂无介绍: no introduction yet
+还没有签名:  no label yet
+在学: studying
+粉丝: fans
+在学%classroom.name%: studying in %classroom.name%
+共%classroom.courseNum%门课程: have % classroom.courseNum% courses
+无在学的%classroom.name%！: is not studying in %classroom.name%！
+在教%name%:  teaching %name%
+无在教的%name%: is not teaching %name%
+无在教的课程: not teaching course
+无在学的课程: not studying course
+无收藏的课程: not collected course
+温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！: Tips：For better service, if your information have changed，please modify below！
+已认证: verified
+实名认证中: real-name authenticating
+仅需一步，完善资料，让我们更好的为你服务！: for better service, please complete information with only one step！
+无关注的人: no follow
+无粉丝: no fans
+管理小组:  manage group
+暂无签名: no lebel
+收藏的课程: collected courses
+关注/粉丝: follow/fans
+个人介绍: self-introduction
+在学%name%: studying %name%
+抵价: trade in
+打折: discount
+已领取: got
+PPT: PPT
+--: --
+支付宝: Alipay
+网银支付:  E-currency payment
+快捷支付: Quick payment
+苹果应用内支付: Apple in-app purchase
+站外支付: payment out of website
+虚拟币: virtual currency
+文章: article
+页面: page
+头条: news
+今日: today
+昨日: yesterday
+本周: this week
+上周: last week
+本月: this mouth
+上月: last mouth
+一: Monday
+二: Tuesday
+三: Wednesday
+四: Thursday
+五: Friday
+六: Saturday
+日:  Sunday
+本地视频: local video
+云视频: cloud-video
+网络视频: internet video
+管理员: administrator
+超级管理员: super administrator
+银牌会员: silver vip
+金牌会员: golden vip
+钻石会员: dimond vip
+升级: remote
+取消会员: delete member
+手机号: phone number
+邮件地址: email address
+登录IP: Login IP
+一次: every time
+每小时: every hour
+每天: every day
+每月: every mouth
+<span>提示</span>: <span>tip</span>
+<span class="text-warning">警告</span>: <span class="text-warning"> warning</span>
+<span class="text-danger">错误</span>: <span class="text-danger"> error</span>
+新注册用户数: new registed users number
+用户登录数: Log in users
+新增课程数: new courses
+新增课时数:  new classes
+加入学习数: studied
+购买课程数: buy courses
+购买班级数: buy classes
+完成课时学习数: classes complete
+视频观看数:  video played
+└─ 云视频观看数: └─ cloud-video played
+└─ 本地视频观看数: └─ local video played
+└─ 网络视频观看数: └─ internet video played
+营收额: revenue
+└─ 课程营收额: └─ courses revenue
+└─ 班级营收额: └─ classes revenue
+└─ 会员营收额: └─ members revenue
+课程总数:  Total courses
+用户总数: Total users
+网站注册: register
+微博登录: blog login
+网站邮箱注册: email register
+网站手机注册: phone number register
+手动导入: Manual import
+人人连接: renren login
+QQ登录: QQ login
+简单: easy
+一般: general
+困难:  difficult
+班级: class
+组合: Combination
+开启: open
+你的父母名字: father's name
+你的老师名字: teacher's name
+你的爱人的名字: lover's name
+你的母校名字: Alma Mater‘s name
+你的启蒙老师: your first teacher
+你的爱好: hobby
+不指定问题类型: Do not specify the issue type
+限时打折: time-limited discounting
+限时免费: time-limited free
+全站打折: All website discounting
+已通过: approved
+未通过: disapproved
+待审核: wait for review
+编辑中: editing
+作业快速批改:  quick checking
+试卷阅卷: Examination paper marking
+教师答疑: Question answering
+活动组织: activity organnization
+直播答疑: live question and answering
+就业指导: career guaiding
+旁听生: A drop-in
+学生: student
+班主任: class teacher
+助教: teachning assistant
+QQ: QQ number
+身份证号码: ID number
+优秀: excellent
+良好: good
+合格: qualified
+不合格: disqualified
+未转码: not transcode
+转码中: transcoding
+转码成功: transcode successfully
+转码失败: transcode failed
+禁用: prohibited
+屏蔽: shield
+敏感词: sensitive words
 编号: serial number
 主题目录%themeDir%不存在！: Subject catalog  is not exist！
-文章已删除或者未发布！: '''The article is canclled or not issued yet!'''
-用户没有登录,不能评论!: '''Want to make comments,please log-in first!'''
-标签不存在!: 'Tag is not found !'
-密码不正确，请重试。: 'Password is incorrect,please try again。'
+文章已删除或者未发布！: The article is canclled or not issued yet!
+用户没有登录,不能评论!: Want to make comments,please log-in first!
+标签不存在!: Tag is not found !
+密码不正确，请重试。: Password is incorrect,please try again。
 type不正确: The type is incorrect
 登录成功: log-in successful
-用户未登录，请先登录！: 'Please log-in first！'
-网校虚拟币未开启！: 'The virtual currency function is closed！'
-您已经填过邀请码: 'The inviation code is already exist'
-邀请码不正确: 'The inviation code is incorrect'
-课程公告(#%id%)不存在。: 'The course announcement  is not found。'
+用户未登录，请先登录！: Please log-in first！
+网校虚拟币未开启！: The virtual currency function is closed！
+您已经填过邀请码: The inviation code is already exist
+邀请码不正确: The inviation code is incorrect
+课程公告(#%id%)不存在。: The course announcement  is not found。
 课程不存在: The course is not found
-你好像忘了登录哦？: 'Forgot to log-in？'
-您还不是课程《%coursTtitle%》的学员，请先购买或加入学习。: 'You are not the member of course，please join-in first。'
-章节(#%chapterId%)不存在！: 'The chapter is not found！'
-非常抱歉，您无权限访问该班级，如有需要请联系客服: 'Sorry，you have no permission to access.Please contact custom service first。'
-请前往后台开启直播,尝试创建！: 'Please enable the live function，then try to creat one！'
-请联系EduSoho官方购买直播教室，然后才能开启直播功能！: 'Before enable the live，purchase the fuction first through EduSoho official '
+你好像忘了登录哦？: Forgot to log-in？
+您还不是课程《%coursTtitle%》的学员，请先购买或加入学习。: You are not the member of course，please join-in first。
+章节(#%chapterId%)不存在！: The chapter is not found！
+非常抱歉，您无权限访问该班级，如有需要请联系客服: Sorry，you have no permission to access.Please contact custom service first。
+请前往后台开启直播,尝试创建！: Please enable the live function，then try to creat one！
+请联系EduSoho官方购买直播教室，然后才能开启直播功能！: Before enable the live，purchase the fuction first through EduSoho official
 您不是课程的学员。: Please join-in the course first。
-有关联的订单，不能直接退出学习。: 'You cann''t quit now,due to it may have a relation wiht other orders。'
-课程不存在，或已删除。: 'The course is not found，may be removed。'
-抱歉，未发布课程不能学习！: 'Sorry，the course will be upcoming soon!'
+有关联的订单，不能直接退出学习。: You cann't quit now,due to it may have a relation wiht other orders。
+课程不存在，或已删除。: The course is not found，may be removed。
+抱歉，未发布课程不能学习！: Sorry，the course will be upcoming soon!
 订单不存在!: The order is not found !
 文件转换请求失败，请重试！: The file conversion is failed,please try again！
 您的观看时长已到: Watching limit is reached
 不能再观看: No more watching
-抱歉，视频文件不存在，暂时无法学习。: 'Sorry，the video is not found，can not learn now 。'
-抱歉，音频文件不存在，暂时无法学习。: 'Sorry，the radio is not found，can not learn now。'
-抱歉，PPT文件不存在，暂时无法学习。: 'Sorry，the PPT is not existed，can not learn now。'
+抱歉，视频文件不存在，暂时无法学习。: Sorry，the video is not found，can not learn now 。
+抱歉，音频文件不存在，暂时无法学习。: Sorry，the radio is not found，can not learn now。
+抱歉，PPT文件不存在，暂时无法学习。: Sorry，the PPT is not existed，can not learn now。
 未开启课时音视频下载。: Download of Radio/Video file  is closed。
 PPT文档还在转换中，还不能查看，请稍等。: PPT conversion is on going,can't preview,please waiting。
 文档转换失败，请到课程: File conversion is failed，please try again in course management。
@@ -676,16 +1839,16 @@ PPT文档还在转换中，还不能查看，请稍等。: PPT conversion is on 
 实时考试已经结束!: The test is finished!
 您已经提交试卷，不能继续考试!: Handed already,can't go on testing .
 实时考试，不能再考一次!: Only can hand one time！
-文件已删除: 'The file is removed yet.'
+文件已删除: The file is removed yet.
 文件已在课程文件中移除: The file is removed out of the course
 课程基本信息已保存！: The  information of the course  is saved successful!
 该用户还不存在！: The user is not found!
 该用户已是本课程的学员了！: The user is already join-in the course!
-该用户是本课程的教师，不能添加!: 'The user is  teacher of the course,no need to be added.'
+该用户是本课程的教师，不能添加!: The user is  teacher of the course,no need to be added.
 课程详细信息已保存！: The infomation are  saved successful!
-课程价格已经修改成功!: 'The price  is revised successfully!'
-查询订单已关闭，请联系管理员: 'The order has been closed,please contact the administrator.'
-实付价格: 'Actual price'
+课程价格已经修改成功!: The price  is revised successfully!
+查询订单已关闭，请联系管理员: The order has been closed,please contact the administrator.
+实付价格: Actual price
 教师设置成功！: The teacher is added successfully.
 未知页面: Unknown page
 参数不正确！: Parameter is incorrect.
@@ -695,69 +1858,69 @@ PPT文档还在转换中，还不能查看，请稍等。: PPT conversion is on 
 订单已过期，不能支付，请重新创建订单。: The order has been cancelled,please re-create the order and pay for it.
 不是您的订单，不能支付: The order is not belonged to you ,can not pay for it.
 购买的课程不存在，请重新创建订单!: The course belong  to the order is removed,please re-create the order.
-题目添加成功，请继续添加。: 'The question is added already,continue the next.'
-题目添加成功，请继续添加子题。: 'The question is added already,continue to add the sub-question.'
-题目添加成功。: 'The question is added already.'
+题目添加成功，请继续添加。: The question is added already,continue the next.
+题目添加成功，请继续添加子题。: The question is added already,continue to add the sub-question.
+题目添加成功。: The question is added already.
 父题不存在，不能创建子题！: The
 题目修改成功！: The question is revised successfully!
 题目不存在！: The question is not found！
 该用户不存在: The user is not found
 该用户已是本课程的学员了: The user is already join-in.
-该用户是本课程的教师，不能添加: 'The user is  teacher of the course,no need to be added.'
-您无权查看学员详细信息！: 'You have no permission to look up the user''s information!'
+该用户是本课程的教师，不能添加: The user is  teacher of the course,no need to be added.
+您无权查看学员详细信息！: You have no permission to look up the user's information!
 试卷不存在: The test paper is not found!
 试卷信息保存成功！: The test paper information is saved successfully!
 试卷题目不能为空！: The paper can't be saved without any question.
 试卷题目保存成功！: The question is added successfully.
-话题不存在，或已删除。: 'The topic is not found,may be removed.'
+话题不存在，或已删除。: The topic is not found,may be removed.
 错误提示: Error message
-上传授权码已过期，请刷新页面后重试！: 'The access key is expired,please re-fresh the page and try again.'
-您上传的不是图片文件，请重新上传。: 'It''s not pic file,please upload again.'
-您上传的不是Flash文件，请重新上传。: 'It''s not flash file,please upload again.'
-上传类型不正确！: 'Upload type is incorrect!'
-短信服务被管理员关闭了: 'Message service is closed.'
-验证码错误: 'Verification code is error'
-请等待120秒再申请: 'Please waiting for 120s, and try again.'
+上传授权码已过期，请刷新页面后重试！: The access key is expired,please re-fresh the page and try again.
+您上传的不是图片文件，请重新上传。: It's not pic file,please upload again.
+您上传的不是Flash文件，请重新上传。: It's not flash file,please upload again.
+上传类型不正确！: Upload type is incorrect!
+短信服务被管理员关闭了: Message service is closed.
+验证码错误: Verification code is error
+请等待120秒再申请: Please waiting for 120s, and try again.
 用户注册: Register -in
-您已经绑定了该手机号码: 'You have been binding the telephone successfully'
-该手机号码已被其他用户绑定: 'The phone number have been bond by other user.'
-登录密码重置: 'reset your sign-in password'
+您已经绑定了该手机号码: You have been binding the telephone successfully
+该手机号码已被其他用户绑定: The phone number have been bond by other user.
+登录密码重置: reset your sign-in password
 用户没有被绑定的手机号: The user has no binding telephone.
-手机与用户名不匹配: 'The user name doesn''t match the phone number.'
+手机与用户名不匹配: The user name doesn't match the phone number.
 网站余额支付: Pay with account balance.
-支付密码重置: 'Reset the payment password'
-您输入的手机号，不是已绑定的手机: 'The entered phone number doesn''t match  the one has bond.'
-手机号错误:%to%: 'Phone number error'
-发送失败, %resulterror%: 'send failure'
-验证码正确: 'security code error'
-用户未登录: 'log-out '
-用户没有登录,不能查看!: 'log-in first'
+支付密码重置: Reset the payment password
+您输入的手机号，不是已绑定的手机: The entered phone number doesn't match  the one has bond.
+手机号错误:%to%: Phone number error
+发送失败, %resulterror%: send failure
+验证码正确: security code error
+用户未登录: log-out
+用户没有登录,不能查看!: log-in first
 参数不正确: parameter is incorrect
 文件不存在: The file is not found
-目前只允许管理员创建小组!: 'The dicussion group only can be created by administrator.'
+目前只允许管理员创建小组!: The dicussion group only can be created by administrator.
 小组名称不能为空！: The name can not be null
-该小组已被关闭: 'The group is closed'
+该小组已被关闭: The group is closed
 您没有权限!: You have no authority.
-只有小组成员可以发言: 'Only group member can post '
+只有小组成员可以发言: Only group member can post
 话题名称不能为空！: The name cann't be null
 您没有权限编辑: you have no authority to edit
 您尚未登录，不能收藏话题！: before collect the topic,log-in first
-该话题已被管理员删除: 'The topic is removed by administrator.'
-该话题已被关闭: 'The topic is closed'
+该话题已被管理员删除: The topic is removed by administrator.
+该话题已被关闭: The topic is closed
 您未购买该附件!: pay for the attachment first.
 虚拟币余额不足!: The virtual currency account is Insufficient balance!
 您的回复被采纳为最佳回答！: Your answer is rated as the best one.
-查看话题隐藏内容: 'Look up the hidden contents of the topic'
+查看话题隐藏内容: Look up the hidden contents of the topic
 隐藏区域: hidden area
-本话题隐藏内容: 'The topic has hidden contents'
-游客,如果您要查看本话题隐藏内容请先: 'Please log-in first, before look up the hidden content。'
+本话题隐藏内容: The topic has hidden contents
+游客,如果您要查看本话题隐藏内容请先: Please log-in first, before look up the hidden content。
 回复可见区域: the contents will be seen after replay.
 本话题可见: The topic can be seen.
 文件类型不正确!: The file type is incorrect!
 生成视频播放列表失败！: Fail to build viedo play list.
 生成视频播放地址失败！: Fail to creat vedio play address!
-直播频道已关闭: 'The live function is closed.'
-尚未登入！: 'log-in first'
+直播频道已关闭: The live function is closed.
+尚未登入！: log-in first
 课时不存在！: The file is not found.
 直播教室不存在！: The live classroom is not found.
 该订单已失效: The order is invalid.
@@ -765,80 +1928,178 @@ PPT文档还在转换中，还不能查看，请稍等。: PPT conversion is on 
 订单已经过期，不能支付: The order has been expired ,can't pay for it.
 用户未登录，支付失败。: The user is log-out,fail to pay.
 缺少订单，支付失败: The order is not found ,fail to pay.
-支付方式未开启，请先开启: 'payment system is closed，open it first.'
+支付方式未开启，请先开启: payment system is closed，open it first.
 不是您创建的订单，支付失败: The order is not belongs to you,fail to pay.
-支付密码不正确: 'payment password is incorrect.'
-支付密码正确: 'payment password is correct.'
+支付密码不正确: payment password is incorrect.
+支付密码正确: payment password is correct.
 不是您绑定的银行卡: The card number is not match your have bond.
-支付参数尚未配置，请先配置。: 'payment parameter is not configured yet, please deploy first.'
-音频正在转码中，请稍后再访问.: 'The radio is converting,please access later'
+支付参数尚未配置，请先配置。: payment parameter is not configured yet, please deploy first.
+音频正在转码中，请稍后再访问.: The radio is converting,please access later
 该课时不存在!: The file is not found
 该题目不存在!: The question is not found.
-支付密码不正确，请重试！: 'Password error,try again.'
+支付密码不正确，请重试！: Password error,try again.
+参数缺失，上传初始化失败！: Upload initialization failed because of an invalid or missing parameter！
+文件(#%id%)，不存在。: File (#%id%) does not exist.
+文件(#%id%)，不是云文件。: File (#%id%) is not  CloudFiles.
+文件(#%id%)，不是视频文件。: File (#%id%) is not video file.
+文件(#%id%)，不是课时文件。: File (#%id%) is not class hour file.
+文件(#%id%)已转换: File (#%id%) has been converted
+文件(#%id%)转换请求失败！: File (#%id%) conversion request failed!
+参数错误，请重新输入: Parameter error,please try again.
+文件(#%id%)不存在，转换失败: File (#%id%) does not exist, the conversion failed
+状态不正确，变更文件转换状态失败！: Status is not correct, change file conversion status failed!
+您无权访问此文件！: You have no right to access this file！
+您无权访问此页面: You have no right to access this page
+更新的字段错误！: Update field Error!
+小组不存在，更新失败！: The group does not exist, update failed!
+小组不存在, 加入小组失败！: You failed to join the group because the group does not exist!
+您已加入小组！！: You have joined the group！！
+小组不存在,退出小组失败！: You exit the group failed because the group does not exist!
+退出小组失败！: exit the group has failed！
+话题不存在，收藏失败！: the collection failed because the topic does not exist!
+不能收藏自己的话题！: You Can not collect your own topic！
+不允许重复收藏!: Not allowed to repeat collection!
+话题不存在，取消收藏失败！: You cancel the collection failed because the topic does not exist!
+不存在此收藏关系，取消收藏失败！: You cancel the collection failed!
+标题名称不能为空！: The title name can not be empty！
+话题内容不能为空！: The topic can not be empty!
+小组Id不能为空！: Group Id can not be empty!
+用户ID不能为空！: User ID can not be empty!
+用户ID不能为空!: User ID can not be empty!
+回复内容不能为空！: Reply can not be empty!
+购买班级《%title%》(管理员添加): Purchase Class "%title%" (the administrator to add)
+通过批量导入添加: Through bulk import added
+重复行：: Duplicated row
+'第%value%行 ': 'the %value% row'
+请选择上传的文件: Please select a file to upload
+Excel格式不正确！: Excel format is not correct!
+Excel超过1000行数据!: Excel data over 1000 lines!
+缺少必要的字段: Missing required field
+第 %row%行的信息有误，用户数据不存在，请检查。: The %row% of the information is incorrect, the user data does not exist, please check.
+购买课程《%title%》(管理员添加): Purchase course "%title%" (allow the administrator to add)
+message must be a string: message must be a string
+Excel格式不正确: Excel format is not correct!
+Excel超过1000行数据: Excel data over 1000 lines!
+第%row%行班级号为%classroomId%的班级未发布，请检查。: The row%row classroomId% class is not published,please check
+第%row%行班级号为%classroomId%的班级不存在，请检查。: The row %rowclassroomId% class does not exist,please check
+当前用户没有导入用户权限: The current user does not have the import user permissions
+'重复:': repeat
+批量导入会员: Bulk import members
+您已被管理员添加为%viplevelName%会员: You have been added as a member by the administrator
+缺少必要字段: lack of necessary fields
+当前用户没有导入会员权限: The current user does not have the permission to import members
+驻点不存在: key point does not exist
+请输入弹题时间！: Please enter a valid popup exercises time！
+驻点不存在，操作失败。: operation failed because the key point does not exist
+该视频不属于你，无权操作！: The video does not belong to you, you cannot operate！
+请到我的教育云开启云视频！: please skip to my edu-cloud to start my cloud video！
+弹题不存在: opup exercises do not exist
+删除驻点问题#%stem%: delete the key point question#%stem%
+卡号有重复，生成失败，请重新生成！: creat-failure because the Card number is repeated, please  re-create!
+充值卡不存在，作废失败！: The card is not exist, invalid failed!
+您的一张价值为%batch%%coin_name%的学习卡已经被管理员作废，详情请联系管理员。: File of the course has deleted cannot void using state of prepaid  cards!
+不能作废已使用状态的充值卡！: You cannot Cancel a prepaid card which has been used!
+无效的链接: Invalid Link
+该链接不存在或已被删除: The link does not exist or has been deleted
+该学习卡已经作废: This learning card is invalid
+您已经领取该批学习卡: You have got the learning card
+该批学习卡已经被领完: This batch of learning card has been out of
+学习卡领取失败: fail to get the learning card
+您有一张价值为%batch%%coin_name%的充值卡领取成功: You get a %batch%%coin_name% prepaid card
+领取成功，请在卡包中查看: Get the card success, please check in the card package
+网校公告: networks School announcement
+创建订单失败：缺少参数。: Failed to create the order:missing parameter
+订单用户(#%id%)不存在，不能创建订单。: The user(#%id%) does not exist, cannot create the order.
+创建订单失败：payment取值不正确。: Failed to create the order
+优惠码不可用: Coupon code is not available
+创建订单: create the order
+订单(%payData%)已被删除，支付失败。: the order(%payData%) has been deleted. payment failed
+订单不存在，获取订单日志失败！: The order does not exist. Failed to get the order log!
+订单#%id%，不能退款: Order #%id% ，can't get a refund
+订单退款成功(无退款金额): successful refund an order  (no refund amount)
+订单申请退款: Order to apply for a refund
+订单(#%id%)不存在，退款确认失败: Order(#%id%)was not exist, failed to identify a refund
+订单(#%id%)，你无权进行退款确认操作: Order (#%id%), you have no right to make a refund confirmation operating
+退款申请(ID:%id%)已审核通过：%note%: Refund application(ID:%id%) has been approved：%note%
+退款申请(ID:%id%)已审核未通过：%note%: Refund application(ID:%id%) has been not approved：%note%
+取消退款申请(ID:%id%): cancel application refund(ID:%id%)
+系统自动取消: The system automatically cancelled
+已经是班级的学员了!: You have been the class's students！
+不能加入未发布班级!: You Can't add to unpublished class
+找不到要购买的班级!: Can't find the class you want to buy！
+已经是课程的学员了!: You have been the course's students
+找不到要购买课程!: Can't find the course you want to buy
+找不到要购买的组合!: Can't find the combination you want to buy
+活动还没有开始: Activity has yet to start
+活动已经结束: Activity is over
+订单类型不存在: The order type does not exist
+已经是该等级会员了!: You had been already at the member level！
+找不到会员等级!: Can't find the membership grade
+参数不正确!: Incorrect parameter!
 用户不存在，推荐失败！: User not exist, recommendation failed!
 用户不存在，取消推荐失败！: User not exist, recommend cancellation failed!
-取消推荐用户%nickname%(#%id%): '''Cancel recommendation of user %nickname%(#%id%)'''
-计数器的数量，必须为数字: '''The count of counter must be numbers'''
-用户不存在，关注失败！: 'User not exist, failed to follow!'
-不能关注自己！: 'Can''t follow yourself!'
-关注失败！: 'Failed to follow'
-不允许重复关注!: 'Repeat follow not allowed!'
-用户不存在，取消关注失败！: 'User not exist, failed to unfollow !'
-不存在此关注关系，取消关注失败！: 'The following relation not exist. Following cancellation failed.'
-用户不存在，检测关注状态失败！: 'User not exist. Failed to detect the follow status!'
-被关注者不存在，检测关注状态失败！: 'Following subject not exist. Failed to detect the follow status!'
-用户#%id%不存在！: 'User #%id% not exist!'
-用户%nickname%实名认证成功，操作人:%currentUser% !: 'User %nickname% passed the real name certification, operator: %currentUser%!'
-用户%nickname%实名认证失败，操作人:%currentUser% !: 'User %nickname% failed the real name certification，operator: %currentUser%!'
+取消推荐用户%nickname%(#%id%): Cancel recommendation of user %nickname%(#%id%)
+计数器的数量，必须为数字: The count of counter must be numbers
+用户不存在，关注失败！: User not exist, failed to follow!
+不能关注自己！: Can't follow yourself!
+关注失败！: Failed to follow
+不允许重复关注!: Repeat follow not allowed!
+用户不存在，取消关注失败！: User not exist, failed to unfollow !
+不存在此关注关系，取消关注失败！: The following relation not exist. Following cancellation failed.
+用户不存在，检测关注状态失败！: User not exist. Failed to detect the follow status!
+被关注者不存在，检测关注状态失败！: Following subject not exist. Failed to detect the follow status!
+用户#%id%不存在！: User #%id% not exist!
+用户%nickname%实名认证成功，操作人:%currentUser% !: User %nickname% passed the real name certification, operator: %currentUser%!
+用户%nickname%实名认证失败，操作人:%currentUser% !: User %nickname% failed the real name certification，operator: %currentUser%!
 云视频bucket不能为空，请更改云视频设置。: The bucket of the cloud video can not be empty. Please change your settings.
-无导出目录写权限，无法导出数据库: 'Lack of write permission of directory, failed to export the database.'
--- ---------------- 导出数据库: '-- ---------------- export the database'
+无导出目录写权限，无法导出数据库: Lack of write permission of directory, failed to export the database.
+-- ---------------- 导出数据库: -- ---------------- export the database
 '-- ---------------- 时间:': '-- ---------------- time:'
 '-- ---------------- 数据库:': '-- ---------------- database:'
 '-- ---------------- 主机:': '-- ---------------- host:'
 '-- -------------- 表:%table% 的表结构  -------------- ': '-- -------------- table: table strcture of %table%   --------------'
 -- -------------- 视图:%table% 的表结构  --------------: '-- -------------- View: table strcture of %table%   --------------'
 -- ----------- %table% 的数据结束 ---------: '-- ----------- %table% data finished ---------'
-app/data目录不存在，请先创建: 'Directory app/data not exist, please create the directory'
-插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式: 'Format of the plug-in meta information file %blockMeta% do not conform to the JSON specifications. Failed to parse. Please check the format.'
-插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式: 'Format of the plug-in meta information file %metaFilePath% do not conform to the JSON specifications. Failed to parse. Please check the format.'
-无法打开tinyipdata文件: 'can''t open file tinyipdata'
+app/data目录不存在，请先创建: Directory app/data not exist, please create the directory
+插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式: Format of the plug-in meta information file %blockMeta% do not conform to the JSON specifications. Failed to parse. Please check the format.
+插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式: Format of the plug-in meta information file %metaFilePath% do not conform to the JSON specifications. Failed to parse. Please check the format.
+无法打开tinyipdata文件: can't open file tinyipdata
 查询不到此IP: can't inquire this IP
 ExtensionManager尚未实例化。: ExtensionManager not instantiate yet
-数据标签`%name%`尚未定义。: 'data label `%name%` is not defined'
-获取网易公开课专辑(%url%)页面内容失败！: 'Failed to parse page content of Netease Open Class album!'
-解析网易公开课专辑信息失败！: 'Failed to parse title of Netease Open Class album!'
-解析网易公开课专辑标题失败！: 'Failed to parse title of Netease Open Class album!'
-解析网易公开课专辑摘要失败！: 'Failed to parse abstract of Netease Open Class album!'
-获取网易公开课专辑ID失败: 'Failed to get ID of Netease Open Class album!'
-获取网易公开课视频条目信息失败: 'Failed to get entry information of Netease Open Class'
-获取网易公开课视频(中国)条目信息失败: 'Failed to get entry information of Netease Open Class (China)'
-获取网易公开课视频(中国)条目信息失败!: 'Failed to get entry information of Netease Open Class (China)!'
-获取QQ视频专辑(%url%)页面内容失败！: 'Failed to parse page content of QQ video album (%url%) !'
+数据标签`%name%`尚未定义。: data label `%name%` is not defined
+获取网易公开课专辑(%url%)页面内容失败！: Failed to parse page content of Netease Open Class album!
+解析网易公开课专辑信息失败！: Failed to parse title of Netease Open Class album!
+解析网易公开课专辑标题失败！: Failed to parse title of Netease Open Class album!
+解析网易公开课专辑摘要失败！: Failed to parse abstract of Netease Open Class album!
+获取网易公开课专辑ID失败: Failed to get ID of Netease Open Class album!
+获取网易公开课视频条目信息失败: Failed to get entry information of Netease Open Class
+获取网易公开课视频(中国)条目信息失败: Failed to get entry information of Netease Open Class (China)
+获取网易公开课视频(中国)条目信息失败!: Failed to get entry information of Netease Open Class (China)!
+获取QQ视频专辑(%url%)页面内容失败！: Failed to parse page content of QQ video album (%url%) !
 解析QQ视频专辑基础信息失败！: Failed to parse basic information of QQ video album!
 定位QQ视频专辑页面列表区域失败！: Failed to locate list area of QQ video album!
 解析QQ视频专辑列表失败！: Failed to parse the list of QQ video album!
-获取优酷视频专辑ID失败: 'Failed to get the ID of QQ video album!'
-获取新浪公开课专辑标题失败: 'Failed to get the title of Sina open class album!'
-获取新浪公开课专辑摘要失败: 'Failed to get the summary of Sina open class album!'
-获取新浪公开课视频条目信息失败: 'Failed to get the entry information of Sina open class album!'
-获取优酷视频专辑(%url%)页面内容失败！: 'Failed to get the page content of Youku video album!'
-获取优酷视频专辑(%url%)标题失败！: 'Failed to get the title of Youku video album!'
-获取优酷视频专辑(%url%)视频数量失败！: 'Failed to get the number of videos of Youku video album!'
-获取优酷视频专辑(%url%)视频条目失败！: 'Failed to get the entry information of Youku video album!'
-解析优酷视频专辑(%url%)视频条目失败！: 'Failed to parse the entry information of Youku video album!'
+获取优酷视频专辑ID失败: Failed to get the ID of QQ video album!
+获取新浪公开课专辑标题失败: Failed to get the title of Sina open class album!
+获取新浪公开课专辑摘要失败: Failed to get the summary of Sina open class album!
+获取新浪公开课视频条目信息失败: Failed to get the entry information of Sina open class album!
+获取优酷视频专辑(%url%)页面内容失败！: Failed to get the page content of Youku video album!
+获取优酷视频专辑(%url%)标题失败！: Failed to get the title of Youku video album!
+获取优酷视频专辑(%url%)视频数量失败！: Failed to get the number of videos of Youku video album!
+获取优酷视频专辑(%url%)视频条目失败！: Failed to get the entry information of Youku video album!
+解析优酷视频专辑(%url%)视频条目失败！: Failed to parse the entry information of Youku video album!
 获取乐视视频信息失败！: Failed to get the information of Letv video!
-获取网易公开课视频信息失败！: 'Failed to get the information of Netease open class!'
+获取网易公开课视频信息失败！: Failed to get the information of Netease open class!
 解析土豆视频信息失败: Failed to parse the information of Tudou video!
 获取QQ视频页面信息失败！: Failed to get the information of QQ video!
 解析QQ视频ID失败！: Failed to parse the ID of QQ video!
 获取QQ视频信息失败！.: Failed to get the information of QQ video!
 解析QQ视频信息失败！..: Failed to parse the information of QQ video!
 解析QQ视频ID失败！....: Failed to parse the ID of QQ video!
-获取土豆视频(%url%)页面内容失败！: 'Failed to ge th page content of Tudou video.'
-优酷视频地址不正确！: 'Incorrect Youku video address.'
-获取优酷视频页面信息失败！: 'Failed to get the information of Youku video!'
-解析优酷视频页面信息失败!: 'Failed to parse the information of Youku video!'
+获取土豆视频(%url%)页面内容失败！: Failed to ge th page content of Tudou video.
+优酷视频地址不正确！: Incorrect Youku video address.
+获取优酷视频页面信息失败！: Failed to get the information of Youku video!
+解析优酷视频页面信息失败!: Failed to parse the information of Youku video!
 参数%type%不正确: Parameter %type% incorrect
 微博帐号: Weibo account
 微博登录接口: weibo sign in interface
@@ -847,55 +2108,55 @@ QQ登录接口: QQ sign in interface
 人人帐号: Renren account
 人人登录接口: Renren sign in interface
 微信网页登录接口: Wechat webpage sign in interface
-微信内分享登录接口: 'wechat inside share sign in interface'
-支付宝支付校验失败(%error%)。: 'Alipay payment verification failed (%error%).'
-网银支付校验失败(%error%)。: 'E-bank payment verification failed (%error%).'
+微信内分享登录接口: wechat inside share sign in interface
+支付宝支付校验失败(%error%)。: Alipay payment verification failed (%error%).
+网银支付校验失败(%error%)。: E-bank payment verification failed (%error%).
 网银支付失败: E-bank payment failed
-该笔单据查询超过１次,请过15分钟之后查询: 'The receipts has just inquired. Please inquire 15 minutes later.'
+该笔单据查询超过１次,请过15分钟之后查询: The receipts has just inquired. Please inquire 15 minutes later.
 快捷支付失败: Quick payment failed
 解绑银行卡成功: Unbinding bank card successfully
 支付: payment
 微信支付失败: Wechat payment failed
-由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的: 'The version of your browser is out-dated. You are not able to use the website. Please use the latest'
+由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的: The version of your browser is out-dated. You are not able to use the website. Please use the latest
 谷歌浏览器: Chrome
 Firefox浏览器: Firefox
 访问本站。: to visit the website.
-请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm: 'Please enter the correct date and time, eg. XXXX-MM-DD hh:mm'
-真的要删除该公告吗？: 'Are you determined  to delete this announcement?'
+请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm: Please enter the correct date and time, eg. XXXX-MM-DD hh:mm
+真的要删除该公告吗？: Are you determined  to delete this announcement?
 勾选同意此服务协议，才能继续注册！: Agree the Term of Service to continue your register.
 登录成功，正在跳转至首页！: Sign in succeed. Guiding to homepage.
 登录失败，请重新登录后再试！: sign in failed. Please try to sign in again.
 绑定帐号成功，正在跳转至首页！: Binding succeed. Guiding to homepage.
-绑定失败，帐号或密码错误。: 'Binding failed. Wrong account or password.'
-两次密码输入不一致，请重新输入: 'Two passwords are inconsistent. Please try again.'
+绑定失败，帐号或密码错误。: Binding failed. Wrong account or password.
+两次密码输入不一致，请重新输入: Two passwords are inconsistent. Please try again.
 '%display%格式错误': '%display% format error'
 '%display%不允许以1开头的11位纯数字': '%display% 11 numbers start with number 1 is not allowed'
 勾选同意此服务协议，才能继续注册: Agree the service agreement to continue your register.
 链接复制成功: link copied succeed
-已优惠: 'dicouted'
-去学习: 'Start Stduy'
-您真的要退出学习吗？: 'Are you determined to quite the course?'
+已优惠: dicouted
+去学习: Start Stduy
+您真的要退出学习吗？: Are you determined to quite the course?
 '天 ': 'day'
 '时 ': 'hour'
 '分 ': 'minute'
 视频文件正在转换中，稍后完成后即可查看: Video converting. Check later.
-直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。: 'live course will start at %liveStartTime%, finish at %liveEndTime%，please enter the course 10 minutes before.'
-老师们：: 'Teachers:'
+直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。: live course will start at %liveStartTime%, finish at %liveEndTime%，please enter the course 10 minutes before.
+老师们：: Teachers:
 录制直播课程时，需在直播课程间点击: To record live course, you need to click
 录制面板: recording panel
-，录制完成后点击: ', when recording finished, click'
+，录制完成后点击: , when recording finished, click
 请点击「开始考试」按钮，在新开窗口中完成考试。: Plese click the "Start Exam" button and finish the exam in new window.
 开始考试: Start Exam
-正在载入，请稍等...: 'loading...'
-实时考试将于%testStartTime%开始，将于%testEndTime%结束，请在课前10分钟内提早进入。: 'Exam will start at %testStartTime%, will stop at %testEndTime%，please enter the course 10 minutes ahead of time.'
+正在载入，请稍等...: loading...
+实时考试将于%testStartTime%开始，将于%testEndTime%结束，请在课前10分钟内提早进入。: Exam will start at %testStartTime%, will stop at %testEndTime%，please enter the course 10 minutes ahead of time.
 考试已经结束: Exam finished
-欢迎参加考试，请点击「开始考试」按钮。: 'Weclome to the exam. Please click the "Start Exam" button.'
-试卷已批阅。: 'Test paper reviewed.'
-试卷未完全做完。: 'Test paper not finished completely.'
-试卷正在批阅。: 'Test paper reviewing'
+欢迎参加考试，请点击「开始考试」按钮。: Weclome to the exam. Please click the "Start Exam" button.
+试卷已批阅。: Test paper reviewed.
+试卷未完全做完。: Test paper not finished completely.
+试卷正在批阅。: Test paper reviewing
 查看试卷: check test paper
-已经到最后一张图片了哦: 'It''s the last picture.'
-您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。: 'Flashplayer not installed or version outdated, please install the flashplayer.'
+已经到最后一张图片了哦: It's the last picture.
+您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。: Flashplayer not installed or version outdated, please install the flashplayer.
 '还剩: ': 'Remained:'
 '[收起全文]': '[Fold the page]'
 '[展开全文]': '[Unfold the page]'
@@ -903,19 +2164,19 @@ Firefox浏览器: Firefox
 订单取消失败！: Fajiled to cancel the order.
 订单已取消成功！: Cancel the order successfully!
 真的要取消退款吗？: Are you determined to cancel the refund request?
-加入学习失败，请联系管理员！: 'Failed to join the course. Please contact the administrator.'
+加入学习失败，请联系管理员！: Failed to join the course. Please contact the administrator.
 发表回复失败，请重试: Failed to post the reply. Please try again.
-您真的要删除该回帖吗？: 'Are you determined to delete the reply?'
-请输入标签: 'Please enter the label'
-网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。: 'The site support maximum %capacity% people in live class at the same time. You can set a bigger number, but may cause some student can not enter the live class when fulled.'
+您真的要删除该回帖吗？: Are you determined to delete the reply?
+请输入标签: Please enter the label
+网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。: The site support maximum %capacity% people in live class at the same time. You can set a bigger number, but may cause some student can not enter the live class when fulled.
 信息已保存: infomation saved
-添加成功: 'add succeed'
+添加成功: add succeed
 您真的要发布该课程吗？: Are you determined to publish the course?
-请选择或上传%display%文件: 'Please select or upload %display% file'
-时长格式不正确: 'Incorret format of time length'
-文件正在上传，等待上传完后再保存。: 'Files are uploading. Please save later.'
+请选择或上传%display%文件: Please select or upload %display% file
+时长格式不正确: Incorret format of time length
+文件正在上传，等待上传完后再保存。: Files are uploading. Please save later.
 课时已保存: Period saved
-添加课时成功: 'period added'
+添加课时成功: period added
 时长: duration
 编辑课时: edit lesson
 (草稿已于%createdTime%保存): (draft saved at %createdTime%)
@@ -923,12 +2184,12 @@ Firefox浏览器: Firefox
 请选择试卷: please select the test paper
 请填写建议时长: please enter suggested duration
 试卷课时已保存: exam saved
-添加试卷课时成功: 'Add exam successfully'
+添加试卷课时成功: Add exam successfully
 考试开始时间: start time of the exam
-删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？: 'Deleting the lesson will also delete materials and tests under the lesson. Are you determined to delete the lesson?'
-课时已删除！: 'Lesson deleted.'
-您真的要删除该%chapter_name%%part_name%吗？: 'Are you determined to delete %chapter_name%%part_name%?'
-已删除！: 'Deleted'
+删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？: Deleting the lesson will also delete materials and tests under the lesson. Are you determined to delete the lesson?
+课时已删除！: Lesson deleted.
+您真的要删除该%chapter_name%%part_name%吗？: Are you determined to delete %chapter_name%%part_name%?
+已删除！: Deleted
 您真的要录制回放吗？: Are your determined to create the playback?
 录制失败，直播时您没有进行录制！: Create falied. You did not record at live class.
 录制失败！: Failed to create playback.
@@ -936,43 +2197,43 @@ Firefox浏览器: Firefox
 课时发布成功！: Lesson published successfully
 (未发布): (not published)
 课时已取消发布！: Lesson unpublished.
-您真的要删除该课时练习吗？: 'Are you determined to delete the practice?'
-练习已删除！: 'Practice deleted.'
-您真的要删除该课时作业吗？: 'Are you determined to delete the assignment?'
-作业已删除！: 'Assignment deleted.'
-正在文件格式转换: 'Converting files'
-文件格式转换失败: 'Failed to convert the files'
+您真的要删除该课时练习吗？: Are you determined to delete the practice?
+练习已删除！: Practice deleted.
+您真的要删除该课时作业吗？: Are you determined to delete the assignment?
+作业已删除！: Assignment deleted.
+正在文件格式转换: Converting files
+文件格式转换失败: Failed to convert the files
 您确认要发布此课程吗？: Are you determined to publish the course?
 课程发布成功！: Course published successfully.
-真的要删除该资料吗？: 'Are you determined to delete the material?'
-资料已删除: 'Material deleted'
-请先上传文件或添加资料网络链接！: 'Please upload file or add material links.'
-资料添加成功！: 'Material add successfully.'
-资料添加失败，请重试！: 'Failed to add the material. Please try again.'
-上传成功！: 'Upload successfully.'
-增加%name%有效期操作成功!: 'Add %name% validity period successfully.'
-增加%name%有效期操作失败!: 'Failed to add %name% validity period.'
-添加%name%操作成功!: 'Add %name% successfully.'
-添加%name%操作失败!: 'Failed to add %name%.'
+真的要删除该资料吗？: Are you determined to delete the material?
+资料已删除: Material deleted
+请先上传文件或添加资料网络链接！: Please upload file or add material links.
+资料添加成功！: Material add successfully.
+资料添加失败，请重试！: Failed to add the material. Please try again.
+上传成功！: Upload successfully.
+增加%name%有效期操作成功!: Add %name% validity period successfully.
+增加%name%有效期操作失败!: Failed to add %name% validity period.
+添加%name%操作成功!: Add %name% successfully.
+添加%name%操作失败!: Failed to add %name%.
 备注%name%成功: Remark %name% successfully.
 备注%name%失败，请重试！: Failed to remark %name%. Please try again.
 您真的要移除该%name%吗？: Are you determined to remove %name%?
 移除%name%成功！: Remove %name% succcessfully.
 移除%name%失败，请重试！: Failed to remove %name%. Please try again.
 课程至少需要一个教师！: The course need at least 1 teacher.
-该教师已添加，不能重复添加！: 'The teached is already added.'
+该教师已添加，不能重复添加！: The teached is already added.
 文件转换提交失败，请重试！: File trancoding failed. Please try again.
 未选中任何文件记录: No file is selected.
-已转码: 'Transcoded'
-超清: 'Full HD'
-高清: 'HD'
-标清: 'Standard'
+已转码: Transcoded
+超清: Full HD
+高清: HD
+标清: Standard
 '文件上传失败，可能的原因: 1.文件大小超出限制. 2.文件不存在. 3.文件不能被写入硬盘. 4.临时目录不存在.': 'Failed to upload the files. Possible reasons: 1, file size exceed the limit; 2, file not exist; 3, file can not be writed in hardrive; 4, temporary archive not exist.  '
-请求上传授权码失败！: 'Failed to request the upload license key.'
-当前正在上传的文件将停止上传，确定关闭？: 'Current uploading will be stopped. Are you dertermined to close the window?'
+请求上传授权码失败！: Failed to request the upload license key.
+当前正在上传的文件将停止上传，确定关闭？: Current uploading will be stopped. Are you dertermined to close the window?
 长度为2-200位: length between 2-200
 '回复 ': 'reply'
-真的要退出该小组？您在该小组的信息将删除！: 'Are you determined to quit the group? Your information in the group will be deleted.'
+真的要退出该小组？您在该小组的信息将删除！: Are you determined to quit the group? Your information in the group will be deleted.
 长度为2-100位: length between 2-200
 请选择要踢出的成员！: Please select the meber to kick out.
 真的要踢出该成员？: Are you determined to kick out the member?
@@ -985,60 +2246,60 @@ Firefox浏览器: Firefox
 设置成功！: Set successfully.
 余额不足!: Insufficient balance!
 悬赏额范围在1-50之间!: Reward between 1-50!
-已经导入：: 'imported'
-导入完成！: 'import successfully!'
+已经导入：: imported
+导入完成！: import successfully!
 失败：: failed
 '%title%时，发生了未知错误。': 'when %title%, unknown error occured.'
 正在初始化系统...: initializing the system...
 目录: Directory
 已保存: saved
-进入直播教室错误，请联系管理员，: 'Error occured when entering the live class. Please contact webmaster.'
+进入直播教室错误，请联系管理员，: Error occured when entering the live class. Please contact webmaster.
 重试: try again
 保存成功: saved successfully
 操作失败: operation failed
-添加直播课时成功: 'add live lesson successfully'
-请输入一个晚于现在的时间: 'please enter a time later than current time'
-直播已经开始或者结束,无法编辑: 'Can not edit the lesson. The live class has started or finished.'
-请输入直播的开始时间: 'Please enter the start time of the live class.'
-在此时间段内开课，将会超出教室容量%count%人，届时有可能会导致满额后部分学员无法进入直播。: 'If creating new live course at this period of time, it will exceed %count% person.'
-请先作答!: 'Please answer at first.'
-将题目拖至左侧时间条: Drag the question to the timeline on the left.
+添加直播课时成功: add live lesson successfully
+请输入一个晚于现在的时间: please enter a time later than current time
+直播已经开始或者结束,无法编辑: Can not edit the lesson. The live class has started or finished.
+请输入直播的开始时间: Please enter the start time of the live class.
+在此时间段内开课，将会超出教室容量%count%人，届时有可能会导致满额后部分学员无法进入直播。: If creating new live course at this period of time, it will exceed %count% person.
+请先作答!: Please answer at first.
+将题目拖至左侧时间条: Drag the excercise to the timeline on the left.
 左右拖动驻点调整刻度位置或与已有驻点合并: Drag the key point left or right to the wanted position or to bind with exist key point.
-真的要删除该私信吗？: 'Are you determined to deleted this private message?'
+真的要删除该私信吗？: Are you determined to deleted this private message?
 想要说的话不能大于500个字: Don't type more than 500 characters.
-不好意思，私信内容长度不能超过500!: 'Sorry, the maximum characters of private message is 500 .'
-不好意思，私信内容不允许为空!: 'Sorry, the content of private message can''t be empty.'
-本条信息为最后一条，真的要删除该私信吗？: 'This is the last message. Are you determined to delete it?'
-真的要删除该笔记吗？: 'Are you determined to delete the note?'
+不好意思，私信内容长度不能超过500!: Sorry, the maximum characters of private message is 500 .
+不好意思，私信内容不允许为空!: Sorry, the content of private message can't be empty.
+本条信息为最后一条，真的要删除该私信吗？: This is the last message. Are you determined to delete it?
+真的要删除该笔记吗？: Are you determined to delete the note?
 退款申请已取消成功！: Refund request cancelled successfully.
 今天: Today
-优惠码可用，您当前使用的是: 'You can use coupons. You are now using'
-打%rate%折: '%rate% discout '
-抵价%rate%元: '%rate% discout '
-的优惠码: 'promotion code'
-退学原因的长度请小于或等于120。: 'The reason to drop out within 120 characters.'
-请输入退学原因。: 'Please enter quit reason.'
-请选择退学原因: 'Please selecte quit reason.'
+优惠码可用，您当前使用的是: You can use coupons. You are now using
+打%rate%折: %rate% discout
+抵价%rate%元: %rate% discout
+的优惠码: promotion code
+退学原因的长度请小于或等于120。: The reason to drop out within 120 characters.
+请输入退学原因。: Please enter quit reason.
+请选择退学原因: Please selecte quit reason.
 确定解除绑定该银行卡吗: Are you determined to unbind the bank card?
 复制成功！: Copy succeed!
-免费试看结束，购买后可完整观看: 'Trial play finished. Pay to watch the full video.'
+免费试看结束，购买后可完整观看: Trial play finished. Pay to watch the full video.
 您的浏览器不能播放当前视频。: Failed to play the video in your browser.
-正在载入音频...: 'Loading audio...'
-音频载入失败，请重试。: 'Failed to load the audio. Please try again.'
+正在载入音频...: Loading audio...
+音频载入失败，请重试。: Failed to load the audio. Please try again.
 请重试: Please try again
-真的要删除该分类吗？: 'Are you determined to delete this category?'
-请输入正确的分值: 'Please enter the correct score'
-选项最多十个!: '10 options in maximum '
+真的要删除该分类吗？: Are you determined to delete this category?
+请输入正确的分值: Please enter the correct score
+选项最多十个!: 10 options in maximum
 选项至少二个!: 2 options in minimum
 选项: option
 请选择正确答案!: Please select the correct answer.
 请选择您的答案: Please select your answer
-请输入正确的答案,如今天是[[晴|阴|雨]]天.: 'Please select the correct answer, e.g. It''s [[Sunny | Overcast | Rainy]] today.'
+请输入正确的答案,如今天是[[晴|阴|雨]]天.: Please select the correct answer, e.g. It's [[Sunny | Overcast | Rainy]] today.
 系统好像出了点小问题，请稍后再交卷: It seems an error occured. Please submit test paper later.
-'%display%只能是<=题目分数、且>=0的整数或者1位小数': '%display% can only be  integer or with one decimal that <=score of the question and >=0.'
-请先选择要上传的图片: 'Please selecte the picture to upload.'
-上传图片成功！: 'Upload picture successfully.'
-上传图片失败，请重试！: 'Failed to upload the picture. Please try again.'
+'%display%只能是<=题目分数、且>=0的整数或者1位小数': '%display% can only be  integer or with one decimal that <=score of the exercise and >=0.'
+请先选择要上传的图片: Please selecte the picture to upload.
+上传图片成功！: Upload picture successfully.
+上传图片失败，请重试！: Failed to upload the picture. Please try again.
 '附件:': 'Attachment:'
 请打分: please mark
 很差: Very Bad
@@ -1047,89 +2308,89 @@ Firefox浏览器: Firefox
 力荐: Good
 '%display%只能上传图片': 'only picture upload allowed'
 '%display%大小不能超过2M': 'size not exceed 2M'
-上传成功: 'upload successfully'
-上传失败,请重试: 'Failed to upload. Please try again.'
-微博地址不正确，须以http://开头。: 'Incorret weibo address. It should start with http://.'
-博客地址不正确，须以http://开头。: 'Incorret blog address. It should start with http://.'
-个人主页地址不正确，须以http://开头。: 'Incorret personal website address. It should start with http://.'
-问题类型不能重复: 'No repetion of question type '
+上传成功: upload successfully
+上传失败,请重试: Failed to upload. Please try again.
+微博地址不正确，须以http://开头。: Incorret weibo address. It should start with http://.
+博客地址不正确，须以http://开头。: Incorret blog address. It should start with http://.
+个人主页地址不正确，须以http://开头。: Incorret personal website address. It should start with http://.
+问题类型不能重复: No repetion of question type
 设置帐号成功，正在跳转: Account set succesfully.
 设置帐号失败，请重试: Failed to set the account. Please try again.
-请上传用户头像: 'Please upload a profile photo.'
+请上传用户头像: Please upload a profile photo.
 发送成功！: Sent successfully!
 正在发送: Sending.
 发送发生了未知错误。: Unknown error occured while sending.
-重置会清空原先的题目,确定要继续吗？: 'Reset will clear all the questions. Are you determined to continue？'
-真的要%title%吗？ 试卷发布后无论是否关闭都将无法修改。: 'Are you determined to publish? Test paper can''t be edit if published.'
+重置会清空原先的题目,确定要继续吗？: Reset will clear all the exercises. Are you determined to continue？
+真的要%title%吗？ 试卷发布后无论是否关闭都将无法修改。: Are you determined to publish? Test paper can't be edit if published.
 成功！: Succeed.
 努力保存中...: Saving...
-分数输入不正确！: 'Incorrect score.'
-暂无题目,请添加: 'There is no questions. Please add.'
+分数输入不正确！: Incorrect score.
+暂无题目,请添加: There is no exercise. Please add.
 试卷总分%total%分%questionType%%questionCount%题/%questionTotal%分: Total score %total% %questionType% %questionCount%questions /%questionTotal%
 总计: In total
-题目分值不能为0。: The score of the question can't be 0.
-题目分值只能填写数字，且最多一位小数。: The score of the question can only be numbers, with no more than one decimals.
-请选择题目。: Please select the question.
+题目分值不能为0。: The score of the exercise can't be 0.
+题目分值只能填写数字，且最多一位小数。: The score of the exercise can only be numbers, with no more than one decimals.
+请选择题目。: Please select the exercise.
 试卷总分: Total score of the test paper.
 试卷总分%score%分: Total score of the test paper %score%
 ' 漏选得分': 'score of miss options answer '
-未选中任何题目: No question is selected
-确定要删除选中的题目吗？: 'Are you determined to delete the selected questions?'
-您真的要删除该题目吗？: 'Are you determined to delete the question?'
-缺%count%道: '%count% questions lacked'
+未选中任何题目: No exercise is selected
+确定要删除选中的题目吗？: Are you determined to delete the selected exercise?
+您真的要删除该题目吗？: Are you determined to delete the exercise?
+缺%count%道: %count% questions lacked
 缺: lack
-课程题库题目数量不足，无法生成试卷：: 'Insufficent questions in the course''s question bank. Can''t create test paper:'
-题目数量只能填写数字: The quantity of questions can only be numbers.
-试卷题目总数量不能为0。: The quantity of questions can't be 0.
-试卷题目总数不能超过1000道。: 'The quantity of total questions of test paper can not exceed 1000.'
+课程题库题目数量不足，无法生成试卷：: Insufficent exercise in the course's question bank. Can't create test paper:
+题目数量只能填写数字: The quantity of exercises can only be numbers.
+试卷题目总数量不能为0。: The quantity of exercises can't be 0.
+试卷题目总数不能超过1000道。: The quantity of total exercises of test paper can not exceed 1000.
 题目漏选分值只能填写数字，且最多一位小数。: Socre of miss option answer can only be numbers, with no more than one decimals.
-题目漏选分值不能大于题目分值。: Socre of miss option answer can not bigger than the socre of the question.
-真的要删除该回复吗？: 'Are you determined to delete the reply?'
+题目漏选分值不能大于题目分值。: Socre of miss option answer can not bigger than the socre of the exercise.
+真的要删除该回复吗？: Are you determined to delete the reply?
 您已点过赞了！: You have already liked.
 点赞失败，请重试！: Failed to like. Please try again.
 暂停中: paused
-待上传: 'wait for upload'
+待上传: wait for upload
 文件: file
-Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器: 'Web Uploader does not support your browser. If you are using IE, please try to update your flashplayer.'
-全部暂停: 'All pause'
-全部继续: 'All Continue'
-已上传: 'uploaded'
-上传失败: 'failed to upload'
-你的源文件可能已损坏，请检查后重新上传: 'Your source file may damaged. Please check and upload again.'
+Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器: Web Uploader does not support your browser. If you are using IE, please try to update your flashplayer.
+全部暂停: All pause
+全部继续: All Continue
+已上传: uploaded
+上传失败: failed to upload
+你的源文件可能已损坏，请检查后重新上传: Your source file may damaged. Please check and upload again.
 即将完成: almost finished
 剩余: remaing
 私信发送成功: Personal message sent successfully
 私信发送失败，请重试！: Failed to send personal message. Please try again.
 请选择性别: please select gender
-真的要删除该评论吗？: 'Are you determined to delete the comment?'
-您还没有安装flash播放器 请点击: 'You haven''t install flashplayer yet. Please click'
-安装: 'install'
+真的要删除该评论吗？: Are you determined to delete the comment?
+您还没有安装flash播放器 请点击: You haven't install flashplayer yet. Please click
+安装: install
 请选择老师: please select teacher
 资料来源: material source
-来自上传: 'from upload'
+来自上传: from upload
 来自分享: from share
-公共资料: 'public material'
+公共资料: public material
 我的收藏: my collection
-输入视频标题关键字: 'enter the keywords of the video title'
-正在加载，请稍等: 'loading... please wait for a moment'
-当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？: 'File uploading will be cancelled if leaving the page. Are you determined to leave?'
+输入视频标题关键字: enter the keywords of the video title
+正在加载，请稍等: loading... please wait for a moment
+当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？: File uploading will be cancelled if leaving the page. Are you determined to leave?
 视频文件: video file
-请输入视频页面地址: 'Please enter the video address'
-请输入正确的视频网址: 'Please enter the correct video address'
-读取视频页面信息失败，请检查您的输入的页面地址后重试: 'Failed to read the video information. Please check the address you entered and try again.'
+请输入视频页面地址: Please enter the video address
+请输入正确的视频网址: Please enter the correct video address
+读取视频页面信息失败，请检查您的输入的页面地址后重试: Failed to read the video information. Please check the address you entered and try again.
 发送短信成功: Messages sent successfully
 发送短信失败，请联系管理员: Failed to send the messages. Please contact the webmaster.
 '画质 / ': 'video quality'
 音质: audio quality
-上传失败，请重试！: 'Upload failed. Please try again.'
-文件过大，请上传较小的文件！: 'The file size exceed limit. Please upload smaller file.'
-添加的文件数量过多！: 'Add too many files!'
+上传失败，请重试！: Upload failed. Please try again.
+文件过大，请上传较小的文件！: The file size exceed limit. Please upload smaller file.
+添加的文件数量过多！: Add too many files!
 文件类型错误！: Incorrect type of files.
-确定要删除选中的: 'Are you determined to delete the selected files?'
-正在删除: 'deleting'
-，请稍等。: ', please wait for a moment.'
-名片加载中: 'loading information '
+确定要删除选中的: Are you determined to delete the selected files?
+正在删除: deleting
+，请稍等。: , please wait for a moment.
+名片加载中: loading information
 已签到: signed in
 连续: continuously
 于: at
-签到,第: 'sign in'
+签到,第: sign in
