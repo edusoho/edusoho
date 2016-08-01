@@ -16,9 +16,9 @@ define(function(require, exports, module) {
             disableProgressBar: false,
             controlBar: {
                 disableVolumeButton: false,
-                disablePlaybackButton: false
+                disablePlaybackButton: false,
+                disableResolutionSwitcher:false
             },
-            questions: [],
             enablePlaybackRates: false
         },
 
@@ -68,20 +68,6 @@ define(function(require, exports, module) {
                     }
                 })
             }
-
-            var questions = self.getQuestions();
-            if(questions) {
-                extConfig = $.extend(extConfig, {
-                    exam: { 
-                        popupExam : {
-                            config : {
-                                "mode" : "middle"
-                            },
-                            questions : questions
-                        }
-                    }
-                });
-            }
             
             if(self.get('enablePlaybackRates') != false && self.isBrowserSupportPlaybackRates() ) {
                 extConfig = $.extend(extConfig, {
@@ -93,11 +79,16 @@ define(function(require, exports, module) {
                 });
             }
 
+            if(self.get('controlBar') != '' ) {
+                extConfig = $.extend(extConfig, {
+                    controlBar: self.get('controlBar')
+                });
+            }
+
             var player = new VideoPlayerSDK($.extend({
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),
-                controlBar: self.get('controlBar'),
                 playlist: self.get('url'),
                 remeberLastPos : self.get('remeberLastPos')
             }, extConfig));
@@ -165,18 +156,27 @@ define(function(require, exports, module) {
             return false;
         },
 
-        getQuestions: function() {
-            var questions = this.get('questions');
+        setQuestions: function(questions) {
 
-            if(questions == '' || questions.length == 0) {
-                return null;
+            if(questions.length > 0) {
+
+                for (var i in questions) {
+                    questions[i]['type'] = this.convertQuestionType(questions[i].type, 'es');
+                }
+
+                var exam = { 
+                    popupExam : {
+                        config : {
+                            "mode" : "middle"
+                        },
+                        questions : questions
+                    }
+                }
+
+                this.get("player").setExams(exam);
             }
 
-            for (var i in questions) {
-                questions[i]['type'] = this.convertQuestionType(questions[i].type, 'es');
-            }
-
-            return questions;
+            return this;
         },
 
         isBrowserSupportPlaybackRates: function() {

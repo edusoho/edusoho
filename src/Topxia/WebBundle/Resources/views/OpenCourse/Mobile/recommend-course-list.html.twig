@@ -8,7 +8,7 @@
   <div class="open-course-recommend clearfix">
     <div class="open-course-img">
       <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-        <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}"
+        <img class="img-responsive" src="{{ filepath(course.middlePicture|default(''), 'course.png') }}"
              alt="{{ course.title }}">
       </a>
     </div>

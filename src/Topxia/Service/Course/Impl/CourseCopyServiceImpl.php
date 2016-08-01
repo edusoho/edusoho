@@ -338,7 +338,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyHomeworks($courseId, $newCourse, $newLessons, $newQuestions)
     {
-        $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
+        $lessons   = $this->getLessonDao()->findLessonsByCourseId($courseId);
+        $homeworks = $this->getHomeworkDao()->findHomeworksByCourseIdAndLessonIds($courseId, ArrayToolkit::column($lessons, 'id'));
 
         $map = array();
 

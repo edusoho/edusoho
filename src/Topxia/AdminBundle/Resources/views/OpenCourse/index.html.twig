@@ -10,6 +10,10 @@
 %}
 {% block main %}
   {% include 'TopxiaAdminBundle:OpenCourse:course-search-form.html.twig' with {actionUrl:path('admin_open_course'),showStatusSelect:1} %}
+  
+  {% if not setting('cloud_sms.sms_enabled',0) or (setting('cloud_sms.sms_enabled',0) and setting('cloud_sms.sms_live_play_one_day') == 'off' and setting('cloud_sms.sms_live_play_one_hour') == 'off') %}
+    <div class="alert alert-warning">尚未开启云短信的直播通知开关，开启后直播公开课将支持短信提醒功能&nbsp;&nbsp;{% if 'ROLE_SUPER_ADMIN' in app.user.roles%}<a href="{{ path('admin_edu_cloud_sms') }}">去开启</a>{% endif %}</div>
+  {% endif %}
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
     <thead>
