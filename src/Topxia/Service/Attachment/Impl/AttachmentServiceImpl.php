@@ -49,6 +49,23 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
         return $attachment;
     }
 
+    public function proxyCreate($targetObj, $attachment)
+    {
+        $fileIds    = empty($attachment['fileIds']) ? array() : explode(",", $attachment['fileIds']);
+        $targetType = $attachment['targetType'];
+        if (!empty($fileIds)) {
+            $attachments = array_map(function ($fileId) use ($targetObj, $targetType) {
+                $attachment = array(
+                    'fileId'     => $fileId,
+                    'targetType' => $targetType,
+                    'targetId'   => $targetObj['id']
+                );
+                return $attachment;
+            }, $fileIds);
+            $this->creates($attachments);
+        }
+    }
+
     public function findByTargetTypeAndTargetId($targetType, $targetId)
     {
         $conditions = array(

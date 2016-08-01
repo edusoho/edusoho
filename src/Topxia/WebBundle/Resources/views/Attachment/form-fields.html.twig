@@ -16,7 +16,7 @@
       </a>
     </div>
     {# 应该标记该附件是否新增,或者修改 #}
-    <input class="js-file-ids-store" value="{{ attachments|array_column('fileId')|join(',') }}" name="fileIds" type="hidden">
-    <input class="js-attachment-targetType-store" value="{{ targetType }}" name="targetType" type="hidden">
+    <input class="js-file-ids-store" value="{{ attachments|array_column('fileId')|join(',') }}" name="attachment[fileIds]" type="hidden">
+    <input class="js-attachment-targetType-store" value="{{ targetType }}" name="attachment[targetType]" type="hidden">
   </div>
 {% endif %}
