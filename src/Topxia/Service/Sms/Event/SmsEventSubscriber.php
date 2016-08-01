@@ -13,12 +13,14 @@ class SmsEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.reviewed'      => 'onTestpaperReviewed',
-            'order.pay.success'       => 'onOrderPaySuccess',
-            'course.lesson.publish'   => 'onCourseLessonPublish',
-            'course.lesson.update'    => 'onCourseLessonUpdate',
-            'course.lesson.delete'    => 'onCourseLessonDelete',
-            'course.lesson.unpublish' => 'onCourseLessonUnpublish'
+            'testpaper.reviewed'        => 'onTestpaperReviewed',
+            'order.pay.success'         => 'onOrderPaySuccess',
+            'course.lesson.publish'     => 'onCourseLessonPublish',
+            'course.lesson.update'      => 'onCourseLessonUpdate',
+            'course.lesson.delete'      => 'onCourseLessonDelete',
+            'course.lesson.unpublish'   => 'onCourseLessonUnpublish',
+            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate'
         );
     }
 
@@ -76,7 +78,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $lesson = $event->getSubject();
 
         if ($lesson['type'] == 'live') {
-            $this->createJob($lesson);
+            $this->createJob($lesson, 'lesson');
             $smsType = 'sms_live_lesson_publish';
         } else {
             $smsType = 'sms_normal_lesson_publish';
@@ -120,7 +122,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             }
 
             if ($lesson['status'] == 'published') {
-                $this->createJob($lesson);
+                $this->createJob($lesson, 'lesson');
             }
         }
     }
@@ -136,7 +138,42 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function createJob($lesson)
+    public function onLiveOpenCourseLessonCreate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
+            && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
+        ) {
+            if ($lesson['status'] == 'published') {
+                $this->createJob($lesson, 'liveOpenLesson');
+            }
+        }
+    }
+
+    public function onLiveOpenCourseLessonUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
+            && $lesson['startTime'] != $lesson['fields']['startTime']
+            && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
+        ) {
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('liveOpenLesson', $lesson['id']);
+
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+
+            if ($lesson['status'] == 'published') {
+                $this->createJob($lesson, 'liveOpenLesson');
+            }
+        }
+    }
+
+    protected function createJob($lesson, $targetType)
     {
         $daySmsType  = 'sms_live_play_one_day';
         $hourSmsType = 'sms_live_play_one_hour';
@@ -149,7 +186,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
                 'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType'      => 'lesson',
+                'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
@@ -161,7 +198,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
                 'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType'      => 'lesson',
+                'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);

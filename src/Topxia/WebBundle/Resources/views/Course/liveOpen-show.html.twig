@@ -1,0 +1,70 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% set tab = 'overview' %}
+
+{% do load_script('course/show') %}
+
+{% block course_main %}
+
+  <div class="course-detail-content">
+
+		{% if not member %}
+      <div class="es-piece">
+        <div class="piece-header">
+          课程介绍
+        </div>
+        <div class="piece-body p-lg clearfix">
+          {% if course.about %}
+            {{ course.about|raw }}
+          {% else %}
+            <div class="text-muted">暂无课程简介</div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if course.goals %}
+        <div class="es-piece">
+          <div class="piece-header">
+            课程目标
+          </div>
+          <div class="piece-body">
+            <ul class="piece-body-list">
+              {% for goal in course.goals %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if course.audiences %}
+        <div class="es-piece">
+          <div class="piece-header">
+            适合人群
+          </div>
+          <div class="piece-body">
+            <ul class="piece-body-list">
+              {% for audience in course.audiences %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+    {% else %}
+			<div class="es-piece">
+	      <div class="piece-body">
+	        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
+	        
+	      </div>
+	    </div>
+    {% endif %}
+    
+  </div>
+
+{% endblock %}

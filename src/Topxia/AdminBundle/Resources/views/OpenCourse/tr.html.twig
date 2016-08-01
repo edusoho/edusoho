@@ -1,0 +1,56 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% set target = ''~filter~'_index' %}
+<tr id="course-tr-{{ course.id }}">
+  <td>{{ course.id }}</td>
+  <td>
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    
+    {% if course.type == 'liveOpen' %}
+      <span class="label label-success live-label mls">直播</span>
+    {% endif %}
+
+    <br>
+    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span> 
+  </td>
+    
+  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ course.createdTime|date('Y-m-d H:i') }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id,filter:filter}) }}" target="_blank">管理</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+    
+        {% if not course.recommended %}
+          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_open_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
+        {% endif %}
+
+        {% if course.recommended %}
+          <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_open_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+        {% endif %}
+
+        {% if course.status == 'published' %}
+          <li class="divider"></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_open_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' %}
+          <li class="divider"></li>
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_open_course_publish', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' and app.user.isSuperAdmin() %}
+          <li class="divider"></li>
+          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('章')}}" data-part="{{default.part_name|default('节')}}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

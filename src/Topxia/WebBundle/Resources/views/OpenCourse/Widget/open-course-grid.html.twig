@@ -1,0 +1,35 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+      {% if course.type == 'liveOpen' %}
+        <span class="tags">
+          <span class="tag-open-live"></span>
+        </span>
+      {% endif %}
+      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+    </a>
+
+    {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+    {% if course.type == 'liveOpen' %}
+      <div class="open-starttime">{{ lessons[0].startTime|date('Y-m-d H:i')}}直播</div>
+    {% endif %}
+  </div>
+  <div class="course-info">
+    <div class="title">
+      {% if course.type == 'liveOpen' %}
+        {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+          <span class="label label-primary mrm">正在直播</span>
+        {% elseif "now"|date("U") < lessons[0].startTime %}
+          <span class="label label-warning mrm">即将直播</span>
+        {% endif %}
+      {% endif %}
+      <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
+        {{ course.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+    </div>
+  </div>
+</div>

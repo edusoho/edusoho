@@ -66,7 +66,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'testpaper.reviewed'        => 'onTestPaperReviewed',
 
-            'homework.check'            => 'onHomeworkCheck'
+            'homework.check'            => 'onHomeworkCheck',
+
+            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate'
         );
     }
 
@@ -500,6 +503,38 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->pushCloud('testpaper.reviewed', $testpaperResult);
     }
 
+    public function onLiveOpenCourseLessonCreate(ServiceEvent $event)
+    {
+        $context       = $event->getSubject();
+        $lesson        = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            if ($lesson['status'] == 'published') {
+                $this->LiveOpenCreateJob($lesson);
+            }
+        }
+    }
+
+    public function onLiveOpenCourseLessonUpdate(ServiceEvent $event)
+    {
+        $context       = $event->getSubject();
+        $lesson        = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && $lesson['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            $job = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId('LiveOpenPushNotificationOneHourJob', 'liveOpenLesson', $lesson['id']);
+
+            if ($job) {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
+
+            if ($lesson['status'] == 'published') {
+                $this->LiveOpenCreateJob($lesson);
+            }
+        }
+    }
+
     /**
      * Homework相关
      */
@@ -609,6 +644,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'jobParams'       => '',
                 'targetType'      => 'lesson',
                 'targetId'        => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }
+    }
+
+    protected function LiveOpenCreateJob($lesson)
+    {
+        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+            $startJob = array(
+                'name'       => "LiveOpenPushNotificationOneHourJob",
+                'cycle'      => 'once',
+                'jobClass'   => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
+                'targetType' => 'liveOpenLesson',
+                'targetId'   => $lesson['id'],
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

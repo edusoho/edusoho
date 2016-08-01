@@ -90,6 +90,17 @@ parameters:
           defaultSubTitle: "精选网校课程，满足你的学习兴趣。"
           id: "latestCourse"
         - title: ""
+          count: "12"
+          orderBy: "latest"
+          background: ""
+          categoryId: 0
+          code: open-course
+          categoryCount: "4"
+          defaultTitle: "公开课"
+          subTitle: ""
+          defaultSubTitle: "公开课。"
+          id: "latestOpenCourse"
+        - title: ""
           count: "4"
           categoryId: ""
           code: "live-course"

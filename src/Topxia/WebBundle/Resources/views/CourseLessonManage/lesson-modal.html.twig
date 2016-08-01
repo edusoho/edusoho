@@ -119,7 +119,7 @@
     <div class="col-md-9 controls">
       <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">{{'分'|trans}}
       <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">{{'秒'|trans}}
-      <div class="help-block">{{'时长必须为整数。'|trans}}</div>
+      <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
     </div>
   </div>
 

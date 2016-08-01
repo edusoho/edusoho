@@ -28,17 +28,23 @@ class CourseLessonController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $context                 = array();
+        $context['lessonId']     = $lessonId;
+        $context['hideQuestion'] = ($isPreview || $request->query->get('hideQuestion', 0) == 1) ? 1 : 0;
+
         if ($isPreview && !empty($course['tryLookable'])) {
+            $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
-                'context' => array('watchTimeLimit' => $course['tryLookTime'] * 60)
+                'context' => $context
             ));
         }
 
-        list($course, $member)    = $this->getCourseService()->tryTakeCourse($courseId);
-        $context                  = array();
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
         $context['starttime']     = $request->query->get('starttime');
         $context['hideBeginning'] = $request->query->get('hideBeginning', false);
+
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
             'context' => $context
@@ -302,15 +308,15 @@ class CourseLessonController extends BaseController
                         'courseId' => $course['id'],
                         'lessonId' => $lesson['id']
                     ));
+                }
 
-                    if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
-                        $user        = $this->getCurrentUser();
-                        $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                    $user        = $this->getCurrentUser();
+                    $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
 
-                        if ($watchStatus['status'] == 'error') {
-                            $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
-                            $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
-                        }
+                    if ($watchStatus['status'] == 'error') {
+                        $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                        $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
                     }
                 }
             } else {
@@ -324,7 +330,7 @@ class CourseLessonController extends BaseController
                     $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
                 }
             }
-        } elseif ($json['mediaSource'] == 'youku' && $this->isMobile()) {
+        } elseif ($json['mediaSource'] == 'youku' && $this->isMobileClient()) {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -628,51 +634,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    protected function isMobile()
-    {
-// 如果有HTTP_X_WAP_PROFILE则一定是移动设备
-
-        if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
-            return true;
-        }
-
-//如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
-
-        if (isset($_SERVER['HTTP_VIA'])) {
-            //找不到为flase,否则为true
-            return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
-        }
-
-//判断手机发送的客户端标志,兼容性有待提高
-
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
-                'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
-                'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
-                'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
-
-// 从HTTP_USER_AGENT中查找手机浏览器的关键字
-
-            if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
-                return true;
-            }
-        }
-
-//协议法，因为有可能不准确，放到最后判断
-
-        if (isset($_SERVER['HTTP_ACCEPT'])) {
-// 如果只支持wml并且不支持html那一定是移动设备
-
-// 如果支持wml和html但是wml在html之前则是移动设备
-
-            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function listAction(Request $request, $courseId, $member, $previewUrl, $mode = 'full')
     {
         $user          = $this->getCurrentUser();
@@ -698,13 +659,11 @@ class CourseLessonController extends BaseController
             $lessonLearns = array();
         }
 
-        $testpaperIds = ArrayToolkit::column(array_filter($items, function($item){
+        $testpaperIds = ArrayToolkit::column(array_filter($items, function ($item) {
             return $item['type'] == 'testpaper';
         }), 'mediaId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-
-        ;
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items'              => $items,
