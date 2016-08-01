@@ -1,22 +1,32 @@
 {% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) %}
+  {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~type  : 'js-attachment-ids'%}
+  {% set list_class  = (useType == true) ? 'js-attachment-list-'~type  : 'js-attachment-list'%}
   {% do load_script('topxiawebbundle/controller/attachment/upload-form') %}
   <div class="form-group">
     <label class="col-xs-2 control-label" for="thread_title">{{ '附件'|trans }}</label>
     <div class="col-xs-7 col-xs-10 controls">
-      <ul class="list-unstyled js-attachment-list">
+      <ul class="list-unstyled {{list_class}}">
         {% for attachment in attachments %}
           <li>{{ attachment.file.filename }}<button class="btn btn-default js-attachment-delete" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button">删除</button> </li>
         {% endfor %}
       </ul>
       <a class="btn btn-primary js-upload-file" data-toggle="modal" data-backdrop="static"
          data-target="#modal"
-         data-url="{{ path('attachment_upload', {token:uploader_token('attachment', app.user.id, 'private')}) }}"
+         data-url="{{ path('attachment_upload', {idsClass: ids_class, listClass : list_class, token:uploader_token('attachment', app.user.id, 'private')}) }}"
          title="上传附件" data-placement="bottom">
         上传附件
       </a>
     </div>
     {# 应该标记该附件是否新增,或者修改 #}
-    <input class="js-file-ids-store" value="{{ attachments|array_column('fileId')|join(',') }}" name="attachment[fileIds]" type="hidden">
-    <input class="js-attachment-targetType-store" value="{{ targetType }}" name="attachment[targetType]" type="hidden">
+    
+    <input class="{{ids_class}}" 
+      value="{{ attachments|array_column('fileId')|join(',') }}" 
+      name="{% if useType|default(false)%} attachment[{{type}}][fileIds] {% else %} attachment[fileIds]{% endif %}" 
+      type="hidden">
+
+    <input class="js-file-target-type" 
+      value="{{ targetType }}" 
+      name="{% if useType|default(false)%} attachment[{{type}}][targetType] {% else %} attachment[targetType]{% endif %}"
+      type="hidden">
   </div>
 {% endif %}

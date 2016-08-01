@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     "use strict";
 
     var BatchUploader = require('../uploader/batch-uploader');
@@ -7,7 +7,7 @@ define(function (require, exports, module) {
     var attachmentTpl = "<li><%= filename %></li>";
     var template = _.template(attachmentTpl);
 
-    exports.run = function () {
+    exports.run = function() {
 
         var $el = $('#batch-uploader');
         var esuploader = new BatchUploader({
@@ -19,7 +19,7 @@ define(function (require, exports, module) {
         });
 
 
-        esuploader.on('preupload', function (file) {
+        esuploader.on('preupload', function(file) {
             var params = {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(),
                 audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val(),
@@ -28,9 +28,9 @@ define(function (require, exports, module) {
             esuploader.set('process', params);
         });
 
-        var $list = $('.js-attachment-list');
-        var idStore = $('.js-file-ids-store');
-        idStore.addId = function (id) {
+        var $list = $("."+esuploader.element.data('listClass'));
+        var idStore = $("."+esuploader.element.data('idsClass'));
+        idStore.addId = function(id) {
             var id_str = this.val();
             var ids;
             if (id_str === '') {
@@ -43,9 +43,9 @@ define(function (require, exports, module) {
             this.val(ids.join(','));
         };
 
-        idStore.removeId = function (id) {
+        idStore.removeId = function(id) {
             var id_str = this.val();
-            if(id_str === ''){
+            if (id_str === '') {
                 return;
             }
 
@@ -59,7 +59,7 @@ define(function (require, exports, module) {
             this.val(ids.join(','));
         };
 
-        esuploader.on('file.uploaded', function (file, data, response) {
+        esuploader.on('file.uploaded', function(file, data, response) {
             var listHtml = template(response);
             $list.append(listHtml);
             idStore.addId(response.id);
