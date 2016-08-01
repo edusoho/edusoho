@@ -4,8 +4,14 @@
     <div class="testpaper-question-score">{{ item.score|default(item.question.score) }}{{'分'|trans}}</div>
   </div>
   {% if item.questionType == 'fill' %}
-    <div class="testpaper-question-stem">{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}</div>
+    <div class="testpaper-question-stem">
+    	{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
+    	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: item.question.id })) }}
+    </div>
   {% else %}
-    <div class="testpaper-question-stem">{{ item.question.stem|bbCode2Html|raw|nl2br }}</div>
+    <div class="testpaper-question-stem">
+    	{{ item.question.stem|bbCode2Html|raw|nl2br }}
+    	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: item.question.id })) }}
+    </div>
     {% endif %}
 </div>

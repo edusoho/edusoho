@@ -68,11 +68,13 @@ class CourseQuestionManageController extends BaseController
     public function createAction(Request $request, $courseId, $type)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $data       = $request->request->all();
+            $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->createQuestion($data);
+            $this->getAttachmentService()->proxyCreate($question, $attachment['stem']);
+            $this->getAttachmentService()->proxyCreate($question, $attachment['analysis']);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
@@ -134,6 +136,8 @@ class CourseQuestionManageController extends BaseController
             $question = $request->request->all();
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
+
+            $this->getAttachmentService()->proxyCreate($question, $request->request->get('attachment'));
 
             $this->setFlashMessage('success', '题目修改成功！');
 
@@ -312,5 +316,10 @@ class CourseQuestionManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAttachmentService()
+    {
+        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
     }
 }
