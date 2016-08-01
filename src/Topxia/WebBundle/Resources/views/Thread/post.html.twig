@@ -10,6 +10,9 @@
           ></textarea>
         </div>
       </div>
+      {% if thread.type != 'event' %}
+        {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'classroom.thread.post', targetId: thread.id|default(0)})) }}
+     {% endif %}
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <button class="btn btn-primary pull-right" type="submit" data-loading-text="正在回复">发表</button>
