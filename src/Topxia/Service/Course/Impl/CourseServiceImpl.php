@@ -2490,6 +2490,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
+        var_dump($user->isAdmin());
         if ($user->isAdmin()) {
             return true;
         }
@@ -2775,7 +2776,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
         return !empty($member) && $member['role'] == 'teacher';
     }
-
 
     protected function hasCourseManagerRole($courseId, $userId)
     {

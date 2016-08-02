@@ -10,12 +10,6 @@
     <label>
       <input type="checkbox" id="user" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked="checked"{% endif %}>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}
     </label>
-    <label>
-      <input type="checkbox" id="teacher" name="roles[]" value="ROLE_TEACHER" {% if 'ROLE_TEACHER' in user.roles %}checked="checked"{% endif %}>教师
-    </label>
-    <label>
-      <input type="checkbox" name="roles[]" value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}checked="checked"{% endif %}>管理员
-    </label>
     {% set admin_roles = get_admin_roles() %}
     {% for role in admin_roles%}
       <label>
@@ -35,7 +29,7 @@
 
 
 {% block footer %}
-  <button id="change-user-roles-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form"  data-user="{{default.user_name|default('学员')}}" >保存</button>
+  <button id="change-user-roles-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form"  data-user="{{setting('default.user_name')|default('学员')}}" >保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('user/roles-modal')</script>
 {% endblock %}

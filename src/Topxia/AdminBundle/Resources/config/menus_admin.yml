@@ -768,13 +768,6 @@ web:
                                 side_nav: question
                             router_params:
                                 courseId: (course.id)
-                        course_question_plumber:
-                            name: 题目导入导出
-                            data: 
-                                side_nav: question_plumber
-                            router_params:
-                                courseId: (course.id)
-                                type: import
                         course_manage_testpaper:
                             name: 试卷管理
                             data: 
