@@ -40,11 +40,9 @@ admin_classroom_setting:
     name: 班级
     parent: admin_setting_course_setting
     after: admin_setting_live_course
-admin_classroom_review_tab:
+admin_classroom_review:
     name: 班级评价
     parent: admin_course_review
-    router_name: admin_classroom_review
-    group: 1
 admin_classroom_thread_manage:
     name: 班级话题
     parent: admin_course_thread
