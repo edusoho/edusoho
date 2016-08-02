@@ -214,7 +214,6 @@ define(function(require, exports, module) {
             var $uploader = this.element;
             // 当有文件添加进来的时候
             uploader.on('fileQueued', function(file) {
-                console.log(file);
                 $uploader.find('.balloon-nofile').remove();
                 var $list =$uploader.find('.balloon-filelist ul');
 

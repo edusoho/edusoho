@@ -29,8 +29,8 @@ define(function(require, exports, module) {
             esuploader.set('process', params);
         });
 
-        var $list = $("."+esuploader.element.data('listClass'));
-        var idStore = $("."+esuploader.element.data('idsClass'));
+        var $list = $("." + esuploader.element.data('listClass'));
+        var idStore = $("." + esuploader.element.data('idsClass'));
         idStore.addId = function(id) {
             var id_str = this.val();
             var ids;
@@ -61,9 +61,27 @@ define(function(require, exports, module) {
         };
 
         esuploader.on('file.uploaded', function(file, data, response) {
-            var listHtml = template(response);
-            $list.append(listHtml);
+            if ($('.js-reupload-file').length > 0) {
+                $list.empty();
+                idStore.val('');
+            }
+            $list.append(template(response));
             idStore.addId(response.id);
+            fileUploaded(file);
         });
+
+        function fileUploaded(file) {
+            esuploader.uploader.removeFile(file, true);
+            $(".balloon-filelist ul >li").remove();
+            $("#modal").modal("hide");
+            if ($('.js-upload-file').length > 0) {
+                $('.js-upload-file').html($('.js-upload-file').data('reuploadTitle')).removeClass('js-upload-file').addClass('js-reupload-file');
+            }
+        }
+
+        $('.js-reupload-file').on('click', function(e) {
+            e.stopImmediatePropagation();
+            $("#modal").modal("show");
+        })
     }
 });
