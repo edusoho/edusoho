@@ -1272,7 +1272,7 @@ admin_thread_delete:
     pattern: /thread/{id}/delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:delete }
     methods: [POST]
-    permissions: [admin_course_thread]
+    permissions: [admin_course_thread, admin_course_question_manage]
 
 admin_thread_batch_delete:
     pattern: /thread/batch_delete
@@ -1713,7 +1713,7 @@ admin_coin_flow_detail:
 admin_coin_model:
     path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
-    permissions: [admin_coin_user_records]
+    permissions: [admin_coin_settings]
 
 admin_coin_model_ajax:
     path: /setting/coin/model/ajax

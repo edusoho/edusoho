@@ -2490,7 +2490,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        var_dump($user->isAdmin());
         if ($user->isAdmin()) {
             return true;
         }

@@ -9,7 +9,7 @@ admin_classroom:
             children:
                 admin_classroom_create:
                     name: 创建班级
-                    group: 2
+                    group: topBtn
                     blank: true
         admin_classroom_recommend:
             name: 班级推荐
