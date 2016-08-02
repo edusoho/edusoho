@@ -39,7 +39,6 @@ class KernelControllerListener
                 && !empty($permissions)
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
                 $currentUserPermissions = $currentUser->getPermissions();
-
                 foreach ($permissions as $permission) {
                     if (!empty($currentUserPermissions[$permission])) {
                         return;
