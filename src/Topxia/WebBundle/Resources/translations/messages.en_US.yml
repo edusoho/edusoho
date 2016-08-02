@@ -928,7 +928,7 @@ QQ群: 'QQ group'
 查看隐藏帖: 'View the hidden reply'
 所需%coin_name%: '%coin_name% needed'
 立即查看: 'View now'
-'暂无话题信息！': 'No topic information yet !'
+'暂无话题信息！': 'No topic information yet.'
 小组: Group
 最近话题: 'Recent topic'
 管理的小组: 'Groups I manage'
@@ -943,7 +943,7 @@ QQ群: 'QQ group'
 '暂无小组信息': 'No group information yet'
 '%groupinfo%小组': 'Group %groupinfo% '
 当前背景: 'Current background'
-'你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过': 'You may upload JPG/GIF/PNG,  with file size no more than'
+'你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过': 'You may upload JPG/GIF/PNG image, with file size no more than '
 '。推荐大小（1140*150）': '. picture size recommended (1140*150)'
 '正在上传': Uploading
 '上传新背景': 'Upload new background'
@@ -1483,8 +1483,8 @@ Email地址: 'Email address'
 头像图片: 'profile photo'
 头像设置: 'profile photo setting'
 请设置自定义头像。: 'please set custom profile photo'
-当前头像: 'current profile photo'
-'上传新头像': 'upload new profile photo'
+当前头像: 'Current photo'
+'上传新头像': 'Upload New Photo'
 论坛头像: 'forum profile photo'
 使用该头像: 'set as profile photo'
 绑定手机: 'bind mobile phone'
@@ -1515,7 +1515,7 @@ Email地址: 'Email address'
 '找回支付密码': 'Find payment password'
 修改手机号？: 'Modify phone number？'
 '安全问题答案': 'security question answer'
-基础信息: 'basic information'
+基础信息: 'Basic Information'
 '教师资格申请': 'teaching certifition application'
 用户名修改: 'Modify user_name'
 '密码修改': 'Modify password'
@@ -2521,382 +2521,382 @@ sign不正确: Invalid signature
 '话题被加精': 'Topic digested'
 '话题被取消加精': 'Topic removed from digest'
 发布悬赏话题: 发布悬赏话题
-'您发表的话题<%threadTitle%>的隐藏内容被查看！': '您发表的话题<%threadTitle%>的隐藏内容被查看！'
-'上传文件不能为空!': '上传文件不能为空!'
-'上传文件大小不能超过2MB!': '上传文件大小不能超过2MB!'
-直播还没开始!: 直播还没开始!
-直播已结束!: 直播已结束!
-'您不是课程学员，不能参加直播！': '您不是课程学员，不能参加直播！'
-创建直播教室失败，请重试！: 创建直播教室失败，请重试！
-这个时间段的课时可以创建: 这个时间段的课时可以创建
-绑定的用户不存在，请重新绑定。: 绑定的用户不存在，请重新绑定。
-'抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。': '抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。'
-'抱歉！暂时无法通过第三方帐号登录。原因：%message%': '抱歉！暂时无法通过第三方帐号登录。原因：%message%'
-页面已过期，请重新登录。: 页面已过期，请重新登录。
-'网络超时，获取用户信息失败，请重试。': '网络超时，获取用户信息失败，请重试。'
-注册功能未开启，请联系管理员！: 注册功能未开启，请联系管理员！
-登录失败，请重试！: 登录失败，请重试！
-用户名中含有敏感词！: 用户名中含有敏感词！
-'Email地址或手机号码输入错误': 'Email地址或手机号码输入错误'
-该Email地址尚未注册: 该Email地址尚未注册
-'该手机号码尚未注册': '该手机号码尚未注册'
-'密码不正确，请重试！': '密码不正确，请重试！'
-'该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！': '该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！'
-'该手机号码尚未注册或绑定': '该手机号码尚未注册或绑定'
-'该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！': '该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！'
-微信注册帐号: 微信注册帐号
-微博注册帐号: 微博注册帐号
-QQ注册账号: QQ注册账号
-人人注册账号: 人人注册账号
-微信绑定已有账号: 微信绑定已有账号
-微博绑定已有账号: 微博绑定已有账号
-QQ绑定已有账号: QQ绑定已有账号
-人人绑定已有账号: 人人绑定已有账号
-'第三方登录系统参数尚未配置，请先配置。': '第三方登录系统参数尚未配置，请先配置。'
-'第三方登录(%type%)系统参数尚未配置，请先配置。': '第三方登录(%type%)系统参数尚未配置，请先配置。'
-第三方登录(%type%)未开启: 第三方登录(%type%)未开启
-'你已经登录了': '你已经登录了'
-该Email地址可以登录: 该Email地址可以登录
-参数错误!: 参数错误!
-该收件人不存在: 该收件人不存在
-不能给自己发私信哦！: 不能给自己发私信哦！
-私信会话不存在！: 私信会话不存在！
-抱歉，该收信人尚未注册!: 抱歉，该收信人尚未注册!
-'您无权删除此私信！': '您无权删除此私信！'
-客户端尚未开启！: 客户端尚未开启！
-普通用户不能查看别人的订单: 普通用户不能查看别人的订单
-'无权预览非本人收藏的题目!': '无权预览非本人收藏的题目!'
-并没有任务: 并没有任务
-您不是老师，不能查看此页面！: 您不是老师，不能查看此页面！
-短信验证失败。: 短信验证失败。
-用户未登录，创建订单失败。: 用户未登录，创建订单失败。
-'订单中没有购买的内容，不能创建!': '订单中没有购买的内容，不能创建!'
-'实际价格不匹配，不能创建订单!': '实际价格不匹配，不能创建订单!'
-'支付价格不匹配，不能创建订单!': '支付价格不匹配，不能创建订单!'
-'虚拟币抵扣超出限定，不能创建订单!': '虚拟币抵扣超出限定，不能创建订单!'
-'优惠码不支持的购买项目。': '优惠码不支持的购买项目。'
-参数不对。: 参数不对。
-您不是学员或尚未购买，不能退学。: 您不是学员或尚未购买，不能退学。
-组合购买课程不能退出。: 组合购买课程不能退出。
-您不是学员或尚未购买，不能取消退款。: 您不是学员或尚未购买，不能取消退款。
-用户尚未登录！: 用户尚未登录！
-正在跳转页面，请稍等....: 正在跳转页面，请稍等....
-用户不存在，退出登录失败！: 用户不存在，退出登录失败！
-退出成功: 退出成功
-'请通过论坛找回密码': '请通过论坛找回密码'
-'重设密码邮件发送失败，请联系管理员。': '重设密码邮件发送失败，请联系管理员。'
-该邮箱地址没有注册过帐号: 该邮箱地址没有注册过帐号
-用户不存在，请重新找回: 用户不存在，请重新找回
-手机短信验证错误，请重新找回: 手机短信验证错误，请重新找回
-'该手机号码不存在': '该手机号码不存在'
-'尚未开启支付模块，无法购买课程。': '尚未开启支付模块，无法购买课程。'
-xml数据异常！: xml数据异常！
-由于余额不足，支付失败，订单已被取消。: 由于余额不足，支付失败，订单已被取消。
-'%name%交易订单已关闭': '%name%交易订单已关闭'
-'支付模块未开启，请先开启。': '支付模块未开启，请先开启。'
-'支付模块(%payment%)未开启，请先开启。': '支付模块(%payment%)未开启，请先开启。'
-'支付模块(%payment%)参数未设置，请先设置。': '支付模块(%payment%)参数未设置，请先设置。'
-targetType类型不正确: targetType类型不正确
-storage类型不正确: storage类型不正确
-'音频转码失败，请重新上传此音频.': '音频转码失败，请重新上传此音频.'
-课时%lessonNumber%：%lessonTitle%: 课时%lessonNumber%：%lessonTitle%
-'注册已关闭，请联系管理员': '注册已关闭，请联系管理员'
-'手机号码和短信验证码不匹配，请重新注册': '手机号码和短信验证码不匹配，请重新注册'
-正在跳转页面，请稍等......: 正在跳转页面，请稍等......
-'输入的密码不正确': '输入的密码不正确'
-token已失效: token已失效
-该Email不存在: 该Email不存在
-'注册欢迎的内容': '注册欢迎的内容'
-'验证码错误。': '验证码错误。'
-'在上方搜索框输入关键词进行搜索.': '在上方搜索框输入关键词进行搜索.'
-搜索失败，请稍候再试.: 搜索失败，请稍候再试.
-基础信息保存成功。: 基础信息保存成功。
-不能修改已绑定的手机。: 不能修改已绑定的手机。
-'上传文件过大，请上传较小的文件!': '上传文件过大，请上传较小的文件!'
-'上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。': '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'
-实名认证提交成功！: 实名认证提交成功！
-用户名中含有敏感词，更新失败！: 用户名中含有敏感词，更新失败！
-用户名修改成功！: 用户名修改成功！
-获取论坛头像地址失败！: 获取论坛头像地址失败！
-'不能直接设置新支付密码。': '不能直接设置新支付密码。'
-'当前用户登录密码不正确，请重试！': '当前用户登录密码不正确，请重试！'
-'新支付密码设置成功，您可以在此重设密码。': '新支付密码设置成功，您可以在此重设密码。'
-'新支付密码设置成功！': '新支付密码设置成功！'
-'登录密码已设置，请勿重复设置': '登录密码已设置，请勿重复设置'
-'重置支付密码成功。': '重置支付密码成功。'
-'两次输入的支付密码不一致。': '两次输入的支付密码不一致。'
-'用户登录密码错误。': '用户登录密码错误。'
-'您还没有安全问题，请先设置。': '您还没有安全问题，请先设置。'
-'回答正确，你可以开始更新支付密码。': '回答正确，你可以开始更新支付密码。'
-'您还没有绑定手机，请先绑定。': '您还没有绑定手机，请先绑定。'
-'验证通过，你可以开始更新支付密码。': '验证通过，你可以开始更新支付密码。'
-验证错误。: 验证错误。
-'您的登录密码错误，不能设置安全问题。': '您的登录密码错误，不能设置安全问题。'
-'您已经设置过安全问题，不可再次修改。': '您已经设置过安全问题，不可再次修改。'
-'2个问题不能一样。': '2个问题不能一样。'
-'安全问题设置成功。': '安全问题设置成功。'
-'您的登录密码错误': '您的登录密码错误'
-绑定成功: 绑定成功
-绑定失败，原短信失效: 绑定失败，原短信失效
-'密码正确': '密码正确'
-'密码错误': '密码错误'
-'密码不能为空': '密码不能为空'
-'当前密码不正确，请重试！': '当前密码不正确，请重试！'
-'密码修改成功。': '密码修改成功。'
-'新邮箱，不能跟当前邮箱一样。': '新邮箱，不能跟当前邮箱一样。'
-新邮箱已经被注册，请换一个试试。: 新邮箱已经被注册，请换一个试试。
-请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。: 请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。
-邮箱变更确认邮件发送失败，请联系管理员。: 邮箱变更确认邮件发送失败，请联系管理员。
-请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。: 请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。
-邮箱验证邮件发送失败，请联系管理员。: 邮箱验证邮件发送失败，请联系管理员。
-您已经绑定了该第三方网站的帐号，不能重复绑定!: 您已经绑定了该第三方网站的帐号，不能重复绑定!
-您取消了授权/授权失败，请重试绑定!: 您取消了授权/授权失败，请重试绑定!
-授权失败，请重试绑定!: 授权失败，请重试绑定!
-'该第三方帐号已经被其他帐号绑定，不能重复绑定!': '该第三方帐号已经被其他帐号绑定，不能重复绑定!'
-帐号绑定成功!: 帐号绑定成功!
-课程：《: 课程：《
-'请先开启相关设置!': '请先开启相关设置!'
-'在该任务之前，还有学习任务没有完成哦！': '在该任务之前，还有学习任务没有完成哦！'
-该试卷未发布，如有疑问请联系老师！: 该试卷未发布，如有疑问请联系老师！
-'该试卷已关闭，如有疑问请联系老师！': '该试卷已关闭，如有疑问请联系老师！'
-'该试卷考试时间未限制,请选择其他限制时长的试卷': '该试卷考试时间未限制,请选择其他限制时长的试卷'
-'无权预览试卷！': '无权预览试卷！'
-'无权查看试卷！': '无权查看试卷！'
-试卷不存在!: 试卷不存在!
-'不可以访问其他学生的试卷哦~': '不可以访问其他学生的试卷哦~'
-'无权批阅试卷！': '无权批阅试卷！'
-'您尚未登录系统或登录已超时，请先登录。': '您尚未登录系统或登录已超时，请先登录。'
-'试卷已删除，请联系管理员。': '试卷已删除，请联系管理员。'
-'用户没有登录!不能加入活动!': '用户没有登录!不能加入活动!'
-'未登录,不能操作!': '未登录,不能操作!'
-用户还未登录!: 用户还未登录!
-帖子不存在!: 帖子不存在!
-'无权限操作!': '无权限操作!'
+'您发表的话题<%threadTitle%>的隐藏内容被查看！': 'The hidden content in your topic <%threadTitle%> was viewed.'
+'上传文件不能为空!': 'Upload file cannot be empty.'
+'上传文件大小不能超过2MB!': 'Upload file size cannot exceed 2 MB.'
+直播还没开始!: The live session is not started.
+直播已结束!: The live session is ended.
+'您不是课程学员，不能参加直播！': 'You are not course student and cannot participate the live session.'
+创建直播教室失败，请重试！: Failed to created the live session classroom, please try again.
+这个时间段的课时可以创建: The time range is available to create a lesson.
+绑定的用户不存在，请重新绑定。: The binding user does not exist. Please re-bind.
+'抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。': 'Sorry, the third-party account sign in is not enabled. Reason: the sign in request of %name% has not been approved.'
+'抱歉！暂时无法通过第三方帐号登录。原因：%message%': 'Sorry, the third-party account sign in is not enabled. Reason: %message%.'
+页面已过期，请重新登录。: Page expired, please sign in again.
+'网络超时，获取用户信息失败，请重试。': 'Network connection time out. Failed to retrieve user info, please try again.'
+注册功能未开启，请联系管理员！: The sign up feature is not enabled, please contact administrator.
+登录失败，请重试！: Sign in failed, please try again.
+用户名中含有敏感词！: Invalid words included in the user name.
+'Email地址或手机号码输入错误': 'Invalid email address of mobile phone number.'
+该Email地址尚未注册: This email address is not registered.
+'该手机号码尚未注册': 'This phone number is not registered.'
+'密码不正确，请重试！': 'Invalid password, please try again.'
+'该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！': 'This account %siteName% has been bound to another account in the third-paryt site. Please removed the binding at first.'
+'该手机号码尚未注册或绑定': 'This phone number is not registered or bind.'
+'该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！': 'This account has been bound to another account in the third-paryt site. Please removed the binding at first.'
+微信注册帐号: Sign in with Wechat account
+微博注册帐号: Sign in with Weibo account
+QQ注册账号: Sign in with QQ account
+人人注册账号: Sign in with Renren account
+微信绑定已有账号: Bind Wechat to existing account
+微博绑定已有账号: Bind Weibo to existing account
+QQ绑定已有账号: Bind QQ to existing account
+人人绑定已有账号: Bind Renren to existing account
+'第三方登录系统参数尚未配置，请先配置。': 'Please setup third-party sign in parameters at first.'
+'第三方登录(%type%)系统参数尚未配置，请先配置。': 'Please setup third-party (%type%) sign in parameters at first.'
+第三方登录(%type%)未开启: third-party account sign in (%type%) is not enabled.
+'你已经登录了': 'You have been signed in already'
+该Email地址可以登录: Sign in with this email address
+参数错误!: Invalid parameters
+该收件人不存在: The recipient does not exist
+不能给自己发私信哦！: Cannot send message to yourself
+私信会话不存在！: Message conversation does not exist
+抱歉，该收信人尚未注册!: Sorry, the recipient has not signed up yet.
+'您无权删除此私信！': 'You don''t have permission to delete this message.'
+客户端尚未开启！: The client applicaiton is not enabled.
+普通用户不能查看别人的订单: 'You cannot view other user''s order'
+'无权预览非本人收藏的题目!': 'You cannot view other user''s bookmarked questions'
+并没有任务: No task
+您不是老师，不能查看此页面！: You are not a teacher and cannot view this page.
+短信验证失败。: Failed to verify sms.
+用户未登录，创建订单失败。: Failed to create order. You are not signed in.
+'订单中没有购买的内容，不能创建!': 'Oder is empty and cannot be created.'
+'实际价格不匹配，不能创建订单!': 'The actual price does not match. Cannot create the order.'
+'支付价格不匹配，不能创建订单!': 'The paied price does not match. Cannot create the order.'
+'虚拟币抵扣超出限定，不能创建订单!': 'The virtual coin exceeds the maximum amount. Cannot create the order.'
+'优惠码不支持的购买项目。': 'The coupon cannot be used for this purchase'
+参数不对。: Invalid parameters
+您不是学员或尚未购买，不能退学。: You are not student or have not bought the course, cannot quit.
+组合购买课程不能退出。: You cannot quit a combined course.
+您不是学员或尚未购买，不能取消退款。: You are not student or have not bought the course, cannot cancel the refund request.
+用户尚未登录！: You are not signed in yet.
+正在跳转页面，请稍等....: Redirecting...
+用户不存在，退出登录失败！: User not exist, failed to sign out.
+退出成功: Quit successfully
+'请通过论坛找回密码': 'To retrieve your password in the forum'
+'重设密码邮件发送失败，请联系管理员。': 'Failed to send password resetting email, please contact administrator.'
+该邮箱地址没有注册过帐号: No user account registered by this email address.
+用户不存在，请重新找回: User not exist, please try again.
+手机短信验证错误，请重新找回: Failed to verify sms, please try again.
+'该手机号码不存在': Phone number not exist.
+'尚未开启支付模块，无法购买课程。': 'The payment feature is not enabled, cannot finish the purchase.'
+xml数据异常！: Invalid xml data
+由于余额不足，支付失败，订单已被取消。: Failed to finish the payment due to insufficient account balance. The order has been cancelled.
+'%name%交易订单已关闭': '%name% order was closed'
+'支付模块未开启，请先开启。': 'The payment feature is not enabled. Please enabled it.'
+'支付模块(%payment%)未开启，请先开启。': 'The payment (%payment%) feature is not enabled. Please enabled it.'
+'支付模块(%payment%)参数未设置，请先设置。': 'The payment (%payment%) parameters are not setup. Please setup.'
+targetType类型不正确: targetType is invalid
+storage类型不正确: storage is invalid
+'音频转码失败，请重新上传此音频.': 'Failed to transcode audio, please upload again.'
+课时%lessonNumber%：%lessonTitle%: Lesson %lessonNumber%：%lessonTitle%
+'注册已关闭，请联系管理员': 'Sign up is disabled, please contact administrator.'
+'手机号码和短信验证码不匹配，请重新注册': 'Phone number and sms verification code don''t match, please sign up again.'
+正在跳转页面，请稍等......: Redirecting...
+'输入的密码不正确': 'Invalid password'
+token已失效: token expired
+该Email不存在: Email not exist
+'注册欢迎的内容': 'New user sign up welcome message'
+'验证码错误。': 'Wrong verification code'
+'在上方搜索框输入关键词进行搜索.': 'Input keyword to search'
+搜索失败，请稍候再试.: Search failed, please try again later.
+基础信息保存成功。: Basic info saved.
+不能修改已绑定的手机。: Cannot modify the bound phone number.
+'上传文件过大，请上传较小的文件!': 'The upload file is too large. Please upload a smaller file.'
+'上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。': 'Invalid image format. Please upload an image with format of jpg, bmp, gif or png.'
+实名认证提交成功！: Real name verification request submitted.
+用户名中含有敏感词，更新失败！: Invalid words contained in user name, failed to update.
+用户名修改成功！: User name updated.
+获取论坛头像地址失败！: Failed to retrieve the avatar from the forum.
+'不能直接设置新支付密码。': 'Cannot set new payment password directly.'
+'当前用户登录密码不正确，请重试！': 'Incorrect password of current signed in user, please try again'
+'新支付密码设置成功，您可以在此重设密码。': 'New payment password updated successfully.'
+'新支付密码设置成功！': 'New payment password updated successfully.'
+'登录密码已设置，请勿重复设置': 'Sign in password has been setup already.'
+'重置支付密码成功。': 'Payment password was reset.'
+'两次输入的支付密码不一致。': 'Payment passwords inconsistent.'
+'用户登录密码错误。': 'Invalid user name or password'
+'您还没有安全问题，请先设置。': 'You haven''t setup securtiy questions. Please setup at first.'
+'回答正确，你可以开始更新支付密码。': 'Correct. You can now setup new payment password.'
+'您还没有绑定手机，请先绑定。': 'You haven''t bind a mobile phone, please bind now.'
+'验证通过，你可以开始更新支付密码。': 'Verified successfully, you can now update your payment password.'
+验证错误。: Verification failed.
+'您的登录密码错误，不能设置安全问题。': 'Your sign in password is incorrect, cannot setup security questions.'
+'您已经设置过安全问题，不可再次修改。': 'You have already setup the security questions, cannot setup again.'
+'2个问题不能一样。': 'The questions cannot be the same.'
+'安全问题设置成功。': 'Security questions setup successfully.'
+'您的登录密码错误': 'Wrong sign in password.'
+绑定成功: Bind successfully
+绑定失败，原短信失效: Bind failed, the sms is expired.
+'密码正确': 'Correct password'
+'密码错误': 'Wrong password'
+'密码不能为空': 'Password cannot be empty'
+'当前密码不正确，请重试！': 'Incorrect password, please try again.'
+'密码修改成功。': 'Password updated successfully.'
+'新邮箱，不能跟当前邮箱一样。': 'You need to use a new email address.'
+新邮箱已经被注册，请换一个试试。: The email address has been used, please use another one.
+请到邮箱%dataEmail%中接收确认邮件，并点击确认邮件中的链接完成修改。: Please check your email %dataEmail% and finish the modification by clinking the link in the mail.
+邮箱变更确认邮件发送失败，请联系管理员。: Failed to send email to verify the mailbox change, please contact administrator.
+请到邮箱%userEmail%中接收验证邮件，并点击邮件中的链接完成验证。: Please check your email %dataEmail% and finish the verification by clicking the link in the mail.
+邮箱验证邮件发送失败，请联系管理员。: Failed to send email to verify the mailbox, please contact administrator.
+您已经绑定了该第三方网站的帐号，不能重复绑定!: You have already bind this third-party account, cannot bind it again.
+您取消了授权/授权失败，请重试绑定!: The authorization was cancelled or failed, please try again.
+授权失败，请重试绑定!: The authorization was failed, please try again.
+'该第三方帐号已经被其他帐号绑定，不能重复绑定!': 'This third-party account has been bound to another account, cannot be used again.'
+帐号绑定成功!: Account binding successfully.
+课程：《: Course:
+'请先开启相关设置!': 'Please enabled the related settings.'
+'在该任务之前，还有学习任务没有完成哦！': 'There are other tasks haven''t been done before this task.'
+该试卷未发布，如有疑问请联系老师！: Test paper not published, please contact the teacher.
+'该试卷已关闭，如有疑问请联系老师！': 'Test paper was closed, please contact the teacher.'
+'该试卷考试时间未限制,请选择其他限制时长的试卷': 'This test paper doesn''t have a time limitation, please choose another test paper.'
+'无权预览试卷！': 'You cannot preview this test paper.'
+'无权查看试卷！': 'You cannot access this test paper.'
+试卷不存在!: Test paper not exist
+'不可以访问其他学生的试卷哦~': 'You cannot access other student''s test paper.'
+'无权批阅试卷！': 'You cannot review test paper.'
+'您尚未登录系统或登录已超时，请先登录。': 'You are not signed in or session expired, please sign in again.'
+'试卷已删除，请联系管理员。': 'The test paper was removed. Please contact administrator.'
+'用户没有登录!不能加入活动!': 'You are not signed in and cannot join the activity.'
+'未登录,不能操作!': 'You are not signed in.'
+用户还未登录!: 'You are not signed in.'
+帖子不存在!: The post does not exist.
+'无权限操作!': 'No permission'
 '%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
-报名时间: 报名时间
-成员: 成员
-'上传授权码不正确，请重试！': '上传授权码不正确，请重试！'
-'授权码不正确，请重试！': '授权码不正确，请重试！'
-'上传TOKEN已过期或不存在。': '上传TOKEN已过期或不存在。'
-'上传TOKEN非法。': '上传TOKEN非法。'
-'您无权查看此页面！': '您无权查看此页面！'
-数据中id不能为空: 数据中id不能为空
-key不能为空: key不能为空
-转换失败: 转换失败
-'请先登入': '请先登入'
-'请先登录！': '请先登录！'
-普通会员: 普通会员
-classroomId参数缺失: classroomId参数缺失
-count参数缺失: count参数缺失
-'count参数超出最大取值范围': 'count参数超出最大取值范围'
-'group:%argumentsGroup%不存在': 'group:%argumentsGroup%不存在'
-categoryId参数缺失: categoryId参数缺失
-userId参数缺失: userId参数缺失
-courseId参数缺失: courseId参数缺失
-threadId参数缺失: threadId参数缺失
-reviewId参数缺失: reviewId参数缺失
-group参数缺失: group参数缺失
-lessonId参数缺失: lessonId参数缺失
-groupId参数缺失: groupId参数缺失
-参数缺失: 参数缺失
-在线课程: 在线课程
-线下课程: 线下课程
-'在校生': '在校生'
-'非在校生': '非在校生'
-'用户名或密码错误': '用户名或密码错误'
-'您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。': '您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。'
-'帐号或密码错误，您还有%failedLeftFailedCount%次输入机会': '帐号或密码错误，您还有%failedLeftFailedCount%次输入机会'
-'帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。': '帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。'
-'帐号或密码输入错误过多，您已被禁止登录。': '帐号或密码输入错误过多，您已被禁止登录。'
-'同步用户(#%userId%)Email失败': '同步用户(#%userId%)Email失败'
-'同步用户(#%userId%)密码失败': '同步用户(#%userId%)密码失败'
-访问被拒绝！: 访问被拒绝！
-当前操作，需要登录！: 当前操作，需要登录！
-页面已过期，请重新提交数据！: 页面已过期，请重新提交数据！
-此帐号已在别处登录，请重新登录: 此帐号已在别处登录，请重新登录
-'尚未定义批量获取"%name%"数据': '尚未定义批量获取"%name%"数据'
-'尚未定义获取"%name%"数据的记录条数': '尚未定义获取"%name%"数据的记录条数'
-未知区域: 未知区域
-未来: 未来
-刚刚: 刚刚
-秒前: 秒前
-分钟前: 分钟前
-小时前: 小时前
-天前: 天前
-0分钟: 0分钟
-'%minutes%分钟%seconds%秒': '%minutes%分钟%seconds%秒'
-省: 省
-市: 市
-课时%lessonNumber%: 课时%lessonNumber%
-'公告类型不存在': '公告类型不存在'
-'公告内容不能为空！': '公告内容不能为空！'
-发布时间不能为空！: 发布时间不能为空！
-结束时间不能为空！: 结束时间不能为空！
-'公告#%id%不存在。': '公告#%id%不存在。'
-'%field%字段不允许增减，只有%fields%才被允许增减': '%field%字段不允许增减，只有%fields%才被允许增减'
-'文章内容为空,操作失败！': '文章内容为空,操作失败！'
-'文章分类不存在,操作失败！': '文章分类不存在,操作失败！'
-'文章内容为空，创建文章失败！': '文章内容为空，创建文章失败！'
-'文章不存在，操作失败。': '文章不存在，操作失败。'
-'用户还未登录,不能点赞。': '用户还未登录,不能点赞。'
-'资讯不存在，或已删除。': '资讯不存在，或已删除。'
-不可重复对一条资讯点赞！: 不可重复对一条资讯点赞！
-属性%property%不存在，更新失败！: 属性%property%不存在，更新失败！
-'缺少必要参数，，添加栏目失败': '缺少必要参数，，添加栏目失败'
-'栏目(#%id%)不存在，更新栏目失败！': '栏目(#%id%)不存在，更新栏目失败！'
-'参数不正确，更新栏目失败！': '参数不正确，更新栏目失败！'
-'名称不能为空，保存栏目失败': '名称不能为空，保存栏目失败'
-'编码不能为空，保存栏目失败': '编码不能为空，保存栏目失败'
-'编码(%code%)含有非法字符，保存栏目失败': '编码(%code%)含有非法字符，保存栏目失败'
-'编码(%code%)不能全为数字，保存栏目失败': '编码(%code%)不能全为数字，保存栏目失败'
-卡的类型不存在: 卡的类型不存在
-'缺少必要字段，新创建卡失败！': '缺少必要字段，新创建卡失败！'
-'缺少必要字段，请明确卡的类型': '缺少必要字段，请明确卡的类型'
+报名时间: Register date
+成员: Member
+'上传授权码不正确，请重试！': 'Invalid upload authorization code, please try again.'
+'授权码不正确，请重试！': 'Invalid authorization code, please try again.'
+'上传TOKEN已过期或不存在。': 'Invalid or expired upload token.'
+'上传TOKEN非法。': 'Invalid upload token.'
+'您无权查看此页面！': 'You cannot view this page.'
+数据中id不能为空: ID cannot be empty.
+key不能为空: Key cannot be empty.
+转换失败: Transformation failed.
+'请先登入': 'Please sign in'
+'请先登录！': 'Please sign in'
+普通会员: Normal VIP
+classroomId参数缺失: Paramenter classroomId missing.
+count参数缺失: Paramenter count missing.
+'count参数超出最大取值范围': 'Paramenter count exceed the maximum range.'
+'group:%argumentsGroup%不存在': 'group: %argumentsGroup% not exist'
+categoryId参数缺失: Paramenter categoryId missing
+userId参数缺失: Paramenter userId missing
+courseId参数缺失: Paramenter courseId missing
+threadId参数缺失: Paramenter threadId missing
+reviewId参数缺失: Paramenter reviewId missing
+group参数缺失: Paramenter group missing
+lessonId参数缺失: Paramenter lessonId missing
+groupId参数缺失: Paramenter groupId missing
+参数缺失: Paramenter missing
+在线课程: Online course
+线下课程: Offline course
+'在校生': 'In school'
+'非在校生': 'Not in school'
+'用户名或密码错误': 'Invalid user name or password'
+'您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。': 'Too many attemps with same IP or invalid password, please retry after %settingTemporaryLockMinutes% minutes.'
+'帐号或密码错误，您还有%failedLeftFailedCount%次输入机会': 'Invalid user name or password, you have %failedLeftFailedCount% chances to try.'
+'帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。': 'Too many attemps with invalid user name or password, please retry after %settingTemporaryLockMinutes% minutes. You can unlock your account by resetting your password.'
+'帐号或密码输入错误过多，您已被禁止登录。': 'Too many attemps with invalid user name or password, your account was locked.'
+'同步用户(#%userId%)Email失败': 'Failed to synchronize email of user (#%userId%).'
+'同步用户(#%userId%)密码失败': 'Failed to synchronize password of user (#%userId%).'
+访问被拒绝！: Access denied
+当前操作，需要登录！: Please sign in to operate.
+页面已过期，请重新提交数据！: Page expired, please re-submit data.
+此帐号已在别处登录，请重新登录: This account has been signed in from other place, please sign in again.
+'尚未定义批量获取"%name%"数据': 'Undefined retrieve batch data of "%name%"'
+'尚未定义获取"%name%"数据的记录条数': 'Undefined the number of record to retrieve "%name%"'
+未知区域: Unknown area
+未来: Future
+刚刚: Just
+秒前: seconds ago
+分钟前: minutes ago
+小时前: hours ago
+天前: days ago
+0分钟: 0 minutes
+'%minutes%分钟%seconds%秒': '%minutes% minutes %seconds% seconds'
+省: Province
+市: City
+课时%lessonNumber%: Lesson %lessonNumber%
+'公告类型不存在': 'The type of announcement not exist'
+'公告内容不能为空！': 'The content of announcement cannot be empty'
+发布时间不能为空！: The publish date cannot be empty
+结束时间不能为空！: The end date cannot be emtpy
+'公告#%id%不存在。': 'Announcement #%id% not exist'
+'%field%字段不允许增减，只有%fields%才被允许增减': 'Field %field% cannot be adjusted. Only fields of %fields% can be adjusted.'
+'文章内容为空,操作失败！': 'Article content is empty, operation failed.'
+'文章分类不存在,操作失败！': 'Article category not exist, operation failed.'
+'文章内容为空，创建文章失败！': 'Article content is empty, failed to create it.'
+'文章不存在，操作失败。': 'Article not exist, operation failed.'
+'用户还未登录,不能点赞。': 'Please sign in to like it'
+'资讯不存在，或已删除。': 'Article not exist or removed.'
+不可重复对一条资讯点赞！: You have already liked this article.
+属性%property%不存在，更新失败！: 'Property %property% not exisist, failed to updated.'
+'缺少必要参数，，添加栏目失败': 'Missing required parameters, failed to add category.'
+'栏目(#%id%)不存在，更新栏目失败！': 'Category (#%id%) not exist, failed to update category.'
+'参数不正确，更新栏目失败！': 'Invalid parameters, failed to update the category.'
+'名称不能为空，保存栏目失败': 'Name cannot be empty, failed to save the category.'
+'编码不能为空，保存栏目失败': 'The code is empty, failed to save the category.'
+'编码(%code%)含有非法字符，保存栏目失败': 'Code (%code%) contains invalid character, failed to save the category.'
+'编码(%code%)不能全为数字，保存栏目失败': 'Code (%code%) cannot be all digits, failed to save the category.'
+卡的类型不存在: Card type not exist
+'缺少必要字段，新创建卡失败！': 'Missing required fields, failed to create the card.'
+'缺少必要字段，请明确卡的类型': 'Missing required fields, please specify the card type.'
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
-'充值金额必须为整数!': '充值金额必须为整数!'
-'充值购买': '充值购买'
-订单不存在，取消订单失败！: 订单不存在，取消订单失败！
-当前订单状态不能取消订单！: 当前订单状态不能取消订单！
-'订单(%sn%)已被删除，支付失败。': '订单(%sn%)已被删除，支付失败。'
-'订单(%sn%)的金额(%orderAmount%)与实际支付的金额(%payAmount%)不一致，支付失败。': '订单(%sn%)的金额(%orderAmount%)与实际支付的金额(%payAmount%)不一致，支付失败。'
-付款成功: 付款成功
-'入账': '入账'
-出账: 出账
-订单已处理: 订单已处理
-创建交易: 创建交易
-'金额必须为数字，并且不能小于0': '金额必须为数字，并且不能小于0'
-'参数缺失,注册APP失败!': '参数缺失,注册APP失败!'
-'获取应用包#%packageId%信息失败': '获取应用包#%packageId%信息失败'
-php_zip扩展未激活: php_zip扩展未激活
-php_curl扩展未激活: php_curl扩展未激活
-'下载目录(%downloadDirectory%)无写权限': '下载目录(%downloadDirectory%)无写权限'
-下载目录(%downloadDirectory%)创建失败: 下载目录(%downloadDirectory%)创建失败
-'备份(%backupdDirectory%)无写权限': '备份(%backupdDirectory%)无写权限'
-备份(%backupdDirectory%)创建失败: 备份(%backupdDirectory%)创建失败
-'app目录无写权限': 'app目录无写权限'
-'src目录无写权限': 'src目录无写权限'
-'vendor2目录无写权限': 'vendor2目录无写权限'
-'plugins目录无写权限': 'plugins目录无写权限'
-'web目录无写权限': 'web目录无写权限'
-'app/cache目录无写权限': 'app/cache目录无写权限'
-'app/data目录无写权限': 'app/data目录无写权限'
-'app/config目录无写权限': 'app/config目录无写权限'
-'app/config/config.yml文件无写权限': 'app/config/config.yml文件无写权限'
-检查环境: 检查环境
-'EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho': 'EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho'
-检查依赖: 检查依赖
-备份数据库: 备份数据库
-备份文件: 备份文件
-'应用包#%packageId%不存在或网络超时，读取包信息失败': '应用包#%packageId%不存在或网络超时，读取包信息失败'
-'下载应用包': '下载应用包'
-'删除文件时发生了错误：%getMessage%': '删除文件时发生了错误：%getMessage%'
-复制升级文件时发生了错误：%getMessage%: 复制升级文件时发生了错误：%getMessage%
-'执行升级/安装脚本时发生了错误：%getMessage%': '执行升级/安装脚本时发生了错误：%getMessage%'
-'应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限': '应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限'
-执行升级: 执行升级
-'App #%id%不存在，更新版本失败！': 'App #%id%不存在，更新版本失败！'
-强制更新应用「%appName%」版本为「%version%」: 强制更新应用「%appName%」版本为「%version%」
-成功: 成功
-失败: 失败
-'无法解压缩安装包！': '无法解压缩安装包！'
-EduSoho主系统: EduSoho主系统
-EduSoho官方: EduSoho官方
-EduSoho网络课程: EduSoho网络课程
-生成Key失败，请检查服务器的网络设置！: 生成Key失败，请检查服务器的网络设置！
-'不允许对%field%字段进行排序': '不允许对%field%字段进行排序'
-orderBy排序方式错误: orderBy排序方式错误
-orderBy参数不正确: orderBy参数不正确
-'不允许对%orderBy%字段进行排序': '不允许对%orderBy%字段进行排序'
-'组织机构%orgCode%不存在,更新失败': '组织机构%orgCode%不存在,更新失败'
-'重设%nickname%在%sitename%的密码': '重设%nickname%在%sitename%的密码'
-【%sitename%】系统自检邮件: 【%sitename%】系统自检邮件
-系统邮件发送检测测试，请不要回复此邮件！: 系统邮件发送检测测试，请不要回复此邮件！
-'请激活你的帐号 完成注册': '请激活你的帐号 完成注册'
-' 验证邮箱内容': ' 验证邮箱内容'
-重设%nickname%在%sitename%的电子邮箱: 重设%nickname%在%sitename%的电子邮箱
-验证%nickname%在%sitename%的电子邮箱: 验证%nickname%在%sitename%的电子邮箱
-尚未初始化ParameterBag: 尚未初始化ParameterBag
-尚未初始化Translator: 尚未初始化Translator
-尚未初始化CurrentUser: 尚未初始化CurrentUser
-尚未初始化数据库连接: 尚未初始化数据库连接
-IN查询的值需为数组.: IN查询的值需为数组.
-'创建编辑区失败，缺少必要的字段': '创建编辑区失败，缺少必要的字段'
-此编辑区不存在，更新失败!: 此编辑区不存在，更新失败!
-'获取内容失败，不允许查询空编号所对应的内容!': '获取内容失败，不允许查询空编号所对应的内容!'
-此编辑区数据不存在，更新失败!: 此编辑区数据不存在，更新失败!
-评论不存在: 评论不存在
-'无权限删除评论！': '无权限删除评论！'
-不存在当前这种评论对象: 不存在当前这种评论对象
-评论课程失败，该课程不存在: 评论课程失败，该课程不存在
-'参数缺失，创建内容失败！': '参数缺失，创建内容失败！'
-'内容标题不能为空，创建内容失败！': '内容标题不能为空，创建内容失败！'
-'内容不存在，更新失败！': '内容不存在，更新失败！'
-'该文件格式，不允许上传。': '该文件格式，不允许上传。'
-用户尚未登录。: 用户尚未登录。
-'只允许上传以下扩展名的文件：': '只允许上传以下扩展名的文件：'
-'只运行上传JPG、PNG、GIF格式的图片文件。': '只运行上传JPG、PNG、GIF格式的图片文件。'
-文件名为空，请给文件取个名吧。: 文件名为空，请给文件取个名吧。
-'文件名超出了240个字符的限制，请重命名后再试。': '文件名超出了240个字符的限制，请重命名后再试。'
-'文件上传路径%directory%不可写，文件上传失败。': '文件上传路径%directory%不可写，文件上传失败。'
-获取文件扩展名失败！: 获取文件扩展名失败！
-解析文件URI(%uri%)失败！: 解析文件URI(%uri%)失败！
-'添加的字段有问题！': '添加的字段有问题！'
-邀请: 邀请
-'优惠码%code%不存在': '优惠码%code%不存在'
-'优惠码%code%已经被使用': '优惠码%code%已经被使用'
-'优惠码%code%已经被其他人领取': '优惠码%code%已经被其他人领取'
-'优惠码%code%已过期': '优惠码%code%已过期'
-'优惠码%code%不可用': '优惠码%code%不可用'
-'%s字段不允许增减，只有%s才被允许增减': '%s字段不允许增减，只有%s才被允许增减'
-'未知类型,删除失败': '未知类型,删除失败'
-参数不对！: 参数不对！
-用户%userNickName%不存在: 用户%userNickName%不存在
-课程%courseTitle%不存在: 课程%courseTitle%不存在
-'用户已经是学员，不能添加！': '用户已经是学员，不能添加！'
-购买课程《%courseTitle%》: 购买课程《%courseTitle%》
-'(管理员添加)': '(管理员添加)'
-用户未登录，不能创建订单: 用户未登录，不能创建订单
-订单数据缺失，创建课程订单失败。: 订单数据缺失，创建课程订单失败。
-已经是课程学员，操作失败。: 已经是课程学员，操作失败。
-课程不存在，操作失败。: 课程不存在，操作失败。
-'该课程需要实名认证，你还没有实名认证，不可购买。': '该课程需要实名认证，你还没有实名认证，不可购买。'
-创建课程订单失败！: 创建课程订单失败！
-'非课程订单，加入课程失败。': '非课程订单，加入课程失败。'
-当前用户已经是课程学员，支付宝支付成功。: 当前用户已经是课程学员，支付宝支付成功。
-订单不存在，不能申请退款。: 订单不存在，不能申请退款。
-'用户%nickname%申请退款<a href="%courseUrl%">%title%</a>课程，请审核。': '用户%nickname%申请退款<a href="%courseUrl%">%title%</a>课程，请审核。'
-订单不存在，取消退款申请失败。: 订单不存在，取消退款申请失败。
-'缺少必要字段，创建课程失败！': '缺少必要字段，创建课程失败！'
-课程不存在，更新失败！: 课程不存在，更新失败！
-参数不正确，更新计数器失败！: 参数不正确，更新计数器失败！
-'课程不存在，图标更新失败！': '课程不存在，图标更新失败！'
-推荐课程序号只能为数字！: 推荐课程序号只能为数字！
-不能收藏未发布课程: 不能收藏未发布课程
-'该课程不存在,收藏失败!': '该课程不存在,收藏失败!'
-该收藏已经存在，请不要重复收藏!: 该收藏已经存在，请不要重复收藏!
-'你未收藏本课程，取消收藏失败!': '你未收藏本课程，取消收藏失败!'
-课程%courseId%不存在: 课程%courseId%不存在
-货币类型不正确: 货币类型不正确
-'折扣活动#%discountId%不存在！': '折扣活动#%discountId%不存在！'
-参数缺失，创建课时失败！: 参数缺失，创建课时失败！
-'添加课时失败，课程ID为空。': '添加课时失败，课程ID为空。'
-'添加课时失败，课程不存在。': '添加课时失败，课程不存在。'
-'课时类型不正确，添加失败！': '课时类型不正确，添加失败！'
-'media参数不正确，添加课时失败！': 'media参数不正确，添加课时失败！'
-'media id参数不正确，添加/编辑课时失败！': 'media id参数不正确，添加/编辑课时失败！'
-'文件不存在，添加/编辑课时失败！': '文件不存在，添加/编辑课时失败！'
-'media uri参数不正确，添加/编辑课时失败！': 'media uri参数不正确，添加/编辑课时失败！'
-草稿不存在，更新失败！: 草稿不存在，更新失败！
-'课程(#%courseId%)不存在！': '课程(#%courseId%)不存在！'
-'课时#%lessonId%不存在': '课时#%lessonId%不存在'
-此课程不存在！: 此课程不存在！
-'时长不能超过8小时！': '时长不能超过8小时！'
-'该时段内已有直播课时存在，请调整直播开始时间': '该时段内已有直播课时存在，请调整直播开始时间'
-'本课时需要%s学分才能学习，您当前学分为%s分。': '本课时需要%s学分才能学习，您当前学分为%s分。'
-'课时#%lessonId%不存在！': '课时#%lessonId%不存在！'
-'课时#%lessonId%尚未学习，取消学习失败。': '课时#%lessonId%尚未学习，取消学习失败。'
-'课时#%lessonId%尚未学完，取消学习失败。': '课时#%lessonId%尚未学完，取消学习失败。'
-'章节类型不正确，添加失败！': '章节类型不正确，添加失败！'
+'充值金额必须为整数!': 'The recharge amount must be integer.'
+'充值购买': 'Recharge to buy'
+订单不存在，取消订单失败！: Order not exist, failed to cancel the order.
+当前订单状态不能取消订单！: The order cannot be cancelled in current status.
+'订单(%sn%)已被删除，支付失败。': 'Order (%sn%) has been deleted, payment failed.'
+'订单(%sn%)的金额(%orderAmount%)与实际支付的金额(%payAmount%)不一致，支付失败。': 'Order (%sn%) amount (%orderAmount%)is not the same as the amount actually paied (%payAmount%), payment failed.'
+付款成功: Paid successfully
+'入账': 'In'
+出账: Out
+订单已处理: Order has been processed
+创建交易: Create transaction
+'金额必须为数字，并且不能小于0': 'Amount must be digits and more than 0'
+'参数缺失,注册APP失败!': 'Missing parameters, failed to register APP'
+'获取应用包#%packageId%信息失败': 'Failed to retrieve APP info of #%packageId%'
+php_zip扩展未激活: php_zip extension not enabled
+php_curl扩展未激活: php_curl extension not enabled
+'下载目录(%downloadDirectory%)无写权限': 'No write permission to download folder (%downloadDirectory%).'
+下载目录(%downloadDirectory%)创建失败: Failed to created download folder (%downloadDirectory%).
+'备份(%backupdDirectory%)无写权限': 'No write permission to backup folder (%backupdDirectory%).'
+备份(%backupdDirectory%)创建失败: Failed to created backup folder (%backupdDirectory%).
+'app目录无写权限': 'No write permission to app folder.'
+'src目录无写权限': 'No write permission to src folder.'
+'vendor2目录无写权限': 'No write permission to vendor2 folder.'
+'plugins目录无写权限': 'No write permission to plugins folder.'
+'web目录无写权限': 'No write permission to web folder.'
+'app/cache目录无写权限': 'No write permission to app/cache folder.'
+'app/data目录无写权限': 'No write permission to app/data folder.'
+'app/config目录无写权限': 'No write permission to app/config folder.'
+'app/config/config.yml文件无写权限': 'No write permission to app/config/config.yml'
+检查环境: Checking environment
+'EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho': 'EduSoho needs to be later than version %packageEdusohoMinVersion%. Your current version is %systemVersion%. Please upgrade EduSoho at first.'
+检查依赖: Checking dependencies
+备份数据库: Backup database
+备份文件: Backup files
+'应用包#%packageId%不存在或网络超时，读取包信息失败': 'App package #%packageId% not exist or network timeout, failed to read package info.'
+'下载应用包': 'Downloading application package.'
+'删除文件时发生了错误：%getMessage%': 'Error occurred while deleting files: %getMessage%'
+复制升级文件时发生了错误：%getMessage%: 'Error occurred while copying files: %getMessage%'
+'执行升级/安装脚本时发生了错误：%getMessage%': 'Error occurred while excuting upgrade/installation scripts: %getMessage%'
+'应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限': 'Applicaiton installed successfully but failed to refresh cache. Please check the write permission to folder %cachePath%的.'
+执行升级: Upgrading
+'App #%id%不存在，更新版本失败！': 'App #%id% not exist, failed to upgrade.'
+强制更新应用「%appName%」版本为「%version%」: Forcely upgrade application「%appName%」to version「%version%」
+成功: Succeed
+失败: Failed
+'无法解压缩安装包！': 'Cannot install the zip package'
+EduSoho主系统: EduSoho system
+EduSoho官方: EduSoho official
+EduSoho网络课程: EduSoho
+生成Key失败，请检查服务器的网络设置！: Failed to generate key, please check the network of the server.
+'不允许对%field%字段进行排序': 'It''s not allowed to sort by field %field%.'
+orderBy排序方式错误: Invalid orderBy type
+orderBy参数不正确: Invalid orderBy parameter
+'不允许对%orderBy%字段进行排序': 'It''s not allowed to sort by field %orderBy%'
+'组织机构%orgCode%不存在,更新失败': 'Organization %orgCode% not exist, failed to update.'
+'重设%nickname%在%sitename%的密码': 'Reset password for %nickname% on %sitename%.'
+【%sitename%】系统自检邮件: 【%sitename%】system self-checking mail.
+系统邮件发送检测测试，请不要回复此邮件！: 'Self-checking mail send by system, please don''t reply.'
+'请激活你的帐号 完成注册': 'Please activate your account to complete registration.'
+' 验证邮箱内容': ' Verify email address:'
+重设%nickname%在%sitename%的电子邮箱: Reset email address for %nickname% on %sitename%
+验证%nickname%在%sitename%的电子邮箱: Verify email address for %nickname% on %sitename%
+尚未初始化ParameterBag: ParameterBag not initialized
+尚未初始化Translator: Translator not initialized
+尚未初始化CurrentUser: CurrentUser not initialized
+尚未初始化数据库连接: Database connection not initialized
+IN查询的值需为数组.: The value of SQL IN clause needs to be an array.
+'创建编辑区失败，缺少必要的字段': 'Failed to created editable block. Missing required fields.'
+此编辑区不存在，更新失败!: Editable block not exist, failed to update.
+'获取内容失败，不允许查询空编号所对应的内容!': 'Failed to retrieve conetent. Cannot query conent for an empty code.'
+此编辑区数据不存在，更新失败!: No data exist for this editable block, failed to update.
+评论不存在: Review not exist
+'无权限删除评论！': 'No permission to delete review.'
+不存在当前这种评论对象: Cannot reproduce this issue.
+评论课程失败，该课程不存在: Failed to post the review. Course not exist.
+'参数缺失，创建内容失败！': 'Missing parameter, failed to create the conent.'
+'内容标题不能为空，创建内容失败！': 'Subject cannot be empty, failed to create the conent.'
+'内容不存在，更新失败！': 'Content not exist, failed to update.'
+'该文件格式，不允许上传。': 'The file format is not allowed to upload.'
+用户尚未登录。: User not signed in.
+'只允许上传以下扩展名的文件：': 'Only following file formats are allowed: '
+'只运行上传JPG、PNG、GIF格式的图片文件。': 'Only JPG、PNG、GIF formats are allowed.'
+文件名为空，请给文件取个名吧。: Please name the file.
+'文件名超出了240个字符的限制，请重命名后再试。': 'File name cannot be more than 240 characters, please rename it.'
+'文件上传路径%directory%不可写，文件上传失败。': 'No write permission to upload folder %directory%. Upload file failed.'
+获取文件扩展名失败！: Failed to get the file extension.
+解析文件URI(%uri%)失败！: Failed to parse file URI (%uri%).
+'添加的字段有问题！': 'Invalid fields added.'
+邀请: Invitation
+'优惠码%code%不存在': 'Discount code %code% not exist.'
+'优惠码%code%已经被使用': 'Discount code %code% already been used.'
+'优惠码%code%已经被其他人领取': 'Discount code %code% already been taken by others.'
+'优惠码%code%已过期': 'Discount code %code% expired.'
+'优惠码%code%不可用': 'Discount code %code% not available'
+'%s字段不允许增减，只有%s才被允许增减': 'Field %s cannot be ajusted. Only field %s can be adjusted.'
+'未知类型,删除失败': 'Unknown type, failed to delete.'
+参数不对！: Invalid parameters
+用户%userNickName%不存在: User %userNickName% not exist
+课程%courseTitle%不存在: Course %courseTitle% not exist
+'用户已经是学员，不能添加！': 'The user is already a student, cannot be added again.'
+购买课程《%courseTitle%》: Buy course %courseTitle%
+'(管理员添加)': '(Added by Admin)'
+用户未登录，不能创建订单: User not signed in, cannot create order.
+订单数据缺失，创建课程订单失败。: Missing order data, failed to create course order.
+已经是课程学员，操作失败。: Operation failed because the user is already a student.
+课程不存在，操作失败。: Course not exist, Operation failed.
+'该课程需要实名认证，你还没有实名认证，不可购买。': 'This course requires the user to be real-name verified. You are not verified and cannot buy it.'
+创建课程订单失败！: Failed to create course order.
+'非课程订单，加入课程失败。': 'Not an course order, failed to join the course.'
+当前用户已经是课程学员，支付宝支付成功。: The user has already been added into the course. Payment by Alipay successfully.
+订单不存在，不能申请退款。: Order not exist, cannot refund it.
+'用户%nickname%申请退款<a href="%courseUrl%">%title%</a>课程，请审核。': 'User %nickname% request refund course <a href="%courseUrl%">%title%</a>, please review it.'
+订单不存在，取消退款申请失败。: Order not exist, failed to cancel refund request.
+'缺少必要字段，创建课程失败！': 'Missing required fields, failed to create the course.'
+课程不存在，更新失败！: Course not exist, failed to update it.
+参数不正确，更新计数器失败！: Invalid parameter, failed to update the counter.
+'课程不存在，图标更新失败！': 'Course not exist, failed to update icon.'
+推荐课程序号只能为数字！: The sequence of a recommended course must be digits.
+不能收藏未发布课程: Unpublished course cannot be bookmarked.
+'该课程不存在,收藏失败!': 'Course not exist. Failed to bookmark this course.'
+该收藏已经存在，请不要重复收藏!: You have already bookmarked it.
+'你未收藏本课程，取消收藏失败!': 'This course was not bookmarked, cannot unbookmark it.'
+课程%courseId%不存在: Course %courseId% not exist.
+货币类型不正确: Invalid currency type.
+'折扣活动#%discountId%不存在！': 'Discount #%discountId% not exist.'
+参数缺失，创建课时失败！: Missing parameters, failed to create lesson.
+'添加课时失败，课程ID为空。': 'Course ID is empty, failed to add lesson.'
+'添加课时失败，课程不存在。': 'Course not exist, failed to add lesson.'
+'课时类型不正确，添加失败！': 'Invalid lesson type, failed to save the lesson.'
+'media参数不正确，添加课时失败！': 'Invalid media, failed to save the lesson.'
+'media id参数不正确，添加/编辑课时失败！': 'Invalid media id, failed to save the lesson.'
+'文件不存在，添加/编辑课时失败！': 'File not exist, failed to save the lesson.'
+'media uri参数不正确，添加/编辑课时失败！': 'Invalid media uri，failed to save the lesson.'
+草稿不存在，更新失败！: Draft not exist, failed to update.
+'课程(#%courseId%)不存在！': 'Course #%courseId% not exist.'
+'课时#%lessonId%不存在': 'Lesson #%lessonId% not exist.'
+此课程不存在！: Course not exist
+'时长不能超过8小时！': 'Lesson length cannot be more than 8 hours'
+'该时段内已有直播课时存在，请调整直播开始时间': 'Other live session exists during this period, please change the start time.'
+'本课时需要%s学分才能学习，您当前学分为%s分。': 'This lesson requires %s credits to learn, you only have %s credits。'
+'课时#%lessonId%不存在！': 'Lesson #%lessonId% not exist.'
+'课时#%lessonId%尚未学习，取消学习失败。': 'Lesson #%lessonId% is not started, failed to cancel learning.'
+'课时#%lessonId%尚未学完，取消学习失败。': 'Lesson #%lessonId% is not finished, failed to cancel learning.'
+'章节类型不正确，添加失败！': 'Invalid chapter type, failed to save.'
 '章节#%chapterId%不存在！': '章节#%chapterId%不存在！'
 '章节(ID:%s)不存在，删除失败！': '章节(ID:%s)不存在，删除失败！'
 itemdIds参数不正确: itemdIds参数不正确
