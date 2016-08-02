@@ -19,8 +19,13 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="fileSize"]',
             required: true,
-            rule: 'integer',
+            rule: 'integer fileSize',
         });
+
+        Validator.addRule("fileSize", function(options) {
+            var element = $(options.element);
+            return element.val() <= 2 * 1024; 
+        }, "{{display}}不能超过2G");
     }
 
 });
