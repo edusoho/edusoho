@@ -111,9 +111,8 @@ class RoleServiceImpl extends BaseService implements RoleService
             return true;
         }
 
-        $tag = $this->getRoleDao()->getRoleByName($name);
-
-        return $tag ? false : true;
+        $role = $this->getRoleDao()->getRoleByName($name);
+        return $role ? false : true;
     }
 
     public function isRoleCodeAvalieable($code, $exclude = null)

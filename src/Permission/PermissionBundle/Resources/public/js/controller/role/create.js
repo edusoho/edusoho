@@ -45,13 +45,13 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#name',
             required: true,
-            rule: 'remote'
+            rule: 'byte_minlength{min:2} chinese_alphanumeric remote '
         });
 
         validator.addItem({
             element: '#code',
             required: true,
-            rule: 'remote alphanumeric'
+            rule: 'byte_minlength{min:2} alphanumeric remote'
         });
         
     };
