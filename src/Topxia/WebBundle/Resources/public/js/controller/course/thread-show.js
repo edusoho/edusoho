@@ -42,8 +42,10 @@ define(function(require, exports, module) {
                     $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
                     var id = $(html).appendTo('.thread-post-list').attr('id');
                     editor.setData('');
+                    //清除附件
                     $('.js-attachment-list').empty();
                     $('.js-attachment-ids').val("");
+                    
                     $form.find('[type=submit]').removeAttr('disabled');
 
                     window.location.href = '#' + id;
