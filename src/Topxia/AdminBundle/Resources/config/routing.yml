@@ -465,7 +465,6 @@ admin_course_chooser:
 admin_course_recommend_list:
     pattern: /course/recommend/list
     defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
-    permissions: [admin_course_recommend]
 
 admin_course_category:
     pattern: /course/category
