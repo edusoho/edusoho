@@ -71,10 +71,15 @@ define(function(require, exports, module) {
         });
 
         function fileUploaded(file) {
+            //移除文件
             esuploader.uploader.removeFile(file, true);
             $(".balloon-filelist ul >li").remove();
+            //隐藏modal框
             $("#modal").modal("hide");
+
+            //更新按钮状态
             if ($('.js-upload-file').length > 0) {
+                $('.js-upload-file').data('toggle','null'); 
                 $('.js-upload-file').html($('.js-upload-file').data('reuploadTitle')).removeClass('js-upload-file').addClass('js-reupload-file');
             }
         }
