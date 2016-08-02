@@ -97,12 +97,12 @@
 音质：: 'Audio quality'
 确定: OK
 我的%coin_name%: My %coin_name%
-我的现金账单: 'My cash orders'
+我的现金账单: 'Cash Orders'
 '我的邀请码': 'My invitation code'
-'收入：': Income
-'元': 'RMB Yuan'
-支出：: Expense
-流水号: 'Transaction Number'
+'收入：': 'Income '
+'元': ' RMB Yuan'
+支出：: 'Expense '
+流水号: 'Transaction Number '
 名称: Name
 成交时间: 'Transaction time'
 收支: Balance
@@ -144,10 +144,10 @@
 奖励获取时间: 'Rewarded date'
 '暂无邀请用户': 'No Invited users'
 '邀请码功能已关闭': 'Invitation code feature is off'
-账户中心: 'Account center'
-我的账户: 'My account'
-我的订单: 'My order'
-会员记录: 'VIP record'
+账户中心: 'Account Center'
+我的账户: 'My Account'
+我的订单: 'My Order'
+会员记录: 'VIP Record'
 分享邀请链接: 'Share invitation link'
 复制到剪贴板: 'Copy to clipboard'
 '由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功。': 'Since the trading method you choose for payment is "secured transactions"  please make a delivery confirmation on Alipay (the system have completed virtual delivery automatically), so that your payment will succeed.'
@@ -732,7 +732,7 @@ mp3: mp3
 '仅显示通过现金购买加入的学员退款记录': 'Only show refund history of students who enrolled via cash'
 '班级课程退款情况请在班级管理中查看': 'Please view the course refund  in Class Management Section'
 '无学员记录': 'NO Students'
-请填写: 'Please fill in'
+请填写: 'Please fill in '
 的备注信息: 'Notes for'
 '增加': Add
 课程有效期: 'Expiration date'
@@ -740,7 +740,7 @@ mp3: mp3
 '增加天数': 'Days Added'
 '课程不能增加': 'The course can''t be added'
 '有效期，请课程发布后再增加。': 'Please add the expiration dates for the course when it is published'
-个人主页: 'My homepage'
+个人主页: 'My Homepage'
 电话: 'Phone number'
 个人网站: 'Personal websites'
 学员管理: 'Student management'
@@ -825,7 +825,7 @@ mp3: mp3
 说：: Say
 正在直播: 'On live'
 更多直播: More
-在学课程: 'Learning courses'
+在学课程: 'Learning Courses'
 教师：%nickname%: Teacher：%nickname%
 完成%percent%: '%percent% done'
 名师风采: 'Teacher Info'
@@ -1117,18 +1117,18 @@ Email地址: 'Email address'
 来探索更多课程吧！: 'let`s explore more courses!'
 '我的网校': 'My online school'
 我的成长: 'My progress'
-在教课程: 'Teaching courses'
-所教%name%: 'teaching %name%'
+在教课程: 'Teaching Courses'
+所教%name%: 'Teaching %name%'
 教学资料库: 'data housewareis'
-我的课程: 'my courses'
-我的%name%: 'my %name%'
-我的直播课表: 'my live curriculum'
-我的问答: 'my Q&As'
-我的话题: 'my topics'
-我的笔记: 'my notes'
-我的作业: 'my homework'
-我的考试: 'my examination'
-我的任务: 'my task'
+我的课程: 'My Courses'
+我的%name%: 'My %name%'
+我的直播课表: 'My Live Lessons'
+我的问答: 'My Q&As'
+我的话题: 'My Topics'
+我的笔记: 'My Notes'
+我的作业: 'My Homework'
+我的考试: 'My Exam'
+我的任务: 'My Tasks'
 '暂无已收藏的课程': 'no favourite courses'
 已学完: 'learning complished'
 '暂无已学完的课程': 'no complished courses'
@@ -1590,7 +1590,7 @@ Email地址: 'Email address'
 '正在发送，请不要关闭当前窗口': 'the massages is sending, please do not close current window'
 '正在发送, 请稍等': 'the massages is sending, please wait.'
 发送完成: complete
-还没有动态: 'no lebel yet'
+还没有动态: 'No updates'
 '当前还没有标签': 'no tag now'
 '没有搜到相关课程，请换个标签试试！': 'No relative courses, please change another tag and try again！'
 '标签不存在，请重新输入！': 'The tag is not existed, please change anohter tag and try angin！'
@@ -1660,7 +1660,7 @@ Email地址: 'Email address'
 '视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。': 'videos will be uploaded to<strong> web server</strong>，if you need cloud-video, click <a href="http://open.edusoho.com/show/cloud/video" target="_blank"> here </a> know more information。'
 '暂无介绍': 'no introduction yet'
 还没有签名: 'no label yet'
-在学: studying
+在学: Learning
 粉丝: fans
 在学%classroom.name%: 'studying in %classroom.name%'
 '共%classroom.courseNum%门课程': 'have % classroom.courseNum% courses'
@@ -1677,11 +1677,11 @@ Email地址: 'Email address'
 '无关注的人': 'no follow'
 '无粉丝': 'no fans'
 管理小组: 'manage group'
-'暂无签名': 'no lebel'
-收藏的课程: 'collected courses'
-'关注/粉丝': follow/fans
-个人介绍: self-introduction
-在学%name%: 'studying %name%'
+'暂无签名': 'No signature'
+收藏的课程: 'Bookmarked Courses'
+'关注/粉丝': Followers/fans
+个人介绍: Introduction
+在学%name%: 'Learning %name%'
 抵价: 'trade in'
 打折: discount
 已领取: got
