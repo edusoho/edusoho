@@ -69,14 +69,15 @@ class TransGenerateCommand extends BaseCommand
 
         $addCount   = 0;
         $existCount = 0;
-
+        $newTrans = array();
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $existTrans)) {
                 $existCount++;
+                $newTrans[$keyword] = $existTrans[$keyword];
             } else {
                 $output->writeln(" - {$keyword} <info>... 新增</info>");
                 $addCount++;
-                $existTrans[$keyword] = $keyword;
+                $newTrans[$keyword] = $keyword;
             }
         }
 
@@ -84,8 +85,7 @@ class TransGenerateCommand extends BaseCommand
         $output->writeln('<question>END</question>');
 
         $yaml    = new Yaml();
-        $content = $yaml->dump($existTrans);
-
+        $content = $yaml->dump($newTrans);
         file_put_contents($tranFile, $content);
     }
 
