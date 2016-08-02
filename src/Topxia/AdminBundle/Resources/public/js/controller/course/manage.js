@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
     require('../widget/category-select').run('course');
+
 	exports.run = function(options) {
 		var $table = $('#course-table');
 		$table.on('click', '.cancel-recommend-course', function() {
@@ -23,10 +24,14 @@ define(function(require, exports, module) {
 
 		$table.on('click', '.publish-course', function() {
 			if (!confirm('您确认要发布此课程吗？')) return false;
-			$.post($(this).data('url'), function(html) {
-				var $tr = $(html);
-				$table.find('#' + $tr.attr('id')).replaceWith(html);
-				Notify.success('课程发布成功！');
+			$.post($(this).data('url'), function(response) {
+				if (response['message']) {
+					Notify.danger(response['message']);
+				} else {
+					var $tr = $(response);
+					$table.find('#' + $tr.attr('id')).replaceWith(response);
+					Notify.success('课程发布成功！');
+				}
 			});
 		});
 
@@ -56,6 +61,65 @@ define(function(require, exports, module) {
 		$table.on('click', '.copy-course[data-type="live"]', function(e) {
 			e.stopPropagation();
 		});
+
+		if($('#course_tags').length>0){
+			$('#course_tags').select2({
+	            ajax: {
+	                url: app.arguments.tagMatchUrl + '#',
+	                dataType: 'json',
+	                quietMillis: 100,
+	                data: function(term, page) {
+	                    return {
+	                        q: term,
+	                        page_limit: 10
+	                    };
+	                },
+	                results: function(data) {
+
+	                    var results = [];
+
+	                    $.each(data, function(index, item) {
+
+	                        results.push({
+	                            id: item.name,
+	                            name: item.name
+	                        });
+	                    });
+
+	                    return {
+	                        results: results
+	                    };
+
+	                }
+	            },
+	            initSelection: function(element, callback) {
+	                var data = [];
+	                $(element.val().split(",")).each(function() {
+	                    data.push({
+	                        id: this,
+	                        name: this
+	                    });
+	                });
+	                callback(data);
+	            },
+	            formatSelection: function(item) {
+	                return item.name;
+	            },
+	            formatResult: function(item) {
+	                return item.name;
+	            },
+	            width: 'off',
+	            multiple: true,
+	            maximumSelectionSize: 20,
+	            placeholder: "请输入标签",
+	            width: '162px',
+	            multiple: true,
+	            createSearchChoice: function() {
+	                return null;
+	            },
+	            maximumSelectionSize: 20
+	        });
+		}
 	};
 
 });

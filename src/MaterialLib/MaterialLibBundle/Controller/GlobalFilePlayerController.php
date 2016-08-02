@@ -4,8 +4,8 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class GlobalFilePlayerController extends BaseController
 {
@@ -161,8 +161,19 @@ class GlobalFilePlayerController extends BaseController
             'audio' => $file['directives']['audioQuality']
         );
 
-        $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
-        return $this->createJsonResponse($playlist);
+        $playlist = $api->get('/hls/playlist', array(
+            'streams'   => $streams,
+            'qualities' => $qualities
+        ));
+
+        if (empty($playlist['playlist'])) {
+            return $this->createMessageResponse('error', '生成视频播放列表失败！');
+        }
+
+        return new Response($playlist['playlist'], 200, array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+        ));
     }
 
     public function streamAction(Request $request, $globalId, $level, $token)

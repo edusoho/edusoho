@@ -37,11 +37,11 @@ abstract class BaseController extends Controller
     /**
      * 创建消息提示响应
      *
-     * @param  string     $type     消息类型：info, warning, error
-     * @param  string     $message  消息内容
-     * @param  string     $title    消息抬头
-     * @param  integer    $duration 消息显示持续的时间
-     * @param  string     $goto     消息跳转的页面
+     * @param  string $type 消息类型：info, warning, error
+     * @param  string $message 消息内容
+     * @param  string $title 消息抬头
+     * @param  integer $duration 消息显示持续的时间
+     * @param  string $goto 消息跳转的页面
      * @return Response
      */
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
@@ -152,7 +152,8 @@ abstract class BaseController extends Controller
 
         if (strpos($url[0], 'callback') !== false
             || strpos($url[0], '/login/bind') !== false
-            || strpos($url[0], 'crontab') !== false) {
+            || strpos($url[0], 'crontab') !== false
+        ) {
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
@@ -192,6 +193,60 @@ abstract class BaseController extends Controller
         });
     }
 
+    /**
+     * 判断是否微信内置浏览器访问
+     * @return bool
+     */
+    protected function isWxClient()
+    {
+        return $this->isMobileClient() && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
+    }
+
+    /**
+     * 是否移动端访问访问
+     *
+     * @return bool
+     */
+    protected function isMobileClient()
+    {
+        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+        if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
+            return true;
+        }
+
+        //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+        if (isset($_SERVER['HTTP_VIA'])) {
+            //找不到为flase,否则为true
+            return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+        }
+
+        //判断手机发送的客户端标志,兼容性有待提高
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $clientkeywords = array(
+                'nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
+                'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
+                'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
+                'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile'
+            );
+
+            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+            if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
+                return true;
+            }
+        }
+
+        //协议法，因为有可能不准确，放到最后判断
+        if (isset($_SERVER['HTTP_ACCEPT'])) {
+            // 如果只支持wml并且不支持html那一定是移动设备
+            // 如果支持wml和html但是wml在html之前则是移动设备
+            if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
@@ -206,21 +261,21 @@ abstract class BaseController extends Controller
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-    protected function fillOrgCode($conditions){
 
-        if($this->setting('magic.enable_org')){
-             if( !isset($conditions['orgCode'])){
-                $conditions['likeOrgCode'] =  $this->getCurrentUser()->getSelectOrgCode();
-             }else{
-                $conditions['likeOrgCode'] =  $conditions['orgCode'];
-                 unset($conditions['orgCode']); 
-             }
-        }else{
-             if(isset($conditions['orgCode'])){
-               unset($conditions['orgCode']); 
-             }
+    protected function fillOrgCode($conditions)
+    {
+        if ($this->setting('magic.enable_org')) {
+            if (!isset($conditions['orgCode'])) {
+                $conditions['likeOrgCode'] = $this->getCurrentUser()->getSelectOrgCode();
+            } else {
+                $conditions['likeOrgCode'] = $conditions['orgCode'];
+                unset($conditions['orgCode']);
+            }
+        } else {
+            if (isset($conditions['orgCode'])) {
+                unset($conditions['orgCode']);
+            }
         }
-
         return $conditions;
     }
 }

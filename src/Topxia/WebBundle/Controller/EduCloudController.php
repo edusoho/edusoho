@@ -22,7 +22,7 @@ class EduCloudController extends BaseController
             $smsType = $request->request->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
 
-            if ($smsType != 'sms_user_pay') {
+            if (!in_array($smsType, array('sms_user_pay', 'system_remind'))) {
                 $captchaNum = strtolower($request->request->get('captcha_num'));
 
                 if ($request->getSession()->get('captcha_code') != $captchaNum) {
@@ -97,6 +97,11 @@ class EduCloudController extends BaseController
                 $to = $user['verifiedMobile'];
             }
 
+            if ($smsType == 'system_remind') {
+                $to          = $request->request->get('to');
+                $description = '直播公开课';
+            }
+
             if (!$this->checkPhoneNum($to)) {
                 return $this->createJsonResponse(array('error' => "手机号错误:{$to}"));
             }
@@ -143,6 +148,12 @@ class EduCloudController extends BaseController
 
         if (strlen($request->query->get('value')) == 0 || strlen($targetSession['sms_code']) == 0) {
             $response = array('success' => false, 'message' => '验证码错误');
+        }
+
+        $mobile = $request->query->get('mobile') ? $request->query->get('mobile') : '';
+
+        if ($mobile != '' && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
+            return $this->createJsonResponse(array('success' => false, 'message' => '验证码和手机号码不匹配'));
         }
 
         if ($targetSession['sms_code'] == $request->query->get('value')) {
@@ -251,7 +262,7 @@ class EduCloudController extends BaseController
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'))) {
             throw new \RuntimeException('不存在的sms Type');
         }
 

@@ -3,7 +3,13 @@
 {% block title %}{{'文件移除'|trans}}{% endblock %}
 
 {% block body %}
-	<form id="material-delete-form" class="form-horizontal" method="post" action="{{ path('course_manage_delete_materials',{id:course.id}) }}" onsubmit="return false">
+
+  {% if course.type in ['open','liveOpen'] %}
+    {% set deleteUrl = path('open_course_manage_files_delete', {id:course.id}) %}
+  {% else %}
+    {% set deleteUrl = path('course_manage_delete_materials', {id:course.id}) %}
+  {% endif %}
+	<form id="material-delete-form" class="form-horizontal" method="post" action="{{ deleteUrl }}" onsubmit="return false">
 
     <div class="form-group">
       <div class="controls mll">

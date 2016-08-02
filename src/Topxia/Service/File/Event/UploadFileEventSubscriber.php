@@ -10,12 +10,15 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'        => 'onCourseDelete',
+            'course.delete'          => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete' => 'onCourseLessonDelete',
-            'course.material.create'      => 'onMaterialCreate',
-            'course.material.update'      => 'onMaterialUpdate',
-            'course.material.delete'      => 'onMaterialDelete'
+            'course.lesson.delete'   => 'onCourseLessonDelete',
+            'course.material.create' => 'onMaterialCreate',
+            'course.material.update' => 'onMaterialUpdate',
+            'course.material.delete' => 'onMaterialDelete',
+
+            'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
+            'open.course.delete'        => 'onOpenCourseDelete'
         );
     }
 
@@ -101,6 +104,33 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onOpenCourseLessonDelete(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $lesson   = $context['lesson'];
+
+        if (!empty($lesson['mediaId'])) {
+            $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
+        }
+    }
+
+    public function onOpenCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
+
+        if (!empty($lessons)) {
+            $fileIds = ArrayToolkit::column($lessons, "mediaId");
+
+            if (!empty($fileIds)) {
+                foreach ($fileIds as $fileId) {
+                    $this->getUploadFileService()->waveUploadFile($fileId, 'usedCount', -1);
+                }
+            }
+        }
+    }
+
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
@@ -109,5 +139,10 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
     }
 }

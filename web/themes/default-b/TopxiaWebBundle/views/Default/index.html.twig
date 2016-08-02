@@ -24,6 +24,20 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
+
+        {% set openCourses = data('OpenCourses',{ count:3, orderBy:'recommendedSeq' }) %}
+        {% if openCourses %}
+          <div class="es-box">
+            <div class="es-box-heading">
+              <h2>公开课</h2>
+              <a class="pull-right" href="{{ path('open_course_explore') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              {{ _self.open_course_grids(openCourses) }} 
+            </div>
+          </div>
+        {% endif %}
+
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           {% if classrooms %}
           <div class="es-box">
@@ -529,3 +543,60 @@
     <div class="empty">暂无课程。</div>
   {% endif %}
 {% endmacro %}
+
+{% macro open_course_grids(courses) %}
+  {% if courses %}
+    <ul class="course-grids clearfix">
+      {% for course in courses %}
+        {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+
+        <li class="course-grid">
+          <a href="{{ path('open_course_show', {courseId:course.id}) }}" class="grid-body">
+            {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive thumb', '') }}
+
+            {% if course.type == 'liveOpen' %}
+              {% if lessons and "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+                <span class="label label-warning series-mode-label">正在直播中</span>
+              {% else %}
+                <span class="label label-success series-mode-label">直播</span>
+              {% endif %}
+            {% endif %}
+
+            <span class="title">{{ course.title }}</span>
+
+              {#{% if course.type == 'liveOpen' and lessons %}
+                <span class="live-course-lesson metas">
+                  <span class="text-success mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
+                </span>
+              {% endif %}#}
+
+              <span class="metas clearfix">
+                <span class="text-muted mrm">
+                  <i class="es-icon es-icon-removeredeye mrs"></i>{{ course.hitNum }}
+                </span>
+                <span class="text-muted mrm">
+                  <i class="es-icon es-icon-thumbup mrs"></i>{{ course.likeNum }}
+                </span>
+                <span class="text-muted mrm">
+                  <i class="es-icon es-icon-textsms mrs"></i>{{ course.postNum }}
+                </span>
+              </span>
+
+            {% set user = users[course.teacherIds|first]|default(null) %}
+            {% if user %}
+              <span class="teacher clearfix">
+                <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="thumb">
+                <span class="nickname ellipsis">{{ user.nickname }}</span>
+                <span class="user-title ellipsis">{{ user.title }}</span>
+              </span>
+            {% endif %}
+
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">暂无课程。</div>
+  {% endif %}
+{% endmacro %}
+
