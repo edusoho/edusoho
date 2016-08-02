@@ -15,6 +15,7 @@ define(function(require, exports, module) {
             initUrl: $el.data('initUrl'),
             finishUrl: $el.data('finishUrl'),
             uploadAuthUrl: $el.data('uploadAuthUrl'),
+            fileSingleSizeLimit: $el.data('fileSingleSizeLimit'),
             multi: false,
         });
 

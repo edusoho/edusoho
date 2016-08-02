@@ -191,7 +191,7 @@
     }
 
   </style>
-
+{% set single_file_size = setting('cloud_attachment.fileSize') %}
   {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
   <div class="balloon-uploader" id="batch-uploader"
        data-init-url="{{ path('uploader_init', {token:token}) }}"
@@ -201,6 +201,7 @@
        data-process="{{ uploader_process(targetType) }}"
        data-ids-class="{{idsClass}}"
        data-list-class="{{listClass}}"
+       data-file-single-size-limit="{{ setting('cloud_attachment.fileSize',0) == 0  ? 2048 * 1024 * 1024 : setting('cloud_attachment.fileSize')*1024*1024  }}"
   >
     <div class="balloon-uploader-heading">上传文件</div>
     <div class="balloon-uploader-body">

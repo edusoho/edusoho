@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var filesize = require('filesize');
     var Widget = require('widget');
     var _ = require('underscore');
+    var Notify = require('common/bootstrap-notify');
 
     var BatchUploader = Widget.extend({
 
@@ -18,6 +19,7 @@ define(function(require, exports, module) {
             process: 'none',
             uploadToken: null,
             multi: true,
+            fileSingleSizeLimit: null,
             hookRegisted: false
         },
 
@@ -115,6 +117,7 @@ define(function(require, exports, module) {
 
                 dnd: this.element.find('.balloon-uploader-body'),
                 accept: accept,
+                fileSingleSizeLimit: this.get('fileSingleSizeLimit'),
 
                 // 不压缩image
                 resize: false,
@@ -135,7 +138,6 @@ define(function(require, exports, module) {
             if (!this.get('multi')) {
                 defaults['fileNumLimit'] = 1;
             }
-
             this._initUploaderHook();
             if ( !WebUploader.Uploader.support() ) {
                 alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
@@ -212,6 +214,7 @@ define(function(require, exports, module) {
             var $uploader = this.element;
             // 当有文件添加进来的时候
             uploader.on('fileQueued', function(file) {
+                console.log(file);
                 $uploader.find('.balloon-nofile').remove();
                 var $list =$uploader.find('.balloon-filelist ul');
 
@@ -236,7 +239,19 @@ define(function(require, exports, module) {
                 }
 
             });
-
+            uploader.on('error', function(handler){
+                switch(handler){
+                    case 'F_EXCEED_SIZE':
+                        Notify.danger('文件超出大小限制！');
+                        break;
+                    case 'Q_EXCEED_NUM_LIMIT':
+                        Notify.danger('文件超出上传数量限制！');
+                        break;
+                    case 'Q_TYPE_DENIED':
+                        Notify.danger('不支持该文件类型！');
+                        break;
+                }
+            });
             uploader.on('beforeFileQueued', function (file) {
                 file.uploaderWidget = self;
 
