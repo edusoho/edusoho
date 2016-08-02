@@ -197,7 +197,7 @@
        data-init-url="{{ path('uploader_init', {token:token}) }}"
        data-finish-url="{{ path('uploader_finished', {token:token}) }}"
        data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
-       data-accept="{{ uploader_accept(targetType)|json_encode }}"
+       data-accept="{{ uploader_accept('attachment')|json_encode }}"
        data-process="{{ uploader_process(targetType) }}"
        data-ids-class="{{idsClass}}"
        data-list-class="{{listClass}}"
