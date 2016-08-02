@@ -32,9 +32,9 @@ define(function(require, exports, module) {
                     var string = $form.attr('action');
                     
                     if (string.indexOf('edit') >= 0) {
-                        Notify.success('权限修改成功!');
+                        Notify.success('角色修改成功!');
                     } else{
-                        Notify.success('权限添加成功!');
+                        Notify.success('角色添加成功!');
                     }
                     window.location.reload();
                 });

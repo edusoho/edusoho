@@ -94,7 +94,6 @@ class PermissionBuilder
             $this->cached['getPermissionByCode'] = array();
         }
         $this->cached['getPermissionByCode'][$code] = $menus[$code];
-
         return $menus[$code];
     }
 
