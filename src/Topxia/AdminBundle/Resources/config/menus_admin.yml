@@ -37,10 +37,6 @@ admin:
                                     name: '添加新用户'
                                     mode: modal
                                     group: topBtn
-                                admin_user_export:
-                                    name: '导出搜索结果'
-                                    mode: modal
-                                    group: none
                                 admin_user_edit:
                                     name: '编辑用户信息'
                                     mode: modal
