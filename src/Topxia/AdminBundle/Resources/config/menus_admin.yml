@@ -241,7 +241,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
-                                    visable: (course.status != 'published' and app.user.isSuperAdmin())
+                                    visable: ( course.status in ['closed', 'draft'])
                         admin_course_recommend_list:
                             name: 课程推荐
                         admin_course_data:
