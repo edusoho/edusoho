@@ -181,7 +181,7 @@ admin:
                                     router_params:
                                         id: (course.id)
                                     group: groupButton
-                                    visable: ( filter == 'normal' and not course.type == 'live' )
+                                    visable: ( course.type == 'normal' and course.parentId == 0 )
                                     icon: 'glyphicon glyphicon-plus-sign'
                                     mode: modal
                                 admin_course_guest_member_preview:
@@ -228,6 +228,7 @@ admin:
                                         id: (course.id)
                                         filter: (filter)
                                     group: groupButton
+                                    class: publish-course
                                     icon: 'glyphicon glyphicon-ok-circle'
                                     mode: none
                                     visable: (course.status != 'published')
