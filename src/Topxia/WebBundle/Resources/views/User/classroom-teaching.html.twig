@@ -23,7 +23,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty">{{'无在教的%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}！</div>
+    <div class="empty">{{'无在教的%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
   {% endif %}
 
   {{ web_macro.paginator(paginator) }}
