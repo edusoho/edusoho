@@ -129,7 +129,7 @@ admin:
                                 approvalStatus: approving
                             children:
                                 admin_approval_cancel:
-                                    name: 审核
+                                    name: 撤销
                                     router_params:
                                         id: (user.id)
                                     class: 'btn cancel-approval'

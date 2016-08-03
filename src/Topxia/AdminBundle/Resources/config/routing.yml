@@ -1302,7 +1302,7 @@ admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
     methods:  [POST]
-    permissions: [admin_approval_approvals]
+    permissions: [admin_approval_cancel]
 
 show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
