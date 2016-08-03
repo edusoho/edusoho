@@ -147,7 +147,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isAdmin()
     {
-        if (!empty($this->getPermissions()) && in_array('admin', array_keys($this->getPermissions()))) {
+        $permissions = $this->getPermissions();
+        if (!empty($permissions) && in_array('admin', array_keys($permissions))) {
             return true;
         }
 
@@ -165,7 +166,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isTeacher()
     {
-        return in_array('web', array_keys($this->getPermissions()));
+        $permissions = $this->getPermissions();
+        return in_array('web', array_keys($permissions));
     }
 
     public function getCurrentOrgId()
