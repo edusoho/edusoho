@@ -106,8 +106,8 @@
 名称: Name
 成交时间: 'Transaction time'
 收支: Balance
-支付方式: 'Payment method'
-订单号：: 'Order number'
+支付方式: 'Payment Method'
+订单号：: 'Order Number'
 '网校支付': 'Platform payment'
 '暂无记录': 'No record'
 '兑换': Redeem
@@ -206,7 +206,7 @@
 发表于%createdTime%: 'Published at %createdTime%'
 发送系统通知给该课程的%user.name%: 'Send a system notice to %user.name% in the course'
 课程存档: 'Archived courses'
-教师：: Instructor
+教师：: Teacher
 '目前暂时无课程': 'No courses have been found.'
 简介: 'Introduction'
 '课程目标': 'Goals'
@@ -301,7 +301,7 @@
 '当前课时正在编辑中，暂时无法观看。': 'The current course in not accessible while being edited'
 学过了: Learned
 扫一扫: 'QR scan'
-'扫二维码继续学习': 'Scan the QR code to resume the course'
+'扫二维码继续学习': 'Scan QR code to resume the course'
 '学习进度提示': 'Notice for learning progress'
 '赞一个，这个课程你已经都学完啦，你可以再回顾一下或者去看看别的课程': 'Well done! You have completed the course. You can review the course or check out other courses.'
 回课程主页: 'Back to course home page'
@@ -326,18 +326,18 @@
 请联系客服: 'Please contact customer service'
 购买课程: 'Buy the course'
 该课程属于: 'This course is of'
-首页: Homepage
+首页: Home
 '您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。': 'Your refund request was submitted. Please wait for proccessing. Courses are not accessible during the refund proccess'
 '取消退款，继续学习！': 'Cancel the refund and resume course.'
-完成课时：: 'completed lesson：'
-下一课时：: 'Next lesson：'
+完成课时：: 'Lessons completed: '
+下一课时：: 'Next lesson: '
 组合购买课程不能退出: You cannot quit a combined course
 推荐%name%: Recommended %name%
 会员: VIP
 '免费学': Free
 '<a href="%href%" target="_blank">升级会员</a>': 'Upgrade VIP'
 '<a href="%href%" target="_blank">加入会员</a>': 'Become a VIP'
-有效期: 'Expiration date'
+有效期: 'Expire After'
 '您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击': 'The course you bought has expired ,you can not learn a lesson or post a question. If you have any questions please contact the teacher or just click '
 天: Day
 原价: 'Original price'
@@ -355,8 +355,8 @@
 概览: Overview
 最新学员: Newcommer
 '暂无学员': 'No student'
-授课教师: Instructor
-'暂无教师': 'No instructor'
+授课教师: Teacher
+'暂无教师': 'No Teacher'
 发话题: 'Start a topic'
 提问题: 'Ask a question'
 问答: 'Q&A'
@@ -539,16 +539,16 @@ mp3: mp3
 '上传Flash': 'Upload flash file'
 'Flash将上传到': 'Upload flash files to'
 '暂无Flash，请先上传。': 'No flash  file ,please upload'
-基本信息: 'Basic info'
-'副标题': Subtittile
+基本信息: 'Basic Info'
+'副标题': Subtitle
 '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理': 'Used for course search by tags and unified management by the administrator'
 直播最大%user_name%数: Capacity
-'设置该值后，%user_name%只能在有效期内进行课程的相关操作，统默认会在到期前10天提醒。该值为0，则不做此限制。': 'After this value is set, %user_name%  can only make related operations within the valid period.By default the system will alert within 10 days before the expiration;If the value is 0,then there is no such limitations'
+'设置该值后，%user_name%只能在有效期内进行课程的相关操作，统默认会在到期前10天提醒。该值为0，则不做此限制。': 'After this value is set, %user_name% can only operate within the valid period. By default the system will inform the user 10 days before the expiration. If the value is 0, then there is no expiration date.'
 连载状态: 'To be continued'
 视频观看时间限制: 'Time limit'
 倍单视频总时长: 'Video duration'
 0表示不限制。: '0 means no limitations'
-实名认证: 'Real-name authentication'
+实名认证: 'Real-name verification'
 '设置该值后，学员购买课程前，必须先去申请实名认证。': 'After the value has been set ,users must complete the real-name authentication to buy a course'
 直播“桌面分享”插件下载: 'Download plugin for live "Desktop Sharing"'
 '添加选择题': 'Add Multiple Choice'
@@ -569,11 +569,11 @@ mp3: mp3
 课程图片: Image
 录播管理: 'Recorded course management'
 课程设置: Settings
-'价格设置': 'Price settings'
-教师设置: 'Instructor settings'
-管理: Management
+'价格设置': 'Price Settings'
+教师设置: 'Teacher Settings'
+管理: ' Management'
 题库: 'Exam library'
-题目管理: Management
+题目管理: Quiz Management
 '题目导入/导出': Import/Export
 试卷管理: 'Test paper management'
 '试卷批阅': 'Paper marking'
@@ -617,7 +617,7 @@ mp3: mp3
 分钟: Mins
 '抱歉，您无权设置课程价格，如有需要请联系网站管理员！': 'Sorry, you have no right to set the price of the course, if necessary, please contact the Administrator!'
 '已添加教师': 'Teachers Added'
-'只能添加有教师权限的用户': 'Can only add users who are also authorized teachers'
+'只能添加有教师权限的用户': 'Can only add users who are verified teachers.'
 课时未发布，不能下载该资料: 'Unable to download the files since the course is not started'
 网络链接资料: 'Internet refrence links'
 课时%number%: Lesson%number%
@@ -1142,14 +1142,14 @@ Email地址: 'Email address'
 《%title%》的笔记: 'notes of 《%title%》'
 课时%number%：%title%: '%number% classes:'
 '该课时已删除': 'the lesson has been deleted'
-'共%length%字': '…words in total'
-'删除笔记': 'delete notes'
-'订单详情': 'order detail'
-订单号: 'order number'
-订单状态: 'order status'
+'共%length%字': ' words in total'
+'删除笔记': 'Delete Note'
+'订单详情': 'Order Details'
+订单号: 'Order Number'
+订单状态: 'Order Status'
 申请退款: 'application for refund'
-订单名称: 'order name'
-'订单价格': 'order price'
+订单名称: 'Order Name'
+'订单价格': 'Order Price'
 '优惠码': 'coupon code'
 '优惠金额': 'discount amount'
 虚拟币支付: 'Virtual currency payment'
@@ -1232,7 +1232,7 @@ Email地址: 'Email address'
 在资讯: 'in info'
 '的回复中提到了你。': 'mentioned you in reply'
 '的回复了你。': 'replied you'
-'详情': details
+'详情': Details
 日志: log
 订单确认: 'order confirmation'
 订单支付: 'order payment'
@@ -1444,15 +1444,15 @@ Email地址: 'Email address'
 '注册确认信已经发到你的邮箱': 'confirmation letter has been sent to your email'
 '，你需要点击邮件中的确认链接来完成邮箱验证。': 'you need to click the confirm button to complish email verification'
 重新评价: reevaluate
-请打分：: 'please score against …'
-'评价详细内容': 'details of the evaluation'
-评价已保存！: 'evalutation has been saved'
-'收起全文': 'fold the whole text'
-'暂无评价': 'no evaluate on...'
-搜索结果: 'search result'
-'常用关键词': 'frequently used keywords'
-搜索：: 'search:'
-可搜索课程、教师、话题、资讯: 'searchable courses\teachers\topics\info'
+请打分：: 'Please rate this course.'
+'评价详细内容': 'details of your review'
+评价已保存！: 'Your review has been saved'
+'收起全文': 'Collapse the whole text'
+'暂无评价': 'No review'
+搜索结果: 'Search result'
+'常用关键词': 'Frequently used keywords'
+搜索：: 'Search: '
+可搜索课程、教师、话题、资讯: 'Search by courses\teachers\topics\info'
 教师: teacher
 小组话题: 'group topic'
 资讯: information
@@ -1575,7 +1575,7 @@ Email地址: 'Email address'
 短信推送: 'Send massage'
 发送对象: 'send object'
 '%classroom.name%内': 'in %classroom.name%'
-用户: user
+用户: User
 预计发送量: 'Expected massages sending volume'
 条: 'the number of'
 '发送内容': text
@@ -1752,14 +1752,14 @@ PPT: PPT
 网站邮箱注册: 'email register'
 网站手机注册: 'phone number register'
 '手动导入': 'Manual import'
-人人连接: 'renren login'
+人人连接: 'Renren login'
 QQ登录: 'QQ login'
-简单: easy
-一般: general
-困难: difficult
-班级: class
+简单: Easy
+一般: Normal
+困难: Difficult
+班级: Class
 组合: Combination
-开启: open
+开启: On
 '你的父母名字': 'father''s name'
 '你的老师名字': 'teacher''s name'
 '你的爱人的名字': 'lover''s name'
@@ -1770,10 +1770,10 @@ QQ登录: 'QQ login'
 限时打折: 'time-limited discounting'
 '限时免费': 'time-limited free'
 '全站打折': 'All website discounting'
-已通过: approved
-未通过: disapproved
-'待审核': 'wait for review'
-编辑中: editing
+已通过: Approved
+未通过: Rejected
+'待审核': 'Waiting for review'
+编辑中: Editing
 作业快速批改: 'quick checking'
 '试卷阅卷': 'Examination paper marking'
 教师答疑: 'Question answering'
@@ -2166,10 +2166,10 @@ Firefox浏览器: Firefox
 '加入学习失败，请联系管理员！': 'Failed to join the course. Please contact the administrator.'
 发表回复失败，请重试: 'Failed to post the reply. Please try again.'
 '您真的要删除该回帖吗？': 'Are you determined to delete the reply?'
-'请输入标签': 'Please enter the label'
+'请输入标签': 'Please input tags'
 '网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。': 'The site support maximum %capacity% people in live class at the same time. You can set a bigger number, but may cause some student can not enter the live class when fulled.'
-信息已保存: 'infomation saved'
-'添加成功': 'add succeed'
+信息已保存: 'Infomation saved'
+'添加成功': 'Added successfully'
 您真的要发布该课程吗？: 'Are you determined to publish the course?'
 '请选择或上传%display%文件': 'Please select or upload %display% file'
 '时长格式不正确': 'Incorret format of time length'
@@ -2418,7 +2418,7 @@ Firefox浏览器: Firefox
 ！: ！
 '%chapter_name%': '%chapter_name%'
 '%part_name%': '%part_name%'
-人: persons
+人: ' persons'
 还有: and
 所属%name%: in %name%
 '%discount%折': '%discount% off'
@@ -2897,306 +2897,306 @@ IN查询的值需为数组.: The value of SQL IN clause needs to be an array.
 '课时#%lessonId%尚未学习，取消学习失败。': 'Lesson #%lessonId% is not started, failed to cancel learning.'
 '课时#%lessonId%尚未学完，取消学习失败。': 'Lesson #%lessonId% is not finished, failed to cancel learning.'
 '章节类型不正确，添加失败！': 'Invalid chapter type, failed to save.'
-'章节#%chapterId%不存在！': '章节#%chapterId%不存在！'
-'章节(ID:%s)不存在，删除失败！': '章节(ID:%s)不存在，删除失败！'
-itemdIds参数不正确: itemdIds参数不正确
-'教师ID不能为空，设置课程(#%courseId%)教师失败': '教师ID不能为空，设置课程(#%courseId%)教师失败'
-'用户不存在或没有教师角色，设置课程(#%courseId%)教师失败': '用户不存在或没有教师角色，设置课程(#%courseId%)教师失败'
-课程学员不存在，备注失败!: 课程学员不存在，备注失败!
-'不能加入未发布课程': '不能加入未发布课程'
-'用户(#%userId%)不存在，加入课程失败！': '用户(#%userId%)不存在，加入课程失败！'
-'用户(#%userId%)已加入该课程！': '用户(#%userId%)已加入该课程！'
-'用户(#%userId%)不能以会员身份加入课程！': '用户(#%userId%)不能以会员身份加入课程！'
-'订单(#%orderId%})不存在，加入课程失败！': '订单(#%orderId%})不存在，加入课程失败！'
-'课程(#%courseId%)不存在，退出课程失败。': '课程(#%courseId%)不存在，退出课程失败。'
-'用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。': '用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。'
-'课程(#%courseId%)不存在，封锁学员失败。': '课程(#%courseId%)不存在，封锁学员失败。'
-'用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。': '用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。'
-'用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。': '用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。'
-'未登录用户，无权操作！': '未登录用户，无权操作！'
-'您不是课程的教师或管理员，无权操作！': '您不是课程的教师或管理员，无权操作！'
-'您不是管理员，无权操作！': '您不是管理员，无权操作！'
-您尚未登录用户，请登录后再查看！: 您尚未登录用户，请登录后再查看！
-'您不是课程学员，不能查看课程内容，请先购买课程！': '您不是课程学员，不能查看课程内容，请先购买课程！'
-'course, member参数不能为空': 'course, member参数不能为空'
-'您不是课程学员，不能学习！': '您不是课程学员，不能学习！'
-录播回放: 录播回放
-录播回放不存在，更新失败！: 录播回放不存在，更新失败！
-直播课时不存在，更新失败！: 直播课时不存在，更新失败！
-'参数缺失，上传失败！': '参数缺失，上传失败！'
-'课程资料不存在，删除失败。': '课程资料不存在，删除失败。'
-keywordType参数不正确: keywordType参数不正确
-'缺少必要的字段，保存笔记失败': '缺少必要的字段，保存笔记失败'
-课时不存在，保存笔记失败: 课时不存在，保存笔记失败
-'笔记(#%id%)不存在，删除失败': '笔记(#%id%)不存在，删除失败'
-'你没有权限删除笔记(#%id%)': '你没有权限删除笔记(#%id%)'
-'笔记不存在，或已删除。': '笔记不存在，或已删除。'
-不可重复对一条笔记点赞！: 不可重复对一条笔记点赞！
-参数不正确，评价失败！: 参数不正确，评价失败！
-'课程(#%fieldsCourseId%)不存在，评价失败！': '课程(#%fieldsCourseId%)不存在，评价失败！'
-'用户(#%fieldsUserId%)不存在,评价失败!': '用户(#%fieldsUserId%)不存在,评价失败!'
-'评价(#%id%)不存在，删除失败！': '评价(#%id%)不存在，删除失败！'
-发帖次数过多，请稍候尝试。: 发帖次数过多，请稍候尝试。
-话题不存在，更新失败！: 话题不存在，更新失败！
-参数缺失，更新失败。: 参数缺失，更新失败。
-'话题(ID: %s)不存在。': '话题(ID: %s)不存在。'
-'您无权限删除该话题': '您无权限删除该话题'
-'课程(ID: %s)话题(ID: %s)不存在。': '课程(ID: %s)话题(ID: %s)不存在。'
-'回帖#%id%不存在。': '回帖#%id%不存在。'
-参数缺失。: 参数缺失。
-'帖子(#%s)不存在，删除失败。': '帖子(#%s)不存在，删除失败。'
-'帖子#%s不属于课程#%s，删除失败。': '帖子#%s不属于课程#%s，删除失败。'
-'转码类型不存在': '转码类型不存在'
-'参数缺失，添加用户文件失败!': '参数缺失，添加用户文件失败!'
+'章节#%chapterId%不存在！': 'Chapter #%chapterId% doesn''t exist.'
+'章节(ID:%s)不存在，删除失败！': 'Chapter(ID:%s)delete failed because it dosen''t exist.'
+itemdIds参数不正确: Invalid parameter itemdIds
+'教师ID不能为空，设置课程(#%courseId%)教师失败': 'Setting teacher for course (#%courseId%) failed since teacher ID cannot be empty'
+'用户不存在或没有教师角色，设置课程(#%courseId%)教师失败': 'Setting teacher for course (#%courseId%) failed since user dosen''t exist or there is no teacher role'
+课程学员不存在，备注失败!: Note added failed, students of the course dosen''t exist.
+'不能加入未发布课程': 'Unpublished courses can not be added.'
+'用户(#%userId%)不存在，加入课程失败！': 'Course added failed since user(#%userId%)dosen''t exist.'
+'用户(#%userId%)已加入该课程！': 'This course has been added by the user (#%userId%)！'
+'用户(#%userId%)不能以会员身份加入课程！': 'User (#%userId%) cannot add the course as a member！'
+'订单(#%orderId%})不存在，加入课程失败！': 'Course added failed,order(#%orderId%})dosen''t exist！'
+'课程(#%courseId%)不存在，退出课程失败。': 'Unable to quit the course because course(#%courseId%)dosen''t exist'
+'用户(#%userId%)不是课程(#%courseId%)的学员，退出课程失败。': 'User (#%userId%)is not a menmber of course (#%courseId%), Unable to quit'
+'课程(#%courseId%)不存在，封锁学员失败。': 'Unable to block students because course(#%courseId%)dosen''t exist'
+'用户(#%userId%)不是课程(#%courseId%)的学员，封锁学员失败。': 'Unable to block students because user (#%userId%)is not a menmber of course (#%courseId%)'
+'用户(#%userId%)不是课程(#%courseId%)的学员，解封学员失败。': 'Unable to unblock students because user (#%userId%)is not a menmber of course (#%courseId%).'
+'未登录用户，无权操作！': 'Cannot make any operations please sign in！'
+'您不是课程的教师或管理员，无权操作！': 'Cannot make any operations because you are not a teacher or administrator of the course'
+'您不是管理员，无权操作！': 'Cannot make any operations because you are not an administrator'
+您尚未登录用户，请登录后再查看！:  Check it out after signing in！
+'您不是课程学员，不能查看课程内容，请先购买课程！': 'Cannot view the course because you are not a member,please buy the course first！'
+'course, member参数不能为空': 'Parameters for course, member cannot be empty'
+'您不是课程学员，不能学习！': 'Cannot enroll the course because you are not a menmber ！'
+录播回放: Playback
+录播回放不存在，更新失败！: 'Update failed because the Playback dosen''t exist！'
+直播课时不存在，更新失败！: 'Update failed because the live course session dosen''t exist！'
+'参数缺失，上传失败！': 'Upload failed ,Parameters no completed！'
+'课程资料不存在，删除失败。': 'Unable to delete the course ,course materials dosen''t exist'
+keywordType参数不正确: keywordType parameter is not correct
+'缺少必要的字段，保存笔记失败': 'Save failed ,Missing required strings for the note'
+课时不存在，保存笔记失败: 'Unable to save the note because the lesson dosen''t exit'
+'笔记(#%id%)不存在，删除失败': 'Unable to delete, note(#%id%)dosen''t exist'
+'你没有权限删除笔记(#%id%)': 'You have no permission to delete the note(#%id%)'
+'笔记不存在，或已删除。': 'The note dosen''t exist or has been deleted'
+不可重复对一条笔记点赞！: You have already favorited the note！
+参数不正确，评价失败！: Comment failed ,Parameters error！
+'课程(#%fieldsCourseId%)不存在，评价失败！': 'Unable to comment ,the coures(#%fieldsCourseId%)dosen''t exist！'
+'用户(#%fieldsUserId%)不存在,评价失败!': 'Unable to comment the user (#%fieldsUserId%)dosen''t exist!'
+'评价(#%id%)不存在，删除失败！': 'Unable to delete the comment(#%id%)it dosen''t exist！'
+发帖次数过多，请稍候尝试。: Posting too often, Please try again later.
+话题不存在，更新失败！: 'Update failed ,the topic dosen''t exist！'
+参数缺失，更新失败。: Update failed ,parameter error
+'话题(ID: %s)不存在。' :  'Topic (ID: %s)dosen''t exist'
+'您无权限删除该话题': 'You have no permission to delete the topic'
+'课程(ID: %s)话题(ID: %s)不存在。': 'The topic (ID: %s)in the coures(ID: %s)dosen''t exist'
+'回帖#%id%不存在。': 'Reply #%id% dosen''t exist'
+参数缺失。: Parameters missing.
+'帖子(#%s)不存在，删除失败。': 'Post (#%s)dosen''t exist ,Unable to delete'
+'帖子#%s不属于课程#%s，删除失败。': 'The post #%s dose not belongs to the course#%s，Cannot be deleted'
+'转码类型不存在': 'The transcoding type dosen''t exist'
+'参数缺失，添加用户文件失败!': 'Parameters incomplete,failed to add files!'
 '文件不存在(global id: #%globalId%)，完成上传失败！': '文件不存在(global id: #%globalId%)，完成上传失败！'
-本地文件暂不支持转换: 本地文件暂不支持转换
-文件不存在，不能下载！: 文件不存在，不能下载！
-'用户未登录，上传初始化失败！': '用户未登录，上传初始化失败！'
+本地文件暂不支持转换: Local files conversion are temporarily not supported
+文件不存在，不能下载！: 'Cannot download ,the file dosen''t exist！'
+'用户未登录，上传初始化失败！': 'Upload initialization failed,user is not logged in!'
 'uploadFile失败，完成上传失败！': 'uploadFile失败，完成上传失败！'
-'文件(#%id%)所属的课程已删除。': '文件(#%id%)所属的课程已删除。'
-字段对应用户数据重复: 字段对应用户数据重复
-第%row%行为空行，已跳过: 第%row%行为空行，已跳过
-'第%col%列重复:': '第%col%列重复:'
-'第%row%行    %key%': '第%row%行    %key%'
+'文件(#%id%)所属的课程已删除。': 'The course(#%id%)which the file belongs to is deleted'
+字段对应用户数据重复: String field corresponds to the user data are duplicated
+第%row%行为空行，已跳过: Row number %row% is empty ,has been stepped
+'第%col%列重复:': 'Column number %col% is duplicated:'
+'第%row%行    %key%': 'Row number %row%   %key%'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
-'第%row%行组织机编码为%orgCode%的组织机构不存在，请检查。': '第%row%行组织机编码为%orgCode%的组织机构不存在，请检查。'
-第%row%行课程号为的%courseId%的课程未发布，请检查。: 第%row%行课程号为的%courseId%的课程未发布，请检查。
-'第%row%行课程号为的%courseId%的课程课程属于班级课程,无法加入': '第%row%行课程号为的%courseId%的课程课程属于班级课程,无法加入'
-第%row%行课程号为的%courseId%的课程不存在，请检查。: 第%row%行课程号为的%courseId%的课程不存在，请检查。
-第%row%行的用户已存在，已略过: 第%row%行的用户已存在，已略过
-第%row%行的用户已存在，将会更新: 第%row%行的用户已存在，将会更新
-'根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。': '根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。'
-'根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。': '根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。'
-'根据网校当前注册模式，第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。': '根据网校当前注册模式，第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。'
-'根据网校当前注册模式，第 %row%行%email% 列 的数据不能为空，请检查。': '根据网校当前注册模式，第 %row%行%email% 列 的数据不能为空，请检查。'
-'根据网校当前注册模式，第 %row%行%mobile% 列 的数据不能为空，请检查。': '根据网校当前注册模式，第 %row%行%mobile% 列 的数据不能为空，请检查。'
-'第 %row%行%email% 列 的数据存在问题，请检查。': '第 %row%行%email% 列 的数据存在问题，请检查。'
-'第 %row%行%mobile% 列 的数据存在问题，请检查。': '第 %row%行%mobile% 列 的数据存在问题，请检查。'
-'第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。': '第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。'
-更新驻点时间不存在: 更新驻点时间不存在
-'批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！': '批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！'
-'您的一张价值为%batch%%coin_name%的学习卡已经被管理员启用。': '您的一张价值为%batch%%coin_name%的学习卡已经被管理员启用。'
-'您的一张价值为%batch%%coin_name%的学习卡已经被管理员删除，详情请联系管理员。': '您的一张价值为%batch%%coin_name%的学习卡已经被管理员删除，详情请联系管理员。'
-批次不存在，作废失败！: 批次不存在，作废失败！
-'作废了批次为%id%的充值卡': '作废了批次为%id%的充值卡'
-'学习卡批次不存在或已被删除': '学习卡批次不存在或已被删除'
-'删除了批次为%id%的充值卡': '删除了批次为%id%的充值卡'
-'订单(%sn%)的金额(%amount%)与实际支付的金额(%payData%)不一致，支付失败。': '订单(%sn%)的金额(%amount%)与实际支付的金额(%payData%)不一致，支付失败。'
-'当前订单(#%id%)退款记录不存在，不能进行确认退款操作': '当前订单(#%id%)退款记录不存在，不能进行确认退款操作'
-'当前订单(#%id%)退款记录状态下，不能进行确认退款操作款': '当前订单(#%id%)退款记录状态下，不能进行确认退款操作款'
-'订单(#%id%)不存在，取消退款失败': '订单(#%id%)不存在，取消退款失败'
-'用户未登录，订单(#%id%)取消退款失败': '用户未登录，订单(#%id%)取消退款失败'
-'订单(#%id%)，你无权限取消退款': '订单(#%id%)，你无权限取消退款'
-'当前订单(#%id%)状态下，不能取消退款': '当前订单(#%id%)状态下，不能取消退款'
-'当前订单(#%id%)退款记录不存在，不能取消退款': '当前订单(#%id%)退款记录不存在，不能取消退款'
-更新订单失败：订单不存在。: 更新订单失败：订单不存在。
-更新订单失败：支付流水号不存在。: 更新订单失败：支付流水号不存在。
-'支付密码不正确，创建订单失败!': '支付密码不正确，创建订单失败!'
-该班级不可购买，如有需要，请联系客服: 该班级不可购买，如有需要，请联系客服
-该%name%不可购买，如有需要，请联系客服: 该%name%不可购买，如有需要，请联系客服
-班级中还未设置课程，请联系管理员!: 班级中还未设置课程，请联系管理员!
-该课程不可购买，如有需要，请联系客服: 该课程不可购买，如有需要，请联系客服
-'不能加入未发布课程!': '不能加入未发布课程!'
-'名额已满，不能加入!': '名额已满，不能加入!'
-订单数据缺失，创建会员订单失败。: 订单数据缺失，创建会员订单失败。
-购买类型不正确，创建会员订单失败。: 购买类型不正确，创建会员订单失败。
-会员开通时长不正确，创建会员订单失败。: 会员开通时长不正确，创建会员订单失败。
-付费方式不正确，创建会员订单失败。: 付费方式不正确，创建会员订单失败。
-会员等级不存在，创建会员订单失败。: 会员等级不存在，创建会员订单失败。
-'会员等级已关闭，创建会员订单失败。': '会员等级已关闭，创建会员订单失败。'
-'升级会员到 %level%': '升级会员到 %level%'
-'您已经成功加入 %level% ，点击查看': '您已经成功加入 %level% ，点击查看'
-'您的 %level% 已成功续费，当前的有效期至：': '您的 %level% 已成功续费，当前的有效期至：'
-'您已经升级到 %level% ，点击查看': '您已经升级到 %level% ，点击查看'
-余额不足扣款不成功: 余额不足扣款不成功
-'缺少必要参数，添加类别失败': '缺少必要参数，添加类别失败'
-'缺少必要参数，更新类别失败': '缺少必要参数，更新类别失败'
-'该问题没有答案或答案格式不正确！': '该问题没有答案或答案格式不正确！'
-用户不存在.: 用户不存在.
-今日已签到!: 今日已签到!
-《%paperName%》试卷: 《%paperName%》试卷
-'试卷批阅提醒': '试卷批阅提醒'
-成功回执: 成功回执
-发送失败！: 发送失败！
-'云短信相关设置未开启!': '云短信相关设置未开启!'
-对: 对
-发送用于%Type%的通知短信: 发送用于%Type%的通知短信
-课时不存在: 课时不存在
-课时：: 课时：
-课程：: 课程：
-预告: 预告
-短信类型不存在: 短信类型不存在
-任务类型不存在不存在: 任务类型不存在不存在
-'分类Group #%id%，不存在': '分类Group #%id%，不存在'
-'分类Group #%code%，不存在': '分类Group #%code%，不存在'
-'缺少必要参数，，添加分类失败': '缺少必要参数，，添加分类失败'
-'分类(#%id%)不存在，更新分类失败！': '分类(#%id%)不存在，更新分类失败！'
-参数不正确，更新分类失败！: 参数不正确，更新分类失败！
-名称不能为空，保存分类失败: 名称不能为空，保存分类失败
-'编码不能为空，保存分类失败': '编码不能为空，保存分类失败'
-'编码(%code%)含有非法字符，保存分类失败': '编码(%code%)含有非法字符，保存分类失败'
-'编码(%code%)不能全为数字，保存分类失败': '编码(%code%)不能全为数字，保存分类失败'
-'编码(%code%)不可用，保存分类失败': '编码(%code%)不可用，保存分类失败'
-分类分组ID(%groupId%)不存在，保存分类失败: 分类分组ID(%groupId%)不存在，保存分类失败
-'父分类(ID:%groupId%)不存在，保存分类失败': '父分类(ID:%groupId%)不存在，保存分类失败'
-'添加标签%name%(#%id%)': '添加标签%name%(#%id%)'
-'标签(#%id%)不存在，更新失败！': '标签(#%id%)不存在，更新失败！'
-'编辑标签%name%(#%id%)': '编辑标签%name%(#%id%)'
-'标签名不能为空，添加失败！': '标签名不能为空，添加失败！'
-'该标签名已存在，添加失败！': '该标签名已存在，添加失败！'
-'缺少必要字段！': '缺少必要字段！'
-试卷状态不合法!: 试卷状态不合法!
-'此题已删除': '此题已删除'
-当前用户不存在!: 当前用户不存在!
-'无权修改其他学员的试卷！': '无权修改其他学员的试卷！'
-已经交卷的试卷不能更改答案!: 已经交卷的试卷不能更改答案!
-'得分必须为数字！': '得分必须为数字！'
-数据缺失: 数据缺失
-课时不存在!: 课时不存在!
-测试: 测试
-爱: 爱
-测: 测
-额: 额
-恶: 恶
-简墨: 简墨
-' Id不能为空！': ' Id不能为空！'
-权限不够!: 权限不够!
-'话题(ID: %threadId%)不存在。': '话题(ID: %threadId%)不存在。'
-'删除话题 %title%(%id%)': '删除话题 %title%(%id%)'
-'话题(ID: %id%)不存在。': '话题(ID: %id%)不存在。'
-回复次数过多，请稍候尝试。: 回复次数过多，请稍候尝试。
-parentId参数不正确！: parentId参数不正确！
-'帖子(#%postId%)不存在，删除失败。': '帖子(#%postId%)不存在，删除失败。'
-'话题回复(ID: %id%)不存在。': '话题回复(ID: %id%)不存在。'
-'已超过人数限制!': '已超过人数限制!'
-成员已存在!: 成员已存在!
-成员不存在!: 成员不存在!
-'输入不合法': '输入不合法'
-'名称不合法,长度不符合关联论坛用户名要求': '名称不合法,长度不符合关联论坛用户名要求'
-名称含有非法字符: 名称含有非法字符
-名称已被注册: 名称已被注册
-'Email格式不正确': 'Email格式不正确'
-'Email不允许注册': 'Email不允许注册'
-Email已存在: Email已存在
-未知错误: 未知错误
-名称为空: 名称为空
-名称长度不符合: 名称长度不符合
-名称含有禁用字符: 名称含有禁用字符
-Email为空为空: Email为空为空
-Email不在白名单: Email不在白名单
-Email处在黑名单: Email处在黑名单
-'密码长度不符合': '密码长度不符合'
-'密码含有非法字符': '密码含有非法字符'
-'原密码错误': '原密码错误'
-'暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）': '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'
-名称已存在!: 名称已存在!
-Email已存在!: Email已存在!
-'手机号码已存在!': '手机号码已存在!'
+'第%row%行组织机编码为%orgCode%的组织机构不存在，请检查。': 'The organnization which is coded number %orgCode% in row number %row% dosen''t exist ,please check again'
+第%row%行课程号为的%courseId%的课程未发布，请检查。: The course %courseId% in row  number %row% has not been published yet,please check again
+'第%row%行课程号为的%courseId%的课程课程属于班级课程,无法加入': 'The course %courseId% in row %row% belongs to Class course type ,cannot be added '
+第%row%行课程号为的%courseId%的课程不存在，请检查。: 'The course %courseId% in row  number %row% dosen''t exist,please check again'
+第%row%行的用户已存在，已略过:  User in Row number %row% is already existed ,which has been stepped
+第%row%行的用户已存在，将会更新: User in Row number %row% is already existed ,which will be updated
+'根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。': ' Somthing wrong  with the data for %email% in row %row%  according to current registration mode ,please check again '
+'根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。': 'Somthing wrong  with the data in row %row%  according to current registration mode ,please check again'
+'根据网校当前注册模式，第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。': 'Somthing wrong  with the data for %email% or %mobile%  in row %row%  according to current registration mode ,please check again。'
+'根据网校当前注册模式，第 %row%行%email% 列 的数据不能为空，请检查。': 'The data for %email% in row %row%  should not be empty according to current registration mode ,please check again。'
+'根据网校当前注册模式，第 %row%行%mobile% 列 的数据不能为空，请检查。': 'The data for %mobile% in row %row%  should not be empty according to current registration mode ,please check again。'
+'第 %row%行%email% 列 的数据存在问题，请检查。': 'Somthing wrong  with the data for %email% in row %row%  ,please check again'
+'第 %row%行%mobile% 列 的数据存在问题，请检查。': 'Somthing wrong  with the data for %mobile% in row %row%  ,please check again'
+'第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。': 'The data for %email% or %mobile% in row %row%  should not be empty,please check again'
+更新驻点时间不存在: Update stagnation time does not exist
+????   '批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！': 'The order has been invalid ,the recharge cards under this order cannot be activated'
+'您的一张价值为%batch%%coin_name%的学习卡已经被管理员启用。': 'One of your promotion card named %batch%%coin_name% has been activated by the administrator '
+'您的一张价值为%batch%%coin_name%的学习卡已经被管理员删除，详情请联系管理员。': 'One of your promotion card named %batch%%coin_name% has been deleted ,for more information please contact the administrator'
+批次不存在，作废失败！: The order dosen't exist ,void failure ！
+'作废了批次为%id%的充值卡': 'The recharging card which is ordered %id% has been void '
+'学习卡批次不存在或已被删除': 'The order of promotion cards dosen''t exist or has been deleted'
+'删除了批次为%id%的充值卡': 'Recharging card ordered %id% is deleted'
+'订单(%sn%)的金额(%amount%)与实际支付的金额(%payData%)不一致，支付失败。': 'Amount (%amount%) on the order (%sn%) is not same with the actual payment amount ,payment failed '
+'当前订单(#%id%)退款记录不存在，不能进行确认退款操作': 'Current order (#%id%) refund record dosen''t exist，Cannot confirm the refund process'
+'当前订单(#%id%)退款记录状态下，不能进行确认退款操作款': 'Cannot confirm the refund process under the current order (#%id%) status'
+'订单(#%id%)不存在，取消退款失败': 'Order(#%id%) dosen''t exist，refund cancel failed'
+'用户未登录，订单(#%id%)取消退款失败': 'User not logged in ,Order (#%id%) refund cancel failed'
+'订单(#%id%)，你无权限取消退款': 'Order (#%id%), you don''t have permission to cancel the refund process'
+'当前订单(#%id%)状态下，不能取消退款': 'Cannot cancel refund under the Current order (#%id%) status'
+'当前订单(#%id%)退款记录不存在，不能取消退款': 'Current refund(#%id%) record dosen''t exist,unable to cancel '
+更新订单失败：订单不存在。: 'Order update failed:the order dosen''t exist'
+更新订单失败：支付流水号不存在。: 'Order update failed,the order transaction ID dosen''t exist'
+'支付密码不正确，创建订单失败!': 'Invalid payment password ,order create failed!'
+该班级不可购买，如有需要，请联系客服: This class is not available to buy,Please contact the cusomer service if needs to
+该%name%不可购买，如有需要，请联系客服: %name%is not available to buy,Please contact the cusomer service if needs to
+班级中还未设置课程，请联系管理员!: No lesson set for the class,Please contact the administrator!
+该课程不可购买，如有需要，请联系客服: This course is not available to buy,Please contact the cusomer service if needs to
+'不能加入未发布课程!': 'Cannot add unpublished courses!'
+'名额已满，不能加入!': 'Already full,cannot be added!'
+订单数据缺失，创建会员订单失败。:  Order data incomplete,unable to create a membership order
+购买类型不正确，创建会员订单失败。: Order type invalid,unable to create a membership order
+会员开通时长不正确，创建会员订单失败。: Membership duration invalid,unable to create a membership order
+付费方式不正确，创建会员订单失败。: Payment method invalid,unable to create a membership order
+会员等级不存在，创建会员订单失败。: 'Membership level dosen''t exist,unable to create a membership order.'
+'会员等级已关闭，创建会员订单失败。': 'Membership level system deactivated,unable to create a membership order'
+'升级会员到 %level%': 'Upgrade to membership level %level%'
+'您已经成功加入 %level% ，点击查看': 'You are already one of the membership level %level% ，click to check'
+'您的 %level% 已成功续费，当前的有效期至：': 'You membership level %level% has already been extended which is valid until：'
+'您已经升级到 %level% ，点击查看': 'You have already upgraded to level %level% ，click to check'
+余额不足扣款不成功: Balance Insufficent,payment not Successful
+'缺少必要参数，添加类别失败': 'Incomplete parameter,category add failed'
+'缺少必要参数，更新类别失败': 'Incomplete parameter,category update failed'
+'该问题没有答案或答案格式不正确！': 'The question has no answer or not correct'
+用户不存在.: 'User dosen''t exist'
+今日已签到!: Checked already!
+《%paperName%》试卷: Testpaper《%paperName%》
+'试卷批阅提醒': 'Testpaper review notification'
+成功回执: Successful receipt
+发送失败！: Send failed！
+'云短信相关设置未开启!': 'Cloud message setting not activated!'
+对: Correct
+发送用于%Type%的通知短信: notification message %Type% sent at
+课时不存在: 'The Lesson dosen''t exist'
+课时：: 'Lesson: '
+课程：: 'Course: '
+预告: Trailer
+短信类型不存在: Message Type not found
+任务类型不存在不存在: Task Type not found
+'分类Group #%id%，不存在': 'Category Group #%id%，dosen''t exist'
+'分类Group #%code%，不存在': 'Category  #%code%，dosen''t exist'
+'缺少必要参数，，添加分类失败': 'incomplete Parameter, category add failed'
+'分类(#%id%)不存在，更新分类失败！': 'Category(#%id%)dosen''t exist，update failed！'
+参数不正确，更新分类失败！: Parameter errors，category update failed！
+名称不能为空，保存分类失败: Name cannot be empty，category save failed
+'编码不能为空，保存分类失败': 'Code strings cannot be empty，category save failed'
+'编码(%code%)含有非法字符，保存分类失败': 'Code strings(%code%)contains illegal characters,category save failed'
+'编码(%code%)不能全为数字，保存分类失败': 'Code strings(%code%)cannot be all numbers，category save failed'
+'编码(%code%)不可用，保存分类失败': 'Code strings(%code%) is not available，category save failed'
+分类分组ID(%groupId%)不存在，保存分类失败: 'Category ID or Section ID (%groupId%)dosen''t exist,save failed'
+'父分类(ID:%groupId%)不存在，保存分类失败': 'Parent category (ID:%groupId%)dosen''t exist，save failed'
+'添加标签%name%(#%id%)': 'Add tag name%name%(#%id%)'
+'标签(#%id%)不存在，更新失败！': 'Tag(#%id%)dosen''t exist，update ffailed！'
+'编辑标签%name%(#%id%)': 'Edit the tag name %name%(#%id%)'
+'标签名不能为空，添加失败！': 'The tag name cannot be empty, added failed！'
+'该标签名已存在，添加失败！': 'The tag name already exist, added failed！'
+'缺少必要字段！': 'Missing required fields'
+试卷状态不合法!: Illegal testpaper status!
+'此题已删除': 'The question has already been deleted'
+当前用户不存在!: 'The current user dosen''t exist!'
+'无权修改其他学员的试卷！': 'You have no permission to make changes to other student''s testpaper！'
+已经交卷的试卷不能更改答案!: Answers cannot be changed after the testpaper being submmitted!
+'得分必须为数字！': 'Score must be an number！'
+数据缺失: Data incomplete
+课时不存在!: 'The lesson dosen''t exist!'
+测试: Test
+爱: love
+测: test
+额: um..
+恶: dislike
+简墨: Simple ink
+' Id不能为空！': ' Id cannot be empty！'
+权限不够!: No enough permission!
+'话题(ID: %threadId%)不存在。': 'The topic(ID: %threadId%) dosen''t exist'
+'删除话题 %title%(%id%)': 'Delete the topic %title% (%id%)'
+'话题(ID: %id%)不存在。': 'The topic (ID: %id%) dosen''t exist'
+回复次数过多，请稍候尝试。: Rely too many times, please wait and try again.
+parentId参数不正确！: parentId parameter is not correct.
+'帖子(#%postId%)不存在，删除失败。': 'The post (#%postId%) dosen''t exist, unable to delete.'
+'话题回复(ID: %id%)不存在。': 'The reply to the topic(ID: %id%) dosen''t exist.'
+'已超过人数限制!': 'Already exceeded the capacity.'
+成员已存在!: The member already exist.
+成员不存在!: The member dosen't exist.
+'输入不合法': 'Illegal Inputs'
+'名称不合法,长度不符合关联论坛用户名要求': 'Name is not legitimate, do not meet the length requirements associated forum username'
+名称含有非法字符: Name contains illegal characters
+名称已被注册: Name has already been registered
+'Email格式不正确': 'Email format is not correct'
+'Email不允许注册': 'Email is not allow to register'
+Email已存在: Email already exist
+未知错误: Unknown errors
+名称为空: Name is empty
+名称长度不符合: Name length is not correct
+名称含有禁用字符: Username contains characters which are not allow to use
+Email为空为空: Email is empty
+Email不在白名单: Email is not on the whitelist
+Email处在黑名单: Email is on the Blacklist
+'密码长度不符合': 'The password length is not correct'
+'密码含有非法字符': 'The password contains illegal characters'
+'原密码错误': 'The original password is not correct'
+'暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）': 'Temporarily unable to register, administrators are trying to repair(Maybe something wrong with the Ucenter configration or connection errors)'
+名称已存在!: Name already exist!
+Email已存在!: Email already exist!
+'手机号码已存在!': 'The phone number already exist!'
 '电子邮箱或者手机号码格式不正确!': '电子邮箱或者手机号码格式不正确!'
-发件人未注册!: 发件人未注册!
-不存在此通知!: 不存在此通知!
-此通知已经发送!: 此通知已经发送!
-通知不存在，操作失败。: 通知不存在，操作失败。
-您没有权限: 您没有权限
-'缺少必要字段，添加黑名单失败！': '缺少必要字段，添加黑名单失败！'
-被拉黑用户不存在: 被拉黑用户不存在
-'不能重复添加黑名单！': '不能重复添加黑名单！'
-该黑名单不存在: 该黑名单不存在
-'黑名单拥有者用户不存在': '黑名单拥有者用户不存在'
-发件人或收件人未注册!: 发件人或收件人未注册!
-'抱歉,不允许给自己发送私信!': '抱歉,不允许给自己发送私信!'
-'抱歉,不能发送空内容!': '抱歉,不能发送空内容!'
-'私信会话#%conversationId%不存在。': '私信会话#%conversationId%不存在。'
-userId不能为空！: userId不能为空！
-名称不能为空！: 名称不能为空！
-url不能为空！: url不能为空！
-字段名称不能为空！: 字段名称不能为空！
-字段排序不能为空！: 字段排序不能为空！
-字段排序只能为数字！: 字段排序只能为数字！
-字段类型是错误的！: 字段类型是错误的！
-用户不存在，设置帐号失败！: 用户不存在，设置帐号失败！
-'用户昵称格式不正确，设置帐号失败！': '用户昵称格式不正确，设置帐号失败！'
-昵称已存在！: 昵称已存在！
-'Email格式不正确，变更Email失败。': 'Email格式不正确，变更Email失败。'
-Email(%email%)已经存在，Email变更失败。: Email(%email%)已经存在，Email变更失败。
-用户不存在，头像更新失败！: 用户不存在，头像更新失败！
-'参数不正确，更改密码失败。': '参数不正确，更改密码失败。'
-'用户%email%(ID:%id%)重置密码成功': '用户%email%(ID:%id%)重置密码成功'
-'参数不正确，更改支付密码失败。': '参数不正确，更改支付密码失败。'
-'用户%email%(ID:%id%)重置支付密码成功': '用户%email%(ID:%id%)重置支付密码成功'
-参数不正确，更改失败。: 参数不正确，更改失败。
-'参数不正确，校验密码失败。': '参数不正确，校验密码失败。'
-参数不正确，邮箱或手机不能为空。: 参数不正确，邮箱或手机不能为空。
-参数不正确，手机不能为空。: 参数不正确，手机不能为空。
-昵称已存在: 昵称已存在
-该帐号，已经设置过帐号信息，不能再设置！: 该帐号，已经设置过帐号信息，不能再设置！
-用户不存在，更新用户失败。: 用户不存在，更新用户失败。
-性别不正确，更新用户失败。: 性别不正确，更新用户失败。
-生日不正确，更新用户失败。: 生日不正确，更新用户失败。
-手机不正确，更新用户失败。: 手机不正确，更新用户失败。
-QQ不正确，更新用户失败。: QQ不正确，更新用户失败。
-用户不存在，设置用户角色失败。: 用户不存在，设置用户角色失败。
-用户角色不能为空: 用户角色不能为空
-'用户角色必须包含ROLE_USER': '用户角色必须包含ROLE_USER'
-用户角色不正确，设置用户角色失败。: 用户角色不正确，设置用户角色失败。
-获取用户绑定信息失败，当前用户不存在: 获取用户绑定信息失败，当前用户不存在
-解除第三方绑定失败，该用户不存在: 解除第三方绑定失败，该用户不存在
-'%type%类型不正确，解除第三方绑定失败。': '%type%类型不正确，解除第三方绑定失败。'
-用户名%user%解绑成功，操作用户为%currentUser%: 用户名%user%解绑成功，操作用户为%currentUser%
-获取用户绑定信息失败，该用户不存在: 获取用户绑定信息失败，该用户不存在
-'%type%类型不正确，获取第三方登录信息失败。': '%type%类型不正确，获取第三方登录信息失败。'
-用户不存在，第三方绑定失败: 用户不存在，第三方绑定失败
-'%type%类型不正确，第三方绑定失败。': '%type%类型不正确，第三方绑定失败。'
-用户(%nickname%)，: 用户(%nickname%)，
-连续第%ErrorTimes%次登录失败: 连续第%ErrorTimes%次登录失败
-登录失败: 登录失败
-'用户(IP: %ip%)，': '用户(IP: %ip%)，'
-用户不存在，封禁失败！: 用户不存在，封禁失败！
-'封禁用户%nickname%(#%id%)': '封禁用户%nickname%(#%id%)'
-用户不存在，解禁失败！: 用户不存在，解禁失败！
-'无法显示该动态。': '无法显示该动态。'
-解析QQ视频信息失败！...: 解析QQ视频信息失败！...
-'解析优酷视频页面信息失败!!': '解析优酷视频页面信息失败!!'
-'参数$config中，必需包含key, secret两个为key的值': '参数$config中，必需包含key, secret两个为key的值'
-IE浏览器: IE浏览器
-'剩余 ': '剩余 '
-活动时间到，正在刷新网页，请稍等...: 活动时间到，正在刷新网页，请稍等...
-直播将于: 直播将于
-开始，于: 开始，于
-' 结束，请在课前10分钟内提早进入。': ' 结束，请在课前10分钟内提早进入。'
-结束录播，录播结束后在: 结束录播，录播结束后在
-界面生成回放。: 界面生成回放。
-直播平台: 直播平台
-下课后: 下课后
-且: 且
-直播时间: 直播时间
-结束后，在课时管理的: 结束后，在课时管理的
-点击生成回放。: 点击生成回放。
-'结束，请在课前10分钟内提早进入。': '结束，请在课前10分钟内提早进入。'
-'进入直播教室': '进入直播教室'
-直播已经开始，直播将于: 直播已经开始，直播将于
-结束。: 结束。
-直播已经开始，直播将于%liveEndTime%结束。: 直播已经开始，直播将于%liveEndTime%结束。
-直播已经结束: 直播已经结束
-实时考试将于: 实时考试将于
-开始，将于: 开始，将于
-'欢迎参加考试，本考试离开考还有': '欢迎参加考试，本考试离开考还有'
-时: 时
-考试开始后，请点击: 考试开始后，请点击
-'进入': '进入'
-考试剩余时间: 考试剩余时间
-请点击: 请点击
-，: ，
-'在此时间段内开课，将会超出教室容量': '在此时间段内开课，将会超出教室容量'
-'人，届时有可能会导致满额后部分学员无法进入直播。': '人，届时有可能会导致满额后部分学员无法进入直播。'
-试卷总分%total%分: 试卷总分%total%分
-'%questionType%%questionCount%题': '%questionType%%questionCount%题'
-'%questionTotal%分': '%questionTotal%分'
-'%display%只能是<=试卷总分、且>0的整数或者1位小数': '%display%只能是<=试卷总分、且>0的整数或者1位小数'
-秒后重新获取: 秒后重新获取
-高品: 高品
-未选中任何: 未选中任何
+发件人未注册!: The sender is not signed up!
+不存在此通知!: 'The notice dosen''t exist!'
+此通知已经发送!: The notice has been sent !
+通知不存在，操作失败。: 'Opreate failed ,the notice dosen''t exist'
+您没有权限: You don't have permission
+'缺少必要字段，添加黑名单失败！': 'Blacklist added failed ,lack required strings！'
+被拉黑用户不存在: 'User on the Blacklist dosen''t exist'
+'不能重复添加黑名单！': 'Blacklist can be added only once！'
+该黑名单不存在: 'This Blacklist dosen''t exist'
+'黑名单拥有者用户不存在': 'Blacklist user dosen''t exist'
+发件人或收件人未注册!: The sender or recipient is not registered!!
+'抱歉,不允许给自己发送私信!': 'Sorry ,cannot send a message to yourself!'
+'抱歉,不能发送空内容!': 'Sorry,sending message cannot be empty!'
+'私信会话#%conversationId%不存在。': 'Private conversion session #%conversationId% dosen''t exist'
+userId不能为空！: userId cannot be empty！
+名称不能为空！: Name cannot be empty！
+url不能为空！: url cannot be empty！
+字段名称不能为空！: String name cannot be empty！
+字段排序不能为空！: String order cannot be empty！
+字段排序只能为数字！: String order must be a number！
+字段类型是错误的！: String type error！
+用户不存在，设置帐号失败！: 'Account set failed,the user dosen''t exist！'
+'用户昵称格式不正确，设置帐号失败！': 'Account set failed, Username format error！'
+昵称已存在！: The nickname already exist！
+'Email格式不正确，变更Email失败。': 'Email format error,Email update failed。'
+Email(%email%)已经存在，Email变更失败。: Email (%email%) already exist，Email update failed。
+用户不存在，头像更新失败！: 'Failed to update avatar ,the user dosen''t exist！'
+'参数不正确，更改密码失败。': 'Parameter error,changing password failed'
+'用户%email%(ID:%id%)重置密码成功': 'User %email% (ID:%id%) reset password succeed'
+'参数不正确，更改支付密码失败。': 'Parameter error, changing payment password failed.'
+'用户%email%(ID:%id%)重置支付密码成功': 'User %email% (ID:%id%) reset payment password succeed'
+参数不正确，更改失败。: Parameter error,change failed
+'参数不正确，校验密码失败。': 'Parameter error, password verification failed'
+参数不正确，邮箱或手机不能为空。: Parameter error,phone number or email cannot be empty
+参数不正确，手机不能为空。: Parameter error, phone number cannot be empty
+昵称已存在: The nickname already exists.
+该帐号，已经设置过帐号信息，不能再设置！: This account has been set up which cannot be override.
+用户不存在，更新用户失败。: User update failed. User dosen't exist.
+性别不正确，更新用户失败。: User update failed, gender is not correct.
+生日不正确，更新用户失败。: User update failed, birthday is not correct.
+手机不正确，更新用户失败。: User update failed, phone number is not correct。
+QQ不正确，更新用户失败。:  User update failed, QQ number is no correct。
+用户不存在，设置用户角色失败。: 'User role set failed ,User dosen''t exist.'
+用户角色不能为空: User role should not be empty.
+'用户角色必须包含ROLE_USER': 'ROLE_USER must be included in user role.'
+用户角色不正确，设置用户角色失败。: 'User role set failed since it''s not correct'
+获取用户绑定信息失败，当前用户不存在: 'Failed to access to user''s account bind information because current user dosen''t exist'
+解除第三方绑定失败，该用户不存在: 'Failed to unbind third-party Platform because the user dosen''t exist'
+'%type%类型不正确，解除第三方绑定失败。': 'Failed to unbind third-party Platform because the type %type% is not correct'
+用户名%user%解绑成功，操作用户为%currentUser%: User %user% unbind succcessfully，operated by user %currentUser%
+获取用户绑定信息失败，该用户不存在: 'Failed to access to user''s account bind information because current user dosen''t exist'
+'%type%类型不正确，获取第三方登录信息失败。': 'Failed to access third-party Platform information because the type %type% is not correct'
+用户不存在，第三方绑定失败: 'Failed to bind third-party Platform because the user dosen''t exist'
+'%type%类型不正确，第三方绑定失败。': 'Failed to bind third-party Platform because the type %type% is not correct'
+用户(%nickname%)，: user (%nickname%)，
+连续第%ErrorTimes%次登录失败: Log in failed for %ErrorTimes% times in a row
+登录失败: Log in failed
+'用户(IP: %ip%)，': 'User (IP: %ip%)'
+用户不存在，封禁失败！: 'The user dosen''t exist, failed to block.'
+'封禁用户%nickname%(#%id%)': 'Blocked the user %nickname% (#%id%)'
+用户不存在，解禁失败！: 'The user dosen''t exist, failed to unblock.'
+'无法显示该动态。': 'Unable to display the status.'
+解析QQ视频信息失败！...: Failed to parse QQ video information.
+'解析优酷视频页面信息失败!!': 'Failed to parse Youku video page information.'
+'参数$config中，必需包含key, secret两个为key的值': 'Parameter in $config must include two keys: key and secret'
+IE浏览器: IE Internet browser
+'剩余 ': 'left'
+活动时间到，正在刷新网页，请稍等...: Time is up, refreshing the page. Please wait for a moment.
+直播将于: Live session will be
+开始，于: Start at
+' 结束，请在课前10分钟内提早进入。': ' Please enter the live session 10 mins earlier before the lesson started。'
+结束录播，录播结束后在: When the live session finished
+界面生成回放。: to generate playback.
+直播平台: Live Platform
+下课后: After class
+且: and
+直播时间: Live available at:
+结束后，在课时管理的: When finished, in the lesson management section
+点击生成回放。: Click to generate playback
+'结束，请在课前10分钟内提早进入。': 'Please enter the live session 10 mins earlier before the lesson started.'
+'进入直播教室': 'Enter the live session classroom'
+直播已经开始，直播将于: The live session started which will
+结束。: Ended
+直播已经开始，直播将于%liveEndTime%结束。: The live session started which will end at %liveEndTime%
+直播已经结束: The live session has ended
+实时考试将于: Real time test will be
+开始，将于: Start，will
+'欢迎参加考试，本考试离开考还有': 'Welcome to the test. Time to start: '
+时: hour
+考试开始后，请点击: Please click, when the test starts
+'进入': 'Enter'
+考试剩余时间: Time left
+请点击: Click
+，: , 
+'在此时间段内开课，将会超出教室容量': 'Classroom capacity will exceed if start during this time'
+'人，届时有可能会导致满额后部分学员无法进入直播。': 'persons. Will likely lead to live member capacity exceed when some students can not enter.'
+试卷总分%total%分: Total score %total%
+'%questionType%%questionCount%题': '%questionType% %questionCount% questions'
+'%questionTotal%分': '%questionTotal% points'
+'%display%只能是<=试卷总分、且>0的整数或者1位小数': '%display% should be less or equal to the total score, and more than 0.'
+秒后重新获取: seconds later to retry
+高品: High Quality
+未选中任何: No selection
 吗？: 吗？
-'真的要删除该': '真的要删除该'
-个签到.: 个签到.
-已签: 已签
+'真的要删除该': 'Are you sure to delete?'
+个签到.: Check In
+已签: Checked In
