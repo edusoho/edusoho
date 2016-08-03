@@ -19,7 +19,8 @@ define(function(require, exports, module) {
                 disablePlaybackButton: false,
                 disableResolutionSwitcher:false
             },
-            enablePlaybackRates: false
+            enablePlaybackRates: false,
+            videoHeaderLength: 0
         },
 
         events: {},
@@ -90,7 +91,8 @@ define(function(require, exports, module) {
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),
                 playlist: self.get('url'),
-                remeberLastPos : self.get('remeberLastPos')
+                remeberLastPos : self.get('remeberLastPos'),
+                videoHeaderLength: self.get('videoHeaderLength')
             }, extConfig));
 
             player.on('ready', function(e){

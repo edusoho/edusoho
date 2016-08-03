@@ -7,8 +7,8 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Service\File\Convertor\ConvertorFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -471,7 +471,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $result['globalId'] = $file['globalId'];
         $result['outerId']  = $file['id'];
-        $result['hashId'] = $file['hashId'];
+        $result['hashId']   = $file['hashId'];
         $result['resumed']  = $apiResult['resumed'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
@@ -488,8 +488,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $download = $api->get("/resources/{$globalId}/download");
         return $download;
     }
-
-    
 
     public function getDownloadFile($file)
     {
@@ -598,7 +596,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     private function mergeCloudFile($localFile, $cloudFile)
     {
-        if(empty($localFile)){
+        if (empty($localFile)) {
             $localFile = array(
                 'id'        => 0,
                 'storage'   => 'cloud',
@@ -713,10 +711,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     protected function proccessConvertStatus($file)
     {
-        if(!isset($file['processStatus'])) {
+        if (!isset($file['processStatus'])) {
             return $file;
         }
-        
+
         $statusMap = array(
             'none'       => 'none',
             'waiting'    => 'waiting',
@@ -736,7 +734,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $file['metas2']        = array();
 
         if (!empty($file['directives']['output'])) {
-            
             if ($file['type'] == 'video') {
                 $file['convertParams'] = array(
                     'convertor'    => 'HLSEncryptedVideo',
@@ -746,8 +743,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
                 if (isset($file['metas']['levels'])) {
                     foreach ($file['metas']['levels'] as $key => $value) {
-                        $value['type']                      = $key;
-                        $value['cmd']['hlsKey']             = $file['metas']['levels'][$key]['hlsKey'];
+                        $value['type']                 = $key;
+                        $value['cmd']['hlsKey']        = $file['metas']['levels'][$key]['hlsKey'];
                         $file['metas']['levels'][$key] = $value;
                     }
 
@@ -757,7 +754,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 if (isset($file['directives']['watermarks'])) {
                     $file['convertParams']['hasVideoWatermark'] = 1;
                 }
-            } elseif (in_array($file['type'],array('ppt','document'))) {
+            } elseif (in_array($file['type'], array('ppt', 'document'))) {
                 $file['convertParams'] = array(
                     'convertor' => $file['directives']['output']
                 );
@@ -790,5 +787,3 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->createService('System.SettingService');
     }
 }
-
-
