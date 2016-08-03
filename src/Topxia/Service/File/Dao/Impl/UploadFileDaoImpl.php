@@ -84,12 +84,11 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function searchFiles($conditions, $orderBy = array('id', 'DESC'), $start, $limit)
     {
-        if($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
-            return array();   
+        if ($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
+            return array();
         }
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('id','updatedTime','createdTime','ext','filename','fileSize'));
-        
+        $orderBy = $this->checkOrderBy($orderBy, array('id', 'updatedTime', 'createdTime', 'ext', 'filename', 'fileSize'));
 
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
@@ -102,8 +101,8 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function searchFileCount($conditions)
     {
-        if($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
-            return 0;   
+        if ($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
+            return 0;
         }
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -186,10 +185,17 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             unset($conditions['filename']);
         }
 
+        if (isset($conditions['useType'])) {
+            $conditions['useTypeLike'] = "%{$conditions['useType']}%";
+            unset($conditions['useType']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('targetType = :targetType')
             ->andWhere('targetType IN ( :targetTypes )')
+            ->andWhere('useType IN ( :useTypes)')
+            ->andWhere('useType LIKE :useTypeLike')
             ->andWhere('globalId = :globalId')
             ->andWhere('globalId IN ( :globalIds )')
             ->andWhere('globalId <> ( :existGlobalId )')

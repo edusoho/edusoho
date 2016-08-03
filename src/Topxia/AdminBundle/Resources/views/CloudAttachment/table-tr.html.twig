@@ -1,4 +1,4 @@
-
+ {% import _self as forms %}
   <tr>
     <td>
         <div class="materials-table-img">
@@ -55,7 +55,7 @@
       <span style="display:block">{{ cloudAttachment.createdTime|date('Y-m-d H:i:s') }}</span>
     </td>
      <td class="text-center">
-      <span style="display:block">资讯</span>
+      <span style="display:block">{{ forms.showType(cloudAttachment.useType) }}</span>
     </td>
     <td class="es-materillib-table text-center">
       <div class="btn-group ">
@@ -74,3 +74,17 @@
       </div>
     </td>
   </tr>
+
+{% macro showType( useType) %}
+    {% if useType == "article" %}
+      资讯
+    {% elseif useType in ['course.thread','course.thread.post'] %}
+      课程讨论区
+    {% elseif  useType in ['classroom.thread','classroom.thread.post'] %}
+      班级讨论区
+    {% elseif useType in ['group.thread', 'group.thread.post'] %}
+      小组
+    {% elseif useType in ['question.stem', 'question.analysis'] %}
+      试题
+    {% endif %}
+{% endmacro %}

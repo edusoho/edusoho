@@ -15,7 +15,7 @@ define(function(require, exports, module) {
             },
             events: {
                 'submit': 'submitForm',
-                'click .nav-tabs .js-type-btn': 'onClickNav',
+                'click .nav-tabs .js-useType-btn': 'onClickNav',
                 'click .targetType-tabs .js-targetType-btn': 'onClickTargetType',
                 'click .pagination li': 'onClickPagination',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
                 var $target = $(event.currentTarget);
                 $target.closest('.nav').find('.active').removeClass('active');
                 $target.addClass('active');
-                $target.closest('.nav').find('[name=type]').val($target.data('value'));
+                $target.closest('.nav').find('[name=useType]').val($target.data('value'));
                 this.renderTable();
                 event.preventDefault();
             },

@@ -44,7 +44,6 @@ class CloudAttachmentController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        //  var_dump($materials);
         $materials = array_map(function ($material) {
             if (!array_key_exists('createdUserId', $material)) {
                 $material['createdUserId'] = $material['userId'];

@@ -96,7 +96,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId'));
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount'));
 
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->updateFile($file['id'], $fields);

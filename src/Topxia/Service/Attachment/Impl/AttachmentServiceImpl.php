@@ -53,16 +53,22 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
     {
         $fileIds    = empty($attachment['fileIds']) ? array() : explode(",", $attachment['fileIds']);
         $targetType = $attachment['targetType'];
-        if (!empty($fileIds)) {
-            $attachments = array_map(function ($fileId) use ($targetObj, $targetType) {
-                $attachment = array(
-                    'fileId'     => $fileId,
-                    'targetType' => $targetType,
-                    'targetId'   => $targetObj['id']
-                );
-                return $attachment;
-            }, $fileIds);
-            $this->creates($attachments);
+        if (empty($fileIds)) {
+            return false;
+        }
+        $attachments = array_map(function ($fileId) use ($targetObj, $targetType) {
+            $attachment = array(
+                'fileId'     => $fileId,
+                'targetType' => $targetType,
+                'targetId'   => $targetObj['id']
+            );
+            return $attachment;
+        }, $fileIds);
+        $this->creates($attachments);
+
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        foreach ($files as $file) {
+            $this->getUploadFileService()->update($file['id'], array('useType' => $targetType, 'usedCount' => $file['usedCount'] + 1));
         }
     }
 
