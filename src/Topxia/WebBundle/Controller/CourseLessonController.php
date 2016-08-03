@@ -30,7 +30,7 @@ class CourseLessonController extends BaseController
 
         $context                 = array();
         $context['lessonId']     = $lessonId;
-        $context['hideQuestion'] = ($isPreview || $request->query->get('hideQuestion', 0) == 1) ? 1 : 0;
+        $context['hideQuestion'] = $request->query->get('hideQuestion', 0);
 
         if ($isPreview && !empty($course['tryLookable'])) {
             $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
