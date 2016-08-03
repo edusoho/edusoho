@@ -39,7 +39,7 @@
 还没有人评论，欢迎说说您的想法！: 'No comment yet. Let us know your opinion.'
 '标签：': Tag
 '头条大图轮播功能需先在后台资讯管理页面设置缩略图以及添加头条属性': 'Please setup the slides in the Administration control panel'
-前往设置: Settings
+前往设置: Setting
 还没有任何资讯: 'No article'
 上一页: Previous
 下一页: Next
@@ -335,7 +335,7 @@
 '此课时设置了必须完整播放完整个课时才能学完': 'You can only complete the lesson after finishing the whole video.'
 作业未完成提示: 'Notice for assignment unfinished'
 '此课时设置了必须做完本课时作业并提交后才能学完': 'You can only complete the lesson after finishing and submmitting the assignments'
-'关注': Follow
+'关注': Following
 '已关注': Followed
 发私信: Message
 已学%number%课时: 'Already learned %number% lessons'
@@ -439,7 +439,7 @@
 这里: Here
 '了解详情。': 'Learn more'
 '视频转码类型': 'Video transcoding type'
-设置: Settings
+设置: Setting
 '支持常见文档、图片、音视频、压缩包文件格式。': 'Support for common documents, pictures, audio and video, compressed file format.'
 '且文件大小不能超过': 'And the file size can not exceed '
 '<li>文件将上传到<strong>云服务器</strong>。</li>': '<li>files will be uploaded to the <strong>cloud server</strong>。</li>'
@@ -584,7 +584,7 @@ mp3: mp3
 视频观看时间限制: 'Time limit'
 倍单视频总时长: 'Video duration'
 0表示不限制。: '0 means no limitations'
-实名认证: 'Real-name verification'
+实名认证: 'Real Name Verification'
 '设置该值后，学员购买课程前，必须先去申请实名认证。': 'After the value has been set ,users must complete the real-name authentication to buy a course'
 直播“桌面分享”插件下载: 'Download plugin for live "Desktop Sharing"'
 '添加选择题': 'Add Multiple Choice'
@@ -894,9 +894,9 @@ mp3: mp3
 学员评价: 'Student reviews'
 还没有评价: 'No review'
 学员动态: 'Student updates'
-个人设置: 'Personal settings'
-我的教学: 'My teaching'
-'我的学习': 'my course learning'
+个人设置: 'My Account'
+我的教学: 'My Teaching'
+'我的学习': 'My Learning'
 管理后台: Administration
 通知: Notice
 私信: Message
@@ -964,7 +964,7 @@ QQ群: 'QQ group'
 您已购买该附件: 'You have already bought the attachment.'
 购买: Buy
 立即下载: 'Download Now'
-'加入小组': 'Join the group'
+'加入小组': 'Joined Groups'
 退出小组: 'Quit the group'
 '%memberNum%个成员': '%memberNum% members'
 '%threadNum%个话题': '%threadNum% topics'
@@ -1298,7 +1298,7 @@ Email地址: 'Email address'
 '价格(元)': price(yuan)
 已移除: removed
 文件管理: 'file management'
-'暂无在教的课程': 'no teaching course'
+'暂无在教的课程': 'No teaching course.'
 您的课程中还没有: 'there''s no…in your course'
 提问过...: 'have questioned…'
 话题...: discuss…
@@ -1330,7 +1330,7 @@ Email地址: 'Email address'
 账户余额：: 'account balance'
 '为了保障账户资金安全，请先': 'to ensure the security of your account assets, please…'
 '设置支付密码': 'set payment password'
-'设置登录密码': 'set login password'
+'设置登录密码': 'set sign in password'
 '请输入支付密码': 'please type in payment password'
 '忘记密码？': 'forget password'
 抵扣: deduction
@@ -1571,23 +1571,23 @@ Email地址: 'Email address'
 来自: from
 正在实名认证中，管理员会尽快答复您。: 'real name is being verified，administrator will reply soon'
 恭喜您，已通过实名认证！: 'congratulations, real name has been verified'
-您尚未实名认证: 'your real name has not been verified'
-'实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。': 'real name verification not passed, please modify according to the advice and then try again'
-真实姓名: 'real name'
-身份证号: 'ID number'
-'照片要求': 'photo requirements'
-'<p class="text-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>': 'credentials must be clear in color anf digital format copied directly from the original ones, either with a scanner or digital camera, image formats can be jpg、gif、png ，size of each image should not larger than 2M'
-'身份证正面照': 'front photo of ID card'
-'身份证反面照': 'back photo of ID card'
-头像图片: 'profile photo'
-头像设置: 'profile photo setting'
-请设置自定义头像。: 'please set custom profile photo'
-当前头像: 'Current photo'
+您尚未实名认证: 'Your real name has not been verified.'
+'实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。': 'Real name verification not passed, please modify according to the advice and try again.'
+真实姓名: 'Real Name'
+身份证号: 'ID Number'
+'照片要求': 'Photo Requirements'
+'<p class="text-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>': 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
+'身份证正面照': 'Front Side of ID Card'
+'身份证反面照': 'Back Side of ID Card'
+头像图片: 'Avatar'
+头像设置: 'Avatar'
+请设置自定义头像。: 'Please set custom profile photo'
+当前头像: 'Current Avatar'
 '上传新头像': 'Upload New Photo'
-论坛头像: 'forum profile photo'
-使用该头像: 'set as profile photo'
+论坛头像: 'Forum Avatar'
+使用该头像: 'Set as avatar'
 绑定手机: 'bind mobile phone'
-'安全设置': 'security setting'
+'安全设置': 'Security Questions'
 '手机号码绑定': 'bind phone number'
 已绑定手机号: 'bound phone number'
 '您的登录密码': 'your login password'
@@ -1603,14 +1603,14 @@ Email地址: 'Email address'
 (这是一封自动产生的email，请勿回复。): '(This is a auto－generated email, please do not reply.)'
 请点击下面的链接完成邮箱的验证：: 'Please click the url below to complete the verification：'
 '感谢对 %site.name% 的支持！': 'Thanks for supporting %site.name%！'
-邮箱设置: 'set E-mail address'
-当前登录邮箱: 'Current email'
+邮箱设置: 'Email Address'
+当前登录邮箱: 'Current Email'
 已验证: Verified
-邮箱地址尚未验证，: 'Mail address hasn''t been verified'
+邮箱地址尚未验证，: 'Mail address hasn''t been verified.'
 去验证: Verify
 '您还未设置邮箱，请在下方设置你的新邮箱。': 'You haven''t set your email, please set your new email below.'
 管理员尚未设置邮件服务器，不能更改邮箱地址。: 'administrator haven''t set email server, do not change the email address.'
-'支付密码': 'payment password'
+'支付密码': 'Payment password'
 '找回支付密码': 'Find payment password'
 修改手机号？: 'Modify phone number？'
 '安全问题答案': 'security question answer'
@@ -1636,7 +1636,7 @@ Email地址: 'Email address'
 '通过安全问题找回': 'Find password by security question'
 通过手机找回: 'Find password by phone'
 '忘记支付密码？': 'Forget payment password？'
-'安全问题': 'security question'
+'安全问题': 'Security questions'
 '设置安全问题': 'set securtiy question'
 '安全问题一经设置，不可再次修改。': 'securtiy question cannot be modified when it is set。'
 '安全问题1': 'securtiy question 1'
@@ -1646,14 +1646,14 @@ Email地址: 'Email address'
 '安全问题3': 'securtiy question 3'
 '安全问题3答案': 'securtiy question answer 3'
 '查看安全问题': 'View securtiy question'
-'安全等级：高': 'securtiy level：High'
-'安全等级：中': securtiy：Medium
-'安全等级：低': securtiy：Low
-'登录密码': 'Login password'
-'登录网校时需要输入的密码': 'You need enter password when signing in system'
-'在网校进行消费行为时需要输入的密码': 'You need enter password when purchasing in system'
+'安全等级：高': 'Securtiy level: High'
+'安全等级：中': 'Securtiy level: Medium'
+'安全等级：低': 'Securtiy level: Low'
+'登录密码': 'Sign in password'
+'登录网校时需要输入的密码': 'The password to sign into the system.'
+'在网校进行消费行为时需要输入的密码': 'The password to perform a payment.'
 重置: reset
-'通过设置并且验证安全问题，保护帐号密码安全。': 'To protect the securtiy of account by setting and verifying securtiy quesiong。'
+'通过设置并且验证安全问题，保护帐号密码安全。': 'To protect your account by setting up securtiy quesions.'
 查看: view
 手机绑定: 'Bound phone number'
 '增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。': 'To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.'
@@ -1760,25 +1760,25 @@ Email地址: 'Email address'
 '暂无介绍': 'no introduction yet'
 还没有签名: 'no label yet'
 在学: Learning
-粉丝: fans
+粉丝: Fans
 在学%classroom.name%: 'studying in %classroom.name%'
 '共%classroom.courseNum%门课程': 'have % classroom.courseNum% courses'
 '无在学的%classroom.name%！': 'is not studying in %classroom.name%！'
-在教%name%: 'teaching %name%'
-'无在教的%name%': 'is not teaching %name%'
-'无在教的课程': 'not teaching course'
-'无在学的课程': 'not studying course'
-'无收藏的课程': 'not collected course'
+在教%name%: 'Teaching %name%'
+'无在教的%name%': 'No teaching %name%.'
+'无在教的课程': 'No teaching course.'
+'无在学的课程': 'No learning course.'
+'无收藏的课程': 'No favorite course.'
 '温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！': 'Tips：For better service, if your information have changed，please modify below！'
 已认证: verified
 实名认证中: 'real-name authenticating'
 '仅需一步，完善资料，让我们更好的为你服务！': 'for better service, please complete information with only one step！'
-'无关注的人': 'no follow'
-'无粉丝': 'no fans'
-管理小组: 'manage group'
+'无关注的人': 'No following'
+'无粉丝': 'No fans'
+管理小组: 'Manage Groups'
 '暂无签名': 'No signature'
 收藏的课程: 'Bookmarked Courses'
-'关注/粉丝': Followers/fans
+'关注/粉丝': Following/Fans
 '''}}{% endif %}{{''%nickname%的个人主页': '''}}{% endif %}{{''%nickname% ''s homepage'
 个人介绍: Introduction
 在学%name%: 'Learning %name%'
@@ -3200,3 +3200,4 @@ Firefox浏览器: Firefox
 '签到,第': 'sign in'
 个签到.: 'Check In'
 已签: 'Checked In'
+新登录邮箱: New Email
