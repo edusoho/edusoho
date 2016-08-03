@@ -20,7 +20,7 @@
 #     router_params_context: 1
 
 admin:
-    name: 后台
+    name: 后台管理员
     parent: null
     children:
         admin_user:
@@ -659,7 +659,7 @@ admin:
                         admin_logs_prod:
                             name: 程序运行日志
 web:
-    name: 前台
+    name: 老师
     parent: null
     children:
         course_manage:
