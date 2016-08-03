@@ -158,8 +158,18 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('cloud_attachment', $attachment);
             $this->setFlashMessage('success', '云附件设置已保存！');
         }
+        //云端视频判断
+        try {
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
 
-        return $this->render('TopxiaAdminBundle:EduCloud:cloud-attachment.html.twig', array('attachment' => $attachment));
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-attachment.html.twig', array(
+            'attachment' => $attachment,
+            'info'       => $info
+        ));
     }
 
     //云视频设置页
