@@ -1,7 +1,7 @@
 提示: Tips
-'您尚未成为%name%成员,请先成为%name%成员': 'You are not a member yet, please sign up at first.'
+'您尚未成为%classroomName%成员,请先成为%classroomName%成员': 'You are not a %classroomName% member yet, please sign up %classroomName% at first.'
 '加入旁听生': 'Join as guest'
-'您尚未成为%title%学员,请先成为%title%学员': 'You are not a student yet, please join the course at first.'
+'您尚未成为%courseTitle%学员,请先成为%courseTitle%学员': 'You are not a %courseTitle% student yet, please join %courseTitle% at first.'
 '加入学习': Join
 编辑: Edit
 '删除': Delete
