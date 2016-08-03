@@ -231,7 +231,7 @@
 '第%number% : %title%': 'No. %number% : %title%'
 '课程暂无相关课时': 'No lesson in this course'
 '%title%课程的数据': 'Data of course %title%'
-用户名: 'User name'
+用户名: 'User Name'
 '加入课程时间': 'Joined at'
 完成课程时间: 'Completed at'
 '课程学习天数': 'Days learned'
@@ -277,11 +277,11 @@
 课程列表: 'Course list'
 查看%name%: 'View %name%'
 最新: Latest
-最热: 'Most popular'
-推荐: Reconmmended
-会员课程: 'Premium courses'
-直播课程: 'Live courses'
-'免费课程': 'Free courses'
+最热: 'Popular'
+推荐: Recommmended
+会员课程: 'Premium'
+直播课程: 'Live'
+'免费课程': 'Free'
 '该分类下无课程': 'No courses in this category'
 取消收藏: Cancel
 收藏课程: Favorite
@@ -378,7 +378,7 @@
 分享: Share
 课程概览: Overview
 笔记: Notes
-讨论区: Reviews
+讨论区: Discussion
 资料区: Materials
 概览: Overview
 所属%name%: 'in %name%'
@@ -874,11 +874,11 @@ mp3: mp3
 '取消加精': '取消加精'
 '您真的要加精该帖吗？': '您真的要加精该帖吗？'
 '加精': '加精'
-教师的答案: 'Teacher''''s answer'
+教师的答案: 'Teacher''s answer'
 所有答案: 'All answers'
 还没有: 'no'
 '赶快添加一个吧！': 'Add one'
-更多课程: 'More courses'
+更多课程: 'More Courses'
 查看在线客服: 'View our online customer service'
 '关闭在线客服': 'Turn off online customer service'
 收缩: 收缩
@@ -1115,12 +1115,12 @@ QQ群: 'QQ group'
 登录%name%: '%name% log-in'
 '密码': Password
 '记住密码': 'Remember password'
-'找回密码': 'Retrieve password'
-还没有注册帐号？: 'Not registered?'
-立即注册: 'Register now'
+'找回密码': 'Forgot password'
+还没有注册帐号？: 'No account?'
+立即注册: 'Sign up now'
 'Email / 手机': 'Email / Mobile'
 '请填写在%name%注册时填写的Email地址/手机号码': 'Please enter Email/Mobile same as %name% registered'
-Email地址: 'Email address'
+Email地址: 'Email Address'
 请填写在%name%注册时填写的Email地址: 'Please enter Email address same as %name% registered'
 确认绑定: 'Sure to bind'
 绑定新帐号: 'Bind new account'
@@ -1128,15 +1128,15 @@ Email地址: 'Email address'
 头像: Avatar
 '自动获取头像失败，请稍后在自行上传头像': 'Fail to auto gain avatar, please upload your avatar later'
 '用户名最长18个英文或者9个汉字': 'User name no more than 18 english letters or 9 Chinese characters'
-邮箱地址: 'Email address'
-'我已阅读并同意': 'Read and agreed'
+邮箱地址: 'Email Address'
+'我已阅读并同意': 'I''ve read and agree.'
 《服务协议》: 'Service agreements'
-正在登录: 'Logging in'
-注册帐号: 'Register account'
+正在登录: 'Signing in'
+注册帐号: 'Sign Up'
 绑定已有帐号: 'Bind existing account'
 绑定到已有帐号: 'Bind existing account'
 绑定: Bind
-登录帐号: 'Log-in account'
+登录帐号: 'Sign In'
 帐号: Account
 用户不存在: 'User does not exist'
 尾页: 'Last page'
@@ -1533,7 +1533,7 @@ Email地址: 'Email address'
 下一步: 'next step'
 管理员尚未设置邮件服务器，不能重置邮箱地址。: 'mail server has not been set by administrator, can not reset email'
 邮箱重置: 'reset email'
-'新邮箱地址:': 'new email address'
+'新邮箱地址:': 'New email address'
 '请输入新的邮箱地址': 'please type in new email address'
 验证: verification
 注册成功: 'registration succeeded'
@@ -1821,7 +1821,7 @@ Flash: Flash
 升级: remote
 取消会员: 'delete member'
 手机号: 'phone number'
-邮件地址: 'email address'
+邮件地址: 'Email address'
 登录IP: 'Login IP'
 一次: 'every time'
 每小时: 'every hour'
@@ -1848,8 +1848,8 @@ Flash: Flash
 '└─ 会员营收额': '└─ members revenue'
 课程总数: 'Total courses'
 用户总数: 'Total users'
-网站注册: register
-微博登录: 'blog login'
+网站注册: Sign In
+微博登录: 'Weibo login'
 网站邮箱注册: 'email register'
 网站手机注册: 'phone number register'
 '手动导入': 'Manual import'
@@ -1999,7 +1999,7 @@ PPT文档还在转换中，还不能查看，请稍等。: 'PPT conversion is on
 '短信服务被管理员关闭了': 'Message service is closed.'
 '验证码错误': 'Verification code is error'
 '请等待120秒再申请': 'Please waiting for 120s, and try again.'
-用户注册: 'Register -in'
+用户注册: 'Sign Up'
 '您已经绑定了该手机号码': 'You have been binding the telephone successfully'
 '该手机号码已被其他用户绑定': 'The phone number have been bond by other user.'
 '登录密码重置': 'reset your sign-in password'
