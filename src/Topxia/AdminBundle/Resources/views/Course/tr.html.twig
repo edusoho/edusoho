@@ -42,11 +42,13 @@
         <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
       {% endif %}
     </td>
-    {% elseif filter == 'vip' %}
-        {% set vip = vips[course.vipLevelId]|default(null) %}
-        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
     {% else %}
       <td>{{ course.studentNum }}</td>
+    {% endif %}
+    {% if filter == 'vip' %}
+        {% set vip = vips[course.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
+   
     {% endif %}
   {% endif %}
 

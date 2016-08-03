@@ -14,6 +14,7 @@ class HLSController extends BaseController
         $levelParam = $request->query->get('level', "");
 
         $token    = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $fromApi  = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
@@ -43,7 +44,8 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id' => $file['id'].$level
+                        'id'      => $file['id'].$level,
+                        'fromApi' => $fromApi
                     ),
                     'times'    => ($inWhiteList || $enablePlayRate) ? 0 : 1,
                     'duration' => 3600
@@ -120,6 +122,7 @@ class HLSController extends BaseController
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $fromApi  = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
@@ -153,7 +156,7 @@ class HLSController extends BaseController
 
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
         $enablePlayRate = $this->setting('storage.enable_playback_rates');
-        $keyencryption  = ($inWhiteList || $enablePlayRate) ? 0 : 1;
+        $keyencryption  = ($fromApi || $inWhiteList || $enablePlayRate) ? 0 : 1;
         $tokenFields    = array(
             'data'     => array(
                 'id'            => $file['id'],
