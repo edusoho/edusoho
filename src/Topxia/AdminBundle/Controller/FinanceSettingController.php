@@ -33,16 +33,16 @@ class FinanceSettingController extends BaseController
             'quickpay_enabled' => 0,
             'quickpay_key'     => '',
             'quickpay_secret'  => '',
-            'quickpay_aes'     => ''
+            'quickpay_aes'     => '',
+            'llcbpay_enabled'  => 0,
+            'llcbpay_key'      => ''
         );
 
         $payment = array_merge($default, $payment);
-
+        
         if ($request->getMethod() == 'POST') {
             $payment                    = $request->request->all();
-
             $payment = ArrayToolkit::trim($payment);
-
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
