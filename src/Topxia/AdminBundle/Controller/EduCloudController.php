@@ -485,6 +485,7 @@ class EduCloudController extends BaseController
                 $copyright                   = $this->getSettingService()->get('copyright', array());
                 $copyright['owned']          = 1;
                 $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                $copyright['licenseDomains'] = $info['licenseDomains'];
                 $this->getSettingService()->set('copyright', $copyright);
             } else {
                 $this->getSettingService()->delete('copyright');
@@ -695,7 +696,8 @@ class EduCloudController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned'          => 1,
             'name'           => $request->request->get('name', ''),
-            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0
+            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0,
+            'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : array()
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
