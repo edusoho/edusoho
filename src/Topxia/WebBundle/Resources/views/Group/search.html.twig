@@ -4,7 +4,7 @@
   <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
     <li><a href="{{path('homepage')}}">{{ homepage.name|default('首页'|trans) }}</a></li>
     <li><a href="{{path('group')}}">{{ group.name|default('小组主页'|trans) }}</a></li>
-    <li><a href="{{path('group_search_group')}}">{{'%name%'|trans({'%name%': search.name,|default('搜索小组'|trans)})}}</a></li>
+    <li><a href="{{path('group_search_group')}}">{{ search.name|default('搜索小组'|trans) }}</a></li>
   </ol>
 
   <div class="row">
