@@ -23,7 +23,7 @@
               <input type="text" name="price" class="form-control course-current-price" value="{{course.price}}">
               {% if discount %}
                 <div class="alert alert-warning">
-                  <small>{{'当前课程正处于%name%打折活动中。'|trans({'%name%':「 discount.name 」})}}
+                  <small>{{'当前课程正处于「 %name% 」打折活动中。'|trans({'%name%': discount.name})}}
                   {{'折扣'|trans}}： <strong>{{'%discount%折'|trans({'%discount%': course.discount}) }} </strong>，
                   {{'折后价'|trans}}：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>
                 </div>
@@ -39,7 +39,7 @@
               </div>
               {% if discount %}
                 <div class="alert alert-warning">
-                  {{'当前课程正处于%name%打折活动中。'|trans({'%name%':「 discount.name 」})}}<br>
+                  {{'当前课程正处于「 %name% 」打折活动中。'|trans({'%name%':discount.name})}}<br>
                   {{'折扣'|trans}}： <strong>{{'%discount%折'|trans({'%discount%': course.discount}) }} </strong>，
                   {{'折后价'|trans}}：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> {{'元'|trans}}</strong>。
                 </div>
