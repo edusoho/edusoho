@@ -531,7 +531,7 @@ class GroupThreadController extends BaseController
             }
         }
 
-        $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+        $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
 
         $message = array(
             'id'       => $groupId,
