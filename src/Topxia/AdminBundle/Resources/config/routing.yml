@@ -872,12 +872,10 @@ admin_setting_developer:
 admin_setting_developer_version:
     pattern:  /setting/developer/version
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:version }
-    permissions: [admin]
 
 admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
-    permissions: [admin]
 
 admin_setting_developer_sync_file_data:
     pattern:  /setting/developer/sync_upload_file
@@ -891,12 +889,10 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
-    permissions: [admin_setting_message]
 
 admin_setting_redis:
-    pattern:  /setting/redis
+    pattern:  /setting/developer/redis
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
-    permissions: [admin]
 
 admin_optimize:
     pattern:  /setting/optimize
