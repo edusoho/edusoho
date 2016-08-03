@@ -22,6 +22,14 @@ class PlayerController extends BaseController
 
             $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
+                // 加入片头信息
+                if (!$this->isHiddenVideoHeader()) {
+                    $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
+                    if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == 'success') {
+                        $context['videoHeaderLength'] = $videoHeaderFile['length'];
+                    }
+                }
+
                 if (!empty($file['convertParams']['hasVideoWatermark'])) {
                     $file['videoWatermarkEmbedded'] = 1;
                 }
