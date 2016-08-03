@@ -351,7 +351,7 @@
 课程概览: Overview
 笔记: Notes
 讨论区: Reviews
-资料区: 'Course materials'
+资料区: 'Materials'
 概览: Overview
 最新学员: Newcommer
 '暂无学员': 'No student'
@@ -379,8 +379,8 @@
 '文件若被引用，移除或删除会引起引用课时无法正常使用': 'Removal or deleting of a referenced file will cause the lesson not work properly。'
 确认: OK
 '文件：%filename% 被引用': 'File：%filename% is referenced'
-课程文件: 'Course materials'
-'添加课程文件': 'Add course material'
+课程文件: 'Materials'
+'添加课程文件': ' Add Material'
 文件名: 'File name'
 类型: Type
 大小: Size
@@ -451,7 +451,7 @@ flash课程: 'Courses in flash video format'
 '登录后购买学习完整的课程': 'Buy the whole course after signing in'
 抱歉，该课程为限制课程，请联系客服。: 'Limited access, please contact the customer service.'
 '抱歉，课程%title%已关闭！': 'Sorry, this course has been closed.'
-课时管理: 'Course management'
+课时管理: 'Lessons'
 直播课时: 'Live session'
 '添加%chapter_name%': 'Add  %chapter_name%'
 '添加%part_name%': 'Add %part_name%'
@@ -566,19 +566,19 @@ mp3: mp3
 详细信息: Details
 课程简介: 'About this course'
 适应人群: 'Who should take the course'
-课程图片: Image
-录播管理: 'Recorded course management'
+课程图片: Cover Image
+录播管理: 'Playback'
 课程设置: Settings
-'价格设置': 'Price Settings'
-教师设置: 'Teacher Settings'
+'价格设置': 'Price'
+教师设置: 'Teachers'
 管理: ' Management'
 题库: 'Exam library'
-题目管理: Quiz Management
+题目管理: Questions
 '题目导入/导出': Import/Export
-试卷管理: 'Test paper management'
-'试卷批阅': 'Paper marking'
+试卷管理: 'Test paper'
+'试卷批阅': 'Test Paper Review'
 作业批改: 'Assignments Review'
-课程运营: 'Course operation'
+课程运营: 'Course Operation'
 '课程学习数据': 'Course learning data'
 课程名: 'Course name'
 '课程学习人数': 'students enrolled'
@@ -623,12 +623,12 @@ mp3: mp3
 课时%number%: Lesson%number%
 '上传于': Uploaded
 '课程暂无资料': 'No flies for this course'
-课程资料: 'Course materials'
+课程资料: 'Materials'
 '此课程暂无资料': 'No flies for this course'
 重新选择: Reselect
 '上传文件': 'Upload files'
 网络链接: Links
-'请将文件拖到这里，或点击添加文件按钮': 'Please drag files here ,or click the Upload button'
+'请将文件拖到这里，或点击添加文件按钮': 'Please drag files here, or click the Upload button.'
 '文件将上传到': 'Files will be upload to'
 '暂无文件，请先上传。': 'No flies ,please upload'
 资料链接地址: 'Materials link addresses'
@@ -945,7 +945,7 @@ QQ群: 'QQ group'
 当前背景: 'Current background'
 '你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过': 'You may upload JPG/GIF/PNG image, with file size no more than '
 '。推荐大小（1140*150）': '. picture size recommended (1140*150)'
-'正在上传': Uploading
+'正在上传': ' Uploading'
 '上传新背景': 'Upload new background'
 编辑小组: 'Set the group'
 '图标设置': 'Icon setting'
@@ -1651,8 +1651,8 @@ Email地址: 'Email address'
 '加入活动': 'participate in activity'
 手机: phone
 未回复的话题: 'unanswered post'
-'添加文件': 'Add file'
-'开始上传': uploading
+'添加文件': ' Add file'
+'开始上传': ' Uploading'
 '资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。': 'Repository support a variety of file formats to upload， share， download，single file size should less then <strong>2GB</strong>。'
 '视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。': 'video will be uploaded to <strong> cloud-video server </strong>，and converted to cloud-video which prepare for creating ES video courses.If you need to modify the type of transcode of cloud-video ，please set the type of transcode first。You need waiting when transcoding, and the video cannot be played when transcoding。'
 '支持<strong>断点续传</strong>（仅支持HTML5浏览器）。': 'support <strong> breakpoint resume</strong>（only support HTML5 explore）。'
