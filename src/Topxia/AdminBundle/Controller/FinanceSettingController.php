@@ -35,11 +35,12 @@ class FinanceSettingController extends BaseController
             'quickpay_secret'  => '',
             'quickpay_aes'     => '',
             'llcbpay_enabled'  => 0,
-            'llcbpay_key'      => ''
+            'llcbpay_key'      => '',
+            'llcbpay_secret'  => '',
         );
 
         $payment = array_merge($default, $payment);
-        
+
         if ($request->getMethod() == 'POST') {
             $payment                    = $request->request->all();
             $payment = ArrayToolkit::trim($payment);

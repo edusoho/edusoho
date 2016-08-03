@@ -6,7 +6,7 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class LlcbpayRequest extends Request
 {
-    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
+    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 
     public function form()
     {
@@ -19,9 +19,8 @@ class LlcbpayRequest extends Request
 
     public function signParams($params)
     {
-        unset($params['pay_code'], $params['goods_name'], $params['remark']);
+        ksort($params);
         $sign = '';
-
         foreach ($params as $key => $value) {
             if (empty($value)) {
                 continue;
@@ -29,33 +28,33 @@ class LlcbpayRequest extends Request
 
             $sign .= $key.'='.$value.'&';
         }
-
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
     }
 
     protected function convertParams($params)
     {
-        $converted                    = array();
-        $converted['version']         = 1;
-        $converted['agent_id']        = $this->options['key'];
-        $converted['agent_bill_id']   = strtolower($this->generateOrderToken($params));
-        $converted['agent_bill_time'] = date("YmdHis", time());
-        $converted['pay_type']        = '20';
-        $converted['pay_code']        = '0';
-        $converted['pay_amt']         = $params['amount'];
-
+        $converted                 = array();
+        $converted['busi_partner'] = '101001';
+        $converted['dt_order']     = date('YmdHis', time());
+        $converted['money_order']  = $params['amount'];
+        $converted['name_goods']   = mb_substr($this->filterText($params['title']), 0, 12, 'utf-8');
+        $converted['no_order']     = $params['orderSn'];
         if (!empty($params['notifyUrl'])) {
             $converted['notify_url'] = $params['notifyUrl'];
         }
-
+        $converted['oid_partner']  = $this->options['key'];
+        $converted['sign_type']    = 'MD5';
+        $converted['version']      = '2.0';
+        $converted['user_id']      = $params['userId'];
+        $converted['timestamp']    = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
-            $converted['return_url'] = $params['returnUrl'];
+            $converted['url_return'] = $params['returnUrl'];
         }
 
-        $converted['user_ip']    = str_replace(".", "_", $this->getClientIp());
-        $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 15, 'utf-8'));
-        $converted['remark']     = '';
+        $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
+        $converted['bank_code']  = '';
+        $converted['pay_type']   = '1';
         $converted['sign']       = $this->signParams($converted);
         return $converted;
     }
@@ -74,11 +73,5 @@ class LlcbpayRequest extends Request
         }
 
         return $title;
-    }
-
-    private function generateOrderToken($params)
-    {
-        $processor = OrderProcessorFactory::create($params['targetType']);
-        return $processor->generateOrderToken();
     }
 }
