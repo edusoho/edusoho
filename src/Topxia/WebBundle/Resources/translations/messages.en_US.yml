@@ -92,9 +92,9 @@
 已使用: Used
 已过期: Expired
 已作废: Disabled
-没有搜索到符合条件的: 'No match'
+没有搜索到符合条件的: 'No match '
 '网站没有开启%coin_name%功能,学习卡功能暂时没法使用': 'The %coin_name% feature is not enabled. The learning card cannot be used.'
-'我的卡包': 'My wallet'
+'我的卡包': 'My Wallet'
 '学习卡可以用于账户充值': 'Learning card can be used to recharge your account balance.'
 '%coin_name%': '%coin_name%'
 立即使用: 'Use it now'
@@ -139,9 +139,9 @@
 虚拟币图片: 'Virtual coin icon'
 '充&nbsp;值': Recharge
 '使用学习卡': 'Use learnig cards'
-'全部记录': 'All records'
-'充值记录': 'Recharge record'
-消费记录: 'Payment record'
+'全部记录': 'All Records'
+'充值记录': 'Recharge Records'
+消费记录: 'Payment Records'
 '学习卡充值': 'Learning card recharge'
 余额支付: Recharge
 'TA的邀请码': 'Invitation code'
@@ -278,7 +278,7 @@
 查看%name%: 'View %name%'
 最新: Latest
 最热: 'Popular'
-推荐: Recommmended
+推荐: Recommended
 会员课程: 'Premium'
 直播课程: 'Live'
 '免费课程': 'Free'
@@ -1241,8 +1241,8 @@ Email地址: 'Email Address'
 日志信息: 'log information'
 操作人: operator
 '暂无交易日志': 'no transaction log'
-'全部订单': 'all orders'
-'待付款': 'waiting for payment'
+'全部订单': 'All Orders'
+'待付款': 'To Be Paid'
 退款记录: 'refund record'
 退款订单: 'refund order'
 退款申请时间: 'request time of refund'
@@ -1348,10 +1348,10 @@ Email地址: 'Email Address'
 '获取短信验证码': 'get SMS verification code'
 您还未绑定手机号: 'you have not bind mobile phone number'
 去绑定: 'go to bind'
-'实付(元)': 'Actual paied (RMB)'
-取消退款: 'cancel refund'
-取消订单: 'cancel order'
-'暂无订单记录': 'no order record'
+'实付(元)': 'Actual Paid (RMB)'
+取消退款: 'Cancel Refund'
+取消订单: 'Cancel Order'
+'暂无订单记录': 'No order record.'
 您已购买过：: 'you have bought'
 抵扣：: 'deduction:'
 会员升级为：%level.name%: 'membership upgrade to：%level.name%'
@@ -1763,7 +1763,7 @@ Email地址: 'Email Address'
 粉丝: Fans
 在学%classroom.name%: 'studying in %classroom.name%'
 '共%classroom.courseNum%门课程': 'have % classroom.courseNum% courses'
-'无在学的%classroom.name%！': 'is not studying in %classroom.name%！'
+'无在学的%classroom.name%！': 'No learning %classroom.name%'
 在教%name%: 'Teaching %name%'
 '无在教的%name%': 'No teaching %name%.'
 '无在教的课程': 'No teaching course.'
