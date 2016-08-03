@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+
+{% block title %}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '管理'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'course-manage/students' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ setting('default.user_name')|default('学员'|trans) }}{{ '管理'|trans }}
+      {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
+        <a class="btn btn-info btn-sm pull-right mhs"
+           href="{{ path('open_course_manage_student_export_csv', {id:course.id,userType:app.request.get('userType'),isNotified:app.request.get('isNotified')}) }}"><i
+              class="glyphicon glyphicon-export"></i> 导出{{ setting('default.user_name')|default('学员'|trans) }}</a>
+      {% endif %}
+    </div>
+
+    <div class="panel-body">
+      <ul class="nav nav-tabs">
+        <li {% if app.request.get('userType') == 'login' %}class="active"{% endif %}>
+          <a href="{{ path('open_course_manage_students',{id:course.id,userType:'login'}) }}">已登录</a>
+        </li>
+        <li {% if app.request.get('userType') == 'unlogin' %}class="active"{% endif %}>
+          <a href="{{ path('open_course_manage_students',{id:course.id,userType:'unlogin'}) }}">未登录</a>
+        </li>
+      </ul>
+      
+      {% if app.request.get('userType') == 'unlogin' %}
+        {% include 'TopxiaWebBundle:OpenCourseManage:student-unlogin-list.html.twig' %}
+      {% else %}
+        {% include 'TopxiaWebBundle:OpenCourseManage:student-login-list.html.twig' %}
+      {% endif %}
+
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+
+{% endblock %}

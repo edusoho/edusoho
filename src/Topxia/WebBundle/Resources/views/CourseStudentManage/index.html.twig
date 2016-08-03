@@ -1,6 +1,5 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-
 {% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'students' %}

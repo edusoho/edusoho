@@ -3,6 +3,15 @@ namespace Topxia\Common;
 
 class ArrayToolkit
 {
+    public static function get(array $array, $key, $default)
+    {
+        if(isset($array[$key])){
+            return $array[$key];
+        }else{
+            return $default;
+        }
+    }
+
     public static function column(array $array, $columnName)
     {
         if (empty($array)) {

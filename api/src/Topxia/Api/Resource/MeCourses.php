@@ -33,7 +33,7 @@ class MeCourses extends BaseResource
                 empty($type) ? array() : array('type' => $type)
             );
         } elseif ($relation == 'learn') {
-            $total              = $this->getCourseService()->findUserLearnCourseCount($user['id'], $conditions);
+            $total              = $this->getCourseService()->findUserLearnCourseCount($user['id'], true);
             $coursesAfterColumn = $this->getCourseService()->findUserLearnCourses(
                 $user['id'],
                 $start,

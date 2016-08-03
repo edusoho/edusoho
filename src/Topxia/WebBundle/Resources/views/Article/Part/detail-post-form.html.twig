@@ -1,6 +1,6 @@
 <form class="es-commet" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
   <div class="es-commet-header">
-    {{'文章评论'|trans}}<span class="badge badge-primary">{{ article.postNum }}</span>
+    {{'文章评论'|trans}}<span class="badge badge-primary thread-post-num">{{ article.postNum }}</span>
   </div>
   <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>
   <div class="form-group clearfix">

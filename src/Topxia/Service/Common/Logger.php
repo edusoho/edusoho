@@ -131,6 +131,12 @@ class Logger
      */
     const ANNOUNCEMENT = 'announcement';
 
+    /**
+     * [$open_course 公开课]
+     * @var string
+     */
+    const OPEN_COURSE = 'open_course';
+
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
@@ -301,7 +307,21 @@ class Logger
                 'deduct_coin'     => '扣除'),
             self::ANNOUNCEMENT => array(
                 'delete' => '删除公告'
-            )
+            ),
+            self::OPEN_COURSE  => array(
+                'create_course'           => '创建公开课',
+                'update_course'           => '更新公开课',
+                'delete_course'           => '删除课程',
+                'pulish_course'           => '发布公开课',
+                'close_course'            => '关闭公开课',
+                'update_picture'          => '更新公开课图片',
+                'add_lesson'              => '添加公开课课时',
+                'update_lesson'           => '更新公开课课时',
+                'delete_lesson'           => '删除课时',
+                'delete_member'           => '删除学员',
+                'delete_material'         => '删除资料',
+                'update_teacher'          => '更新公开课教师',
+                'delete_recommend_course' => '删除推荐课程')
         );
     }
 
@@ -385,7 +405,8 @@ class Logger
             self::EXERCISE     => '练习',
             self::HOMEWORK     => '作业',
             self::QUESTIONPLUS => '题库增强版',
-            self::ANNOUNCEMENT => '公告'
+            self::ANNOUNCEMENT => '公告',
+            self::OPEN_COURSE  => '公开课'
         );
     }
 }

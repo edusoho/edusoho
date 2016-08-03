@@ -79,11 +79,13 @@ define(function(require, exports, module) {
                     msg = msg.data;
                 }
 
-                // 剥离消息前缀
-                msg = msg.slice(prefix.length);
-
-                for(var i = 0; i < self.listenFunc.length; i++){
-                    self.listenFunc[i](msg);
+                // 匹配到指定消息前缀的才传回信息
+                if (msg.indexOf(prefix) == 0) {
+                    // 剥离消息前缀
+                    msg = msg.slice(prefix.length);
+                    for(var i = 0; i < self.listenFunc.length; i++){
+                        self.listenFunc[i](msg);
+                    }
                 }
             };
 

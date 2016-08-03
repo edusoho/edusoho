@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle:Theme:edit-modal-layout.html.twig' %}
+
+{% block custom_orderby %}
+	<div class="form-group">
+	  <label class="col-md-3 control-label">{{'排序设置'|trans}}</label>
+	  <div class="col-md-4 controls">
+	    <select id="orderBy" name="orderBy" required="required" class="form-control width-input width-input-large">
+	        <option value="latest">{{'最新'|trans}}</option>
+	        <option value="hitNum">{{'最热'|trans}}</option>
+	        <option value="recommendedSeq">{{'推荐'|trans}}</option>
+	    </select>
+	    <div class="help-block" style="display:none;"></div>
+	  </div>
+	</div>
+{% endblock %}
+
+{% block custom_category_count %}{% endblock %}
+

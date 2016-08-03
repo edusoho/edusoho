@@ -127,6 +127,10 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $teachers = array();
 
             foreach ($course['teacherIds'] as $teacherId) {
+                if (!$teacherId) {
+                    continue;
+                }
+
                 $user = $users[$teacherId];
                 unset($user['password']);
                 unset($user['salt']);

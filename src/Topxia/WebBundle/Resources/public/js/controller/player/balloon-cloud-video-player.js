@@ -173,6 +173,10 @@ define(function(require, exports, module) {
 
                 player.on("pause", function(e){
                     self.trigger("paused", e);
+                    player.pluck({
+                        text: "",
+                        display:false
+                    });
                 });
                 
                 self.set('player', player);

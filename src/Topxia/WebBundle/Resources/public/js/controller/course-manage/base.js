@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require('es-ckeditor');
+
     require('jquery.select2-css');
     require('jquery.select2');
 
@@ -30,9 +32,7 @@ define(function(require, exports, module) {
                     };
                 },
                 results: function(data) {
-
                     var results = [];
-
                     $.each(data, function(index, item) {
 
                         results.push({
@@ -83,17 +83,14 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=title]',
-            required: true
+            required: true,
+            display: '标题'
         });
 
         validator.addItem({
             element: '[name=subtitle]',
-            rule: 'maxlength{max:70}'
-        });
-
-        validator.addItem({
-            element: '[name=expiryDay]',
-            rule: 'integer'
+            rule: 'maxlength{max:70}',
+            display: '副标题'
         });
 
         validator.addItem({
@@ -111,17 +108,22 @@ define(function(require, exports, module) {
                     if ($(elem).parent().find('.alert-warning').length > 0) {
                         $(elem).parent().find('.alert-warning').html(message).show();
                     } else {
-                        $(elem).parent().append('<div class="alert alert-warning mts">' + message + '</div>');
+                        $(elem).parent().find('.alert-warning').hide();
                     }
                 } else {
-                    $(elem).parent().find('.alert-warning').hide();
+                    validator.removeItem('[name=expiryDay]');
                 }
-
-
-
             }
-        });
-
+        }) 
+        
+        if ($('#course-about-field').length > 0) {
+            CKEDITOR.replace('course-about-field', {
+                allowedContent: true,
+                toolbar: 'Detail',
+                filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
+            });
+        }
+        
     };
 
 });

@@ -12,6 +12,7 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
+        // todo delete try catche
         try {
             $file = $this->getUploadFileService()->getFullFile($id);
 
@@ -19,12 +20,25 @@ class PlayerController extends BaseController
                 throw $this->createNotFoundException();
             }
 
+            $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
             if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
                 if (!empty($file['convertParams']['hasVideoWatermark'])) {
                     $file['videoWatermarkEmbedded'] = 1;
                 }
 
                 $player = "balloon-cloud-video-player";
+
+                $api    = CloudAPIFactory::create("leaf");
+                $result = $api->get("/resources/{$file['globalId']}/player");
+
+                // 临时修复手机浏览器端视频不能播放的问题
+                if ($agentInWhiteList) {
+                    $context['hideQuestion'] = 1; //手机浏览器不弹题
+                    if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
+                        $player = "local-video-player";
+                        $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
+                    }
+                }
             } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
                 $player = "local-video-player";
             } elseif ($file["type"] == 'audio') {
@@ -32,17 +46,8 @@ class PlayerController extends BaseController
             }
 
             $url = $this->getPlayUrl($id, $context);
-
-            $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
-            if ($agentInWhiteList && isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                $player = "local-video-player";
-                $api    = CloudAPIFactory::create("leaf");
-                $result = $api->get("/resources/{$file['globalId']}/player");
-                $url    = isset($result['mp4url']) ? $result['mp4url'] : '';
-            }
         } catch (\Exception $e) {
         }
-
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => isset($url) ? $url : null,
@@ -295,8 +300,7 @@ class PlayerController extends BaseController
         }
 
         $token = $this->getTokenService()->verifyToken('local.media', $token);
-
-        if ($token['userId'] != $this->getCurrentUser()->getId()) {
+        if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
             throw $this->createAccessDeniedException();
         }
 

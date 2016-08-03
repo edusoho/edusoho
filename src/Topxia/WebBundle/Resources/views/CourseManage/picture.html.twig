@@ -1,4 +1,9 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set layout = 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+{% else %}
+  {% set layout = 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% endif %}
+{% extends layout %}
 
 {% block title %}{{'课程图片'|trans}} - {{ parent() }}{% endblock %}
 
@@ -32,7 +37,12 @@
           id="upload-picture-btn"
           class="btn btn-fat btn-primary"
           data-upload-token="{{ upload_token('tmp', 'image') }}"
-          data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
+          {% if course.type == 'open' or course.type == 'liveOpen' %}
+            data-goto-url="{{path('open_course_manage_picture_crop', {id:course.id})}}"
+          {% else %}
+            data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
+          {% endif %}
+          
           >{{'选择要上传的图片'|trans}}</a>
         </div>
       </div>

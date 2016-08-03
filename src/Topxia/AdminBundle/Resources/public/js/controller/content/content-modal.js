@@ -106,6 +106,7 @@ define(function(require, exports, module) {
         // group: 'default'
         var editor = CKEDITOR.replace('richeditor-body-field', {
             toolbar: 'Admin',
+            allowedContent: true,
             filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
             height: 300
