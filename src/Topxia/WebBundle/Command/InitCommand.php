@@ -232,7 +232,6 @@ EOD;
         $settingService = $this->getSettingService();
 
         $defaultSetting                 = array();
-        $defaultSetting['user_name']    = 'Student';
         $defaultSetting['chapter_name'] = '章';
         $defaultSetting['part_name']    = '节';
 
