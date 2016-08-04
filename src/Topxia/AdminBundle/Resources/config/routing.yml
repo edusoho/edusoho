@@ -450,13 +450,13 @@ admin_course_coping:
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
-    permissions: [admin_course_manage,admin_course_recommend]
+    permissions: [admin_course_recommend_list, admin_course_recommend]
 
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
-    permissions: [admin_course_manage,admin_course_recommend]
+    permissions: [admin_course_recommend_list, admin_course_cancel_recommend]
 
 admin_course_chooser:
     pattern: /course/chooser
