@@ -1,12 +1,7 @@
 define(function(require, exports, module) {
     "use strict";
-
     var BatchUploader = require('../uploader/batch-uploader');
-    var _ = require('underscore');
-
-    var attachmentTpl = '<div class="well well-sm"><%= filename %></div>';
-    var template = _.template(attachmentTpl);
-
+    
     exports.run = function() {
 
         var $el = $('#batch-uploader');
