@@ -55,7 +55,7 @@ class ExtensionManager
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('ExtensionManager尚未实例化。'));
+            throw new \RuntimeException(self::getServiceKernel()->trans('ExtensionManager尚未实例化。'));
         }
 
         return self::$_instance;

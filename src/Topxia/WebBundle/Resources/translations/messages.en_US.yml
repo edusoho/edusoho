@@ -897,7 +897,6 @@ QQ客服及QQ群: 'QQ customer service'
 '学<br>习<br>中<br>心': 'Learning<br> Center'
 点击这里给我发消息: 'Send me a message'
 工作时间：%worktime%: Worktime：%worktime%
-'%name%:%number%': '%name%: %number%'
 邮箱：: Mailbox
 '暂无通知': 'No notice'
 考试: Exam
@@ -1094,7 +1093,7 @@ QQ群: 'QQ group'
 'Email / 手机': 'Email / Mobile'
 '请填写在%name%注册时填写的Email地址/手机号码': 'Please enter Email/Mobile same as %name% registered'
 Email地址: 'Email Address'
-请填写在%name%注册时填写的Email地址: 'Please enter Email address same as %name% registered'
+请填写在注册时填写的Email地址: 'Please enter Email address same as %name% registered'
 确认绑定: 'Sure to bind'
 绑定新帐号: 'Bind new account'
 '您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。': 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
@@ -3155,7 +3154,6 @@ Firefox浏览器: Firefox
 个签到.: 'Check In'
 已签: 'Checked In'
 #未翻译的部分
-'%name%': '%name%'
 折: 折
 '%coin_name%': '%coin_name%'
 。: 。
@@ -3180,7 +3178,6 @@ mp3: mp3
 '您真的要加精该帖吗？': '您真的要加精该帖吗？'
 '加精': '加精'
 收缩: 收缩
-'%name%:%title%': '%name%:%title%'
 '%title%': '%title%'
 了: 了
 道: 道

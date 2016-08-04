@@ -28,7 +28,7 @@
           <tr class="active">
             <td width="30%">{{'课程名'|trans}}</td>
              {% if filter == 'classroom' %}
-            <td>{{'所在'|trans}}{{'%name%': setting("classroom.name")|default('班级'|trans)}}</td>
+            <td>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</td>
              {% endif %}
             <td>课时数</td>
             <td>{% if setting('default.user_name') %}{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</td>
