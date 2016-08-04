@@ -10,7 +10,7 @@
     {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
     <span class="label label-primary label-md">{{'账户余额'|trans}}</span>
     {% if setting('coin.coin_content') %}
-      <a href="/coin/show" target="_blank" class="pull-right">{{'%coin_name%'|trans({'%coin_name%': setting('coin.coin_name')|default('说明'|trans)})}}</a>
+      <a href="/coin/show" target="_blank" class="pull-right">{{'%coin_name%说明'|trans({'%coin_name%': setting('coin.coin_name')|default('虚拟币'|trans)})}}</a>
     {% endif %}
     <br>
     <div class="coin-block clearfix">
