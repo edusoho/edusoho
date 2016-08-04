@@ -33,13 +33,12 @@
       </div>
 
       <div class="mask" {% if lesson %}style="display:none"{% endif %} id="media-error-dialog">
-        <div class="modal-dialog" style="width:200px;margin:22% auto;">
+        <div class="modal-dialog" style="width:230px;margin:22% auto;">
           <div class="modal-content">
-            <div class="modal-header" style="padding:5px 15px;">
-              <h4 class="modal-title">提示</h4>
-            </div>
+
             <div class="modal-body clearfix">
-              {% if not lesson %}课时未发布{% else %}该课时资源文件被删除{% endif %}
+              <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+              <span class="media-error">{% if not lesson %}视频编辑中，请稍后再试{% else %}该课时资源文件被删除{% endif %}</span>
             </div>
           </div>
         </div>
@@ -52,11 +51,9 @@
         <div class="mask">
           <div class="modal-dialog" style="width:200px;margin:22% auto;">
             <div class="modal-content">
-              <div class="modal-header" style="padding:5px 15px;">
-                <h4 class="modal-title">提示</h4>
-              </div>
               <div class="modal-body clearfix">
-                暂未发布直播
+                <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+                <span class="media-error">暂未发布直播</span>
               </div>
             </div>
           </div>
