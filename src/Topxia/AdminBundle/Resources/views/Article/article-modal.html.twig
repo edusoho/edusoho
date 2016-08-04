@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'article', targetId: article.id|default(0)})) }}
+      {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'article', targetId: article.id|default(0)}, {'showLabel':false})) }}
 
       <div class="form-group">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -26,14 +26,15 @@ class AttachmentController extends BaseController
 
     public function formFieldsAction(Request $request, $targetType, $targetId)
     {
-        $targets = explode(".", $targetType);
-
+        $targets     = explode(".", $targetType);
+        $attachments = $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId);
         return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
             'target'      => array_shift($targets),
             'targetType'  => $targetType,
             'type'        => array_pop($targets),
             'useType'     => $request->query->get('useType', false),
-            'attachments' => $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId)
+            'showLabel'   => $request->query->get('showLabel', true),
+            'attachments' => $attachments
         ));
     }
 

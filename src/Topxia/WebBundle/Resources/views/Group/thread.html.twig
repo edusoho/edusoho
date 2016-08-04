@@ -301,7 +301,7 @@
           </div>
 
             <div class="form-group">
-                {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'group.thread.post', targetId: thread.id|default(0)})) }}
+                {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'group.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
             </div>
 
           <div class="form-group">
