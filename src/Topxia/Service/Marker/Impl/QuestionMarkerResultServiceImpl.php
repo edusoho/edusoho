@@ -28,9 +28,8 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
     public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type, $lessonId)
     {
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
-
         if (in_array($type, array('single_choice', 'determine'))) {
-            $status = in_array($answer, $questionMarker['answer']) ? 'right' : 'wrong';
+            $status = array_diff($answer, $questionMarker['answer']) ? 'right' : 'wrong';
         }
 
         if ($type == 'uncertain_choice') {

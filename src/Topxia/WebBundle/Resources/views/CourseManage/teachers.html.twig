@@ -1,4 +1,9 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set layout = 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+{% else %}
+  {% set layout = 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% endif %}
+{% extends layout %}
 
 {% block title %}{{'教师设置'|trans}} - {{ parent() }}{% endblock %}
 
@@ -40,7 +45,7 @@
   <div class="panel-heading">{{'教师设置'|trans}}</div>
   <div class="panel-body">
 
-    <form id="teachers-form" class="form-horizontal" method="post">
+    <form id="teachers-form" class="form-horizontal" method="post" action="{% if course.type == 'open' or course.type == 'liveOpen' %}{{ path('open_course_manage_teachers',{id:course.id}) }}{% else %}{{ path('course_manage_teachers',{id:course.id}) }}{% endif %}">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="teachers-form-group">

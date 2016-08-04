@@ -18,7 +18,8 @@ class CourseMaterialController extends CourseBaseController
         $conditions = array(
             'courseId'        => $id,
             'excludeLessonId' => 0,
-            'source'          => 'coursematerial'
+            'source'          => 'coursematerial',
+            'type'            => 'course'
         );
 
         $paginator = new Paginator(
@@ -29,7 +30,7 @@ class CourseMaterialController extends CourseBaseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime','DESC'),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

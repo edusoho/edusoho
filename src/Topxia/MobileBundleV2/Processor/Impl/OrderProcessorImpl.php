@@ -54,7 +54,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam("receipt-data");
         $amount  = $this->getParam("amount", 0);
-        return $this->requestReceiptData($user["id"], $amount, $receipt, true);
+        return $this->requestReceiptData($user["id"], $amount, $receipt, false);
     }
 
     public function checkCoupon()
@@ -239,6 +239,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         if (!is_object($data)) {
             return $this->createErrorResponse('error', "充值验证失败");
+        }
+
+        if ($data->status == 21007) { //sandbox receipt 
+            return $this->requestReceiptData($userId, $amount, $receipt, true);
         }
 
         if (!isset($data->status) || $data->status != 0) {

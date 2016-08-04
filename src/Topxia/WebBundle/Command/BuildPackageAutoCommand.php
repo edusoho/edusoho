@@ -266,18 +266,18 @@ class BuildPackageAutoCommand extends BaseCommand
         }
         $prefix = 'release';
 
-        $gitRelease   = exec("git branch |grep release/{$version}");
+        $gitRelease   = exec("git branch |grep v{$version}");
         $gitToRelease = exec("git branch |grep release/{$toVersion}");
         if (empty($gitRelease)) {
-            echo "分支 release/{$version} 不存在, 无法生成差异文件\n";exit;
+            echo "标签 v{$version} 不存在, 无法生成差异文件\n";
         }
         if (empty($gitToRelease)) {
             echo "分支 release/{$toVersion} 不存在, 无法生成差异文件\n";exit;
         }
-        $this->output->writeln("<info>  使用 git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");
+        $this->output->writeln("<info>  使用 git  diff --name-status  v{$version} release{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");
 
         chdir($RootPath);
-        $command = "git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion}";
+        $command = "git  diff --name-status  v{$version} release/{$toVersion} > build/diff-{$toVersion}";
         exec($command);
     }
 

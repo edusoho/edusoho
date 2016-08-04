@@ -78,18 +78,22 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlockByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}'";
-        $block = $this->getConnection()->fetchAssoc($sql, array($code));
-
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = '{$code}'";
+            $block = $that->getConnection()->fetchAssoc($sql, array($code));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        });
     }
 
     public function getBlockByCodeAndOrgId($code,$orgId=0)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
-        $block = $this->getConnection()->fetchAssoc($sql, array($code,$orgId));
-
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+        return $this->fetchCached("code:{$code}:orgId:{$orgId}", $code, $orgId, function ($code, $orgId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = '{$code}' AND orgId =  '{$orgId}' ";
+            $block = $that->getConnection()->fetchAssoc($sql, array($code,$orgId));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        });
     }
     
     public function updateBlock($id, array $fields)

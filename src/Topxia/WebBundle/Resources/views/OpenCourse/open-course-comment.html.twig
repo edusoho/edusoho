@@ -1,0 +1,33 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+
+<div class="es-section" id="open-course-comment">
+  <div class="gray-darker pbl">{{'评论'|trans}}(<span class="thread-post-num">{{ course.postNum }}</span>)</div>
+  {% if app.user %}
+    <form class="es-commet" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}" onsubmit="return false">
+      <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>
+      <div class="form-group clearfix">
+        <button type="submit" class="btn btn-primary pull-right {% if not app.user or app.request.get('as')|default('') == 'preview' %}disabled{% endif %}" data-loading-text="{{'正在保存...'|trans}}">{{'发表评论'|trans}}</button>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% else %}
+    <div class="empty">
+      {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
+    </div>
+  {% endif %}
+
+  <ul class="comment-list thread-pripost-list">
+    {% for post in posts %}
+      {% set author = users[post.userId] %}
+      {% set postReplyUrl = path('open_course_post_reply', {id:course.id, postId:post.id, targetType:'openCourse'}) %}
+      {% set goto = goto|default(path('homepage')) %}
+      {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
+    {% else %}
+      <li class="empty">{{'还没有人评论，欢迎说说您的想法！'|trans}}</li>
+    {% endfor %}
+  </ul>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+</div>

@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {{ course.title }}查询结果&nbsp;&nbsp;({{ app.request.get('startTime') }} 到 {{ app.request.get('endTime') }})
+{% endblock %}
+{% block body %}
+  {% include 'TopxiaAdminBundle:OpenCourseAnalysis/Conversion:order-list.html.twig' %}
+
+  <!-- 以下是来源详情 -->
+ {# {{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:course.id })) }}#}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}

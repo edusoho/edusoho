@@ -1,18 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Util\AvatarAlert;
+use Symfony\Component\HttpFoundation\Request;
 
 class MyCourseController extends BaseController
 {
-
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
         if ($this->getCurrentUser()->isTeacher()) {
-            return $this->redirect($this->generateUrl('my_teaching_courses')); 
+            return $this->redirect($this->generateUrl('my_teaching_courses'));
         } else {
             return $this->redirect($this->generateUrl('my_courses_learning'));
         }
@@ -21,7 +18,7 @@ class MyCourseController extends BaseController
     public function learningAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $paginator = new Paginator(
+        $paginator   = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserLeaningCourseCount($currentUser['id']),
             12
@@ -34,7 +31,7 @@ class MyCourseController extends BaseController
         );
 
         return $this->render('TopxiaWebBundle:MyCourse:learning.html.twig', array(
-            'courses'=>$courses,
+            'courses'   => $courses,
             'paginator' => $paginator
         ));
     }
@@ -42,7 +39,7 @@ class MyCourseController extends BaseController
     public function learnedAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $paginator = new Paginator(
+        $paginator   = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserLeanedCourseCount($currentUser['id']),
             12
@@ -56,16 +53,16 @@ class MyCourseController extends BaseController
 
         $userIds = array();
         foreach ($courses as $key => $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-            $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$course['id'],'userId'=>$currentUser['id']));
-            
-            $courses[$key]['learnTime']=intval($learnTime/60/60)."小时".($learnTime/60%60)."分钟";
+            $userIds   = array_merge($userIds, $course['teacherIds']);
+            $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+
+            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60)."小时".($learnTime / 60 % 60)."分钟";
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaWebBundle:MyCourse:learned.html.twig', array(
-            'courses'=>$courses,
-            'users'=>$users,
+            'courses'   => $courses,
+            'users'     => $users,
             'paginator' => $paginator
         ));
     }
@@ -73,28 +70,27 @@ class MyCourseController extends BaseController
     public function favoritedAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $currentUser['id']
+        );
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserFavoritedCourseCount($currentUser['id']),
+            $this->getCourseService()->searchCourseFavoriteCount($conditions),
             12
         );
-        
-        $courses = $this->getCourseService()->findUserFavoritedCourses(
-            $currentUser['id'],
+
+        $courseFavorites = $this->getCourseService()->searchCourseFavorites(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userIds = array();
-        foreach ($courses as $favoriteCourse) {
-            $userIds = array_merge($userIds, $favoriteCourse['teacherIds']);
-        }
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render('TopxiaWebBundle:MyCourse:favorited.html.twig', array(
-            'courses'=>$courses,
-            'users'=>$users,
-            'paginator' => $paginator
+            'courseFavorites' => $courseFavorites,
+            'paginator'       => $paginator
         ));
     }
 
@@ -108,9 +104,8 @@ class MyCourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getClassroomService() 
+    protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }

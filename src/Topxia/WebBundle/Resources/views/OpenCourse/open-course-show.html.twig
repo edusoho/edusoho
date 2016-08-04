@@ -1,0 +1,81 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course' %}
+
+{% block title %}
+  {{ course.title }} - {{ parent() }}
+{% endblock %}
+
+{% block keywords %}
+  {% set tags = data('Tags', {tagIds: course.tags}) %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
+{% endblock %}
+
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <ol class="breadcrumb open-course-breadcrumb">
+    <li><a href="{{ path('homepage') }}">首页</a></li>
+    <li><a href="{{ path('open_course_explore') }}" >公开课</a></li>
+    <li>{{ course.title }}</li>
+  </ol>
+  {# {% cache 'open/course/' ~ course.id ~ '/header' 600 %} #}
+  <div class="open-course-header">
+    <div class="row">
+
+      {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+
+      <div class="col-md-3 open-course-tab js-open-course-tab">
+        <ul class="clearfix">
+          <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
+          {#{% if course.type == 'open' %}
+            <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>课时列表</li>
+          {% endif %}#}
+        </ul>
+        <div id="content">
+          <ul id="recommand-tab">
+            {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig' %}
+          </ul>
+          {# <ul id="live-tab" style="display:none">
+            {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig' with {currentLessonId:lessonId|default(null)} %}
+          </ul> #}
+        </div>
+      </div>
+    </div>
+  </div>
+  {# {% endcache %} #}
+
+  {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
+
+  <div class="open-course-detail row">
+    <div class="col-md-9">
+      <div class="es-section gray-darker editor-text">
+        {% if course.about %}
+          {{ course.about|raw }}
+        {% else %}
+          <div class="empty">暂无简介</div>
+        {% endif %}
+      </div>
+      {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+    </div>
+
+    {# {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %} #}
+    <div class="col-md-3 hidden-sm hidden-xs">
+      {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+      {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
+    </div>
+    {# {% endcache %} #}
+  </div>
+  {% include 'TopxiaWebBundle:Common:weixin-share.html.twig' with {
+  'title': course.title,
+  'desc': course.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(course.largePicture,'course.png'),
+  }%}
+{% endblock %}
+    
