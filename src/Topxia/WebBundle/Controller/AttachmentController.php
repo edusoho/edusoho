@@ -45,10 +45,24 @@ class AttachmentController extends BaseController
         ));
     }
 
+    public function fileShowAction(Request $request, $fileId)
+    {
+        $file       = $this->getUploadFileService()->getFile($fileId);
+        $attachment = array('file' => $file);
+        return $this->render('TopxiaWebBundle:Attachment:file-item.html.twig', array(
+            'attachment' => $attachment
+        ));
+    }
+
     public function previewAction(Request $request, $id)
     {
-        $attachment = $this->getAttachmentService()->get($id);
-        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+        $previewType = $request->query->get('type', 'attachment');
+        if ($previewType == 'attachment') {
+            $attachment = $this->getAttachmentService()->get($id);
+            $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+        } else {
+            $file = $this->getUploadFileService()->getFile($id);
+        }
 
         if ($file['storage'] == 'cloud') {
             return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
@@ -72,9 +86,15 @@ class AttachmentController extends BaseController
         ));
     }
 
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
-        $this->getAttachmentService()->delete($id);
+        $previewType = $request->query->get('type', 'attachment');
+        if ($previewType == 'attachment') {
+            $this->getAttachmentService()->delete($id);
+        } else {
+            $this->getUploadFileService()->deleteFile($id);
+        }
+
         return $this->createJsonResponse(array('msg' => 'ok'));
     }
 

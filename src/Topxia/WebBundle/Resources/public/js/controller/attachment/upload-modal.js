@@ -64,7 +64,9 @@ define(function(require, exports, module) {
             $list.empty();
             idStore.val('');
 
-            $list.append(template(response));
+            $.get('/attachment/file/'+ response.id +'/show', function(html){
+                $list.append(html);
+            })
             idStore.addId(response.id);
             fileUploaded(file);
         });

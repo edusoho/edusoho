@@ -1,8 +1,10 @@
 {% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) %}
+  {% do load_script('topxiawebbundle/controller/attachment/upload-form') %}
+  
   {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~type  : 'js-attachment-ids'%}
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~type  : 'js-attachment-list'%}
   {% set reupload = attachments|default(null)|length %}
-  {% do load_script('topxiawebbundle/controller/attachment/upload-form') %}
+  
   <div class="form-group">
     {% if showLabel|default(false) %}
       <label class="col-xs-2 control-label" for="thread_title">{{ '附件'|trans }}</label>
