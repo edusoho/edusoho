@@ -100,7 +100,6 @@ class TransGenerateCommand extends BaseCommand
         $yaml    = new Yaml();
         $content = $yaml->dump($newTrans);
         if ($type == 'untranslate') {
-            $content .= "#未翻译的部分\n";
             $content .= $yaml->dump($unTrans);
         }
         file_put_contents($tranFile, $content);

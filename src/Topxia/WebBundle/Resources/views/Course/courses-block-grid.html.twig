@@ -57,7 +57,7 @@
 
             {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <span class="student-col">
-              <span class="meta-label">{{'%user_name%'|trans({'%user_name%': default.user_name|default('学员'|trans)})}}</span>
+              <span class="meta-label">{{ default.user_name|default('学员'|trans) }}</span>
               <span class="student-num">{{'%studentNum%人'|trans({'%studentNum%': course.studentNum })}}</span>
             </span>
             {% endif %}

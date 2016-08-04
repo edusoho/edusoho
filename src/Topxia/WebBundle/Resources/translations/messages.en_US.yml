@@ -147,6 +147,7 @@
 '，TA注册后将获得%promoted_user_value%元优惠券': 'The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration'
 'TA在消费后您将获得%promote_user_value%元优惠券': 'You will get a coupon worthing %promote_user_value% RMB when he or she  make a payment'
 '同时您将获得%promote_user_value%元优惠券': 'And you will get a coupon worthing %promote_user_value% RMB'
+。: .
 邀请对象: Invited
 邀请时间: 'Invited date'
 邀请奖励: Rewards
@@ -1093,7 +1094,6 @@ QQ群: 'QQ group'
 'Email / 手机': 'Email / Mobile'
 '请填写在%name%注册时填写的Email地址/手机号码': 'Please enter Email/Mobile same as %name% registered'
 Email地址: 'Email Address'
-请填写在注册时填写的Email地址: 'Please enter Email address same as %name% registered'
 确认绑定: 'Sure to bind'
 绑定新帐号: 'Bind new account'
 '您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。': 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
@@ -3154,10 +3154,7 @@ Firefox浏览器: Firefox
 个签到.: 'Check In'
 已签: 'Checked In'
 折: 折
-'%coin_name%': '%coin_name%'
-。: 。
-￥: ￥
-'%user_name%': '%user_name%'
+'%coin_name%说明': '%coin_name%说明'
 '%startTime%': '%startTime%'
 ！: ！
 '%chapter_name%': '%chapter_name%'
@@ -3178,6 +3175,8 @@ mp3: mp3
 '加精': '加精'
 收缩: 收缩
 '%title%': '%title%'
+请填写在%name%注册时填写的Email地址: 请填写在%name%注册时填写的Email地址
+￥: ￥
 了: 了
 道: 道
 门: 门
