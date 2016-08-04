@@ -494,7 +494,7 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay', 'llcbpay');
+        $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay', 'llcbpay', 'llquickpay');
 
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {

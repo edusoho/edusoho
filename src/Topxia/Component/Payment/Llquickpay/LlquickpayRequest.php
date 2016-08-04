@@ -1,0 +1,111 @@
+<?php
+namespace Topxia\Component\Payment\Llquickpay;
+
+use Topxia\Component\Payment\Request;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+
+class LlquickpayRequest extends Request
+{
+    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
+
+    public function form()
+    {
+        $form           = array();
+        if ($this->isMobile($this->params['userAgent'])) {
+            $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
+        }
+        $form['action'] = $this->url;
+        $form['method'] = 'post';
+        $form['params'] = $this->convertParams($this->params);
+        return $form;
+    }
+
+    public function signParams($params)
+    {
+        ksort($params);
+        $sign = '';
+        foreach ($params as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
+            $sign .= $key.'='.$value.'&';
+        }
+        $sign .= 'key='.$this->options['secret'];
+        return md5($sign);
+    }
+
+    protected function convertParams($params)
+    {
+        $isMobile   = $this->isMobile($params['userAgent']);
+        $mobileType = $this->mobileType($params['userAgent']);
+
+        $converted                 = array();
+        $converted['busi_partner'] = '101001';
+        $converted['dt_order']     = date('YmdHis', time());
+        $converted['money_order']  = $params['amount'];
+        $converted['name_goods']   = mb_substr($this->filterText($params['title']), 0, 12, 'utf-8');
+        $converted['no_order']     = $params['orderSn'];
+        if (!empty($params['notifyUrl'])) {
+            $converted['notify_url'] = $params['notifyUrl'];
+        }
+        $converted['oid_partner']  = $this->options['key'];
+        $converted['sign_type']    = 'MD5';
+        $converted['version']      = '1.0';
+        $converted['user_id']      = $params['userId'];
+        $converted['timestamp']    = date('YmdHis', time());
+        if (!empty($params['returnUrl'])) {
+            $converted['url_return'] = $params['returnUrl'];
+        }
+
+        $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
+        $converted['bank_code']  = '';
+        $converted['pay_type']   = '2';
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001));
+        if ($isMobile) {
+            $converted['app_request'] = $mobileType;
+        }
+        $converted['sign']       = $this->signParams($converted);
+        return $converted;
+    }
+
+    protected function filterText($text)
+    {
+        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9.]*/iu', $text, $results);
+        $title = '';
+
+        if ($results) {
+            foreach ($results[0] as $result) {
+                if (!empty($result)) {
+                    $title .= $result;
+                }
+            }
+        }
+
+        return $title;
+    }
+
+    public function isMobile($userAgent)
+    {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android') || strpos($userAgent, 'WAP')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function mobileType($userAgent)
+    {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad')) {
+            return 'IOS';
+        }
+
+        if (strpos($userAgent, 'Android')) {
+            return 'Android';
+        }
+
+        if (strpos($userAgent, 'WAP')) {
+            return 'WAP';
+        }
+    }
+}
