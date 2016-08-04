@@ -132,7 +132,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         $this->calculateClassroomRating($review['classroomId']);
 
-        $this->getLogService()->info('classroom', 'delete_review', $this->getKernel()->trans('删除评价#%id%', array('%id%' => $id)));
+        $this->getLogService()->info('classroom_review', 'delete', "删除评价#{$id}");
     }
 
     protected function getClassroomReviewDao()
