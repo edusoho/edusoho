@@ -269,7 +269,7 @@ class BuildPackageAutoCommand extends BaseCommand
         $gitRelease   = exec("git branch |grep v{$version}");
         $gitToRelease = exec("git branch |grep release/{$toVersion}");
         if (empty($gitRelease)) {
-            echo "标签 v{$version} 不存在, 无法生成差异文件\n";exit;
+            echo "标签 v{$version} 不存在, 无法生成差异文件\n";
         }
         if (empty($gitToRelease)) {
             echo "分支 release/{$toVersion} 不存在, 无法生成差异文件\n";exit;
