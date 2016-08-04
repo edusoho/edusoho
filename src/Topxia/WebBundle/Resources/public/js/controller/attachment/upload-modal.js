@@ -61,10 +61,9 @@ define(function(require, exports, module) {
         };
 
         esuploader.on('file.uploaded', function(file, data, response) {
-            if ($('.js-reupload-file').length > 0) {
-                $list.empty();
-                idStore.val('');
-            }
+            $list.empty();
+            idStore.val('');
+
             $list.append(template(response));
             idStore.addId(response.id);
             fileUploaded(file);
@@ -77,16 +76,7 @@ define(function(require, exports, module) {
             //隐藏modal框
             $("#modal").modal("hide");
 
-            //更新按钮状态
-            if ($('.js-upload-file').length > 0) {
-                $('.js-upload-file').data('toggle','null'); 
-                $('.js-upload-file').html($('.js-upload-file').data('reuploadTitle')).removeClass('js-upload-file').addClass('js-reupload-file');
-            }
+            $list.next('a').addClass('hidden');
         }
-
-        $('.js-reupload-file').on('click', function(e) {
-            e.stopImmediatePropagation();
-            $("#modal").modal("show");
-        })
     }
 });
