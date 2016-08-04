@@ -70,7 +70,7 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if (!$this->_checkCourseStatus($courseId)) {
-            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+            return $this->createMessageResponse('error', '课程暂时无法查看，请稍后再试。');
         }
 
         /*  if (!$this->_checkPublishedLessonExists($courseId)) {
