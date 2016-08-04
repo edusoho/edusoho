@@ -14,12 +14,14 @@ class TransGenerateCommand extends BaseCommand
     {
         $this->setName('trans:generate')
             ->addArgument('dir', InputArgument::REQUIRED, 'Bundle Directory')
+            ->addArgument('type', InputArgument::OPTIONAL, 'Trans Type')
             ->setDescription('生成Bundle的语言文件! eg. src/Topxia/WebBundle');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('dir');
+        $type =  $input->getArgument('type') == 'untranslate' ? $input->getArgument('type'): 'default';
         $dir = rtrim($dir, "\/");
 
         $output->writeln("<comment>正在扫描模版文件的语言串:</comment>");
@@ -70,14 +72,25 @@ class TransGenerateCommand extends BaseCommand
         $addCount   = 0;
         $existCount = 0;
         $newTrans = array();
+        $unTrans = array();
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $existTrans)) {
                 $existCount++;
-                $newTrans[$keyword] = $existTrans[$keyword];
+                if ($type == 'untranslate' && $existTrans[$keyword] == $keyword) {
+                    $unTrans[$keyword] = $existTrans[$keyword];
+                } else {
+                    $newTrans[$keyword] = $existTrans[$keyword];
+                }
             } else {
                 $output->writeln(" - {$keyword} <info>... 新增</info>");
                 $addCount++;
-                $newTrans[$keyword] = $keyword;
+                if ($type == 'untranslate') {
+                    $unTrans[$keyword] = $keyword;
+
+                } else {
+                    $newTrans[$keyword] = $keyword;
+                }
+
             }
         }
 
@@ -86,6 +99,10 @@ class TransGenerateCommand extends BaseCommand
 
         $yaml    = new Yaml();
         $content = $yaml->dump($newTrans);
+        if ($type == 'untranslate') {
+            $content .= "#未翻译的部分\n";
+            $content .= $yaml->dump($unTrans);
+        }
         file_put_contents($tranFile, $content);
     }
 
