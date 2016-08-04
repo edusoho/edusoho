@@ -3157,7 +3157,7 @@ Firefox浏览器: Firefox
 个签到.: 'Check In'
 已签: 'Checked In'
 折: 折
-'%coin_name%说明': '%coin_name%说明'
+'%coin_name%说明': '%coin_name% description'
 '1 GB': '1 GB'
 'mp4, mp3': 'mp4, mp3'
 'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
@@ -3167,14 +3167,14 @@ mp3: mp3
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
 2M: 2M
-'当前课程正处于「 %name% 」打折活动中。': '当前课程正处于「 %name% 」打折活动中。'
-'您真的要取消加精该帖吗？': '您真的要取消加精该帖吗？'
-'取消加精': '取消加精'
-'您真的要加精该帖吗？': '您真的要加精该帖吗？'
-'加精': '加精'
-收缩: 收缩
+'当前课程正处于「 %name% 」打折活动中。': 'This course is in promotion「 %name% 」.'
+'您真的要取消加精该帖吗？': 'Are you sure to remove this post from digest?'
+'取消加精': 'Remove digest'
+'您真的要加精该帖吗？': 'Are you sure to add this post to digest?'
+'加精': 'Add to digest'
+收缩: Collapse
 '%title%': '%title%'
-请填写在%name%注册时填写的Email地址: 请填写在%name%注册时填写的Email地址
+请填写在%name%注册时填写的Email地址: Please enter you email address when join %name%.
 了: 了
 道: 道
 门: 门
@@ -3183,11 +3183,11 @@ mp3: mp3
 PPT: PPT
 Flash: Flash
 '--': '--'
-发布悬赏话题: 发布悬赏话题
+发布悬赏话题: Add topic with rewards
 '%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
-'文件不存在(global id: #%globalId%)，完成上传失败！': '文件不存在(global id: #%globalId%)，完成上传失败！'
-'uploadFile失败，完成上传失败！': 'uploadFile失败，完成上传失败！'
+'文件不存在(global id: #%globalId%)，完成上传失败！': 'File not exist (global id: #%globalId%), failed to upload.'
+'uploadFile失败，完成上传失败！': 'Failed to upload file.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
-'电子邮箱或者手机号码格式不正确!': '电子邮箱或者手机号码格式不正确!'
+'电子邮箱或者手机号码格式不正确!': 'Invalid format of email or phone number.'
