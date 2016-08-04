@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                      var $tr = $(html);
                     $('#' + $tr.attr('id')).remove();
                 }).error(function(){
-                    Notify.danger(Translator.trans('%title%失败',{title:$trigger.attr('title')}));
+                    Notify.danger(Translator.trans('%title%失败!',{title:$trigger.attr('title')}));
                 });
 
         });

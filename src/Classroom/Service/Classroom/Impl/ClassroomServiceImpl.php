@@ -223,7 +223,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->deleteClassroom($id);
-        $this->getLogService()->info('Classroom', 'delete', $this->getKernel()->trans('班级#%id%永久删除',array('%id%'=>$id)));
+        $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
 
         return true;
     }
@@ -327,7 +327,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->deleteNotUsedPictures($classroom);
 
-        $this->getLogService()->info('classroom', 'update_picture', $this->getKernel()->trans('更新课程《%title%》(#%id%)图片',array('%title%'=>$classroom['title'],'%id%'=>$classroom['id'])), $fields);
+        $this->getLogService()->info('classroom', 'update_picture', "更新课程《{$classroom['title']}》(#{$classroom['id']})图片", $fields);
 
         return $this->updateClassroom($id, $fields);
     }
@@ -459,7 +459,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
-        $this->getLogService()->info('classroom', 'remove_student', $this->getKernel()->trans('班级《%title%》(#%classroomId%)，移除学员#%memberId%',array('%title%'=>$classroom['title'],'%classroomId%'=>$classroom['id'],'%memberId%'=>$member['id'])));
+        $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'classroom.quit',
             new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
@@ -1327,7 +1327,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'recommendedTime' => time()
         ));
 
-        $this->getLogService()->info('classroom', 'recommend', $this->getKernel()->trans("推荐班级《%title%》(#%id%),序号为%number%",array('%title%'=>$classroom['title'],'%id%'=>$classroom['id'],'%number%'=>$number)));
+        $this->getLogService()->info('classroom', 'recommend', "推荐班级《{$classroom['title']}》(#{$classroom['id']}),序号为{$number}");
 
         return $classroom;
     }
@@ -1342,7 +1342,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'recommendedSeq'  => 100
         ));
 
-        $this->getLogService()->info('classroom', 'cancel_recommend', $this->getKernel()->trans('取消推荐班级《%title%》(#%id%)',array('%title%'=>$classroom['title'],'%id%'=>$classroom['id'])));
+        $this->getLogService()->info('classroom', 'cancel_recommend', "取消推荐班级《{$classroom['title']}》(#{$classroom['id']})");
 
         return $classroom;
     }

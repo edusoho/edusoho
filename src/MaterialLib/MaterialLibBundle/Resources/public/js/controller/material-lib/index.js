@@ -113,7 +113,7 @@ define(function(require, exports, module) {
                     }).done(function(resp){
                         self.element.hide();
                         self.element.prev().hide();
-                        self.element.parent().prev().html('资源详情');
+                        self.element.parent().prev().html(Translator.trans('资源详情'));
                         self.element.parent().append(resp);
 
                         if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {

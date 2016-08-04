@@ -2,7 +2,7 @@
    <div class="order-detail  clearfix">
      <div class="order-img hidden-xs">
         <a href="{{ path('classroom_show', {id:classroom.id}) }}">
-          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="收费">
+          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="{{ '收费'|trans }}">
         </a>
      </div>
      <div class="order-info">
