@@ -45,6 +45,7 @@ define(function(require, exports, module) {
                     //清除附件
                     $('.js-attachment-list').empty();
                     $('.js-attachment-ids').val("");
+                    $('.js-upload-file').removeClass('hidden');
                     
                     $form.find('[type=submit]').removeAttr('disabled');
 
