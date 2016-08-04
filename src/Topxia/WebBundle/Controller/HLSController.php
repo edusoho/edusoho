@@ -117,10 +117,11 @@ class HLSController extends BaseController
         $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
         $fromApi  = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
-
         if (empty($token)) {
             throw $this->createNotFoundException();
         }
+
+        $streamToken = $token;
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
@@ -169,7 +170,7 @@ class HLSController extends BaseController
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
-        if (!$inWhiteList && $this->isHiddenVideoHeader($hideBeginning)) {
+        if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
                 'keyencryption' => $keyencryption
