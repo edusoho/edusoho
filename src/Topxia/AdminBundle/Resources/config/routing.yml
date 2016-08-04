@@ -256,7 +256,7 @@ admin_user_create_nickname_check:
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
-    permissions: [admin_user_manage,admin_teacher]
+    permissions: [admin]
 
 admin_user_edit:
     pattern:  /user/{id}/edit
