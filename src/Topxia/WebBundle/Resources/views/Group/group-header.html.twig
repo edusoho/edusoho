@@ -1,7 +1,7 @@
 {% set groupNav = groupNav|default(null) %}
 <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
-  <li><a href="{{path('homepage')}}">{{'%name%'|trans({'%name%': homepage.name|default('首页'|trans)}) }}</a></li>
-  <li><a href="{{path('group')}}">{{'%name%'|trans({'%name%': group.name|default('小组频道'|trans)}) }}</a></li>
+  <li><a href="{{path('homepage')}}">{{ homepage.name|default('首页'|trans) }}</a></li>
+  <li><a href="{{path('group')}}">{{ group.name|default('小组频道'|trans) }}</a></li>
   <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
 </ol>
 <div class="group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
