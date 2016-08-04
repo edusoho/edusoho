@@ -135,7 +135,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="video_fingerprint_time"]',
                 required: true,
-                rule: 'arithmetic_number',
+                rule: 'decimal min{min:0.1} max{max:100}',
                 display:'云视频指纹显示时间'
             });
         }
@@ -145,7 +145,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="video_fingerprint_time"]',
                     required: true,
-                    rule: 'arithmetic_number',
+                    rule: 'decimal min{min:0.1} max{max:100}',
                     display:'云视频指纹显示时间'
                 });
             } else {
