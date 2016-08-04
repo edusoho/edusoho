@@ -626,7 +626,7 @@ class CourseLessonController extends BaseController
                 'url'    => $this->generateUrl('course_learn', array('id' => $courseId), true)."#lesson/".$lessonId,
                 'appUrl' => $appUrl
             ),
-            'times'    => 0,
+            'times'    => 1,
             'duration' => 3600
         ));
         $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
