@@ -18,6 +18,7 @@ define(function(require, exports, module) {
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var videoHeaderLength = videoHtml.data('videoHeaderLength');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
@@ -66,7 +67,8 @@ define(function(require, exports, module) {
                     disableVolumeButton: disableVolumeButton,
                     disablePlaybackButton: disablePlaybackButton,
                     disableResolutionSwitcher: disableResolutionSwitcher
-                }
+                },
+                videoHeaderLength: videoHeaderLength
             }
         );
 

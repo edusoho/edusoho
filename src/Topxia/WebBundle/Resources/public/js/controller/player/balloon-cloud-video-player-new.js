@@ -20,7 +20,8 @@ define(function(require, exports, module) {
                 disablePlaybackButton: false,
                 disableResolutionSwitcher:false
             },
-            enablePlaybackRates: false
+            enablePlaybackRates: false,
+            videoHeaderLength: 0
         },
 
         events: {},
@@ -91,7 +92,8 @@ define(function(require, exports, module) {
                 disableControlBar: self.get('disableControlBar'),
                 disableProgressBar: self.get('disableProgressBar'),
                 playlist: self.get('url'),
-                remeberLastPos : self.get('remeberLastPos')
+                remeberLastPos : self.get('remeberLastPos'),
+                videoHeaderLength: self.get('videoHeaderLength')
             }, extConfig));
 
             player.on('ready', function(e){
@@ -183,7 +185,6 @@ define(function(require, exports, module) {
         isBrowserSupportPlaybackRates: function() {
             var nUserAgent = navigator.userAgent.toLowerCase();
             // IE不支持，低版本(47以下)的chrome不支持
-            console.log(nUserAgent);
             var isIE = nUserAgent.indexOf('msie') > 0;
             var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
             var isChrome = nUserAgent.indexOf('chrome') > 0;
