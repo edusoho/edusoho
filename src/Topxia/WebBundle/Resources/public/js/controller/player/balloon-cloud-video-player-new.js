@@ -184,7 +184,6 @@ define(function(require, exports, module) {
         isBrowserSupportPlaybackRates: function() {
             var nUserAgent = navigator.userAgent.toLowerCase();
             // IE不支持，低版本(47以下)的chrome不支持
-            console.log(nUserAgent);
             var isIE = nUserAgent.indexOf('msie') > 0;
             var isIE11 = nUserAgent.indexOf('trident') > 0 && nUserAgent.indexOf('rv') > 0;
             var isChrome = nUserAgent.indexOf('chrome') > 0;
