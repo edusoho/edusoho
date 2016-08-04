@@ -146,7 +146,7 @@ class HLSController extends BaseController
         }
 
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $enablePlayRate = $this->setting('storage.enable_playback_rates');
+        $enablePlayRate = $this->setting('storage.enable_playback_rates', 0);
         $keyencryption  = ($fromApi || $inWhiteList || $enablePlayRate) ? 0 : 1;
         $tokenFields    = array(
             'data'     => array(
@@ -303,7 +303,7 @@ class HLSController extends BaseController
                         'level'         => $level,
                         'keyencryption' => $params['keyencryption']
                     ),
-                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'times'    => ($this->agentInWhiteList($request->headers->get("user-agent")) || $this->setting('storage.enable_playback_rates', 0)) ? 0 : 1,
                     'duration' => 3600,
                     'userId'   => $params['userId']
                 ));
