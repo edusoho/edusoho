@@ -11,19 +11,15 @@ class LlcbpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        var_dump($params);
-        exit();
-        $error  = $this->hasError($params);
+        $error  = $this->hasError($paymentrams);
 
         if ($error) {
             throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
         }
 
-        $data['payment'] = 'heepay';
+        $data['payment'] = 'Llcbpay';
         $data['sn']      = $this->getOrderSn($params['agent_bill_id']);
-
-        $order = $this->getOrderService()->getOrderBySn($data['sn']);
-
+        
         if ($order['status'] == 'paid') {
             $data['status'] = 'success';
         } else {
@@ -51,7 +47,7 @@ class LlcbpayResponse extends Response
 
     private function hasError($params)
     {
-        if ($params['result'] != 1 && !empty($params['pay_message'])) {
+        if ($params['ret_code'] != 0000 && !empty($params['pay_message'])) {
             return $params['pay_message'];
         }
 

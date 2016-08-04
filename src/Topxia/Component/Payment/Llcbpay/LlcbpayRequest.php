@@ -45,7 +45,7 @@ class LlcbpayRequest extends Request
         }
         $converted['oid_partner']  = $this->options['key'];
         $converted['sign_type']    = 'MD5';
-        $converted['version']      = '2.0';
+        $converted['version']      = '1.0';
         $converted['user_id']      = $params['userId'];
         $converted['timestamp']    = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
