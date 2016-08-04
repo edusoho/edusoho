@@ -17,10 +17,10 @@ define(function(require, exports, module) {
 
             $.post($form.attr('action'), $form.serialize(), function(html) {
                 $modal.modal('hide');
-                Notify.success('保存组织机构成功！');
+                Notify.success(Translator.trans('保存组织机构成功！'));
                 window.location.reload();
             }).fail(function() {
-                Notify.danger("添加组织机构失败，请重试！");
+                Notify.danger(Translator.trans('添加组织机构失败，请重试！'));
             });
 
         }
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
     });
 
     $modal.find('.delete-org').on('click', function() {
-        if (!confirm('真的要删除该组织机构及其辖下组织机构吗？')) {
+        if (!confirm(Translator.trans('真的要删除该组织机构及其辖下组织机构吗？'))) {
             return;
         }
 
