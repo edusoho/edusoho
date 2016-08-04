@@ -103,35 +103,35 @@ admin_dictionary_name_check:
 admin_content_create:
     pattern:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_edit:
     pattern:  /content/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Content:edit }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_publish:
     pattern:  /content/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Content:publish }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_trash:
     pattern:  /content/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Content:trash }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_delete:
     pattern:  /content/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Content:delete }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_block:
     pattern:  /block/list-{category}
