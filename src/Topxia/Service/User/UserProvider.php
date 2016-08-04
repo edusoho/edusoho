@@ -27,10 +27,10 @@ class UserProvider implements UserProviderInterface
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
-        $currentUser->fromArray($user);
+        $permissions       = $this->loadPermissions($user);
 
-        $permissions = $this->loadPermissions($user);
         $currentUser->setPermissions($permissions);
+        $currentUser->fromArray($user);
 
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;

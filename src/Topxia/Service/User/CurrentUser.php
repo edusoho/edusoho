@@ -72,11 +72,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function getRoles()
     {
-        $roles = $this->roles;
-        if ($this->isAdmin()) {
-            $roles[] = 'ROLE_ADMIN';
-        }
-        return $roles;
+        return $this->roles;
     }
 
     public function getPassword()
@@ -208,6 +204,13 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
             $user['org'] = array('id' => $this->rootOrgId);
         }
         $this->data = $user;
+
+        $roles = $this->getRoles();
+        if ($this->isAdmin()) {
+            $roles[]             = 'ROLE_ADMIN';
+            $this->data['roles'] = $roles;
+        }
+
         return $this;
     }
 
