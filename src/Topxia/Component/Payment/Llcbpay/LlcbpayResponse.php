@@ -11,8 +11,6 @@ class LlcbpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        var_dump($params);
-        exit();
         $error  = $this->hasError($paymentrams);
 
         if ($error) {
