@@ -11,30 +11,22 @@ class LlcbpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $error  = $this->hasError($paymentrams);
+        $error  = $this->hasError($params);
 
         if ($error) {
             throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
         }
 
         $data['payment'] = 'Llcbpay';
-        $data['sn']      = $this->getOrderSn($params['agent_bill_id']);
-        
-        if ($order['status'] == 'paid') {
+        $data['sn']      = $params['no_order'];
+        $result= $this->confirmSellerSendGoods();
+
+        if (in_array($result['result_pay'], array('WAITING', 'PROCESSING'))) {
+            return array('sn' => $params['no_order'], 'status' => 'waitBuyerConfirmGoods');
+        } elseif ($result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
-            $result      = $this->confirmSellerSendGoods();
-            $returnArray = $this->toArray($result);
-
-            if ($returnArray['result'] != 1) {
-                throw new \RuntimeException('网银支付失败');
-            }
-
-            if (in_array($returnArray['result'], array(1))) {
-                $data['status'] = 'success';
-            } else {
-                $data['status'] = 'unknown';
-            }
+            $data['status'] = 'unknown';
         }
 
         $data['amount']   = $params['pay_amt'];
@@ -47,10 +39,9 @@ class LlcbpayResponse extends Response
 
     private function hasError($params)
     {
-        if ($params['ret_code'] != 0000 && !empty($params['pay_message'])) {
-            return $params['pay_message'];
+        if ($params['result_pay'] != 'SUCCESS') {
+            return '网银支付异常';
         }
-
         return false;
     }
 
@@ -58,12 +49,10 @@ class LlcbpayResponse extends Response
     {
         $params                  = $this->params;
         $data                    = array();
-        $data['version']         = 1;
-        $data['agent_id']        = $params['agent_id'];
-        $data['agent_bill_id']   = $params['agent_bill_id'];
-        $data['agent_bill_time'] = date("YmdHis", time());
-        $data['remark']          = $params['remark'];
-        $data['return_mode']     = 1;
+        $data['oid_partner']     = $params['oid_partner'];
+        $data['sign_type']      　= "MD5";
+        $data['no_order']        = $params['no_order'];
+        $data['dt_orde']         = date("YmdHis", time());
         $data['sign']            = $this->signParams($data);
         $response                = $this->postRequest($this->url, $data);
         return $response;
@@ -92,65 +81,19 @@ class LlcbpayResponse extends Response
         return $response;
     }
 
-    public function getOrderSn($token)
-    {
-        if (stripos($token, 'c') !== false) {
-            $order = $this->getOrderService()->getOrderByToken($token);
-        }
-
-        if (stripos($token, 'o') !== false) {
-            $order = $this->getCashOrdersService()->getOrderByToken($token);
-        }
-
-        return $order['sn'];
-    }
-
     private function signParams($params)
     {
-        unset($params['sign'], $params['pay_message'], $params['remark']);
-        $params = array_filter($params);
+        ksort($params);
         $sign   = '';
-
         foreach ($params as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
             $sign .= $key.'='.strtolower($value).'&';
         }
 
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
-    }
-
-    private function toArray($result)
-    {
-        $data = explode("|", $result);
-
-        if (count($data) <= 1) {
-            throw new \RuntimeException(sprintf('该笔单据查询超过１次,请过15分钟之后查询'));
-        }
-
-        $param = array();
-
-        if (is_array($data)) {
-            foreach ($data as $value) {
-                $arr            = explode("=", $value);
-                $param[$arr[0]] = $arr[1];
-            }
-        }
-
-        return $param;
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
-
-    protected function getCashOrdersService()
-    {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }
