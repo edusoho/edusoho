@@ -38,8 +38,6 @@ class LlquickpayRequest extends Request
     protected function convertParams($params)
     {
         $isMobile   = $this->isMobile($params['userAgent']);
-        $mobileType = $this->mobileType($params['userAgent']);
-
         $converted                 = array();
         $converted['busi_partner'] = '101001';
         $converted['dt_order']     = date('YmdHis', time());
@@ -61,12 +59,29 @@ class LlquickpayRequest extends Request
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001));
-        if ($isMobile) {
-            $converted['app_request'] = $mobileType;
-        }
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId'],'user_info_dt_register'=>date('YmdHis', time())));
         $converted['sign']       = $this->signParams($converted);
-        return $converted;
+        if ($isMobile) {
+            return $this->convertMobileParams($converted, $params['userAgent']);
+        } else {
+            return $converted;
+        }
+    }
+
+    public function convertMobileParams($converted, $userAgent)
+    {
+        unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
+        $mobileType = $this->mobileType($userAgent);
+        $converted['version'] = '1.0';
+        if ($mobileType == 'Android') {
+            $converted['app_request'] = 1;
+        } elseif ($mobileType == 'IOS') {
+            $converted['app_request'] = 2;
+        } elseif ($mobileType == 'WAP') {
+            $converted['app_request'] = 3;
+        }
+        $converted['sign'] = $this->signParams($converted);
+        return array('req_data'=>json_encode($converted));
     }
 
     protected function filterText($text)
