@@ -59,6 +59,10 @@ class HLSController extends BaseController
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
+                if (isset($token['data']['hideBeginning'])) {
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
+                }
+
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
             } else {
                 $token['token'] = $this->getTokenService()->makeFakeTokenString();
@@ -106,17 +110,6 @@ class HLSController extends BaseController
             'Content-Type'                 => 'application/vnd.apple.mpegurl',
             'Content-Disposition'          => 'inline; filename="playlist.m3u8"'
         ));
-    }
-
-    protected function haveHeadLeader()
-    {
-        $storage = $this->setting("storage");
-
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            return true;
-        }
-
-        return false;
     }
 
     public function streamAction(Request $request, $id, $level, $token)
@@ -175,7 +168,8 @@ class HLSController extends BaseController
 
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        if (!$inWhiteList && $this->haveHeadLeader()) {
+        $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
+        if (!$inWhiteList && $this->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
                 'keyencryption' => $keyencryption
@@ -274,24 +268,14 @@ class HLSController extends BaseController
         return new Response($fakeKey);
     }
 
-    protected function getUploadFileService()
+    protected function isHiddenVideoHeader($isHidden = false)
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getOldUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getTokenService()
-    {
-        return $this->getServiceKernel()->createService('User.TokenService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        $storage = $this->setting("storage");
+        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     protected function getVideoBeginning(Request $request, $level, $params = array())
@@ -335,5 +319,25 @@ class HLSController extends BaseController
         }
 
         return $beginning;
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getOldUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
