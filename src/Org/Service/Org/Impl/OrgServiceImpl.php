@@ -16,7 +16,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($org, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
         }
 
         $org['createdUserId'] = $user['id'];
@@ -64,7 +64,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($fields, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
         }
 
         $org = $this->getOrgDao()->updateOrg($id, $fields);
@@ -133,7 +133,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = $this->getOrg($id);
 
         if (empty($org)) {
-            throw $this->createServiceException('组织机构不存在,更新失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('组织机构不存在,更新失败'));
         }
 
         return $org;
