@@ -103,12 +103,9 @@ class HLSController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
-        return new Response($playlist['playlist'], 200, array(
-            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS',
-            'Content-Type'                 => 'application/vnd.apple.mpegurl',
-            'Content-Disposition'          => 'inline; filename="playlist.m3u8"'
+        return $this->ResponseEnhanced($playlist['playlist'], array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
         ));
     }
 
@@ -195,13 +192,9 @@ class HLSController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
-        return new Response($stream['stream'], 200, array(
-            'Content-Type'                 => 'application/vnd.apple.mpegurl',
-            'Content-Length'               => strlen($stream['stream']),
-            'Content-Disposition'          => 'inline; filename="stream.m3u8"',
-            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
+        return $this->ResponseEnhanced($stream['stream'], array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"'
         ));
     }
 
@@ -235,7 +228,7 @@ class HLSController extends BaseController
         }
 
         if (empty($file['globalId']) && isset($file['convertParams']['hlsKey'])) {
-            return new Response($file['convertParams']['hlsKey']);
+            return $this->ResponseEnhanced($file['convertParams']['hlsKey']);
         }
 
         if (empty($file['metas2'][$token['data']['level']]['hlsKey'])) {
@@ -246,27 +239,31 @@ class HLSController extends BaseController
 
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
-            return new Response($stream['key'], 200, array(
-                'Content-Length'               => strlen($stream['key']),
-                'Access-Control-Allow-Headers' => 'origin, content-type, accept',
-                'Access-Control-Allow-Origin'  => '*',
-                'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
-            ));
+            return $this->ResponseEnhanced($stream['key']);
         }
 
         $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
-        return new Response($file['metas2'][$token['data']['level']]['hlsKey'], 200, array(
-            'Content-Length'               => strlen($file['metas2'][$token['data']['level']]['hlsKey']),
+
+        return $this->ResponseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
+    }
+
+    protected function ResponseEnhanced($response)
+    {
+        $headers = array(
             'Access-Control-Allow-Headers' => 'origin, content-type, accept',
             'Access-Control-Allow-Origin'  => '*',
             'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
-        ));
+        );
+        if (is_string($response)) {
+            $headers['Content-Length'] = strlen($response);
+        }
+        return new Response($response, 200, $headers);
     }
 
     protected function makeFakeTokenString()
     {
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-        return new Response($fakeKey);
+        return $this->ResponseEnhanced($fakeKey);
     }
 
     protected function isHiddenVideoHeader($isHidden = false)
