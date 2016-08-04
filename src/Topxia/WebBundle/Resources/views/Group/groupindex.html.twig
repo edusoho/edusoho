@@ -126,7 +126,7 @@
         </div>
         <div class="media-body">
           <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
-          <span class="text-sm gray-medium">{{'%title%'|trans({'%title%': groupOwner.title|default('无'|trans)})}}</span>
+          <span class="text-sm gray-medium">{{ groupOwner.title|default('无'|trans) }}</span>
         </div>
       </div>
     </div>

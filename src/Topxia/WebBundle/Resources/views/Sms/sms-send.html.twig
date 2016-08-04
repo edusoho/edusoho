@@ -30,7 +30,7 @@
     </div>
     <div style="z-index:2000;">
       <p class="help-block">
-        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}{{'%classroom.name%'|trans({'%classroom.name%': classroom.name|default('班级'|trans)})}}{% else %}{{'课程'|trans}}{% endif %}{{'：'|trans}}{{'《'|trans}}{{item.title}}{{'》'|trans}}{{'现已开始报名'|trans}}!<a href ='{{url}}' target="_blank">{{'链接地址'|trans}}</a>
+        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}{{ classroom.name|default('班级'|trans) }}{% else %}{{'课程'|trans}}{% endif %}{{'：'|trans}}{{'《'|trans}}{{item.title}}{{'》'|trans}}{{'现已开始报名'|trans}}!<a href ='{{url}}' target="_blank">{{'链接地址'|trans}}</a>
       </p>
     </div>
   </div>
