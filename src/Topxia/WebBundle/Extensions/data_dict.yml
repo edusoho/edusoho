@@ -312,3 +312,7 @@ searchKeyWord:
 searchBanlog:
     name: 敏感词
     userName: 用户名
+courseSerializeMode:
+    none: 非连载课程
+    serialize: 更新中
+    finished: 已完结
