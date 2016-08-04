@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
     var BatchUploader = require('../../../../topxiaweb/js/controller/uploader/batch-uploader');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
 
@@ -117,6 +119,40 @@ define(function(require, exports, module) {
                 }
             });
         }
+
+        var validator = new Validator({
+            element: $form,
+            failSilently: true,
+            onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return false;
+                }
+                $('#cloud-video-form-btn').button('submiting').addClass('disabled');
+            }
+        });
+
+        if ($('input[name="video_fingerprint"]:checked').val() == 1){
+            validator.addItem({
+                element: '[name="video_fingerprint_time"]',
+                required: true,
+                rule: 'arithmetic_number',
+                display:'云视频指纹显示时间'
+            });
+        }
+
+        $('input[name="video_fingerprint"]').change(function(){
+            if($(this).val() == 1) {
+                validator.addItem({
+                    element: '[name="video_fingerprint_time"]',
+                    required: true,
+                    rule: 'arithmetic_number',
+                    display:'云视频指纹显示时间'
+                });
+            } else {
+                validator.removeItem('[name="video_fingerprint_time"]');
+            }
+        })
+        
     }
 
 })

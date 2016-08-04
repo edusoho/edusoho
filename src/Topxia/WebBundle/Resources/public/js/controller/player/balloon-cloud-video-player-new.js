@@ -8,6 +8,7 @@ define(function(require, exports, module) {
         attrs: {
             url: '',
             fingerprint: '',
+            fingerprintTime: 0.5,
             watermark: '',
             agentInWhiteList: '',
             timelimit: '',
@@ -55,7 +56,7 @@ define(function(require, exports, module) {
                 extConfig = $.extend(extConfig, {
                     fingerprint: {
                         html: self.get('fingerprint'),
-                        duration: 100
+                        duration: self.get('fingerprintTime')
                     }
                 })
             }

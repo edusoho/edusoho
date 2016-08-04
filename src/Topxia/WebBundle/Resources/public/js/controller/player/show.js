@@ -23,6 +23,7 @@ define(function(require, exports, module) {
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
+        var fingerprintTime = videoHtml.data('fingerprintTime');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
@@ -56,6 +57,7 @@ define(function(require, exports, module) {
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
+                fingerprintTime:fingerprintTime,
                 watermark: watermark,
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList,
