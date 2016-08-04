@@ -24,7 +24,6 @@
 给%user_name%发送系统通知: 'Send system notice to %user_name%'
 取消: Cancel
 保存: Save
-'%name%': '%name%'
 '全部': All
 正文: Content
 '文章来源': Source
@@ -70,7 +69,6 @@
 '可用于抵扣全站会员': 'For any level of VIP membership'
 用于抵扣指定会员: 'For specified level of VIP membership'
 '可用于抵扣全站所有类型消费': 'For any purchase on our web site'
-折: 折
 有效期截止：: 'Expired on: '
 '%deadline%年': '%deadline% Year'
 '%deadline%月': '%deadline% Month'
@@ -96,7 +94,6 @@
 '网站没有开启%coin_name%功能,学习卡功能暂时没法使用': 'The %coin_name% feature is not enabled. The learning card cannot be used.'
 '我的卡包': 'My Wallet'
 '学习卡可以用于账户充值': 'Learning card can be used to recharge your account balance.'
-'%coin_name%': '%coin_name%'
 立即使用: 'Use it now'
 '您领取了一张': 'You got a new'
 '已添加至“我的卡包“': 'Added to My Wallet'
@@ -150,7 +147,6 @@
 '，TA注册后将获得%promoted_user_value%元优惠券': 'The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration'
 'TA在消费后您将获得%promote_user_value%元优惠券': 'You will get a coupon worthing %promote_user_value% RMB when he or she  make a payment'
 '同时您将获得%promote_user_value%元优惠券': 'And you will get a coupon worthing %promote_user_value% RMB'
-。: 。
 邀请对象: Invited
 邀请时间: 'Invited date'
 邀请奖励: Rewards
@@ -242,16 +238,13 @@
 订单名称：%title%: 'Order name: %title%'
 订单号：%sn%: 'Order number: %sn%'
 '订单价格：': 'Order price: '
-￥: ￥
 '价格：': 'Price: '
 '免费': Free
 '价格 : %price%元': 'Price: %price% RMB'
-'%user_name%': '%user_name%'
 更新中: Updating
 已完结: Ended
 正在直播中: 'On live'
 直播: Live
-'%startTime%': '%startTime%'
 第%number%课时: 'Lesson %number%'
 '找不到相关课程！': 'No relevant courses'
 选择课程: 'Select a course'
@@ -277,11 +270,11 @@
 课程列表: 'Course list'
 查看%name%: 'View %name%'
 最新: Latest
-最热: 'Popular'
+最热: Popular
 推荐: Recommended
-会员课程: 'Premium'
-直播课程: 'Live'
-'免费课程': 'Free'
+会员课程: Premium
+直播课程: Live
+'免费课程': Free
 '该分类下无课程': 'No courses in this category'
 取消收藏: Cancel
 收藏课程: Favorite
@@ -298,7 +291,6 @@
 请重新: 'Please try again'
 开通会员: 'Become a VIP'
 返回课程首页: 'Back to course home page'
-！: ！
 '您的会员已过期，不能学习此课程，请先': 'You can not learn this course since your membership has expired, please'
 续费: Renewal
 '会员等级不够，不能学习此课程。请先': 'Your VIP level is not qualified to access this course. Please '
@@ -318,9 +310,7 @@
 上一课时: Previous
 下一课时: Next
 第: Number
-'%chapter_name%': '%chapter_name%'
 '章': Chapter
-'%part_name%': '%part_name%'
 节: Section
 课时: Lesson
 '正在加载': Loading
@@ -428,10 +418,8 @@
 支持: Suport
 'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf': 'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf '
 '格式的文件上传，文件大小不能超过': 'format and the file size can not exceed '
-'1 GB': '1 GB'
 '视频将上传到': 'Video will be uploaded to '
 '云服务器''}}</strong>{{''，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。': 'Cloud server''}}</strong>{{''，The uploaded video will be transcoded and will be able to play during the process.'
-'mp4, mp3': 'mp4, mp3'
 '格式的文件上传，且文件大小不能超过': ' format and the file size can not exceed '
 'MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。': 'MP4 video should be transcoded using AVC(H264) encoder, or the video cannot played in the browser.'
 网站服务器: 'Website server'
@@ -537,13 +525,11 @@ flash课程: 'Courses in flash video format'
 从资料库中选择: 'Select from the library'
 从课程文件中选择: 'Select from course documents'
 '导入网络视频': 'Import video clips from the internet'
-'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
 '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。': 'The size of the uploading video can not exceed <strong>2 GB</strong>'
 '断点续传': 'Multithreading breakpoint transmissionM'
 '（仅支持HTML5浏览器）。': '(Only supports HTML5 browser)'
 云视频服务器: 'cloud-video server'
 '，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。': 'The video will be transcoded which takes some time and the video is not accessible during the proccess.'
-mp4: mp4
 '格式的视频文件上传，文件大小不能超过': 'The size of the uploading video can not exceed'
 '。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。': 'MP4 video should be transcoded using AVC(H264) encoder ,or the video will not be playable by the browser'
 '。如需使用%Edusoho%云视频,点击': '，to use %Edusoho% cloud-video feature ,click on the'
@@ -554,20 +540,16 @@ mp4: mp4
 '导入': Import
 '腾讯和网易的视频不支持手机端播放': 'Videos from Tencent and Netease  is not supported on mobile'
 '上传音频': 'Upload audio'
-mp3: mp3
 '格式的音频文件上传，且文件大小不能超过': 'The  size of the audio can not exceed'
-500M: 500M
 '音频将上传到': 'Upload audio files to'
 云服务器: 'Cloud server'
 ，%Edusoho%点击: '，%Edusoho% click'
 '暂无音频文件，请先上传。': 'No audio file ,please upload'
-'ppt, pptx': 'ppt, pptx'
 '格式的PPT文件上传，且文件大小不能超过': 'Upload PPT and the file size can not exceed'
 '100 MB': 100MB
 'PPT将上传到': 'Upload PPT file to'
 '暂无PPT文件，请先上传。': 'No PPT file , please upload'
 '上传文档': 'Upload a document'
-'pdf,doc,docx': 'pdf,doc,docx'
 '格式的文档上传，且文件大小不能超过': 'Upload document and the file size can not exceed'
 '文档将上传到': 'Upload document file to'
 '暂无文档，请先上传。': 'No document file ,please upload'
@@ -640,10 +622,8 @@ mp3: mp3
 重新选择图片: 'Reselect an image'
 '你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。': 'You can upload jpg, gif, png format, image size is recommended at least 480x270.'
 '文件大小不能超过': 'File size can not exceed'
-2M: 2M
 '选择要上传的图片': 'Select an image to upload'
 '%coin_name%价格': '%coin_name%Price'
-'当前课程正处于「 %name% 」打折活动中。': '当前课程正处于「 %name% 」打折活动中。'
 折扣: Discount
 折后价: 'Price after discount'
 会员课程设置: 'Premium Course Settings'
@@ -870,10 +850,6 @@ mp3: mp3
 取消置顶: Unmark
 您真的要置顶该帖吗？: 'Are you sure to mark this post?'
 置顶: Mark
-'您真的要取消加精该帖吗？': '您真的要取消加精该帖吗？'
-'取消加精': '取消加精'
-'您真的要加精该帖吗？': '您真的要加精该帖吗？'
-'加精': '加精'
 教师的答案: 'Teacher''s answer'
 所有答案: 'All answers'
 还没有: 'no'
@@ -881,7 +857,6 @@ mp3: mp3
 更多课程: 'More Courses'
 查看在线客服: 'View our online customer service'
 '关闭在线客服': 'Turn off online customer service'
-收缩: 收缩
 客服QQ: 'QQ customer service'
 客服电话: 'Phone customer service'
 邮件: Email
@@ -935,7 +910,6 @@ QQ客服及QQ群: 'QQ customer service'
 '学习中心': 'Learning center'
 预告板: 'Notice board'
 '学习任务': Mission
-'%name%:%title%': '%name%:%title%'
 课时%number%-%title%: Lesson%number%-%title%
 '课程:%title%': 'Course:%title%'
 '暂未发现还有未学习课时。': 'No more lessons.'
@@ -994,7 +968,6 @@ QQ群: 'QQ group'
 组长: 'Group leader'
 副组长: 'Deputy group leader'
 小组组长: 'Group leader'
-'%title%': '%title%'
 '暂无小组信息！': 'No group information !'
 撤消副组长: 'Deputy group leader dismissed'
 还没有副组长！: 'No deputy group leader yet !'
@@ -1431,7 +1404,6 @@ Email地址: 'Email Address'
 回答错误: 'wrong answer'
 '你': 'your answer is wrong'
 答错: Wrong
-了: 了
 参考答案: 'reference answer'
 参考答案：: 'reference answer'
 '你的回答：': 'your answer'
@@ -1473,7 +1445,6 @@ Email地址: 'Email Address'
 您真的要交卷吗？: 'are you sure to hand in paper?'
 '正在交卷, 请稍等': 'now submitting, please wait'
 总分%score%分: 'total score:'
-道: 道
 '（其中有%accuracy[type].partRight%道漏选）': ...miss-selection
 未答: 'not answered'
 '批阅完成': 'mark complished'
@@ -1554,11 +1525,9 @@ Email地址: 'Email Address'
 小组话题: 'group topic'
 资讯: information
 '共找到': '… related courses searched'
-门: 门
 '相关': related
 '没有搜到相关课程，请换个关键词试试！': 'cannot find related courses, please change your keyword'
 为您找到资讯结果约: 'about…results found for you'
-个: 个
 正在学: 'now learning'
 '%course.ratingNum%人评价%course.studentNum%人学习': '…comment on,…study…'
 '课时 %lesson.number%: %lesson.title%': 'lesson %lesson.number%'
@@ -1678,10 +1647,7 @@ Email地址: 'Email Address'
 预计发送量: 'Expected massages sending volume'
 条: 'the number of'
 '发送内容': text
-'%classroom.name%': '%classroom.name%'
 ：: ':'
-《: 《
-》: 》
 现已开始报名: 'In registering'
 链接地址: 'link address'
 短信发送准备中: 'prepare to send massages'
@@ -1785,9 +1751,6 @@ Email地址: 'Email Address'
 抵价: 'trade in'
 打折: discount
 已领取: got
-PPT: PPT
-Flash: Flash
-'--': '--'
 支付宝: Alipay
 网银支付: 'E-currency payment'
 快捷支付: 'Quick payment'
@@ -2035,7 +1998,6 @@ sign不正确: 'Invalid signature'
 您发表的附件<%attachTitle%>被购买下载！: 'Your published attachment <%attachTitle%> was bought and downloaded.'
 '话题被加精': 'Topic digested'
 '话题被取消加精': 'Topic removed from digest'
-发布悬赏话题: 发布悬赏话题
 您的回复被采纳为最佳回答！: 'Your answer is rated as the best one.'
 '查看话题隐藏内容': 'Look up the hidden contents of the topic'
 '您发表的话题<%threadTitle%>的隐藏内容被查看！': 'The hidden content in your topic <%threadTitle%> was viewed.'
@@ -2216,7 +2178,6 @@ token已失效: 'token expired'
 用户还未登录!: 'You are not signed in.'
 帖子不存在!: 'The post does not exist.'
 '无权限操作!': 'No permission'
-'%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
 报名时间: 'Register date'
 成员: Member
 '上传授权码不正确，请重试！': 'Invalid upload authorization code, please try again.'
@@ -2296,7 +2257,6 @@ groupId参数缺失: 'Paramenter groupId missing'
 卡的类型不存在: 'Card type not exist'
 '缺少必要字段，新创建卡失败！': 'Missing required fields, failed to create the card.'
 '缺少必要字段，请明确卡的类型': 'Missing required fields, please specify the card type.'
-'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 '充值金额必须为整数!': 'The recharge amount must be integer.'
 '充值购买': 'Recharge to buy'
 订单不存在，取消订单失败！: 'Order not exist, failed to cancel the order.'
@@ -2492,12 +2452,10 @@ keywordType参数不正确: 'keywordType parameter is not correct'
 '帖子#%s不属于课程#%s，删除失败。': 'The post #%s dose not belongs to the course#%s，Cannot be deleted'
 '转码类型不存在': 'The transcoding type dosen''t exist'
 '参数缺失，添加用户文件失败!': 'Parameters incomplete,failed to add files!'
-'文件不存在(global id: #%globalId%)，完成上传失败！': '文件不存在(global id: #%globalId%)，完成上传失败！'
 本地文件暂不支持转换: 'Local files conversion are temporarily not supported'
 文件不存在，不能下载！: 'Cannot download ,the file dosen''t exist！'
 '用户未登录，上传初始化失败！': 'Upload initialization failed,user is not logged in!'
 '参数缺失，上传初始化失败！': 'Upload initialization failed because of an invalid or missing parameter！'
-'uploadFile失败，完成上传失败！': 'uploadFile失败，完成上传失败！'
 '文件(#%id%)，不存在。': 'File (#%id%) does not exist.'
 '文件(#%id%)，不是云文件。': 'File (#%id%) is not  CloudFiles.'
 '文件(#%id%)，不是视频文件。': 'File (#%id%) is not video file.'
@@ -2541,8 +2499,6 @@ keywordType参数不正确: 'keywordType parameter is not correct'
 '第%col%列重复:': 'Column number %col% is duplicated:'
 '第%row%行    %key%': 'Row number %row%   %key%'
 '购买课程《%title%》(管理员添加)': 'Purchase course "%title%" (allow the administrator to add)'
-'message must be a string': 'message must be a string'
-'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
 'Excel格式不正确': 'Excel format is not correct!'
 'Excel超过1000行数据': 'Excel data over 1000 lines!'
 第%row%行班级号为%classroomId%的班级未发布，请检查。: 'The row%row classroomId% class is not published,please check'
@@ -2734,7 +2690,6 @@ Email处在黑名单: 'Email is on the Blacklist'
 名称已存在!: 'Name already exist!'
 Email已存在!: 'Email already exist!'
 '手机号码已存在!': 'The phone number already exist!'
-'电子邮箱或者手机号码格式不正确!': '电子邮箱或者手机号码格式不正确!'
 发件人未注册!: 'The sender is not signed up!'
 不存在此通知!: 'The notice dosen''t exist!'
 此通知已经发送!: 'The notice has been sent !'
@@ -3189,7 +3144,6 @@ Firefox浏览器: Firefox
 文件类型错误！: 'Incorrect type of files.'
 未选中任何: 'No selection'
 '确定要删除选中的': 'Are you determined to delete the selected files?'
-吗？: 吗？
 '正在删除': deleting
 ，请稍等。: ', please wait for a moment.'
 '名片加载中': 'loading information'
@@ -3200,3 +3154,50 @@ Firefox浏览器: Firefox
 '签到,第': 'sign in'
 个签到.: 'Check In'
 已签: 'Checked In'
+#未翻译的部分
+'%name%': '%name%'
+折: 折
+'%coin_name%': '%coin_name%'
+。: 。
+￥: ￥
+'%user_name%': '%user_name%'
+'%startTime%': '%startTime%'
+！: ！
+'%chapter_name%': '%chapter_name%'
+'%part_name%': '%part_name%'
+'1 GB': '1 GB'
+'mp4, mp3': 'mp4, mp3'
+'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
+mp4: mp4
+mp3: mp3
+500M: 500M
+'ppt, pptx': 'ppt, pptx'
+'pdf,doc,docx': 'pdf,doc,docx'
+2M: 2M
+'当前课程正处于「 %name% 」打折活动中。': '当前课程正处于「 %name% 」打折活动中。'
+'您真的要取消加精该帖吗？': '您真的要取消加精该帖吗？'
+'取消加精': '取消加精'
+'您真的要加精该帖吗？': '您真的要加精该帖吗？'
+'加精': '加精'
+收缩: 收缩
+'%name%:%title%': '%name%:%title%'
+'%title%': '%title%'
+了: 了
+道: 道
+门: 门
+个: 个
+'%classroom.name%': '%classroom.name%'
+《: 《
+》: 》
+PPT: PPT
+Flash: Flash
+'--': '--'
+发布悬赏话题: 发布悬赏话题
+'%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
+'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
+'文件不存在(global id: #%globalId%)，完成上传失败！': '文件不存在(global id: #%globalId%)，完成上传失败！'
+'uploadFile失败，完成上传失败！': 'uploadFile失败，完成上传失败！'
+'message must be a string': 'message must be a string'
+'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
+'电子邮箱或者手机号码格式不正确!': '电子邮箱或者手机号码格式不正确!'
+吗？: 吗？
