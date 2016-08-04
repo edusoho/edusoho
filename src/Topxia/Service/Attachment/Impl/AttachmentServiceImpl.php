@@ -102,7 +102,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
         }
         $user = $this->getCurrentUser();
         if (!$user->isLogin() || $file['createdUserId'] != $user['id'] || !$user->isAdmin()) {
-            $this->createAccessDeniedException("您无全删除改附件");
+            $this->createAccessDeniedException("您无全删除该附件");
         }
 
         try {
