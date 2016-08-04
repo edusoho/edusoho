@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var BatchUploader = require('../uploader/batch-uploader');
     var _ = require('underscore');
 
-    var attachmentTpl = "<li><%= filename %></li>";
+    var attachmentTpl = '<div class="well well-sm"><%= filename %></div>';
     var template = _.template(attachmentTpl);
 
     exports.run = function() {

@@ -40,8 +40,10 @@
         {{'发表于'|trans}} {{ threadMain.createdTime|smart_time }}
         <span class="mll">{{ threadMain.hitNum }} {{'次查看'|trans}}</span>
       </div>
-
-      {{threadMain.content|raw}}
+      <div class="editor-text">
+        {{threadMain.content|raw}}
+      </div>
+      
       {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'group.thread', targetId: threadMain.id })) }}
       {% if attachs %}
         <hr>
