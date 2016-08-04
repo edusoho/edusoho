@@ -22,7 +22,7 @@ define(function(require, exports, module) {
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
-        var fingerprintTime = isNaN(videoHtml.data('fingerprintTime')) ? 500 : videoHtml.data('fingerprintTime') * 1000;
+        var fingerprintTime = videoHtml.data('fingerprintTime');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
