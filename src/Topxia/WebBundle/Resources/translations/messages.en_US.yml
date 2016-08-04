@@ -1598,6 +1598,7 @@ Email地址: 'Email Address'
 邮箱地址尚未验证，: 'Mail address hasn''t been verified.'
 去验证: Verify
 '您还未设置邮箱，请在下方设置你的新邮箱。': 'You haven''t set your email, please set your new email below.'
+新登录邮箱: 'New Email'
 管理员尚未设置邮件服务器，不能更改邮箱地址。: 'administrator haven''t set email server, do not change the email address.'
 '支付密码': 'Payment password'
 '找回支付密码': 'Find payment password'
