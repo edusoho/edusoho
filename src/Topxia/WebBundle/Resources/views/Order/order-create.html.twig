@@ -63,7 +63,7 @@
           <div class="total-price">
             {{'应付金额：'|trans}}
             {% if priceType|default('RMB') == "Coin" %}
-              <span role="pay-coin">0</span> {{'%coin_name% ÷ 汇率(%cashRate%) = '|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">{{'￥'|trans}}</span> <span role="pay-rmb" class="pay-rmb">{{'元'|trans}}</span>
+              <span role="pay-coin">0</span> {{'%coin_name% ÷ 汇率(%cashRate%) = '|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'元'|trans}}</span>
             {% else %}
               <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
             {% endif %}

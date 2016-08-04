@@ -95,7 +95,7 @@
         {{'请重新'|trans}}<a class="alert-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
       {% else %}
         <a class="alert-link js-exit-course" href="javascript:;" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
-      {% endif %}{{'！'|trans}}
+      {% endif %}！
     {% elseif vipChecked == 'member_expired' %}
       {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
     {% elseif vipChecked == 'level_low' %}

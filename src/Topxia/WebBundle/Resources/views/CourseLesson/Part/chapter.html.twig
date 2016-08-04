@@ -4,7 +4,7 @@
     {% if setting('course.custom_chapter_enabled')|default(true) %} 
       {{'第%number%'|trans({'%number%': item.number })}} 
       {% if setting('default.part_name') %}
-       }{{'%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节'|trans)})}}
+       }{{ setting('default.part_name')|default('节'|trans) }}
       {% else %}
         {{'节'|trans}}
       {% endif %}：
@@ -19,7 +19,7 @@
       {% if setting('course.custom_chapter_enabled')|default(true) %} 
         {{'第%number%'|trans({'%number%': item.number })}} 
         {% if setting('default.chapter_name') %}
-          }{{'%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)}}
+          {{ setting('default.chapter_name')|default('章'|trans) }}
         {% else %}
           {{'章'|trans}}
         {% endif %}：

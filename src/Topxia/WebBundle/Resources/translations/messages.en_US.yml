@@ -1647,6 +1647,8 @@ Email地址: 'Email Address'
 条: 'the number of'
 '发送内容': text
 ：: ':'
+《: ''
+》: ''
 现已开始报名: 'In registering'
 链接地址: 'link address'
 短信发送准备中: 'prepare to send massages'
@@ -3143,6 +3145,7 @@ Firefox浏览器: Firefox
 文件类型错误！: 'Incorrect type of files.'
 未选中任何: 'No selection'
 '确定要删除选中的': 'Are you determined to delete the selected files?'
+吗？: '?'
 '正在删除': deleting
 ，请稍等。: ', please wait for a moment.'
 '名片加载中': 'loading information'
@@ -3155,10 +3158,6 @@ Firefox浏览器: Firefox
 已签: 'Checked In'
 折: 折
 '%coin_name%说明': '%coin_name%说明'
-'%startTime%': '%startTime%'
-！: ！
-'%chapter_name%': '%chapter_name%'
-'%part_name%': '%part_name%'
 '1 GB': '1 GB'
 'mp4, mp3': 'mp4, mp3'
 'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
@@ -3176,14 +3175,11 @@ mp3: mp3
 收缩: 收缩
 '%title%': '%title%'
 请填写在%name%注册时填写的Email地址: 请填写在%name%注册时填写的Email地址
-￥: ￥
 了: 了
 道: 道
 门: 门
 个: 个
 '%classroom.name%': '%classroom.name%'
-《: 《
-》: 》
 PPT: PPT
 Flash: Flash
 '--': '--'
@@ -3195,4 +3191,3 @@ Flash: Flash
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
 '电子邮箱或者手机号码格式不正确!': '电子邮箱或者手机号码格式不正确!'
-吗？: 吗？
