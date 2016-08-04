@@ -28,7 +28,13 @@ class CommonController extends BaseController
         $token = $this->getTokenService()->verifyToken('qrcode', $token);
 
         if (empty($token) || !isset($token['data']['url'])) {
-            return $this->redirect($this->generateUrl('homepage', array(), true));
+            $content = $this->renderView('TopxiaWebBundle:Default:message.html.twig', array(
+                'type'     => 'error',
+                'goto'     => $this->generateUrl('homepage', array(), true),
+                'duration' => 1,
+                'message'  => '二维码已失效，正跳转到首页'
+            ));
+            return new Response($content, '302');
         }
 
         if (strpos(strtolower($request->headers->get('User-Agent')), 'kuozhi') > -1) {

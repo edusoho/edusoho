@@ -83,7 +83,7 @@ define(function (require, exports, module) {
                 if (lesson.mediaError) {
                     //Notify.danger(lesson.mediaError);
                     $('#media-error-dialog').show();
-                    $('#media-error-dialog').find('.modal-body').html(lesson.mediaError);
+                    $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
                     return;
                 }
                 $('#media-error-dialog').hide();

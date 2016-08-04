@@ -26,6 +26,7 @@
           data-file-id="{{file.id}}"
           data-file-type="{{file.type}}"
           data-url="{{url}}"
+          data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
           data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
           data-player="{{player}}"
           data-agentInWhiteList="{{agentInWhiteList}}"
