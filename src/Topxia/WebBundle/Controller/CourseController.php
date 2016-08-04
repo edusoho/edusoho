@@ -858,7 +858,7 @@ class CourseController extends CourseBaseController
                 'url'    => $this->generateUrl('course_show', array('id' => $id), true),
                 'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}"
             ),
-            'times'    => 0,
+            'times'    => 1,
             'duration' => 3600
         ));
         $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
