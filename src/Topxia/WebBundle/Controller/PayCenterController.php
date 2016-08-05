@@ -275,7 +275,8 @@ class PayCenterController extends BaseController
         } else {
             $returnArray = $request->request->all();
             if ($name == 'llcbpay' || $name == 'llquickpay') {
-                $returnArray['userAgent'] = $request->headers->get('User-Agent');
+                $returnArray = file_get_contents("php://input");
+                //$returnArray['userAgent'] = $request->headers->get('User-Agent');
             }
         }
 
