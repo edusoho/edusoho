@@ -228,6 +228,7 @@ class PayCenterController extends BaseController
     {
         if ($name == 'llcbpay' || $name == 'llquickpay') {
             $returnArray = $request->request->all();
+            $returnArray['userAgent'] = $request->headers->get('User-Agent');
         } else {
             $returnArray = $request->query->all();
         }
