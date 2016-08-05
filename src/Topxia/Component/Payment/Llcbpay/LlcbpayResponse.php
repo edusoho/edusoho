@@ -11,7 +11,7 @@ class LlcbpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $error  = $this->hasError($params);
+        $error  = $this->hasError();
 
         if ($error) {
             throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
@@ -19,29 +19,33 @@ class LlcbpayResponse extends Response
 
         $data['payment'] = 'Llcbpay';
         $data['sn']      = $params['no_order'];
-        $result= $this->confirmSellerSendGoods();
+        $result= json_decode($this->confirmSellerSendGoods(), true);
 
-        if (in_array($result['result_pay'], array('WAITING', 'PROCESSING'))) {
-            return array('sn' => $params['no_order'], 'status' => 'waitBuyerConfirmGoods');
-        } elseif ($result['result_pay'] == 'SUCCESS') {
+        if ($result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
             $data['status'] = 'unknown';
         }
 
-        $data['amount']   = $params['pay_amt'];
+        $data['amount']   = $params['money_order'];
         $data['paidTime'] = time();
-
         $data['raw'] = $params;
 
         return $data;
     }
 
-    private function hasError($params)
+    private function hasError()
     {
-        if ($params['result_pay'] != 'SUCCESS') {
-            return '网银支付异常';
+        $sign = $this->signParams($this->params);
+        
+        if ($this->params['sign'] !== $sign) {
+            return 'sign_error';
         }
+
+        if ($this->params['result_pay'] != 'SUCCESS') {
+            return '支付异常';
+        }
+
         return false;
     }
 
@@ -50,9 +54,9 @@ class LlcbpayResponse extends Response
         $params                  = $this->params;
         $data                    = array();
         $data['oid_partner']     = $params['oid_partner'];
-        $data['sign_type']      　= "MD5";
+        $data['dt_order']        = $params['dt_order'];
         $data['no_order']        = $params['no_order'];
-        $data['dt_orde']         = date("YmdHis", time());
+        $data['sign_type']       = $params['sign_type'];
         $data['sign']            = $this->signParams($data);
         $response                = $this->postRequest($this->url, $data);
         return $response;
@@ -81,18 +85,17 @@ class LlcbpayResponse extends Response
         return $response;
     }
 
-    private function signParams($params)
+    public function signParams($params)
     {
         ksort($params);
-        $sign   = '';
+        $sign = '';
         foreach ($params as $key => $value) {
             if (empty($value)) {
                 continue;
             }
 
-            $sign .= $key.'='.strtolower($value).'&';
+            $sign .= $key.'='.$value.'&';
         }
-
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
     }
