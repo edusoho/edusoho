@@ -295,7 +295,7 @@ class PayCenterController extends BaseController
             list($success, $order) = $processor->pay($payData);
 
             if ($success) {
-                if ($name == 'llquickpay') {
+                if ($name == 'llcbpay' || $name == 'llquickpay') {
                     return new Response("{'ret_code':'0000','ret_msg':'交易成功'}");
                 } else {
                     return new Response('success');
