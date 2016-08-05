@@ -1,5 +1,9 @@
 {% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
-  {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
+  {% if courseVip%}
+    {{'会员免费学'|trans}}<br/><br/>
+  {% else %}
+    {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
+  {% endif %}
 {% else %}
   <a class="btn btn-primary btn-lg"
     {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}

@@ -18,10 +18,12 @@ define(function(require, exports, module) {
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var videoHeaderLength = videoHtml.data('videoHeaderLength');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
+        var fingerprintTime = videoHtml.data('fingerprintTime');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
@@ -55,6 +57,7 @@ define(function(require, exports, module) {
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
+                fingerprintTime:fingerprintTime,
                 watermark: watermark,
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList,
@@ -64,7 +67,8 @@ define(function(require, exports, module) {
                     disableVolumeButton: disableVolumeButton,
                     disablePlaybackButton: disablePlaybackButton,
                     disableResolutionSwitcher: disableResolutionSwitcher
-                }
+                },
+                videoHeaderLength: videoHeaderLength
             }
         );
 
