@@ -16,8 +16,8 @@ class Version20160805093136 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `cash_orders` CHANGE `payment` `payment` VARCHAR(32) CHARACTER NOT NULL DEFAULT 'none'");
-        $this->addSql("ALTER TABLE `cash_flow` CHANGE `payment` `payment` VARCHAR(32) CHARACTER NOT NULL DEFAULT 'none'");
+        $this->addSql("ALTER TABLE `cash_orders` CHANGE `payment` `payment` VARCHAR(32) NOT NULL DEFAULT 'none'");
+        $this->addSql("ALTER TABLE `cash_flow` CHANGE `payment` `payment` VARCHAR(32) NULL DEFAULT ''");
     }
 
     /**
