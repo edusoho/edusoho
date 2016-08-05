@@ -1,46 +1,46 @@
-购买%name%: 购买%name%
-'加入学习': '加入学习'
-'注意：请在30分钟内完成支付，否则订单将会过期失效': '注意：请在30分钟内完成支付，否则订单将会过期失效'
-'%name%名称': '%name%名称'
-'价格': '价格'
-'会员免费': '会员免费'
-'元': '元'
-'您还没有头像，设置以后才能加入学习': '您还没有头像，设置以后才能加入学习'
-'拥有一个独有的头像，老师和同学们能更容易关注到你哦～～': '拥有一个独有的头像，老师和同学们能更容易关注到你哦～～'
-点击设置: 点击设置
-'此%name%为免费%classroomName%，无需购买，可直接加入学习。': '此%name%为免费%classroomName%，无需购买，可直接加入学习。'
-'预览模式无法支付%role%': '预览模式无法支付%role%'
-去支付: 去支付
-'正在加入...': '正在加入...'
-正在创建订单...: 正在创建订单...
-'预览模式无法加入学习%role%': '预览模式无法加入学习%role%'
-'继续学习': '继续学习'
-'立即加入': '立即加入'
-'共有<span>%courseNum%</span>门课程': '共有<span>%courseNum%</span>门课程'
-所属%name%: 所属%name%
-我的话题: 我的话题
-问答帖: 问答帖
-问: 问
-精华帖: 精华帖
-精: 精
-发表于%name%: 发表于%name%
-'已删除': '已删除'
-最后回复: 最后回复
-浏览: 浏览
-'你还没提过问题': '你还没提过问题'
-'你还没发表过话题': '你还没发表过话题'
-'你还没有发表过话题': '你还没有发表过话题'
-'您的退款申请已提交，请等待管理员的处理。': '您的退款申请已提交，请等待管理员的处理。'
-'取消退款，继续学习！': '取消退款，继续学习！'
-首页: 首页
-'已关闭': '已关闭'
-'扫二维码继续学习': '扫二维码继续学习'
-评价: 评价
-'价格：': '价格：'
-'免费': '免费'
-学员: 学员
-课程: 课程
-分享: 分享
+购买%name%: Buy %name%
+'加入学习': 'Join'
+'注意：请在30分钟内完成支付，否则订单将会过期失效': 'Note: Please finish payment with 30 minutes, otherwise the order will expire.'
+'%name%名称': '%name% name'
+'价格': 'Price'
+'会员免费': 'Free for VIP'
+'元': ' RMB Yuan'
+'您还没有头像，设置以后才能加入学习': 'Please setup your avator to join the course.'
+'拥有一个独有的头像，老师和同学们能更容易关注到你哦～～': 'Setting up a unique avator will improve your visibility to others. '
+点击设置: Settings
+'此%name%为免费%classroomName%，无需购买，可直接加入学习。': 'This %name% is a free %classroomName%, you can join to study directly.'
+'预览模式无法支付%role%': 'Cannot pay %role% in preview mode.'
+去支付: Go to Pay
+'正在加入...': 'Joining ...'
+正在创建订单...: Creating order ...
+'预览模式无法加入学习%role%': 'Cannot join %role% in preview mode.'
+'继续学习': 'Continue'
+'立即加入': 'Join Now'
+'共有<span>%courseNum%</span>门课程': 'Total number of courses: <span>%courseNum%</span>'
+所属%name%: In %name%
+我的话题: My Topic
+问答帖: Q&A
+问: Ask
+精华帖: Digest
+精: Digest
+发表于%name%: Posted at %name%
+'已删除': 'Deleted'
+最后回复: Last reply
+浏览: View
+'你还没提过问题': 'You haven''t asked any question.'
+'你还没发表过话题': 'You haven''t posted any topic.'
+'你还没有发表过话题': 'You haven''t posted any topic.'
+'您的退款申请已提交，请等待管理员的处理。': 'Your refund request has been sumbitted, please wait for processing.'
+'取消退款，继续学习！': 'Cancel refund and continue learning.'
+首页: Home
+'已关闭': 'Closed'
+'扫二维码继续学习': 'Scan QR code to resume the course'
+评价: Review
+'价格：': 'Price: '
+'免费': 'Free'
+学员: Student
+课程: Course
+分享: Share
 会员%name%: 会员%name%
 承诺服务: 承诺服务
 '%name%管理': '%name%管理'
