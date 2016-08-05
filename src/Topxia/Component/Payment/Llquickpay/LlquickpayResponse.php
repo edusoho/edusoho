@@ -10,23 +10,16 @@ class LlquickpayResponse extends Response
     
     public function getPayData()
     {
+        if ($this->isMobile($params['userAgent'])) {
+            $this->params = json_decode($this->params['res_data'], true);
+        }
         $params = $this->params;
         $data['payment'] = 'Llquickpay';
-        
-        if ($this->isMobile($params['userAgent'])) {
-            $error = $this->hasMobileError();
-        } else {
-            $error = $this->hasError();
-        }
-
+        $error = $this->hasError();
         if ($error) {
             throw new \RuntimeException(sprintf('快捷支付校验失败(%s)。', $error));
         }
-
         $result= json_decode($this->confirmSellerSendGoods(), true);
-
-        var_dump($result);
-        exit();
         if ($result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
@@ -43,15 +36,6 @@ class LlquickpayResponse extends Response
     private function hasError()
     {
         if ($this->params['result_pay'] != 'SUCCESS') {
-            return '支付异常';
-        }
-        return false;
-    }
-
-    private function hasMobileError()
-    {
-        $params = json_decode($this->params['res_data'], true);
-        if ($params['result_pay'] != 'SUCCESS') {
             return '支付异常';
         }
         return false;
