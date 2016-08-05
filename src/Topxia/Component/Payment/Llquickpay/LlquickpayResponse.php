@@ -11,6 +11,8 @@ class LlquickpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
+        var_dump($params);
+        exit();
         $error = $this->hasError();
         if ($error) {
             throw new \RuntimeException(sprintf('快捷支付校验失败(%s)。', $error));
@@ -33,6 +35,7 @@ class LlquickpayResponse extends Response
 
     private function hasError()
     {
+
         if ($this->params['result_pay'] != 'SUCCESS') {
             return '支付异常';
         }
@@ -87,5 +90,14 @@ class LlquickpayResponse extends Response
         }
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
+    }
+
+    public function isMobile($userAgent)
+    {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android') || strpos($userAgent, 'WAP')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
