@@ -59,7 +59,7 @@ class LlquickpayRequest extends Request
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId'],'user_info_dt_register'=>date('YmdHis', time())));
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId']));
         $converted['sign']       = $this->signParams($converted);
         if ($isMobile) {
             return $this->convertMobileParams($converted, $params['userAgent']);

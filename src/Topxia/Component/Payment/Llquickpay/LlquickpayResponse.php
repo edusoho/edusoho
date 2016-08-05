@@ -33,12 +33,6 @@ class LlquickpayResponse extends Response
 
     private function hasError()
     {
-        $sign = $this->signParams($this->params);
-        
-        if ($this->params['sign'] !== $sign) {
-            return 'sign_error';
-        }
-
         if ($this->params['result_pay'] != 'SUCCESS') {
             return '支付异常';
         }
