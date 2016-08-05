@@ -751,7 +751,6 @@ define(function(require, exports, module) {
         },
 
         execute: function() {
-            console.log(11);
             var posted = this.addMediaPlayingCounter();
             this.addLearningCounter(posted);
         },
