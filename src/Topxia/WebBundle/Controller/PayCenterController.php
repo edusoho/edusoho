@@ -274,6 +274,9 @@ class PayCenterController extends BaseController
             $returnArray = $request->query->all();
         } else {
             $returnArray = $request->request->all();
+            if ($name == 'llcbpay' || $name == 'llquickpay') {
+                $returnArray['userAgent'] = $request->headers->get('User-Agent');
+            }
         }
 
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
