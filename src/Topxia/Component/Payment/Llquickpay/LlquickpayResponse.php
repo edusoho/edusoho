@@ -10,7 +10,7 @@ class LlquickpayResponse extends Response
     
     public function getPayData()
     {
-        if ($this->isMobile($params['userAgent'])) {
+        if ($this->isMobile($this->params['userAgent'])) {
             $this->params = json_decode($this->params['res_data'], true);
         }
         $params = $this->params;
