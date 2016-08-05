@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set bodyClass = 'classroom-list-page bg-blank' %}
 {% set script_controller = 'classroombundle/controller/classroom/explore' %}
-{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ','}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{'全部'|trans}}{% endif %}{% endblock %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{'全部'|trans}}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
     {% block title %}{{ categoryArray.name|default('全部'|trans)  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
