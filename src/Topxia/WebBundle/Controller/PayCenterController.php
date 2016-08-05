@@ -267,20 +267,17 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
-        // if ($name == 'wxpay') {
-        //     $returnXml   = $request->getContent();
-        //     $returnArray = $this->fromXml($returnXml);
-        // } elseif ($name == 'heepay' || $name == 'quickpay') {
-        //     $returnArray = $request->query->all();
-        // } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
-        //     $returnArray = json_decode(file_get_contents("php://input"), true);
-        //     $returnArray['userAgent'] = $request->headers->get('User-Agent');
-        // } else {
-        //     $returnArray = $request->request->all();
-        // }
-
-        $returnArray = $request->request->all();
-        $returnArray['cds'] =111;
+        if ($name == 'wxpay') {
+            $returnXml   = $request->getContent();
+            $returnArray = $this->fromXml($returnXml);
+        } elseif ($name == 'heepay' || $name == 'quickpay') {
+            $returnArray = $request->query->all();
+        } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
+            $returnArray = json_decode(file_get_contents("php://input"), true);
+            $returnArray['userAgent'] = $request->headers->get('User-Agent');
+        } else {
+            $returnArray = $request->request->all();
+        }
 
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
 
