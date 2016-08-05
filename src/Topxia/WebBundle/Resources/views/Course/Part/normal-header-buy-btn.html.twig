@@ -1,6 +1,6 @@
 {% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
   {% if courseVip%}
-    {{'会员免费学'|trans}}<br>
+    {{'会员免费学'|trans}}<br/><br/>
   {% else %}
     {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
   {% endif %}
