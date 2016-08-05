@@ -11,34 +11,38 @@ class LlquickpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $error = $this->hasError($params);
+        $error = $this->hasError();
         if ($error) {
             throw new \RuntimeException(sprintf('快捷支付校验失败(%s)。', $error));
         }
 
         $data['payment'] = 'Llquickpay';
         $data['sn']      = $params['no_order'];
-        $result= $this->confirmSellerSendGoods();
-
-        if (in_array($result['result_pay'], array('WAITING', 'PROCESSING'))) {
-            return array('sn' => $params['no_order'], 'status' => 'waitBuyerConfirmGoods');
-        } elseif ($result['result_pay'] == 'SUCCESS') {
+        $result= json_decode($this->confirmSellerSendGoods(), true);
+        if ($result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
             $data['status'] = 'unknown';
         }
 
-        $data['amount']   = $params['pay_amt'];
+        $data['amount']   = $params['money_order'];
         $data['paidTime'] = time();
         $data['raw'] = $params;
         return $data;
     }
 
-    private function hasError($params)
+    private function hasError()
     {
-        if ($params['result_pay'] != 'SUCCESS') {
-            return '快捷支付异常';
+        $sign = $this->signParams($this->params);
+        
+        if ($this->params['sign'] !== $sign) {
+            return 'sign_error';
         }
+
+        if ($this->params['result_pay'] != 'SUCCESS') {
+            return '支付异常';
+        }
+
         return false;
     }
 
@@ -47,11 +51,11 @@ class LlquickpayResponse extends Response
         $params                  = $this->params;
         $data                    = array();
         $data['oid_partner']     = $params['oid_partner'];
-        $data['sign_type']      　= "MD5";
+        $data['dt_order']        = $params['dt_order'];
         $data['no_order']        = $params['no_order'];
-        $data['dt_orde']         = date("YmdHis", time());
+        $data['sign_type']       = $params['sign_type'];
         $data['sign']            = $this->signParams($data);
-        $response                = $this->postRequest($this->url, $data);
+        $response                = $this->postRequest($this->url, json_encode($data));
         return $response;
     }
 
@@ -85,12 +89,9 @@ class LlquickpayResponse extends Response
             if (empty($value)) {
                 continue;
             }
-
-            $sign .= $key.'='.strtolower($value).'&';
+            $sign .= $key.'='.$value.'&';
         }
-
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
     }
-
 }

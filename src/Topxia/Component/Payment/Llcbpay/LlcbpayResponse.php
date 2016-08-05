@@ -21,6 +21,7 @@ class LlcbpayResponse extends Response
         $data['sn']      = $params['no_order'];
         $result= $this->confirmSellerSendGoods();
 
+
         if (in_array($result['result_pay'], array('WAITING', 'PROCESSING'))) {
             return array('sn' => $params['no_order'], 'status' => 'waitBuyerConfirmGoods');
         } elseif ($result['result_pay'] == 'SUCCESS') {
@@ -50,7 +51,7 @@ class LlcbpayResponse extends Response
         $params                  = $this->params;
         $data                    = array();
         $data['oid_partner']     = $params['oid_partner'];
-        $data['sign_type']      　= "MD5";
+        $data['sign_type']       = 'MD5';
         $data['no_order']        = $params['no_order'];
         $data['dt_orde']         = date("YmdHis", time());
         $data['sign']            = $this->signParams($data);
