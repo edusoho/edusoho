@@ -53,7 +53,7 @@ class LlcbpayResponse extends Response
         $data['no_order']        = $params['no_order'];
         $data['sign_type']       = $params['sign_type'];
         $data['sign']            = $this->signParams($data);
-        $response                = $this->postRequest($this->url, $data);
+        $response                = $this->postRequest($this->url, json_encode($data));
         return $response;
     }
 
