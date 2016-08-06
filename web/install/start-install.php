@@ -202,11 +202,10 @@ function install_step3($init_data = 0)
             $init->initLockFile();
             $connection->commit();
             header("Location: start-install.php?step=4");
-
-        }catch (\Exception $e){
-            $connection->rollBack();
-        }finally{
             exit();
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $connection->rollBack();
         }
     }
 
