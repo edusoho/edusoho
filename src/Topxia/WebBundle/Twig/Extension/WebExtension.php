@@ -1212,6 +1212,10 @@ class WebExtension extends \Twig_Extension
                     $default = '快捷支付';
                 } elseif ($order['payment'] == 'outside') {
                     $default = '站外支付';
+                } elseif ($order['payment'] == 'llcbpay') {
+                    $default = ' 连连-网银支付';
+                } elseif ($order['payment'] == 'llquickpay') {
+                    $default = '连连-快捷支付';
                 } else {
                     $default = '支付宝';
                 }
