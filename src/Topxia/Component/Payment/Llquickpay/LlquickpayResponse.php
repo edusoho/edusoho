@@ -14,7 +14,7 @@ class LlquickpayResponse extends Response
             $this->params = json_decode($this->params['res_data'], true);
         }
         $params = $this->params;
-        $data['payment'] = 'Llquickpay';
+        $data['payment'] = 'llquickpay';
         $error = $this->hasError();
         if ($error) {
             throw new \RuntimeException(sprintf('快捷支付校验失败(%s)。', $error));

@@ -17,7 +17,7 @@ class LlcbpayResponse extends Response
             throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
         }
 
-        $data['payment'] = 'Llcbpay';
+        $data['payment'] = 'llcbpay';
         $data['sn']      = $params['no_order'];
         $result= json_decode($this->confirmSellerSendGoods(), true);
 
