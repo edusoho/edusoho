@@ -59,6 +59,8 @@ interface CourseService
 
     public function findUserFavoritedCourses($userId, $start, $limit);
 
+    public function findRandomCourses($conditions, $num);
+
     public function createCourse($course);
 
     public function updateCourse($id, $fields);
@@ -360,11 +362,15 @@ interface CourseService
 
     public function hasFavoritedCourse($courseId);
 
+    public function searchCourseFavoriteCount($conditions);
+
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
+
     public function generateLessonReplay($courseId, $lessonId);
 
     public function entryReplay($lessonId, $courseLessonReplayId);
 
-    public function getCourseLessonReplayByLessonId($lessonId);
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType);
 
     public function deleteCourseLessonReplayByLessonId($lessonId);
 
@@ -376,12 +382,18 @@ interface CourseService
 
     public function addCourseLessonReplay($courseLessonReplay);
 
-    public function deleteLessonReplayByLessonId($lessonId);
+    public function deleteLessonReplayByLessonId($lessonId, $lessonType);
 
-    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
+
+    public function getCourseLessonReplay($id);
 
     public function updateCourseLessonReplay($id, $fields);
 
-    public function updateCourseLessonReplayByLessonId($lessonId, $fields);
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
+
+    public function searchCourseLessonReplayCount($conditions);
+
+    public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
 
 }

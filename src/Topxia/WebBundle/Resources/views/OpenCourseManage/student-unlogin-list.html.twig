@@ -1,0 +1,50 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+  <form class="form-inline well well-sm " action="{{ path('open_course_manage_students',{id:course.id}) }}" method="get" novalidate>
+    <div class="form-group col-md-7">
+      <input type="hidden" name="userType" value="unlogin"/>
+      <select class="form-control" name="isNotified">
+        {{ select_options({0:'全部学员', 1: '设置提醒的学员'}, app.request.get('isNotified')) }}
+      </select>&nbsp;&nbsp;
+      <button class="btn btn-primary">{{ '搜索'|trans }}</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+{% endif %}
+
+<table class="table table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="30%">IP</th>
+      <th width="20%">{{'最近进入'|trans}}</th>
+      {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+        <th width="20%">手机号</th>
+        <th width="20%">是否提醒</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      <tr id="student-tr">
+        <td class="media" style="vertical-align: middle;">
+          {{ student.ip }}
+        </td>
+        <td style="vertical-align: middle;">
+          {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
+        </td>
+
+        {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+          <td>{{ student.mobile }}</td>
+          <td style="vertical-align: middle;">
+            {% if student.isNotified %}已设置提醒{% else %}未设置{% endif %}
+          </td>
+        {% endif %}
+        
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{'暂无记录'|trans}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+

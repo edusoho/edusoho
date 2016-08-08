@@ -187,6 +187,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['title']);
         }
 
+        if (!empty($conditions['tags'])) {
+            $tagIds = $conditions['tags'];
+            $tags   = '';
+
+            foreach ($tagIds as $tagId) {
+                $tags .= "|".$tagId;
+            }
+
+            $conditions['tags'] = $tags."|";
+        }
+
         if (isset($conditions['tagId'])) {
             $tagId = (int) $conditions['tagId'];
 
@@ -210,6 +221,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
+
             ->from($this->table, 'course')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
@@ -256,6 +268,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
 
             unset($conditions['tagIds']);
+        }
+
+        if (isset($conditions['types'])) {
+            $builder->andWhere('type IN ( :types )');
         }
 
         return $builder;

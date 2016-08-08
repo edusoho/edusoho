@@ -1,0 +1,37 @@
+{% extends 'TopxiaAdminBundle:OpenCourseAnalysis:layout.html.twig' %}
+
+{% set nav = 'watch' %}
+
+{% block form_input %}
+    <input name="type" type="hidden" value="{{ app.request.get('type') }}">
+{% endblock %}
+
+{% block analysis_content %}
+  <div class="mbs">
+  <div class= "btn-group" >
+    <a href="javascript:;" class="btn btn-default btn-sm js-watch-type {% if app.request.query.get('type', '') == '' %}btn-primary{% endif %}" role="button">全部</a>
+    <a href="javascript:;" class="btn btn-default btn-sm js-watch-type {% if app.request.query.get('type', '') == 'open' %}btn-primary{% endif %}" role="button" data-value="open">录播公开课</a>
+    <a href="javascript:;" class="btn btn-default btn-sm js-watch-type {% if app.request.query.get('type', '') == 'liveOpen' %}btn-primary{% endif %}" role="button" data-value="liveOpen">直播公开课</a>
+  </div>
+</div>
+  <div id="line-charts" data-charts-data="{{ watchData }}" style="width: 100%; height: 350px;"></div>
+
+  <div class="well">
+      <div class="row">
+        <div class="col-md-4">
+          <span class="prs" style="display: table-cell;vertical-align: middle;">公开课总数: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ totalOpenCourseNum }}</span>
+        </div>
+        <div class="col-md-4">
+          <span class="prs" style="display: table-cell;vertical-align: middle;">总访问量: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ totalWatchNum }}</span>
+        </div>
+        <div class="col-md-4">
+          <span class="prs" style="display: table-cell;vertical-align: middle;">日均观看次数: </span>
+          <span style="font-size:24px;display: table-cell;vertical-align: middle;">{{ averageWatchNum }}</span>
+        </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% do load_script('open-course-analysis/watch') %}

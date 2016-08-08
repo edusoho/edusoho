@@ -176,7 +176,6 @@ class OrderController extends BaseController
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-
             if ($order["status"] == "paid") {
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }

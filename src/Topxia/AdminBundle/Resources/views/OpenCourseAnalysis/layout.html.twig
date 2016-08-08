@@ -1,0 +1,62 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% set nav = nav|default(null) %} 
+
+{% do load_script('open-course-analysis/index') %}
+{% set menu = 'admin_opencourse_analysis' %}
+
+{% block main %}
+  <style>
+    .form-control[readonly] {
+      cursor: pointer;
+      background: #fff;
+    }
+  </style>
+
+  {% block form %}
+    <form id="refererlog-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
+      <div class="form-group ">
+        <label for="startDate">起始日期</label>
+        <input class="form-control datetimepicker-input" type="text" id="startTime" name="startTime"
+               value="{{ dateRange.startTime }}" placeholder="起始时间" readonly>
+        <label for="endDate">截止日期</label>
+        <input class="form-control datetimepicker-input" type="text" id="endTime" name="endTime"
+               value="{{ dateRange.endTime }}" placeholder="结束时间" readonly>
+        <button
+            class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'day' %}active {% endif %}"
+            type="button" id="btn-yesterday-range" data-type="day" data-start="{{ dateRange.yesterdayStart }}"
+            data-end="{{ dateRange.yesterdayEnd }}">昨天
+        </button>
+        <button
+            class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'week' %}active {% endif %}"
+            type="button" id="btn-lastWeek-range" data-type="week" data-start="{{ dateRange.lastWeekStart }}"
+            data-end="{{ dateRange.lastWeekEnd }}">最近七天
+        </button>
+        <button
+            class="btn btn-default btn-data-range {% if app.request.query.get('date-range') == 'month' %}active {% endif %}"
+            type="button" id="btn-lastMonth-range" data-type="month" data-start="{{ dateRange.lastMonthStart }}"
+            data-end="{{ dateRange.lastMonthEnd }}">最近30天
+        </button>
+        <input name="date-range" type="hidden" value="{{ app.request.query.get('date-range','week') }}">
+        {% block form_input %}
+        {% endblock %}
+        <button class="btn btn-primary" type="submit">搜索</button>
+      </div>
+    </form>
+  {% endblock form %}
+
+  <div class="btn-group mbm" role="group" aria-label="...">
+    <a class="btn btn-default {% if nav  == 'referer' %}active{% endif %}"
+       href="{{ path('admin_opencourse_analysis_referer_summary_list',{startTime:app.request.get('startTime'),endTime:app.request.get('endTime'),'date-range':app.request.get('date-range')}) }}"
+       role="button">来源分析</a>
+    <a class="btn btn-default {% if nav == 'conversion' %}active{% endif %}"
+       href="{{ path('admin_opencourse_analysis_conversion',{startTime:app.request.get('startTime'),endTime:app.request.get('endTime'),'date-range':app.request.get('date-range')}) }}"
+       role="button">购买转化分析</a>
+    <a class="btn btn-default {% if nav|default('') == 'watch' %}active{% endif %}"
+       href="{{ path('admin_opencourse_analysis_referer_watch_statistics',{startTime:app.request.get('startTime'),endTime:app.request.get('endTime'),'date-range':app.request.get('date-range')}) }}"
+       role="button">观看统计</a>
+  </div>
+
+  {% block analysis_content %}
+
+  {% endblock %}
+{% endblock %}

@@ -76,8 +76,16 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $lessonId        = $this->getParam("lessonId");
         $start           = (int) $this->getParam("start", 0);
         $limit           = (int) $this->getParam("limit", 10);
-        $lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, $start, 1000);
-        $files           = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
+        $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
+            array(
+                'lessonId' => $lessonId,
+                'source'   => 'coursematerial',
+                'type'     => 'course'
+            ),
+            array('createdTime', 'DESC'),
+            0, 1000
+        );
+        $files = $this->controller->getUploadFileService()->findFilesByIds(ArrayToolkit::column($lessonMaterials, 'fileId'));
 
         return array(
             "start" => $start,
@@ -157,7 +165,16 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($user->isLogin()) {
             $learnStatus     = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
-            $lessonMaterials = $this->controller->getMaterialService()->findLessonMaterials($lessonId, 0, 1);
+            $lessonMaterials = $this->controller->getMaterialService()->searchMaterials(
+                array(
+                    'lessonId' => $lessonId,
+                    'source'   => 'coursematerial',
+                    'type'     => 'course'
+                ),
+                array('createdTime', 'DESC'),
+                0, 1
+            );
+
             return array(
                 "learnStatus" => $learnStatus,
                 "hasMaterial" => empty($lessonMaterials) ? false : true
@@ -212,8 +229,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
         // $files = $this->getUploadFiles($courseId);
         $fileIds = ArrayToolkit::column($lessons, 'mediaId');
-        $files = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
-        $files = array_map(function ($file) {
+        $files   = ArrayToolkit::index($this->getUploadFileService()->findFilesByIds($fileIds), 'id');
+        $files   = array_map(function ($file) {
             $file['convertParams'] = null; //过滤convertParams防止移动端报错
             return $file;
         }, $files);
@@ -406,7 +423,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $mediaId     = $lesson['mediaId'];
         $mediaSource = $lesson['mediaSource'];
         $mediaUri    = $lesson['mediaUri'];
-
         if ($lesson['length'] > 0) {
             $lesson['length'] = $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
         } else {
@@ -418,6 +434,16 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
+                    $enablePlayRate = $this->controller->setting('storage.enable_playback_rates');
+                    if ($enablePlayRate && $file['mcStatus'] && $file['mcStatus'] == 'yes') {
+                        $player = $this->controller->getMaterialLibService()->player($file['globalId']);
+                        if (isset($player['mp4url'])) {
+                            $lesson['mediaUri'] = $player['mp4url'];
+                            return $lesson;
+                        }
+                    }
+
+                    //do mp4
                     $lesson['mediaConvertStatus'] = $file['status'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {

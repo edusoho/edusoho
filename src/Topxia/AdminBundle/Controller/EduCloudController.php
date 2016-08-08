@@ -148,6 +148,7 @@ class EduCloudController extends BaseController
             'upload_mode'                 => 'local',
             'cloud_bucket'                => '',
             'support_mobile'              => 0,
+            'enable_playback_rates'       => 0,
             'video_quality'               => 'low',
             'video_audio_quality'         => 'low',
             'video_watermark'             => 0,
@@ -155,6 +156,7 @@ class EduCloudController extends BaseController
             'video_embed_watermark_image' => '',
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
+            'video_fingerprint_time'      => 0.5,
             'video_header'                => null
         );
 

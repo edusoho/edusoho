@@ -16,20 +16,21 @@
 <ul class="course-wide-list">
   {% if courses %}
   {% for course in courses %}
+
   <li class="course-item clearfix"   data-id="{{course.id}}" >
-    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+    <a class="course-picture-link" href="{{ path('course_show',{id:course.id}) }}" target="_blank">
       <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
-     <div style="float:right;" class="text-muted mrm mls">
+      <div style="float:right;" class="text-muted mrm mls">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            <span class="course-price" style="display:inline">
-              {% if course.price > 0 %}
-                 {{'价格：'|trans}} {{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
-              {% else %}
-                {{'免费'|trans}}
-              {% endif %}
-            </span>
+          <span class="course-price" style="display:inline">
+            {% if course.price > 0 %}
+               {{'价格：'|trans}} {{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
+            {% else %}
+              {{'免费'|trans}}
+            {% endif %}
+          </span>
         {% else %}
           <span class="course-price">
             {% if course.price > 0 %}
@@ -45,20 +46,21 @@
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员'|trans)}}</span>
         {% endif %}
 
-        </div>
+      </div>
 
-      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+      <h4 class="course-title"><a href="{{ path('course_show',{id:course.id}) }}" target="_blank">{{ course.title }}</a>
       {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">{{'已完结'|trans}}</span>
       {% endif %}
+
       {% if course.type == 'live' %}
           {% set lesson = course['lesson']|default(null) %}
           {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-            <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
+            <span class="label label-warning">{{'正在直播中'|trans}}</span>
           {% else %}
-            <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
+            <span class="label label-success">{{'直播'|trans}}</span>
           {% endif %}
       {% endif %}
       </h4>

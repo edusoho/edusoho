@@ -1,0 +1,34 @@
+<li class="autumn-grid autumn-course-grid">
+  <a href="{{ path('open_course_show', {courseId:course.id}) }}" class="course-picture">
+    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', '') }}
+    {% if course.status == 'draft' %}
+      <span class="label  label-warning course-status">未发布</span>
+    {% elseif course.status == 'closed' %}
+      <span class="label label-danger course-status">已关闭</span>
+    {% endif %}
+
+    {% if course.type == 'liveOpen' %}
+      {% set lesson = course['lesson']|default(null) %}
+      {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+        <span class="label label-warning series-mode-label">正在直播中</span>
+      {% else %}
+        <span class="label label-success series-mode-label">直播</span>
+      {% endif %}
+    {% endif %}
+  </a>
+  <div class="course-body">
+    <h3 class="course-name"><a href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a></h3>
+    <div class="course-about">{{ course.about|plain_text(60) }}</div>
+
+    <div class="course-metas">
+      <span class="teachers">
+         主讲:
+        {% for teacher in course.teachers %}
+         {% if loop.index <= 1 %}
+          {{ web_macro.user_link(teacher, 'text-muted') }}
+         {% endif %}
+        {% endfor %}
+      </span>
+    </div>
+  </div>  
+</li>
