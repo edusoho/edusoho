@@ -755,6 +755,10 @@ web:
                                 side_nav: students
                             router_params:
                                 id: (course.id)
+                            children:
+                                course_manage_student_create:
+                                    name: 添加学员
+
                 course_manage_questions:
                     name: 题库
                     children:
