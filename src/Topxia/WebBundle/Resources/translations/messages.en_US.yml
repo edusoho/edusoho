@@ -1761,12 +1761,20 @@ Email地址: 'Email Address'
 '''}}{% endif %}{{''%nickname%的个人主页': '''}}{% endif %}{{''%nickname% ''s homepage'
 个人介绍: Introduction
 在学%name%: 'Learning %name%'
+高品: 'High Quality'
+开启: 'On'
+文件: file
+非连载课程: 'Non Serial'
+支付宝: Alipay
+简单: Easy
+一般: Normal
+困难: Difficult
+错误提示: 'Error message'
+网银支付: 'E-currency payment'
+快捷支付: 'Quick payment'
 抵价: 'trade in'
 打折: discount
 已领取: got
-支付宝: Alipay
-网银支付: 'E-currency payment'
-快捷支付: 'Quick payment'
 '苹果应用内支付': 'Apple in-app purchase'
 站外支付: 'payment out of website'
 虚拟币: 'virtual currency'
@@ -1831,12 +1839,8 @@ Email地址: 'Email Address'
 '手动导入': 'Manual import'
 人人连接: 'Renren login'
 QQ登录: 'QQ login'
-简单: Easy
-一般: Normal
-困难: Difficult
 班级: Class
 组合: Combination
-开启: 'On'
 '你的父母名字': 'father''s name'
 '你的老师名字': 'teacher''s name'
 '你的爱人的名字': 'lover''s name'
@@ -1875,7 +1879,6 @@ QQ: 'QQ number'
 屏蔽: shield
 敏感词: 'sensitive words'
 编号: 'serial number'
-非连载课程: 'Non Serial'
 主题目录%themeDir%不存在！: 'Subject catalog  is not exist！'
 '资讯栏目页面不存在': 'page not exist'
 '文章已删除或者未发布！': 'The article is canclled or not issued yet!'
@@ -1968,7 +1971,6 @@ PPT文档还在转换中，还不能查看，请稍等。: 'PPT conversion is on
 '课时%lessonnumber%： %lessontitle%': 'Lesson %lessonnumber%: %lessontitle%'
 '非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服': 'Sorry, you cannot access %classroomSettingname%. Please contact customer service for help.'
 '话题不存在，或已删除。': 'The topic is not found,may be removed.'
-错误提示: 'Error message'
 '上传授权码已过期，请刷新页面后重试！': 'The access key is expired,please re-fresh the page and try again.'
 '您上传的不是图片文件，请重新上传。': 'It''s not pic file,please upload again.'
 '您上传的不是Flash文件，请重新上传。': 'It''s not flash file,please upload again.'
@@ -3122,7 +3124,6 @@ Firefox浏览器: Firefox
 点赞失败，请重试！: 'Failed to like. Please try again.'
 暂停中: paused
 '待上传': 'wait for upload'
-文件: file
 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器': 'Web Uploader does not support your browser. If you are using IE, please try to update your flashplayer.'
 '全部暂停': 'All pause'
 '全部继续': 'All Continue'
@@ -3153,7 +3154,6 @@ Firefox浏览器: Firefox
 秒后重新获取: 'seconds later to retry'
 发送短信成功: 'Messages sent successfully'
 发送短信失败，请联系管理员: 'Failed to send the messages. Please contact the webmaster.'
-高品: 'High Quality'
 '画质 / ': 'video quality'
 音质: 'audio quality'
 '上传失败，请重试！': 'Upload failed. Please try again.'
@@ -3183,6 +3183,29 @@ mp3: mp3
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
 2M: 2M
+'流畅 <span class="text-muted">(适合PPT讲解)</span>': '流畅 <span class="text-muted">(适合PPT讲解)</span>'
+'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>': '标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'
+'精细 <span class="text-muted">(适合动态电影)</span>': '精细 <span class="text-muted">(适合动态电影)</span>'
+最近一周: 最近一周
+最近两周: 最近两周
+最近一个月: 最近一个月
+最近两个月: 最近两个月
+最近三个月: 最近三个月
+是: 是
+否: 否
+'其他支付': '其他支付'
+'购买者用户名': '购买者用户名'
+随机生成: 随机生成
+按难易程度: 按难易程度
+整个课程: 整个课程
+按课时范围: 按课时范围
+提示信息: 提示信息
+警告信息: 警告信息
+我要提问: 我要提问
+'详细描述你的问题': '详细描述你的问题'
+'请输入私信内容': '请输入私信内容'
+收信人用户名: 收信人用户名
+想要说的话: 想要说的话
 PPT: PPT
 Flash: Flash
 '--': '--'
