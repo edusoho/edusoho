@@ -3214,45 +3214,45 @@ mp3: mp3
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
 2M: 2M
-'流畅 <span class="text-muted">(适合PPT讲解)</span>': '流畅 <span class="text-muted">(适合PPT讲解)</span>'
-'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>': '标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'
-'精细 <span class="text-muted">(适合动态电影)</span>': '精细 <span class="text-muted">(适合动态电影)</span>'
-最近一周: 最近一周
-最近两周: 最近两周
-最近一个月: 最近一个月
-最近两个月: 最近两个月
-最近三个月: 最近三个月
-是: 是
-否: 否
-'其他支付': '其他支付'
-'购买者用户名': '购买者用户名'
-随机生成: 随机生成
-按难易程度: 按难易程度
-整个课程: 整个课程
-按课时范围: 按课时范围
-提示信息: 提示信息
-警告信息: 警告信息
-我要提问: 我要提问
-'详细描述你的问题': '详细描述你的问题'
-'请输入私信内容': '请输入私信内容'
-收信人用户名: 收信人用户名
-想要说的话: 想要说的话
-资讯频道: 资讯频道
-可用: 可用
-'我正在学习《%course%》，收获巨大哦，一起来学习吧！': '我正在学习《%course%》，收获巨大哦，一起来学习吧！'
-'我正在学习「%classroom%」，收获巨大哦，一起来学习吧！': '我正在学习「%classroom%」，收获巨大哦，一起来学习吧！'
-'我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。': '我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。'
-我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
-小组频道: 小组频道
-搜索小组: 搜索小组
-' 将学校装进口袋，移动学习，随时随地。': ' 将学校装进口袋，移动学习，随时随地。'
-系统: 系统
-'无解析': '无解析'
-'<span class="text-muted">未回答</span>': '<span class="text-muted">未回答</span>'
+'流畅 <span class="text-muted">(适合PPT讲解)</span>': 'Smooth <span class="text-muted">(Suitable for PPT illustration)</span>'
+'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>': 'Standard <span class="text-muted">(Suitable for screen recording or camera capturing)</span>'
+'精细 <span class="text-muted">(适合动态电影)</span>': 'High-quality <spanS class="text-muted">(Suitable for motion pictures)</span>'
+最近一周: Last week
+最近两周: Two Weeks before
+最近一个月: Last month
+最近两个月: Two months before
+最近三个月: Three months before
+是: Yes
+否: No
+'其他支付': 'Other payment'
+'购买者用户名': 'Buyer's Name'
+随机生成: Created randomly
+按难易程度: According to difficulty
+整个课程: The whole course
+按课时范围: According to lesson's category
+提示信息: Tips
+警告信息: Attention
+我要提问: Ask a question
+'详细描述你的问题': 'Describe your question in detail.'
+'请输入私信内容': 'Please enter content for the private message.'
+收信人用户名: Recipent's Username
+想要说的话: what to say
+资讯频道: News channel
+可用: Accessible
+'我正在学习《%course%》，收获巨大哦，一起来学习吧！': 'I'm learning 《%course%》，it's really rewarding,let's keep learning together!'
+'我正在学习「%classroom%」，收获巨大哦，一起来学习吧！': 'I'm learning 「%classroom%」,it's really rewarding，let's keep learning together!'
+'我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。': 'I'm eenjoying「%articletitle%」,please follow「%sitename%」; Sharing knowledge makes a better future!'
+我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！: I'm now part of the group「%groupname%」,and check out 「%threadname%」,it's really fantastic ,come and join with me!
+小组频道: Groups
+搜索小组: Search a group
+' 将学校装进口袋，移动学习，随时随地。': ' A whole knowledge base right in your pocket.Enjoy knowledge no mater wherever you are'
+系统: System
+'无解析': 'Parse failed'
+'<span class="text-muted">未回答</span>': '<span class="text-muted">unanswered</span>'
 PPT: PPT
 Flash: Flash
 '--': '--'
-'%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
+'%threadtitle%-成员.xls': '%threadtitle%-member.xls'
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
