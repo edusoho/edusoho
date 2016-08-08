@@ -30,7 +30,7 @@ class TransGenerateCommand extends BaseCommand
 
         $output->writeln("<comment>正在扫描模版文件Radio的语言串:</comment>");
         $viewRadioKeywords = $this->scanViewRadioTrans($dir, $output);
-        $this->printScanResult($viewKeywords, $output);
+        $this->printScanResult($viewRadioKeywords, $output);
 
         $output->writeln("<comment>\n正在扫描菜单配置文件的语言串:</comment>");
         $menuKeywords = $this->scanMenuTrans($dir, $output);
