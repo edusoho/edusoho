@@ -15,6 +15,11 @@ define(function(require, exports, module) {
 
     var rules = [
         [
+            'required',
+            /.+/,
+            Translator.trans('请输入 %display%',{display:'{{display}}'})
+        ],
+        [
             'integer',
             /[0-9]*/,
             '{{display}}必须是数字'
@@ -371,7 +376,7 @@ define(function(require, exports, module) {
             }   
         }   
         return len;  
-    }  
+    }
 
     exports.inject = function(Validator) {
         $.each(rules, function(index, rule){

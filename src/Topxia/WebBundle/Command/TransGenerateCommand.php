@@ -236,6 +236,28 @@ class TransGenerateCommand extends BaseCommand
             }
         }
 
+        $path = realpath($this->getRootDir().'/../web/assets/libs/common');
+        if (empty($path)) {
+            $output->write("<error>js is not exist.</error>");
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($path);
+
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getRealpath());
+
+            $matched = preg_match_all('/trans\(\'(.*?)\'/', $content, $matches);
+
+            if ($matched) {
+                $output->write("{$file->getRealpath()}");
+                $count = count($matches[1]);
+                $output->writeln("<info> ... {$count}</info>");
+
+                $keywords = array_merge($keywords, $matches[1]);
+            }
+        }
+
         return $keywords;
     }
 
