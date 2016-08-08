@@ -291,7 +291,7 @@ admin:
                                 admin_category_create:
                                     name: '添加分类'
                                     router_params:
-                                        groupId: group.id
+                                        groupId: (group.id)
                                     router_params_context: 1
                                     group: topBtn
                                     mode: modal
