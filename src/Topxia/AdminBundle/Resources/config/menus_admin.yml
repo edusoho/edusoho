@@ -16,8 +16,8 @@
 # admin_block_visual_edit_history:
 #     name: 历史记录
 #     parent: admin_operation_block
-#     router_params: {'blockTemplateId': 'block.blockTemplateId'}
-#     router_params_context: 1
+#     router_params: 
+#        blockTemplateId: (block.blockTemplateId)
 
 admin:
     name: 后台管理员
