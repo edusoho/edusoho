@@ -17,10 +17,12 @@ class CourseManageController extends BaseController
         }
 
         $courseManagePermission = $this->getPermissionExtension()->getPermissionByCode('course_manage');
-        $defaultMenu = $this->getPermissionExtension()->getFirstChild($this->getPermissionExtension()->getFirstChild($courseManagePermission));
+        $defaultMenu            = $this->getPermissionExtension()->getFirstChild($this->getPermissionExtension()->getFirstChild($courseManagePermission));
 
-        $url = $this->generateUrl($defaultMenu['code'], array('id' => $id));
-        return $this->redirect($url);
+        return $this->render('TopxiaWebBundle:CourseManage:index.html.twig', array(
+            'menu'   => $defaultMenu,
+            'course' => $course
+        ));
     }
 
     public function baseAction(Request $request, $id)
