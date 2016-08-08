@@ -217,10 +217,7 @@
     {% if info.enabled|default(1) == 0 or videoStatus.status|default(null) == 'stoped' %}
       <div class="mask"></div>
     {% endif %}
-    <div class="page-header clearfix">
-      <h1 class="pull-left">云视频</h1>
-    </div>
-
+    
     <div class="controls radios"> 
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
         {% if storageSetting.upload_mode|default('local') == "local" or info.accessCloud|default(0) == 0 %}

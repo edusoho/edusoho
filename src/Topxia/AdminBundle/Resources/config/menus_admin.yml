@@ -444,9 +444,8 @@ admin:
                 admin_bills:
                     name: 账单管理
                     children:
-                        admin_cash_bill:
+                        admin_bill:
                             name: 现金账单
-                            router_name: admin_bill
                         admin_coin_records:
                             name: 虚拟币账单
                 admin_coin_user:
