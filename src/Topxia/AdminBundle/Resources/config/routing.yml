@@ -760,7 +760,7 @@ admin_setting_default_avatar_crop:
 admin_setting_default_course_picture_crop:
     pattern:  /setting/default/course/picture/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
-    permissions: [admin_user_avatar]
+    permissions: [admin_user_avatar,course_manage_picture]
 
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
