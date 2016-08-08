@@ -3,7 +3,7 @@
 
 {% do load_script('course/common') %}
 
-{% if member and not member.locked %}
+{% if member %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
 {% elseif course.parentId|default(false) %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
