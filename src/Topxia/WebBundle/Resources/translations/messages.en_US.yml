@@ -1772,12 +1772,14 @@ Email地址: 'Email Address'
 错误提示: 'Error message'
 网银支付: 'E-currency payment'
 快捷支付: 'Quick payment'
+班级: Class
+虚拟币: 'virtual currency'
+'尚未开启支付模块，无法购买课程。': 'The payment feature is not enabled, cannot finish the purchase.'
 抵价: 'trade in'
 打折: discount
 已领取: got
 '苹果应用内支付': 'Apple in-app purchase'
 站外支付: 'payment out of website'
-虚拟币: 'virtual currency'
 '文章': article
 页面: page
 头条: news
@@ -1839,7 +1841,6 @@ Email地址: 'Email Address'
 '手动导入': 'Manual import'
 人人连接: 'Renren login'
 QQ登录: 'QQ login'
-班级: Class
 组合: Combination
 '你的父母名字': 'father''s name'
 '你的老师名字': 'teacher''s name'
@@ -2097,7 +2098,6 @@ QQ绑定已有账号: 'Bind QQ to existing account'
 用户不存在，请重新找回: 'User not exist, please try again.'
 手机短信验证错误，请重新找回: 'Failed to verify sms, please try again.'
 '该手机号码不存在': 'Phone number not exist.'
-'尚未开启支付模块，无法购买课程。': 'The payment feature is not enabled, cannot finish the purchase.'
 该订单已失效: 'The order is invalid.'
 订单状态被更改，不能支付: 'The order has been changed,can''t pay for it now'
 订单已经过期，不能支付: 'The order has been expired ,can''t pay for it.'
@@ -3206,6 +3206,18 @@ mp3: mp3
 '请输入私信内容': '请输入私信内容'
 收信人用户名: 收信人用户名
 想要说的话: 想要说的话
+资讯频道: 资讯频道
+可用: 可用
+'我正在学习《%course%》，收获巨大哦，一起来学习吧！': '我正在学习《%course%》，收获巨大哦，一起来学习吧！'
+'我正在学习「%classroom%」，收获巨大哦，一起来学习吧！': '我正在学习「%classroom%」，收获巨大哦，一起来学习吧！'
+'我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。': '我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。'
+我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！: 我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！
+小组频道: 小组频道
+搜索小组: 搜索小组
+' 将学校装进口袋，移动学习，随时随地。': ' 将学校装进口袋，移动学习，随时随地。'
+系统: 系统
+'无解析': '无解析'
+'<span class="text-muted">未回答</span>': '<span class="text-muted">未回答</span>'
 PPT: PPT
 Flash: Flash
 '--': '--'
