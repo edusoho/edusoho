@@ -1,7 +1,8 @@
 {% if setting('magic.enable_org','0') %}
-	 <td>
+	<td>
 	    {% set org = data('Org',{orgCode: orgCode}) %}
 	    {{ org.name|default('--')}}
-	    <span class="text-muted text-sm">编码：{{ orgCode }}</span>
+	    <br>
+	    <span class="text-muted text-sm">编码：{{ org.code }}</span>
 	</td>
 {% endif %}
