@@ -846,7 +846,6 @@ admin_setting_consult_setting:
 admin_setting_es_bar:
     pattern:  /setting/es-bar
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
-    permissions: [admin_setting_live_course]
 
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
