@@ -1326,9 +1326,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $permissions = $this->loadPermissions($user);
 
-        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())
-            || in_array('ROLE_ADMIN', $user->getRoles())
-            || in_array('admin', $permissions)) {
+        if (in_array('admin', $permissions)) {
             return true;
         }
 
