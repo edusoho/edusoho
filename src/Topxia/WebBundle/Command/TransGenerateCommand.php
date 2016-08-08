@@ -30,8 +30,12 @@ class TransGenerateCommand extends BaseCommand
 
         $output->writeln("<comment>正在扫描模版文件Radio的语言串:</comment>");
         $viewRadioKeywords = $this->scanViewRadioTrans($dir, $output);
-        $this->printScanResult($viewKeywords, $output);
+        $this->printScanResult($viewRadioKeywords, $output);
 
+        $output->writeln("<comment>正在扫描模版文件Default的语言串:</comment>");
+        $viewDefaultKeywords = $this->scanViewDefaultTrans($dir, $output);
+        $this->printScanResult($viewDefaultKeywords, $output);
+        
         $output->writeln("<comment>\n正在扫描菜单配置文件的语言串:</comment>");
         $menuKeywords = $this->scanMenuTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
@@ -49,7 +53,7 @@ class TransGenerateCommand extends BaseCommand
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n语言串总和:</comment>");
-        $keywords = array_merge($viewKeywords, $viewRadioKeywords, $menuKeywords, $dictsKeywords, $phpKeywords,$jsKeywords);
+        $keywords = array_merge($viewKeywords, $viewRadioKeywords, $viewDefaultKeywords, $menuKeywords, $dictsKeywords, $phpKeywords,$jsKeywords);
 
         $this->printScanResult($keywords, $output);
         $keywords = array_values(array_unique($keywords));
@@ -230,6 +234,36 @@ class TransGenerateCommand extends BaseCommand
             $content = file_get_contents($file->getRealpath());
 
             $matched = preg_match_all('/\:\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
+
+            if ($matched) {
+                $output->write("{$file->getRealpath()}");
+                $count = count($matches[1]);
+                $output->writeln("<info> ... {$count}</info>");
+
+                $keywords = array_merge($keywords, $matches[1]);
+            }
+        }
+
+        return $keywords;
+    }
+
+    protected function scanViewDefaultTrans($dir, $output)
+    {
+        $keywords = array();
+
+        $path = realpath($this->getRootDir().'/../'.$dir.'/Resources/views');
+
+        if (empty($path)) {
+            $output->write("<error>{$dir}/Resources/views is not exist.</error>");
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($path);
+
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getRealpath());
+
+            $matched = preg_match_all('/default\(\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");

@@ -14,7 +14,7 @@
 						<li><a href="#teacherAnswer{{ item.questionId }}" data-toggle="tab">{{'参考答案'|trans}}</a></li>
 					</ul>
 					<div class="tab-content mbl">
-						<div class="tab-pane active" id="studentAnswer{{ item.questionId }}">{{ item.question.testResult.answer[0]|default('<span class="text-muted">'+'未回答'|trans|raw+'</span>')|bbCode2Html|raw }}</div>
+						<div class="tab-pane active" id="studentAnswer{{ item.questionId }}">{{ item.question.testResult.answer[0]|default('<span class="text-muted">未回答</span>'|trans|raw)|bbCode2Html|raw }}</div>
 						<div class="tab-pane" id="teacherAnswer{{ item.questionId }}">{{ item.question.answer[0]|bbCode2Html|raw }}</div>
 					</div>
 
