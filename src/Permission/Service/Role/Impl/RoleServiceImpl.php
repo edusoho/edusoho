@@ -117,9 +117,9 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function isRoleCodeAvalieable($code, $exclude = null)
     {
-        if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
-            return false;
-        }
+        // if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
+        //     return false;
+        // }
 
         if ($code == $exclude) {
             return true;
