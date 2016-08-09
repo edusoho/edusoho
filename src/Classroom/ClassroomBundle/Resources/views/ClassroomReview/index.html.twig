@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({1:'1星'|trans, 2:'2星'|trans, 3:'3星'|trans, 4:'4星'|trans, 5:'5星'|trans}, app.request.get('rating'), '评分'|trans) }}
+        {{ select_options({1:'1'~'星'|trans, 2:'2'~'星'|trans, 3:'3'~'星'|trans, 4:'4'~'星'|trans, 5:'5'~'星'|trans}, app.request.get('rating'), '评分'|trans) }}
       </select>
     </div>
 

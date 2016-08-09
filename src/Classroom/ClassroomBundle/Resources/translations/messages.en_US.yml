@@ -141,10 +141,10 @@
 '添加学员': 'Add Student'
 '%status%%name%不能添加学员，请%classroomName%发布后再添加。': 'Cannot add student into %status %%name%, please publish %classroomName% at first.'
 正在保存...: 'Saving ...'
-返回%name%主页: 'Return to %name% homepage'
-作为未购买用户: 'As Guest'
-作为旁听生: 'As Auditor'
-作为正式学员: 'As Student'
+返回%name%主页: 'Return to %name% Homepage'
+作为未购买用户: 'As a Guest'
+作为旁听生: 'As an Auditor'
+作为正式学员: 'As a Student'
 '%unsetted%还未设置': '%unsetted% not set'
 确定要发布吗？: 'Are you sure to publish?'
 班主任设置: 'Head Teacher'
@@ -162,13 +162,13 @@
 新增话题数: 'Number of new topics'
 最新评价: 'Latest reviews'
 '该%name%尚无评价': 'No review'
-管理首页: Administration
+管理首页: Overview
 未完善: 'Not finished'
 服务设置: 'Service Settings'
 '学习计划': 'Learning Plan'
 学员备注: 'Student remark'
 请填写学员的备注信息: 'Please fill out student remark'
-提供的服务: 'Services provided'
+提供的服务: 'Services Provided'
 提供专属的一对一在线答疑，快速答疑解惑。: 'Private teacher one to one Q&A, answer your questions quickly.'
 '你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为525x350。': 'File format could be jpg/gif/png. Suggested size is 525 * 350 px.'
 '上传新图片': 'Upload new picture'
@@ -275,8 +275,3 @@
 '%title%失败!': '%title% failed.'
 设置推荐班级操作成功!: 'Recommend class successfully.'
 设置推荐班级操作失败!: 'Recommend class failed.'
-1星: 1星
-2星: 2星
-3星: 3星
-4星: 4星
-5星: 5星
