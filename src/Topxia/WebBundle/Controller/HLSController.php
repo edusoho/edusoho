@@ -103,7 +103,7 @@ class HLSController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
-        return $this->ResponseEnhanced($playlist['playlist'], array(
+        return $this->responseEnhanced($playlist['playlist'], array(
             'Content-Type'        => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="playlist.m3u8"'
         ));
@@ -192,7 +192,7 @@ class HLSController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放地址失败！');
         }
 
-        return $this->ResponseEnhanced($stream['stream'], array(
+        return $this->responseEnhanced($stream['stream'], array(
             'Content-Type'        => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="stream.m3u8"'
         ));
@@ -228,7 +228,7 @@ class HLSController extends BaseController
         }
 
         if (empty($file['globalId']) && isset($file['convertParams']['hlsKey'])) {
-            return $this->ResponseEnhanced($file['convertParams']['hlsKey']);
+            return $this->responseEnhanced($file['convertParams']['hlsKey']);
         }
 
         if (empty($file['metas2'][$token['data']['level']]['hlsKey'])) {
@@ -239,31 +239,36 @@ class HLSController extends BaseController
 
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
-            return $this->ResponseEnhanced($stream['key']);
+            return $this->responseEnhanced($stream['key']);
         }
 
         $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
 
-        return $this->ResponseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
+        return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
     }
 
-    protected function ResponseEnhanced($response)
+    protected function responseEnhanced($responseContent, $headers = array())
     {
-        $headers = array(
-            'Access-Control-Allow-Headers' => 'origin, content-type, accept',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
+        $headers = array_merge(
+            array(
+                'Access-Control-Allow-Headers' => 'origin, content-type, accept',
+                'Access-Control-Allow-Origin'  => '*',
+                'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
+            ),
+            $headers
         );
-        if (is_string($response)) {
-            $headers['Content-Length'] = strlen($response);
+
+        if (is_string($responseContent)) {
+            $headers['Content-Length'] = strlen($responseContent);
         }
-        return new Response($response, 200, $headers);
+
+        return new Response($responseContent, 200, $headers);
     }
 
     protected function makeFakeTokenString()
     {
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-        return $this->ResponseEnhanced($fakeKey);
+        return $this->responseEnhanced($fakeKey);
     }
 
     protected function isHiddenVideoHeader($isHidden = false)

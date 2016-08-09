@@ -450,9 +450,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteJob($jobs)
     {
         foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
+            $this->getCrontabService()->deleteJob($job['id']);
         }
     }
 

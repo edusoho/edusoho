@@ -9699,6 +9699,7 @@ textarea {
   height: 40px;
   line-height: 40px;
   float: left;
+  width: 66%;
 }
 .lesson-list .item-actions {
   visibility: hidden;
@@ -13288,7 +13289,7 @@ textarea {
 }
 .group-page .grouplist {
   height: 120px;
-  width: 82px;
+  width: 81px;
   float: left;
   text-align: center;
 }
