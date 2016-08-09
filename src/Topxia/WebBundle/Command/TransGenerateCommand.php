@@ -62,6 +62,33 @@ class TransGenerateCommand extends BaseCommand
 
         $locale = $this->getLocale();
 
+        //去掉WebBundle已有的key
+        if ($dir != 'src/Topxia/WebBundle') {
+            $webTransFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getRootDir()), 'src/Topxia/WebBundle', $locale);
+            $webBundleTrans = array();
+            if (!file_exists($webTransFile)) {
+                $output->writeln("WebBundle语言包不存在!");
+            } else {
+                $content = file_get_contents($webTransFile);
+
+                $yaml       = new Yaml();
+                $webBundleTrans = $yaml->parse($content);
+                $output->writeln("扫描WebBundle语言包");
+            }
+
+            $addCount   = 0;
+            $webExistCount = 0;
+            foreach ($keywords as $key => $keyword) {
+                if (array_key_exists($keyword, $webBundleTrans)) {
+                    $webExistCount++;
+                    unset($keywords[$key]);
+                }
+            }
+
+            $output->writeln("<info>共找到和WebBundle重叠的语言串为: {$webExistCount}</info>");
+
+        }
+
         $tranFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getRootDir()), $dir, $locale);
 
         $existTrans = array();
