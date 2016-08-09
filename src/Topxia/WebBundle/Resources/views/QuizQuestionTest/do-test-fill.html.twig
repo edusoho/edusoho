@@ -52,12 +52,7 @@
 			</div>
 
 			<div class="testpaper-question-actions pull-right">
-		  	{% if paperResult.status|default(null) in ['doing'] %}
-					{% set flags = ['mark'] %}
-		  	{% else %}
-					{% set flags = ['mark', 'favorite'] %}
-		  	{% endif %}
-				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:flags } %}
+		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 	  </div>
 
