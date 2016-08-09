@@ -1,9 +1,12 @@
+{% set isAuditor = isAuditor|default(false) %}
 {% if setting("course.buy_fill_userinfo")|default(false) %}
   {% if checkMemberLevelResult == 'ok' %}
     <a  class="btn btn-primary btn-lg"  href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
   {% else %}
     {% if classroom.buyable == 1 %}
-      <a class="btn btn-link" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">进去逛逛</a>
+      {% if not isAuditor %}
+        <a class="btn btn-link" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">进去逛逛</a>
+      {% endif %}
       <a class="btn btn-primary btn-lg" href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">加入购买</a>
     {% else %}
       <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该{{setting("classroom.name")|default("班级")}}无法在线购买，若需帮助请联系客服">无法购买</button>
