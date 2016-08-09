@@ -16,19 +16,19 @@
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="homeworkReview" {% if 'homeworkReview' in classroom.service %}checked='checked'{% endif %}> {{'24小时作业批改'|trans}}</label>
-              <p class="help-block">{{'24小时内完成作业批改，即时反馈并巩固您的学习效果。'|trans}}</p>
+              <p class="help-block">{{'24小时内完成作业批改，即时反馈并巩固您的学习效果'|trans}}</p>
             </div>
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="testpaperReview" {% if 'testpaperReview' in classroom.service %}checked='checked'{% endif %}> {{'24小时阅卷点评'|trans}}</label>
-              <p class="help-block">{{'24小时内批阅您提交的试卷，给予有针对性的点评。'|trans}}</p>
+              <p class="help-block">{{'24小时内批阅您提交的试卷，给予有针对性的点评'|trans}}</p>
             </div>
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="teacherAnswer" {% if 'teacherAnswer' in classroom.service %}checked='checked'{% endif %}> {{'提问必答'|trans}}</label>
-              <p class="help-block">{{'对于提问做到有问必答，帮您扫清学习过程中的种种障碍。'|trans}}</p>
+              <p class="help-block">{{'对于提问做到有问必答，帮您扫清学习过程中的种种障碍'|trans}}</p>
             </div>
             <label class="col-md-2 control-label">
             </label>
@@ -41,14 +41,14 @@
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %}checked='checked'{% endif %}> {{setting("classroom.name")|default('班级'|trans)}}{{'活动'|trans}}</label>
-              <p class="help-block">{{'不定期组织各种线上或线下的%name%活动，让学习更加生动有趣，同学关系更为紧密。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
+              <p class="help-block">{{'不定期组织各种线上或线下的%name%活动，让学习更加生动有趣，同学关系更为紧密'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}
               </p>
             </div>
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="workAdvise" {% if 'workAdvise' in classroom.service %}checked='checked'{% endif %}> {{'就业指导'|trans}}</label>
-              <p class="help-block">{{'完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导。'|trans}}
+              <p class="help-block">{{'完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导'|trans}}
               </p>
             </div>
 
