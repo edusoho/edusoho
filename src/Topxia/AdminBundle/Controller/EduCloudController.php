@@ -697,7 +697,7 @@ class EduCloudController extends BaseController
             'owned'          => 1,
             'name'           => $request->request->get('name', ''),
             'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0,
-            'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : array()
+            'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : ''
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
