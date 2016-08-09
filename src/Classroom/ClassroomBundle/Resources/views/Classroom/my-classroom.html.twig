@@ -26,7 +26,7 @@
                 <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
               </a>
               <div class="course-body">
-                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>                
+                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
                 {% if classroom.status == "draft" %}
                   <span class="label label-warning ">{{'未发布'|trans}}</span>
                   {% elseif classroom.status == "closed" %}
@@ -63,7 +63,7 @@
                   </span>
                 </div>
                 {% endif %}
-                
+
 
                 </div>
 
