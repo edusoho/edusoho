@@ -58,14 +58,14 @@ PPT: PPT
 时间: Time
 描述: Description
 分享给%nickname%: Share to %nickname%
-取消与%nickname%的分享: Cancel share from %nickname%
+取消与%nickname%的分享: Cancelled sharing to %nickname%
 '无资料分享记录': 'No sharing history'
 首页: First Page
 尾页: Last Page
 昵称: Nickname
 操作: Operation
 将资料分享给%nickname%老师。: Share to teacher %nickname%
-取消分享: Cancel Share
+取消分享: Cancel Sharing
 我的分享历史: My Share History
 分享教学资料给: Share to
 '输入用户名': 'Enter user name'
@@ -84,14 +84,14 @@ PPT: PPT
 编辑: Edit
 查看: View
 下载: Download
-'取消共享': 'Cancel Share'
+'取消共享': 'Cancel Sharing'
 '重新转码': 'Re-transcode'
 资源管理: Management
 生成视频播放地址失败！: Failed to generate video play url.
 '您无权访问此页面': 'No permission to access this page.'
 '已将资料分享给你，': 'Shared material to you, '
 点击查看: Click to View
-'已取消分享资料给你，': 'Cancelled share to you, '
+'已取消分享资料给你，': 'Cancelled sharing to you, '
 '其他': 'Other'
 存储空间使用分布: Disk space usage
 流量使用分布: Network traffic
@@ -109,15 +109,15 @@ PPT: PPT
 确定要分享这些资源吗？: Are you sure to share?
 '请先选择你要操作的资源!': 'Please select material to operate.'
 确定要分享这个资源吗？: Are you sure to share?
-确定要取消分享这个资源吗？: Are you sure the cancel sharing?
-取消分享资源成功: Sharing cancelled
-'正在加载，请等待......': 'Loading, please wait ...'
+确定要取消分享这个资源吗？: Are you sure to cancel sharing?
+取消分享资源成功: Cancelled sharing
+'正在加载，请等待......': 'Loading ...'
 'Opps,出错了......': 'Opps, something went wrong ...'
 '请先选择你要分享的资源!': 'Please select material to share.'
 分享资源成功: Shared successfully
 分享资源失败: Failed to share
 '删除资源成功': 'Material deleted'
-已取消分享！: Sharing cancelled
+已取消分享！: Cancelled sharing
 '素材分享成功!': 'Shared successfully'
 '素材分享失败!': 'Failed to share'
 要分享的老师: Share to

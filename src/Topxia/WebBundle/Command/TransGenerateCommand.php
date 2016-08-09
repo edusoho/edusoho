@@ -131,7 +131,6 @@ class TransGenerateCommand extends BaseCommand
 
         $output->writeln("<info>已存在{$existCount}个语言串，本次新增{$addCount}个语言串</info>");
         $output->writeln('<question>END</question>');
-
         $yaml    = new Yaml();
         $content = $yaml->dump($newTrans);
         if ($type == 'untranslate') {
