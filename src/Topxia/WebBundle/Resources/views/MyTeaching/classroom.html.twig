@@ -46,7 +46,7 @@
             </li>
             {% endfor %}
             {% else %}
-              <div class="empty">{{'找不到所教%classroom%！'|trans({'%classroom%':setting('classroom.name')|default('班级'|trans)})}}</div>
+              <div class="empty">{{'找不到所教%classroom.name%！'|trans({'%classroom.name%':setting('classroom.name')|default('班级'|trans)})}}</div>
             {% endif %}
           </ul>
   </div>
