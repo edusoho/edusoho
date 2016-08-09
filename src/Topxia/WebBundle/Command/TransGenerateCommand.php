@@ -289,7 +289,7 @@ class TransGenerateCommand extends BaseCommand
         foreach ($finder as $file) {
             $content = file_get_contents($file->getRealpath());
 
-            $matched = preg_match_all('/default\(\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
+            $matched = preg_match_all('/default\(\s*\'([^,\{\}\~]+)\'\s*\|\s*?trans/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
