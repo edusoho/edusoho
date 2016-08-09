@@ -37,22 +37,22 @@
 {% endif %}
 
 <ul class="list-group">
-  <li class="list-group-heading">{{ setting('classroom.name')|default("班级") ~ '管理' }}</li>
+  <li class="list-group-heading">{{ setting('classroom.name')|default('班级'|trans) ~ '管理'|trans }}</li>
   {% if canManage %}
-    <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">课程管理</a></li>
+    <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'课程管理'|trans}}</a></li>
     <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
-      <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">学员管理</a>
+      <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{'学员管理'|trans}}</a>
     </li>
   {% endif %}
 
   {% if canHandle %}
     <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
-      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">试卷批阅</a>
+      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">{{'试卷批阅'|trans}}</a>
     </li>
    
     {% if is_plugin_installed('Homework') %}
       <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
-        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">作业批改</a>
+        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">{{'作业批改'|trans}}</a>
       </li>
     {% endif %}
   {% endif %}
