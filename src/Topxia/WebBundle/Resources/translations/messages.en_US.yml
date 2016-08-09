@@ -1771,18 +1771,63 @@ Email地址: 'Email Address'
 '''}}{% endif %}{{''%nickname%的个人主页': '''}}{% endif %}{{''%nickname% ''s homepage'
 个人介绍: Introduction
 在学%name%: 'Learning %name%'
+'流畅 <span class="text-muted">(适合PPT讲解)</span>': 'Smooth <span class="text-muted">(Suitable for PPT illustration)</span>'
+'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>': 'Standard <span class="text-muted">(Suitable for screen recording or camera capturing)</span>'
+'精细 <span class="text-muted">(适合动态电影)</span>': 'High-quality <spanS class="text-muted">(Suitable for motion pictures)</span>'
+高品: 'High Quality'
+最近一周: 'Last week'
+最近两周: 'Two Weeks before'
+最近一个月: 'Last month'
+最近两个月: 'Two months before'
+最近三个月: 'Three months before'
+开启: 'On'
+文件: file
+非连载课程: 'Non Serial'
+是: 'Yes'
+否: 'No'
+支付宝: Alipay
+'其他支付': 'Other payment'
+'购买者用户名': 'Buyer''s Name'
+简单: Easy
+一般: Normal
+困难: Difficult
+随机生成: 'Created randomly'
+按难易程度: 'According to difficulty'
+整个课程: 'The whole course'
+按课时范围: 'According to lesson''s category'
+提示信息: Tips
+警告信息: Attention
+错误提示: 'Error message'
+我要提问: 'Ask a question'
+'详细描述你的问题': 'Describe your question in detail.'
+'请输入私信内容': 'Please enter content for the private message.'
+收信人用户名: 'Recipent''s Username'
+想要说的话: 'what to say'
+网银支付: 'E-currency payment'
+快捷支付: 'Quick payment'
+班级: Class
+资讯频道: 'News channel'
+可用: Accessible
+虚拟币: 'virtual currency'
+'我正在学习《%course%》，收获巨大哦，一起来学习吧！': 'I''m learning 《%course%》，it''s really rewarding,let''s keep learning together!'
+'我正在学习「%classroom%」，收获巨大哦，一起来学习吧！': 'I''m learning 「%classroom%」,it''s really rewarding，let''s keep learning together!'
+'我正在看「%articletitle%」，关注「%sitename%」，分享知识，成就未来。': 'I''m eenjoying「%articletitle%」,please follow「%sitename%」; Sharing knowledge makes a better future!'
+我正在「%groupname%」小组，看到「%threadname%」，很不错哦，一起来看看吧！: 'I''m now part of the group「%groupname%」,and check out 「%threadname%」,it''s really fantastic ,come and join with me!'
+'尚未开启支付模块，无法购买课程。': 'The payment feature is not enabled, cannot finish the purchase.'
+小组频道: Groups
+搜索小组: 'Search a group'
+' 将学校装进口袋，移动学习，随时随地。': ' A whole knowledge base right in your pocket.Enjoy knowledge no matter where you are'
+系统: System
+'无解析': 'Parse failed'
+'<span class="text-muted">未回答</span>': '<span class="text-muted">unanswered</span>'
 抵价: 'trade in'
 打折: discount
 已领取: got
 PPT: PPT
 Flash: Flash
 '--': '--'
-支付宝: Alipay
-网银支付: 'E-currency payment'
-快捷支付: 'Quick payment'
 '苹果应用内支付': 'Apple in-app purchase'
 站外支付: 'payment out of website'
-虚拟币: 'virtual currency'
 '文章': article
 页面: page
 头条: news
@@ -1844,12 +1889,7 @@ Flash: Flash
 '手动导入': 'Manual import'
 人人连接: 'Renren login'
 QQ登录: 'QQ login'
-简单: Easy
-一般: Normal
-困难: Difficult
-班级: Class
 组合: Combination
-开启: 'On'
 '你的父母名字': 'father''s name'
 '你的老师名字': 'teacher''s name'
 '你的爱人的名字': 'lover''s name'
@@ -1888,7 +1928,6 @@ QQ: 'QQ number'
 屏蔽: shield
 敏感词: 'sensitive words'
 编号: 'serial number'
-非连载课程: 'Non Serial'
 主题目录%themeDir%不存在！: 'Subject catalog  is not exist！'
 '资讯栏目页面不存在': 'page not exist'
 '文章已删除或者未发布！': 'The article is canclled or not issued yet!'
@@ -1981,7 +2020,6 @@ PPT文档还在转换中，还不能查看，请稍等。: 'PPT conversion is on
 '课时%lessonnumber%： %lessontitle%': 'Lesson %lessonnumber%: %lessontitle%'
 '非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服': 'Sorry, you cannot access %classroomSettingname%. Please contact customer service for help.'
 '话题不存在，或已删除。': 'The topic is not found,may be removed.'
-错误提示: 'Error message'
 '上传授权码已过期，请刷新页面后重试！': 'The access key is expired,please re-fresh the page and try again.'
 '您上传的不是图片文件，请重新上传。': 'It''s not pic file,please upload again.'
 '您上传的不是Flash文件，请重新上传。': 'It''s not flash file,please upload again.'
@@ -2108,7 +2146,6 @@ QQ绑定已有账号: 'Bind QQ to existing account'
 用户不存在，请重新找回: 'User not exist, please try again.'
 手机短信验证错误，请重新找回: 'Failed to verify sms, please try again.'
 '该手机号码不存在': 'Phone number not exist.'
-'尚未开启支付模块，无法购买课程。': 'The payment feature is not enabled, cannot finish the purchase.'
 该订单已失效: 'The order is invalid.'
 订单状态被更改，不能支付: 'The order has been changed,can''t pay for it now'
 订单已经过期，不能支付: 'The order has been expired ,can''t pay for it.'
@@ -2206,7 +2243,7 @@ token已失效: 'token expired'
 用户还未登录!: 'You are not signed in.'
 帖子不存在!: 'The post does not exist.'
 '无权限操作!': 'No permission'
-'%threadtitle%-成员.xls': '%threadtitle%-成员.xls'
+'%threadtitle%-成员.xls': '%threadtitle%-member.xls'
 报名时间: 'Register date'
 成员: Member
 '上传授权码不正确，请重试！': 'Invalid upload authorization code, please try again.'
@@ -3139,7 +3176,6 @@ Firefox浏览器: Firefox
 点赞失败，请重试！: 'Failed to like. Please try again.'
 暂停中: paused
 '待上传': 'wait for upload'
-文件: file
 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器': 'Web Uploader does not support your browser. If you are using IE, please try to update your flashplayer.'
 '全部暂停': 'All pause'
 '全部继续': 'All Continue'
@@ -3170,7 +3206,6 @@ Firefox浏览器: Firefox
 秒后重新获取: 'seconds later to retry'
 发送短信成功: 'Messages sent successfully'
 发送短信失败，请联系管理员: 'Failed to send the messages. Please contact the webmaster.'
-高品: 'High Quality'
 '画质 / ': 'video quality'
 音质: 'audio quality'
 '上传失败，请重试！': 'Upload failed. Please try again.'
@@ -3190,3 +3225,34 @@ Firefox浏览器: Firefox
 '签到,第': 'sign in'
 个签到.: 'Check In'
 已签: 'Checked In'
+'请输入%display%': 'Please input %display%'
+'%display%必须是数字': '%display% must be numbers'
+'%display%不能全为数字': '%display% can not be all numbers'
+'%display%请输入可见性字符': '%display% Please input a visible character'
+'%display%的长度必须小于等于%max%字符,一个中文为2个字符': ' The length of %display% should not exceed %max% characters,one chinese character consists of two characters'
+'%display%必须是中文字': '%display% must be chinese characters'
+'请输入有效的%display%': 'Please input a valid %display%'
+'%display%必须是中文字、英文字母、数字及下划线组成': '%display% should consists of chinese characters ,english characters ,numbers and underline '
+'%display%必须是5位数字、英文字母组成': '%display% must consists of five numbers and english characters'
+'%display%必须是英文字母、数字及下划线组成': '%display% should consists of english characters ,numbers and underline'
+'%display%必须以英文字母或下划线开头': '%display% must be started with english characters or underline'
+'%display%的长度必须大于等于%min%，一个中文字算2个字符': 'The length of %display% must be longer than %min% ,a chinese character consists of two characters.'
+'请输入合法的%display%,如:200, 221.99, 0.99, 0等': 'Please input valid %display%,for example :200, 221.99, 0.99, 0 etc.'
+'%display%的长度必须小于等于%max%，一个中文字算2个字符': 'The length of %display% should not exceed %max%，a chinese character consists of two characters.'
+'%display%格式不正确': 'The format of %display% is not correct.'
+'%display%只能由4-20个字符组成': '%display% can only consist of 4-20 characters.'
+秒数只能在0-59之间: 'Sencond number should be within 0-59.'
+'请输入正确的日期,格式如XXXX-MM-DD': 'Please enter a valid date in the format of XXXX-MM-DD.'
+'%display%必须为整数': '%display% should be an integer.'
+'请输入正确的小数,只保留到两位小数': 'Please enter the correct decimals, leaving only TWO decimal places.'
+'请输入正确的小数,只保留到一位小数': 'Please enter the correct decimals, leaving only ONE decimal places.'
+'%display%必须为整数,最大到9位整数': '%display% must be an integer and should not be greater than ONE bilion.'
+'%display%必须为正整数': '%display% should be a positive integer.'
+'%display%必须为正数': '%display% must be greater than zero.'
+'必须在0~100之间': 'Must be within 0~100.'
+'{{display}}必须小于2M': 'The size of {{display}} should not be greater than 2M.'
+'开始时间必须小于或等于结束时间': 'The start time should not be later than the end time .'
+'请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss': 'Please enter a valid date in the format of XXXX-MM-DD hh:mm:ss.'
+结束时间不能早于或等于开始时间: 'The end time should not be later than the started time.'
+'有效期必须大于等于当前日期': 'Expiration date must be later than or equals the current date.  '
+'%display%的长度必须等于%length%': 'The length of %display% must be %length%.'

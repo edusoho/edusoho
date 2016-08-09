@@ -1,17 +1,6 @@
 <li class="hidden-xs">
-    <form action="{{ path('switch_language') }}" method="post">
-        <label>Language</label>
-        <select name="language">
-            <option value="zh_CN" {% if app.request.locale == 'zh_CN' %}selected="selected"{% endif %}>中文
-            </option>
-            <option value="en_US" {% if app.request.locale == 'en_US' %}selected="selected"{% endif %}>English
-            </option>
-            <option value="ug_CN" {% if app.request.locale == 'ug_CN' %}selected="selected"{% endif %}>ئۇيغۇر تىلى
-            </option>
-        </select>
-        <input type="hidden" name="_target_path"
-               value="{% if app.request.attributes.get('_route') %} {{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }} {% else %} {{ path('homepage') }} {% endif %}
-                ">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    </form>
+    <a href="{{ path('switch_language', {language: 'zh_CN', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">中文</a>
+</li>
+<li class="hidden-xs">
+<a href="{{ path('switch_language', {language: 'en_US', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">English</a>
 </li>

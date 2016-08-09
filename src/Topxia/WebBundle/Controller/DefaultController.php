@@ -185,8 +185,8 @@ class DefaultController extends BaseController
 
     public function translateAction(Request $request)
     {
-        $locale     = $request->request->get('language');
-        $targetPath = $request->request->get('_target_path');
+        $locale     = $request->query->get('language');
+        $targetPath = $request->query->get('_target_path');
 
         $request->getSession()->set('_locale', $locale);
 
