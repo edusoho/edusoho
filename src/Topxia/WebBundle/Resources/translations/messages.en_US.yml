@@ -69,7 +69,6 @@
 '可用于抵扣全站会员': 'For any level of VIP membership'
 用于抵扣指定会员: 'For specified level of VIP membership'
 '可用于抵扣全站所有类型消费': 'For any purchase on our web site'
-折: 折
 有效期截止：: 'Expired on: '
 '%deadline%年': '%deadline% Year'
 '%deadline%月': '%deadline% Month'
@@ -421,10 +420,8 @@
 支持: Suport
 'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf': 'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf '
 '格式的文件上传，文件大小不能超过': 'format and the file size can not exceed '
-'1 GB': '1 GB'
 '视频将上传到': 'Video will be uploaded to '
 '云服务器''}}</strong>{{''，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。': 'Cloud server''}}</strong>{{''，The uploaded video will be transcoded and will be able to play during the process.'
-'mp4, mp3': 'mp4, mp3'
 '格式的文件上传，且文件大小不能超过': ' format and the file size can not exceed '
 'MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。': 'MP4 video should be transcoded using AVC(H264) encoder, or the video cannot played in the browser.'
 网站服务器: 'Website server'
@@ -530,13 +527,11 @@ flash课程: 'Courses in flash video format'
 从资料库中选择: 'Select from the library'
 从课程文件中选择: 'Select from course documents'
 '导入网络视频': 'Import video clips from the internet'
-'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
 '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。': 'The size of the uploading video can not exceed <strong>2 GB</strong>'
 '断点续传': 'Multithreading breakpoint transmissionM'
 '（仅支持HTML5浏览器）。': '(Only supports HTML5 browser)'
 云视频服务器: 'cloud-video server'
 '，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。': 'The video will be transcoded which takes some time and the video is not accessible during the proccess.'
-mp4: mp4
 '格式的视频文件上传，文件大小不能超过': 'The size of the uploading video can not exceed'
 '。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。': 'MP4 video should be transcoded using AVC(H264) encoder ,or the video will not be playable by the browser'
 '。如需使用%Edusoho%云视频,点击': '，to use %Edusoho% cloud-video feature ,click on the'
@@ -547,20 +542,16 @@ mp4: mp4
 '导入': Import
 '腾讯和网易的视频不支持手机端播放': 'Videos from Tencent and Netease  is not supported on mobile'
 '上传音频': 'Upload audio'
-mp3: mp3
 '格式的音频文件上传，且文件大小不能超过': 'The  size of the audio can not exceed'
-500M: 500M
 '音频将上传到': 'Upload audio files to'
 云服务器: 'Cloud server'
 ，%Edusoho%点击: '，%Edusoho% click'
 '暂无音频文件，请先上传。': 'No audio file ,please upload'
-'ppt, pptx': 'ppt, pptx'
 '格式的PPT文件上传，且文件大小不能超过': 'Upload PPT and the file size can not exceed '
 '100 MB': 100MB
 'PPT将上传到': 'Upload PPT file to'
 '暂无PPT文件，请先上传。': 'No PPT file , please upload'
 '上传文档': 'Upload a document'
-'pdf,doc,docx': 'pdf,doc,docx'
 '格式的文档上传，且文件大小不能超过': 'Upload document and the file size can not exceed '
 '文档将上传到': 'Upload document file to'
 '暂无文档，请先上传。': 'No document file ,please upload'
@@ -633,7 +624,6 @@ mp3: mp3
 重新选择图片: 'Reselect an image'
 '你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。': 'You can upload jpg, gif, png format, image size is recommended at least 480x270.'
 '文件大小不能超过': 'File size can not exceed '
-2M: 2M
 '选择要上传的图片': 'Select an image to upload'
 '%coin_name%价格': '%coin_name%Price'
 '当前课程正处于「 %name% 」打折活动中。': 'This course is in promotion「 %name% 」.'
@@ -1239,7 +1229,7 @@ Email地址: 'Email Address'
 没有退款记录: 'no refund record'
 考试记录: 'examination record'
 收藏的题目: 'collected questions'
-'未批阅': Not Reviewed
+'未批阅': 'Not Reviewed'
 来自课程《%title%》: 'from course of 《%title%》'
 '共%score%分 / %itemCount%道题': 'total %score% scores/%itemCount% problems'
 交卷: 'hand in paper'
@@ -1272,8 +1262,8 @@ Email地址: 'Email Address'
 '还没有参加过任何考试': 'no examination attended'
 '我的批阅': 'Test Paper Review'
 我的任务日历: 'my task calendar'
-所教%classroom.name%: Teaching %classroom.name%
-管理%classroom.name%: Manage %classroom.name%
+所教%classroom.name%: 'Teaching %classroom.name%'
+管理%classroom.name%: 'Manage %classroom.name%'
 '共%coursesCount%课': 'total courses%coursesCount%'
 今日新增: 'New today'
 学员%allCount%: students…%allCount%
@@ -1285,7 +1275,7 @@ Email地址: 'Email Address'
 课程%user_name%话题: course%user_name%topic
 '%classroom.name% %user_name%话题': '%classroom.name% %user_name% topic'
 数: Number
-'价格(元)': Price (RMB)
+'价格(元)': 'Price (RMB)'
 已移除: Removed
 文件管理: 'File Management'
 '暂无在教的课程': 'No teaching course.'
@@ -1699,7 +1689,7 @@ Email地址: 'Email Address'
 班级数量设置: 'class number settings'
 教师数量设置: 'teacher number settings'
 问题: question
-'话题标题': 'Topic'
+'话题标题': Topic
 '活动标题': 'Activity Title'
 活动时间: 'Activity Time'
 活动开始时间: 'activity start time'
@@ -1805,6 +1795,7 @@ Email地址: 'Email Address'
 想要说的话: 'what to say'
 网银支付: 'E-currency payment'
 快捷支付: 'Quick payment'
+请选择试卷: 'please select the test paper'
 班级: Class
 资讯频道: 'News channel'
 可用: Accessible
@@ -1823,9 +1814,6 @@ Email地址: 'Email Address'
 抵价: 'trade in'
 打折: discount
 已领取: got
-PPT: PPT
-Flash: Flash
-'--': '--'
 '苹果应用内支付': 'Apple in-app purchase'
 站外支付: 'payment out of website'
 '文章': article
@@ -2323,7 +2311,6 @@ groupId参数缺失: 'Paramenter groupId missing'
 卡的类型不存在: 'Card type not exist'
 '缺少必要字段，新创建卡失败！': 'Missing required fields, failed to create the card.'
 '缺少必要字段，请明确卡的类型': 'Missing required fields, please specify the card type.'
-'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 '充值金额必须为整数!': 'The recharge amount must be integer.'
 '充值购买': 'Recharge to buy'
 订单不存在，取消订单失败！: 'Order not exist, failed to cancel the order.'
@@ -2568,8 +2555,6 @@ keywordType参数不正确: 'keywordType parameter is not correct'
 '第%col%列重复:': 'Column number %col% is duplicated:'
 '第%row%行    %key%': 'Row number %row%   %key%'
 '购买课程《%title%》(管理员添加)': 'Purchase course "%title%" (allow the administrator to add)'
-'message must be a string': 'message must be a string'
-'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
 'Excel格式不正确': 'Excel format is not correct!'
 'Excel超过1000行数据': 'Excel data over 1000 lines!'
 第%row%行班级号为%classroomId%的班级未发布，请检查。: 'The row%row classroomId% class is not published,please check'
@@ -3000,7 +2985,6 @@ Firefox浏览器: Firefox
 编辑课时: 'edit lesson'
 (草稿已于%createdTime%保存): '(draft saved at %createdTime%)'
 考试结束日期不得早于当前日期: 'The finish time of exam can not be early than current time'
-请选择试卷: 'please select the test paper'
 请填写建议时长: 'please enter suggested duration'
 试卷课时已保存: 'exam saved'
 '添加试卷课时成功': 'Add exam successfully'
@@ -3256,3 +3240,23 @@ Firefox浏览器: Firefox
 结束时间不能早于或等于开始时间: 'The end time should not be later than the started time.'
 '有效期必须大于等于当前日期': 'Expiration date must be later than or equals the current date.  '
 '%display%的长度必须等于%length%': 'The length of %display% must be %length%.'
+折: 折
+'1 GB': '1 GB'
+'mp4, mp3': 'mp4, mp3'
+'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
+mp4: mp4
+mp3: mp3
+500M: 500M
+'ppt, pptx': 'ppt, pptx'
+'pdf,doc,docx': 'pdf,doc,docx'
+2M: 2M
+'公开': '公开'
+'--按题型--': '--按题型--'
+'--按从属--': '--按从属--'
+PPT: PPT
+Flash: Flash
+'--': '--'
+'--请选择退学原因--': '--请选择退学原因--'
+'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
+'message must be a string': 'message must be a string'
+'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
