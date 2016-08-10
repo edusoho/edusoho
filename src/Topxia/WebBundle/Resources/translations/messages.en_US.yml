@@ -3265,3 +3265,4 @@ Flash: Flash
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
+'请输入正确的%display%': '请输入正确的%display%'
