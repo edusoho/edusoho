@@ -155,7 +155,6 @@ class GroupThreadController extends BaseController
 
     public function checkUserAction(Request $request)
     {
-
         $nickname = $request->query->get('value');
         $result   = $this->getUserService()->isNicknameAvaliable($nickname);
 
@@ -317,7 +316,7 @@ class GroupThreadController extends BaseController
         $postMember       = $this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id),
-            array('postNum', 'DESC'), 0, 12);
+            array('postNum', 'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members   = $this->getUserService()->findUsersByIds($memberIds);
@@ -802,7 +801,6 @@ class GroupThreadController extends BaseController
         );
 
         if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
-
             if ($action == 'setElite') {
                 $this->getThreadService()->setElite($threadId);
                 $message['type'] = 'elite';
