@@ -1,8 +1,8 @@
 {% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) %}
   {% do load_script('topxiawebbundle/controller/attachment/upload-form') %}
   
-  {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~type  : 'js-attachment-ids'%}
-  {% set list_class  = (useType == true) ? 'js-attachment-list-'~type  : 'js-attachment-list'%}
+  {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~fileType  : 'js-attachment-ids'%}
+  {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
   {% set reupload = attachments|default(null)|length %}
   
   <div class="form-group">
@@ -33,12 +33,17 @@
     
     <input class="{{ids_class}}" 
       value="{{ attachments|array_column('fileId')|join(',') }}" 
-      name="{% if useType|default(false)%} attachment[{{type}}][fileIds] {% else %} attachment[fileIds]{% endif %}" 
+      name="{% if useType|default(false)%} attachment[{{fileType}}][fileIds] {% else %} attachment[fileIds]{% endif %}" 
       type="hidden">
 
     <input class="js-file-target-type" 
       value="{{ targetType }}" 
-      name="{% if useType|default(false)%} attachment[{{type}}][targetType] {% else %} attachment[targetType]{% endif %}"
+      name="{% if useType|default(false)%} attachment[{{fileType}}][targetType] {% else %} attachment[targetType]{% endif %}"
+      type="hidden">
+
+    <input class="js-file-type" 
+      value="{{ type }}" 
+      name="{% if useType|default(false)%} attachment[{{fileType}}][type] {% else %} attachment['type']{% endif %}"
       type="hidden">
   </div>
 {% endif %}

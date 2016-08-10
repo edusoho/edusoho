@@ -27,11 +27,14 @@ class AttachmentController extends BaseController
     public function formFieldsAction(Request $request, $targetType, $targetId)
     {
         $targets     = explode(".", $targetType);
-        $attachments = $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId);
+        $type        = 'attachment';
+        $attachments = $this->getUploadFileService()->finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
+
         return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
             'target'      => array_shift($targets),
             'targetType'  => $targetType,
-            'type'        => array_pop($targets),
+            'fileType'    => array_pop($targets),
+            'type'        => 'attachment',
             'useType'     => $request->query->get('useType', false),
             'showLabel'   => $request->query->get('showLabel', true),
             'attachments' => $attachments
@@ -40,8 +43,9 @@ class AttachmentController extends BaseController
 
     public function listAction(Request $request, $targetType, $targetId)
     {
+        $type = 'attachment';
         return $this->render('TopxiaWebBundle:Attachment:list.html.twig', array(
-            'attachments' => $this->getAttachmentService()->findByTargetTypeAndTargetId($targetType, $targetId)
+            'attachments' => $this->getUploadFileService()->finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
         ));
     }
 
@@ -58,7 +62,7 @@ class AttachmentController extends BaseController
     {
         $previewType = $request->query->get('type', 'attachment');
         if ($previewType == 'attachment') {
-            $attachment = $this->getAttachmentService()->get($id);
+            $attachment = $this->getUploadFileService()->getUseFile($id);
             $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
         } else {
             $file = $this->getUploadFileService()->getFile($id);
@@ -78,7 +82,7 @@ class AttachmentController extends BaseController
 
     public function downloadAction(Request $request, $id)
     {
-        $attachment = $this->getAttachmentService()->get($id);
+        $attachment = $this->getUploadFileService()->getUseFile($id);
         $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
@@ -90,17 +94,12 @@ class AttachmentController extends BaseController
     {
         $previewType = $request->query->get('type', 'attachment');
         if ($previewType == 'attachment') {
-            $this->getAttachmentService()->delete($id);
+            $this->getUploadFileService()->deleteUseFile($id);
         } else {
             $this->getUploadFileService()->deleteFile($id);
         }
 
         return $this->createJsonResponse(array('msg' => 'ok'));
-    }
-
-    protected function getAttachmentService()
-    {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
     }
 
     protected function getUploadFileService()
