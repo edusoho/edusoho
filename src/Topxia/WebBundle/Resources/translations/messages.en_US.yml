@@ -692,6 +692,8 @@ flash课程: 'Courses in flash video format'
 '上传题目附件': 'Upload attachment'
 新增选项: 'Add an Option'
 不定项选择题: Multiple-choices
+选项: option
+正确答案: 'Correct answer'
 答案: Answers
 编辑题目: 'Edit questions'
 '添加题目': 'Add questions'
@@ -1120,7 +1122,6 @@ Email地址: 'Email Address'
 帐号: Account
 用户不存在: 'User does not exist'
 尾页: 'Last page'
-正确答案: 'Correct answer'
 完成: Done
 下一题: 'Next question'
 正确: Correct
@@ -3097,7 +3098,6 @@ Firefox浏览器: Firefox
 '请输入正确的分值': 'Please enter the correct score'
 选项最多十个!: '10 options in maximum'
 选项至少二个!: '2 options in minimum'
-选项: option
 请选择正确答案!: 'Please select the correct answer.'
 请选择您的答案: 'Please select your answer'
 '请输入正确的答案,如今天是[[晴|阴|雨]]天.': 'Please select the correct answer, e.g. It''s [[Sunny | Overcast | Rainy]] today.'
@@ -3250,9 +3250,14 @@ mp3: mp3
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
 2M: 2M
+'选项内容': '选项内容'
 '公开': '公开'
 '--按题型--': '--按题型--'
 '--按从属--': '--按从属--'
+'点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': '点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对'
+材料: 材料
+部分回答正确: 部分回答正确
+'你未回答': '你未回答'
 PPT: PPT
 Flash: Flash
 '--': '--'
