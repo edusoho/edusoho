@@ -47,7 +47,7 @@
 '暂无热门资讯': 'No hot article'
 推荐资讯: 'Recommended article'
 '暂无推荐资讯': 'No recommended article'
-月: Month
+月: /
 热门评论: 'Hot comments'
 评论于: 'Commented at'
 一个评论都没有！: 'No comment'
@@ -1837,13 +1837,13 @@ Flash: Flash
 上周: 'last week'
 本月: 'this mouth'
 上月: 'last mouth'
-一: Monday
-二: Tuesday
-三: Wednesday
-四: Thursday
-五: Friday
-'六': Saturday
-日: Sunday
+一: ' Mon'
+二: ' Tue'
+三: ' Wed'
+四: ' Thu'
+五: ' Fri'
+'六': ' Sat'
+日: ' Sun'
 本地视频: 'local video'
 云视频: cloud-video
 网络视频: 'internet video'
