@@ -51,7 +51,7 @@
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
           <p class="help-block">
-          请上传png, gif, jpg格式的超过50*50的等比例图片，否则无法上传
+          请上传png, gif, jpg格式的大于等于50*50的<span class="text-danger">等比例</span>图片，否则无法上传
           </p>
           <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
           <input type="hidden" name="coin_picture_50_50" value="{{setting('coin.coin_picture_50_50') }}">
