@@ -54,7 +54,8 @@ class CloudAttachmentController extends BaseController
         $createdUserIds = ArrayToolkit::column($materials, 'createdUserId');
         $createdUsers   = $this->getUserService()->findUsersByIds($createdUserIds);
 
-        return $this->render('TopxiaAdminBundle:CloudAttachment:tbody.html.twig', array(
+        return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
+            'pageType'     => 'attachment',
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'targetType'   => empty($conditions['targetType']) ? 'all' : $conditions['targetType'],
             'materials'    => $materials,
