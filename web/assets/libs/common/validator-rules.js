@@ -365,6 +365,11 @@ define(function(require, exports, module) {
                 return  result;  
              },
             Translator.trans('%display%格式错误', {display: '{{display}}'})
+        ],
+        [
+            'mobile',
+            /^1\d{10}$/,
+            Translator.trans('请输入正确的%display%', {display:'{{display}}'})
         ]
     ];
 
