@@ -1272,10 +1272,10 @@ Email地址: 'Email Address'
 '还没有参加过任何考试': 'no examination attended'
 '我的批阅': 'Test Paper Review'
 我的任务日历: 'my task calendar'
-所教%classroom.name%: teach…%classroom.name%
-管理%classroom.name%: manage…%classroom.name%
+所教%classroom.name%: Teaching %classroom.name%
+管理%classroom.name%: Manage %classroom.name%
 '共%coursesCount%课': 'total courses%coursesCount%'
-今日新增: 'new... today'
+今日新增: 'New today'
 学员%allCount%: students…%allCount%
 话题%threadCount%: topic…
 '课时完成学习%todayFinishedLessonNum%': 'finished %todayFinishedLessonNum%'
