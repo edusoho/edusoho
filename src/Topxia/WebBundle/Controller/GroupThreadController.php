@@ -51,7 +51,8 @@ class GroupThreadController extends BaseController
 
                 $thread = $this->getThreadService()->addThread($info);
 
-                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -104,7 +105,8 @@ class GroupThreadController extends BaseController
 
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
 
-                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -531,7 +533,8 @@ class GroupThreadController extends BaseController
             }
         }
 
-        $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
+        $attachment = $request->request->get('attachment');
+        $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
         $message = array(
             'id'       => $groupId,
@@ -1152,8 +1155,8 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
-    protected function getAttachmentService()
+    protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
+        return $this->createService('File.UploadFileService');
     }
 }

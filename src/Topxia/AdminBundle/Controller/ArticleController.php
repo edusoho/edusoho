@@ -54,8 +54,8 @@ class ArticleController extends BaseController
 
             $article = $this->getArticleService()->createArticle($formData);
 
-            $this->getAttachmentService()->proxyCreate($article, $request->request->get('attachment'));
-
+            $attachment = $request->request->get('attachment');
+            $this->getUploadFileService()->createUseFiles($article['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -91,7 +91,9 @@ class ArticleController extends BaseController
             $formData = $request->request->all();
             $article  = $this->getArticleService()->updateArticle($id, $formData);
 
-            $this->getAttachmentService()->proxyCreate($article, $request->request->get('attachment'));
+            $attachment = $request->request->get('attachment');
+
+            $this->getUploadFileService()->createUseFiles($article['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -212,8 +214,8 @@ class ArticleController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getAttachmentService()
+    protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
+        return $this->createService('File.UploadFileService');
     }
 }

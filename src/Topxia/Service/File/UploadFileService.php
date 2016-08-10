@@ -104,7 +104,7 @@ interface UploadFileService
     public function waveUploadFile($id, $field, $diff);
 
     //file-used api
-    public function useFiles($fileIds, $targetType, $targetId);
+    public function createUseFiles($targetId, $targetType, $type, $fileIds);
 
     public function getUseFile($id);
 

@@ -158,8 +158,9 @@ class CourseThreadController extends CourseBaseController
             $formData = $request->request->all();
             if ($form->isValid()) {
                 try {
-                    $thread = $this->getThreadService()->createThread($form->getData());
-                    $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                    $thread     = $this->getThreadService()->createThread($form->getData());
+                    $attachment = $request->request->get('attachment');
+                    $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                     return $this->redirect($this->generateUrl('course_thread_show', array(
                         'courseId' => $thread['courseId'],
@@ -209,8 +210,9 @@ class CourseThreadController extends CourseBaseController
                 $formData = $request->request->all();
 
                 if ($form->isValid()) {
-                    $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
-                    $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                    $thread     = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
+                    $attachment = $request->request->get('attachment');
+                    $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                     if ($user->isAdmin()) {
                         $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
@@ -390,7 +392,8 @@ class CourseThreadController extends CourseBaseController
 
                 $post = $this->getThreadService()->createPost($postData);
 
-                $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                 $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $id), true);
                 $threadUrl .= "#post-".$post['id'];
@@ -509,8 +512,8 @@ class CourseThreadController extends CourseBaseController
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
 
-                $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
-
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
                 if ($user->isAdmin()) {
                     $message = array(
                         'userId'     => $user['id'],
@@ -632,9 +635,9 @@ class CourseThreadController extends CourseBaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getAttachmentService()
+    protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
+        return $this->createService('File.UploadFileService');
     }
 
     protected function createPostForm($data = array())

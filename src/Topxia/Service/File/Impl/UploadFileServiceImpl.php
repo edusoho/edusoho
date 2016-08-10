@@ -1036,7 +1036,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //================
-    public function useFiles($fileIds, $targetType, $targetId)
+    public function createUseFiles($targetId, $targetType, $type, $fileIds)
     {
         $fileIds    = empty($fileIds) ? array() : explode(",", $fileIds);
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
@@ -1044,12 +1044,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return false;
         }
 
-        $attachments = array_map(function ($fileId) use ($targetType, $targetId) {
+        $attachments = array_map(function ($fileId) use ($targetType, $targetId, $type) {
             $attachment = array(
                 'fileId'      => $fileId,
                 'targetType'  => $targetType,
                 'targetId'    => $targetId,
-                'type'        => 'attachment',
+                'type'        => $type,
                 'createdTime' => time()
             );
             return $attachment;

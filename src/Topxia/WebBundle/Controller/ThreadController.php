@@ -124,7 +124,8 @@ class ThreadController extends BaseController
 
                 $thread = $this->getThreadService()->createThread($data);
 
-                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                 return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                     "{$target['type']}Id" => $thread['targetId'],
@@ -155,7 +156,8 @@ class ThreadController extends BaseController
 
                 $thread = $this->getThreadService()->updateThread($thread['id'], $data);
 
-                $this->getAttachmentService()->proxyCreate($thread, $request->request->get('attachment'));
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
 
                 $message = array(
                     'title'      => $thread['title'],
@@ -243,8 +245,9 @@ class ThreadController extends BaseController
             unset($fields['attachment']);
             $post = $this->getThreadService()->createPost($fields);
 
-            $this->getAttachmentService()->proxyCreate($post, $request->request->get('attachment'));
-            // $authors = $this->getThreadService()->setUserBadgeTitle($thread, array($user['id'] => $user->toArray()));
+            $attachment = $request->request->get('attachment');
+            $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+
             return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
                 'post'    => $post,
                 'author'  => $user,
@@ -408,8 +411,8 @@ class ThreadController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    protected function getAttachmentService()
+    protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
+        return $this->createService('File.UploadFileService');
     }
 }

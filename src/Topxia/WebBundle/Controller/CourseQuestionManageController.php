@@ -73,8 +73,9 @@ class CourseQuestionManageController extends BaseController
             $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->createQuestion($data);
-            $this->getAttachmentService()->proxyCreate($question, $attachment['stem']);
-            $this->getAttachmentService()->proxyCreate($question, $attachment['analysis']);
+
+            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['stem']['targetType'], $attachment['stem']['type'], $attachment['stem']['fileIds']);
+            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type'], $attachment['analysis']['fileIds']);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
@@ -133,11 +134,12 @@ class CourseQuestionManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
-            $question = $request->request->all();
+            $question   = $request->request->all();
+            $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
-
-            $this->getAttachmentService()->proxyCreate($question, $request->request->get('attachment'));
+            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['stem']['targetType'], $attachment['stem']['type'], $attachment['stem']['fileIds']);
+            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type'], $attachment['analysis']['fileIds']);
 
             $this->setFlashMessage('success', '题目修改成功！');
 
@@ -316,10 +318,5 @@ class CourseQuestionManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getAttachmentService()
-    {
-        return $this->getServiceKernel()->createService('Attachment.AttachmentService');
     }
 }

@@ -43,7 +43,7 @@
 
     <input class="js-file-type" 
       value="{{ type }}" 
-      name="{% if useType|default(false)%} attachment[{{fileType}}][type] {% else %} attachment['type']{% endif %}"
+      name="{% if useType|default(false)%} attachment[{{fileType}}][type] {% else %} attachment[type]{% endif %}"
       type="hidden">
   </div>
 {% endif %}
