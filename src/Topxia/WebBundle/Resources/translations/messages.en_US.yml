@@ -624,6 +624,7 @@ flash课程: 'Courses in flash video format'
 重新选择图片: 'Reselect an image'
 '你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。': 'You can upload jpg, gif, png format, image size is recommended at least 480x270.'
 '文件大小不能超过': 'File size can not exceed '
+2M: '2 M'
 '选择要上传的图片': 'Select an image to upload'
 '%coin_name%价格': '%coin_name%Price'
 '当前课程正处于「 %name% 」打折活动中。': 'This course is in promotion「 %name% 」.'
@@ -693,6 +694,7 @@ flash课程: 'Courses in flash video format'
 新增选项: 'Add an Option'
 不定项选择题: Multiple-choices
 选项: option
+'选项内容': 'Please select '
 正确答案: 'Correct answer'
 答案: Answers
 编辑题目: 'Edit questions'
@@ -1612,6 +1614,7 @@ Email地址: 'Email Address'
 设置头衔、自我介绍并保存后，即可开始创建课程。: 'You can create a course after setting till and self-introduction.'
 还没绑定手机号，: 'Haven''t bound phone number，'
 前去绑定: 'to bound phone number'
+'公开': Public
 最大值为9位整数: 'Maximum is 9-bit integer'
 保留到2位小数: 'Reservations to 2 decimal places'
 '通过安全问题找回': 'Find password by security question'
@@ -1796,7 +1799,14 @@ Email地址: 'Email Address'
 想要说的话: 'what to say'
 网银支付: 'E-currency payment'
 快捷支付: 'Quick payment'
+'--按题型--': '-- By type --'
+'--按从属--': '-- By category --'
 请选择试卷: 'please select the test paper'
+'标题，用一句话说清你的问题': 'Topic, describe your question in one sentence'
+'点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': 'Click the button <span style="color:red">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”'
+材料: Materials
+部分回答正确: 'Partly Correct'
+'你未回答': 'Not answered'
 班级: Class
 资讯频道: 'News channel'
 可用: Accessible
@@ -2276,6 +2286,7 @@ groupId参数缺失: 'Paramenter groupId missing'
 此帐号已在别处登录，请重新登录: 'This account has been signed in from other place, please sign in again.'
 '尚未定义批量获取"%name%"数据': 'Undefined retrieve batch data of "%name%"'
 '尚未定义获取"%name%"数据的记录条数': 'Undefined the number of record to retrieve "%name%"'
+'--请选择退学原因--': '-- Please select reason --'
 未知区域: 'Unknown area'
 未来: Future
 刚刚: Just
@@ -3240,6 +3251,7 @@ Firefox浏览器: Firefox
 结束时间不能早于或等于开始时间: 'The end time should not be later than the started time.'
 '有效期必须大于等于当前日期': 'Expiration date must be later than or equals the current date.  '
 '%display%的长度必须等于%length%': 'The length of %display% must be %length%.'
+'请输入正确的%display%': 'Please input correct %display%'
 折: 折
 '1 GB': '1 GB'
 'mp4, mp3': 'mp4, mp3'
@@ -3249,21 +3261,18 @@ mp3: mp3
 500M: 500M
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
-2M: 2 M
-'选项内容': 'Please select '
-'公开': 'Public'
-'--按题型--': '-- By type --'
-'--按从属--': '-- By category --'
-'标题，用一句话说清你的问题': 'Topic, describe your question in one sentence'
-'点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': 'Click the button <span style="color:red">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”'
-材料: Materials
-部分回答正确: Partly Correct
-'你未回答': 'Not answered'
+收件人: 收件人
+'新密码': '新密码'
+'确认密码': '确认密码'
+'确认登录密码': '确认登录密码'
+'当前密码': '当前密码'
+'用户登录密码': '用户登录密码'
+'新支付密码': '新支付密码'
+'确认支付密码': '确认支付密码'
+'旧的支付密码': '旧的支付密码'
 PPT: PPT
 Flash: Flash
 '--': '--'
-'--请选择退学原因--': '-- Please select reason --'
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
-'请输入正确的%display%': 'Please input correct %display%'
