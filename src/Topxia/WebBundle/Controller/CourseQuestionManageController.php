@@ -243,7 +243,7 @@ class CourseQuestionManageController extends BaseController
                 continue;
             }
 
-            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时') . "{$lesson['number']}：{$lesson['title']}";
         }
 
         return $choices;
