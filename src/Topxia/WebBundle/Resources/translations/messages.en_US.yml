@@ -3249,21 +3249,21 @@ mp3: mp3
 500M: 500M
 'ppt, pptx': 'ppt, pptx'
 'pdf,doc,docx': 'pdf,doc,docx'
-2M: 2M
-'选项内容': '选项内容'
-'公开': '公开'
-'--按题型--': '--按题型--'
-'--按从属--': '--按从属--'
-'标题，用一句话说清你的问题': '标题，用一句话说清你的问题'
-'点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': '点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对'
-材料: 材料
-部分回答正确: 部分回答正确
-'你未回答': '你未回答'
+2M: 2 M
+'选项内容': 'Please select '
+'公开': 'Public'
+'--按题型--': '-- By type --'
+'--按从属--': '-- By category --'
+'标题，用一句话说清你的问题': 'Topic, describe your question in one sentence'
+'点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': 'Click the button <span style="color:red">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”'
+材料: Materials
+部分回答正确: Partly Correct
+'你未回答': 'Not answered'
 PPT: PPT
 Flash: Flash
 '--': '--'
-'--请选择退学原因--': '--请选择退学原因--'
+'--请选择退学原因--': '-- Please select reason --'
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
-'请输入正确的%display%': '请输入正确的%display%'
+'请输入正确的%display%': 'Please input correct %display%'
