@@ -259,7 +259,7 @@ class TransGenerateCommand extends BaseCommand
         foreach ($finder as $file) {
             $content = file_get_contents($file->getRealpath());
 
-            $matched = preg_match_all('/\:\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
+            $matched = preg_match_all('/[\:]\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
@@ -274,6 +274,20 @@ class TransGenerateCommand extends BaseCommand
             $content = file_get_contents($file->getRealpath());
 
             $matched = preg_match_all('/select_options.*\s*\,\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
+
+            if ($matched) {
+                $output->write("{$file->getRealpath()}");
+                $count = count($matches[1]);
+                $output->writeln("<info> ... {$count}</info>");
+
+                $keywords = array_merge($keywords, $matches[1]);
+            }
+        }
+
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getRealpath());
+
+            $matched = preg_match_all('/\?\s*\'([^,\{\}]+)\'\s*\|\s*?trans\s*\:/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
