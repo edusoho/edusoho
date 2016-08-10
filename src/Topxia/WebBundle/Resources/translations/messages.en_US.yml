@@ -1279,7 +1279,7 @@ Email地址: 'Email Address'
 学员%allCount%: students…%allCount%
 话题%threadCount%: topic…
 '课时完成学习%todayFinishedLessonNum%': 'finished %todayFinishedLessonNum%'
-找不到所教%classroom.name%！: 'can not find teached %todayFinishedLessonNum%'
+找不到所教%classroom.name%！: 'can not find teached %classroom.name%'
 普通课程: 'normal courses'
 '%classroom.name%课程': '%classroom.name% course'
 课程%user_name%话题: course%user_name%topic
