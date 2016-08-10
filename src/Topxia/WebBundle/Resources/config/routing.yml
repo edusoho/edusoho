@@ -5,6 +5,7 @@ homepage:
 switch_language:
     pattern: /switch/language
     defaults: { _controller: TopxiaWebBundle:Default:translate }
+
 homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:coursesCategory }

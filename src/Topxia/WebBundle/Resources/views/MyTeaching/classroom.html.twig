@@ -40,13 +40,13 @@
 
                    {{'学员%allCount%'|trans({'%allCount%':classroom.allCount})}}  &nbsp;&nbsp;
 
-                   {{'话题%threadCount%'|trans({'%threadCount%':classroom.threadCount})}}  &nbsp;&nbsp; {{'课时完成学习%todayFinishedLessonNum%'|trans({'%todayFinishedLessonNum%':classroom.todayFinishedLessonNum})}} 
+                   {{'话题%threadCount%'|trans({'%threadCount%':classroom.threadCount})}}  &nbsp;&nbsp; {{'课时完成学习%todayFinishedLessonNum%'|trans({'%todayFinishedLessonNum%':classroom.todayFinishedLessonNum})}}
                 </div>
               </div>
             </li>
             {% endfor %}
             {% else %}
-              <div class="empty">{{'找不到所教%classroom.name%！'|trans({'%classroom.name%':classroom.name|default('班级'|trans)})}}</div>
+              <div class="empty">{{'找不到所教%classroom.name%！'|trans({'%classroom.name%':setting('classroom.name')|default('班级'|trans)})}}</div>
             {% endif %}
           </ul>
   </div>

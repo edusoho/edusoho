@@ -47,7 +47,7 @@
 '暂无热门资讯': 'No hot article'
 推荐资讯: 'Recommended article'
 '暂无推荐资讯': 'No recommended article'
-月: Month
+月: /
 热门评论: 'Hot comments'
 评论于: 'Commented at'
 一个评论都没有！: 'No comment'
@@ -555,13 +555,13 @@ mp3: mp3
 ，%Edusoho%点击: '，%Edusoho% click'
 '暂无音频文件，请先上传。': 'No audio file ,please upload'
 'ppt, pptx': 'ppt, pptx'
-'格式的PPT文件上传，且文件大小不能超过': 'Upload PPT and the file size can not exceed'
+'格式的PPT文件上传，且文件大小不能超过': 'Upload PPT and the file size can not exceed '
 '100 MB': 100MB
 'PPT将上传到': 'Upload PPT file to'
 '暂无PPT文件，请先上传。': 'No PPT file , please upload'
 '上传文档': 'Upload a document'
 'pdf,doc,docx': 'pdf,doc,docx'
-'格式的文档上传，且文件大小不能超过': 'Upload document and the file size can not exceed'
+'格式的文档上传，且文件大小不能超过': 'Upload document and the file size can not exceed '
 '文档将上传到': 'Upload document file to'
 '暂无文档，请先上传。': 'No document file ,please upload'
 '上传Flash': 'Upload flash file'
@@ -632,7 +632,7 @@ mp3: mp3
 提示：请选择图片裁剪区域。: 'Tip:Please select an image crop area'
 重新选择图片: 'Reselect an image'
 '你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。': 'You can upload jpg, gif, png format, image size is recommended at least 480x270.'
-'文件大小不能超过': 'File size can not exceed'
+'文件大小不能超过': 'File size can not exceed '
 2M: 2M
 '选择要上传的图片': 'Select an image to upload'
 '%coin_name%价格': '%coin_name%Price'
@@ -923,7 +923,7 @@ QQ客服及QQ群: 'QQ customer service'
 '%title %第%number%课时': '%title %Number%number%lesson'
 '暂无作业': 'No homework'
 已提交: Submitted
-'已批阅': Marked
+'已批阅': Reviewed
 '学习中心': 'Learning center'
 预告板: 'Notice board'
 '学习任务': Mission
@@ -1239,19 +1239,19 @@ Email地址: 'Email Address'
 没有退款记录: 'no refund record'
 考试记录: 'examination record'
 收藏的题目: 'collected questions'
-'未批阅': unremarked
+'未批阅': Not Reviewed
 来自课程《%title%》: 'from course of 《%title%》'
 '共%score%分 / %itemCount%道题': 'total %score% scores/%itemCount% problems'
 交卷: 'hand in paper'
-'批阅': mark
+'批阅': Review
 总分: 'total score'
 '客观题%objectiveScore%分 / 主观题%subjectiveScore%分': 'objective question…points/subjective question…points'
-批于: 'mark at'
-'还没有等待批阅的试卷': 'no paper wait for marking'
-'还没有已经批阅的试卷': 'no paper marked'
-正确答案：%answer%: 'correct answer:'
+批于: 'Reviewed at'
+'还没有等待批阅的试卷': 'No test paper waiting for review.'
+'还没有已经批阅的试卷': 'No paper reviewed.'
+正确答案：%answer%: 'Correct Answer:'
 解析：%analysis%: 'Analysis:'
-正确答案：%keys%: 'Correct answer:'
+正确答案：%keys%: 'Correct Answer: %keys%'
 正确答案：: 'Correct answer:'
 来自试卷《%name%》: 'from Examination paper'
 收藏于: 'collected from'
@@ -1270,24 +1270,24 @@ Email地址: 'Email Address'
 '该试卷已删除': 'the paper has been deleted'
 我的考试记录: 'my examination record'
 '还没有参加过任何考试': 'no examination attended'
-'我的批阅': 'my marks'
+'我的批阅': 'Test Paper Review'
 我的任务日历: 'my task calendar'
-所教%classroom.name%: teach…%classroom.name%
-管理%classroom.name%: manage…%classroom.name%
+所教%classroom.name%: Teaching %classroom.name%
+管理%classroom.name%: Manage %classroom.name%
 '共%coursesCount%课': 'total courses%coursesCount%'
-今日新增: 'new... today'
+今日新增: 'New today'
 学员%allCount%: students…%allCount%
 话题%threadCount%: topic…
 '课时完成学习%todayFinishedLessonNum%': 'finished %todayFinishedLessonNum%'
-找不到所教%classroom.name%！: 'can not find teached %todayFinishedLessonNum%'
+找不到所教%classroom.name%！: 'can not find teached %classroom.name%'
 普通课程: 'normal courses'
 '%classroom.name%课程': '%classroom.name% course'
 课程%user_name%话题: course%user_name%topic
 '%classroom.name% %user_name%话题': '%classroom.name% %user_name% topic'
 数: Number
-'价格(元)': price(yuan)
-已移除: removed
-文件管理: 'file management'
+'价格(元)': Price (RMB)
+已移除: Removed
+文件管理: 'File Management'
 '暂无在教的课程': 'No teaching course.'
 您的课程中还没有: 'there''s no…in your course'
 提问过...: 'have questioned…'
@@ -1699,12 +1699,12 @@ Email地址: 'Email Address'
 班级数量设置: 'class number settings'
 教师数量设置: 'teacher number settings'
 问题: question
-'话题标题': 'topic title'
-'活动标题': 'activity title'
-活动时间: 'activity time'
+'话题标题': 'Topic'
+'活动标题': 'Activity Title'
+活动时间: 'Activity Time'
 活动开始时间: 'activity start time'
-活动地点: 'activity location'
-封面图片: 'cover picture'
+活动地点: 'Activity Location'
+封面图片: 'Cover Image'
 '推荐图片大小200*112': 'Recommended image size 200*112'
 浏览...: view
 最大人数: 'maximum people'
@@ -1837,13 +1837,13 @@ Flash: Flash
 上周: 'last week'
 本月: 'this mouth'
 上月: 'last mouth'
-一: Monday
-二: Tuesday
-三: Wednesday
-四: Thursday
-五: Friday
-'六': Saturday
-日: Sunday
+一: ' Mon'
+二: ' Tue'
+三: ' Wed'
+四: ' Thu'
+五: ' Fri'
+'六': ' Sat'
+日: ' Sun'
 本地视频: 'local video'
 云视频: cloud-video
 网络视频: 'internet video'
@@ -1909,7 +1909,7 @@ QQ登录: 'QQ login'
 教师答疑: 'Question answering'
 活动组织: 'activity organnization'
 直播答疑: 'live question and answering'
-就业指导: 'career guaiding'
+就业指导: 'Career Advisory'
 旁听生: 'A drop-in'
 学生: student
 班主任: 'class teacher'

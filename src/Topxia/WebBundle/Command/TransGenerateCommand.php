@@ -131,7 +131,6 @@ class TransGenerateCommand extends BaseCommand
 
         $output->writeln("<info>已存在{$existCount}个语言串，本次新增{$addCount}个语言串</info>");
         $output->writeln('<question>END</question>');
-
         $yaml    = new Yaml();
         $content = $yaml->dump($newTrans);
         if ($type == 'untranslate') {
@@ -290,7 +289,7 @@ class TransGenerateCommand extends BaseCommand
         foreach ($finder as $file) {
             $content = file_get_contents($file->getRealpath());
 
-            $matched = preg_match_all('/default\(\s*\'([^,\{\}]+)\'\s*\|\s*?trans/', $content, $matches);
+            $matched = preg_match_all('/default\(\s*\'([^,\{\}\~]+)\'\s*\|\s*?trans/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
