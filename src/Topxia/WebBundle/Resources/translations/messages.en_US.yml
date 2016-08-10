@@ -3260,16 +3260,16 @@ mp4: mp4
 mp3: mp3
 500M: 500M
 'ppt, pptx': 'ppt, pptx'
-'pdf,doc,docx': 'pdf,doc,docx'
-收件人: 收件人
-'新密码': '新密码'
-'确认密码': '确认密码'
-'确认登录密码': '确认登录密码'
-'当前密码': '当前密码'
-'用户登录密码': '用户登录密码'
-'新支付密码': '新支付密码'
-'确认支付密码': '确认支付密码'
-'旧的支付密码': '旧的支付密码'
+'pdf,doc,docx': 'pdf, doc, docx'
+收件人: Recipent
+'新密码': 'New Password'
+'确认密码': 'Password Confirmed'
+'确认登录密码': 'Sign In Password Confirmed'
+'当前密码': 'Current Password'
+'用户登录密码': 'Sign In Password'
+'新支付密码': 'New Payment Password'
+'确认支付密码': 'Payment Password Confirmed'
+'旧的支付密码': 'Old Payment Password'
 PPT: PPT
 Flash: Flash
 '--': '--'
