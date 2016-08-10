@@ -370,6 +370,68 @@ define(function(require, exports, module) {
             'mobile',
             /^1\d{10}$/,
             Translator.trans('请输入正确的%display%', {display:'{{display}}'})
+        ],
+        [
+            'email',
+            /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'url',
+            /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'number',
+            /^[+-]?[1-9][0-9]*(\.[0-9]+)?([eE][+-][1-9][0-9]*)?$|^[+-]?0?\.[0-9]+([eE][+-][1-9][0-9]*)?$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'date',
+            /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+           'min',
+            function(options) {
+                var element = options.element, min = options.min;
+                return Number(element.val()) >= Number(min);
+            },
+            Translator.trans('%display%必须大于或者等于%min%', {display:'{{display}}', min:'{{min}}'})
+        ],
+        [
+            'max',
+            function(options) {
+                var element = options.element, max = options.max;
+                return Number(element.val()) <= Number(max);
+            },
+            Translator.trans('%display%必须小于或者等于%max%', {display:'{{display}}', max:'{{max}}'})
+        ],
+        [
+            'minlength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l >= Number(options.min);
+            },
+            Translator.trans('%display%的长度必须大于或等于%min%', {display:'{{display}}', min:'{{min}}'})
+        ],
+        [
+            'maxlength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l <= Number(options.max);
+            },
+            Translator.trans('%display%的长度必须小于或等于%max%', {display:'{{display}}', max:'{{max}}'})
+        ],
+        [
+            'confirmation',
+            function(options) {
+                var element = options.element, target = $(options.target);
+                return element.val() == target.val();
+            },
+            Translator.trans('两次输入的%display%不一致，请重新输入', {display: '{{display}}'})
         ]
     ];
 
