@@ -280,7 +280,7 @@
 '免费课程': Free
 '该分类下无课程': 'No courses in this category'
 取消收藏: Cancel
-收藏课程: Favorite
+收藏课程: Bookmark
 '查看%user_name%的学习进度, 还可以发私信进行联系': 'Check out the learnnig progress of %user_name, or send a message directly'
 分享到: 'Share to'
 '退出学习': Quit
@@ -337,7 +337,7 @@
 '全部课时': 'All lessons'
 排序：: Order
 最新笔记: 'Latest notes'
-点赞最多: 'Most favorited'
+点赞最多: 'Most liked'
 '展开全文': 'Full article'
 '暂无笔记记录': 'No note'
 '下节直播课程将于本周五上午10:30按时开课，请各位学员准备好上次的作业进行批阅。': 'The next live course session will start at 10:30 am on this Friday , please make sure your assignments of last session be ready for assessment'
@@ -366,8 +366,8 @@
 名额已满: Full
 '%maxStudentNum%名额': '%maxStudentNum% students'
 '%lessonNum%课时': 'Lesson %lessonNum%'
-已收藏: Favorited
-收藏: Favorite
+已收藏: Bookmarked
+收藏: Bookmark
 分享: Share
 课程概览: Overview
 笔记: Notes
@@ -1757,7 +1757,7 @@ Email地址: 'Email Address'
 '无在教的%name%': 'No teaching %name%.'
 '无在教的课程': 'No teaching course.'
 '无在学的课程': 'No learning course.'
-'无收藏的课程': 'No favorite course.'
+'无收藏的课程': 'No bookmarked course.'
 '温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！': 'Tips：For better service, if your information have changed，please modify below！'
 已认证: verified
 实名认证中: 'real-name authenticating'
@@ -2502,7 +2502,7 @@ keywordType参数不正确: 'keywordType parameter is not correct'
 '笔记(#%id%)不存在，删除失败': 'Unable to delete, note(#%id%)dosen''t exist'
 '你没有权限删除笔记(#%id%)': 'You have no permission to delete the note(#%id%)'
 '笔记不存在，或已删除。': 'The note dosen''t exist or has been deleted'
-不可重复对一条笔记点赞！: 'You have already favorited the note！'
+不可重复对一条笔记点赞！: 'You have already liked the note！'
 参数不正确，评价失败！: 'Comment failed ,Parameters error！'
 '课程(#%fieldsCourseId%)不存在，评价失败！': 'Unable to comment ,the coures(#%fieldsCourseId%)dosen''t exist！'
 '用户(#%fieldsUserId%)不存在,评价失败!': 'Unable to comment the user (#%fieldsUserId%)dosen''t exist!'
