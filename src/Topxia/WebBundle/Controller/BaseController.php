@@ -197,6 +197,11 @@ abstract class BaseController extends Controller
         return ServiceKernel::instance();
     }
 
+    protected function createService($service)
+    {
+        return $this->getServiceKernel()->createService($service);
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
@@ -206,19 +211,20 @@ abstract class BaseController extends Controller
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-    protected function fillOrgCode($conditions){
 
-        if($this->setting('magic.enable_org')){
-             if( !isset($conditions['orgCode'])){
-                $conditions['likeOrgCode'] =  $this->getCurrentUser()->getSelectOrgCode();
-             }else{
-                $conditions['likeOrgCode'] =  $conditions['orgCode'];
-                 unset($conditions['orgCode']); 
-             }
-        }else{
-             if(isset($conditions['orgCode'])){
-               unset($conditions['orgCode']); 
-             }
+    protected function fillOrgCode($conditions)
+    {
+        if ($this->setting('magic.enable_org')) {
+            if (!isset($conditions['orgCode'])) {
+                $conditions['likeOrgCode'] = $this->getCurrentUser()->getSelectOrgCode();
+            } else {
+                $conditions['likeOrgCode'] = $conditions['orgCode'];
+                unset($conditions['orgCode']);
+            }
+        } else {
+            if (isset($conditions['orgCode'])) {
+                unset($conditions['orgCode']);
+            }
         }
 
         return $conditions;

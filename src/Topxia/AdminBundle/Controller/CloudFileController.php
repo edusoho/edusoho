@@ -181,11 +181,6 @@ class CloudFileController extends BaseController
         return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
     }
 
-    protected function createService($service)
-    {
-        return $this->getServiceKernel()->createService($service);
-    }
-
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
