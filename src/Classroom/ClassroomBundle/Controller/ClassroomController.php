@@ -227,7 +227,7 @@ class ClassroomController extends BaseController
             $isclassroomteacher = false;
         }
 
-        if ($member && !$member["locked"]) {
+        if ($member) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom'              => $classroom,
                 'courses'                => $courses,

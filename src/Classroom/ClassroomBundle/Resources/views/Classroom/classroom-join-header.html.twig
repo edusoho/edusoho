@@ -1,7 +1,12 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
-  
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        您的退款申请已提交，请等待管理员的处理。
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
+      </div>
+    {% endif %}
     <ol class="breadcrumb breadcrumb-o">
       <li><a href="{{ path('homepage') }}">首页</a></li>
       {% for breadcrumb in breadcrumbs %}
@@ -103,7 +108,7 @@
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}
-      {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
+      {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) and not member.locked %}
         {% if 'headTeacher' not in member.role %}  
           <a type="button" 
             {% if  'student' in member.role and member.orderId > 0 %}
