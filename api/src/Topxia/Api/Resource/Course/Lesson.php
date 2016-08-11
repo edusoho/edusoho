@@ -12,24 +12,26 @@ class Lesson extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $lesson = $this->getCourseService()->getLesson($id);
-
         if (empty($lesson)) {
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
-        $user = $this->getCurrentUser();
-        if (empty($user)) {
-            if (!$lesson['free'] || $lesson['type'] == 'testpaper') {
-                return $this->error('not_login', "您尚未登录，不能查看该课时");
-            }
-        } else {
-            $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $user['id']);
-            if (empty($member)) {
-                return $this->error('not_student', "你不是该课程学员，请加入学习");
-            }
-        }
+        $courseSetting         = $this->getSettingService()->get('course');
+        $allowAnonymousPreview = isset($courseSetting['allowAnonymousPreview']) ? $courseSetting['allowAnonymousPreview'] : 0;
 
-        $this->setStartLesson($lesson['courseId'], $id);
+        if (!$allowAnonymousPreview || ($allowAnonymousPreview && !$lesson['free'])) {
+            $currentUser = $this->getCurrentUser();
+            if (empty($currentUser) || !$currentUser->isLogin()) {
+                return $this->error('not_login', "您尚未登录，不能查看该课时");
+            } else {
+                $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
+                if (!$lesson['free'] && empty($member)) {
+                    return $this->error('not_student', "你不是该课程学员，请加入学习");
+                }
+            }
+
+            $this->setStartLesson($lesson['courseId'], $id);
+        }
 
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
@@ -267,9 +269,7 @@ class Lesson extends BaseResource
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            $file                  = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $file["convertParams"] = json_decode($file["convertParams"], true);
-            $file["metas2"]        = json_decode($file["metas2"], true);
+            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
             return $file;
         }
 
