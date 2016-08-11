@@ -19,9 +19,9 @@
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
   {% if keywords %}
-    {{'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'|trans({'%count%': count, '%keywords%': keywords})}}
+    {{'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'|trans({'%count%': count, '%keywords%': keywords})|raw}}
   {% else %}
-    {{'共找到<span>%count%</span>门课程'|trans({'%count%': count})}}
+    {{'共找到<span>%count%</span>门课程'|trans({'%count%': count})|raw}}
     {% endif %}
     </div>
     <ul class="nav nav-pills hidden-xs" role="tablist">
