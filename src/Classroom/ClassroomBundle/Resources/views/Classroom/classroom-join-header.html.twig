@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="class-operation">
-          <ul class='class-data clearfix {% if classroomMemberLevel %}hidden-sm{% else %}two-col{% endif %}'>
+          <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
             <li>
               <p><i class="es-icon es-icon-person"></i></p>
               <p>学员({{classroom.studentNum + classroom.auditorNum }})</p>
@@ -74,7 +74,7 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-            {% if classroomMemberLevel and  classroom.showable %}
+            {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
               <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
                 <i class="es-icon es-icon-crown"></i><br>
                 {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
