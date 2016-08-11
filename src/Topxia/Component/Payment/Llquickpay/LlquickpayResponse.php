@@ -10,7 +10,7 @@ class LlquickpayResponse extends Response
     
     public function getPayData()
     {
-        if ($this->isMobile($this->params['userAgent'])) {
+        if ($this->params['isMobile']) {
             $this->params = json_decode($this->params['res_data'], true);
         }
         $params = $this->params;
@@ -88,14 +88,5 @@ class LlquickpayResponse extends Response
         }
         $sign .= 'key='.$this->options['secret'];
         return md5($sign);
-    }
-
-    public function isMobile($userAgent)
-    {
-        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android') || strpos($userAgent, 'WAP')) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

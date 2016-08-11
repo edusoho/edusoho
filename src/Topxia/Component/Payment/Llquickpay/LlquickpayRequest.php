@@ -11,7 +11,7 @@ class LlquickpayRequest extends Request
     public function form()
     {
         $form           = array();
-        if ($this->isMobile($this->params['userAgent'])) {
+        if ($this->params['isMobile']) {
             $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
         }
         $form['action'] = $this->url;
@@ -37,7 +37,6 @@ class LlquickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $isMobile   = $this->isMobile($params['userAgent']);
         $converted                 = array();
         $converted['busi_partner'] = '101001';
         $converted['dt_order']     = date('YmdHis', time());
@@ -61,7 +60,7 @@ class LlquickpayRequest extends Request
         $converted['pay_type']   = '2';
         $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId']));
         $converted['sign']       = $this->signParams($converted);
-        if ($isMobile) {
+        if ($params['isMobile']) {
             return $this->convertMobileParams($converted, $params['userAgent']);
         } else {
             return $converted;
@@ -99,16 +98,6 @@ class LlquickpayRequest extends Request
 
         return $title;
     }
-
-    public function isMobile($userAgent)
-    {
-        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android') || strpos($userAgent, 'WAP')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function mobileType($userAgent)
     {
         if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad')) {
