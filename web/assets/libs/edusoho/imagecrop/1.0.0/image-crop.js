@@ -26,7 +26,7 @@ define(function(require, exports, module) {
 	            selectWidth = (cropedWidth) * (naturalWidth/scaledWidth),
 	            selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
 
-            $picture.css('height', scaledHeight);
+           /* $picture.css('height', scaledHeight);*/
 
 	        var img = $.Jcrop($picture, {
 	            trueSize: [naturalWidth, naturalHeight],
