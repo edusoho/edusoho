@@ -183,27 +183,17 @@ class BlockServiceImpl extends BaseService implements BlockService
     }
 
     /**
-     * 根据表结构判断更新逻辑(6.17.20对block表做了拆分),因此不同的版本可能更新逻辑不一样
+     * 根据表结构判断更新逻辑(6.17.20对block表做了拆分),需要进行兼容
      * @param  [type] $fields         [description]
      * @return [type] [description]
      */
     public function update($fields)
     {
         $fields['updateTime'] = time();
-        unset($fields['mode']);
 
-        $templateFields = $fields;
-        //未升级到到6.17.20,block有该字段，升级后字段放到block_template
-        if (array_key_exists('meta', $block)) {
-            unset($fields['meta']);
-            $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
-        } else {
-            $blockTemplate = $this->getBlockTemplateDao()->getBlockTemplateByCode($block['code']);
-            if (!$blockTemplate) {
-                throw $this->createServiceException('此编辑区不存在，更新失败!');
-            }
-            $updatedBlock = $this->getBlockTemplateDao()->updateBlockTemplate($blockTemplate['id'], $templateFields);
-        }
+        $partsFields  = ArrayToolkit::parts($fields, array('userId', 'content', 'code', 'data', 'updateTime'));
+        $updatedBlock = $this->getBlockDao()->updateBlock($id, $partsFields);
+        $updatedBlock = $this->getBlockTemplateDao()->updateBlockTemplate($updatedBlock['blockTemplateId'], $fields);
         return $updatedBlock;
     }
 
