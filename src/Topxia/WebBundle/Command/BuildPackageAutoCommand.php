@@ -283,35 +283,55 @@ class BuildPackageAutoCommand extends BaseCommand
 
     private function diffFilePrompt($diffFile, $version)
     {
-        $noSqlUpgrade = true;
-        $askFileEdit  = false;
-        $file         = @fopen($diffFile, "r");
+        $askDiffFile   = false;
+        $askAssetsLibs = false;
+        $askSqlUpgrade = false;
+        $file          = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line   = fgets($file);
             $op     = $line[0];
             $opFile = trim(substr($line, 1));
             if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
                 echo "异常的文件更新模式：{$line}";
-                $askFileEdit = true;
+                $askDiffFile = true;
                 continue;
             }
 
+            if (strpos($opFile, 'web/assets/libs') === 0) {
+                $askAssetsLibs = true;
+                $this->output->writeln("<comment>web/assets/libs文件：{$opFile}</comment>");
+            }
+
             if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
-                $noSqlUpgrade = false;
+                $askSqlUpgrade = true;
                 $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
             }
         }
 
+        if ($askDiffFile) {
+            $this->output->writeln("<info>确认build/diff-{$version}差异文件</info>");
+        }
         $question = "请手动检查build/diff-{$version}文件是否需要编辑,继续请输入y (y/n)";
-        if ($askFileEdit && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+        if ($askDiffFile && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
 
-        $this->output->writeln("<info>准备制作升级脚本</info>");
+        if ($askAssetsLibs) {
+            $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
+        }
+        $question = "请确认web/assets/libs下的改动文件，没有问题，请输入y (y/n)";
+        if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+            $this->output->writeln('<error>制作升级包终止!</error>');
+            exit;
+        }
+
+        if ($askSqlUpgrade) {
+            $this->output->writeln("<info>准备制作升级脚本</info>");
+        }
         $question = "请根据以上sql脚本完成 scripts/upgrade-{$version}.php,完成后输入y (y/n)";
 
-        if (!$noSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+        if ($askSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
