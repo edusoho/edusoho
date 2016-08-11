@@ -162,7 +162,19 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
         $fields['updateTime'] = time();
         unset($fields['mode']);
-        $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
+
+        $templateFields = $fields;
+        //未升级到到6.17.20,block有该字段，升级后字段放到block_template
+        if (array_key_exists('meta', $block)) {
+            unset($fields['meta']);
+            $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
+        } else {
+            $blockTemplate = $this->getBlockTemplateDao()->getBlockTemplateByCode($block['code']);
+            if (!$blockTemplate) {
+                throw $this->createServiceException('此编辑区不存在，更新失败!');
+            }
+            $updatedBlock = $this->getBlockTemplateDao()->updateBlockTemplate($blockTemplate['id'], $templateFields);
+        }
 
         $blockHistoryInfo = array(
             'blockId'     => $updatedBlock['id'],
@@ -176,7 +188,8 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         $this->getLogService()->info('system', 'update_block', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
 
-        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($updatedBlock['blockTemplateId']);
+        $blcokTemplateId       = isset($updatedBlock['blockTemplateId']) ? $updatedBlock['blockTemplateId'] : $updatedBlock['id'];
+        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($blcokTemplateId);
         $updatedBlock['id']    = $blockTemplate['id'];
         $updatedBlock['title'] = $blockTemplate['title'];
         $updatedBlock['mode']  = $blockTemplate['mode'];
