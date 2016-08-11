@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="class-operation">
-          <ul class='class-data clearfix two-col'>
+          <ul class='class-data clearfix {% if classroomMemberLevel %}hidden-sm{% else %}two-col{% endif %}'>
             <li>
               <p><i class="es-icon es-icon-person"></i></p>
               <p>学员({{classroom.studentNum + classroom.auditorNum }})</p>
@@ -74,15 +74,21 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
+            {% if classroomMemberLevel and  classroom.showable %}
+              <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
+                <i class="es-icon es-icon-crown"></i><br>
+                {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+              </li>
+            {% endif %}
           </ul>
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
               您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
               
-              {% if setting("course.buy_fill_userinfo")|default(false) %}
-                <a href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >立即加入购买</a>
-              {% else %}
-                <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
+              {% if  classroom.showable and classroom.status != 'closed' %}
+                <div class="btn-buy">
+                  {% include 'ClassroomBundle:Classroom:Part/classroom-buy-btn.html.twig' with {isAuditor:true} %}
+                </div>
               {% endif %}
               
             </div>
