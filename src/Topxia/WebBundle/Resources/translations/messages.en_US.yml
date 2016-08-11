@@ -3267,8 +3267,8 @@ Firefox浏览器: Firefox
 '两次输入的%display%不一致，请重新输入': 'The values you input for %display% are different, please retry.'
 折: 折
 '请加入后再学习': '请加入后再学习'
-'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程': '共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'
-'共找到<span>%count%</span>门课程': '共找到<span>%count%</span>门课程'
+'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程': 'Found <span>%count%</span> courses matching keyword “%keywords%”.'
+'共找到<span>%count%</span>门课程': 'Found <span>%count%</span> courses.'
 PPT: PPT
 Flash: Flash
 '--': '--'
