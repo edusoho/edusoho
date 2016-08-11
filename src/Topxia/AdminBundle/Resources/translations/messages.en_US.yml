@@ -1,59 +1,58 @@
-新增: 新增
-'内容链接': '内容链接'
-'以"http://"或"https://"开头': '以"http://"或"https://"开头'
-'公告信息': '公告信息'
-发布人: 发布人
-即将开始: 即将开始
-显示中: 显示中
-商业版: 商业版
-'作者：': '作者：'
-主题: 主题
-应用: 应用
-隐藏已购应用: 隐藏已购应用
-'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，': 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，'
-请修改设置。: 请修改设置。
-'您的服务器无法连接到更新服务器，请检查网络连接状况。': '您的服务器无法连接到更新服务器，请检查网络连接状况。'
-商业专属: 商业专属
-已购买: 已购买
-套餐信息: 套餐信息
-'了套餐解详情': '了套餐解详情'
-版本：: 版本：
-有效期：: 有效期：
-套餐服务将于明天到期，: 套餐服务将于明天到期，
-请尽快: 请尽快
-'以免影响正常使用': '以免影响正常使用'
-套餐服务已到期，: 套餐服务已到期，
-套餐服务将于%packageDate%天后到期: 套餐服务将于%packageDate%天后到期
-授权信息: 授权信息
-非商业授权: 非商业授权
-商业授权: 商业授权
-'授权域名:': '授权域名:'
-最后更新：: 最后更新：
-卸载: 卸载
-应用名称: 应用名称
-需要回滚: 需要回滚
-更新失败: 更新失败
-更新成功: 更新成功
-已恢复: 已恢复
-个可用更新: 个可用更新
-需要主系统%edusohoMinVersion%及更高版本: 需要主系统%edusohoMinVersion%及更高版本
-'开发者：': '开发者：'
-更新: 更新
-当前已是最新版本!: 当前已是最新版本!
-任务管理: 任务管理
-版本: 版本
-开始: 开始
-'正在安装，请不要关闭当前窗口...': '正在安装，请不要关闭当前窗口...'
-'正在完成安装/升级, 请稍等...': '正在完成安装/升级, 请稍等...'
-'完成安装/升级': '完成安装/升级'
-编辑资讯: 编辑资讯
-'资讯标题': '资讯标题'
-'所属栏目': '所属栏目'
-'选择所属栏目': '选择所属栏目'
-'TAG标签': 'TAG标签'
-正在保存...: 正在保存...
-资讯属性: 资讯属性
-设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。: 设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。
+新增: New
+'内容链接': 'Link'
+'以"http://"或"https://"开头': 'Start with "http://" or "https://"开头'
+'公告信息': 'Announcement'
+发布人: Creator
+即将开始: Start soon
+显示中: Displaying
+商业版: Commercial Version
+'作者：': 'Author: '
+主题: Topic
+应用: Application
+隐藏已购应用: Hide purchased App
+'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，': 'System will not work properly if AccessKey or SecretKey is invalid.'
+请修改设置。: Please update settings
+'您的服务器无法连接到更新服务器，请检查网络连接状况。': 'Cannot connect to update server, please check your network.'
+商业专属: Commercial Only
+已购买: Purchased
+套餐信息: Package Info
+'了套餐解详情': 'View Package Info'
+版本：: 'Version: '
+有效期：: 'Expire at: '
+套餐服务将于明天到期，请尽快: 'The package will be expired tomorrow, please '
+'以免影响正常使用': 'to continue use it.'
+套餐服务已到期，: 'The package expired, '
+套餐服务将于%packageDate%天后到期: 'The package will be expired after %packageDate% days'
+授权信息: Licence Info
+非商业授权: Non-commercial Licence
+商业授权: Commercial Licence
+'授权域名:': 'Licenced to domain: '
+最后更新：: 'Last update: '
+卸载: Uninstall
+应用名称: App Name
+需要回滚: Need roll back
+更新失败: Update failed
+更新成功: Updated Successfully
+已恢复: Recovered
+个可用更新: updates available
+需要主系统%edusohoMinVersion%及更高版本: Require EduSoho version %edusohoMinVersion% or above
+'开发者：': 'Developer: '
+更新: Update
+当前已是最新版本!: This is already the newest version.
+任务管理: Task Management
+版本: Version
+开始: Start
+'正在安装，请不要关闭当前窗口...': 'Installing, don''t close the window ...'
+'正在完成安装/升级, 请稍等...': 'Finishing installation/upgrading, please wait ...'
+'完成安装/升级': 'Finished installation/upgrading'
+编辑资讯: Edit Article
+'资讯标题': 'Article Title'
+'所属栏目': 'In Category'
+'选择所属栏目': 'Select Category'
+'TAG标签': 'Tags'
+正在保存...: 'Saving ...'
+资讯属性: 'Article properties'
+设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。: 'When set <strong>sticky</strong>, this article will be displayed on the top of the list'
 '设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': '设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。'
 设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。: 设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。
 来源设置: 来源设置
