@@ -160,10 +160,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         if (!$block) {
             throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
-        $fields['updateTime'] = time();
-        unset($fields['mode']);
-        $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
-
+        $updatedBlock     = $this->update($fields);
         $blockHistoryInfo = array(
             'blockId'     => $updatedBlock['id'],
             'content'     => $updatedBlock['content'],
@@ -176,11 +173,27 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         $this->getLogService()->info('system', 'update_block', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
 
-        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($updatedBlock['blockTemplateId']);
+        $blcokTemplateId       = isset($updatedBlock['blockTemplateId']) ? $updatedBlock['blockTemplateId'] : $updatedBlock['id'];
+        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($blcokTemplateId);
         $updatedBlock['id']    = $blockTemplate['id'];
         $updatedBlock['title'] = $blockTemplate['title'];
         $updatedBlock['mode']  = $blockTemplate['mode'];
 
+        return $updatedBlock;
+    }
+
+    /**
+     * 根据表结构判断更新逻辑(6.17.20对block表做了拆分),需要进行兼容
+     * @param  [type] $fields         [description]
+     * @return [type] [description]
+     */
+    public function update($fields)
+    {
+        $fields['updateTime'] = time();
+
+        $partsFields  = ArrayToolkit::parts($fields, array('userId', 'content', 'code', 'data', 'updateTime'));
+        $updatedBlock = $this->getBlockDao()->updateBlock($id, $partsFields);
+        $updatedBlock = $this->getBlockTemplateDao()->updateBlockTemplate($updatedBlock['blockTemplateId'], $fields);
         return $updatedBlock;
     }
 
