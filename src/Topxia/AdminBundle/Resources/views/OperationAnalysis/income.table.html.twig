@@ -17,11 +17,12 @@
                     <td>{{data.title}}<br>订单号:{{data.sn}}</td>
                     <td class="text-danger">{{data.amount}}</td>
                     {% if data.targetType == "course" %}
-                    <td class="text-danger"> {{courses[data.targetId].price|default("")}}</td>
+                      <td class="text-danger"> {{courses[data.targetId].price|default("-")}}</td>
                     {% elseif data.targetType == "vip" %}
-                    <td class="text-danger">{{data.totalPrice}}</td>
+                      <td class="text-danger">{{data.totalPrice|default("-")}}</td>
                     {% elseif data.targetType == "classroom" %}
-                    <td class="text-danger">{{classrooms[data.targetId].price|default("")}}</td>
+                      <td class="text-danger">{{classrooms[data.targetId].price|default("-")}}</td>
+                    {% else %} <td>-</td>
                     {% endif %}
 
                     <td>{% if  data.coupon %}优惠码<br>[{{data.coupon}}]{% endif %}</td>
