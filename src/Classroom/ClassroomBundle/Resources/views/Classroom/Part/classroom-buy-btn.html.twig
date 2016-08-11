@@ -15,7 +15,9 @@
 {% else %}
   {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
     {% if classroom.buyable == 1 %}
-      <a class="btn btn-link" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
+      {% if not isAuditor %}
+        <a class="btn btn-link" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
+      {% endif %}
       <a class="btn btn-primary btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
     {% else %}
       <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该{{setting("classroom.name")|default("班级")}}无法在线购买，若需帮助请联系客服">无法购买</button>
