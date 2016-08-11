@@ -18,7 +18,6 @@
 
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
-      {{'共找到'|trans}}<span>{{ count }}</span>{{'门'|trans}}{% if keywords %}<span>“{{ keywords }}”</span>{{'相关'|trans}}{% endif %}{{'课程'|trans}}
   {% if keywords %}
     {{'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'|trans({'%count%': count, '%keywords%': keywords})}}
   {% else %}

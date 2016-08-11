@@ -401,6 +401,7 @@
 '文件将从该课程中移除关联': 'The file will be removed from the course'
 '同时在我的教学资料中删除相关文件': 'And remove relevant documents from the teaching materials'
 '文件若被引用，移除或删除会引起引用课时无法正常使用': 'Removal or deleting of a referenced file will cause the lesson not work properly。'
+'正在删除': deleting
 确认: OK
 '文件：%filename% 被引用': 'File：%filename% is referenced'
 课程文件: Materials
@@ -418,7 +419,6 @@
 '上传资料文件': 'Upload documents'
 '上传文件到教学资料库': 'Upload documents to the course materials library'
 支持: Suport
-'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf': 'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf '
 '格式的文件上传，文件大小不能超过': 'format and the file size can not exceed '
 '视频将上传到': 'Video will be uploaded to '
 '云服务器''}}</strong>{{''，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。': 'Cloud server''}}</strong>{{''，The uploaded video will be transcoded and will be able to play during the process.'
@@ -548,11 +548,12 @@ flash课程: 'Courses in flash video format'
 ，%Edusoho%点击: '，%Edusoho% click'
 '暂无音频文件，请先上传。': 'No audio file ,please upload'
 '格式的PPT文件上传，且文件大小不能超过': 'Upload PPT and the file size can not exceed '
-'100 MB': 100MB
 'PPT将上传到': 'Upload PPT file to'
 '暂无PPT文件，请先上传。': 'No PPT file , please upload'
 '上传文档': 'Upload a document'
+'pdf,doc,docx': 'pdf, doc, docx'
 '格式的文档上传，且文件大小不能超过': 'Upload document and the file size can not exceed '
+'100 MB': 100MB
 '文档将上传到': 'Upload document file to'
 '暂无文档，请先上传。': 'No document file ,please upload'
 '上传Flash': 'Upload flash file'
@@ -639,6 +640,7 @@ flash课程: 'Courses in flash video format'
 '抱歉，您无权设置课程价格，如有需要请联系网站管理员！': 'Sorry, you have no right to set the price of the course, if necessary, please contact the Administrator!'
 '已添加教师': 'Teachers Added'
 '只能添加有教师权限的用户': 'Can only add users who are verified teachers.'
+显示: Show
 课时未发布，不能下载该资料: 'Unable to download the files since the course is not started'
 网络链接资料: 'Internet refrence links'
 课时%number%: Lesson%number%
@@ -1535,9 +1537,6 @@ Email地址: 'Email Address'
 教师: teacher
 小组话题: 'group topic'
 资讯: information
-'共找到': '… related courses searched'
-门: Courses
-'相关': related
 '没有搜到相关课程，请换个关键词试试！': 'cannot find related courses, please change your keyword'
 为您找到资讯结果约: 'about…results found for you'
 个: results
@@ -1802,6 +1801,15 @@ Email地址: 'Email Address'
 '--按题型--': '-- By type --'
 '--按从属--': '-- By category --'
 请选择试卷: 'please select the test paper'
+收件人: Recipent
+'新密码': 'New Password'
+'确认密码': 'Password Confirmed'
+'确认登录密码': 'Sign In Password Confirmed'
+'当前密码': 'Current Password'
+'用户登录密码': 'Sign In Password'
+'新支付密码': 'New Payment Password'
+'确认支付密码': 'Payment Password Confirmed'
+'旧的支付密码': 'Old Payment Password'
 '标题，用一句话说清你的问题': 'Topic, describe your question in one sentence'
 '点击编辑器按钮 <span style="color:red">[ ]</span>  可以插入填空项；也可手工输入，例如“今年是[[2014|马]]年”，回答“2014”或者“马”都算答对': 'Click the button <span style="color:red">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”'
 材料: Materials
@@ -3210,7 +3218,6 @@ Firefox浏览器: Firefox
 未选中任何: 'No selection'
 '确定要删除选中的': 'Are you determined to delete the selected files?'
 吗？: '?'
-'正在删除': deleting
 ，请稍等。: ', please wait for a moment.'
 '名片加载中': 'loading information'
 '真的要删除该': 'Are you sure to delete?'
@@ -3252,33 +3259,19 @@ Firefox浏览器: Firefox
 '有效期必须大于等于当前日期': 'Expiration date must be later than or equals the current date.  '
 '%display%的长度必须等于%length%': 'The length of %display% must be %length%.'
 '请输入正确的%display%': 'Please input correct %display%'
-折: 折
-'1 GB': '1 GB'
-'mp4, mp3': 'mp4, mp3'
-'mp4, avi, flv, wmv, mov, m4v': 'mp4, avi, flv, wmv, mov, m4v'
-mp4: mp4
-mp3: mp3
-500M: 500M
-'ppt, pptx': 'ppt, pptx'
-'pdf,doc,docx': 'pdf, doc, docx'
-收件人: Recipent
-'新密码': 'New Password'
-'确认密码': 'Password Confirmed'
-'确认登录密码': 'Sign In Password Confirmed'
-'当前密码': 'Current Password'
-'用户登录密码': 'Sign In Password'
-'新支付密码': 'New Payment Password'
-'确认支付密码': 'Payment Password Confirmed'
-'旧的支付密码': 'Old Payment Password'
-PPT: PPT
-Flash: Flash
-'--': '--'
-'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
-'message must be a string': 'message must be a string'
-'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
 '%display%的格式不正确': 'Invalid format of %display%'
 '%display%必须大于或者等于%min%': '%display% must be larger or equal to %min%'
 '%display%必须小于或者等于%max%': '%display% must be less or equal to %max%'
 '%display%的长度必须大于或等于%min%': 'Length of %display% must be larger or equal to %min%'
 '%display%的长度必须小于或等于%max%': 'Length of %display% must be less or equal to %max%'
 '两次输入的%display%不一致，请重新输入': 'The values you input for %display% are different, please retry.'
+折: 折
+'请加入后再学习': '请加入后再学习'
+'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程': '共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'
+'共找到<span>%count%</span>门课程': '共找到<span>%count%</span>门课程'
+PPT: PPT
+Flash: Flash
+'--': '--'
+'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
+'message must be a string': 'message must be a string'
+'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'

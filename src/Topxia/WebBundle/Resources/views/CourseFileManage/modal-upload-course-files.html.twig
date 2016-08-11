@@ -44,10 +44,10 @@
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>{{'支持'|trans|raw}}<strong>{{'mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf'|trans}}</strong>{{'格式的文件上传，文件大小不能超过'|trans|raw}}<strong>{{'1 GB'|trans|raw}}</strong>。</li>
+          <li>{{'支持'|trans|raw}}<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx, pdf, doc, docx, swf</strong>{{'格式的文件上传，文件大小不能超过'|trans|raw}}<strong>1 GB</strong>。</li>
           <li>{{'视频将上传到'|trans|raw}}<strong>{{'云服务器'}}</strong>{{'，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。'|trans|raw}}</li>
         {% else %}
-          <li>{{'支持'|trans}}<strong>{{'mp4, mp3'|trans}}</strong>{{'格式的文件上传，且文件大小不能超过'|trans}}<strong>{{ upload_max_filesize() }}</strong>。<br>{{'MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans}}</li>
+          <li>{{'支持'|trans}}<strong>mp4, mp3</strong>{{'格式的文件上传，且文件大小不能超过'|trans}}<strong>{{ upload_max_filesize() }}</strong>。<br>{{'MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans}}</li>
             <li>{{'视频将上传到'|trans}}<strong>{{'网站服务器'|trans}}</strong>{{'，如需使用%Edusoho%云视频,点击'|trans({'%Edusoho%':'EduSoho'|copyright_less})}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</li>
         {% endif %}
       </ul>
