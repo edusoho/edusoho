@@ -1939,6 +1939,8 @@ QQ: 'QQ number'
 敏感词: 'sensitive words'
 编号: 'serial number'
 '--请选择退学原因--': '-- Please select reason --'
+'课程内容质量差': 'Poor quality of course content'
+老师服务态度不好: 'Teacher service attitude is not good'
 主题目录%themeDir%不存在！: 'Subject catalog  is not exist！'
 '资讯栏目页面不存在': 'page not exist'
 '文章已删除或者未发布！': 'The article is canclled or not issued yet!'
@@ -3273,8 +3275,6 @@ Firefox浏览器: Firefox
 PPT: PPT
 Flash: Flash
 '--': '--'
-'课程内容质量差': 'Poor quality of course content'
-老师服务态度不好: Teacher service attitude is not good
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
