@@ -154,34 +154,47 @@ class BlockServiceImpl extends BaseService implements BlockService
 
     public function updateBlock($id, $fields)
     {
-        $block = $this->getBlockDao()->getBlock($id);
+        $block = $this->getBlock($id);
         $user  = $this->getCurrentUser();
 
         if (!$block) {
             throw $this->createServiceException('此编辑区不存在，更新失败!');
         }
-        $fields['updateTime'] = time();
-        unset($fields['mode']);
-        $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
-
-        $blockHistoryInfo = array(
-            'blockId'     => $updatedBlock['id'],
-            'content'     => $updatedBlock['content'],
-            'data'        => $updatedBlock['data'],
-            'userId'      => $user['id'],
-            'createdTime' => time()
-        );
-
-        $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
+        $updatedBlock = $this->update($fields);
 
         $this->getLogService()->info('system', 'update_block', "更新编辑区#{$id}", array('content' => $updatedBlock['content']));
 
-        $blockTemplate         = $this->getBlockTemplateDao()->getBlockTemplate($updatedBlock['blockTemplateId']);
-        $updatedBlock['id']    = $blockTemplate['id'];
-        $updatedBlock['title'] = $blockTemplate['title'];
-        $updatedBlock['mode']  = $blockTemplate['mode'];
-
         return $updatedBlock;
+    }
+
+    /**
+     * 根据表结构判断更新逻辑(6.17.20对block表做了拆分),需要进行兼容
+     * 没有编辑过模板，是不会产生编辑区，更新时仅可更新模板
+     * @param  [type] $fields         [description]
+     * @return [type] [description]
+     */
+    public function update($fields)
+    {
+        $fields['updateTime'] = time();
+
+        $partsFields          = ArrayToolkit::parts($fields, array('userId', 'content', 'code', 'data', 'updateTime'));
+        $updatedBlock         = $this->getBlockDao()->updateBlock($id, $partsFields);
+        $updatedBlockTemplate = $this->getBlockTemplateDao()->updateBlockTemplate($updatedBlock['blockTemplateId'], $fields);
+        if (!empty($updatedBlock)) {
+            $blockHistoryInfo = array(
+                'blockId'     => $updatedBlock['id'],
+                'content'     => $updatedBlock['content'],
+                'data'        => $updatedBlock['data'],
+                'userId'      => $user['id'],
+                'createdTime' => time()
+            );
+            $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
+            $updatedBlock['id']    = $updatedBlockTemplate['id'];
+            $updatedBlock['title'] = $updatedBlockTemplate['title'];
+            $updatedBlock['mode']  = $updatedBlockTemplate['mode'];
+            return $updatedBlock;
+        }
+        return $updatedBlockTemplate;
     }
 
     public function deleteBlock($id)

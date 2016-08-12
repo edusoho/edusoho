@@ -557,7 +557,8 @@ define(function(require, exports, module) {
             $form = $('#teacherCheckForm');
 
             $.post($('#testpaper-teacherSay-btn').data('post-url'), $form.serialize(), function(response) {
-                window.location.href = $('#testpaper-teacherSay-btn').data('goto');
+                //window.location.href = $('#testpaper-teacherSay-btn').data('goto');
+                window.location.reload();
             })
         });
 

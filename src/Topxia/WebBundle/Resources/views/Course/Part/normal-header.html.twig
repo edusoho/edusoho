@@ -58,7 +58,7 @@
         {% if member.deadline > 'now'|date('U') %}
           <p class="expiry-date hidden-sm">
             <span class="mrm">有效期至</span>
-            <span>{{ member.deadline|date('Y年m月d日 h小时i分') }}</span>
+            <span>{{ member.deadline|date('Y年m月d日 H时i分') }}</span>
           </p>
         {% else %}
          <div class="alert alert-danger alert-dismissable">

@@ -558,7 +558,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $member['levelId'] = $fields['levelId'];
                 $member['remark']  = $fields['remark'];
             } else {
-                $member['role'] = array('student');
+                $member['role']    = array('student');
+                $member['orderId'] = $fields['orderId'];
             }
 
             $member = MemberSerialize::serialize($member);
