@@ -567,13 +567,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $count += $cloudFiles['count'];
         }
 
-        /*$cloudFileConditions = array(
-        'processStatus' => $conditions['processStatus'],
-        'nos'           => implode(',', $globalIds)
-        );
-
-        $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);*/
-
         return $count;
     }
 
