@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     exports.run = function() {
         if ($("#course-create-form").length > 0) {
             var validator = new Validator({
