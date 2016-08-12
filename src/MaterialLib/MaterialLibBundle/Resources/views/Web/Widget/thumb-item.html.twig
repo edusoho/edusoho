@@ -23,11 +23,11 @@
       </p>
       {#<p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>#}
       <p class="text-muted text-overflow text-sm mbs" title="{{ uploadFile.createdTime|date('Y/m/d H:i') }}">
-        时间：  {{ uploadFile.createdTime|date('Y/m/d H:i') }}
+        {{ '时间'|trans }}：  {{ uploadFile.createdTime|date('Y/m/d H:i') }}
       </p>
       {% if source in ['public','sharing','favorite'] %}
       <p class="text-muted text-overflow text-sm" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
-        作者：  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}
+        {{ '作者'|trans }}：  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}
       </p>
       {% endif %}
     </li>
