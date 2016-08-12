@@ -23,7 +23,7 @@ class DictionaryExtension extends \Twig_Extension
         }
 
         foreach ($dictionaryItems as $key => $value) {
-            $choices[$key] = $value['name'];
+            $choices[$key] = $this->getServiceKernel()->trans($value['name']);
         }
         $choices['other'] = $this->getServiceKernel()->trans('其他');
 

@@ -1803,6 +1803,7 @@ Email地址: 'Email Address'
 '--按题型--': '-- By type --'
 '--按从属--': '-- By category --'
 请选择试卷: 'please select the test paper'
+课程分类: 'Course categories'
 收件人: Recipent
 '新密码': 'New Password'
 '确认密码': 'Password Confirmed'
@@ -1937,6 +1938,7 @@ QQ: 'QQ number'
 屏蔽: shield
 敏感词: 'sensitive words'
 编号: 'serial number'
+'--请选择退学原因--': '-- Please select reason --'
 主题目录%themeDir%不存在！: 'Subject catalog  is not exist！'
 '资讯栏目页面不存在': 'page not exist'
 '文章已删除或者未发布！': 'The article is canclled or not issued yet!'
@@ -2296,7 +2298,6 @@ groupId参数缺失: 'Paramenter groupId missing'
 此帐号已在别处登录，请重新登录: 'This account has been signed in from other place, please sign in again.'
 '尚未定义批量获取"%name%"数据': 'Undefined retrieve batch data of "%name%"'
 '尚未定义获取"%name%"数据的记录条数': 'Undefined the number of record to retrieve "%name%"'
-'--请选择退学原因--': '-- Please select reason --'
 未知区域: 'Unknown area'
 未来: Future
 刚刚: Just
@@ -3269,10 +3270,11 @@ Firefox浏览器: Firefox
 '两次输入的%display%不一致，请重新输入': 'The values you input for %display% are different, please retry.'
 折: 折
 '请加入后再学习': '请加入后再学习'
-课程分类: Course categories
 PPT: PPT
 Flash: Flash
 '--': '--'
+'课程内容质量差': 'Poor quality of course content'
+老师服务态度不好: Teacher service attitude is not good
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'

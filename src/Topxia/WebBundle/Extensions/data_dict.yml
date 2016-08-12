@@ -312,7 +312,14 @@ searchKeyWord:
 searchBanlog:
     name: 敏感词
     userName: 用户名
+
 courseSerializeMode:
     none: 非连载课程
     serialize: 更新中
     finished: 已完结
+
+refund_reason:
+    select_reason: --请选择退学原因--
+    bad_content: 课程内容质量差
+    bad_teacher_attitude: 老师服务态度不好
+    other: 其他

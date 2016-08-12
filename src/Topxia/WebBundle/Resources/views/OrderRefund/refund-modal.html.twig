@@ -10,6 +10,7 @@
       <div class="col-md-8 controls">
 
         <select class="form-control" name="reason[type]">
+          {% set defaultFields = dict('refund_reason') %}
           {{ dict_select_options('refund_reason') }}
         </select>
         <textarea class="form-control" name="reason[note]" placeholder="{{'请输入您的退学原因'|trans}}" style="margin-top:10px;display:none;"></textarea>
