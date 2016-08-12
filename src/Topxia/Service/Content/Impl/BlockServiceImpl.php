@@ -162,6 +162,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
         $fields['updateTime'] = time();
         unset($fields['mode']);
+
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
 
         $blockHistoryInfo = array(
