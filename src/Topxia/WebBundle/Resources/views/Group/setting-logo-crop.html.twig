@@ -16,9 +16,9 @@
 
   <div class="form-group clearfix">
     <div class="col-md-offset-1 col-md-10 controls">
-      <img src="{{ filepath(pictureUrl) }}" 
+      <img class="img-responsive" src="{{ filepath(pictureUrl) }}" 
       id="logo-crop" 
-      width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" style="max-width:100%!important;height: auto;"/>
+      width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
       <div class="help-block ">{{'提示：请选择图片裁剪区域。'|trans}}</div>
     </div>
   </div>
