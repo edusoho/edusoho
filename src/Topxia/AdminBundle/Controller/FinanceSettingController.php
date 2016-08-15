@@ -12,37 +12,41 @@ class FinanceSettingController extends BaseController
     {
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
-            'enabled'          => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
-            'bank_gateway'     => 'none',
-            'alipay_enabled'   => 0,
-            'alipay_key'       => '',
-            'alipay_secret'    => '',
-            'alipay_account'   => '',
-            'alipay_type'      => 'direct',
-            'tenpay_enabled'   => 0,
-            'tenpay_key'       => '',
-            'tenpay_secret'    => '',
-            'wxpay_enabled'    => 0,
-            'wxpay_key'        => '',
-            'wxpay_secret'     => '',
-            'wxpay_account'    => '',
-            'heepay_enabled'   => 0,
-            'heepay_key'       => '',
-            'heepay_secret'    => '',
-            'quickpay_enabled' => 0,
-            'quickpay_key'     => '',
-            'quickpay_secret'  => '',
-            'quickpay_aes'     => ''
+            'enabled'            => 0,
+            'disabled_message'   => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway'       => 'none',
+            'alipay_enabled'     => 0,
+            'alipay_key'         => '',
+            'alipay_secret'      => '',
+            'alipay_account'     => '',
+            'alipay_type'        => 'direct',
+            'tenpay_enabled'     => 0,
+            'tenpay_key'         => '',
+            'tenpay_secret'      => '',
+            'wxpay_enabled'      => 0,
+            'wxpay_key'          => '',
+            'wxpay_secret'       => '',
+            'wxpay_account'      => '',
+            'heepay_enabled'     => 0,
+            'heepay_key'         => '',
+            'heepay_secret'      => '',
+            'quickpay_enabled'   => 0,
+            'quickpay_key'       => '',
+            'quickpay_secret'    => '',
+            'quickpay_aes'       => '',
+            'llcbpay_enabled'    => 0,
+            'llcbpay_key'        => '',
+            'llcbpay_secret'     => '',
+            'llquickpay_enabled' => 0,
+            'llquickpay_key'     => '',
+            'llquickpay_secret'  => ''
         );
 
         $payment = array_merge($default, $payment);
 
         if ($request->getMethod() == 'POST') {
             $payment                    = $request->request->all();
-
             $payment = ArrayToolkit::trim($payment);
-
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
