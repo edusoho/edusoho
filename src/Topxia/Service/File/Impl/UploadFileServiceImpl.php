@@ -5,6 +5,7 @@ namespace Topxia\Service\File\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService;
+use Topxia\Service\File\FireWall\FireWallFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
@@ -1093,8 +1094,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (empty($file)) {
             $this->createNotFoundException("该附件不存在,或已被删除");
         }
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin() || $file['createdUserId'] != $user['id'] || !$user->isAdmin()) {
+        $fireWall = FireWallFactory::create($attachment['targetType']);
+        if (!$fireWall->canAccess($attachment)) {
             $this->createAccessDeniedException("您无全删除该附件");
         }
 
