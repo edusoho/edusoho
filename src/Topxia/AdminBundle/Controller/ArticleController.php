@@ -55,7 +55,7 @@ class ArticleController extends BaseController
             $article = $this->getArticleService()->createArticle($formData);
 
             $attachment = $request->request->get('attachment');
-            $this->getUploadFileService()->createUseFiles($article['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -93,7 +93,7 @@ class ArticleController extends BaseController
 
             $attachment = $request->request->get('attachment');
 
-            $this->getUploadFileService()->createUseFiles($article['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 

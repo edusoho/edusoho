@@ -1036,7 +1036,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //================
-    public function createUseFiles($targetId, $targetType, $type, $fileIds)
+    public function createUseFiles($fileIds, $targetId, $targetType, $type)
     {
         $fileIds    = empty($fileIds) ? array() : explode(",", $fileIds);
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);

@@ -125,7 +125,7 @@ class ThreadController extends BaseController
                 $thread = $this->getThreadService()->createThread($data);
 
                 $attachment = $request->request->get('attachment');
-                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                     "{$target['type']}Id" => $thread['targetId'],
@@ -157,7 +157,7 @@ class ThreadController extends BaseController
                 $thread = $this->getThreadService()->updateThread($thread['id'], $data);
 
                 $attachment = $request->request->get('attachment');
-                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 $message = array(
                     'title'      => $thread['title'],
@@ -246,7 +246,7 @@ class ThreadController extends BaseController
             $post = $this->getThreadService()->createPost($fields);
 
             $attachment = $request->request->get('attachment');
-            $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
             return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
                 'post'    => $post,

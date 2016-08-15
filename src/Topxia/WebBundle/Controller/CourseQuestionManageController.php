@@ -74,8 +74,8 @@ class CourseQuestionManageController extends BaseController
 
             $question = $this->getQuestionService()->createQuestion($data);
 
-            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['stem']['targetType'], $attachment['stem']['type'], $attachment['stem']['fileIds']);
-            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type'], $attachment['analysis']['fileIds']);
+            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
@@ -138,8 +138,8 @@ class CourseQuestionManageController extends BaseController
             $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
-            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['stem']['targetType'], $attachment['stem']['type'], $attachment['stem']['fileIds']);
-            $this->getUploadFileService()->createUseFiles($question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type'], $attachment['analysis']['fileIds']);
+            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
 
             $this->setFlashMessage('success', '题目修改成功！');
 

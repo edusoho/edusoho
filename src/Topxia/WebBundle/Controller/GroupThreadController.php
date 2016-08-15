@@ -52,7 +52,7 @@ class GroupThreadController extends BaseController
                 $thread = $this->getThreadService()->addThread($info);
 
                 $attachment = $request->request->get('attachment');
-                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -106,7 +106,7 @@ class GroupThreadController extends BaseController
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
 
                 $attachment = $request->request->get('attachment');
-                $this->getUploadFileService()->createUseFiles($thread['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -534,7 +534,7 @@ class GroupThreadController extends BaseController
         }
 
         $attachment = $request->request->get('attachment');
-        $this->getUploadFileService()->createUseFiles($post['id'], $attachment['targetType'], $attachment['type'], $attachment['fileIds']);
+        $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
         $message = array(
             'id'       => $groupId,
