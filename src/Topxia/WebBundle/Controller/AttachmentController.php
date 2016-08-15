@@ -28,7 +28,7 @@ class AttachmentController extends BaseController
     {
         $targets     = explode(".", $targetType);
         $type        = 'attachment';
-        $attachments = $this->getUploadFileService()->finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
+        $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 
         return $this->render('TopxiaWebBundle:Attachment:form-fields.html.twig', array(
             'target'      => array_shift($targets),
@@ -45,7 +45,7 @@ class AttachmentController extends BaseController
     {
         $type = 'attachment';
         return $this->render('TopxiaWebBundle:Attachment:list.html.twig', array(
-            'attachments' => $this->getUploadFileService()->finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+            'attachments' => $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
         ));
     }
 

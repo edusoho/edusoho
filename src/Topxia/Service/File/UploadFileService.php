@@ -110,5 +110,5 @@ interface UploadFileService
 
     public function deleteUseFile($id);
 
-    public function finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 }

@@ -1065,7 +1065,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
-    public function finduseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
     {
         $conditions = array(
             'type'       => $type,
