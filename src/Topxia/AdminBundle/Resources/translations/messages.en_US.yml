@@ -52,124 +52,121 @@
 'TAG标签': 'Tags'
 正在保存...: 'Saving ...'
 资讯属性: 'Article properties'
-设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。: 'When set <strong>sticky</strong>, this article will be displayed on the top of the list'
-'设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': '设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。'
-设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。: 设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。
-来源设置: 来源设置
-来源名称: 来源名称
-来源地址: 来源地址
-设置缩略图: 设置缩略图
-'请上传png, gif, jpg格式的图片文件。': '请上传png, gif, jpg格式的图片文件。'
-'请推荐尺寸754*424px。': '请推荐尺寸754*424px。'
-'内容条目默认按发布时间的倒序显示': '内容条目默认按发布时间的倒序显示'
-设置资讯图片: 设置资讯图片
-未分类: 未分类
-设置为头条: 设置为头条
-头: 头
-推荐该资讯: 推荐该资讯
-荐: 荐
-置顶该资讯: 置顶该资讯
-顶: 顶
-移至回收站: 移至回收站
-'永久删除': '永久删除'
-资讯图片: 资讯图片
-'你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过<strong>2M</strong>。': '你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过<strong>2M</strong>。'
-'选择上传的文件': '选择上传的文件'
-'--所属栏目--': '--所属栏目--'
-'标题关键词': '标题关键词'
-'栏目': '栏目'
-属性: 属性
-设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。: 设为“<strong>置顶</strong>”后，该资讯将会显示在列表的最前面。
-'设为“<strong>头条</strong>”后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': '设为“<strong>头条</strong>”后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。'
-设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。: 设为“<strong>推荐</strong>”后，该资讯将会显示在页面右侧的推荐资讯中。
-'暂无页面记录': '暂无页面记录'
-频道名称: 频道名称
-列表每页资讯数: 列表每页资讯数
-'栏目名称': '栏目名称'
-'编码': '编码'
-'编辑栏目': '编辑栏目'
-'添加栏目': '添加栏目'
-'栏目编码': '栏目编码'
-生成列表、资讯时使用，例如news、bbs等: 生成列表、资讯时使用，例如news、bbs等
-'父栏目': '父栏目'
-'选择栏目': '选择栏目'
-'允许发布资讯': '允许发布资讯'
-'SEO标题': 'SEO标题'
-'SEO关键字': 'SEO关键字'
-SEO描述: SEO描述
-启用: 启用
-'建议等栏目内容整理编辑完毕后再启用': '建议等栏目内容整理编辑完毕后再启用'
-'暂无分类记录': '暂无分类记录'
-'添加子栏目': '添加子栏目'
-返回顶部: 返回顶部
-编辑区: 编辑区
-编辑模式: 编辑模式
-模板: 模板
-'模板内容': '模板内容'
-'目前提供３种模板内容占位符，占位符在内容编辑时，会转换为编辑框，方便网站运营编辑': '目前提供３种模板内容占位符，占位符在内容编辑时，会转换为编辑框，方便网站运营编辑'
-'占位符名:': '占位符名:'
-举例: 举例
-链接一: 链接一
-这个是链接: 这个是链接
-文本一: 文本一
-图片一: 图片一
-'内容编辑帮助': '内容编辑帮助'
-'填写内容编辑时的帮助信息': '填写内容编辑时的帮助信息'
-'编辑内容': '编辑内容'
-编辑区名称：: 编辑区名称：
-'上传图片': '上传图片'
-编辑帮助: 编辑帮助
-变更记录: 变更记录
-'恢复此内容': '恢复此内容'
-'查看JSON配置': '查看JSON配置'
-修改时间: 修改时间
-修改用户: 修改用户
-+新增: +新增
-保存设置: 保存设置
-最近更新: 最近更新
-'暂无编辑区记录': '暂无编辑区记录'
-'编码：': '编码：'
-编辑html: 编辑html
-当前主题: 当前主题
-搜索编辑区: 搜索编辑区
-打开新窗口: 打开新窗口
-图片描述: 图片描述
-图片链接: 图片链接
-链接文本: 链接文本
-是否开启: 是否开启
-布局模式: 布局模式
-'限宽居中': '限宽居中'
-'平铺居中': '平铺居中'
-图片模式: 图片模式
-HTML模式: HTML模式
-选择图片: 选择图片
-'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px': '[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px'
-'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px': '[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px'
-'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。': '建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。'
-'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px': '[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px'
-'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px': '[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px'
-'背景色填充': '背景色填充'
-海报链接地址: 海报链接地址
-文本: 文本
-编辑分类: 编辑分类
-'添加分类': '添加分类'
-显示序号需为整数，分类按序号的顺序从小到大排序。: 显示序号需为整数，分类按序号的顺序从小到大排序。
-'必填，建议使用分类名称的英文单词或缩写作为编码。': '必填，建议使用分类名称的英文单词或缩写作为编码。'
-'非必填': '非必填'
-'图标': '图标'
-'允许上传的图标文件格式为': '允许上传的图标文件格式为'
-'添加子分类': '添加子分类'
-账单月份: 账单月份
-空间使用量: 空间使用量
-流量: 流量
-空间费用: 空间费用
-流量费用: 流量费用
-费用合计: 费用合计
-月末：: 月末：
-月均：: 月均：
-'免费额度：': '免费额度：'
-单价：: 单价：
-'暂无账单记录': '暂无账单记录'
+设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。: 'When set as <strong>sticky</strong>, this article will be displayed on top of the list.'
+'设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': 'When set as sticky, the thumbnail will be displayed on the top of the page and the recommended image size is 754 * 424.': 
+设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。: 'When set as recommended, the article will be displayed in the right panel of the page.'
+来源设置: Set Source
+来源名称: Source Name
+来源地址: Source URL
+设置缩略图: Set Thumbnail
+'请上传png, gif, jpg格式的图片文件。': 'Please upload image with png/gif/jpg format.'
+'请推荐尺寸754*424px。': 'Recommended image size is 754 * 424.'
+'内容条目默认按发布时间的倒序显示': 'Sort by the published time by default.'
+设置资讯图片: Set article image
+未分类: Uncategoried
+设置为头条: Set as Headline
+头: Headline
+推荐该资讯: Recommend
+荐: Recommend
+置顶该资讯: Sticky
+顶: Sticky
+移至回收站: Delete
+'永久删除': 'Delete Permanently'
+资讯图片: Article Image
+'你可以上传JPG、GIF或PNG格式的文件,推荐尺寸754*424px,文件大小不能超过<strong>2M</strong>。': 'Please upload image with jpg/gif/png format, the recommended size is 754 * 424 px and no more than 2 M.'
+'选择上传的文件': 'Choose File'
+'--所属栏目--': '-- Category --'
+'标题关键词': 'Keyword'
+'栏目': 'Category'
+属性: Attributes
+'暂无页面记录': 'No records'
+频道名称: Channel Name
+列表每页资讯数: Articles per page
+'栏目名称': 'Category Name'
+'编码': 'Code'
+'编辑栏目': 'Edit Category'
+'添加栏目': 'Add Category'
+'栏目编码': 'Category Code'
+生成列表、资讯时使用，例如news、bbs等: 'Will be used when generating the article list, for example the news or bbs.'
+'父栏目': 'Parent Category'
+'选择栏目': 'Select Category'
+'允许发布资讯': 'Allow publish news'
+'SEO标题': 'SEO Title'
+'SEO关键字': 'SEO Keywords'
+SEO描述: SEO Description
+启用: Turn On
+'建议等栏目内容整理编辑完毕后再启用': 'Suggest turn on it when finish editing the cateory.'
+'暂无分类记录': 'No category'
+'添加子栏目': 'Add sub-category'
+返回顶部: Top
+编辑区: Editable Block
+编辑模式: Edit Mode
+模板: Template
+'模板内容': 'Content Template'
+'目前提供３种模板内容占位符，占位符在内容编辑时，会转换为编辑框，方便网站运营编辑': 'We currently provide 3 template placeholders which will be displayed as input field when editing the content.'
+'占位符名:': 'Name of the placeholder: '
+举例: For example
+链接一: Link 1
+这个是链接: This is a link
+文本一: Text 1
+图片一: Image 1
+'内容编辑帮助': 'Help'
+'填写内容编辑时的帮助信息': 'Help info when editing content'
+'编辑内容': 'Edit Content'
+编辑区名称：: Name of the editable block
+'上传图片': 'Upload Image'
+编辑帮助: Help
+变更记录: Change log
+'恢复此内容': 'Recover Content'
+'查看JSON配置': 'View JSON Config'
+修改时间: Modified at
+修改用户: Modified by
++新增: '+ Add'
+保存设置: Save
+最近更新: Latest Updates
+'暂无编辑区记录': 'No editable block'
+'编码：': 'Code: '
+编辑html: Edit HTML
+当前主题: Current Theme
+搜索编辑区: Search the editable block
+打开新窗口: Open new window
+图片描述: Image description
+图片链接: Image link
+链接文本: Link text
+是否开启: Switch
+布局模式: Layout
+'限宽居中': 'Limited Width and Centered'
+'平铺居中': 'Tiled Horizontally'
+图片模式: Image Mode
+HTML模式: HTML Mode
+选择图片: Choose Image
+'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：300px': '[ Limited Width and Centered ] Suggest image size is 1140 * 300 px'
+'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：450px': '[ Tiled Horizontally ] Suggest image size is 1920 * 450 px'
+'建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。': 'Suggest all posts use the same layout and size.'
+'[ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px': '[ Limited Width and Centered ] Suggest image size is 1140 * 450 px'
+'[ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px': '[ Tiled Horizontally ] Suggest image size is 1920 * 600 px'
+'背景色填充': 'Fill with background color'
+海报链接地址: Link URL
+文本: Text
+编辑分类: Edit Category
+'添加分类': 'Add Category'
+显示序号需为整数，分类按序号的顺序从小到大排序。: The sequence should be numbers. Categories will be displayed by the sequence ascendant.
+'必填，建议使用分类名称的英文单词或缩写作为编码。': 'Required. Sugguest use English word or abbreviation.'
+'非必填': 'Optional'
+'图标': 'Icon'
+'允许上传的图标文件格式为': 'The accepted icon formats are: '
+'添加子分类': 'Add sub-category'
+账单月份: Bill of month
+空间使用量: Disk space usage
+流量: Web Traffic
+空间费用: Storage Fee
+流量费用: Network Fee
+费用合计: Total
+月末：: 'At end of month: ' 
+月均：: 'Monthly average: '
+'免费额度：': 'Free for: '
+单价：: 'Unit price: '
+'暂无账单记录': 'No record'
 '空间费用 = 月均空间使用量 * 空间单价': '空间费用 = 月均空间使用量 * 空间单价'
 云账单: 云账单
 云视频账单: 云视频账单
