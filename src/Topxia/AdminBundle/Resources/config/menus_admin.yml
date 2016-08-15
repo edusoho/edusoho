@@ -469,6 +469,9 @@ admin_edu_cloud_sms:
 admin_edu_cloud_search:
    name: 云搜索设置
    parent: admin_app
+admin_app_im:
+   name: 即时聊天设置
+   parent: admin_app
 # admin_edu_cloud_email:
 #     name: 云邮件设置
 #     parent: admin_app

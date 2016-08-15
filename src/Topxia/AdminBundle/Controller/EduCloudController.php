@@ -704,6 +704,55 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    public function appImAction(Request $request)
+    {
+        $appImSetting = $this->getSettingService()->get('app_im', array());
+        if (!$appImSetting) {
+            $appImSetting = array('enabled' => 0);
+            $this->getSettingService()->set('app_im', $appImSetting);
+        }
+
+        $data = array();
+
+        try {
+            $api      = CloudAPIFactory::create('root');
+            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
+
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+            $data['status'] = 'unconnect';
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:app-im-setting.html.twig', array(
+            'data' => array('status' => 'success')
+        ));
+    }
+
+    public function appImUpdateStatusAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $appImSetting = $this->getSettingService()->get('app_im', array());
+
+            $status = $request->request->get('status', 0);
+            if ($status == 1) {
+                //去云平台判断im账号是否存在
+            }
+
+            //更改云IM账号状态
+            //$api      = CloudAPIFactory::create('root');
+            //$api->get("im/account_status/{status}");
+
+            $appImSetting['enabled'] = $status;
+            $this->getSettingService()->set('app_im', $appImSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
     protected function dateFormat($time)
     {
         return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));

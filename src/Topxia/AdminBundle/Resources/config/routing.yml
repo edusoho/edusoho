@@ -1549,6 +1549,15 @@ admin_edu_cloud_search_close:
     pattern: /setting/edu_cloud/search/close
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
 
+admin_app_im:
+    pattern: /setting/app/im
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:appIm }
+
+admin_app_im_update:
+    pattern: /setting/app/im/update
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:appImUpdateStatus }
+    methods: [POST]
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
