@@ -715,7 +715,8 @@ class EduCloudController extends BaseController
         $data = array();
 
         try {
-            $api      = CloudAPIFactory::create('root');
+            $api = CloudAPIFactory::create('root');
+
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
@@ -734,15 +735,23 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $appImSetting = $this->getSettingService()->get('app_im', array());
+            $api          = CloudAPIFactory::create('root');
 
             $status = $request->request->get('status', 0);
+
             if ($status == 1) {
                 //去云平台判断im账号是否存在
+                $imAccount = $api->get('/im/account');
+                if (isset($imAccount['error'])) {
+                    $imAccount = $api->post('/im/account');
+                }
+                $imStatus = 'enable';
+            } else {
+                $imStatus = 'disable';
             }
 
             //更改云IM账号状态
-            //$api      = CloudAPIFactory::create('root');
-            //$api->get("im/account_status/{status}");
+            $api->post("/im/account_status/{$imStatus}");
 
             $appImSetting['enabled'] = $status;
             $this->getSettingService()->set('app_im', $appImSetting);
