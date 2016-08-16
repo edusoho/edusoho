@@ -63,6 +63,8 @@
 			title="{{'重新录制'|trans}}"
 			{% endif %}
 			 data-url="{{ createUrl }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
+
+			<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ path('live_course_lesson_replay_upload', {courseId:course.id,lessonId:lesson.id}) }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
 
 	</div>

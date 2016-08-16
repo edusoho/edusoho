@@ -444,6 +444,18 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    public function uploadModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
+            'course'     => $course,
+            'lesson'     => $lesson,
+            'targetType' => 'courselesson'
+        ));
+    }
+
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
