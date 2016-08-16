@@ -300,10 +300,6 @@ live_course_lesson_replay_create:
     pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
 
-live_course_lesson_replay_upload:
-    pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/upload
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:uploadModal }
-
 live_course_lesson_replay_entry:
     pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
