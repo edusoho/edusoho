@@ -237,6 +237,7 @@ class CourseLessonController extends BaseController
         $json['testMode']               = $lesson['testMode'];
         $json['testStartTime']          = $lesson['testStartTime'];
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
+        $json['replayStatus']           = $lesson['replayStatus'];
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
@@ -259,27 +260,7 @@ class CourseLessonController extends BaseController
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
-            $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
-            $visableReplays = array();
-
-            foreach ($replaysLesson as $key => $value) {
-                if ($value['hidden'] == 0) {
-                    $visableReplays[] = $value;
-                }
-            }
-
-            $json['replays'] = $visableReplays;
-
-            if (!empty($json['replays'])) {
-                foreach ($json['replays'] as $key => $value) {
-                    $url = $this->generateUrl('live_course_lesson_replay_entry', array(
-                        'courseId'             => $lesson['courseId'],
-                        'lessonId'             => $lesson['id'],
-                        'courseLessonReplayId' => $value['id']
-                    ), true);
-                    $json['replays'][$key]["url"] = $url;
-                }
-            }
+            $json['replays'] = $this->getLiveReplays($lesson);
         }
 
         if ($json['mediaSource'] == 'self') {
@@ -723,6 +704,25 @@ class CourseLessonController extends BaseController
             'course' => $course,
             'media'  => $media
         ));
+    }
+
+    protected function getLiveReplays($lesson)
+    {
+        $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+        $visableReplays = array();
+
+        foreach ($replaysLesson as $key => $value) {
+            if ($value['hidden'] == 0) {
+                $value['url'] = $this->generateUrl('live_course_lesson_replay_entry', array(
+                    'courseId'             => $lesson['courseId'],
+                    'lessonId'             => $lesson['id'],
+                    'courseLessonReplayId' => $value['id']
+                ), true);
+                $visableReplays[] = $value;
+            }
+        }
+
+        return $visableReplays;
     }
 
     private function checkTestPaper($lessonId, $testId, $status)

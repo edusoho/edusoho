@@ -29,10 +29,10 @@
 		  <span class="text-warning">({{'直播未结束'|trans}})</span>
 		{% endif %}
 
-		{% if lesson.status == 'published' and lesson.isEnd and (lesson.type == 'live' or lesson.type == 'liveOpen') and lesson.replayStatus == 'ungenerated' %}
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.type in ['live','liveOpen'] %}
 			{% if lesson.replayStatus == 'ungenerated' %}
 				<span class="text-warning">({{'未录制回放'|trans}})</span>
-			{% elseif lesson.replayStatus == 'generated' %}
+			{% elseif lesson.replayStatus in ['generated', 'videoGenerated'] %}
 				<span class="text-warning">({{'已录制回放'|trans}})</span>
 			{% endif %}
 		{% endif %}
@@ -46,25 +46,32 @@
 		{% if lesson.type == 'live' %}
 			{% set editUrl = path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
 			{% set createUrl = path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
+			{% set uploadUrl = path('live_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 		{% elseif lesson.type == 'liveOpen' %}
 			{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
 			{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
+			{% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 		{% endif %}
 
-		{% if lesson.status =='published' and lesson.isEnd and lesson.replayStatus == 'generated' and lesson.type in ['live','liveOpen'] %}
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.replayStatus == 'generated' and lesson.type in ['live','liveOpen'] %}
 			<a href="#modal" class="btn btn-link " title="{{'编辑'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
 		{% endif %}
 
-		{% if lesson.status == 'published'  and lesson.type in ['live','liveOpen'] and lesson.isEnd  and  lesson.canRecord|default(false) %}
-			<button class="btn btn-link replay-lesson-btn"
-			{% if lesson.replayStatus == 'ungenerated' %}
-			title="{{'录制'|trans}}"
-			{% else %}
-			title="{{'重新录制'|trans}}"
+		{% if lesson.status == 'published' and lesson.type in ['live','liveOpen'] and lesson.isEnd  %}
+			{% if lesson.canRecord|default(false) and lesson.replayStatus != 'videoGenerated' %}
+				<button class="btn btn-link replay-lesson-btn"
+				{% if lesson.replayStatus == 'ungenerated' %}
+				title="{{'录制'|trans}}"
+				{% else %}
+				title="{{'重新录制'|trans}}"
+				{% endif %}
+				 data-url="{{ createUrl }}"><span class="glyphicon glyphicon-facetime-video"></span>
+				</button>
 			{% endif %}
-			 data-url="{{ createUrl }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
 
-			<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ path('live_course_lesson_replay_upload', {courseId:course.id,lessonId:lesson.id}) }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			{% if lesson.replayStatus not in ['generated','generating'] %}
+				<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			{% endif %}
 		{% endif %}
 
 	</div>

@@ -2665,8 +2665,35 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fields)
     {
-        $course = $this->tryManageCourse($courseId);
-        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+        }
+
+        if (!ArrayToolkit::requireds($fields, array('fileId'))) {
+            throw $this->createServiceException("缺少字段fileId,增加失败");
+        }
+
+        $file = $this->getUploadFileService()->getFile($fields['fileId']);
+        if (!$file) {
+            throw $this->createServiceException("文件不存在");
+        }
+
+        $lessonFields = array(
+            'mediaId'      => $file['id'],
+            'mediaName'    => $file['filename'],
+            'mediaSource'  => 'self',
+            'replayStatus' => 'videoGenerated'
+        );
+
+        $updatedLesson = LessonSerialize::unserialize(
+            $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($lessonFields))
+        );
+
+        $this->dispatchEvent("course.lesson.generate.video.replay", $lesson);
+
+        return $lesson;
     }
 
     public function entryReplay($lessonId, $courseLessonReplayId)

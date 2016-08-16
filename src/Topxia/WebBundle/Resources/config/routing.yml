@@ -2276,6 +2276,10 @@ live_open_course_lesson_replay_create:
     pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
 
+live_open_course_lesson_replay_upload:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:uploadModal }
+
 live_open_course_live_replay_entry:
     pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entryReplay }

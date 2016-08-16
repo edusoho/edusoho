@@ -24,11 +24,9 @@ define(function(require, exports, module) {
                 $("#material-list").append(html).show();
                 $form.find('.text-warning').hide();
                 $form.find('[name="fileId"]').val('');
-                $form.find('[name="link"]').val('');
-                $form.find('[name="description"]').val('');
                 materialChooser.open();
             }).fail(function(){
-                Notify.success('添加回放成功失败，请重试！');
+                Notify.success('添加回放失败，请重试！');
             });
             return false;
         });

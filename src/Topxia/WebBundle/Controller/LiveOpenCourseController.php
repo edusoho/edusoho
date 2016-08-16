@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveOpenCourseController extends BaseOpenCourseController
 {
@@ -24,7 +23,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
-        $this->createRefererLog( $request, $course);
+        $this->createRefererLog($request, $course);
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
@@ -197,6 +196,23 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $this->createJsonResponse(array(
             'url'   => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null
+        ));
+    }
+
+    public function uploadModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fields);
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
+            'course'     => $course,
+            'lesson'     => $lesson,
+            'targetType' => 'opencourselesson'
         ));
     }
 

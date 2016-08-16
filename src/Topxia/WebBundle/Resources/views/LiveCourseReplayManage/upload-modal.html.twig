@@ -2,13 +2,16 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}{{'添加视频'|trans}}{% endblock %}
+{% block title %}
+  {% if lesson.replayStatus == 'videoGenerated' %}{{ '编辑回放视频'|trans }}{% else %}{{'添加回放视频'|trans}}{% endif %}
+{% endblock %}
+
 {% block body %}
 
 {% if course.type == 'open' or course.type == 'liveOpen' %}
-  {% set uploadUrl = path('open_course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
+  {% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 {% else %}
-  {% set uploadUrl = path('course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
+  {% set uploadUrl = path('live_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 {% endif %}
 
 <form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">

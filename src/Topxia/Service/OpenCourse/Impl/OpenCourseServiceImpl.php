@@ -5,7 +5,6 @@ namespace Topxia\Service\OpenCourse\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\OpenCourse\OpenCourseService;
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
@@ -492,43 +491,35 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $result;
     }
 
-    public function generateLessonReplay($courseId, $lessonId)
+    public function generateLessonVideoReplay($courseId, $lessonId, $fields)
     {
-        $lesson = $this->getLesson($lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
 
-        $client     = new EdusohoLiveClient();
-        $replayList = $client->createReplayList($lesson["mediaId"], "录播回放", $lesson["liveProvider"]);
-
-        if (isset($replayList['error']) && !empty($replayList['error'])) {
-            return $replayList;
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
         }
 
-        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, 'liveOpen');
-
-        if (isset($replayList['data']) && !empty($replayList['data'])) {
-            $replayList = json_decode($replayList["data"], true);
+        if (!ArrayToolkit::requireds($fields, array('fileId'))) {
+            throw $this->createServiceException("缺少字段fileId,增加失败");
         }
 
-        foreach ($replayList as $key => $replay) {
-            $fields                = array();
-            $fields["courseId"]    = $courseId;
-            $fields["lessonId"]    = $lessonId;
-            $fields["title"]       = $replay["subject"];
-            $fields["replayId"]    = $replay["id"];
-            $fields["userId"]      = $this->getCurrentUser()->id;
-            $fields["createdTime"] = time();
-            $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+        $file = $this->getUploadFileService()->getFile($fields['fileId']);
+        if (!$file) {
+            throw $this->createServiceException("文件不存在");
         }
 
-        $fields = array(
-            "replayStatus" => "generated"
+        $lessonFields = array(
+            'mediaId'      => $file['id'],
+            'mediaName'    => $file['filename'],
+            'mediaSource'  => 'self',
+            'replayStatus' => 'videoGenerated'
         );
 
-        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+        $updatedLesson = $this->getOpenCourseLessonDao()->updateLesson($lessonId, $lessonFields);
 
-        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+        $this->dispatchEvent("open.course.lesson.generate.video.replay", $updatedLesson);
 
-        return $replayList;
+        return $lesson;
     }
 
     public function getCourseLesson($courseId, $lessonId)

@@ -446,8 +446,13 @@ class LiveCourseController extends BaseController
 
     public function uploadModalAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fields);
+        }
 
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
             'course'     => $course,
