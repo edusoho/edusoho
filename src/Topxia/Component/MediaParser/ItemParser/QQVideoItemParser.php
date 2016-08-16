@@ -33,7 +33,7 @@ class QQVideoItemParser extends AbstractItemParser
             $vid = $matches[1];
         }
 
-        $matched = preg_match($this->patterns['p1'], $url);
+        $matched = $this->getUrlMatched($url);
 
         if ($matched) {
             $responseInfo = $response ? $response : array();
@@ -62,45 +62,39 @@ class QQVideoItemParser extends AbstractItemParser
                 }
             }
 
-            $item = array(
-                'type'     => 'video',
-                'source'   => 'qqvideo',
-                'uuid'     => 'qqvideo:'.$vid,
-                'name'     => $title,
-                'summary'  => $video ? $video['desc'] : '',
-                'duration' => $video ? $video['duration'] : '',
-                'page'     => $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url,
-                'pictures' => array(
-                    array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400")
-                ),
-                'files'    => array(
-                    array('type' => 'swf', 'url' => "http://static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
-                    array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4")
-                )
-            );
+            $summary  = $video ? $video['desc'] : '';
+            $duration = $video ? $video['duration'] : '';
+            $pageUrl  = $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url;
+
+            $item = $this->getItem($vid, $title, $summary, $duration, $pageUrl);
         } else {
             $title = $this->getVideoTitle($response);
             if (empty($title)) {
                 throw $this->createParseException("解析QQ视频ID失败！....");
             }
-
-            $item = array(
-                'type'     => 'video',
-                'source'   => 'qqvideo',
-                'uuid'     => 'qqvideo:'.$vid,
-                'name'     => $title,
-                'summary'  => '',
-                'duration' => '',
-                'page'     => $url,
-                'pictures' => array(
-                    array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400")
-                ),
-                'files'    => array(
-                    array('type' => 'swf', 'url' => "http://static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
-                    array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4")
-                )
-            );
         }
+
+        return $this->getItem($vid, $title, '', '', $url);
+    }
+
+    protected function getItem($vid, $title, $summary, $duration, $pageUrl)
+    {
+        $item = array(
+            'type'     => 'video',
+            'source'   => 'qqvideo',
+            'uuid'     => 'qqvideo:'.$vid,
+            'name'     => $title,
+            'summary'  => $summary,
+            'duration' => $duration,
+            'page'     => $pageUrl,
+            'pictures' => array(
+                array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400")
+            ),
+            'files'    => array(
+                array('type' => 'swf', 'url' => "http://static.video.qq.com/TPout.swf?vid={$vid}&auto=1"),
+                array('type' => 'mp4', 'url' => "http://video.store.qq.com/{$vid}.mp4")
+            )
+        );
 
         return $item;
     }
