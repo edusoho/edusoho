@@ -511,8 +511,7 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay', 'llcbpay', 'llquickpay');
-
+        $payNames = $this->get('topxia.twig.web_extension')->getDict('payment');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(
