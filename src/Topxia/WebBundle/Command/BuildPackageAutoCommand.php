@@ -320,7 +320,7 @@ class BuildPackageAutoCommand extends BaseCommand
         if ($askAssetsLibs) {
             $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
         }
-        $question = "请确认web/assets/libs下的改动文件，没有问题，请输入y (y/n)";
+        $question = "web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)";
         if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
