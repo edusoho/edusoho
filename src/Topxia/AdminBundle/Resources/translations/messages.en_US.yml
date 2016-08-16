@@ -53,7 +53,7 @@
 正在保存...: 'Saving ...'
 资讯属性: 'Article properties'
 设为<strong>置顶</strong>后，该资讯将会显示在列表的最前面。: 'When set as <strong>sticky</strong>, this article will be displayed on top of the list.'
-'设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': 'When set as sticky, the thumbnail will be displayed on the top of the page and the recommended image size is 754 * 424.': 
+'设为<strong>头条</strong>后，如果设置了缩略图，则该资讯的缩略图将显示在资讯首页的头条图片区，图片尺寸建议统一为：754*424。': 'When set as sticky, the thumbnail will be displayed on the top of the page and the recommended image size is 754 * 424.':
 设为<strong>推荐</strong>后，该资讯将会显示在页面右侧的推荐资讯中。: 'When set as recommended, the article will be displayed in the right panel of the page.'
 来源设置: Set Source
 来源名称: Source Name
@@ -162,7 +162,7 @@ HTML模式: HTML Mode
 空间费用: Storage Fee
 流量费用: Network Fee
 费用合计: Total
-月末：: 'At end of month: ' 
+月末：: 'At end of month: '
 月均：: 'Monthly average: '
 '免费额度：': 'Free for: '
 单价：: 'Unit price: '
@@ -998,213 +998,213 @@ QQ群号: QQ群号
 课程列表页默认排序: 课程列表页默认排序
 '课程详情页显示相关课程': '课程详情页显示相关课程'
 '根据课程的标签，显示相关课程': '根据课程的标签，显示相关课程'
-'免费课时允许未登录用户观看': '免费课时允许未登录用户观看'
-'如果允许此项设置,未登录用户（游客）可观看免费课时': '如果允许此项设置,未登录用户（游客）可观看免费课时'
-图文、文档课时防复制: 图文、文档课时防复制
-试卷防复制: 试卷防复制
-'课程中允许显示%user_name%人数': '课程中允许显示%user_name%人数'
-'设置章节名称': '设置章节名称'
-'开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。': '开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。'
-'课程章名称': '课程章名称'
-课程节名称: 课程节名称
-在线客户服务: 在线客户服务
-客服Mail: 客服Mail
-自定义默认头像: 自定义默认头像
-'你可以上传JPG、GIF或PNG格式的文件': '你可以上传JPG、GIF或PNG格式的文件'
-系统默认头像: 系统默认头像
-自定义默认课程图片: 自定义默认课程图片
-系统默认课程图片: 系统默认课程图片
-'资讯分享内容': '资讯分享内容'
-'为资讯标题': '为资讯标题'
-'为网校名称': '为网校名称'
-'课程分享内容': '课程分享内容'
-'小组分享内容': '小组分享内容'
-为小组名称: 为小组名称
-为话题名称: 为话题名称
-'班级分享内容': '班级分享内容'
-为班级名称: 为班级名称
-'侧边栏功能': '侧边栏功能'
-'一行一个IP，被加入黑名单的IP将被禁止访问！暂不支持网段的封锁!': '一行一个IP，被加入黑名单的IP将被禁止访问！暂不支持网段的封锁!'
-下一次执行时间范围: 下一次执行时间范围
-任务名称: 任务名称
-任务对象: 任务对象
-执行周期: 执行周期
-下一次执行时间: 下一次执行时间
-班级：: 班级：
-'无定时任务记录': '无定时任务记录'
-开启状态: 开启状态
-直播LOGO: 直播LOGO
-只针对直播新方案。: 只针对直播新方案。
-'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。': '请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。'
-同时在线人数上限: 同时在线人数上限
-'扩充在线人数，请联系客服：': '扩充在线人数，请联系客服：'
-'--所有操作--': '--所有操作--'
-系统操作日志: 系统操作日志
-程序运行日志: 程序运行日志
-显示最近的２０００条日志信息。: 显示最近的２０００条日志信息。
-'--所有模块--': '--所有模块--'
-日志等级: 日志等级
-时间/IP: 时间/IP
-查看数据: 查看数据
-隐藏数据: 隐藏数据
-'无日志记录': '无日志记录'
-用户登录限制: 用户登录限制
-'开启后同一账号将不能在不同IP或者不同地域下同时登录': '开启后同一账号将不能在不同IP或者不同地域下同时登录'
-用户登录保护: 用户登录保护
-'开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户': '开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户'
-'用户连续输入错误密码': '用户连续输入错误密码'
-次，将暂时封禁用户: 次，将暂时封禁用户
-'同一IP连续输入错误密码': '同一IP连续输入错误密码'
-次，将暂时封禁IP: 次，将暂时封禁IP
-经过: 经过
-分钟后，解锁用户/IP: 分钟后，解锁用户/IP
-申请: 申请
-'接入帮助:': '接入帮助:'
-'你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；': '你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；'
-需填写的回调地址为：: 需填写的回调地址为：
-'为你的ES系统网址。例如，气球鱼学院的回调地址填写为：': '为你的ES系统网址。例如，气球鱼学院的回调地址填写为：'
-网址一定要有www哦；: 网址一定要有www哦；
-'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。': 'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。'
-'如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。': '如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。'
-'接入帮助': '接入帮助'
-'登录时必须设置邮箱': '登录时必须设置邮箱'
-'在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过': '在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过'
-'最后一步,请在底部输入登录接口验证代码': '最后一步,请在底部输入登录接口验证代码'
-'登录接口验证代码': '登录接口验证代码'
-'验证代码': '验证代码'
-'在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。': '在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。'
-'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。': '当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。'
-邮件发送: 邮件发送
-需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件: 需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件
-服务器地址: 服务器地址
-'每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：': '每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：'
-SMTP端口号: SMTP端口号
-通常端口号为: 通常端口号为
-SMTP用户名: SMTP用户名
-'正确格式应为': '正确格式应为'
-'SMTP密码': 'SMTP密码'
-'smtp密码：即邮箱密码/客户端授权密码': 'smtp密码：即邮箱密码/客户端授权密码'
-发信人地址: 发信人地址
-发信人名称: 发信人名称
-'客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。': '客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。'
-轮播图1: 轮播图1
-'默认（无触发动作）': '默认（无触发动作）'
-跳转到连接地址: 跳转到连接地址
-'跳转到内部课程': '跳转到内部课程'
-请填写连接地址: 请填写连接地址
-'请填写内部课程Id': '请填写内部课程Id'
-轮播图2: 轮播图2
-轮播图3: 轮播图3
-轮播图4: 轮播图4
-轮播图5: 轮播图5
-'请上传png, gif, jpg格式的图片文件': '请上传png, gif, jpg格式的图片文件'
-移动端未开启，: 移动端未开启，
-'系统-课程设置-移动端设置 ': '系统-课程设置-移动端设置 '
-是否开启客户端: 是否开启客户端
-'开启后，网站首页顶部导航会出现客户端入口': '开启后，网站首页顶部导航会出现客户端入口'
-常规设置点这里: 常规设置点这里
-'网校简介': '网校简介'
-'此简介将显示在移动客户端的"关于网校': '此简介将显示在移动客户端的"关于网校'
-'网校LOGO': '网校LOGO'
-'请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。': '请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。'
-'将会在手机端banner下面显示网校的公告，建议用简练概括的语言描述，字数在20字以下。': '将会在手机端banner下面显示网校的公告，建议用简练概括的语言描述，字数在20字以下。'
-定制APP设置项: 定制APP设置项
-APP名称: APP名称
-APP简介: APP简介
-'APP图标': 'APP图标'
-'请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。': '请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。'
-APP封面: APP封面
-'请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。': '请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。'
-设置启动图: 设置启动图
-'最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。': '最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。'
-启动图1: 启动图1
-启动图2: 启动图2
-启动图3: 启动图3
-启动图4: 启动图4
-启动图5: 启动图5
-刷新缓存: 刷新缓存
-'刷新并重建缓存,让系统保持最优的状态。': '刷新并重建缓存,让系统保持最优的状态。'
-优化磁盘空间: 优化磁盘空间
-移除系统的临时数据，释放出更多磁盘空间。: 移除系统的临时数据，释放出更多磁盘空间。
-数据库备份和下载: 数据库备份和下载
-备份数据库，并下载备份文件: 备份数据库，并下载备份文件
-下载完成后请: 下载完成后请
-下载数据库备份: 下载数据库备份
-'谨慎操作区域': '谨慎操作区域'
-'清空系统备份数据': '清空系统备份数据'
-'慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。': '慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。'
-'清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间': '清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间'
-'优化课程视频和相关资料文件': '优化课程视频和相关资料文件'
-'注意：该功能慎用。请仔细阅读下列说明：': '注意：该功能慎用。请仔细阅读下列说明：'
-优化课程文件: 优化课程文件
-支付功能: 支付功能
-'支付关闭时的提示信息': '支付关闭时的提示信息'
-接口状态: 接口状态
-接口类型: 接口类型
-PID和Key可在申请支付宝接口后获取，: PID和Key可在申请支付宝接口后获取，
-如何申请？: 如何申请？
-'立即到账接口"如需在移动客户端使用，请开通': '立即到账接口"如需在移动客户端使用，请开通'
-手机网站支付: 手机网站支付
-'标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。': '标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。'
-支付宝账户: 支付宝账户
+'免费课时允许未登录用户观看': 'Set free course be accessible by user without logging in'
+'如果允许此项设置,未登录用户（游客）可观看免费课时': 'When this is activated ,free courses will be accessible by users without logging in or guest users'
+图文、文档课时防复制: Copyright protection for images,documents and lectures
+试卷防复制:  Copyright protection for testpaper
+'课程中允许显示%user_name%人数': '%user_name% number allowed to be seen in the courses'
+'设置章节名称': 'Set chapter name '
+'开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。': 'After being activated,System will automatically create chapter name when adding chapters or lesson setions in the lesson management according to the settings below '
+'课程章名称': 'Chapter name'
+课程节名称: Section name
+在线客户服务: Online customer service
+客服Mail: Mail of customer service
+自定义默认头像: Customize default avatar
+'你可以上传JPG、GIF或PNG格式的文件': 'You can upload documents in the format of JPG,GIF or PNG'
+系统默认头像: Default avatar
+自定义默认课程图片: Customize default course cover image
+系统默认课程图片: Default course cover image
+'资讯分享内容': 'Content of news sharing'
+'为资讯标题': 'as new Headline'
+'为网校名称': 'as Online school name '
+'课程分享内容': 'Content of course sharing'
+'小组分享内容': 'Content of group sharing'
+为小组名称: as group name
+为话题名称: as Topic title
+'班级分享内容': 'Content of class sharing'
+为班级名称: as class name
+'侧边栏功能': 'Sidebar functions'
+'一行一个IP，被加入黑名单的IP将被禁止访问！暂不支持网段的封锁!': 'ONE IP address for each line ,the IPs on the blacklist will be blocked !Blocking on the whole network section is not supported for now!'
+下一次执行时间范围: Time scope for the next excution
+任务名称: Task name
+任务对象: Task objective
+执行周期: Execution cycle
+下一次执行时间: Time for the next excution
+班级：: Class :
+'无定时任务记录': 'No cycled task records'
+开启状态: Activated
+直播LOGO: LOGO for Live course
+只针对直播新方案。: Just for new live course solution
+'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。': 'Please upload images in the format of PNG,GIF,JPG.Image size for the LOGO should be smaller than 100*23'
+同时在线人数上限: Capacity of cocurrent online users
+'扩充在线人数，请联系客服：': 'For exapanding the user online capacity,please contact the customer service'
+'--所有操作--': '--All Operations--'
+系统操作日志: System operation log
+程序运行日志: Program running log
+显示最近的２０００条日志信息。: Show the recent ２０００ log entries .
+'--所有模块--': '--ALL Modules--'
+日志等级: Log level
+时间/IP: Time/IP
+查看数据: View data
+隐藏数据: Hide data
+'无日志记录': 'No log records'
+用户登录限制:
+'开启后同一账号将不能在不同IP或者不同地域下同时登录': 'When activated ,the same account will not be allowed to log in on more than 2 IP addresses or places'
+用户登录保护: User loging protection
+'开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户': 'When activated,user will be banned if enter wrong password too many times,however,admin can still ban the user manually '
+'用户连续输入错误密码': 'user enter wrong password too many times'
+次，将暂时封禁用户: times,user wil be banned temporarily
+'同一IP连续输入错误密码': 'Entering wrong password too many times for the same IP'
+次，将暂时封禁IP: times, the IP wil be blocked temporarily
+经过: after
+分钟后，解锁用户/IP: munites after,unblock the user/IP
+申请: Apply
+'接入帮助:': 'Help:'
+'你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；': 'To enable third party logging in for the website ,your QQ open platform account authentication degrees (personal information completion) should be 75% above'
+需填写的回调地址为：: Required redirect URL：
+'为你的ES系统网址。例如，气球鱼学院的回调地址填写为：': 'as your website address .For instance ,redirect URL of Qiqiuyu online school should be like this: '
+网址一定要有www哦；: Website addresse should contains WWW
+'QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。': 'In the personal information section on the QQ open platform ,find the ID and Key, then input them in the edusoho admin panel to activate QQ logging in '
+'如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。': 'If verifcation of the QQ integration failed or suggesting "logging button's position is not correct" ,please check [System]=>[User Settings]=>[Logging] in the ES admin panel,make sure third party logging in or QQ logging in function is activated'
+'接入帮助': 'For help'
+'登录时必须设置邮箱': 'Email required when logging in'
+'在%admin_name%官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过': 'Please do not activate this option before integration application by %admin_name% is officially accepted,or the verifcation will fail '
+'最后一步,请在底部输入登录接口验证代码': 'Last step ,Please enter the verifcation code of loging interface on the section below '
+'登录接口验证代码': 'verifcation code of loging interface'
+'验证代码': 'verifcation code'
+'在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。': 'Your website domain name verifcation will be required when applying third party loging API,please paste the relevant code here ,save and subbmit'
+'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。': 'You are running on the trail version,Cannot set the Email service.If you want to buy the verified version ,please contact our sales agent'
+邮件发送: Send by Email
+需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件: Logging email required,and SMTP service in the mail settings should be activated in order to send verifcation email
+服务器地址: Server address
+'每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：': 'Every email addresss are not the same ,please find the email server address according to the mail type you use,for instance:'
+SMTP端口号: SMTP Port number
+通常端口号为: Usual port number
+SMTP用户名: SMTP user name
+'正确格式应为': 'Correct format should be like this :'
+'SMTP密码': 'SMTP password'
+'smtp密码：即邮箱密码/客户端授权密码': 'smtp password：should be email password/client verifcation password'
+发信人地址: Sender's Email address
+发信人名称: Sender's name
+'客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。': 'Slider images for client side Which should be no more than 5 images and the recommended size is 750*300 in JPG or PNG format'
+轮播图1: slider image1
+'默认（无触发动作）': 'Default(No trigger operations)'
+跳转到连接地址: Redirecting to connection address
+'跳转到内部课程': 'Redirecting to internal courses '
+请填写连接地址: Please enter the connection address
+'请填写内部课程Id': 'Please enter Id for internal course'
+轮播图2: slider image2
+轮播图3: slider image3
+轮播图4: slider image4
+轮播图5: slider image5
+'请上传png, gif, jpg格式的图片文件': 'Please upload images in the format of PNG,GIF,JPG'
+移动端未开启，: Not activated on the mobile APPs
+'系统-课程设置-移动端设置 ': 'System-Course settings-Mobile APP settings '
+是否开启客户端: Activation for the client side
+'开启后，网站首页顶部导航会出现客户端入口': 'The APP links will show on the website navigation bar after this is activated'
+常规设置点这里: Click here for General settings
+'网校简介': 'School Introduction'
+'此简介将显示在移动客户端的"关于网校': 'This Introduction will show on the "About Us" section on the mobile APPs'
+'网校LOGO': 'Scholl LOGO'
+'请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。': 'Please upload images in the format of PNG,GIF,JPG.Recommended image size of the LOGO should be smaller than 50px'
+'将会在手机端banner下面显示网校的公告，建议用简练概括的语言描述，字数在20字以下。': 'The Introduction will show on the school announcement section right below the banner on the mobile APPs.Recommended Introduction should be consise and be less than 20 characters'
+定制APP设置项: Customize APP setting items
+APP名称: APP Name
+APP简介: APP Introduction
+'APP图标': 'APP LOGO'
+'请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。': 'Please upload images in the format of PNG,GIF,JPG.Recommended image size is 120*120'
+APP封面: APP Cover
+'请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。': 'Please upload images in the format of PNG,GIF,JPG.Recommended image size is  225*400。'
+设置启动图: Set Launch images
+'最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。': 'The Launch image should not be more than 5 images(size :640*960) ,The Launch iamges will show when user log in for the first time'
+启动图1:  Launch image1
+启动图2: Launch image2
+启动图3: Launch image3
+启动图4: Launch image4
+启动图5: Launch image5
+刷新缓存: Refresh cache
+'刷新并重建缓存,让系统保持最优的状态。': 'Refresh and rebuild the cache,which makes system running on the most optimized status'
+优化磁盘空间: Disk Optimization
+移除系统的临时数据，释放出更多磁盘空间。: Remove system cache to release the disk space
+数据库备份和下载: Database backup and downloads
+备份数据库，并下载备份文件: Backup database and download the backup
+下载完成后请: when downloads completed please
+下载数据库备份: Download the database backup
+'谨慎操作区域': 'Important section :Operate with attention'
+'清空系统备份数据': 'Clean the system backup data'
+'慎重：请确保当前系统已经升级成功。当系统升级过程中发生意外，备份的系统文件和数据库可用于恢复。': 'Attention: please make sure the current system updated successfully.The backup will be used to restore the system if any exception happens during the update'
+'清空系统升级过程中备份的系统文件和备数据库。通过清空系统备份数据，可以让系统释放出更多的磁盘空间': 'Clean the backup for the database and system during the update process which can release more disk space '
+'优化课程视频和相关资料文件': 'Optimization of course videos and relevant materials'
+'注意：该功能慎用。请仔细阅读下列说明：': 'Attention:this feature should be use carefully.Please read the mannual below '
+优化课程文件: Course materials optimization
+支付功能: Payment
+'支付关闭时的提示信息': 'Notifications when payment is closed'
+接口状态: Port statu
+接口类型: Port Type
+PID和Key可在申请支付宝接口后获取，: PID and Key can be acquired after application for Alipay API
+如何申请？: How to apply？
+'立即到账接口"如需在移动客户端使用，请开通': 'If "instant payment API" is needed on the mobile APPs ,please activate first'
+手机网站支付: Mobile website payment
+'标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。': 'Contract signing of "Standard dual interface " and " secured transactions Interface " were terminated separately on 2014-12-29、2016-1-21,Contracts already in effect still be valid until they are terminated, users using these two interfaces please use instant payment before the contracts expired'
+支付宝账户: Alipay account
 如需开启移动客户端支付，需填写支付宝账户。: 如需开启移动客户端支付，需填写支付宝账户。
-'启用支付宝交易关闭接口': '启用支付宝交易关闭接口'
-'该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。': '该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。'
-简单申请介绍: 简单申请介绍
-'PID即为公众号APPID。': 'PID即为公众号APPID。'
-商户号: 商户号
-商户号即为微信支付商户号。: 商户号即为微信支付商户号。
-商户平台Key: 商户平台Key
-下载接口申请说明文档: 下载接口申请说明文档
-'因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方': '因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方'
-'同一IP，5分钟内最多发帖次数（包含回复数）': '同一IP，5分钟内最多发帖次数（包含回复数）'
-发帖次数: 发帖次数
-'发帖次数必须大于或者等于0的整数，0表示不限制': '发帖次数必须大于或者等于0的整数，0表示不限制'
-'同一用户，5分钟内最多发帖次数（包含回复数）': '同一用户，5分钟内最多发帖次数（包含回复数）'
-'正在优化课程文件，请不要关闭当前窗口...': '正在优化课程文件，请不要关闭当前窗口...'
-'正在优化, 请稍等...': '正在优化, 请稍等...'
-完成优化: 完成优化
-交卷后答案以及解析的显示: 交卷后答案以及解析的显示
-退款期限: 退款期限
+'启用支付宝交易关闭接口': 'Activate Alipay transaction close interface'
+'该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。': 'This option is used for closing Alipay transaction order when cancelled.If this option is needed ,please apply "transaction closing interface" from Alipay customer services,and it will be available after the application is accepted'
+简单申请介绍: Introduction for application
+'PID即为公众号APPID。': 'PID is referenced as APPID。'
+商户号: Merchant ID
+商户号即为微信支付商户号。: Merchant ID is referenced as the same vender ID of Wechat pay
+商户平台Key: Merchant platform Key
+下载接口申请说明文档: Documentation for the download interface application
+'因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方': 'Application for online payment is now out of service for some reasons relevant to Alipay ,sorry for inconvenience.Please contact the EduSoho if in doubt'
+'同一IP，5分钟内最多发帖次数（包含回复数）': 'One IP address can only post up to maximum 5 times(replys included) '
+发帖次数: Post times
+'发帖次数必须大于或者等于0的整数，0表示不限制': 'Post time should not be smaller than Zero which means no limitation'
+'同一用户，5分钟内最多发帖次数（包含回复数）': 'Same user can only post up to maximum 5 times(replys included)'
+'正在优化课程文件，请不要关闭当前窗口...': 'Optimizing the course materials,please do not close the current window'
+'正在优化, 请稍等...': 'Optimizing ,please wait'
+完成优化: Optimization completed
+交卷后答案以及解析的显示: Display of answers and explnation after testpaper is subbmited
+退款期限: Refund deadline
 '用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。': '用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。'
 '系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。': '系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。'
-退款申请通知: 退款申请通知
+退款申请通知: Notification of Refund application
 '退款申请提交时，发送给用户的站内通知。': '退款申请提交时，发送给用户的站内通知。'
 '退款审核通过通知': '退款审核通过通知'
 '管理员审核退款通过时，发送给用户的站内通知。': '管理员审核退款通过时，发送给用户的站内通知。'
 '退款审核未通过通知': '退款审核未通过通知'
 '管理员审核退款未通过时，发送给用户的站内通知。': '管理员审核退款未通过时，发送给用户的站内通知。'
 需退款的课程或班级: 需退款的课程或班级
-不可写: 不可写
-可写: 可写
-文件目录权限正常: 文件目录权限正常
-环境检测: 环境检测
-'推荐配置': '推荐配置'
-当前状态: 当前状态
-最低要求: 最低要求
-操作系统: 操作系统
-PHP版本: PHP版本
-更多信息: 更多信息
-PHP运行用户: PHP运行用户
-'安全模式': '安全模式'
-'必须': '必须'
-'已安装': '已安装'
-'尚未安装MySQL_PDO': '尚未安装MySQL_PDO'
-'文件上传大小': '文件上传大小'
-'该值决定可以上传视频的最大大小': '该值决定可以上传视频的最大大小'
-大于200M: 大于200M
-表单数据大小: 表单数据大小
+不可写: Non-writable
+可写: Writable
+文件目录权限正常:  Document directory permission is normal
+环境检测: Environment check
+'推荐配置': 'Recommended configiration'
+当前状态: Current statu
+最低要求: Mininal configiration
+操作系统: Operating system
+PHP版本: PHP version
+更多信息: More
+PHP运行用户: PHP Operating user
+'安全模式': 'Safe mode '
+'必须': 'Required'
+'已安装': 'Installed'
+'尚未安装MySQL_PDO': 'MySQL_PDO not Installed'
+'文件上传大小': 'Upload file size '
+'该值决定可以上传视频的最大大小': 'This value decides the maximum uploading video size'
+大于200M: Over 200M
+表单数据大小: Table data size
 '该值不能小于文件上传大小的值': '该值不能小于文件上传大小的值'
-PHP脚本最大执行时间: PHP脚本最大执行时间
+PHP脚本最大执行时间: PHP script maximum excution time
 '该值决定上传视频时，最长可使用的时间': '该值决定上传视频时，最长可使用的时间'
-大于300秒: 大于300秒
-30秒: 30秒
-PHP扩展：: PHP扩展：
+大于300秒: over 300secs
+30秒: 30secs
+PHP扩展：: PHP extention：
 该扩展用于处理中文字符: 该扩展用于处理中文字符
-'尚未安装': '尚未安装'
+'尚未安装': 'Not Installed'
 该扩展用于远程读取文件: 该扩展用于远程读取文件
 该扩展用于处理图片: 该扩展用于处理图片
-'通信情况': '通信情况'
+'通信情况': 'Communication status'
 '与Discuz Ucenter的连接': '与Discuz Ucenter的连接'
 '每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看': '每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看'
 系统文件、目录权限检查: 系统文件、目录权限检查
@@ -1212,11 +1212,11 @@ PHP扩展：: PHP扩展：
 正常扫描文件......: 正常扫描文件......
 '系统空间占用': '系统空间占用'
 '总共': '总共'
-网站名称: 网站名称
+网站名称: Website name
 '网站副标题': '网站副标题'
-网站域名: 网站域名
+网站域名: Website domain
 '以"http://"开头': '以"http://"开头'
-网站LOGO: 网站LOGO
+网站LOGO:  Website LOGO
 '请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。': '请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。'
 '浏览器图标': '浏览器图标'
 '请上传ico格式的图标文件, 建议大小16*16或者32*32。': '请上传ico格式的图标文件, 建议大小16*16或者32*32。'
