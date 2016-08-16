@@ -1145,9 +1145,9 @@ PID和Key可在申请支付宝接口后获取，: PID and Key can be acquired af
 如何申请？: How to apply？
 '立即到账接口"如需在移动客户端使用，请开通': 'If "instant payment API" is needed on the mobile APPs ,please activate first'
 手机网站支付: Mobile website payment
-'标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。': 'Contract signing of "Standard dual interface " and " secured transactions Interface " were terminated separately on 2014-12-29、2016-1-21,Contracts already in effect still be valid until they are terminated, users using these two interfaces please use instant payment before the contracts expired'
+'标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。': 'Contract signing of "Standard dual interface " and " secured transactions Interface " were terminated separately on 2014-12-29、2016-1-21,Contracts already in effect still be valid until they are terminated, users using these two interfaces please use instant payment before the contracts expire'
 支付宝账户: Alipay account
-如需开启移动客户端支付，需填写支付宝账户。: 如需开启移动客户端支付，需填写支付宝账户。
+如需开启移动客户端支付，需填写支付宝账户。: Alipay account required to activate mobile payment.
 '启用支付宝交易关闭接口': 'Activate Alipay transaction close interface'
 '该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。': 'This option is used for closing Alipay transaction order when cancelled.If this option is needed ,please apply "transaction closing interface" from Alipay customer services,and it will be available after the application is accepted'
 简单申请介绍: Introduction for application
@@ -1166,15 +1166,15 @@ PID和Key可在申请支付宝接口后获取，: PID and Key can be acquired af
 完成优化: Optimization completed
 交卷后答案以及解析的显示: Display of answers and explnation after testpaper is subbmited
 退款期限: Refund deadline
-'用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。': '用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。'
-'系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。': '系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。'
+'用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。': 'User can require refund within the refunding deadline.If the refunding deadline is 0 ,that means refund is not available'
+'系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。': 'System dosen't support automatic refund,please contact the student to acquire relevant accounts and process the refund mannualy'
 退款申请通知: Notification of Refund application
-'退款申请提交时，发送给用户的站内通知。': '退款申请提交时，发送给用户的站内通知。'
-'退款审核通过通知': '退款审核通过通知'
-'管理员审核退款通过时，发送给用户的站内通知。': '管理员审核退款通过时，发送给用户的站内通知。'
-'退款审核未通过通知': '退款审核未通过通知'
-'管理员审核退款未通过时，发送给用户的站内通知。': '管理员审核退款未通过时，发送给用户的站内通知。'
-需退款的课程或班级: 需退款的课程或班级
+'退款申请提交时，发送给用户的站内通知。': 'In site notification when applying the refund'
+'退款审核通过通知': 'Notification for refund application review'
+'管理员审核退款通过时，发送给用户的站内通知。': 'In site notification when refund application is being reviewed by the administrator '
+'退款审核未通过通知': 'Notification when refund application is not accepted'
+'管理员审核退款未通过时，发送给用户的站内通知。': 'In site notification when refund application is not accepted by the administrator'
+需退款的课程或班级: Courses and classes needs refund
 不可写: Non-writable
 可写: Writable
 文件目录权限正常:  Document directory permission is normal
@@ -1194,13 +1194,13 @@ PHP运行用户: PHP Operating user
 '该值决定可以上传视频的最大大小': 'This value decides the maximum uploading video size'
 大于200M: Over 200M
 表单数据大小: Table data size
-'该值不能小于文件上传大小的值': '该值不能小于文件上传大小的值'
+'该值不能小于文件上传大小的值': 'The value should be greater than the uploading file size '
 PHP脚本最大执行时间: PHP script maximum excution time
-'该值决定上传视频时，最长可使用的时间': '该值决定上传视频时，最长可使用的时间'
+'该值决定上传视频时，最长可使用的时间': 'This value decides the maximum valid usage time for the  uploading video'
 大于300秒: over 300secs
 30秒: 30secs
 PHP扩展：: PHP extention：
-该扩展用于处理中文字符: 该扩展用于处理中文字符
+该扩展用于处理中文字符: 
 '尚未安装': 'Not Installed'
 该扩展用于远程读取文件: 该扩展用于远程读取文件
 该扩展用于处理图片: 该扩展用于处理图片
