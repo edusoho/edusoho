@@ -146,17 +146,36 @@ admin_course_add:
     router_name: course_create
     group: 2
     blank: 1
-admin_live_course_add:
-    name: 创建直播课程
-    parent: admin_course_manage
-    router_name: course_create
-    router_params: {'flag': 'isLive'}
-    group: 2
-    blank: 1
 admin_live_course:
     name: 直播管理
     parent: admin_course
     router_params: {'status': 'coming'}
+
+admin_open_course_manage:
+    name: 公开课管理
+    parent: admin_course
+    router_name: admin_open_course
+admin_open_course:
+    name: 公开课管理
+    parent: admin_open_course_manage
+    router_name: admin_open_course
+
+admin_open_course_add:
+    name: 创建课程
+    parent: admin_open_course
+    router_name: course_create
+    group: 2
+    blank: 1
+
+admin_open_course_recommend:
+    name: 公开课推荐
+    parent: admin_open_course_manage
+    router_name: admin_open_course_recommend_list
+
+admin_opencourse_analysis:
+    name: 公开课统计
+    parent: admin_open_course_manage
+
 admin_course_thread:
     name: 话题管理
     parent: admin_course

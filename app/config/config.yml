@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.17.20
+        assets_version: 7.0.2
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -121,7 +121,7 @@ services:
         class: Topxia\Service\Common\Redis\RedisFactory
         factory_class: Topxia\Service\Common\Redis\RedisFactory
         factory_method: instance
-        arguments: 
+        arguments:
             - "@service_container"
 
     session.handler.redis:
@@ -132,7 +132,7 @@ services:
         class: SessionHandlerInterface
         factory_class: Topxia\Service\Common\SessionHandlerFactory
         factory_method: getSessionHandler
-        arguments: 
+        arguments:
             - "@service_container"
 
     kernel.listener.ajax_exception_listener:
@@ -200,6 +200,12 @@ services:
 
     topxia.twig.theme_extension:
         class: Topxia\WebBundle\Twig\Extension\ThemeExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    topxia.twig.order_extension:
+        class: Topxia\WebBundle\Twig\Extension\OrderExtension
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }

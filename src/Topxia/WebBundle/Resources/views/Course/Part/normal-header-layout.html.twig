@@ -13,7 +13,7 @@
       {% endif %}
       
       {% if member|default(false) %}
-        {% if not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' %}
+        {% if not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' and not member.locked %}
           {% if member.orderId  %}
             <a href="#modal" class="btn btn-default setting hidden-xs hidden-sm" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
               <i class="es-icon es-icon-exit"></i>

@@ -40,7 +40,7 @@ seajs.config({
         'mask': 'arale/overlay/1.1.4/mask',
         'sticky': 'arale/sticky/1.3.1/sticky',
         'cookie': 'arale/cookie/1.0.2/cookie',
-        'messenger': 'arale/messenger/2.0.0/messenger',
+        'messenger': 'arale/messenger/2.0.1/messenger',
         "templatable": "arale/templatable/0.9.1/templatable",
         'placeholder': 'arale/placeholder/1.1.0/placeholder',
         'json': 'gallery/json/1.0.3/json',
@@ -72,12 +72,15 @@ seajs.config({
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
-        'echarts': 'echarts/3.1.2/echarts.min.js',
+        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/video-player/v1/sdk.js',
+        'echarts': 'gallery2/echarts/3.1.10/echarts',
+        'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
-        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css'
+        'jquery.treegrid.css': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid.css',
+        'jweixin':'edusoho/wxrs/1.0.0/jweixin.js'
     },
 
     // 预加载项
@@ -113,6 +116,11 @@ seajs.on('fetch', function(data) {
         return ;
     }
 
+    if (data.uri.indexOf('js-sdk/video-player') > 0) {
+        data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
+        return ;
+    }
+    
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 
 });

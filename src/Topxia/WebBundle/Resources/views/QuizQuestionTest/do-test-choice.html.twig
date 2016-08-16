@@ -60,8 +60,9 @@
 					</label>
 				{% endfor %}
 		  </div>
+
 		  <div class="testpaper-question-actions pull-right">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
 

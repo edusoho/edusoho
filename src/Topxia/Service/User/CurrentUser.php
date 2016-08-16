@@ -9,6 +9,10 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 {
     protected $data;
 
+    protected $rootOrgId = 1;
+
+    protected $rootOrgCode = '1.';
+
     public function __set($name, $value)
     {
         if (array_key_exists($name, $this->data)) {
@@ -23,7 +27,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
-
         throw new \RuntimeException("{$name} is not exist in CurrentUser.");
     }
 
@@ -166,14 +169,27 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return isset($this->selectOrg) ? $this->selectOrg : $this->org;
     }
 
-    public function getSelectOrgCode()
+    public function getOrg()
     {
-        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
+        return empty($this->orgId) ? $this->org['orgId'] : $this->orgId;
     }
 
-    public function getCurrentOrgCode()
+    public function getOrgCode()
     {
-        return $this->orgCode;
+        $org = $this->getOrg();
+        return $org['orgCode'];
+    }
+
+    public function getOrgId()
+    {
+        $org = $this->getOrg();
+        return $org['id'];
+    }
+
+    public function getSelectOrgCode()
+    {
+        $selectOrg = $this->getSelectOrg();
+        return $selectOrg['orgCode'];
     }
 
     public function getSelectOrgId()
@@ -184,6 +200,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function fromArray(array $user)
     {
+        if (empty($user['org'])) {
+            $user['org']     = array('id' => $this->rootOrgId, 'orgCode' => $this->rootOrgCode);
+            $user['orgId']   = $this->rootOrgId;
+            $user['orgCode'] = $this->rootOrgCode;
+        }
         $this->data = $user;
         return $this;
     }

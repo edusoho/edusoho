@@ -1,12 +1,12 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-{% set target = 'normal_index' %}
+{% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
   {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
   <td>{{ course.id }}</td>
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     
-    {% if course.type == 'live' %}
+    {% if course.type == 'live' or course.type == 'liveOpen' %}
       <span class="label label-success live-label mls">直播</span>
     {% endif %}
 
@@ -25,30 +25,31 @@
   </td>
   <td>{{ course.originPrice }}</td>
   {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
-  <td>
-    {% if  course.serializeMode =="none" %}
-    <span class="text-info">非连载课程</span>
-    {% elseif course.serializeMode =="serialize" %}
-    <span class="text-info">连载中</span>
-    {% elseif course.serializeMode =="finished" %}
-    <span class="text-info">已完结</span>
+  {% if filter != 'open' and filter != 'liveOpen' %}
+    <td>
+      {% if  course.serializeMode =="none" %}
+      <span class="text-info">非连载课程</span>
+      {% elseif course.serializeMode =="serialize" %}
+      <span class="text-info">连载中</span>
+      {% elseif course.serializeMode =="finished" %}
+      <span class="text-info">已完结</span>
+      {% endif %}
+    </td>
+    {% if filter == 'classroom' %}
+    <td>
+      {% set classroom = classrooms[course.id]|default(null) %}
+      {% if classroom %}
+        <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+      {% endif %}
+    </td>
+    {% else %}
+      <td>{{ course.studentNum }}</td>
     {% endif %}
-  </td>
-  {% if filter == 'classroom' %}
-  <td>
-    {% set classroom = classrooms[course.id]|default(null) %}
-    {% if classroom %}
-      <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+    {% if filter == 'vip' %}
+        {% set vip = vips[course.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
+   
     {% endif %}
-  </td>
-  {% else %}
-    <td>{{ course.studentNum }}</td>
-  {% endif %}
-  {% if filter == 'course' %}
-    <td><span class="money-text">{{ course.income }}</span></td>
-  {% elseif filter == 'vip' %}
-    {% set vip = vips[course.vipLevelId]|default(null) %}
-    <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
   {% endif %}
 
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
@@ -65,7 +66,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu pull-right">
-        {% if filter == 'normal' %}
+        {% if filter == 'normal' or filter ==  'open' %}
           {% if not course.recommended %}
           <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
           {% endif %}
@@ -75,7 +76,7 @@
           {% endif %}
 
           <li ><a class="copy-course" id="copy-course" href="javascript:"
-          {% if course.type == "live" %}
+          {% if course.type == "live" or course.type == "liveOpen" %}
           title="直播课程不支持复制"
           style="color:#909090"
           {% endif %}
@@ -94,7 +95,9 @@
         {% if course.status == 'published' %}
           <li class="divider"></li>
           <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
-          <li><a href="javascript:" title="发送发布课程({{course.title}})通知短信" data-url="{{path('sms_prepare',{targetType:'course',id:course.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
+          {% if course.type != 'open' and course.type != 'liveOpen' %}
+            <li><a href="javascript:" title="发送发布课程({{course.title}})通知短信" data-url="{{path('sms_prepare',{targetType:'course',id:course.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
+          {% endif %}
         {% endif %}
 
         {% if course.status != 'published' %}

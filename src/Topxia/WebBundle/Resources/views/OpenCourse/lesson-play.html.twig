@@ -1,0 +1,21 @@
+<div class="watermarkEmbedded" ></div>
+<div id="lesson-preview-iframe" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"></div>
+<div id="lesson-preview-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"
+  data-balloon-player="1"
+  {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+    data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+  {% endif %}
+  {% if setting('storage.video_fingerprint') and app.user %}
+    data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+  {% endif %}
+></div>
+<div id="lesson-preview-swf-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;height:100%;"></div>
+
+<input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}">
+
+<div class="mask media-unconvert" style="display:none;">
+  <div class="mask-content">
+    <h2>{{'视频文件正在转换中，稍后完成后即可查看'|trans}}</h2>
+  </div>
+</div>
+

@@ -84,18 +84,15 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteMaterials($course)
     {
-        $materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($course['id']);
+        $conditions    = array('courseId' => $course['id'], 'type' => 'course');
+        $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
         $count         = 0;
 
         if ($materialCount > 0) {
-            $materials = $this->getMaterialDao()->findMaterialsByCourseId($course['id'], 0, 1000);
+            $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, $materialCount);
 
             foreach ($materials as $material) {
-                if (!empty($material['fileId'])) {
-                    $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
-                }
-
-                $result = $this->getMaterialDao()->deleteMaterial($material['id']);
+                $result = $this->getMaterialService()->deleteMaterial($course['id'], $material['id']);
                 $count += $result;
             }
 
@@ -159,11 +156,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
                 }
 
-                $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-                if (!empty($jobs)) {
-                    $this->deleteJob($jobs);
-                }
+                $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
 
                 $result = $this->getLessonDao()->deleteLesson($lesson['id']);
                 $count += $result;
@@ -457,9 +450,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteJob($jobs)
     {
         foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
+            $this->getCrontabService()->deleteJob($job['id']);
         }
     }
 
@@ -493,6 +484,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createService('Crontab.CrontabService');
     }
 
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
+    }
+
     protected function getCourseChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
@@ -521,11 +517,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getLessonViewDao()
     {
         return $this->createDao('Course.LessonViewDao');
-    }
-
-    protected function getMaterialDao()
-    {
-        return $this->createDao('Course.CourseMaterialDao');
     }
 
     protected function getClassroomDao()

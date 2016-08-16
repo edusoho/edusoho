@@ -180,6 +180,13 @@
 
 </style>
 
+{% set courseType = courseType|default('course') %}
+{% if course.type in ['open','liveOpen'] %}
+  {% set courseMaterialUrl = 'open_course_manage_material_browser' %}
+{% else %}
+  {% set courseMaterialUrl = 'course_manage_material_browser' %}
+{% endif %}
+
 {% set lesson = lesson|default(null) %}
 <div id="media-choosers">
 
@@ -258,7 +265,7 @@
 
         <div class="tab-pane" id="video-chooser-course-file">
             <div id="file-browser-video" data-role="course-file-browser"
-            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'video'}) }}"
+            data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'video', courseType:courseType}) }}"
             data-empty="暂无视频文件，请先上传。">
             </div>
         </div>
@@ -352,7 +359,7 @@
 
         <div class="tab-pane" id="audio-chooser-course-file">
           <div id="file-browser-audio" data-role="course-file-browser"
-          data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+          data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'audio', courseType:courseType}) }}" data-empty="暂无音频文件，请先上传。"></div>
         </div>
 
       </div>
@@ -422,7 +429,7 @@
 
         <div class="tab-pane" id="ppt-chooser-course-file">
             <div id="file-browser-ppt" data-role="course-file-browser"
-            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+            data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'ppt', courseType:courseType}) }}" data-empty="暂无PPT文件，请先上传。"></div>
         </div>
 
       </div>
@@ -490,7 +497,7 @@
 
         <div class="tab-pane" id="document-chooser-course-file">
             <div id="file-browser-document" data-role="course-file-browser"
-            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
+            data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'document', courseType:courseType}) }}" data-empty="暂无文档，请先上传。"></div>
         </div>
 
       </div>
@@ -559,7 +566,7 @@
 
         <div class="tab-pane" id="flash-chooser-course-file">
             <div id="file-browser-flash" data-role="course-file-browser"
-            data-url="{{ path('course_manage_material_browser', {courseId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
+            data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'flash', courseType:courseType}) }}" data-empty="暂无Flash，请先上传。"></div>
         </div>
 
       </div>

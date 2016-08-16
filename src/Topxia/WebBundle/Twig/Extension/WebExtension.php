@@ -8,6 +8,7 @@ use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
 
@@ -112,8 +113,45 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
-            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
+            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
+            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig'))
         );
+    }
+
+    public function weixinConfig()
+    {
+        $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
+        if (!(bool) $weixinmob_enabled) {
+            return null;
+        }
+        $jsApiTicket = ServiceKernel::instance()->createService('User.TokenService')->getTokenByType('jsapi.ticket');
+
+        $key    = $this->getSetting('login_bind.weixinmob_key');
+        $secret = $this->getSetting('login_bind.weixinmob_secret');
+        if (empty($jsApiTicket)) {
+            $config      = array('key' => $key, 'secret' => $secret);
+            $weixinshare = new WeixinShare($config);
+            $token       = $weixinshare->getJsApiTicket();
+
+            $jsApiTicket = ServiceKernel::instance()->createService('User.TokenService')->makeToken(
+                'jsapi.ticket',
+                array('data' => $token, 'duration' => $token['expires_in'])
+            );
+        }
+
+        $config = array(
+            'appId'     => $key,
+            'timestamp' => time(),
+            'nonceStr'  => uniqid($prefix = "edusoho"),
+            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ')
+        );
+
+        $jsapi_ticket        = $jsApiTicket['data']['ticket'];
+        $url                 = $this->container->get('request')->getUri();
+        $string              = "jsapi_ticket=".$jsapi_ticket."&noncestr=".$config['nonceStr']."&timestamp=".$config['timestamp']."&url=".$url;
+        $config['string']    = $string;
+        $config['signature'] = sha1($string);
+        return json_encode($config);
     }
 
     public function renderNotification($notification)
@@ -135,7 +173,7 @@ class WebExtension extends \Twig_Extension
     public function isWithoutNetwork()
     {
         $network = $this->getSetting('developer.without_network', $default = false);
-        return boolval($network);
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
@@ -1167,16 +1205,8 @@ class WebExtension extends \Twig_Extension
             } else {
                 if ($order['amount'] == 0) {
                     $default = "无";
-                } elseif ($order['payment'] == 'wxpay') {
-                    $default = '微信支付';
-                } elseif ($order['payment'] == 'heepay') {
-                    $default = '网银支付';
-                } elseif ($order['payment'] == 'quickpay') {
-                    $default = '快捷支付';
-                } elseif ($order['payment'] == 'outside') {
-                    $default = '站外支付';
                 } else {
-                    $default = '支付宝';
+                    $default = $this->getDictText('payment', $order['payment']);
                 }
             }
         }

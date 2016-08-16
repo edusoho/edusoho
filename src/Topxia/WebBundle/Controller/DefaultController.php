@@ -10,13 +10,14 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-
         $user = $this->getCurrentUser();
+
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
+
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks'=>$friendlyLinks));
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
     }
 
     public function userlearningAction()
@@ -107,10 +108,10 @@ class DefaultController extends BaseController
     public function friendlyLinkAction()
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-            
+
         return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
-                'friendlyLinks' => $friendlyLinks
-            ));
+            'friendlyLinks' => $friendlyLinks
+        ));
     }
 
     public function customerServiceAction()
@@ -143,6 +144,7 @@ class DefaultController extends BaseController
         $conditions['parentId'] = 0;
         $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
         $orderBy                = $conditions['orderBy'];
+        $courseType             = isset($conditions['courseType']) ? $conditions['courseType'] : 'course';
 
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
@@ -150,14 +152,17 @@ class DefaultController extends BaseController
             $config = $config['confirmConfig']['blocks']['left'];
 
             foreach ($config as $template) {
-                if ($template['code'] == "course-grid-with-condition-index") {
+                if ($template['code'] == 'course-grid-with-condition-index' && $courseType == 'course') {
+                    $config = $template;
+                } elseif ($template['code'] == 'open-course' && $courseType == 'open-course') {
                     $config = $template;
                 }
             }
 
             $config['orderBy']    = $orderBy;
             $config['categoryId'] = $categoryId;
-            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+
+            return $this->render('TopxiaWebBundle:Default:'.$config['code'].'.html.twig', array(
                 'config' => $config
             ));
         } else {

@@ -1,0 +1,45 @@
+<link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
+
+{% do load_script('open-course/open-course-header') %}
+
+<div class="open-course-title open-course-mobile-title">
+  {{ course.title }}
+  <p><a href="{{ path('homepage') }}" target="_blank">{{ setting('site.name', 'EduSoho网校') }}</a></p>
+</div>
+<div class="open-course-mask  modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content open-course-content" data-dismiss="modal" aria-label="Close">
+        <img class="img-responsive" src="{{ asset('assets/v2/img/mobile/opencourse-share.png') }}">
+        <div class="metas">
+          <p>快分享给你的微信小伙伴吧！</p>
+          <a href="javascript:;" class="btn btn-lg open-course-btn">知道了</a>
+        </div>
+    </div>
+  </div>
+</div>
+{% if course.type == 'open' %}
+  <div class="open-course-views open-course-mobile-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
+    {% if lesson %}
+      {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
+    {% endif %}
+    <div class="mask" {% if lesson %}style="display:none"{% endif %} id="media-error-dialog">
+      <div class="modal-dialog" style="width:230px;margin:22% auto;">
+        <div class="modal-content">
+
+          <div class="modal-body clearfix">
+            <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+            <span class="media-error">{% if not lesson %}视频编辑中，请稍后再试{% else %}该课时资源文件被删除{% endif %}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% elseif course.type == 'liveOpen' %}
+  <div class="open-course-views open-course-wechat-views">
+    {% include 'TopxiaWebBundle:OpenCourse:live-open-course-header.html.twig' %}
+  </div>
+  
+{% endif %}
+
+
+

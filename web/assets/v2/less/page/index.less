@@ -268,12 +268,13 @@
       width: 100%;
     }
     h3 {
-      margin: 15px 0;
+      margin: 15px 5px;
       font-size: 16px;
       .text-overflow;
       text-align: center;
       @media(max-width:@screen-xs-max) {
-        margin: 10px 0;
+        margin: 10px 5px;
+        font-size: 14px;
       }
     }
     .metas {
@@ -282,6 +283,7 @@
       text-align: center;
       @media(max-width:@screen-xs-max) {
         margin: 10px 0;
+        font-size: 12px;
       }
       span {
         margin: 0 3px;
@@ -297,6 +299,12 @@
         }
       }
     }
+  }
+}
+
+.open-course-list-section {
+  .course-item .course-img .img-responsive {
+    padding: 0;
   }
 }
 

@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ course.title }}的转化详情 ({{ app.request.get('startTime') }} 到 {{ app.request.get('endTime') }}){% endblock %}
+
+{% block body %}
+
+	{{ render(controller('TopxiaAdminBundle:OpenCourseAnalysis:detailGraph',{request:app.request, id:course.id})) }}
+	
+	<div class="row form-group referer-log-list">
+		{% include 'TopxiaAdminBundle:OpenCourseAnalysis/Parts:referer-detail-list.html.twig' with {refererloglist:refererloglist, targetId:course.id} %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}
+
+{% block script %}
+    <script>app.load('open-course-analysis/detail')</script>
+{% endblock %}

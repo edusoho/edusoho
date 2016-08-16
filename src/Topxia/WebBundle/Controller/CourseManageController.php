@@ -31,7 +31,8 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
@@ -454,7 +455,7 @@ class CourseManageController extends BaseController
     public function publishAction(Request $request, $id)
     {
         $this->getCourseService()->publishCourse($id);
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('result' => true));
     }
 
     public function teachersMatchAction(Request $request)
@@ -570,6 +571,24 @@ class CourseManageController extends BaseController
             'course' => $course,
             'type'   => $type,
             'url'    => $url
+        ));
+    }
+
+    public function liveOpenTimeSetAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage:live-open-time-set.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function marketingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage:open-course-marketing.html.twig', array(
+            'course' => $course
         ));
     }
 

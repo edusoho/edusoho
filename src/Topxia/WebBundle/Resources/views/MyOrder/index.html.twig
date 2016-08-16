@@ -22,7 +22,7 @@
     <div class="form-group">
       <select class="form-control" name="payWays"  onchange="submit();" >
 
-        {% set options = {'alipay':'支付宝'|trans,'wxpay':'微信支付'|trans,'heepay':'网银支付'|trans,'quickpay':'快捷支付'|trans,'none':'其他支付'|trans,'':'支付方式'|trans} %}
+        {% set options = {'alipay':'支付宝'|trans,'wxpay':'微信支付'|trans,'heepay':'网银支付'|trans,'quickpay':'快捷支付'|trans,'llcbpay':'连连-网银支付'|trans,'llquickpay':'连连-快捷支付'|trans,'none':'其他支付'|trans,'':'支付方式'|trans} %}
         {{ select_options(options, request.get('payWays')) }}
       </select>
     </div>

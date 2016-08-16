@@ -2,34 +2,36 @@
 
 namespace Topxia\Api\Resource\Course;
 
-use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
+use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class Lesson extends BaseResource
 {
     public function get(Application $app, Request $request, $id)
     {
         $lesson = $this->getCourseService()->getLesson($id);
-
         if (empty($lesson)) {
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
-        $user = $this->getCurrentUser();
-        if (empty($user)) {
-            if (!$lesson['free'] || $lesson['type'] == 'testpaper') {
-                return $this->error('not_login', "您尚未登录，不能查看该课时");
-            }
-        } else {
-            $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $user['id']);
-            if (empty($member)) {
-                return $this->error('not_student', "你不是该课程学员，请加入学习");
-            }
-        }
+        $courseSetting         = $this->getSettingService()->get('course');
+        $allowAnonymousPreview = isset($courseSetting['allowAnonymousPreview']) ? $courseSetting['allowAnonymousPreview'] : 0;
 
-        $this->setStartLesson($lesson['courseId'], $id);
+        if (!$allowAnonymousPreview || ($allowAnonymousPreview && !$lesson['free'])) {
+            $currentUser = $this->getCurrentUser();
+            if (empty($currentUser) || !$currentUser->isLogin()) {
+                return $this->error('not_login', "您尚未登录，不能查看该课时");
+            } else {
+                $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
+                if (!$lesson['free'] && empty($member)) {
+                    return $this->error('not_student', "你不是该课程学员，请加入学习");
+                }
+            }
+
+            $this->setStartLesson($lesson['courseId'], $id);
+        }
 
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
@@ -117,7 +119,7 @@ class Lesson extends BaseResource
 
         $lesson['content'] = array(
             'previewUrl' => 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'.$pdfUri,
-            'resource' => $pdfUri
+            'resource'   => $pdfUri
         );
 
         return $lesson;
@@ -125,14 +127,13 @@ class Lesson extends BaseResource
 
     protected function getTestpaperLesson($lesson)
     {
-        $user = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $testpaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
-
         if (empty($testpaper)) {
-            return $this->createErrorResponse('error', '试卷不存在!');
+            return $this->error('error', '试卷不存在!');
         }
 
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($lesson['mediaId'], $user['id']);
+        $testResult        = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($lesson['mediaId'], $user['id']);
         $lesson['content'] = array(
             'status'   => empty($testResult) ? 'nodo' : $testResult['status'],
             'resultId' => empty($testResult) ? 0 : $testResult['id']
@@ -144,7 +145,7 @@ class Lesson extends BaseResource
     private function getTextLesson($lesson)
     {
         $lesson['content'] = $this->filterHtml($lesson['content']);
-        $template = $this->render('course/lesson-text-content.html.twig', array(
+        $template          = $this->render('course/lesson-text-content.html.twig', array(
             'content' => $lesson['content']
         ));
         $lesson['content'] = $template;
@@ -164,6 +165,7 @@ class Lesson extends BaseResource
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
+                $lesson['mediaStorage'] = $file['storage'];
                 if ($file['storage'] == 'cloud') {
                     $factory = new CloudClientFactory();
                     $client  = $factory->createClient();
@@ -177,7 +179,7 @@ class Lesson extends BaseResource
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                     'data'     => array(
-                                        'id' => $headLeaderInfo['id'],
+                                        'id'      => $headLeaderInfo['id'],
                                         'fromApi' => true
                                     ),
                                     'times'    => 2,
@@ -229,10 +231,10 @@ class Lesson extends BaseResource
                 } else {
                     $token = $this->getTokenService()->makeToken('local.media', array(
                         'data'     => array(
-                            'id'      => $file['id']
+                            'id' => $file['id']
                         ),
                         'duration' => 3600,
-                        'userId'   => $this->getCurrentUser()->getId()
+                        'userId'   => 0
                     ));
                     $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
                 }
@@ -268,8 +270,6 @@ class Lesson extends BaseResource
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
             $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $file["convertParams"] = json_decode($file["convertParams"], true);
-            $file["metas2"]        = json_decode($file["metas2"], true);
             return $file;
         }
 

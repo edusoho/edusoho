@@ -19,7 +19,7 @@
           {% if not lesson.free %}
             data-timelimit="{{ course.tryLookTime }}"
           {% endif %}
-          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
+          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1, hideQuestion: 1})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}

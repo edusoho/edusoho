@@ -67,9 +67,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $this->filterStartLimit($start, $limit);
 
         $builder = $this->_createThreadSearchBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         $builder = $this->addOrderBy($builder, $orderBy);
 
@@ -80,7 +80,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     public function searchPostsCount($conditions)
     {
         $builder = $this->_createThreadSearchBuilder($conditions)
-                        ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -137,19 +137,20 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     protected function _createThreadSearchBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('userId = :userId')
-                        ->andWhere('userId NOT IN (:notUserIds)')
-                        ->andWhere('userId IN (:userIds)')
-                        ->andWhere('id < :id')
-                        ->andWhere('ups >= :ups_GT')
-                        ->andWhere('id NOT IN (:excludeIds)')
-                        ->andWhere('createdTime >= :GTEcreatedTime')
-                        ->andWhere('parentId = :parentId')
-                        ->andWhere('threadId = :threadId')
-                        ->andWhere('targetId = :targetId')
-                        ->andWhere('targetType = :targetType')
-                        ->andWhere('adopted = :adopted');
+            ->from($this->table, $this->table)
+            ->andWhere('userId = :userId')
+            ->andWhere('userId NOT IN (:notUserIds)')
+            ->andWhere('userId IN (:userIds)')
+            ->andWhere('id < :id')
+            ->andWhere('ups >= :ups_GT')
+            ->andWhere('id NOT IN (:excludeIds)')
+            ->andWhere('createdTime >= :GTEcreatedTime')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('threadId = :threadId')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN (:targetIds)')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('adopted = :adopted');
         return $builder;
     }
 }

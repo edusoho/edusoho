@@ -32,21 +32,21 @@ class PhpwindAuthProvider implements AuthProvider
 
     public function changeNickname($userId, $newName)
     {
-        $api = $this->getWindidApi('user');
+        $api    = $this->getWindidApi('user');
         $result = $api->editUser($userId, null, array('username' => $newName));
         return $result == 1;
     }
 
     public function changeEmail($userId, $password, $newEmail)
     {
-        $api = $this->getWindidApi('user');
+        $api    = $this->getWindidApi('user');
         $result = $api->editUser($userId, null, array('email' => $newEmail));
         return $result == 1;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
     {
-        $api = $this->getWindidApi('user');
+        $api    = $this->getWindidApi('user');
         $result = $api->editUser($userId, $oldPassword, array('password' => $newPassword));
         return $result == 1;
     }
@@ -60,7 +60,6 @@ class PhpwindAuthProvider implements AuthProvider
 
         return $this->convertApiResult($result);
     }
-
 
     public function checkEmail($email)
     {
@@ -76,10 +75,10 @@ class PhpwindAuthProvider implements AuthProvider
     {
         return array('success', '');
     }
-    
+
     public function checkPassword($userId, $password)
     {
-        $api = $this->getWindidApi('user');
+        $api                    = $this->getWindidApi('user');
         list($result, $apiUser) = $api->login($userId, $password, 1);
         return $result == 1;
     }
@@ -94,14 +93,13 @@ class PhpwindAuthProvider implements AuthProvider
         }
 
         return array(
-            'id' => $apiUser['uid'],
-            'nickname' => $apiUser['username'],
-            'email' => $apiUser['email'],
+            'id'          => $apiUser['uid'],
+            'nickname'    => $apiUser['username'],
+            'email'       => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp' => $apiUser['regip'],
+            'createdIp'   => $apiUser['regip']
         );
     }
-
 
     public function checkLoginByNickname($nickname, $password)
     {
@@ -113,11 +111,11 @@ class PhpwindAuthProvider implements AuthProvider
         }
 
         return array(
-            'id' => $apiUser['uid'],
-            'nickname' => $apiUser['username'],
-            'email' => $apiUser['email'],
+            'id'          => $apiUser['uid'],
+            'nickname'    => $apiUser['username'],
+            'email'       => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp' => $apiUser['regip'],
+            'createdIp'   => $apiUser['regip']
         );
     }
 
@@ -131,11 +129,11 @@ class PhpwindAuthProvider implements AuthProvider
         }
 
         return array(
-            'id' => $apiUser['uid'],
-            'nickname' => $apiUser['username'],
-            'email' => $apiUser['email'],
+            'id'          => $apiUser['uid'],
+            'nickname'    => $apiUser['username'],
+            'email'       => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp' => $apiUser['regip'],
+            'createdIp'   => $apiUser['regip']
         );
     }
 
@@ -159,7 +157,7 @@ class PhpwindAuthProvider implements AuthProvider
     protected function getWindidApi($name)
     {
         define('WEKIT_TIMESTAMP', time());
-        require_once __DIR__ .'/../../../../../vendor_user/windid_client/src/windid/WindidApi.php';
+        require_once __DIR__.'/../../../../../vendor_user/windid_client/src/windid/WindidApi.php';
         return \WindidApi::api($name);
     }
 
@@ -206,4 +204,8 @@ class PhpwindAuthProvider implements AuthProvider
         return strpos($headers[0], ' 200 ') > 0;
     }
 
+    public function checkConnect()
+    {
+        return true;
+    }
 }
