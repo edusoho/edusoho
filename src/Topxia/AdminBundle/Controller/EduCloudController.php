@@ -109,7 +109,8 @@ class EduCloudController extends BaseController
             'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
-            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
+            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null),
+            'imUsedInfo'    => $this->generateChartData($this->getImUsedInfo())
         );
 
         if (isset($overview['service']['storage']['startMonth'])
@@ -1050,6 +1051,22 @@ class EduCloudController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getImUsedInfo()
+    {
+        $api       = CloudAPIFactory::create('root');
+        $endTime   = strtotime(date('Y-m-d', strtotime('-1 day')).' 23:59:59');
+        $startTime = strtotime(date('Y-m-d', strtotime('-7 days', $endTime)).'00:00:00');
+
+        try {
+            $imUsedInfo = $api->get('/im/app/receive_count_period', array(
+                'startTime' => $startTime, 'endTime' => $endTime));
+        } catch (\RuntimeException $e) {
+            $imUsedInfo = array();
+        }
+
+        return $imUsedInfo;
     }
 
     protected function getSearchService()
