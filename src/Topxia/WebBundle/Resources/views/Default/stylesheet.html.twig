@@ -17,9 +17,9 @@
 <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
 
 {% if maincolor == 'default' %}
-	<link href="{{ asset('assets/v2/css/main.css') }}" rel="stylesheet" />
+	<link href="{{ asset('assets/v2/css/main' ~ app.request.getLocale()|rename_locale ~ '.css') }}" rel="stylesheet" />
 {% else %}
-	<link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+	<link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ app.request.getLocale()|rename_locale ~ '.css') }}" rel="stylesheet" />
 {% endif %}
 
 {% if navigationcolor != 'default' %}

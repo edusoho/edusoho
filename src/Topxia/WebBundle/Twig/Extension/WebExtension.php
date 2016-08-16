@@ -52,7 +52,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
-            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter'))
+            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
+            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale'))
         );
     }
 
@@ -175,6 +176,14 @@ class WebExtension extends \Twig_Extension
     public function isMicroMessenger()
     {
         return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
+    }
+
+    public function renameLocale($locale)
+    {
+        $locale = strtolower($locale);
+        $locale = str_replace('_','-' , $locale);
+
+        return $locale == 'zh-cn' ? '' : '-'.$locale;
     }
 
     public function getFingerprint()
