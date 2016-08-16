@@ -34,17 +34,16 @@ class CloudAttachmentController extends BaseController
             $conditions['processStatus'] = '';
         }
 
-        $count     = $this->getCloudAttachment()->searchFileCount($conditions);
+        $count     = $this->getCloudAttachmentService()->searchFileCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $materials = $this->getCloudAttachment()->searchFiles(
+        $materials = $this->getCloudAttachmentService()->searchFiles(
             $conditions,
             $orderBy = array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        //  var_dump($materials);
         $materials = array_map(function ($material) {
             if (!array_key_exists('createdUserId', $material)) {
                 $material['createdUserId'] = $material['userId'];
@@ -55,7 +54,8 @@ class CloudAttachmentController extends BaseController
         $createdUserIds = ArrayToolkit::column($materials, 'createdUserId');
         $createdUsers   = $this->getUserService()->findUsersByIds($createdUserIds);
 
-        return $this->render('TopxiaAdminBundle:CloudAttachment:tbody.html.twig', array(
+        return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
+            'pageType'     => 'attachment',
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'targetType'   => empty($conditions['targetType']) ? 'all' : $conditions['targetType'],
             'materials'    => $materials,
@@ -79,7 +79,7 @@ class CloudAttachmentController extends BaseController
         return $this->createService('User.UserService');
     }
 
-    protected function getCloudAttachment()
+    protected function getCloudAttachmentService()
     {
         return $this->createService('CloudAttachment.CloudAttachmentService');
     }

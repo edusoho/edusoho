@@ -30,13 +30,6 @@
   text-align: left;
   margin: 15px 0;
 }
-#post-action img {
-  max-width: 100%;
-  height: auto;
-}
-#post-action {
-  word-break: break-all;
-}
 .group-page .group-logo-sm {
   width: 50px;
   height: 50px;
@@ -4393,7 +4386,7 @@ a.homework-essay-textarea-pack-up {
   font-size: 100%;
 }
 .quality-switcher-control {
-  margin: 10px 0 10px 20px;
+  margin: 10px 0;
   display: none;
 }
 .quality-switcher-control-open {

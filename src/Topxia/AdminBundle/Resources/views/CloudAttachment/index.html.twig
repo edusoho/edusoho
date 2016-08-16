@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:CloudFile:layout.html.twig' %}
 
 {% set menu = 'admin_cloud_attachment'%}
-{% do load_script('cloudattachment/manage')%}
+{% do load_script('cloudfile/manage') %}
 
 {% block stylesheets %}
   {{parent()}}
@@ -20,13 +20,13 @@
   <div class="page-header clearfix">
     <h1 class="pull-left">云附件</h1>
   </div>
-  <form class="form-inline es-materials-manage" id="attachment-form">
+  <form class="form-inline es-materials-manage" id="materials-form">
     {% include 'TopxiaAdminBundle:CloudAttachment/Form:type.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:nav.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:sort.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudAttachment/Form:batch.html.twig' %}
-    {% include 'TopxiaAdminBundle:CloudAttachment:table.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile:table.html.twig' with {'pageType': 'attachment'} %}
     <input type="hidden">
   </form>
 </div>
