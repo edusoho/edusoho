@@ -14,18 +14,18 @@ class QQVideoItemParser extends AbstractItemParser
 
     public function parse($url)
     {
-        $matched = preg_match('/vid=(\w+)/s', $url, $matches);
+        $matched  = preg_match('/vid=(\w+)/s', $url, $matches);
+        $response = array();
+
         if (!empty($matched)) {
             $vid = $matches[1];
         } else {
             $response = $this->fetchUrl($url);
-
             if ($response['code'] != 200) {
                 throw $this->createParseException('获取QQ视频页面信息失败！');
             }
 
             $matched = preg_match('/VIDEO_INFO.*?[\"]?vid[\"]?\s*:\s*"(\w+?)"/s', $response['content'], $matches);
-
             if (empty($matched)) {
                 throw $this->createParseException("解析QQ视频ID失败！");
             }
@@ -33,11 +33,13 @@ class QQVideoItemParser extends AbstractItemParser
             $vid = $matches[1];
         }
 
-        $matched = $this->getUrlMatched($url);
-        if ($matched) {
-            $url = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
+        $matched = preg_match($this->patterns['p1'], $url);
 
-            $response = $this->fetchUrl($url);
+        if ($matched) {
+            $responseInfo = $response ? $response : array();
+            $videoUrl     = 'http://sns.video.qq.com/tvideo/fcgi-bin/video?otype=json&vid='.$vid;
+
+            $response = $this->fetchUrl($videoUrl);
             if ($response['code'] != 200) {
                 throw $this->createParseException('获取QQ视频信息失败！.');
             }
@@ -48,19 +50,26 @@ class QQVideoItemParser extends AbstractItemParser
             }
 
             $video = json_decode($matches[0], true) ?: array();
-            if (empty($video) || empty($video['video'])) {
-                throw $this->createParseException('解析QQ视频信息失败！...');
+            if (!empty($video) && !empty($video['video'])) {
+                $video = $video['video'];
+                $title = $video['title'];
+                //throw $this->createParseException('解析QQ视频信息失败！...');
+            } else {
+                $video = array();
+                $title = $url;
+                if ($responseInfo) {
+                    $title = $this->getVideoTitle($responseInfo);
+                }
             }
-            $video = $video['video'];
 
             $item = array(
                 'type'     => 'video',
                 'source'   => 'qqvideo',
                 'uuid'     => 'qqvideo:'.$vid,
-                'name'     => $video['title'],
-                'summary'  => $video['desc'],
-                'duration' => $video['duration'],
-                'page'     => 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}",
+                'name'     => $title,
+                'summary'  => $video ? $video['desc'] : '',
+                'duration' => $video ? $video['duration'] : '',
+                'page'     => $video ? 'http://v.qq.com/cover/'.substr($video['cover'], 0, 1)."/{$video['cover']}.html?vid={$vid}" : $url,
                 'pictures' => array(
                     array('url' => "http://shp.qpic.cn/qqvideo/0/{$vid}/400")
                 ),
@@ -70,13 +79,10 @@ class QQVideoItemParser extends AbstractItemParser
                 )
             );
         } else {
-            $matched = preg_match('/VIDEO_INFO.*?title\s*:\s*"(.*?)"/s', $response['content'], $matches);
-
-            if (empty($matched)) {
+            $title = $this->getVideoTitle($response);
+            if (empty($title)) {
                 throw $this->createParseException("解析QQ视频ID失败！....");
             }
-
-            $title = $matches[1];
 
             $item = array(
                 'type'     => 'video',
@@ -102,6 +108,7 @@ class QQVideoItemParser extends AbstractItemParser
     public function detect($url)
     {
         $matched = $this->getUrlMatched($url);
+
         if ($matched) {
             return true;
         }
@@ -119,5 +126,16 @@ class QQVideoItemParser extends AbstractItemParser
         }
 
         return false;
+    }
+
+    protected function getVideoTitle($responseInfo)
+    {
+        $matched = preg_match('/VIDEO_INFO.*?[\"]?title[\"]?\s*:\s*"(.*?)"/s', $responseInfo['content'], $matches);
+
+        if (empty($matched)) {
+            return '';
+        }
+
+        return $matches[1];
     }
 }
