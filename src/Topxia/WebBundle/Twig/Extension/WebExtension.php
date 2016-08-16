@@ -53,7 +53,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
-            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter'))
+            new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
+            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn'))
         );
     }
 
@@ -1324,6 +1325,11 @@ class WebExtension extends \Twig_Extension
         $html = strip_tags($html, '');
 
         return preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $html);
+    }
+
+    public function arrayColumn($array, $column)
+    {
+        return ArrayToolkit::column($array, $column);
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

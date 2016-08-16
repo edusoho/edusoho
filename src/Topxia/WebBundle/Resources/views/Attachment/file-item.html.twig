@@ -1,0 +1,6 @@
+<div class="well well-sm">
+    <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
+    {{ attachment.file.filename }}
+    <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.file.id, type:'file'})  }}" type="button" style="margin-top:13px">删除</button> 
+     <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.file.id, type:'file'}) }}">预览</a>
+  </div>

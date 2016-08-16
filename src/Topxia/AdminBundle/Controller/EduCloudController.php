@@ -115,7 +115,8 @@ class EduCloudController extends BaseController
         if (isset($overview['service']['storage']['startMonth'])
             && isset($overview['service']['storage']['endMonth'])
             && $overview['service']['storage']['startMonth']
-            && $overview['service']['storage']['endMonth']) {
+            && $overview['service']['storage']['endMonth']
+        ) {
             $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
 
             $endMonthFormated                           = $this->dateFormat($videoInfo['endMonth']);
@@ -137,6 +138,37 @@ class EduCloudController extends BaseController
             'chartInfo'   => $chartInfo,
             'accessCloud' => $this->isAccessEduCloud(),
             'overview'    => $overview
+        ));
+    }
+
+    public function attachmentAction(Request $request)
+    {
+        $attachment  = $this->getSettingService()->get('cloud_attachment', array());
+        $defaultData = array('article' => 0, 'course' => 0, 'classroom' => 0, 'group' => 0, 'question' => 0);
+        $default     = array_merge($defaultData, array('enable' => 0, 'fileSize' => 500));
+        $attachment  = array_merge($default, $attachment);
+
+        if ($request->getMethod() == 'POST') {
+            $attachment = $request->request->all();
+
+            if ($attachment['enable'] == 0) {
+                $attachment = array_merge($attachment, $defaultData);
+            }
+            $attachment = array_merge($default, $attachment);
+            $this->getSettingService()->set('cloud_attachment', $attachment);
+            $this->setFlashMessage('success', '云附件设置已保存！');
+        }
+        //云端视频判断
+        try {
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-attachment.html.twig', array(
+            'attachment' => $attachment,
+            'info'       => $info
         ));
     }
 
@@ -564,8 +596,7 @@ class EduCloudController extends BaseController
         }
 
         render:
-        return $this->render('TopxiaAdminBundle:EduCloud:key-update.html.twig', array(
-        ));
+        return $this->render('TopxiaAdminBundle:EduCloud:key-update.html.twig', array());
     }
 
     public function searchSettingAction(Request $request)

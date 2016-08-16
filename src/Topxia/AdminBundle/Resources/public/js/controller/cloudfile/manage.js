@@ -17,6 +17,7 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav-tabs .js-type-btn': 'onClickNav',
+                'click .nav-tabs .js-useType-btn': 'onClickUseTypeNav',
                 'click .pagination li': 'onClickPagination',
                 'click .js-tags-container .js-tag-btn': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
@@ -42,8 +43,11 @@ define(function(require, exports, module) {
             initTagForm: function(event)
             {
                 var $form = $("#tag-form");
+                if($form.length == 0 ){
+                    return false;
+                }
                 var validator = new Validator({
-                    element: $form
+                    element: $form,
                 });
 
                 validator.addItem({
@@ -51,6 +55,14 @@ define(function(require, exports, module) {
                     required: true,
                     display: '标签'
                 });
+            },
+            onClickUseTypeNav: function(event) {
+                var $target = $(event.currentTarget);
+                $target.closest('.nav').find('.active').removeClass('active');
+                $target.addClass('active');
+                $target.closest('.nav').find('[name=useType]').val($target.data('value'));
+                this.renderTable();
+                event.preventDefault();
             },
             onClickNav: function(event)
             {

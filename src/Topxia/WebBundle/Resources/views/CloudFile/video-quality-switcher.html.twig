@@ -7,7 +7,7 @@
     </span>
   </div>
 
-  <div class="quality-switcher-control">
+  <div class="quality-switcher-control" style='display:none'>
     <div class="video-quality radios">
       画质：
         {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, setting('storage.video_quality', 'normal')) }}
@@ -24,5 +24,5 @@
     </div>
   </div>
 </div>
-<script>app.load('cloud-file/cloud-video-quality-switcher')</script>
+<script>app.load('topxiawebbundle/controller/cloud-file/cloud-video-quality-switcher')</script>
 {% endif %}
