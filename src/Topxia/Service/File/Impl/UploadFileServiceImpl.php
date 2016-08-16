@@ -556,13 +556,19 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $cloudFileConditions = array(
-            'processStatus' => $conditions['processStatus'],
-            'nos'           => implode(',', $globalIds)
+            'processStatus' => $conditions['processStatus']
         );
+        $globalArray = array_chunk($globalIds, 20);
+        $count       = 0;
 
-        $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
+        foreach ($globalArray as $key => $globals) {
+            $cloudFileConditions['nos'] = implode(',', $globals);
 
-        return $cloudFiles['count'];
+            $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
+            $count += $cloudFiles['count'];
+        }
+
+        return $count;
     }
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
