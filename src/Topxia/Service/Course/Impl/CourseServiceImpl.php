@@ -2663,6 +2663,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $replayList;
     }
 
+    public function generateLessonVideoReplay($courseId, $lessonId, $fields)
+    {
+        $course = $this->tryManageCourse($courseId);
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+    }
+
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
         $lesson                = $this->getLessonDao()->getLesson($lessonId);
