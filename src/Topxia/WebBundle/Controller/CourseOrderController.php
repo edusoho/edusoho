@@ -300,7 +300,7 @@ class CourseOrderController extends OrderController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay');
+        $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay', 'llcbpay', 'llquickpay');
 
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
