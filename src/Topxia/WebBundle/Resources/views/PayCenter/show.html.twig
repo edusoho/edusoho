@@ -48,13 +48,11 @@
               <span class="icon"></span>
             </div>
             {% else %}
-              {% if isMobile and pament != 'llcbay' and pament != 'heepay' %}
-                <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
-                  {% set picture = 'assets/img/order/'~payment~'.png' %}
-                  <img src="{{ asset(picture) }}" />
-                  <span class="icon"></span>
-                </div>
-              {% endif %}
+              <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
+                {% set picture = 'assets/img/order/'~payment~'.png' %}
+                <img src="{{ asset(picture) }}" />
+                <span class="icon"></span>
+              </div>
             {% endif %}
           {% else %}
             <div class="pay-type-label text-warning ">{{'支付方式未开启，请联系管理员。'|trans}}</div>
