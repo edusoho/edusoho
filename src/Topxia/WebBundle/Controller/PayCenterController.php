@@ -108,7 +108,12 @@ class PayCenterController extends BaseController
 
     public function payAction(Request $request)
     {
-        $fields = $request->request->all();
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+        } else {
+            $fields = $request->query->all();
+        }
+        
         $user   = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
