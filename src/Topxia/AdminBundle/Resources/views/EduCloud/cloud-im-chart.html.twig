@@ -10,7 +10,7 @@
     {% if not setting('app_im.enabled') %}
       <div class="edu-verticalmiddle">
         <div class="edu-verticalmiddle-content text-muted">
-          <p class="text-danger">您的即时聊天服务已关闭，去<a href="{{ path('admin_app_im') }}">开启</a></p>
+          <p class="text-danger">您的即时聊天服务未开启，去<a href="{{ path('admin_app_im') }}">开启</a></p>
         </div>
       </div>
     {% endif %}
