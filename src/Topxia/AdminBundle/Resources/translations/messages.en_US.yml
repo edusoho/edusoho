@@ -1200,285 +1200,285 @@ PHP脚本最大执行时间: PHP script maximum excution time
 大于300秒: over 300secs
 30秒: 30secs
 PHP扩展：: PHP extention：
-该扩展用于处理中文字符: 
+该扩展用于处理中文字符:
 '尚未安装': 'Not Installed'
-该扩展用于远程读取文件: 该扩展用于远程读取文件
-该扩展用于处理图片: 该扩展用于处理图片
+该扩展用于远程读取文件: This extention is used to read documents remotely
+该扩展用于处理图片: This extention is used to process images
 '通信情况': 'Communication status'
-'与Discuz Ucenter的连接': '与Discuz Ucenter的连接'
-'每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看': '每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看'
-系统文件、目录权限检查: 系统文件、目录权限检查
-所需状态: 所需状态
-正常扫描文件......: 正常扫描文件......
-'系统空间占用': '系统空间占用'
-'总共': '总共'
+'与Discuz Ucenter的连接': 'Connect with Discuz Ucenter'
+'每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看': 'A test email will be send to the user on every checking time,please make sure the email of the current user be correct,and check out the system log if email exception happens'
+系统文件、目录权限检查: Check system documents and directory permissions
+所需状态: Required status
+正常扫描文件......: Scanning documents......
+'系统空间占用': 'System disk space'
+'总共': 'In total'
 网站名称: Website name
-'网站副标题': '网站副标题'
+'网站副标题': 'Website subtitle'
 网站域名: Website domain
-'以"http://"开头': '以"http://"开头'
+'以"http://"开头': 'Start with "http://"'
 网站LOGO:  Website LOGO
-'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。': '请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。'
-'浏览器图标': '浏览器图标'
-'请上传ico格式的图标文件, 建议大小16*16或者32*32。': '请上传ico格式的图标文件, 建议大小16*16或者32*32。'
-'SEO关键词': 'SEO关键词'
-'设置多个关键词请用半角逗号","隔开。': '设置多个关键词请用半角逗号","隔开。'
-SEO描述信息: SEO描述信息
-管理员邮箱地址: 管理员邮箱地址
-'课程内容版权方': '课程内容版权方'
-'您可以填写网站名称或公司名称。': '您可以填写网站名称或公司名称。'
-ICP备案号: ICP备案号
-'网站统计分析代码部署': '网站统计分析代码部署'
-'统计分析代码': '统计分析代码'
-建议使用下列统计分析的一种：: 建议使用下列统计分析的一种：
-谷歌分析: 谷歌分析
-百度统计: 百度统计
-'腾讯分析': '腾讯分析'
-站点状态: 站点状态
-网站状态: 网站状态
-'网站关闭公告': '网站关闭公告'
-'网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码': '网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码'
-'网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）': '网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）'
-用户中心: 用户中心
-'支持phpwind 9系列，Discuz X2.5/X3.0/X3.1的用户中心': '支持phpwind 9系列，Discuz X2.5/X3.0/X3.1的用户中心'
-'配置': '配置'
-'从Ucenter复制配置，粘帖到此处。注意：请在第一行加上': '从Ucenter复制配置，粘帖到此处。注意：请在第一行加上'
-'如何配置？': '如何配置？'
-'WindId配置': 'WindId配置'
-'如使用phpwind (WindID)的用户中心，请填写此项配置。': '如使用phpwind (WindID)的用户中心，请填写此项配置。'
-'过滤邮箱地址清单': '过滤邮箱地址清单'
-'每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱': '每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱'
-'添加字段': '添加字段'
-自定义字段设置: 自定义字段设置
-字段名称: 字段名称
-是否显示: 是否显示
-s操作: s操作
-个人资料设置: 个人资料设置
-购买课程或班级时填写个人资料: 购买课程或班级时填写个人资料
-开启后，: 开启后，
-'%user_name%购买课程时，需填写个人资料': '%user_name%购买课程时，需填写个人资料'
-'带格式校检': '带格式校检'
-'可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。': '可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。'
-'收起 ': '收起 '
-登录后填写个人资料: 登录后填写个人资料
-'%user_name%登录后需填写个人资料': '%user_name%登录后需填写个人资料'
-'编辑 ': '编辑 '
-'其它设置': '其它设置'
-'加入免费课程要求设置头像': '加入免费课程要求设置头像'
-用户修改用户名: 用户修改用户名
-'删除字段': '删除字段'
-'确定要删除': '确定要删除'
-字段吗？: 字段吗？
-'所有该字段的历史数据都将一起删除！': '所有该字段的历史数据都将一起删除！'
-如要保留历史数据，请隐藏该字段: 如要保留历史数据，请隐藏该字段
-'确定删除': '确定删除'
-编辑字段: 编辑字段
-字段类型: 字段类型
-是否启用、显示: 是否启用、显示
-请选择: 请选择
-'还可以添加%varcharCount%个字段': '还可以添加%varcharCount%个字段'
-已满10个: 已满10个
-'还可以添加%textCount%option value': '还可以添加%textCount%option value'
-多行文本: 多行文本
-'还可以添加%intCount%个字段,最大值为9位整数': '还可以添加%intCount%个字段,最大值为9位整数'
-整数: 整数
-已满5个: 已满5个
-'还可以添加%floatCount%个字段,保留到两位小数': '还可以添加%floatCount%个字段,保留到两位小数'
-小数: 小数
-日期: 日期
-'暂无自定义字段': '暂无自定义字段'
-'添加时间': '添加时间'
-'暂无标签记录': '暂无标签记录'
-'编辑标签': '编辑标签'
-'新增标签': '新增标签'
-'标签名称': '标签名称'
-最近登录: 最近登录
-'暂无教师记录': '暂无教师记录'
-'暂无推荐老师': '暂无推荐老师'
-设置推荐教师: 设置推荐教师
-取消推荐教师: 取消推荐教师
-禁: 禁
-推荐老师: 推荐老师
-EduSoho主题编辑: EduSoho主题编辑
-主题编辑: 主题编辑
-组件: 组件
-'配色方案': '配色方案'
-'全部重置': '全部重置'
-挂件名称: 挂件名称
-主色调: 主色调
-'导航配色': '导航配色'
-主题版本: 主题版本
-当前正在使用该主题: 当前正在使用该主题
-'审核成功': '审核成功'
-'申请时间:': '申请时间:'
-申请时间: 申请时间
-撤销: 撤销
-'暂无已经审核成功的实名认证用户': '暂无已经审核成功的实名认证用户'
-'暂无需要审核中的实名认证用户': '暂无需要审核中的实名认证用户'
-'重置用户%nickname%的密码': '重置用户%nickname%的密码'
-'新密码': '新密码'
-'确认密码': '确认密码'
-'再输入一次密码': '再输入一次密码'
-'添加新用户': '添加新用户'
-不填将自动生成: 不填将自动生成
-用户权限: 用户权限
-邮箱/手机: 邮箱/手机
-'邮箱地址/手机号码': '邮箱地址/手机号码'
-编辑用户信息: 编辑用户信息
-积分流水账: 积分流水账
-积分类型: 积分类型
-变化值: 变化值
-总值: 总值
-金币: 金币
-导出搜索结果: 导出搜索结果
-用户总数：: 用户总数：
-设置用户组: 设置用户组
-所属组织机构: 所属组织机构
-用户组: 用户组
-最近登录时间/IP: 最近登录时间/IP
-男性: 男性
-女性: 女性
-编辑用户所属组织: 编辑用户所属组织
-用户认证查看: 用户认证查看
-'用户认证审核': '用户认证审核'
-'驳回原因': '驳回原因'
-'审核驳回': '审核驳回'
-'审核通过': '审核通过'
-设置用户头像: 设置用户头像
-该Email地址已验证: 该Email地址已验证
-修改用户组织机构: 修改用户组织机构
-修改用户头像: 修改用户头像
-'修改密码': '修改密码'
-'发送密码重置邮件': '发送密码重置邮件'
-发送Email验证邮件: 发送Email验证邮件
-解禁用户: 解禁用户
-封禁用户: 封禁用户
-已支付: 已支付
-默认模版: 默认模版
-'无导航栏': '无导航栏'
-课程编号: 课程编号
-1星: 1星
-2星: 2星
-3星: 3星
-4星: 4星
-5星: 5星
-'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%': '流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'
-'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%': '标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'
-'精细 %<span class="text-muted">%(适合动态电影)%</span>%': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'
-显示: 显示
-不显示: 不显示
-周: 周
-两周: 两周
-顶部: 顶部
-底部: 底部
-'友情链接': '友情链接'
-不同意: 不同意
-'站内私信': '站内私信'
-电子邮件: 电子邮件
-'不允许': '不允许'
-立即到账接口: 立即到账接口
-'担保交易接口': '担保交易接口'
-'标准双接口': '标准双接口'
-'全部批阅完成后一起显示': '全部批阅完成后一起显示'
-交卷后显示答案和解析: 交卷后显示答案和解析
-开放: 开放
-'--关键词类型--': '--关键词类型--'
-'--查询条件--': '--查询条件--'
-邮箱: 邮箱
-还没有选择课程: 还没有选择课程
-文件组不存在: 文件组不存在
-后台: 后台
-运营: 运营
-订单: 订单
-账务: 账务
-资讯管理: 资讯管理
-小组管理: 小组管理
-邀请管理: 邀请管理
-轮播图设置: 轮播图设置
-每周精选设置: 每周精选设置
-'发现页栏目管理': '发现页栏目管理'
-编辑区管理: 编辑区管理
-历史记录: 历史记录
-自定义页面管理: 自定义页面管理
-'移动端内容管理': '移动端内容管理'
-'添加资讯': '添加资讯'
-'新建栏目': '新建栏目'
-'栏目管理': '栏目管理'
-奖励查询: 奖励查询
-话题管理: 话题管理
-直播管理: 直播管理
-问答管理: 问答管理
-笔记管理: 笔记管理
-评价管理: 评价管理
-分类管理: 分类管理
-'标签管理': '标签管理'
-用户管理: 用户管理
-教师管理: 教师管理
-教师推荐: 教师推荐
-实名认证管理: 实名认证管理
-私信管理: 私信管理
-课程推荐: 课程推荐
-课程统计: 课程统计
-课程订单: 课程订单
-虚拟币订单: 虚拟币订单
-'查阅': '查阅'
-账单管理: 账单管理
-现金账单: 现金账单
-虚拟币账单: 虚拟币账单
-课程退款管理: 课程退款管理
-站点设置: 站点设置
-邮件服务器设置: 邮件服务器设置
-顶部导航: 顶部导航
-底部导航: 底部导航
-客服: 客服
-'侧边栏': '侧边栏'
-用户设置: 用户设置
-用户信息设置: 用户信息设置
-默认头像: 默认头像
-默认图片: 默认图片
-运营设置: 运营设置
-账务设置: 账务设置
-使用方式: 使用方式
-退款: 退款
-移动端设置: 移动端设置
-系统优化: 系统优化
-定时任务: 定时任务
-IP黑名单: IP黑名单
-发帖限制设置: 发帖限制设置
-系统自检: 系统自检
-系统日志: 系统日志
-云视频设置: 云视频设置
-云短信设置: 云短信设置
-云搜索设置: 云搜索设置
-ES应用: ES应用
-应用中心: 应用中心
-已购项目: 已购项目
-更新日志: 更新日志
-'创建站内通知': '创建站内通知'
-'网站公告管理': '网站公告管理'
-'新增公告': '新增公告'
-课程评价: 课程评价
-虚拟币使用方式设置: 虚拟币使用方式设置
-'输入的日期有误!': '输入的日期有误!'
-'您尚未申请云平台授权码，': '您尚未申请云平台授权码，'
-'请先申请授权码': '请先申请授权码'
-'参数缺失,更新应用包失败': '参数缺失,更新应用包失败'
-'获取当前最新应用包信息失败': '获取当前最新应用包信息失败'
-'此栏目有子栏目，无法删除': '此栏目有子栏目，无法删除'
-'栏目已删除': '栏目已删除'
-'编码已被占用，请换一个。': '编码已被占用，请换一个。'
-'不能选择自己作为父栏目': '不能选择自己作为父栏目'
-'群发标题为空': '群发标题为空'
-'通知已删除！': '通知已删除！'
-'通知已被管理员删除！': '通知已被管理员删除！'
-保存成功!: 保存成功!
-'此编码可以使用': '此编码可以使用'
-'此编码已存在,不允许使用': '此编码已存在,不允许使用'
-'不允许设置为已存在的其他编码值': '不允许设置为已存在的其他编码值'
-'图片格式不正确！': '图片格式不正确！'
-恢复成功!: 恢复成功!
-CDN设置已保存！: CDN设置已保存！
-'获取账单信息失败，云视频参数配置不正确，或网络通讯失败。': '获取账单信息失败，云视频参数配置不正确，或网络通讯失败。'
-虚拟币设置已保存！: 虚拟币设置已保存！
+'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。': 'Please upload images in the format of PNG,GIF,JPG .Recommended LOGO images size should not be larger than 250*50'
+'浏览器图标': 'Internet explorer icon'
+'请上传ico格式的图标文件, 建议大小16*16或者32*32。': 'Please upload images in the format of ICO.Recommended image size is 16*16 of 32*32'
+'SEO关键词': 'SEO Keywords'
+'设置多个关键词请用半角逗号","隔开。': 'Please use "," to separate multiple Keywords'
+SEO描述信息: SEO Description information
+管理员邮箱地址: Administrator email address
+'课程内容版权方': 'Course content copyright owner'
+'您可以填写网站名称或公司名称。': 'You can enter website name and company name.'
+ICP备案号: ICP
+'网站统计分析代码部署': 'Website statistics analysis code deployment'
+'统计分析代码': 'Statistics analysis code'
+建议使用下列统计分析的一种：: Please choose one of the recommended statistical analysis provider listed below.
+谷歌分析: Google analysis
+百度统计: Baidu analysis
+'腾讯分析': 'Tencent analysis'
+站点状态: Site status
+网站状态: Website status
+'网站关闭公告': 'Announcement of website shutdown'
+'网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码': 'Users will see this announcement when they visit the website if it is shutdown'
+'网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）': 'Default avatar image will show if user have not upload one.Recommended image size will be 270*270'
+用户中心: User center
+'支持phpwind 9系列，Discuz X2.5/X3.0/X3.1的用户中心': 'Suported user center of Discuz X2.5/X3.0/X3.1 is phpwind 9 serials'
+'配置': 'Configration'
+'从Ucenter复制配置，粘帖到此处。注意：请在第一行加上': 'Copy configiration from Ucenter and paste it here. Please note that add it on the first line'
+'如何配置？': 'How to configure？'
+'WindId配置': 'WindId Configration'
+'如使用phpwind (WindID)的用户中心，请填写此项配置。': 'To use User center of phpwind(WindID),Please configure this option first'
+'过滤邮箱地址清单': 'Filter email address list'
+'每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱': 'Enter ONE email address in each line.An email address will be created randomly if the user using third party loging on the list'
+'添加字段': 'Add string'
+自定义字段设置: Customize string configiration
+字段名称: String name
+是否显示: Show/Hidden
+s操作: s Operation
+个人资料设置: Personal info configiration
+购买课程或班级时填写个人资料: Require personal information when buying course or classes
+开启后，: After being activated
+'%user_name%购买课程时，需填写个人资料': 'Require personal information when %user_name% buy courses'
+'带格式校检': 'Formart verifcation'
+'可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。': 'Drag to reorder.Check characters as you need .If need new characters please add them in [Customize string configiration] '
+'收起 ': 'Collapse'
+登录后填写个人资料: Require personal information after logging in
+'%user_name%登录后需填写个人资料': 'Require personal information after %user_name% logging in '
+'编辑 ': 'Edit '
+'其它设置': 'Other options'
+'加入免费课程要求设置头像': 'Require user avatar when adding free courses'
+用户修改用户名: User change user name
+'删除字段': 'Delete characters'
+'确定要删除': 'Are you sure want to delete it?'
+字段吗？: Characters?
+'所有该字段的历史数据都将一起删除！': 'All history data for the character will be deleted'
+如要保留历史数据，请隐藏该字段: Please hide this character if you want to keep the history data .
+'确定删除': 'Are you sure want to delete it?'
+编辑字段: Edit character
+字段类型: Character type
+是否启用、显示: Whether to activate or show
+请选择: Please choose
+'还可以添加%varcharCount%个字段': '%varcharCount% characters left'
+已满10个: Already full to 10
+'还可以添加%textCount%option value': '%textCount%option value left'
+多行文本: Multiple-line text
+'还可以添加%intCount%个字段,最大值为9位整数': '%intCount% left ,maximum number is 9'
+整数: Interger
+已满5个: Already full to 5
+'还可以添加%floatCount%个字段,保留到两位小数': '%floatCount% left,reserved to two decimal places'
+小数: Decimals
+日期: Date
+'暂无自定义字段': 'No customize characters'
+'添加时间': 'Add date'
+'暂无标签记录': 'No tags'
+'编辑标签': 'Edit tags'
+'新增标签': 'Add tags'
+'标签名称': 'Tag name'
+最近登录: Recent log
+'暂无教师记录': 'No teacher record'
+'暂无推荐老师': 'No recommended teachers'
+设置推荐教师: Set recommended teachers
+取消推荐教师: Cancel recommended teachers
+禁: Ban
+推荐老师: Recommended teachers
+EduSoho主题编辑: EduSoho Theme edit
+主题编辑: Theme edit
+组件: Components
+'配色方案': 'Coloring scheme'
+'全部重置': 'All reset'
+挂件名称: Component name
+主色调: Main color
+'导航配色': 'Navigation color scheme'
+主题版本: Theme version
+当前正在使用该主题: This theme is in use
+'审核成功': 'Verfication succeed'
+'申请时间:': 'Apply date:'
+申请时间: Apply date
+撤销: Cancel
+'暂无已经审核成功的实名认证用户': 'No verified "real-name authentication" user record'
+'暂无需要审核中的实名认证用户': 'No verifing "real-name authentication " user record'
+'重置用户%nickname%的密码': 'Reset password for user %nickname%'
+'新密码': 'New password'
+'确认密码': 'Confirm password'
+'再输入一次密码': 'Re-enter password'
+'添加新用户': 'Add new user'
+不填将自动生成: Create automatically if not set
+用户权限: User permissions
+邮箱/手机: Email/Phone
+'邮箱地址/手机号码': 'Email/Phone number'
+编辑用户信息: Edit user information
+积分流水账: Points records
+积分类型: Points type
+变化值: Delta
+总值: Total
+金币: Coin
+导出搜索结果: Export search result
+用户总数：: User total number
+设置用户组: Set user group
+所属组织机构: Organization
+用户组: User group
+最近登录时间/IP: Recent loging date/IP
+男性: Male
+女性: Female
+编辑用户所属组织: Edit user's organization
+用户认证查看: Check user's verifcation
+'用户认证审核': 'User verifcation'
+'驳回原因': 'Reason'
+'审核驳回': 'Rejected'
+'审核通过': 'Accepted'
+设置用户头像: Set avatar
+该Email地址已验证: This email has been verified
+修改用户组织机构: Change user's organization
+修改用户头像: Change user avatar
+'修改密码': 'Change password'
+'发送密码重置邮件': 'Send password reset confirmation email'
+发送Email验证邮件: Send verifcation email
+解禁用户: Unblock user
+封禁用户: Block user
+已支付: Paid
+默认模版: Default template
+'无导航栏': 'No navigation'
+课程编号: Course number
+1星: 1 Star
+2星: 2 Stars
+3星: 3 Stars
+4星: 4 Stars
+5星: 5 Stars
+'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%': 'Smooth %<span class="text-muted">%(suitble for PPT illustration )%</span>%'
+'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%': 'Standard %<span class="text-muted">%(suitble for screen record and camera capture )%</span>%'
+'精细 %<span class="text-muted">%(适合动态电影)%</span>%': 'High Definition %<span class="text-muted">%(suitble for videos)%</span>%'
+显示: Show
+不显示: Hidden
+周: Week
+两周: Two weeks
+顶部: Top
+底部: Bottom
+'友情链接': 'Recommended links'
+不同意: Disagree
+'站内私信': 'In-site message'
+电子邮件: Email
+'不允许': 'Not allowed'
+立即到账接口: Instant payment interface
+'担保交易接口': 'Secured transactions interface'
+'标准双接口': 'Standard dual interface'
+'全部批阅完成后一起显示': 'Show all after been reviewed'
+交卷后显示答案和解析: Show answers and explnation after testpaper is subbmited
+开放: Open
+'--关键词类型--': '--Keyword type--'
+'--查询条件--': '--Search filters--'
+邮箱: Email
+还没有选择课程: No course selected
+文件组不存在: Document group dose not exist
+后台: Background
+运营: Operation
+订单: Order
+账务: Accounting
+资讯管理: News management
+小组管理: Group management
+邀请管理: Invitation management
+轮播图设置: Sliders management
+每周精选设置: Weekly selected setting
+'发现页栏目管理': 'Explore Page Category Management'
+编辑区管理: Edit area management
+历史记录: History
+自定义页面管理: Customize page management
+'移动端内容管理': 'Mobile App content management'
+'添加资讯': 'Add news'
+'新建栏目': 'Add category'
+'栏目管理': 'Category management'
+奖励查询: Reward checking
+话题管理: Topic management
+直播管理: Live management
+问答管理: Question management
+笔记管理: Note management
+评价管理: Review management
+分类管理: Category management
+'标签管理': 'Tag management'
+用户管理: User management
+教师管理: Teacher management
+教师推荐: Teacher recommendation
+实名认证管理: Real-name authentication management
+私信管理: Privite massage management
+课程推荐: Course recommendation
+课程统计: Course statistics
+课程订单: Course orders
+虚拟币订单: Coin orders
+'查阅': 'Review'
+账单管理: Transactions management
+现金账单: Cash transaction management
+虚拟币账单: Coin transaction management
+课程退款管理: Course refund management
+站点设置: Site settings
+邮件服务器设置: Email server settings
+顶部导航: Top navigation
+底部导航: Bottom navigation
+客服: Customer service
+'侧边栏': 'Sidebar'
+用户设置: User settings
+用户信息设置: User information settings
+默认头像: Default avatar
+默认图片: Default image
+运营设置: Operation settings
+账务设置: Accounting settings
+使用方式: Useage
+退款: Refund
+移动端设置: Mobile App settings
+系统优化: System optimization
+定时任务: Cycled Tasks
+IP黑名单: IP blacklist
+发帖限制设置: Post limitation settings
+系统自检: System self checking
+系统日志: System log
+云视频设置: Cloud video settings
+云短信设置: Cloud message settings
+云搜索设置: Cloud search settings
+ES应用: ES APPs
+应用中心: APP Center
+已购项目: Paid items
+更新日志: Change log
+'创建站内通知': 'Create In-site notification'
+'网站公告管理': 'Site announcement management'
+'新增公告': 'Publish new announcement'
+课程评价: Course review
+虚拟币使用方式设置: Coin usage settings
+'输入的日期有误!': 'Date format is not correct!'
+'您尚未申请云平台授权码，': 'You have not applied for the cloud platform authentication code'
+'请先申请授权码': 'Please apply for the cloud platform authentication code first'
+'参数缺失,更新应用包失败': 'Incomplete parameters,package update failed'
+'获取当前最新应用包信息失败': 'Fethching current newest package information failed'
+'此栏目有子栏目，无法删除': 'This column has child columns ,Cannot be deleted'
+'栏目已删除': 'Column deleted'
+'编码已被占用，请换一个。': 'This number is already taken ,change another one'
+'不能选择自己作为父栏目': 'Cannot choose self as parent column'
+'群发标题为空': 'Group message title is empty'
+'通知已删除！': 'Notification deleted'
+'通知已被管理员删除！': 'Notification is deleted by the administrator'
+保存成功!: Save successfully
+'此编码可以使用': 'This number is useable'
+'此编码已存在,不允许使用': 'This number is already existed ,and is not allowed to be used again'
+'不允许设置为已存在的其他编码值': 'ID number which is already existed cannot be used again'
+'图片格式不正确！': 'Image format is not correct!'
+恢复成功!: Restore successfully!
+CDN设置已保存！: CDN settings saved
+'获取账单信息失败，云视频参数配置不正确，或网络通讯失败。': 'Fethching transaction information failed,cloud video parameter is not correct or Internet Communication failed'
+虚拟币设置已保存！: Coin settings saved！
 虚拟币模式已保存！: 虚拟币模式已保存！
 '图片格式不正确，请上传png, gif, jpg格式的图片文件！': '图片格式不正确，请上传png, gif, jpg格式的图片文件！'
 '图片大小不正确，请上传超过50*50的等比例图片！': '图片大小不正确，请上传超过50*50的等比例图片！'
