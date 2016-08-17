@@ -1479,392 +1479,392 @@ ES应用: ES APPs
 CDN设置已保存！: CDN settings saved
 '获取账单信息失败，云视频参数配置不正确，或网络通讯失败。': 'Fethching transaction information failed,cloud video parameter is not correct or Internet Communication failed'
 虚拟币设置已保存！: Coin settings saved！
-虚拟币模式已保存！: 虚拟币模式已保存！
-'图片格式不正确，请上传png, gif, jpg格式的图片文件！': '图片格式不正确，请上传png, gif, jpg格式的图片文件！'
-'图片大小不正确，请上传超过50*50的等比例图片！': '图片大小不正确，请上传超过50*50的等比例图片！'
-'上传图片格式错误，请上传jpg, gif, png格式的文件。': '上传图片格式错误，请上传jpg, gif, png格式的文件。'
-账目名称: 账目名称
-该URL路径已存在: 该URL路径已存在
-'您不是超级管理员！': '您不是超级管理员！'
-'发布课程，不能删除！': '发布课程，不能删除！'
-'请先删除班级课程': '请先删除班级课程'
-'删除课程成功': '删除课程成功'
-'当前课程未移除,请先移除班级课程': '当前课程未移除,请先移除班级课程'
-作业插件未升级: 作业插件未升级
-'未输入正确的校验密码！': '未输入正确的校验密码！'
-'课时章节': '课时章节'
-课时草稿: 课时草稿
-课时时长: 课时时长
-课时录播: 课时录播
-课时播放时长: 课时播放时长
-课时作业: 课时作业
-'课时练习': '课时练习'
-课时收藏: 课时收藏
-课时笔记: 课时笔记
-课程动态: 课程动态
-课程成员: 课程成员
-'数据删除': '数据删除'
-'数据删除失败或插件未安装或插件未升级': '数据删除失败或插件未安装或插件未升级'
-'数据删除失败': '数据删除失败'
-'{{nickname}},欢迎加入课程{{course}}': '{{nickname}},欢迎加入课程{{course}}'
-课程设置已保存！: 课程设置已保存！
-课程默认图片设置已保存！: 课程默认图片设置已保存！
-题库设置已保存！: 题库设置已保存！
-'我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。': '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。'
-'我正在学习{{course}}，收获巨大哦，一起来学习吧！': '我正在学习{{course}}，收获巨大哦，一起来学习吧！'
-'我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!': '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!'
-'我正在学习{{classroom}}，收获巨大哦，一起来学习吧！': '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！'
-星期日: 星期日
-'当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】': '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'
-星期一: 星期一
-星期二: 星期二
-星期三: 星期三
-星期四: 星期四
-星期五: 星期五
-'星期六': '星期六'
-'开发者已保存！': '开发者已保存！'
-设置已保存！: 设置已保存！
-'请输入名称！': '请输入名称！'
-该名称已经存在！: 该名称已经存在！
-'请输入栏目名称！': '请输入栏目名称！'
-'该栏目名称已经存在！': '该栏目名称已经存在！'
-云视频设置已保存！: 云视频设置已保存！
-'您还没有授权码，请先绑定。': '您还没有授权码，请先绑定。'
-授权域名绑定成功！: 授权域名绑定成功！
-授权域名绑定失败，请重试！: 授权域名绑定失败，请重试！
-'AccessKey / SecretKey　不正确！': 'AccessKey / SecretKey　不正确！'
-'AccessKey / SecretKey　不正确！！': 'AccessKey / SecretKey　不正确！！'
-'授权码保存成功！': '授权码保存成功！'
-Key生成失败，请检查服务器网络后，重试！: Key生成失败，请检查服务器网络后，重试！
-'您无权操作!': '您无权操作!'
-云邮件设置已保存！: 云邮件设置已保存！
-云邮件设置保存失败！: 云邮件设置保存失败！
-'--文件组--': '--文件组--'
-支付方式设置已保存！: 支付方式设置已保存！
-退款设置已保存！: 退款设置已保存！
-'打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文': '打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文'
-移动客户端设置已保存！: 移动客户端设置已保存！
-资讯频道设置已保存！: 资讯频道设置已保存！
-小组设置已保存！: 小组设置已保存！
-'邀请码设置已保存！': '邀请码设置已保存！'
-优化文件: 优化文件
-'无可优化文件': '无可优化文件'
-班级名称: 班级名称
-'/管理员添加/': '/管理员添加/'
-'管理员添加,': '管理员添加,'
-'您的退款申请已通过管理员审核': '您的退款申请已通过管理员审核'
-'您的退款申请因%note%未通过审核': '您的退款申请因%note%未通过审核'
-电子邮件设置已保存！: 电子邮件设置已保存！
-系统默认设置已保存！: 系统默认设置已保存！
-'我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！': '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！'
-保存成功！: 保存成功！
-客服管理设置已保存！: 客服管理设置已保存！
-'配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。': '配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。'
-用户中心设置已保存！: 用户中心设置已保存！
-未开启用户中心，不能同步管理员帐号！: 未开启用户中心，不能同步管理员帐号！
-'用户名或密码不正确。': '用户名或密码不正确。'
-管理员帐号同步成功。: 管理员帐号同步成功。
-站点信息设置已保存！: 站点信息设置已保存！
-客服设置已保存！: 客服设置已保存！
-'侧边栏设置已保存！': '侧边栏设置已保存！'
-分享设置已保存！: 分享设置已保存！
-'我正在看%articletitle%，关注%sitename%，分享知识，成就未来。': '我正在看%articletitle%，关注%sitename%，分享知识，成就未来。'
-'我正在学习%course%，收获巨大哦，一起来学习吧！': '我正在学习%course%，收获巨大哦，一起来学习吧！'
-'我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!': '我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!'
-'我正在学习%classroom%，收获巨大哦，一起来学习吧！': '我正在学习%classroom%，收获巨大哦，一起来学习吧！'
-通信成功: 通信成功
-通信失败: 通信失败
-未开通Ucenter: 未开通Ucenter
-已经使用云邮件: 已经使用云邮件
-邮件发送正常: 邮件发送正常
-邮件发送异常: 邮件发送异常
-邮件发送服务并没开通！: 邮件发送服务并没开通！
-用户在站点进行操作的日志存放目录: 用户在站点进行操作的日志存放目录
-'用户在站点上传图片的存放目录': '用户在站点上传图片的存放目录'
-用户教学资料库中资源的所在目录(云文件除外): 用户教学资料库中资源的所在目录(云文件除外)
-'标签已存在': '标签已存在'
-'教师资格申请因实名认证未通过而失败': '教师资格申请因实名认证未通过而失败'
-管理员撤销: 管理员撤销
-用户已绑定的手机不能修改。: 用户已绑定的手机不能修改。
-注册设置已保存！: 注册设置已保存！
-头像设置已保存！: 头像设置已保存！
-登录设置已保存！: 登录设置已保存！
-'配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。': '配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
-用户信息设置已保存！: 用户信息设置已保存！
-'所在公司': '所在公司'
-'请勿添加与默认字段相同的自定义字段！': '请勿添加与默认字段相同的自定义字段！'
-'已经没有可以添加的字段了!': '已经没有可以添加的字段了!'
-'已添加当前页面为常用链接！': '已添加当前页面为常用链接！'
-'删除常用链接成功！': '删除常用链接成功！'
-'退出学习数': '退出学习数'
-登录人数: 登录人数
-注册人数: 注册人数
-观看数: 观看数
-'确定删除此公告吗？': '确定删除此公告吗？'
-真的要卸载此应用？: 真的要卸载此应用？
-流量使用量: 流量使用量
-使用量: 使用量
-'应用安装/升级成功！': '应用安装/升级成功！'
-'上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？': '上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？'
-正在%title%: 正在%title%
-'%title%失败：': '%title%失败：'
-'%message%完成': '%message%完成'
-'%title%完成': '%title%完成'
-检查系统环境: 检查系统环境
-备份系统文件: 备份系统文件
-检查下载权限: 检查下载权限
-'下载安装升级程序': '下载安装升级程序'
-'执行安装升级程序': '执行安装升级程序'
-检查系统版本: 检查系统版本
-'确认要删除吗？': '确认要删除吗？'
-'删除成功！': '删除成功！'
-'删除失败！': '删除失败！'
-'保存文章成功！': '保存文章成功！'
-'保存栏目成功！': '保存栏目成功！'
-'添加栏目失败，请重试！': '添加栏目失败，请重试！'
-'真的要删除该栏目吗？': '真的要删除该栏目吗？'
-'删除栏目失败，请重试！%error%': '删除栏目失败，请重试！%error%'
-'真的要永久删除该内容吗？': '真的要永久删除该内容吗？'
-发送后不可修改，确认发送？: 发送后不可修改，确认发送？
-'真的要删除该内容吗？': '真的要删除该内容吗？'
-发布成功！: 发布成功！
-更新成功!: 更新成功!
-'确认要删除此编辑区吗？': '确认要删除此编辑区吗？'
-'删除成功!': '删除成功!'
-服务器错误!: 服务器错误!
-创建编辑区成功!: 创建编辑区成功!
-更新编辑区成功!: 更新编辑区成功!
-'删除图片成功！': '删除图片成功！'
-更新成功！: 更新成功！
-提交成功!: 提交成功!
-'插入图片成功！': '插入图片成功！'
-'还有没有保存的数据,是否要离开此页面?': '还有没有保存的数据,是否要离开此页面?'
-'最多只能添加%panelGroup%个!': '最多只能添加%panelGroup%个!'
-'你确定要删除吗?': '你确定要删除吗?'
-'必须要有一个!': '必须要有一个!'
-'正在上传，请稍等！': '正在上传，请稍等！'
-海报(%index%): 海报(%index%)
-'确认要删除图标吗？': '确认要删除图标吗？'
-'删除分类图标成功！': '删除分类图标成功！'
-'删除分类图标失败！': '删除分类图标失败！'
-保存分类成功！: 保存分类成功！
-'添加分类失败，请重试！': '添加分类失败，请重试！'
-'真的要删除该分类及其子分类吗？': '真的要删除该分类及其子分类吗？'
-'Opps,出错了!': 'Opps,出错了!'
-'重新转码成功!': '重新转码成功!'
-'重新转码失败!': '重新转码失败!'
-完成管理: 完成管理
-'请先选择你要删除的资源!': '请先选择你要删除的资源!'
-确定要分享这些资源吗？: 确定要分享这些资源吗？
-'请先选择你要分享的资源!': '请先选择你要分享的资源!'
-分享资源成功: 分享资源成功
-分享资源失败: 分享资源失败
-'请先选择你要操作的资源!': '请先选择你要操作的资源!'
-'正在加载，请等待......': '正在加载，请等待......'
-'Opps,出错了......': 'Opps,出错了......'
-选择用户: 选择用户
-'删除资源成功': '删除资源成功'
-生成截图失败！: 生成截图失败！
-生成截图成功!: 生成截图成功!
-保存失败！: 保存失败！
-操作成功: 操作成功
-'图片格式或大小不正确，上传图片失败，请检查后重试！': '图片格式或大小不正确，上传图片失败，请检查后重试！'
-'上传虚拟币图片成功！': '上传虚拟币图片成功！'
-'删除虚拟币图片成功！': '删除虚拟币图片成功！'
-'删除虚拟币图片失败！': '删除虚拟币图片失败！'
-'请输入虚拟币价格': '请输入虚拟币价格'
-'请输入最大可抵扣比率': '请输入最大可抵扣比率'
-'确定要删除评论吗?': '确定要删除评论吗?'
-'删除失败:%response%': '删除失败:%response%'
-'URL路径只能包含字母和数字,请以字母开头!长度大于2位': 'URL路径只能包含字母和数字,请以字母开头!长度大于2位'
-'正在上传附图，请等待附图上传成功后，再保存！': '正在上传附图，请等待附图上传成功后，再保存！'
-'添加学员操作成功!': '添加学员操作成功!'
-'添加学员操作失败!': '添加学员操作失败!'
-指定课程成功: 指定课程成功
-复制课程成功: 复制课程成功
-复制课程失败: 复制课程失败
-'请输入标题，不能为空。': '请输入标题，不能为空。'
-'删除问题': '删除问题'
-'删除课时资料': '删除课时资料'
-'删除检查章节': '删除检查章节'
-'删除草稿': '删除草稿'
-'删除学习时长': '删除学习时长'
-'删除录播': '删除录播'
-'删除播放时长': '删除播放时长'
-'删除作业': '删除作业'
-'删除练习': '删除练习'
-'删除课时': '删除课时'
-'删除课程收藏': '删除课程收藏'
-'删除课程笔记': '删除课程笔记'
-'删除评价': '删除评价'
-'删除公告': '删除公告'
-'删除动态': '删除动态'
-'删除成员': '删除成员'
-'验证密码错误': '验证密码错误'
-'课程删除成功': '课程删除成功'
-课程推荐已取消！: 课程推荐已取消！
-'您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的%name%，将可以继续学习。': '您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的%name%，将可以继续学习。'
-'课程关闭成功！': '课程关闭成功！'
-'删除课程，将删除课程的%chapter% %part%、课时、%user%等信息。真的要删除该课程吗？': '删除课程，将删除课程的%chapter% %part%、课时、%user%等信息。真的要删除该课程吗？'
-提醒教师的通知，发送成功！: 提醒教师的通知，发送成功！
-真的要取消该课程推荐吗？: 真的要取消该课程推荐吗？
-设置推荐课程操作成功!: 设置推荐课程操作成功!
-设置推荐课程操作失败!: 设置推荐课程操作失败!
-'每周精品栏目只能设置三门课程！': '每周精品栏目只能设置三门课程！'
-'每周精品栏目中已经存在此门课程！': '每周精品栏目中已经存在此门课程！'
-当前在线：%res%人: 当前在线：%res%人
-登录人数：%res%人: 登录人数：%res%人
-'确定要删除该分类展示吗？': '确定要删除该分类展示吗？'
-'更新栏目成功！': '更新栏目成功！'
-'添加栏目成功！': '添加栏目成功！'
-'更新栏目成功失败，请重试！': '更新栏目成功失败，请重试！'
-'添加栏目成功失败，请重试！': '添加栏目成功失败，请重试！'
-'新增栏目成功失败，请重试！': '新增栏目成功失败，请重试！'
-'网校名称最多不能超过8个汉字': '网校名称最多不能超过8个汉字'
-签名: 签名
-'您启用了手机注册模式，不可关闭短信功能！': '您启用了手机注册模式，不可关闭短信功能！'
-'真的要删除该文件吗？': '真的要删除该文件吗？'
-'%trigger%吗？': '%trigger%吗？'
-'%trigger%成功！': '%trigger%成功！'
-'%trigger%失败': '%trigger%失败'
-'请选择要删除的话题！': '请选择要删除的话题！'
-'确定要删除话题吗？': '确定要删除话题吗？'
-'您的导出结果数量（%exportCountFormat%条）已超出最大值（%exportAllowCountFormat%条），请调整筛选范围后分批导出': '您的导出结果数量（%exportCountFormat%条）已超出最大值（%exportAllowCountFormat%条），请调整筛选范围后分批导出'
-没有可导出的数据: 没有可导出的数据
-正在导出数据，请稍候...: 正在导出数据，请稍候...
-保存导航成功！: 保存导航成功！
-'确认要删除此导航吗？': '确认要删除此导航吗？'
-'上传轮播图1失败，请重试！': '上传轮播图1失败，请重试！'
-'上传轮播图1成功！': '上传轮播图1成功！'
-'删除轮播图1成功！': '删除轮播图1成功！'
-'删除轮播图1失败！': '删除轮播图1失败！'
-'上传轮播图2失败，请重试！': '上传轮播图2失败，请重试！'
-'上传轮播图2成功！': '上传轮播图2成功！'
-'删除轮播图2成功！': '删除轮播图2成功！'
-'删除轮播图2失败！': '删除轮播图2失败！'
-'上传轮播图3失败，请重试！': '上传轮播图3失败，请重试！'
-'上传轮播图3成功！': '上传轮播图3成功！'
-'删除轮播图3成功！': '删除轮播图3成功！'
-'删除轮播图3失败！': '删除轮播图3失败！'
-'上传轮播图4失败，请重试！': '上传轮播图4失败，请重试！'
-'上传轮播图4成功！': '上传轮播图4成功！'
-'删除轮播图4成功！': '删除轮播图4成功！'
-'删除轮播图4失败！': '删除轮播图4失败！'
-'上传轮播图5失败，请重试！': '上传轮播图5失败，请重试！'
-'上传轮播图5成功！': '上传轮播图5成功！'
-'删除轮播图5成功！': '删除轮播图5成功！'
-'删除轮播图5失败！': '删除轮播图5失败！'
-检查优化文件: 检查优化文件
-优化文件成功: 优化文件成功
-刷新缓存成功！: 刷新缓存成功！
-刷新缓存失败！: 刷新缓存失败！
-优化磁盘空间成功！: 优化磁盘空间成功！
-优化磁盘空间失败！: 优化磁盘空间失败！
-'确认要清空系统备份数据吗？': '确认要清空系统备份数据吗？'
-'清空系统备份数据成功！': '清空系统备份数据成功！'
-'清空系统备份数据失败！': '清空系统备份数据失败！'
-备份数据库成功，请下载数据库，并及时优化磁盘空间！: 备份数据库成功，请下载数据库，并及时优化磁盘空间！
-备份数据库失败！: 备份数据库失败！
-退款申请处理结果已提交: 退款申请处理结果已提交
-'请选择审核结果': '请选择审核结果'
-'开启前,请先验证您的邮箱': '开启前,请先验证您的邮箱'
-'<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="': '<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="'
-'授权域名一旦绑定就无法变更，您真的要绑定该授权域名吗？': '授权域名一旦绑定就无法变更，您真的要绑定该授权域名吗？'
-'上传云视频播放器水印失败，请重试！': '上传云视频播放器水印失败，请重试！'
-'上传云视频播放器水印成功！': '上传云视频播放器水印成功！'
-'确认要删除云视频播放器水印吗？': '确认要删除云视频播放器水印吗？'
-'删除云视频播放器水印成功！': '删除云视频播放器水印成功！'
-'删除云视频播放器水印失败！': '删除云视频播放器水印失败！'
-'上传云视频内嵌水印失败，请重试！': '上传云视频内嵌水印失败，请重试！'
-'上传云视频内嵌水印成功！': '上传云视频内嵌水印成功！'
-'确认要删除云视频水印吗？': '确认要删除云视频水印吗？'
-'删除云视频内嵌水印成功！': '删除云视频内嵌水印成功！'
-'删除云视频内嵌水印失败！': '删除云视频内嵌水印失败！'
-'上传微信二维码成功！': '上传微信二维码成功！'
-最多设置10个..: 最多设置10个..
-'请选择要上传的默认课程图片文件': '请选择要上传的默认课程图片文件'
-'上传直播课程的LOGO成功！': '上传直播课程的LOGO成功！'
-'删除直播课程LOGO成功！': '删除直播课程LOGO成功！'
-'删除直播课程LOGO失败！': '删除直播课程LOGO失败！'
-'上传网校启动图1成功！': '上传网校启动图1成功！'
-'删除网校启动图1成功！': '删除网校启动图1成功！'
-'删除网校启动图1失败！': '删除网校启动图1失败！'
-'上传网校启动图2成功！': '上传网校启动图2成功！'
-'删除网校启动图2成功！': '删除网校启动图2成功！'
-'删除网校启动图2失败！': '删除网校启动图2失败！'
-'上传网校启动图3成功！': '上传网校启动图3成功！'
-'删除网校启动图3成功！': '删除网校启动图3成功！'
-'删除网校启动图3失败！': '删除网校启动图3失败！'
-'上传网校启动图4成功！': '上传网校启动图4成功！'
-'删除网校启动图4成功！': '删除网校启动图4成功！'
-'删除网校启动图4失败！': '删除网校启动图4失败！'
-'上传网校启动图5成功！': '上传网校启动图5成功！'
-'删除网校启动图5成功！': '删除网校启动图5成功！'
-'删除网校启动图5失败！': '删除网校启动图5失败！'
-'上传网校LOGO成功！': '上传网校LOGO成功！'
-'删除网校LOGO成功！': '删除网校LOGO成功！'
-'删除网校LOGO失败！': '删除网校LOGO失败！'
-'上传app图标成功！': '上传app图标成功！'
-'删除网校app图标成功！': '删除网校app图标成功！'
-'删除网校app图标失败！': '删除网校app图标失败！'
-'删除app封面成功！': '删除app封面成功！'
-'删除app封面失败！': '删除app封面失败！'
-'上传网站LOGO成功！': '上传网站LOGO成功！'
-'删除网站LOGO成功！': '删除网站LOGO成功！'
-'删除网站LOGO失败！': '删除网站LOGO失败！'
-'上传网站浏览器图标成功！': '上传网站浏览器图标成功！'
-'删除网站浏览器图标成功！': '删除网站浏览器图标成功！'
-'删除网站浏览器图标失败！': '删除网站浏览器图标失败！'
-真的要使用该主题吗？: 真的要使用该主题吗？
-'请输入SMTP服务器地址': '请输入SMTP服务器地址'
-'请输入SMTP端口号': '请输入SMTP端口号'
-'请输入SMTP用户名': '请输入SMTP用户名'
-'请输入SMTP密码': '请输入SMTP密码'
-'请输入发信人地址': '请输入发信人地址'
-'请输入发信人名称': '请输入发信人名称'
-'请输入Key': '请输入Key'
-'请输入PID': '请输入PID'
-'请输入商户号': '请输入商户号'
-'请输入商户平台Key': '请输入商户平台Key'
-'请输入Aes': '请输入Aes'
-请选择字段类型: 请选择字段类型
-'确认要删除标签吗？': '确认要删除标签吗？'
-'标签更新成功！': '标签更新成功！'
-'标签添加成功!': '标签添加成功!'
-'真的要删除该标签吗？': '真的要删除该标签吗？'
-真的要取消该教师推荐吗？: 真的要取消该教师推荐吗？
-教师推荐已取消！: 教师推荐已取消！
-设置推荐老师操作成功!: 设置推荐老师操作成功!
-设置推荐老师操作失败!: 设置推荐老师操作失败!
-'是否确认审核失败?': '是否确认审核失败?'
-'是否确认审核通过?': '是否确认审核通过?'
-'请输入驳回原因！': '请输入驳回原因！'
-'不好意思，备注太长，请限制在100个字以内!': '不好意思，备注太长，请限制在100个字以内!'
-确定要撤销这条认证成功的实名认证吗？: 确定要撤销这条认证成功的实名认证吗？
-头像更新成功！: 头像更新成功！
-'密码修改成功': '密码修改成功'
-'新用户添加成功': '新用户添加成功'
-'新用户添加失败': '新用户添加失败'
-用户信息保存成功: 用户信息保存成功
-'网站地址不正确，须以http://weibo.com开头。': '网站地址不正确，须以http://weibo.com开头。'
-'网站地址不正确，须以http://开头。': '网站地址不正确，须以http://开头。'
-'已经导入：%progressNum%': '已经导入：%progressNum%'
-'%data%完成': '%data%完成'
-真的要%title%吗？: 真的要%title%吗？
-'%title%成功！': '%title%成功！'
-'%title%失败': '%title%失败'
-'正在发送密码重置验证邮件，请稍等。': '正在发送密码重置验证邮件，请稍等。'
-'密码重置验证邮件，发送成功！': '密码重置验证邮件，发送成功！'
-'密码重置验证邮件，发送失败': '密码重置验证邮件，发送失败'
-正在发送Email验证邮件，请稍等。: 正在发送Email验证邮件，请稍等。
-Email验证邮件，发送成功！: Email验证邮件，发送成功！
-Email验证邮件，发送失败: Email验证邮件，发送失败
-'用户必须拥有%user%角色': '用户必须拥有%user%角色'
-取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？: 取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？
-用户组保存成功: 用户组保存成功
-修改用户所属机构成功: 修改用户所属机构成功
-未选中任何%name%: 未选中任何%name%
-'确定要删除选中的%ids%条%name%吗？': '确定要删除选中的%ids%条%name%吗？'
-'正在删除%name%，请稍等。': '正在删除%name%，请稍等。'
-'真的要删除该%name%吗？': '真的要删除该%name%吗？'
-'删除%name%成功': '删除%name%成功'
+虚拟币模式已保存！: Coin mode has been saved
+'图片格式不正确，请上传png, gif, jpg格式的图片文件！': 'Image format is not correct,please upload image in format of PNG,GIF or JPG!'
+'图片大小不正确，请上传超过50*50的等比例图片！': 'Image size is not correct which should be larger than 50*50'
+'上传图片格式错误，请上传jpg, gif, png格式的文件。': 'Image format is not correct,please upload image in format of PNG,GIF or JPG!'
+账目名称: Transaction name
+该URL路径已存在: This URL is already existed
+'您不是超级管理员！': 'You are not an administrator!'
+'发布课程，不能删除！': 'Publish courses ,cannot be deleted'
+'请先删除班级课程': 'Please delete class courses first'
+'删除课程成功': 'Courses deleted successfully'
+'当前课程未移除,请先移除班级课程': 'The current course has not been removed,please remove the class courses'
+作业插件未升级: Assignment plugin has not been updated
+'未输入正确的校验密码！': 'Verfication password is not correct!'
+'课时章节': 'Lesson chapter'
+课时草稿: Lesson draft
+课时时长: Lesson time length
+课时录播: Lesson record playback
+课时播放时长: Lesson playback time length
+课时作业: Lesson assignment
+'课时练习': 'Lesson exercise'
+课时收藏: Lesson bookmark
+课时笔记: Lesson note
+课程动态: Lesson updates
+课程成员: Lesson member
+'数据删除': 'Data delete'
+'数据删除失败或插件未安装或插件未升级': 'Data deleted failed or the plugin is not installed or is not updated'
+'数据删除失败': 'Data deleted failed'
+'{{nickname}},欢迎加入课程{{course}}': '{{nickname}},Welcome to {{course}}'
+课程设置已保存！: Course setting has been saved
+课程默认图片设置已保存！: Course default image setting has been saved
+题库设置已保存！: Test library setting has been saved
+'我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。': 'Check out this :{{articletitle}},visit this site :{{sitename}},Sharing knowledge makes a better future '
+'我正在学习{{course}}，收获巨大哦，一起来学习吧！': 'I am learning this :{{course}} which is really rewarding ,lets learn together!'
+'我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!': ' I posted  {{threadname}} in the group {{groupname}},its really good ,come and join me '
+'我正在学习{{classroom}}，收获巨大哦，一起来学习吧！': 'I am learning in {{classroom}} which is really rewarding ,let learn together!'
+星期日: Sunday
+'当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】' : 'The current domain name dose not match with the setting,to avoid affecting the normal use of the cloud messaging feature, Go to [System]-[Site setting]-[General information]-[Site domain name]'
+星期一: Monday
+星期二: Tuesday
+星期三: Wensday
+星期四: Thursday
+星期五: Friday
+'星期六': 'Saturday'
+'开发者已保存！': 'Developer has been saved'
+设置已保存！: Settings saved
+'请输入名称！': 'Please enter a name'
+该名称已经存在！: This name is already existed
+'请输入栏目名称！': 'Please enter column name!'
+'该栏目名称已经存在！': 'This column name is already existed'
+云视频设置已保存！: Cloud video setting has been saved
+'您还没有授权码，请先绑定。': 'You don't have authorization code ,Please bind first'
+授权域名绑定成功！: Domain authorization  bind successfully!
+授权域名绑定失败，请重试！: Domain authorization bind failed,please try again
+'AccessKey / SecretKey　不正确！': 'AccessKey / SecretKey　is not correct!'
+'AccessKey / SecretKey　不正确！！': 'AccessKey / SecretKey　is not correct!'
+'授权码保存成功！': 'Authorization code saved successfully!'
+Key生成失败，请检查服务器网络后，重试！: Key created failed,please check the server statu and try again!
+'您无权操作!': 'You are not allowed to operate!'
+云邮件设置已保存！: Cloud email setting has been saved
+云邮件设置保存失败！: Cloud email setting save failed
+'--文件组--': '--Document group--'
+支付方式设置已保存！: Payment method setting has been saved!
+退款设置已保存！: Refund setting saved!
+'打开文件失败，请检查文件路径是否正确，路径和文件名不要包含中文': 'Document open failed,please check the document directory which should not contains chinese characters'
+移动客户端设置已保存！: Mobile APP setting saved!
+资讯频道设置已保存！: News channel setting saved!
+小组设置已保存！: Group setting saved!
+'邀请码设置已保存！': 'Invitation code setting saved'
+优化文件: Optimize the document
+'无可优化文件': 'No optimizable document'
+班级名称: Class name
+'/管理员添加/': '/Add administrator /'
+'管理员添加,': 'Add administrator,'
+'您的退款申请已通过管理员审核': 'Your refund request has been approved by the administrator'
+'您的退款申请因%note%未通过审核': 'Your refund request has been rejected because %note%'
+电子邮件设置已保存！: Email setting saved!
+系统默认设置已保存！: System default setting saved!
+'我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！': 'Check out {{threadname}} in the group {{groupname}} ,its really good,come and join me!  '
+保存成功！: Save successfully!
+客服管理设置已保存！: Customer service managment setting has been saved!
+'配置文件%discuzConfigPath%不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。': ' Configration file %discuzConfigPath% is not writable ,please open this file ,copy the content in the Ucenter and override the original file'
+用户中心设置已保存！: User center setting saved!
+未开启用户中心，不能同步管理员帐号！: User center is not activated so that the administrator account can not be synchronized
+'用户名或密码不正确。': 'Username or password is not correct!'
+管理员帐号同步成功。: Administrator account synchronized successfully
+站点信息设置已保存！: Site information setting has been saved!
+客服设置已保存！: Customer service setting has been saved!
+'侧边栏设置已保存！': 'Sidebar setting has been saved'
+分享设置已保存！: Sharing settings has been saved!
+'我正在看%articletitle%，关注%sitename%，分享知识，成就未来。': 'Check out this :{{articletitle}},visit this site :{{sitename}},Sharing knowledge makes a better future '
+'我正在学习%course%，收获巨大哦，一起来学习吧！': 'I am learning the course %course% which is really rewarding ,lets learn together!'
+'我在%groupname%小组,发表了%threadname%,很不错哦,一起来看看吧!': ' I posted %threadname% in the group %groupname% which is really good ,come and join me!'
+'我正在学习%classroom%，收获巨大哦，一起来学习吧！': 'I am learning %classroom%，it's really rewarding ,lets learn together!'
+通信成功: Communication succeed
+通信失败: Communication faliure
+未开通Ucenter: Ucenter is not activated
+已经使用云邮件: Cloud email has been used
+邮件发送正常: Email send successfully
+邮件发送异常: Email send error
+邮件发送服务并没开通！: Email sending service is not activated!
+用户在站点进行操作的日志存放目录: Directory where user's operation logs are saved
+'用户在站点上传图片的存放目录': 'Directory where uploaded images are saved'
+用户教学资料库中资源的所在目录(云文件除外): Directory where user's course materials are saved
+'标签已存在': 'The tag already exists'
+'教师资格申请因实名认证未通过而失败': 'Teacher Certification application is rejected because real-name authentication is not approved'
+管理员撤销: Cancelled by the administrator
+用户已绑定的手机不能修改。: The phone number already binded by the user cannot be changed
+注册设置已保存！: Register settings have been saved!
+头像设置已保存！: Avatar settings have been saved!
+登录设置已保存！: Logging settings have been saved!
+'配置文件%phpwindConfigPath%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。': 'Configration file %phpwindConfigPath% is not writable ,please open this file ,copy the content of the WindID and override the original file'
+用户信息设置已保存！: User information settings have been saved
+'所在公司': 'Company'
+'请勿添加与默认字段相同的自定义字段！': 'Do not the customized field which is the same with the default field'
+'已经没有可以添加的字段了!': 'No more field left '
+'已添加当前页面为常用链接！': 'The current page has been added as a common link'
+'删除常用链接成功！': 'Remove common link successfully!'
+'退出学习数': 'Quit students'
+登录人数: Logged students
+注册人数: Registered students
+观看数: Views
+'确定删除此公告吗？': 'Are you sure to delete the announcement?'
+真的要卸载此应用？: Are you sure to uninstall the app?
+流量使用量: Traffic usage
+使用量: Usage
+'应用安装/升级成功！': 'App install/update successfully'
+'上次安装升级应用系统需回滚，继续安装可能会发生不可预料的错误，您确定继续吗？': 'Last upgrade installed applications need to roll back to continue the installation which may occur unexpected errors, you sure to continue?'
+正在%title%: Now %title%
+'%title%失败：': '%title% failed：'
+'%message%完成': '%message% completed'
+'%title%完成': '%title% completed'
+检查系统环境: Check system environment
+备份系统文件: Backup system document
+检查下载权限: Check download permissions
+'下载安装升级程序': 'download update package'
+'执行安装升级程序': 'Install the update package'
+检查系统版本: Check system version
+'确认要删除吗？': 'Are you sure want to delete?'
+'删除成功！': 'Delete successfully'
+'删除失败！': 'Delete failed'
+'保存文章成功！': 'Article saved successfully'
+'保存栏目成功！': 'Column saved successfully'
+'添加栏目失败，请重试！': 'Column added failed ,please try again!'
+'真的要删除该栏目吗？': 'Are you sure want to delete the column?'
+'删除栏目失败，请重试！%error%': 'Column delete failed please try again！%error%'
+'真的要永久删除该内容吗？': 'Are you sure want to delete the content permanently?'
+发送后不可修改，确认发送？: Cannot be modified after being sent ,continue?
+'真的要删除该内容吗？': 'Are you sure want to delete the content?'
+发布成功！: Publish successfully!
+更新成功!: Update successfully!
+'确认要删除此编辑区吗？': 'Are you sure to delete the edit area?'
+'删除成功!': 'Delete successfully!'
+服务器错误!: Server error!
+创建编辑区成功!: Edit area created successfully!
+更新编辑区成功!: Edit area updated successfully!
+'删除图片成功！': 'Image delete successfully!'
+更新成功！: Update successfully！
+提交成功!: Submmit successfully!
+'插入图片成功！': 'Image insert successfully!'
+'还有没有保存的数据,是否要离开此页面?': 'There are unsaved data on this page ,are you sure want to leave?'
+'最多只能添加%panelGroup%个!': 'Can only add up to %panelGroup% groups!'
+'你确定要删除吗?': 'Are you sure to delete?'
+'必须要有一个!': 'Cannot be empty!'
+'正在上传，请稍等！': 'Uploading ,please wait 1'
+海报(%index%): Poster (%index%)
+'确认要删除图标吗？': 'Are you sure to delete the icon?'
+'删除分类图标成功！': 'Category icon delete successfully!'
+'删除分类图标失败！': 'Category icon delete failed!'
+保存分类成功！: Category saved successfully!
+'添加分类失败，请重试！': 'Category add failed ,please try again!'
+'真的要删除该分类及其子分类吗？': 'Are you sure to delete the category and all it's child categories?'
+'Opps,出错了!': 'Opps,Something gose wrong!'
+'重新转码成功!': 'Re-trancoding successfully!'
+'重新转码失败!': 'Re-trancoding failed!'
+完成管理: Complete managment
+'请先选择你要删除的资源!': 'Please first choose the resources you want to delete!'
+确定要分享这些资源吗？: Are you sure want to share these resources?
+'请先选择你要分享的资源!': 'Please first choose the resources you want to share!'
+分享资源成功: Resources sharing  succeeded
+分享资源失败: Resources sharing  failed
+'请先选择你要操作的资源!': 'Please first choose the resources you want to operate!'
+'正在加载，请等待......': 'Loading ,please wait......'
+'Opps,出错了......': 'Opps,Something gose wrong......'
+选择用户: Select user
+'删除资源成功': 'Resources delete successfully'
+生成截图失败！: Snapshoot created failed！
+生成截图成功!: Snapshoot created successfully!
+保存失败！: Save successfully！
+操作成功: Operation succeeded
+'图片格式或大小不正确，上传图片失败，请检查后重试！': 'Upload failed because the image format or size is not correct ,Please review and try again'
+'上传虚拟币图片成功！': 'Coin image upload successfully！'
+'删除虚拟币图片成功！': 'Coin image delete successfully！'
+'删除虚拟币图片失败！': 'Coin image delete failed！'
+'请输入虚拟币价格': 'Please enter the coin value'
+'请输入最大可抵扣比率': 'Please enter the maximum discount persentage'
+'确定要删除评论吗?': 'Are you sure want delete the comment?'
+'删除失败:%response%': 'Delete failed:%response%'
+'URL路径只能包含字母和数字,请以字母开头!长度大于2位': 'URL can only contains numbers and characters and it should starts with characters also be more than 2 characters'
+'正在上传附图，请等待附图上传成功后，再保存！': 'Uploading attached images, please wait fot it uploaded successfully, then save!'
+'添加学员操作成功!': 'Add students successfully!'
+'添加学员操作失败!': 'Add students failed!'
+指定课程成功: Course specified successfully
+复制课程成功: Course copied successfully
+复制课程失败: Course copied failed
+'请输入标题，不能为空。': 'Please enter the title which can not be empty'
+'删除问题': 'Delete question'
+'删除课时资料': 'Delete lesson materials'
+'删除检查章节': 'Delete chapter'
+'删除草稿': 'Delete draft'
+'删除学习时长': 'Delete study time length'
+'删除录播': 'Delete recorded video'
+'删除播放时长': 'Delete playback time length'
+'删除作业': 'Delete assignment'
+'删除练习': 'Delete exercise'
+'删除课时': 'Delete lesson'
+'删除课程收藏': 'Delete course bookmarks'
+'删除课程笔记': 'Delete course notes'
+'删除评价': 'Delete comments'
+'删除公告': 'Delete announcement'
+'删除动态': 'Delete updates'
+'删除成员': 'Delete members'
+'验证密码错误': 'Verfication password is wrong'
+'课程删除成功': 'Delete course successfully'
+课程推荐已取消！: Course recommendation has been cancelled
+'您确认要关闭此课程吗？课程关闭后，仍然还在有效期内的%name%，将可以继续学习。': 'Are you sure want to close the course?student  %name% who are still in the valid service period can still learn the course'
+'课程关闭成功！': 'Course closed successfully'
+'删除课程，将删除课程的%chapter% %part%、课时、%user%等信息。真的要删除该课程吗？': 'Delete the course which means that %chapter% %part%,lesson and %user% information will all be deleted.Are you sure want to proceed ? '
+提醒教师的通知，发送成功！: Notification reminding teachers has been sent successfully!
+真的要取消该课程推荐吗？: Are you sure want to cancel the course recommendation?
+设置推荐课程操作成功!: Course recommendation set successfully!
+设置推荐课程操作失败!: Course recommendation set failed!
+'每周精品栏目只能设置三门课程！': 'Only 3 courses can be set for the weekly recommendation column!'
+'每周精品栏目中已经存在此门课程！': 'This course is already existed in the weekly rrecommendation column！'
+当前在线：%res%人: Currently online users :%res%
+登录人数：%res%人: Currently logged in users :%res%
+'确定要删除该分类展示吗？': 'Are you sure want to delete the category？'
+'更新栏目成功！': 'column updated successfully!'
+'添加栏目成功！': 'Column added successfully!'
+'更新栏目成功失败，请重试！': 'Column update failed ,please try again ！'
+'添加栏目成功失败，请重试！': 'Column add failed ,please try again ！'
+'新增栏目成功失败，请重试！': 'Column add failed ,please try again ！'
+'网校名称最多不能超过8个汉字': 'Site name can not be more than chinese characters'
+签名: signature
+'您启用了手机注册模式，不可关闭短信功能！': 'Mobile registeration mode has been activated and the messaging feature cannot be deactivated!'
+'真的要删除该文件吗？': 'Are you sure want to delete the file?'
+'%trigger%吗？': '%trigger% ？'
+'%trigger%成功！': '%trigger% succeeded！'
+'%trigger%失败': '%trigger% failed'
+'请选择要删除的话题！': 'Please select the topics you want to delete！'
+'确定要删除话题吗？': 'Are you sure want to delete the topic ?'
+'您的导出结果数量（%exportCountFormat%条）已超出最大值（%exportAllowCountFormat%条），请调整筛选范围后分批导出': 'The exported result entries（%exportCountFormat% entries） has exceeded（%exportAllowCountFormat%）, please reset the filter scopes and export them separately'
+没有可导出的数据: No data to be exported
+正在导出数据，请稍候...: Exporting ,please wait...
+保存导航成功！: Navigation saved successfully!
+'确认要删除此导航吗？': 'Are you sure want to delete the navigation?'
+'上传轮播图1失败，请重试！': 'Slide image 1 upaload failed ,please try again!'
+'上传轮播图1成功！': 'Slide image 1 upaload successfully！'
+'删除轮播图1成功！': 'Slide image 1 deleted successfully！'
+'删除轮播图1失败！': 'Slide image 1 delete failed！'
+'上传轮播图2失败，请重试！': 'Slide image 2 upaload failed ,please try again!'
+'上传轮播图2成功！': 'Slide image 2 upaload successfully！'
+'删除轮播图2成功！': 'Slide image 2 deleted successfully！'
+'删除轮播图2失败！': 'Slide image 2 delete failed！'
+'上传轮播图3失败，请重试！': 'Slide image 3 upaload failed ,please try again!'
+'上传轮播图3成功！': 'Slide image 3 upaload successfully！'
+'删除轮播图3成功！': 'Slide image 3 deleted successfully！'
+'删除轮播图3失败！': 'Slide image 3 delete failed！'
+'上传轮播图4失败，请重试！': 'Slide image 4 upaload failed ,please try again!'
+'上传轮播图4成功！': 'Slide image 4 upaload successfully！'
+'删除轮播图4成功！': 'Slide image 4 deleted successfully！'
+'删除轮播图4失败！': 'Slide image 4 delete failed！'
+'上传轮播图5失败，请重试！': 'Slide image 5 upaload failed ,please try again!'
+'上传轮播图5成功！': 'Slide image 5 upaload successfully！'
+'删除轮播图5成功！': 'Slide image 5 deleted successfully！'
+'删除轮播图5失败！': 'Slide image 5 delete failed！'
+检查优化文件: Check document optimization
+优化文件成功: Document optimized successfully
+刷新缓存成功！: Cache refreshed successfully！
+刷新缓存失败！: Cache refresh failed！
+优化磁盘空间成功！: Disk optimization succeeded！
+优化磁盘空间失败！: Disk optimization failed！
+'确认要清空系统备份数据吗？': 'Are you sure to clean system backup data?'
+'清空系统备份数据成功！': 'System backup data cleaned successfully！'
+'清空系统备份数据失败！': 'System backup data cleaned failed！'
+备份数据库成功，请下载数据库，并及时优化磁盘空间！: Database backup succeeded,please download the database and optimize the disk space timely
+备份数据库失败！: Database backup failed!
+退款申请处理结果已提交: Refund request result has been subbmited
+'请选择审核结果': 'Please select reviewed result'
+'开启前,请先验证您的邮箱': 'Before you activate the email ,please verify first'
+'<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="': '<span class="text-danger">Email sending error ,please check<a  target="_blank" href="'
+'授权域名一旦绑定就无法变更，您真的要绑定该授权域名吗？': 'Authorized domain name can not modified after being bined,are you sure to proceed?'
+'上传云视频播放器水印失败，请重试！': 'Cloud video player watermark upload failed, please try again!'
+'上传云视频播放器水印成功！': 'Cloud video player watermark upload successfully!'
+'确认要删除云视频播放器水印吗？': 'Are you sure to delete the cloud video player watermark?'
+'删除云视频播放器水印成功！': 'Cloud video player watermark delete successfully!'
+'删除云视频播放器水印失败！': 'Cloud video player watermark delete failed!'
+'上传云视频内嵌水印失败，请重试！': 'Embeded cloud video player watermark upload failed, please try again'
+'上传云视频内嵌水印成功！': 'Embeded cloud video player watermark upload successfully!'
+'确认要删除云视频水印吗？': 'Are you sure to delete the cloud video player watermark?'
+'删除云视频内嵌水印成功！': 'Embeded cloud video player watermark delete successfully!'
+'删除云视频内嵌水印失败！': 'Embeded cloud video player watermark delete failed!'
+'上传微信二维码成功！': 'Wechat QR code image upaload successfully!'
+最多设置10个..: Can only set up to 10 ...
+'请选择要上传的默认课程图片文件': 'Please choose the default course image to upload'
+'上传直播课程的LOGO成功！': 'Live course logo upload successfully!'
+'删除直播课程LOGO成功！': 'Live course logo delete successfully!'
+'删除直播课程LOGO失败！': 'Live course logo delete failed!'
+'上传网校启动图1成功！': 'School launch image1 upload successfully!'
+'删除网校启动图1成功！': 'School launch image1 delete successfully!'
+'删除网校启动图1失败！': 'School launch image1 delete failed!'
+'上传网校启动图2成功！': 'School launch image2 upload successfully!'
+'删除网校启动图2成功！': 'School launch image2 delete successfully!'
+'删除网校启动图2失败！': 'School launch image2 delete failed!'
+'上传网校启动图3成功！': 'School launch image3 upload successfully!'
+'删除网校启动图3成功！': 'School launch image3 delete successfully!'
+'删除网校启动图3失败！': 'School launch image3 delete failed!'
+'上传网校启动图4成功！': 'School launch image4 upload successfully!'
+'删除网校启动图4成功！': 'School launch image4 delete successfully!'
+'删除网校启动图4失败！': 'School launch image4 delete failed!'
+'上传网校启动图5成功！': 'School launch image5 upload successfully!'
+'删除网校启动图5成功！': 'School launch image5 delete successfully!'
+'删除网校启动图5失败！': 'School launch image5 delete failed!'
+'上传网校LOGO成功！': 'School logo upload successfully!'
+'删除网校LOGO成功！': 'School logo delete successfully！'
+'删除网校LOGO失败！': 'School logo delete failed!'
+'上传app图标成功！': 'App logo upload successfully！'
+'删除网校app图标成功！': 'App logo delete successfully!'
+'删除网校app图标失败！': 'App logo delete failed！'
+'删除app封面成功！': 'App cover delete successfully！'
+'删除app封面失败！': 'App cover delete failed！'
+'上传网站LOGO成功！': 'Website logo upload successfully！'
+'删除网站LOGO成功！': 'Website logo delete successfully！'
+'删除网站LOGO失败！': 'Website logo delete failed！'
+'上传网站浏览器图标成功！': 'Internet explorer logo upload successfully！'
+'删除网站浏览器图标成功！': 'Internet explorer logo delete successfully！'
+'删除网站浏览器图标失败！': 'Internet explorer logo delete failed！'
+真的要使用该主题吗？: Are you sure to use the theme？
+'请输入SMTP服务器地址': 'Please enter the SMTP server address'
+'请输入SMTP端口号': 'Please enter the SMTP server port number'
+'请输入SMTP用户名': 'Please enter the SMTP server Username'
+'请输入SMTP密码': 'Please enter the SMTP server password'
+'请输入发信人地址': 'Please enter sender's address'
+'请输入发信人名称': 'Please enter sender's name '
+'请输入Key': 'Please enter Key'
+'请输入PID': 'Please enter PID'
+'请输入商户号': 'Please enter Merchant ID'
+'请输入商户平台Key': 'Please enter Merchant platform Key'
+'请输入Aes': 'Please enter Aes'
+请选择字段类型: Please choose field type
+'确认要删除标签吗？': 'Are you sure want to delete the tag？'
+'标签更新成功！': 'Tag updated successfully！'
+'标签添加成功!': 'Tag added successfully!'
+'真的要删除该标签吗？': 'Are you sure want to delete the tag？'
+真的要取消该教师推荐吗？: Are you sure want to delete the teacher's recommendation？
+教师推荐已取消！: Teacher recommendation has been cancelled！
+设置推荐老师操作成功!: Teacher recommendation set successfully!
+设置推荐老师操作失败!:  Teacher recommendation set failed!
+'是否确认审核失败?': 'Are you sure the review process failed?'
+'是否确认审核通过?': 'Are you sure the review process succeeded?'
+'请输入驳回原因！': 'Please enter the rejected reasons！'
+'不好意思，备注太长，请限制在100个字以内!': 'Sorry but the note is too long which should be shorter than 100 characters'
+确定要撤销这条认证成功的实名认证吗？: Are you sure to delete the real-name authentication entry which is already verified？
+头像更新成功！: Avatar updated successfully！
+'密码修改成功': 'Password upaloaded successfully'
+'新用户添加成功': 'New user added successfully'
+'新用户添加失败': 'New user add failed'
+用户信息保存成功: User information saved successfully
+'网站地址不正确，须以http://weibo.com开头。': 'The website address is not correct which should starts with http://weibo.com.'
+'网站地址不正确，须以http://开头。': 'The website address is not correct which should starts with http://.'
+'已经导入：%progressNum%': '%progressNum% already imported'
+'%data%完成': '%data% completed'
+真的要%title%吗？: Are you sure want  %title%？
+'%title%成功！': '%title% succeeded！'
+'%title%失败': '%title% failed'
+'正在发送密码重置验证邮件，请稍等。': 'Sending password to reset the verification Email,please wait'
+'密码重置验证邮件，发送成功！': 'Password for reseting the verifcation Email sent successfully！'
+'密码重置验证邮件，发送失败': 'Password for reseting the verification Email sent failed！'
+正在发送Email验证邮件，请稍等。: Sending verification Email ,please wait.
+Email验证邮件，发送成功！: Verification Email sent successfully！
+Email验证邮件，发送失败: Verification Email sent failed!
+'用户必须拥有%user%角色': 'User must have a role of %user%'
+取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？: Cancel the teacher role and all the teacher permissions of the user.Are you sure want to proceed?
+用户组保存成功: User group saved successfully
+修改用户所属机构成功: Change user's organization successfully
+未选中任何%name%: NO %name% is selected
+'确定要删除选中的%ids%条%name%吗？': 'Are you sure to delete the selected %ids%  %name%？'
+'正在删除%name%，请稍等。': 'Deleting %name%，please wait.'
+'真的要删除该%name%吗？': 'Are you sure want to delete %name%?'
+'删除%name%成功': '%name% delete successfully'
