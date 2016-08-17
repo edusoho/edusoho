@@ -4,9 +4,9 @@
       <h3 class="panel-title">即时聊天状态</h3>
     </div>
     <div class="panel-body" style="height: 250px; padding:40px">
-    {% if setting('im.enabled')%}
+    {% if setting('app_im.enabled')%}
       <p class="text-muted">已开启</p>
-      <p class="text-muted">截止目前共发送：</p>
+      <p class="text-muted">截止目前共发送：{{ imUsedTotal.count }} 条</p>
     {% else %}
       <p class="text-muted">未开启</p>
     {% endif %}

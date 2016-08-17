@@ -110,7 +110,7 @@ class EduCloudController extends BaseController
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null),
-            'imUsedInfo'    => $this->generateChartData($this->getImUsedInfo())
+            'imUsedInfo'    => json_encode($this->getImUsedInfo())
         );
 
         if (isset($overview['service']['storage']['startMonth'])
@@ -130,6 +130,7 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
+        $imUsedTotal = $api->get('/im/app/receive_count');
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -137,7 +138,8 @@ class EduCloudController extends BaseController
             'isBinded'    => $isBinded,
             'chartInfo'   => $chartInfo,
             'accessCloud' => $this->isAccessEduCloud(),
-            'overview'    => $overview
+            'overview'    => $overview,
+            'imUsedTotal' => $imUsedTotal
         ));
     }
 
@@ -1057,7 +1059,7 @@ class EduCloudController extends BaseController
     {
         $api       = CloudAPIFactory::create('root');
         $endTime   = strtotime(date('Y-m-d', strtotime('-1 day')).' 23:59:59');
-        $startTime = strtotime(date('Y-m-d', strtotime('-7 days', $endTime)).'00:00:00');
+        $startTime = strtotime(date('Y-m-d', strtotime('-6 days', $endTime)).'00:00:00');
 
         try {
             $imUsedInfo = $api->get('/im/app/receive_count_period', array(
@@ -1066,7 +1068,12 @@ class EduCloudController extends BaseController
             $imUsedInfo = array();
         }
 
-        return $imUsedInfo;
+        $chartInfo = array();
+        foreach ($imUsedInfo as $key => $value) {
+            $chartInfo[] = array('date' => $value['sendTime'], 'count' => $value['nums']);
+        }
+
+        return $chartInfo;
     }
 
     protected function getSearchService()
