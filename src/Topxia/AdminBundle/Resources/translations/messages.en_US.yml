@@ -7,8 +7,8 @@
 显示中: Displaying
 商业版: Commercial Version
 '作者：': 'Author: '
-主题: Topic
-应用: Application
+主题: Theme
+应用: APP
 隐藏已购应用: Hide purchased App
 'AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，': 'System will not work properly if AccessKey or SecretKey is invalid.'
 请修改设置。: Please update settings
@@ -597,7 +597,7 @@ EduSoho开放云解决举报事件、提起诉讼而提交的；: EduSoho开放�
 '您的云视频包将于%remaining%天后到期，请尽快续费': 'Your Cloud Video package will be expired after %remaining% days, please renew as soon as possible.'
 '您的云视频包已到期，请尽快续费': 'Your Cloud Video package has expired, please renew as soon as possible.'
 云短信: Cloud SMS
-教育云: Cloud Service
+教育云: Cloud
 项目: Project
 '元 ': 'RMB '
 '去充值': 'Recharge'
@@ -719,8 +719,8 @@ EduSoho开放云解决举报事件、提起诉讼而提交的；: EduSoho开放�
 您的云视频已被锁定，请联系客服人员：: 'Your Cloud Video service has been locked, please contact customer service: '
 您的云视频已被禁用，请联系客服人员：: 'Your Cloud Video service has been disabled, please contact customer service: '
 视频托管服务由EduSoho教育云提供: 'Video SaaS service provided by EduSoho Cloud Video service'
-启用云视频: Enable Cloud Vido Service
-'抱歉，您尚未接入教育云，不能使用云视频服务！': 'Sorry, you haven''t applied the Cloud Video service, cannot use the service.'
+启用云视频: Enable Cloud Video
+'抱歉，您尚未接入教育云，不能使用云视频服务！': 'Sorry, you haven''t applied the Cloud service.'
 'EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。': 'EduSoho Cloud Video service provide a stable, safe, easy to use video service with low price.'
 云视频功能设置: Cloud Video settings
 云视频Bucket: Cloud Video Bucket
@@ -795,7 +795,7 @@ MP4文件较适合在不同手机机型下使用不同手机浏览器进行视�
 注册链接的地址: URL to sign up
 注册奖励: Gift for signing up
 常用: Often used
-回首页: Back to home
+回首页: Home
 产品: Product
 反馈: Feedback
 '直播开始时间:': 'Live session will start at: '
@@ -1385,7 +1385,7 @@ EduSoho主题编辑: EduSoho Theme edit
 后台: Background
 运营: Operation
 订单: Order
-账务: Accounting
+账务: Finance
 资讯管理: News management
 小组管理: Group management
 邀请管理: Invitation management
@@ -1445,9 +1445,9 @@ IP黑名单: IP blacklist
 云视频设置: Cloud video settings
 云短信设置: Cloud message settings
 云搜索设置: Cloud search settings
-ES应用: ES APPs
+ES应用: EduSoho APP
 应用中心: APP Center
-已购项目: Paid items
+已购项目: My APP
 更新日志: Change log
 '创建站内通知': 'Create In-site notification'
 '网站公告管理': 'Site announcement management'
@@ -1511,7 +1511,7 @@ CDN设置已保存！: CDN settings saved
 '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!': ' I posted  {{threadname}} in the group {{groupname}},its really good ,come and join me '
 '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！': 'I am learning in {{classroom}} which is really rewarding ,let learn together!'
 星期日: Sunday
-'当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】' : 'The current domain name dose not match with the setting,to avoid affecting the normal use of the cloud messaging feature, Go to [System]-[Site setting]-[General information]-[Site domain name]'
+'当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】' : 'The current domain name dose not match the setting, to avoid affecting the normal use of the Cloud SMS feature, Go to [System] - [Site Setting] - [General Info] - [Site Domain Name] '
 星期一: Monday
 星期二: Tuesday
 星期三: Wensday
