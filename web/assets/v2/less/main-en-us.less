@@ -107,3 +107,29 @@
     }
   }
 }
+
+.course-detail-header {
+  .course-img {
+    .tag-serialing,
+    .tag-live,
+    .tag-finished {
+      display: inline-block;
+      height: 24px;
+    }
+    .tag-serialing {
+      background: url("@{img-src}en-us/tag_serialing.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_serialing.png") 1x,url("@{img-src}en-us/tag_serialing@2x.png") 2x);
+      width: 58px;
+    }
+    .tag-live {
+      background: url("@{img-src}en-us/tag_live.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_live.png") 1x,url("@{img-src}en-us/tag_live@2x.png") 2x);
+      width: 103px;
+    }
+    .tag-finished {
+      background: url("@{img-src}en-us/tag_finished.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_finished.png") 1x,url("@{img-src}en-us/tag_finished@2x.png") 2x);
+      width: 84px;
+    }
+  }
+}

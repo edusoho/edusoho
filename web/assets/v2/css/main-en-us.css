@@ -14141,3 +14141,24 @@ textarea {
   background: url("../img/en-us/tag_recommend.png") no-repeat;
   background-image: -webkit-image-set(url("../img/en-us/tag_recommend.png") 1x, url("../img/en-us/tag_recommend@2x.png") 2x);
 }
+.course-detail-header .course-img .tag-serialing,
+.course-detail-header .course-img .tag-live,
+.course-detail-header .course-img .tag-finished {
+  display: inline-block;
+  height: 24px;
+}
+.course-detail-header .course-img .tag-serialing {
+  background: url("../img/en-us/tag_serialing.png") no-repeat;
+  background-image: -webkit-image-set(url("../img/en-us/tag_serialing.png") 1x, url("../img/en-us/tag_serialing@2x.png") 2x);
+  width: 58px;
+}
+.course-detail-header .course-img .tag-live {
+  background: url("../img/en-us/tag_live.png") no-repeat;
+  background-image: -webkit-image-set(url("../img/en-us/tag_live.png") 1x, url("../img/en-us/tag_live@2x.png") 2x);
+  width: 103px;
+}
+.course-detail-header .course-img .tag-finished {
+  background: url("../img/en-us/tag_finished.png") no-repeat;
+  background-image: -webkit-image-set(url("../img/en-us/tag_finished.png") 1x, url("../img/en-us/tag_finished@2x.png") 2x);
+  width: 84px;
+}
