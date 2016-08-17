@@ -47,11 +47,13 @@
               <span class="icon"></span>
             </div>
             {% else %}
-            <div class="check {% if payment == activePayment %} active {% endif %}{% if payment == 'llcbpay' or payment == 'heepay' %}hidden-xs{% endif %}" id="{{payment}}">
-              {% set picture = 'assets/img/order/'~payment~'.png' %}
-              <img src="{{ asset(picture) }}" />
-              <span class="icon"></span>
-            </div>
+                {% if isMobile and payment != 'llcbpay' or payment != 'heepay' %}
+                  <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
+                    {% set picture = 'assets/img/order/'~payment~'.png' %}
+                    <img src="{{ asset(picture) }}" />
+                    <span class="icon"></span>
+                  </div>
+                {% endif %}
             {% endif %}
           {% else %}
             <div class="pay-type-label text-warning ">{{'支付方式未开启，请联系管理员。'|trans}}</div>

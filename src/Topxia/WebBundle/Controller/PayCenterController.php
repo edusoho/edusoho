@@ -27,14 +27,15 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields                  = $request->query->all();
-        $orderInfo['sn']         = $fields['sn'];
-        $orderInfo['targetType'] = $fields['targetType'];
-        $processor               = OrderProcessorFactory::create($fields['targetType']);
-        $orderInfo['template']   = $processor->getOrderInfoTemplate();
-        $order                   = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist           = $processor->isTargetExist($targetId);
+        $fields                                = $request->query->all();
+        $orderInfo['sn']                 = $fields['sn'];
+        $orderInfo['targetType']  = $fields['targetType'];
+        $orderInfo['isMobile']      =  $this->isMobileClient();
+        $processor                         = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']     = $processor->getOrderInfoTemplate();
+        $order                                = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                            = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist                    = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
             return $this->createMessageResponse('error', '该订单已失效');
