@@ -39,7 +39,7 @@
             <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'收藏'|trans}}</a>
           {% endif %}
         </div>
-        {{'发表于%createdTime%'|trans({'%createdTime%':threadMain.createdTime|smart_time})}} 
+        {{'发表于%createdTime%'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}
         <span class="mll"> {{'%hitNum%次查看'|trans({'%hitNum%':threadMain.hitNum})}}</span>
       </div>
 
@@ -170,7 +170,7 @@
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
     <div class="panel-heading">
-      {{'%postNum%回复'|trans({'%hpostNum%': threadMain.postNum})}}
+      {{'%postNum%回复'|trans({'%postNum%': threadMain.postNum})}}
     </div>
     <div class="panel-body">
       <ul class="media-list">
