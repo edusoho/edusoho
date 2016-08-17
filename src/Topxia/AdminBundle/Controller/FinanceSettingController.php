@@ -57,6 +57,12 @@ class FinanceSettingController extends BaseController
         ));
     }
 
+    public function closePaymentAction()
+    {
+        $this->getSettingService()->set('payment', array('enabled'=>0));
+        return $this->createJsonResponse(true);
+    }
+
     public function refundAction(Request $request)
     {
         $refundSetting = $this->getSettingService()->get('refund', array());

@@ -11,7 +11,6 @@ define(function(require, exports, module) {
         
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
-
             if (radio == '1') {
                 validator.addItem({
                     element: '[name="alipay_secret"]',
@@ -73,6 +72,7 @@ define(function(require, exports, module) {
                 validator.removeItem('[name="heepay_key"]');
                 validator.removeItem('[name="heepay_secret"]');
             }
+
         });
 
         $('[name=quickpay_enabled]').change(function(e) {
@@ -131,13 +131,13 @@ define(function(require, exports, module) {
                     errormessageRequired: '请输入商户账号'
                 });
                 validator.addItem({
-                    element: '[name=llcbpay_secret]',
+                    element: '[name=llquickpay_secret]',
                     required: true,
                     errormessageRequired: '请输入商户平台Key'
                 });
             } else {
                 validator.removeItem('[name="llquickpay_key"]');
-                validator.removeItem('[name="llcbpay_secret"]');
+                validator.removeItem('[name="llquickpay_secret"]');
             }
         });
 
@@ -147,6 +147,19 @@ define(function(require, exports, module) {
         $('input[name="quickpay_enabled"]:checked').change();
         $('input[name="llcbpay_enabled"]:checked').change();
         $('input[name="llquickpay_enabled"]:checked').change();
+        
+        function isClosePayment(){
+             /*新增支付方式，加入下列列表计算，以便计算是否关闭支付*/
+            var sum = parseInt($('input[name="alipay_enabled"]:checked').val())+ 
+                              parseInt($('input[name="wxpay_enabled"]:checked').val())+ 
+                              parseInt($('input[name="heepay_enabled"]:checked').val())+ 
+                              parseInt($('input[name="quickpay_enabled"]:checked').val())+ 
+                              parseInt($('input[name="llcbpay_enabled"]:checked').val())+
+                              parseInt($('input[name="llquickpay_enabled"]:checked').val());
+              if(sum< 1) {   
+                $.post($('input[name="closePayment"]').val());
+              }
+        }
     };
 
 });
