@@ -14055,3 +14055,89 @@ textarea {
 .nav.nav-tabs > li > a {
   padding: 5px 15px 15px;
 }
+.card-pack-item .stamp.stamp-outdate {
+  background: url('../img//en-us/card.png') no-repeat 0 -349px;
+}
+.card-pack-item .stamp.stamp-cancel {
+  background: url('../img//en-us/card.png') no-repeat -410px -351px;
+}
+.card-pack-item.coupon-item {
+  background: url('../img//en-us/card.png') no-repeat;
+}
+.card-pack-item.coupon-item.useless {
+  background: url('../img//en-us/card.png') no-repeat 0 -174px;
+}
+.card-pack-item.coupon-item .stamp-used {
+  background: url('../img//en-us/card.png') no-repeat -140px -349px;
+}
+.card-pack-item.card-item {
+  background: url('../img//en-us/card.png') no-repeat -260px 0;
+}
+.card-pack-item.card-item.useless {
+  background: url('../img//en-us/card.png') no-repeat -260px -174px;
+}
+.card-pack-item.card-item .stamp-used {
+  background: url('../img//en-us/card.png') no-repeat -275px -351px;
+}
+.course-list .course-item .course-img {
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.course-list .course-item .course-img .tag-discount {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 68px;
+  height: 68px;
+  background: url("../img//en-us/tag_discount.png");
+  background-image: -webkit-image-set(url("../img//en-us/tag_discount.png") 1x, url("../img//en-us/tag_discount@2x.png") 2x);
+}
+.course-list .course-item .course-img .tag-discount.free {
+  background: url("../img/tag_limitfree.png");
+  background-image: -webkit-image-set(url("../img//en-us/tag_limitfree.png") 1x, url("../img//en-us/tag_limitfree@2x.png") 2x);
+}
+.course-list .course-item .course-img .img-responsive {
+  width: 100%;
+  padding: 10px;
+}
+.course-list .course-item .tags {
+  position: absolute;
+  top: 0;
+  left: 0px;
+}
+.course-list .course-item .tags .tag-live,
+.course-list .course-item .tags .tag-serialing,
+.course-list .course-item .tags .tag-finished {
+  display: inline-block;
+  height: 24px;
+}
+.course-list .course-item .tags .tag-live {
+  background: url("../img//en-us/tag_live.png") no-repeat;
+  background-image: -webkit-image-set(url("../img//en-us/tag_live.png") 1x, url("../img//en-us/tag_live@2x.png") 2x);
+  width: 58px;
+}
+.course-list .course-item .tags .tag-serialing {
+  background: url("../img//en-us/tag_serialing.png") no-repeat;
+  background-image: -webkit-image-set(url("../img//en-us/tag_serialing.png") 1x, url("../img//en-us/tag_serialing@2x.png") 2x);
+  width: 103px;
+}
+.course-list .course-item .tags .tag-finished {
+  background: url("../img/tag_finished.png") no-repeat;
+  background-image: -webkit-image-set(url("../img//en-us/tag_finished.png") 1x, url("../img//en-us/tag_finished@2x.png") 2x);
+  width: 84px;
+}
+.live-course-body .es-live-all .media-left {
+  position: relative;
+}
+.live-course-body .es-live-all .media-left .re-live {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  width: 68px;
+  height: 68px;
+  background: url("../img//en-us/tag_recommend.png") no-repeat;
+  background-image: -webkit-image-set(url("../img//en-us/tag_recommend.png") 1x, url("../img//en-us/tag_recommend@2x.png") 2x);
+}
