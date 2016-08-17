@@ -27,7 +27,7 @@
                       {% if overview.service.live.expire|default(0) and overview.service.live.expire > 0  %}
                         <p class="text-muted">{{'有效期至：'|trans}}{{overview.service.live.expire|date("Y-m-d")}}</p>
                         {% if overview.service.live.remaining > 0 and overview.service.live.remaining < 30 %}
-                          <p class="text-warning text-sm">{{'您的云直播服务将于%remaining %天后到期，请尽快续费'|trans({'%remaining%': overview.service.live.remaining })}}</p>
+                          <p class="text-warning text-sm">{{'您的云直播服务将于%remaining%天后到期，请尽快续费'|trans({'%remaining%': overview.service.live.remaining })}}</p>
                         {% elseif overview.service.live.remaining <= 0 %}
                           <p class="text-danger text-sm">{{'您的云直播服务已到期，请尽快续费'|trans}}</p>
                         {% endif %}
