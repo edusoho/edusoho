@@ -11,7 +11,7 @@
                   <p class="text-muted">{{'有效期：'|trans}}{{ startDate|default('') }}~{{ endDate|default('') }}</p>
                   {% endif %}
                   {% if packageDate|default(31)  == 0 %}
-                  <p class="text-danger text-sm">{{'套餐服务将于明天到期，'|trans}}{{'请尽快'|trans}}<a href="http://www.edusoho.com/product/system" target="_blank">{{'续费'|trans}}</a>，{{'以免影响正常使用'|trans}}</p> 
+                  <p class="text-danger text-sm">{{'套餐服务将于明天到期，请尽快'|trans}}<a href="http://www.edusoho.com/product/system" target="_blank">{{'续费'|trans}}</a>，{{'以免影响正常使用'|trans}}</p> 
                   {% endif %}
                   <!--已到期-->
                   {% if packageDate|default(31)  < 0 %}
