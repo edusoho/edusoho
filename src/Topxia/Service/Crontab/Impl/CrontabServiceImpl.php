@@ -104,7 +104,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     protected function afterJonExecute($job)
     {
         if ($job['cycle'] == 'once') {
-            //$this->getJobDao()->deleteJob($job['id']);
+            $this->getJobDao()->deleteJob($job['id']);
         }
 
         if ($job['cycle'] == 'everyhour') {
