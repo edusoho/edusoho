@@ -1863,6 +1863,7 @@ pay_center_show:
 pay_center_pay:
     path:   /pay/center/pay
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
+    methods: [POST]
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind

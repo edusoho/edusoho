@@ -108,12 +108,7 @@ class PayCenterController extends BaseController
 
     public function payAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-        } else {
-            $fields = $request->query->all();
-        }
-        
+        $fields = $request->request->all();
         $user   = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
@@ -147,8 +142,9 @@ class PayCenterController extends BaseController
     {
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
+            'notifyUrl' =>  $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'  => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
+            'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType'=>$order['targetType']), true)
         );
         $payment = $request->request->get('payment');
 
