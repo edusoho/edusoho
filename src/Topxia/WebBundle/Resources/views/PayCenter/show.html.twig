@@ -48,7 +48,7 @@
             </div>
             {% else %}
             {{dump(isMobile)}}
-                {% if isMobile and payment != 'llcbpay' or payment != 'heepay' %}
+                {% if isMobile and payment != 'llcbpay' and payment != 'heepay' %}
                   <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
                     {% set picture = 'assets/img/order/'~payment~'.png' %}
                     <img src="{{ asset(picture) }}" />
