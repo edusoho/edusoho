@@ -27,7 +27,6 @@
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
-
         
         {% set activePayment = order.payment %}
         {% for payment,options in payments %}
@@ -48,11 +47,11 @@
               <span class="icon"></span>
             </div>
             {% else %}
-              <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
-                {% set picture = 'assets/img/order/'~payment~'.png' %}
-                <img src="{{ asset(picture) }}" />
-                <span class="icon"></span>
-              </div>
+            <div class="check {% if payment == activePayment %} active {% endif %}{% if payment == 'llcbpay' or payment == 'heepay' %}hidden-xs{% endif %}" id="{{payment}}">
+              {% set picture = 'assets/img/order/'~payment~'.png' %}
+              <img src="{{ asset(picture) }}" />
+              <span class="icon"></span>
+            </div>
             {% endif %}
           {% else %}
             <div class="pay-type-label text-warning ">{{'支付方式未开启，请联系管理员。'|trans}}</div>
