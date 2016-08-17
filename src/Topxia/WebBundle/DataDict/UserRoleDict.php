@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\DataDict;
 
 use Topxia\WebBundle\DataDict\DataDictInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserRoleDict implements DataDictInterface
 {
@@ -24,7 +25,8 @@ class UserRoleDict implements DataDictInterface
     {
         return $this->getDict();
     }
-            protected function getServiceKernel()
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
