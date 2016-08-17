@@ -2691,7 +2691,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($lessonFields))
         );
 
-        $this->dispatchEvent("course.lesson.generate.video.replay", $lesson);
+        $this->dispatchEvent("course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
 
         return $lesson;
     }

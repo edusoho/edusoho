@@ -6,8 +6,12 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $form = $("#course-material-form");
 
+        var choosedMedia = $form.find('[name="media"]').val();
+        choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
+
         var materialChooser = new FileChooser({
-            element: '#material-file-chooser'
+            element: '#material-file-chooser',
+            choosed: choosedMedia
         });
 
         materialChooser.on('change', function(item) {
@@ -24,9 +28,8 @@ define(function(require, exports, module) {
                 $("#material-list").append(html).show();
                 $form.find('.text-warning').hide();
                 $form.find('[name="fileId"]').val('');
-                materialChooser.open();
             }).fail(function(){
-                Notify.success('添加回放失败，请重试！');
+                Notify.danger('添加回放失败，请重试！');
             });
             return false;
         });

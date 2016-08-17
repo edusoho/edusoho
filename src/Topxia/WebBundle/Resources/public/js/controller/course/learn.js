@@ -32,8 +32,7 @@ define(function(require, exports, module) {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
             'click [data-role=finish-lesson]': 'onFinishLesson',
-            'click [data-role=ask-question]': 'onAskQuestion',
-            'click live-video-play-btn': 'onLiveVideoPlay'
+            'click [data-role=ask-question]': 'onAskQuestion'
         },
 
         attrs: {
@@ -425,13 +424,23 @@ define(function(require, exports, module) {
                         };
 
                         if (endLeftSeconds <= 0) {
+
                             $liveNotice = "<p>直播已经结束</p>";
                             $countDown = "";
 
                             if (lesson.replayStatus == 'videoGenerated') {
+                                
                                 $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ lesson.id +"'>查看回放视频</button>&nbsp;&nbsp;";
-                                //$('.live-video-play-btn').bind('click','onLiveVideoPlay');
-                                $('.live-video-play-btn').trigger('click','onLiveVideoPlay');
+                                $('body').on('click','.live-video-play-btn',function(){
+
+                                    if (lesson.mediaId == 0) {
+                                        Notify.danger('抱歉，视频文件不存在，暂时无法学习。');
+                                        return;
+                                    }
+                                    $('#lesson-live-content').hide();
+                                    $('#lesson-video-content').html('');
+                                    self._videoPlay(lesson);
+                                });
                             } else {
                                 if (lesson.replays && lesson.replays.length > 0) {
                                     $.each(lesson.replays, function(i, n) {
@@ -447,7 +456,11 @@ define(function(require, exports, module) {
                     }
 
                     generateHtml();
-                    iID = setInterval(generateHtml, 1000);
+                    var millisecond = 0;
+                    if (lesson.endTime > lesson.nowDate) {
+                        millisecond = 1000;
+                    }
+                    iID = setInterval(generateHtml, millisecond);
 
                     $("#lesson-live-content").show();
                     $("#lesson-live-content").perfectScrollbar({
@@ -801,15 +814,6 @@ define(function(require, exports, module) {
                 $("#lesson-swf-content").show();
             }
         },
-
-        onLiveVideoPlay: function(){
-            console.log('play');
-            $.get(this.get('courseUri') + '/lesson/' + this.get('lessonId'), function(lesson) {
-                $('#lesson-live-content').hide();
-                $('#lesson-video-content').html('');
-                self._videoPlay(lesson);
-            })
-        }
 
     });
 

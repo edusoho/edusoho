@@ -204,8 +204,24 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
+        $file = array();
+        if ($lesson['replayStatus'] == 'videoGenerated') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file)) {
+                $lesson['media'] = array(
+                    'id'     => $file['id'],
+                    'status' => $file['convertStatus'],
+                    'source' => 'self',
+                    'name'   => $file['filename'],
+                    'uri'    => ''
+                );
+            } else {
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+            }
+        }
+
         if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
+            $fields['fileId'] = $request->request->get('fileId', 0);
             $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fields);
         }
 
@@ -251,5 +267,10 @@ class LiveOpenCourseController extends BaseOpenCourseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

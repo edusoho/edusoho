@@ -34,6 +34,7 @@
     <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
       {% include 'TopxiaWebBundle:LiveCourseReplayManage:file-chooser.html.twig' %}
       <input type="hidden" name="fileId">
+      <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
     </div>
   </div>
 

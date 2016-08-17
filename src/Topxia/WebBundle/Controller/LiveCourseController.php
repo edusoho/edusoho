@@ -449,8 +449,24 @@ class LiveCourseController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
+        $file = array();
+        if ($lesson['replayStatus'] == 'videoGenerated') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file)) {
+                $lesson['media'] = array(
+                    'id'     => $file['id'],
+                    'status' => $file['convertStatus'],
+                    'source' => 'self',
+                    'name'   => $file['filename'],
+                    'uri'    => ''
+                );
+            } else {
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+            }
+        }
+
         if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
+            $fields['fileId'] = $request->request->get('fileId', 0);
             $this->getCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fields);
         }
 
@@ -635,5 +651,10 @@ class LiveCourseController extends BaseController
     public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

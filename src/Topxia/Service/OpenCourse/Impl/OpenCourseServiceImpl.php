@@ -517,7 +517,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $updatedLesson = $this->getOpenCourseLessonDao()->updateLesson($lessonId, $lessonFields);
 
-        $this->dispatchEvent("open.course.lesson.generate.video.replay", $updatedLesson);
+        $this->dispatchEvent("open.course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
 
         return $lesson;
     }
