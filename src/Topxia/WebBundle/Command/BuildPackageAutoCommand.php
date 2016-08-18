@@ -314,7 +314,7 @@ class BuildPackageAutoCommand extends BaseCommand
 
             if (strpos($opFile, 'web/assets/libs') === 0) {
                 $askAssetsLibs = true;
-                $this->output->writeln("<comment>web/assets/libs文件：{$opFile}</comment>");
+                $this->output->writeln("<comment>web/assets/libs文件：{$line}</comment>");
             }
         }
 
