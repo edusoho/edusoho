@@ -27,15 +27,15 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields                                = $request->query->all();
-        $orderInfo['sn']                 = $fields['sn'];
-        $orderInfo['targetType']  = $fields['targetType'];
-        $orderInfo['isMobile']     = $this->isMobileClient();
-        $processor                         = OrderProcessorFactory::create($fields['targetType']);
-        $orderInfo['template']     = $processor->getOrderInfoTemplate();
-        $order                                = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId                            = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist                    = $processor->isTargetExist($targetId);
+        $fields                  = $request->query->all();
+        $orderInfo['sn']         = $fields['sn'];
+        $orderInfo['targetType'] = $fields['targetType'];
+        $orderInfo['isMobile']   = $this->isMobileClient();
+        $processor               = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']   = $processor->getOrderInfoTemplate();
+        $order                   = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist           = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
             return $this->createMessageResponse('error', '该订单已失效');
@@ -95,6 +95,14 @@ class PayCenterController extends BaseController
         $orderInfo['order']         = $order;
         $orderInfo['payments']      = $this->getEnabledPayments();
         $orderInfo['payAgreements'] = $this->getUserService()->findUserPayAgreementsByUserId($user['id']);
+
+        foreach ($orderInfo['payments'] as $payment) {
+            if ($payment['enabled']) {
+                $orderInfo['firstEnabledPayment'] = $payment;
+                break;
+            }
+        }
+
         return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', $orderInfo);
     }
 
@@ -143,9 +151,9 @@ class PayCenterController extends BaseController
     {
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' =>  $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'  => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
-            'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType'=>$order['targetType']), true)
+            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
+            'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType' => $order['targetType']), true)
         );
         $payment = $request->request->get('payment');
 
@@ -162,7 +170,7 @@ class PayCenterController extends BaseController
         }
 
         $requestParams['userAgent'] = $request->headers->get('User-Agent');
-        $requestParams['isMobile']    =  $this->isMobileClient();
+        $requestParams['isMobile']  = $this->isMobileClient();
 
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
@@ -230,9 +238,9 @@ class PayCenterController extends BaseController
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
         if ($name == 'llcbpay' || $name == 'llquickpay') {
-            $returnArray = $request->request->all();
+            $returnArray              = $request->request->all();
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
-            $returnArray['isMobile']   = $this->isMobileClient();
+            $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->query->all();
         }
@@ -277,9 +285,9 @@ class PayCenterController extends BaseController
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
         } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
-            $returnArray = json_decode(file_get_contents("php://input"), true);
+            $returnArray              = json_decode(file_get_contents("php://input"), true);
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
-            $returnArray['isMobile']   = $this->isMobileClient();
+            $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->request->all();
         }
@@ -513,16 +521,17 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payment = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                $enableds[] = array(
+                    'name'    => $payName,
+                    'enabled' => $setting[$payName.'_enabled']
                 );
             }
         }
-        
+
         return $enableds;
     }
 
