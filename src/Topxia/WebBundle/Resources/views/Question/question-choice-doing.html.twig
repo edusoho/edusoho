@@ -5,6 +5,7 @@
   {% elseif question.type == 'choice' %}{{'（多选）'|trans}}
   {% endif %}
 {{ question.stem|bbCode2Html|raw }}
+{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: question.id })) }}
 {% endblock %}
 
 {% block body %}
