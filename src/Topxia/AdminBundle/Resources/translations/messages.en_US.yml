@@ -1149,7 +1149,7 @@ PHP脚本最大执行时间: 'PHP script maximum excution time'
 大于300秒: 'over 300secs'
 30秒: 30secs
 PHP扩展：: 'PHP extention：'
-该扩展用于处理中文字符: null
+该扩展用于处理中文字符: This extention is used to process chinese characters
 '尚未安装': 'Not Installed'
 该扩展用于远程读取文件: 'This extention is used to read documents remotely'
 该扩展用于处理图片: 'This extention is used to process images'
