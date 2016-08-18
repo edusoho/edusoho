@@ -112,7 +112,7 @@ class SmsController extends BaseController
         $url .= $request->query->get('url');
 
         $shortUrl = SmsToolkit::getShortLink($url);
-        $url      = empty($shortUrl) ? $url : $shortUrl;
+        $url      = empty($shortUrl) ? 'http://'.$url : $shortUrl;
 
         return $this->createJsonResponse(array('url' => $url.' '));
     }
