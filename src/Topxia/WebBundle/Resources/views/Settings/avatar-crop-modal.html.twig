@@ -4,8 +4,8 @@
 {% block body %}
   <form id="avatar-crop-form" method="post">
     <div class="form-group clearfix">
-      <div class="col-md-offset-2 col-md-8 controls" style=" width: 750px;">
-        <img src="{{ filepath(pictureUrl) }}"
+      <div class="col-md-offset-2 col-md-8 controls">
+        <img class="img-responsive" src="{{ filepath(pictureUrl) }}"
              id="avatar-crop"
              width="{{ scaledSize.width }}" height="{{ scaledSize.height }}"
              data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}"/>
