@@ -2629,7 +2629,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson       = $this->getLessonDao()->getLesson($lessonId);
         $mediaId      = $lesson["mediaId"];
         $client       = new EdusohoLiveClient();
-        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+        $replayList   = $client->createReplayList($mediaId, "查看回放", $lesson["liveProvider"]);
 
         if (array_key_exists("error", $replayList)) {
             return $replayList;
@@ -2663,7 +2663,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $replayList;
     }
 
-    public function generateLessonVideoReplay($courseId, $lessonId, $fields)
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId)
     {
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
@@ -2671,11 +2671,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("课时(#{$lessonId})不存在！");
         }
 
-        if (!ArrayToolkit::requireds($fields, array('fileId'))) {
-            throw $this->createServiceException("缺少字段fileId,增加失败");
-        }
-
-        $file = $this->getUploadFileService()->getFile($fields['fileId']);
+        $file = $this->getUploadFileService()->getFile($fileId);
         if (!$file) {
             throw $this->createServiceException("文件不存在");
         }

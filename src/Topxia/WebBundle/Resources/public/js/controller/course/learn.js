@@ -430,7 +430,7 @@ define(function(require, exports, module) {
 
                             if (lesson.replayStatus == 'videoGenerated') {
                                 
-                                $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ lesson.id +"'>查看回放视频</button>&nbsp;&nbsp;";
+                                $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ lesson.id +"'>查看回放</button>&nbsp;&nbsp;";
                                 $('body').on('click','.live-video-play-btn',function(){
 
                                     if (lesson.mediaId == 0) {

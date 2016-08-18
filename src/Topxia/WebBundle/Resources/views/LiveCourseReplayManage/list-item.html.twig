@@ -32,8 +32,10 @@
 		{% if lesson.status == 'published' and lesson.isEnd and lesson.type in ['live','liveOpen'] %}
 			{% if lesson.replayStatus == 'ungenerated' %}
 				<span class="text-warning">({{'未录制回放'|trans}})</span>
-			{% elseif lesson.replayStatus in ['generated', 'videoGenerated'] %}
+			{% elseif lesson.replayStatus == 'generated' %}
 				<span class="text-warning">({{'已录制回放'|trans}})</span>
+			{% elseif lesson.replayStatus == 'videoGenerated' %}
+				<span class="text-warning">({{'已上传录像'|trans}})</span>
 			{% endif %}
 		{% endif %}
 
@@ -69,9 +71,7 @@
 				</button>
 			{% endif %}
 
-			{% if lesson.replayStatus not in ['generated','generating'] %}
-				<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
-			{% endif %}
+			<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
 
 	</div>

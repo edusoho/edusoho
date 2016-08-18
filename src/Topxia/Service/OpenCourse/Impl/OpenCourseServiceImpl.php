@@ -491,7 +491,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $result;
     }
 
-    public function generateLessonVideoReplay($courseId, $lessonId, $fields)
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId)
     {
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
@@ -499,11 +499,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException("课时(#{$lessonId})不存在！");
         }
 
-        if (!ArrayToolkit::requireds($fields, array('fileId'))) {
-            throw $this->createServiceException("缺少字段fileId,增加失败");
-        }
-
-        $file = $this->getUploadFileService()->getFile($fields['fileId']);
+        $file = $this->getUploadFileService()->getFile($fileId);
         if (!$file) {
             throw $this->createServiceException("文件不存在");
         }
