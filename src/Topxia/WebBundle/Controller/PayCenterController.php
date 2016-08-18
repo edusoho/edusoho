@@ -155,6 +155,10 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
+        if (empty($order['payment'])) {
+            return $this->createMessageResponse('error', '请选择支付方式');
+        }
+
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
