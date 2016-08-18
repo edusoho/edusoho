@@ -2,7 +2,15 @@
   <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
   {{ attachment.file.filename }}
   <span class="pull-right">
-    <a class="attachment-preview" href="#attachment-modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
+  		
+  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document'] and attachment.file.processStatus == "ok" %}
+  	{% if not (can_preview_type and can_preview )%}   
+  		<a  class="attachment-preview color-gray"  href="javascript:;" data-toggle="tooltip" data-placement="top" title="
+  		{% if not can_preview_type %}文件类型暂不支持预览 {% else %} 转码中请稍后预览{% endif %}">预览</a>
+  	 {% else %}
+  	 	<a  class="attachment-preview"  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
+  	{% endif %}
     <a class="attachment-download" href="{{ path('attachment_download', {'id': attachment.id}) }}">下载</a>
   </span>
 </div>
