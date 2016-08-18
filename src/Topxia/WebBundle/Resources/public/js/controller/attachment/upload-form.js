@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
-        $('.js-attachment-delete').on('click',  function() {
+        $('.js-attachment-list').on('click',  '.js-attachment-delete' ,function() {
             var $this = $(this);
             var attachment_remove = confirm("确定要删除附件吗?")
             if (attachment_remove) {
