@@ -39,18 +39,21 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
-            {% if isMobile and payment == 'heepay' or payment ==  'llcbpay' %}
-            <p class="color-danger">移动端不支持网银支付。</p>
+            {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}
+              {% set cbpay = true %}
             {% endif %}
             {% if payment == 'alipay' and is_micro_messenger() %}
-            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
+              {% set alipay = true %}
             <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
             </div>
             {% else %}
-            <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and payment == 'heepay' or payment ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
+            {% if cbpay|default('') and alipay|default('') %}
+            {% set other = payment %}
+            {% endif %}
+            <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
@@ -82,6 +85,9 @@
             </ul>
           </div>
           {% endif %}
+          {% if alipay|default('') or cbpay|default('') %}
+              <p class="color-danger">如需使用{% if alipay|default('') %}支付宝{% endif %}{% if alipay|default('') and cbpay|default('') %}或{% endif %}{% if cbpay|default('') %}网银{% endif %}支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
+          {% endif %}
         </div>
         <div class="form-group">
           <div class="total-price">
@@ -93,7 +99,7 @@
           {% if targetType in ['course', 'classroom', 'vip'] %}
             {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           {% endif %}
-          <button class="pay-button btn btn-primary"  type="submit">{{'确认支付'|trans}}</button>
+          <button class="pay-button btn btn-primary {% if other|default('') is empty %}disable{% endif %}"  type="submit">{{'确认支付'|trans}}</button>
         </div>
       </form>
     </div>
