@@ -69,14 +69,14 @@
                              </label>
                          </div>
                      </div>
-                     <div class="form-group attachement_detail">
+                     <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
                          <div class="col-md-3 control-label">
                              <label for="fileSize">附件大小</label>
                          </div>
                          <div class="col-md-8 controls">
                              <input type="text" id="fileSize" name="fileSize" class="form-control width-input-large mrm" style="display:inline-block"
                                     value="{{ attachment.fileSize }}">MB
-                             <p class="help-block">当前服务器文件上限为2GB</p>
+                             <p class="help-block">当前服务器文件上限为2048MB</p>
                          </div>
                      </div>
                      <div class="row form-group">
