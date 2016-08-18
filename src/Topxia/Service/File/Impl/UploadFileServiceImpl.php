@@ -182,10 +182,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $preparedFile = $implementor->prepareUpload($params);
-
-        $file       = $this->getUploadFileInitDao()->addFile($preparedFile);
-        $params     = array_merge($params, $file);
-        $initParams = $implementor->initUpload($params);
+        $file         = $this->getUploadFileInitDao()->addFile($preparedFile);
+        $params       = array_merge($params, $file);
+        $initParams   = $implementor->initUpload($params);
 
         if ($params['storage'] == 'cloud') {
             $file = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));

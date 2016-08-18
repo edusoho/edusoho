@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table class="table table-striped table-hover mtl" id="materials-table" data-url="{% if pageType == 'attachment'%}{{ path('admin_cloud_attachment_render')}}{% else %}{{ path('admin_cloud_file_render_table')}}{% endif %}">
+  <table class="table table-striped table-hover mtl" id="materials-table" data-url="{{ path('admin_cloud_file_render_table')}}">
     <thead>
       <tr>
         <th width="40%">文件</th>
