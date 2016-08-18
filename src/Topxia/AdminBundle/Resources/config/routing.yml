@@ -615,11 +615,6 @@ admin_setting_payment:
     pattern:  /setting/payment
     defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
 
-admin_setting_payment_close:
-    pattern:  /setting/payment/close
-    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:closePayment }
-    methods: [POST]
-
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video
     defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
