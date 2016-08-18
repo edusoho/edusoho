@@ -54,9 +54,9 @@ class CloudFileController extends BaseController
             $results['count'],
             20
         );
-
+        $pageType = (isset($conditions['resType']) && $conditions['resType'] == 'attachment') ? 'attachment' : 'file';
         return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
-            'pageType'     => 'file',
+            'pageType'     => $pageType,
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
             'createdUsers' => isset($results['createdUsers']) ? $results['createdUsers'] : array(),
