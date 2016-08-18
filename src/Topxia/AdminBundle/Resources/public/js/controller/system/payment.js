@@ -5,6 +5,14 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+      /*新增支付方式，加入下列列表计算，以便计算是否关闭支付*/
+        var sum = parseInt($('input[name="alipay_enabled"]:checked').val())+ 
+                          parseInt($('input[name="wxpay_enabled"]:checked').val())+ 
+                          parseInt($('input[name="heepay_enabled"]:checked').val())+ 
+                          parseInt($('input[name="quickpay_enabled"]:checked').val())+ 
+                          parseInt($('input[name="llcbpay_enabled"]:checked').val())+
+                          parseInt($('input[name="llquickpay_enabled"]:checked').val());
+
         var validator = new Validator({
                 element: '#payment-form'
             });
@@ -72,7 +80,6 @@ define(function(require, exports, module) {
                 validator.removeItem('[name="heepay_key"]');
                 validator.removeItem('[name="heepay_secret"]');
             }
-
         });
 
         $('[name=quickpay_enabled]').change(function(e) {
@@ -147,17 +154,17 @@ define(function(require, exports, module) {
         $('input[name="quickpay_enabled"]:checked').change();
         $('input[name="llcbpay_enabled"]:checked').change();
         $('input[name="llquickpay_enabled"]:checked').change();
-        
-        function isClosePayment(){
-             /*新增支付方式，加入下列列表计算，以便计算是否关闭支付*/
-            var sum = parseInt($('input[name="alipay_enabled"]:checked').val())+ 
-                              parseInt($('input[name="wxpay_enabled"]:checked').val())+ 
-                              parseInt($('input[name="heepay_enabled"]:checked').val())+ 
-                              parseInt($('input[name="quickpay_enabled"]:checked').val())+ 
-                              parseInt($('input[name="llcbpay_enabled"]:checked').val())+
-                              parseInt($('input[name="llquickpay_enabled"]:checked').val());
-              if(sum< 1) {   
-                $.post($('input[name="closePayment"]').val());
+        isClosePayment(sum);
+        function isClosePayment(sum){
+              if(sum< 1) { 
+                $.post($('input[name="closePayment"]').val(), function(response){
+                    if (response) {
+                         Notify.info('所有支付方式已关闭,已关闭支付功能');
+                         setInterval(function(){
+                            window.location.href = window.location.href;
+                         },1000);
+                    }
+                });
               }
         }
     };

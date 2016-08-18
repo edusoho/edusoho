@@ -59,8 +59,14 @@ class FinanceSettingController extends BaseController
 
     public function closePaymentAction()
     {
-        $this->getSettingService()->set('payment', array('enabled'=>0));
-        return $this->createJsonResponse(true);
+        $payment = $this->getSettingService()->get('payment', array());
+        if ($payment['enabled']) {
+            $payment['enabled'] = 0;
+            $this->getSettingService()->set('payment', $payment);
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
     }
 
     public function refundAction(Request $request)
