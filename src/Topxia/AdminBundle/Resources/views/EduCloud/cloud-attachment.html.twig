@@ -3,7 +3,7 @@
 	 {% set script_controller = 'educloud/attachment-setting' %} 
 	 {% block main %}
          <div class="edu-service">
-            {% if info.accessCloud|default(0) == 0 %}
+            {% if info.accessCloud|default(0) == 0 or setting('storage.upload_mode') == 'local' or info.hasStorage == 0 %}
                 <div class="text-center">
                   <div class="error-content" style="padding: 100px 100px">
                     <h4>
