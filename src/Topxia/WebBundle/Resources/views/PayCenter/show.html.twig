@@ -41,7 +41,7 @@
             {% set cbpay = true %}
           {% elseif payment == 'alipay' and  is_micro_messenger() %}
             {% set alipay = true %}
-          {% else %}
+          {% elseif cbpay|default('') and alipay|default('') %}
              {% set other = true %}
           {% endif %}
         {% endfor %}
@@ -102,7 +102,7 @@
           {% if targetType in ['course', 'classroom', 'vip'] %}
             {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           {% endif %}
-          <button class="pay-button btn btn-primary{% if other|default('') is sameas(false) %}disable{% endif %}"  type="submit">{{'确认支付'|trans}}</button>
+          <button class="pay-button btn btn-primary{% if cbpay|default('') and alipay|default('') and other|default('') is sameas(false) %}disable{% endif %}"  type="submit">{{'确认支付'|trans}}</button>
         </div>
       </form>
     </div>
