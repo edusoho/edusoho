@@ -45,7 +45,7 @@
            {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
            {% set alipay = true %}
             {% endif %}
-              <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}">
+              <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}" id="{{payment}}">
                 {% set picture = 'assets/img/order/'~payment.name~'.png' %}
                 <img src="{{ asset(picture) }}" />
                 <span class="icon"></span>
