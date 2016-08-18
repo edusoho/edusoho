@@ -65,7 +65,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if ($showCloud) {
-            $files = $this->getFileImplementor('cloud')->findFiles($files, array('resType' => 'attachment'));
+            $files = $this->getFileImplementor('cloud')->findFiles($files, array());
         }
 
         return $files;
@@ -1135,7 +1135,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     protected function bindFiles(array &$attachments)
     {
-        $files = $this->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'), 1);
+        $files = $this->getUploadFileDao()->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'));
+        if (!empty($files)) {
+            $files = $this->getFileImplementor('cloud')->findFiles($files, array('resType' => 'attachment'));
+        }
 
         $files = ArrayToolkit::index($files, 'id');
         foreach ($attachments as $key => &$attachment) {
