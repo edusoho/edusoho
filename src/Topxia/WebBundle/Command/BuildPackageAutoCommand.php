@@ -296,16 +296,6 @@ class BuildPackageAutoCommand extends BaseCommand
                 $askDiffFile = true;
                 continue;
             }
-
-            if (strpos($opFile, 'web/assets/libs') === 0) {
-                $askAssetsLibs = true;
-                $this->output->writeln("<comment>web/assets/libs文件：{$opFile}</comment>");
-            }
-
-            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
-                $askSqlUpgrade = true;
-                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
-            }
         }
 
         if ($askDiffFile) {
@@ -316,6 +306,17 @@ class BuildPackageAutoCommand extends BaseCommand
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
+        $file = @fopen($diffFile, "r");
+        while (!feof($file)) {
+            $line   = fgets($file);
+            $op     = $line[0];
+            $opFile = trim(substr($line, 1));
+
+            if (strpos($opFile, 'web/assets/libs') === 0) {
+                $askAssetsLibs = true;
+                $this->output->writeln("<comment>web/assets/libs文件：{$opFile}</comment>");
+            }
+        }
 
         if ($askAssetsLibs) {
             $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
@@ -325,7 +326,16 @@ class BuildPackageAutoCommand extends BaseCommand
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
-
+        $file = @fopen($diffFile, "r");
+        while (!feof($file)) {
+            $line   = fgets($file);
+            $op     = $line[0];
+            $opFile = trim(substr($line, 1));
+            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+                $askSqlUpgrade = true;
+                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
+            }
+        }
         if ($askSqlUpgrade) {
             $this->output->writeln("<info>准备制作升级脚本</info>");
         }
