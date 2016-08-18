@@ -268,7 +268,9 @@ class OrderController extends BaseController
             $member .= $orders['couponDiscount'].",";
             $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
             $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
+
+            $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
+            $member .= $payment[$orderPayment].",";
 
             $member .= $users[$orders['userId']]['nickname'].",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
