@@ -40,7 +40,7 @@
           <label >{{'用户登录保护'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-          {{ radios('temporary_lock_enabled', {1:'开启', 0:'关闭'}, loginConnect.temporary_lock_enabled) }} 
+          {{ radios('temporary_lock_enabled', {1:'开启'|trans, 0:'关闭'|trans}, loginConnect.temporary_lock_enabled) }}
           <p class="help-block">{{'开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户'|trans}}</p>
       </div>
 
