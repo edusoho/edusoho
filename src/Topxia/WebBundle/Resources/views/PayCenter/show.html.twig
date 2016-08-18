@@ -49,7 +49,6 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
-            {{dump(payment)}}
             {% if payment == 'alipay' and is_micro_messenger() %}
             <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
@@ -57,7 +56,7 @@
               <span class="icon"></span>
             </div>
             {% else %}
-            <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
+            <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
