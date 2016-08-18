@@ -80,7 +80,11 @@
           </div>
           {% endif %}
           {% if alipay|default('') or cbpay|default('') %}
-              <p class="color-danger">如需使用{% if alipay|default('') %}支付宝{% endif %}{% if alipay|default('') and cbpay|default('') %}或{% endif %}{% if cbpay|default('') %}网银{% endif %}支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
+              {% if is_micro_messenger() %}
+                <p class="color-danger">您正在使用微信浏览，暂不支持其他支付方式</p>
+              {% else %}
+                <p class="color-danger">若需使用网银支付，请使用IE浏览器</p>
+              {% endif %}
           {% endif %}
         </div>
         <div class="form-group">
