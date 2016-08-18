@@ -85,6 +85,8 @@
             </ul>
           </div>
           {% endif %}
+          {{dump(alipay)}}
+          {{dump(cbpay)}}
           {% if alipay|default('') or cbpay|default('') %}
               <p class="color-danger">如需使用{% if alipay|default('') %}支付宝{% endif %}{% if alipay|default('') and cbpay|default('') %}或{% endif %}{% if cbpay|default('') %}网银{% endif %}支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
           {% endif %}
