@@ -40,7 +40,7 @@
 
         <div class="form-group order-detail-bg">
           {% for payment in payments %}
-            {% if payment.name == 'heepay' and  payment.enabled == 0  or payment.name ==  'llcbpay' and payment.enabled == 0 %}
+            {% if payment.name in ['heepay', 'llcbpay'] and payment.enabled == 0 %}
               {% set cbpay = true %}
             {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
               {% set alipay = true %}
