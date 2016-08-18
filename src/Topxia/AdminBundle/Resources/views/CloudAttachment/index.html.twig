@@ -23,7 +23,7 @@
   <form class="form-inline es-materials-manage" id="materials-form">
     {% include 'TopxiaAdminBundle:CloudAttachment/Form:type.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:nav.html.twig' %}
-    {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' with {'pageType': 'attachment'} %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:sort.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudAttachment/Form:batch.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile:table.html.twig' with {'pageType': 'attachment'} %}
