@@ -12,7 +12,7 @@
     {% else %}
       <div class="controls"> 
     {% endif %}
-      <div class="{{list_class}}" style="inline-height:60px">
+      <div class="js-attachment-list {{list_class}}" style="inline-height:60px">
         {% for attachment in attachments  if attachment.file %}
           <div class="well well-sm">
             <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
