@@ -25,7 +25,6 @@ define(function(require, exports, module) {
         });
 
         var $list = $("." + esuploader.element.data('listClass'));
-        console.log( $list)
         var idStore = $("." + esuploader.element.data('idsClass'));
         idStore.addId = function(id) {
             var id_str = this.val();
