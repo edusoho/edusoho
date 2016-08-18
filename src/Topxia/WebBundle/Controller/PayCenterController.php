@@ -38,10 +38,6 @@ class PayCenterController extends BaseController
         $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
         $isTargetExist           = $processor->isTargetExist($targetId);
 
-        if (empty($fields['payment'])) {
-            return $this->createMessageResponse('error', '请选择支付方式');
-        }
-
         if (!$isTargetExist) {
             return $this->createMessageResponse('error', '该订单已失效');
         }
