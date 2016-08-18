@@ -76,7 +76,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
 
-        $parameters['url'] = $url;
+        $parameters['url'] = $url.' ';
 
         return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
     }
