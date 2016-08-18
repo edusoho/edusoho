@@ -61,7 +61,13 @@ class FinanceSettingController extends BaseController
 
     public function isClosePayment($payment)
     {
-        $sum   = $payment['alipay_enabled']+$payment['wxpay_enabled']+$payment['heepay_enabled']+$payment['quickpay_enabled']+$payment['llcbpay_enabled']+$payment['llquickpay_enabled'];
+        $alipay    = empty($payment['alipay_enabled']) ? 0 : $payment['alipay_enabled'];
+        $wxpay   = empty($payment['wxpay_enabled']) ? 0 : $payment['wxpay_enabled'];
+        $heepay = empty($payment['heepay_enabled']) ? 0: $payment['heepay_enabled'];
+        $quickpay = empty($payment['quickpay_enabled']) ? 0: $payment['quickpay_enabled'];
+        $llcbpay = empty($payment['llcbpay_enabled']) ? 0: $payment['llcbpay_enabled'];
+        $llquickpay = empty($payment['llquickpay_enabled']) ? 0: $payment['llquickpay_enabled'];
+        $sum   = $alipay+$wxpay+$heepay+$quickpay+$llcbpay+$llquickpay;
 
         if ($sum < 1) {
             $payment['enabled'] = 0;
