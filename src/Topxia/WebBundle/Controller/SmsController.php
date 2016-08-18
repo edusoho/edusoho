@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\CurlToolkit;
+use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,19 +110,11 @@ class SmsController extends BaseController
     {
         $url = $request->getHost();
         $url .= $request->query->get('url');
-        $arrResponse = CurlToolkit::request('POST', "http://dwz.cn/create.php", array('url' => $url));
 
-        if ($arrResponse['status'] != 0) {
-            $qqArrResponse = CurlToolkit::request('POST', "http://qqurl.com/create/", array('url' => $url));
+        $shortUrl = SmsToolkit::getShortLink($url);
+        $url      = empty($shortUrl) ? $url : $shortUrl;
 
-            if ($qqArrResponse['status'] != 0) {
-                return $this->createJsonResponse(array('url' => $url.' '));
-            } else {
-                return $this->createJsonResponse(array('url' => $qqArrResponse['short_url'].' '));
-            }
-        } else {
-            return $this->createJsonResponse(array('url' => $arrResponse['tinyurl'].' '));
-        }
+        return $this->createJsonResponse(array('url' => $url.' '));
     }
 
     protected function getSettingService()
