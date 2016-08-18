@@ -47,10 +47,10 @@
               <span class="icon"></span>
             </div>
             {% else %}
-            {% if isMobile and pament == 'heepay' and pament ==  'llcbpay' %}
+            {% if isMobile and payment == 'heepay' and payment ==  'llcbpay' %}
             <p class="color-danger">移动端不支持网银支付。</p>
             {% endif %}
-            <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and pament == 'heepay' and pament ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
+            <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and payment == 'heepay' and payment ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>

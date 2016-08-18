@@ -68,7 +68,6 @@ class FinanceSettingController extends BaseController
         $llcbpay = empty($payment['llcbpay_enabled']) ? 0: $payment['llcbpay_enabled'];
         $llquickpay = empty($payment['llquickpay_enabled']) ? 0: $payment['llquickpay_enabled'];
         $sum   = $alipay+$wxpay+$heepay+$quickpay+$llcbpay+$llquickpay;
-
         if ($sum < 1) {
             $payment['enabled'] = 0;
         }
