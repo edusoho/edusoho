@@ -26,7 +26,7 @@
       {% if filter == 'normal' %}
       <div class="form-group">
         <select style="max-width:150px;" class="form-control" name="chargeStatus">
-          {{ select_options({free:'免费课程',charge:'收费课程'}, app.request.get('chargeStatus'), '收费状态'|trans) }}
+          {{ select_options({free:'免费课程'|trans,charge:'收费课程'|trans}, app.request.get('chargeStatus'), '收费状态'|trans) }}
         </select>
       </div>
       {% endif %}

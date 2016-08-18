@@ -179,7 +179,7 @@
         <label>{{'加入免费课程要求设置头像'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('avatar_alert', {'open':'开启', 'close':'关闭'}, setting('user_partner.avatar_alert')|default('close')) }}
+        {{ radios('avatar_alert', {'open':'开启'|trans, 'close':'关闭'|trans}, setting('user_partner.avatar_alert')|default('close')) }}
       </div>
     </div>
     <div class="form-group">
