@@ -45,7 +45,7 @@
             {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
               {% set alipay = true %}
             {% endif %}
-              {% if activePayment == 'none' or activePayment == '' %}
+              {% if activePayment in ['none', ''] and payment.enabled == 1 %}
                 {% set activePayment = payment.name %}
               {% endif %}
               <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}" id="{{payment.name}}">
