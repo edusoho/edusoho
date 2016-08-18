@@ -33,7 +33,7 @@
           {% set activePayment = firstEnabledPayment.name|default('') %}
         {% endif %}
 
-        <input type="hidden" name="payment" value={{activePayment}}>
+        <input type="hidden" name="payment" value="{{activePayment}}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         {% set cbpay = false %}
         {% set alipay = false %}
@@ -45,7 +45,7 @@
            {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
            {% set alipay = true %}
             {% endif %}
-              <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}" id="{{payment}}">
+              <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}" id="{{payment.name}}">
                 {% set picture = 'assets/img/order/'~payment.name~'.png' %}
                 <img src="{{ asset(picture) }}" />
                 <span class="icon"></span>
