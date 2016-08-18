@@ -60,7 +60,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function findFilesByIds(array $ids, $showCloud = 0)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
-
         if (empty($files)) {
             return array();
         }
@@ -496,6 +495,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'start'         => $start,
             'limit'         => $limit
         );
+        if (isset($conditions['resType'])) {
+            $cloudFileConditions['resType'] = $conditions['resType'];
+        }
+
         $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
 
         return $cloudFiles['data'];
@@ -515,7 +518,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $cloudFileConditions = array(
                 'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'))
             );
-
+            if (isset($conditions['resType'])) {
+                $cloudFileConditions['resType'] = $conditions['resType'];
+            }
             $cloudFiles = $this->getFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
@@ -1136,7 +1141,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     protected function bindFiles(array &$attachments)
     {
-        $files = $this->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'), 1);
+        $files = $this->getUploadFileDao()->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'));
+        if (!empty($files)) {
+            $files = $this->getFileImplementor('cloud')->findFiles($files, array('resType' => 'attachment'));
+        }
+
         $files = ArrayToolkit::index($files, 'id');
         foreach ($attachments as $key => &$attachment) {
             if (isset($files[$attachment['fileId']])) {

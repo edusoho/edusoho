@@ -25,7 +25,7 @@
     {% include 'TopxiaAdminBundle:CloudFile/Form:course-user-search.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:nav.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:tags.html.twig' %}
-    {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' with {'pageType': 'file'}%}
     {% include 'TopxiaAdminBundle:CloudFile/Form:sort.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile/Form:batch.html.twig' %}
     {% include 'TopxiaAdminBundle:CloudFile:table.html.twig'  with {'pageType': 'file'} %}
