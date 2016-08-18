@@ -44,7 +44,7 @@
           {% for payment, options in payments %}
             {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}
               {% set cbpay = true %}
-            {% else if payment == 'alipay' and is_micro_messenger() %}
+            {% elseif payment == 'alipay' and is_micro_messenger() %}
               {% set alipay = true %}
             {% else %}
                {% set other = true %}
