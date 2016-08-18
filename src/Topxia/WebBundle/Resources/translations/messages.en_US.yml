@@ -1934,10 +1934,10 @@ QQ: 'QQ number'
 '转码中': transcoding
 '转码成功': 'transcode successfully'
 '转码失败': 'transcode failed'
-禁用: prohibited
-屏蔽: shield
-敏感词: 'sensitive words'
-编号: 'serial number'
+禁用: Block
+屏蔽: Mask
+敏感词: 'Sensitive Words'
+编号: 'Serial'
 '--请选择退学原因--': '-- Please select reason --'
 '课程内容质量差': 'Poor quality of course content'
 老师服务态度不好: 'Teacher service attitude is not good'
