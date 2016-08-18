@@ -191,7 +191,9 @@
 
   </style>
 {% set single_file_size = setting('cloud_attachment.fileSize') %}
-  {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
+  <div class="hidden">
+    {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
+  </div>
   <div class="balloon-uploader" id="batch-uploader"
        data-init-url="{{ path('uploader_init', {token:token}) }}"
        data-finish-url="{{ path('uploader_finished', {token:token}) }}"
