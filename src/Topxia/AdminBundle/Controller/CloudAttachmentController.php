@@ -28,14 +28,4 @@ class CloudAttachmentController extends BaseController
     {
         return $this->createService('System.SettingService');
     }
-
-    protected function getUploadFileService()
-    {
-        return $this->createService('File.UploadFileService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->createService('User.UserService');
-    }
 }
