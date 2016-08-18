@@ -37,7 +37,13 @@
             or (is_micro_messenger() and activePayment in ['none', 'alipay'] and not (payment == 'alipay')) %}
             {% set activePayment = payment %}
           {% endif %}
-          
+          {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}
+            {% set cbpay = true %}
+          {% elseif payment == 'alipay' and  is_micro_messenger() %}
+            {% set alipay = true %}
+          {% else %}
+            {% set other = true %}
+          {% endif %}
         {% endfor %}
         <input type="hidden" name="payment" value={{activePayment}}>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
