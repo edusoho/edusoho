@@ -469,6 +469,9 @@ admin_edu_cloud_sms:
 admin_edu_cloud_search:
    name: 云搜索设置
    parent: admin_app
+admin_edu_cloud_attachment:
+   name: 云附件设置
+   parent: admin_app
 # admin_edu_cloud_email:
 #     name: 云邮件设置
 #     parent: admin_app
@@ -514,6 +517,13 @@ admin_cloud_file:
     name: 云资源
     parent: admin_app
     before: admin_setting_cloud
+admin_cloud_attachment:
+    name: 云附件
+    parent: admin_app
+    before: admin_setting_cloud
+#admin_edu_cloud_search:
+#   name: 云搜索设置
+#   parent: admin_setting_cloud_video
 admin_batch_notification:
     name: 全站站内通知
     parent: admin_operation

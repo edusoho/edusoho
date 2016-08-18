@@ -176,8 +176,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('参数不正确，更新失败！');
         }
 
-        $fields = $this->fillOrgId($fields);
-
+        $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
         return $classroom;
     }

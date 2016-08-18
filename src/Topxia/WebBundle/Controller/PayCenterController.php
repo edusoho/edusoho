@@ -27,14 +27,15 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields                  = $request->query->all();
-        $orderInfo['sn']         = $fields['sn'];
-        $orderInfo['targetType'] = $fields['targetType'];
-        $processor               = OrderProcessorFactory::create($fields['targetType']);
-        $orderInfo['template']   = $processor->getOrderInfoTemplate();
-        $order                   = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist           = $processor->isTargetExist($targetId);
+        $fields                                = $request->query->all();
+        $orderInfo['sn']                 = $fields['sn'];
+        $orderInfo['targetType']  = $fields['targetType'];
+        $orderInfo['isMobile']     = $this->isMobileClient();
+        $processor                         = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']     = $processor->getOrderInfoTemplate();
+        $order                                = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                            = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist                    = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
             return $this->createMessageResponse('error', '该订单已失效');
@@ -55,8 +56,6 @@ class PayCenterController extends BaseController
         if (($order["createdTime"] + 40 * 60 * 60) < time()) {
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
-
-// $this->isPluginInstalled('Coupon') &&
 
         if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
@@ -144,8 +143,9 @@ class PayCenterController extends BaseController
     {
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
+            'notifyUrl' =>  $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'  => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
+            'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType'=>$order['targetType']), true)
         );
         $payment = $request->request->get('payment');
 
@@ -162,6 +162,7 @@ class PayCenterController extends BaseController
         }
 
         $requestParams['userAgent'] = $request->headers->get('User-Agent');
+        $requestParams['isMobile']    =  $this->isMobileClient();
 
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
@@ -228,8 +229,16 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
-        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
-        $response = $this->createPaymentResponse($name, $request->query->all());
+        if ($name == 'llcbpay' || $name == 'llquickpay') {
+            $returnArray = $request->request->all();
+            $returnArray['userAgent'] = $request->headers->get('User-Agent');
+            $returnArray['isMobile']   = $this->isMobileClient();
+        } else {
+            $returnArray = $request->query->all();
+        }
+
+        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $returnArray);
+        $response = $this->createPaymentResponse($name, $returnArray);
         $payData  = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
@@ -267,6 +276,10 @@ class PayCenterController extends BaseController
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
+        } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
+            $returnArray = json_decode(file_get_contents("php://input"), true);
+            $returnArray['userAgent'] = $request->headers->get('User-Agent');
+            $returnArray['isMobile']   = $this->isMobileClient();
         } else {
             $returnArray = $request->request->all();
         }
@@ -291,7 +304,11 @@ class PayCenterController extends BaseController
             list($success, $order) = $processor->pay($payData);
 
             if ($success) {
-                return new Response('success');
+                if ($name == 'llcbpay' || $name == 'llquickpay') {
+                    return new Response("{'ret_code':'0000','ret_msg':'交易成功'}");
+                } else {
+                    return new Response('success');
+                }
             }
         }
 
@@ -496,8 +513,8 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay');
-
+        $payment = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(
@@ -505,7 +522,7 @@ class PayCenterController extends BaseController
                 );
             }
         }
-
+        
         return $enableds;
     }
 

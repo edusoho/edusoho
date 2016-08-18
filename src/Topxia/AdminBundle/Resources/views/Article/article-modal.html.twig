@@ -14,7 +14,7 @@
   #article-form .popover {
     max-width: 400px;
     width: 400px;
-  }   
+  }
 </style>
 
 
@@ -33,7 +33,7 @@
           <input class="form-control" id="article-title-field" type="text" name="title" value="{{ article.title|default('') }}">
         </div>
       </div>
-      
+
       <div class="form-group">
         <label for="categoryId" class="control-label">所属栏目</label>
         <div class="controls">
@@ -53,9 +53,9 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
-      
+
       {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true} %}
-     
+
       <div class="form-group">
         <label for="richeditor-body-field" class="control-label">正文</label>
         <div class="controls">
@@ -66,12 +66,14 @@
         </div>
       </div>
 
+      {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'article', targetId: article.id|default(0)}, {'showLabel':false})) }}
+
       <div class="form-group">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">确定</button>
         <a class="btn btn-link" href="{{ path('admin_article') }}">返回</a>
       </div>
-    
+
     </div>
     <div class="col-md-4">
       <div class="panel panel-default">
@@ -81,10 +83,10 @@
             <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> 置顶
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> 头条  
+            <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> 头条
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐  
+            <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> 推荐
           </label>
           <a class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">
           </a>
@@ -145,7 +147,7 @@
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
   </div>
 </form>

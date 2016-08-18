@@ -573,10 +573,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function search($conditions)
     {
-        $api          = CloudAPIFactory::create('root');
-        $url          = '/resources?'.http_build_query($conditions);
-        $result       = $api->get($url);
-        $cloudFiles   = $result['data'];
+        $api        = CloudAPIFactory::create('root');
+        $url        = '/resources?'.http_build_query($conditions);
+        $result     = $api->get($url);
+        $cloudFiles = $result['data'];
+
         $cloudFiles   = ArrayToolkit::index($cloudFiles, 'no');
         $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
 

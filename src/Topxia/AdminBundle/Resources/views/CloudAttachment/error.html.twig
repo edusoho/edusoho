@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_attachment' %}
+
+{% block main %}
+
+<div class="text-center">
+  <div class="error-content" style="padding: 100px 100px">
+    <h4>
+      您尚未开通云视频服务，无法使用资源管理功能，
+      <a href={{path('admin_setting_cloud_video')}}>立即开通</a>
+      或
+      <a href="http://open.edusoho.com/show/cloud/video" target="_blank">了解云视频</a>
+    </h4>
+    <p>
+    “云资源管理”提供完善的资源管理功能，您可以从课程、上传时间、资源类型等多个维度对资源进行管理，
+    帮助您轻松掌控全站的视频、音频、图片、文档等资源，再也不用担心过期资源占用存储空间了。
+    </p>
+  </div>
+</div>
+
+{% endblock %}

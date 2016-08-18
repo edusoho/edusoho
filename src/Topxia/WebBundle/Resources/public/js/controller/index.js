@@ -23,12 +23,17 @@ define(function(require, exports, module) {
         Lazyload.init();
 
         $("body").on('click','.js-course-filter',function(){
-             var $btn = $(this);
-             var courseType = $btn.data('type');
-             
-             $.get($btn.data('url'),function(html){
-               $('#'+courseType+'-list-section').after(html).remove();
-               Lazyload.init();
+            var $btn = $(this);
+            var courseType = $btn.data('type');
+            var text = $('.course-filter .visible-xs .active a').text();
+            $.get($btn.data('url'),function(html){
+                $('#'+courseType+'-list-section').after(html).remove();
+                var parent = $btn.parent();
+                if(!parent.hasClass('course-sort')){
+                   text = $btn.find("a").text();   
+                }
+            $('.course-filter .visible-xs .btn').html(text+" "+'<span class="caret"></span>');
+                Lazyload.init();
             })
         })
 
