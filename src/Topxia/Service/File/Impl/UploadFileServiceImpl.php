@@ -495,6 +495,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'start'         => $start,
             'limit'         => $limit
         );
+        if (isset($conditions['resType'])) {
+            $cloudFileConditions['resType'] = $conditions['resType'];
+        }
+
         $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
 
         return $cloudFiles['data'];
@@ -514,7 +518,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $cloudFileConditions = array(
                 'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'))
             );
-
+            if (isset($conditions['resType'])) {
+                $cloudFileConditions['resType'] = $conditions['resType'];
+            }
             $cloudFiles = $this->getFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
