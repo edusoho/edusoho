@@ -49,6 +49,7 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
+            {{dump(payment)}}
             {% if payment == 'alipay' and is_micro_messenger() %}
             <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
