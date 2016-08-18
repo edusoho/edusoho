@@ -41,6 +41,7 @@
           {% for payment, options in payments %}
             {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}
               {% set cbpay = true %}
+                {{dump(cbpay)}}
             {% endif %}
             {% if payment == 'alipay' and is_micro_messenger() %}
               {% set alipay = true %}
@@ -50,14 +51,14 @@
               <span class="icon"></span>
             </div>
             {% else %}
-            {% if cbpay|default('') and alipay|default('') %}
-            {% set other = payment %}
-            {% endif %}
             <div class="check {% if payment == activePayment %} active {% endif %} {% if isMobile and payment == 'heepay' or isMobile and payment ==  'llcbpay' %}disabled{% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
             </div>
+            {% endif %}
+            {% if cbpay|default('') and alipay|default('') %}
+            {% set other = payment %}
             {% endif %}
           {% else %}
             <div class="pay-type-label text-warning ">{{'支付方式未开启，请联系管理员。'|trans}}</div>
@@ -85,8 +86,6 @@
             </ul>
           </div>
           {% endif %}
-          {{dump(alipay)}}
-          {{dump(cbpay)}}
           {% if alipay|default('') or cbpay|default('') %}
               <p class="color-danger">如需使用{% if alipay|default('') %}支付宝{% endif %}{% if alipay|default('') and cbpay|default('') %}或{% endif %}{% if cbpay|default('') %}网银{% endif %}支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
           {% endif %}
