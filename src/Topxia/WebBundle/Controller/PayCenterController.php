@@ -30,6 +30,7 @@ class PayCenterController extends BaseController
         $fields                                = $request->query->all();
         $orderInfo['sn']                 = $fields['sn'];
         $orderInfo['targetType']  = $fields['targetType'];
+        $orderInfo['isMobile']     = $this->isMobileClient();
         $processor                         = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']     = $processor->getOrderInfoTemplate();
         $order                                = $processor->getOrderBySn($orderInfo['sn']);
