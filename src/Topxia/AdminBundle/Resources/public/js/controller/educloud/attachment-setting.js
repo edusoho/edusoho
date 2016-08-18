@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="fileSize"]',
             required: true,
-            rule: 'positive_integer fileSize',
+            rule: 'unsigned_integer fileSize',
         });
 
         Validator.addRule("fileSize", function(options) {
