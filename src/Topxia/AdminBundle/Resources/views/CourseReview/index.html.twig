@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({1:'1星'|trans, 2:'2星'|trans, 3:'3星'|trans, 4:'4星'|trans, 5:'5星'|trans}, app.request.get('rating'), '评分') }}
+        {{ select_options({1:'1星'|trans, 2:'2星'|trans, 3:'3星'|trans, 4:'4星'|trans, 5:'5星'|trans}, app.request.get('rating'), '评分'|trans) }}
       </select>
     </div>
 
@@ -82,7 +82,7 @@
 
     <div>
       <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
-      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_review_batch_delete') }}" data-role="batch-delete" data-name="评价">{{'删除'|trans}}</button>
+      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_review_batch_delete') }}" data-role="batch-delete" data-name="{{ '评价'|trans }}">{{'删除'|trans}}</button>
     </div>
   </div>
 

@@ -22,6 +22,7 @@
 套餐服务将于明天到期，请尽快: 'The package will be expired tomorrow, please '
 '以免影响正常使用': 'to continue use it.'
 套餐服务已到期，: 'The package expired, '
+请尽快: 'Please '
 套餐服务将于%packageDate%天后到期: 'The package will be expired after %packageDate% days'
 授权信息: 'Licence Info'
 非商业授权: 'Non-commercial Licence'
@@ -509,10 +510,13 @@ true为开启: 'true - On'
 请联系客服人员：: 'Please contact customer service: '
 云邮件，享受优质的邮件发送服务: 'Cloud Mail Service, enjoy the stable mailing service.'
 '网络问题，无法连接%Edusoho%开放云平台': 'Network issue, cannot connect to %Edusoho% Open Cloud Platform'
+参与直播人数（最近7天）: 'Live session participants (In last 7 days)'
+云直播状态: 'Cloud Live Service Status'
 '云直播服务，轻松创建直播课堂': 'Cloud Live Lesson service, easy to create your live session'
 教室容量：: 'Capacity: '
 人/月: 'Person per month'
 有效期至：: 'Expired on: '
+您的云直播服务将于%remaining%天后到期，请尽快续费: 'Your Cloud Live service will be expire after %remaining% days, please recharge as soon as possible.'
 您的云直播服务已到期，请尽快续费: 'Your Cloud Live service has expired, please recharge as soon as possible.'
 云搜索条款: 'Conditions of Cloud Search service'
 EduSoho云搜索服务使用条款: 'EduSoho Cloud Search service use conditions'
@@ -529,6 +533,8 @@ EduSoho云搜索服务使用条款: 'EduSoho Cloud Search service use conditions
 未绑定授权域名不能开通云搜索！: 'Unbound domain cannot enable Cloud Search service.'
 立即设置: 'Setup Now'
 当前域名与授权域名不符，不能开通云搜索！: 'Current domain name is not the same as the authorized domain, failed to enable Cloud Search service'
+正在索引数据，预计1～3天完成: 'Re-indexing data, will take 1 - 3 days to finish.'
+重建索引: Re-index
 '云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、话题、老师、资讯。': 'Cloud Search provide powerful full text search engine, help students easily find courses/topics/teachers/articles.'
 搜索范围说明: 'Search scope description'
 '课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。': 'Course: include course title, overview, lesson name and content.'
@@ -701,6 +707,7 @@ MP4文件较适合在不同手机机型下使用不同手机浏览器进行视�
 '%user_name%的用户名': ' %user_name% user name'
 云视频片头: 'Cloud vidio title'
 '，上传后会对视频进行格式转换，转换过程需要一定的时间。': ', it will take a while to transcode the video after uploading.'
+检索: Search
 '%user_name%不存在': '%user_name% not exist.'
 小组名: 'Group Name'
 成员数: 'Number of members'
@@ -1149,7 +1156,7 @@ PHP脚本最大执行时间: 'PHP script maximum excution time'
 大于300秒: 'over 300secs'
 30秒: 30secs
 PHP扩展：: 'PHP extention：'
-该扩展用于处理中文字符: This extention is used to process chinese characters
+该扩展用于处理中文字符: 'This extention is used to process chinese characters'
 '尚未安装': 'Not Installed'
 该扩展用于远程读取文件: 'This extention is used to read documents remotely'
 该扩展用于处理图片: 'This extention is used to process images'
@@ -1330,6 +1337,23 @@ EduSoho主题编辑: 'EduSoho Theme edit'
 '--关键词类型--': '--Keyword type--'
 '--查询条件--': '--Search filters--'
 邮箱: Email
+'--属性--': '-- Properties --'
+'--发布状态--': '-- Publish Status --'
+'--选择类型--': '-- Type --'
+请选择分类: 'Select Category'
+'--所有状态--': '-- All Status --'
+课程状态: 'Course Status'
+收费状态: 'Payment Status'
+文件类型: 'File Type'
+帖子类型: 'Post Type'
+小组状态: 'Group Status'
+话题状态: 'Topic Status'
+'--选择数据类型--': '-- Select Data Type --'
+'--执行周期--': '-- Period --'
+'--所有等级--': '-- All Levels --'
+'--时间类型--': '-- Date Type --'
+'--所有角色--': '-- All Roles --'
+'--注册来源--': '-- Source --'
 还没有选择课程: 'No course selected'
 文件组不存在: 'Document group dose not exist'
 后台: Background
@@ -1814,10 +1838,8 @@ Email验证邮件，发送失败: 'Verification Email sent failed!'
 '正在删除%name%，请稍等。': 'Deleting %name%，please wait.'
 '真的要删除该%name%吗？': 'Are you sure want to delete %name%?'
 '删除%name%成功': '%name% delete successfully'
-请尽快: 'Please '
-参与直播人数（最近7天）: Live session participants (In last 7 days)
-云直播状态: Cloud Live Service Status
-您的云直播服务将于%remaining%天后到期，请尽快续费: 'Your Cloud Live service will be expire after %remaining% days, please recharge as soon as possible.'
+分类描述: 分类描述
+课时数: 课时数
 总则: 总则
 '您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。': '您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。'
 '您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。': '您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。'
@@ -1854,8 +1876,6 @@ EduSoho开放云解决举报事件、提起诉讼而提交的；: EduSoho开放�
 '本服务条款部分内容被有管辖权的法院认定为违法的，不因此影响其他内容的效力。': '本服务条款部分内容被有管辖权的法院认定为违法的，不因此影响其他内容的效力。'
 法律适用与管辖: 法律适用与管辖
 '本服务条款之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本服务条款产生之争议，均应依照中华人民共和国法律予以处理，并提交浙江省杭州市滨江区人民法院仲裁。': '本服务条款之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本服务条款产生之争议，均应依照中华人民共和国法律予以处理，并提交浙江省杭州市滨江区人民法院仲裁。'
-正在索引数据，预计1～3天完成: Re-indexing data, will take 1 - 3 days to finish.
-重建索引: Re-index
 课程：《课程名》－课时《课时名》将在［开播时间］开播！%smsSchoolName%链接地址: 课程：《课程名》－课时《课时名》将在［开播时间］开播！%smsSchoolName%链接地址
 '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%': '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！%smsScoolName%'
 '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%': '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！%smsSchoolName%'
@@ -1865,21 +1885,4 @@ EduSoho开放云解决举报事件、提起诉讼而提交的；: EduSoho开放�
 会员购买: 会员购买
 '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%': '你已成功购买《会员名称》，支付［订单金额］。%smsSchoolName%'
 '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%': '你已成功购买《虚拟币面值》《单位》，支付［订单金额］。%smsSchoolName%'
-检索: Search
-'--属性--': '-- Properties --'
-'--发布状态--': '-- Publish Status --'
-'--选择类型--': '-- Type --'
-请选择分类: Select Category
-'--所有状态--': '-- All Status --'
-课程状态: Course Status
-收费状态: Payment Status
-文件类型: File Type
-帖子类型: Post Type
-小组状态: Group Status
-话题状态: Topic Status
-'--选择数据类型--': '-- Select Data Type --'
-'--执行周期--': '-- Period --'
-'--所有等级--': '-- All Levels --'
-'--时间类型--': '-- Date Type --'
-'--所有角色--': '-- All Roles --'
-'--注册来源--': '-- Source --'
+收费课程: 收费课程
