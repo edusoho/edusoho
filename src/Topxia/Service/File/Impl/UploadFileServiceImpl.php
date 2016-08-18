@@ -1062,7 +1062,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }, $newFileIds);
 
         foreach ($attachments as $attachment) {
-            return $this->getFileUsedDao()->create($attachment);
+            $this->getFileUsedDao()->create($attachment);
         }
 
         $files = $this->findFilesByIds($newFileIds);
