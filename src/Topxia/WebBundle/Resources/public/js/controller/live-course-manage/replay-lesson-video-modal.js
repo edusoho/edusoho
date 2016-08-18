@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var FileChooser = require('../widget/file/file-chooser3');
+    var VideoChooser = require('../widget/media-chooser/video-chooser7');
 
     exports.run = function() {
         var $form = $("#course-material-form");
@@ -9,12 +9,14 @@ define(function(require, exports, module) {
         var choosedMedia = $form.find('[name="media"]').val();
         choosedMedia = choosedMedia ? $.parseJSON(choosedMedia) : {};
 
-        var materialChooser = new FileChooser({
+        var videoChooser = new VideoChooser({
             element: '#material-file-chooser',
             choosed: choosedMedia
         });
 
-        materialChooser.on('change', function(item) {
+        videoChooser.show();
+
+        videoChooser.on('change', function(item) {
             $form.find('[name="fileId"]').val(item.id);
         });
 
