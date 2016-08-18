@@ -27,14 +27,14 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields                  = $request->query->all();
-        $orderInfo['sn']         = $fields['sn'];
-        $orderInfo['targetType'] = $fields['targetType'];
-        $processor               = OrderProcessorFactory::create($fields['targetType']);
-        $orderInfo['template']   = $processor->getOrderInfoTemplate();
-        $order                   = $processor->getOrderBySn($orderInfo['sn']);
-        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
-        $isTargetExist           = $processor->isTargetExist($targetId);
+        $fields                                = $request->query->all();
+        $orderInfo['sn']                 = $fields['sn'];
+        $orderInfo['targetType']  = $fields['targetType'];
+        $processor                         = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']     = $processor->getOrderInfoTemplate();
+        $order                                = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                            = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist                    = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
             return $this->createMessageResponse('error', '该订单已失效');
@@ -142,8 +142,9 @@ class PayCenterController extends BaseController
     {
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
+            'notifyUrl' =>  $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'  => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
+            'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType'=>$order['targetType']), true)
         );
         $payment = $request->request->get('payment');
 

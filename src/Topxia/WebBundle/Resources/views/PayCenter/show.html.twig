@@ -47,7 +47,7 @@
               <span class="icon"></span>
             </div>
             {% else %}
-            <div class="check {% if payment == activePayment %} active {% endif %}{% if payment == 'llcbpay' %}hidden-xs{% endif %}" id="{{payment}}">
+            <div class="check {% if payment == activePayment %} active {% endif %}{% if payment == 'llcbpay' or payment == 'heepay' %}hidden-xs{% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>

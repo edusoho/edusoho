@@ -43,10 +43,12 @@ class FinanceSettingController extends BaseController
         );
 
         $payment = array_merge($default, $payment);
-
+        
         if ($request->getMethod() == 'POST') {
             $payment                    = $request->request->all();
             $payment = ArrayToolkit::trim($payment);
+            //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
+            $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
@@ -55,6 +57,17 @@ class FinanceSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
             'payment' => $payment
         ));
+    }
+
+    public function isClosePayment($payment)
+    {
+        $sum   = $payment['alipay_enabled']+$payment['wxpay_enabled']+$payment['heepay_enabled']+$payment['quickpay_enabled']+$payment['llcbpay_enabled']+$payment['llquickpay_enabled'];
+
+        if ($sum < 1) {
+            $payment['enabled'] = 0;
+        }
+
+        return $payment;
     }
 
     public function refundAction(Request $request)
