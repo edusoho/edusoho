@@ -1,23 +1,22 @@
-{  }'搜索关键字': '搜索关键字'
-命中敏感词: 命中敏感词
-屏蔽文本: 屏蔽文本
-屏蔽时间: 屏蔽时间
-IP地址: IP地址
-'暂无屏蔽记录!': '暂无屏蔽记录!'
-屏蔽次数: 屏蔽次数
-'添加时间': '添加时间'
-'暂无敏感词信息!': '暂无敏感词信息!'
-'添加敏感词': '添加敏感词'
-'换行可一次添加多个敏感词': '换行可一次添加多个敏感词'
-敏感词类型: 敏感词类型
-'选择屏蔽，会将指定敏感词替换为''*''。': '选择屏蔽，会将指定敏感词替换为''*''。'
-'选择禁用，将无法保存。': '选择禁用，将无法保存。'
-'选择屏蔽，会将指定敏感词替换为"*"。': '选择屏蔽，会将指定敏感词替换为"*"。'
-更改为屏蔽: 更改为屏蔽
-更改为禁用: 更改为禁用
-所有类型: 所有类型
-敏感词管理: 敏感词管理
-敏感词列表: 敏感词列表
-屏蔽记录: 屏蔽记录
-'您填写的内容中包含敏感词!': '您填写的内容中包含敏感词!'
-'确定删除此关键字吗？': '确定删除此关键字吗？'
+{  }'搜索关键字': 'Search by keywords'
+命中敏感词: Sensitive Words Hit
+屏蔽文本: Mask Text
+屏蔽时间: Masked at
+IP地址: IP Address
+'暂无屏蔽记录!': 'No record'
+屏蔽次数: Masked Times
+'添加时间': 'Added at'
+'暂无敏感词信息!': 'No sensitive word'
+'添加敏感词': 'Add sensitive word'
+'换行可一次添加多个敏感词': 'Add multiple sensitive words in multiple lines'
+敏感词类型: Sensitive word type
+'选择禁用，将无法保存。': 'If choose block, data will not be able to save.'
+'选择屏蔽，会将指定敏感词替换为"*"。': 'If choose mask, the sensitive words will be replaced with "*"'
+更改为屏蔽: Change to Mask
+更改为禁用: Change to Block
+所有类型: All Types
+敏感词管理: Sensitive Words Management
+敏感词列表: Sensitive Words List
+屏蔽记录: Processing History
+'您填写的内容中包含敏感词!': 'Sensitive words contained in your input.'
+'确定删除此关键字吗？': 'Are you sure to delete this sensitive word?'
