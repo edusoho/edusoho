@@ -225,7 +225,7 @@
   {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
     <div class="alert alert-info">
       <ul>
-        <li>附件支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
+        <li>附件支持多种文件格式上传分享下载，单个文件大小上限<strong>{{setting('cloud_attachment.fileSize')}}MB</strong>。</li>
         <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
         <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
       </ul>
