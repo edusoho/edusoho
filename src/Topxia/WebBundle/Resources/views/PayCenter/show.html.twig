@@ -102,7 +102,7 @@
           {% if targetType in ['course', 'classroom', 'vip'] %}
             {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           {% endif %}
-          <button class="pay-button btn btn-primary"  {% if  other is sameas(false) %}disabled="disabled"{% endif %} type="submit">{{'确认支付'|trans}}</button>
+          <button class="pay-button btn btn-primary"  {% if  other is sameas(false) %}disabled="disabled"{% else %}type="submit"{% endif %} >{{'确认支付'|trans}}</button>
         </div>
       </form>
     </div>
