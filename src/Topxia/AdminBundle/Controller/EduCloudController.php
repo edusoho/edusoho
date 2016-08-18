@@ -150,10 +150,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $attachment = $request->request->all();
-
-            if ($attachment['enable'] == 0) {
-                $attachment = array_merge($attachment, $defaultData);
-            }
             $attachment = array_merge($default, $attachment);
             $this->getSettingService()->set('cloud_attachment', $attachment);
             $this->setFlashMessage('success', '云附件设置已保存！');
