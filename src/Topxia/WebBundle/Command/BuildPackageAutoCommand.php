@@ -286,7 +286,9 @@ class BuildPackageAutoCommand extends BaseCommand
         $askDiffFile   = false;
         $askAssetsLibs = false;
         $askSqlUpgrade = false;
-        $file          = @fopen($diffFile, "r");
+
+        $this->output->writeln("<info>确认build/diff-{$version}差异文件</info>");
+        $file = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line   = fgets($file);
             $op     = $line[0];
@@ -297,15 +299,13 @@ class BuildPackageAutoCommand extends BaseCommand
                 continue;
             }
         }
-
-        if ($askDiffFile) {
-            $this->output->writeln("<info>确认build/diff-{$version}差异文件</info>");
-        }
         $question = "请手动检查build/diff-{$version}文件是否需要编辑,继续请输入y (y/n)";
         if ($askDiffFile && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
+
+        $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
         $file = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line   = fgets($file);
@@ -317,15 +317,13 @@ class BuildPackageAutoCommand extends BaseCommand
                 $this->output->writeln("<comment>web/assets/libs文件：{$line}</comment>");
             }
         }
-
-        if ($askAssetsLibs) {
-            $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
-        }
         $question = "web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)";
         if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
+
+        $this->output->writeln("<info>准备制作升级脚本</info>");
         $file = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line   = fgets($file);
@@ -336,11 +334,7 @@ class BuildPackageAutoCommand extends BaseCommand
                 $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
             }
         }
-        if ($askSqlUpgrade) {
-            $this->output->writeln("<info>准备制作升级脚本</info>");
-        }
         $question = "请根据以上sql脚本完成 scripts/upgrade-{$version}.php,完成后输入y (y/n)";
-
         if ($askSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
