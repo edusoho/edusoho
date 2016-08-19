@@ -18,6 +18,8 @@ define(function(require, exports, module) {
 
         videoChooser.on('change', function(item) {
             $form.find('[name="fileId"]').val(item.id);
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
         });
 
         $form.on('submit', function(){
@@ -30,14 +32,12 @@ define(function(require, exports, module) {
                 $("#material-list").append(html).show();
                 $form.find('.text-warning').hide();
                 $form.find('[name="fileId"]').val('');
+                $('.modal').modal('hide');
+                window.location.reload();
             }).fail(function(){
                 Notify.danger('添加回放失败，请重试！');
             });
             return false;
-        });
-
-        $('.modal').on('hidden.bs.modal', function(){
-            window.location.reload();
         });
 
     };
