@@ -1004,9 +1004,9 @@ QQ群号: 'QQ Group Number'
 查看数据: 'View data'
 隐藏数据: 'Hide data'
 '无日志记录': 'No log records'
-用户登录限制: null
+用户登录限制: User login restrictions
 '开启后同一账号将不能在不同IP或者不同地域下同时登录': 'When activated ,the same account will not be allowed to log in on more than 2 IP addresses or places'
-用户登录保护: 'User loging protection'
+用户登录保护: 'User login protection'
 '开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户': 'When activated,user will be banned if enter wrong password too many times,however,admin can still ban the user manually '
 '用户连续输入错误密码': 'user enter wrong password too many times'
 次，将暂时封禁用户: 'times,user wil be banned temporarily'
