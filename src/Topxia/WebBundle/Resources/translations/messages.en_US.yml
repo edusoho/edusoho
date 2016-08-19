@@ -374,7 +374,7 @@
 资料区: Materials
 概览: Overview
 所属%name%: 'in %name%'
-最新学员: Newcommer
+最新学员: New Students
 '暂无学员': 'No student'
 授课教师: Teacher
 '暂无教师': 'No Teacher'
@@ -886,7 +886,7 @@ flash课程: 'Courses in flash video format'
 个人设置: 'My Account'
 我的教学: 'My Teaching'
 '我的学习': 'My Learning'
-管理后台: ' Admin Console'
+管理后台: 'Admin Console'
 通知: Notice
 私信: Message
 退出登录: 'Sign Out'
@@ -1934,10 +1934,10 @@ QQ: 'QQ number'
 '转码中': transcoding
 '转码成功': 'transcode successfully'
 '转码失败': 'transcode failed'
-禁用: prohibited
-屏蔽: shield
-敏感词: 'sensitive words'
-编号: 'serial number'
+禁用: Block
+屏蔽: Mask
+敏感词: 'Sensitive Words'
+编号: 'Serial'
 '--请选择退学原因--': '-- Please select reason --'
 '课程内容质量差': 'Poor quality of course content'
 老师服务态度不好: 'Teacher service attitude is not good'
@@ -3079,7 +3079,7 @@ Firefox浏览器: Firefox
 失败：: failed
 '%title%时，发生了未知错误。': 'when %title%, unknown error occured.'
 正在初始化系统...: 'initializing the system...'
-目录: Directory
+目录: Lessons
 已保存: saved
 '进入直播教室错误，请联系管理员，': 'Error occured when entering the live class. Please contact webmaster.'
 重试: 'try again'
