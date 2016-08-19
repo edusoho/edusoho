@@ -3,11 +3,23 @@
     <div id="classroom-sign"  data-records="{{ path('classroom_signed_records', {'classroomId':classroom.id})}}" data-signurl="{{path('classroom_sign',{classroomId:classroom.id})}}" >
       <i class="es-icon es-icon-today"></i>
       {% if not isSignedToday %}
-        <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+          {% if app.request.getLocale() == 'en_US' %}
+              <span class="date">
+            {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
+          </span>
+          {% else %}
+              <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+          {% endif %}
         <!-- <br> -->
         <!-- 星期{{week}} -->
       {% else %}
-        <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+          {% if app.request.getLocale() == 'en_US' %}
+              <span class="date">
+            {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
+          </span>
+          {% else %}
+              <span class="date">{{ 'now'|date('m') }}{{'月'|trans}}{{ 'now'|date('d') }}{{'日'|trans}}</span>
+          {% endif %}
         <!-- <br>漏签<span style="color:red;">{{notSign}}</span>天 -->
       {% endif %}
       <div id="sign">
