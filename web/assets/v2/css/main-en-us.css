@@ -3370,7 +3370,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -10914,7 +10914,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -14166,4 +14166,10 @@ textarea {
   background: url("../img/en-us/tag_finished.png") no-repeat;
   background-image: -webkit-image-set(url("../img/en-us/tag_finished.png") 1x, url("../img/en-us/tag_finished@2x.png") 2x);
   width: 84px;
+}
+.class-header .class-serve .serve-frame {
+  width: 50px;
+}
+.class-header .class-serve > ul {
+  padding: 25px 10px 25px 60px;
 }
