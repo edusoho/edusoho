@@ -20,7 +20,7 @@ class QiQiuYunV1OpenLessonResponse implements SpecialResponse
                 'content'      => $openCourseLesson['content'],
                 'type'         => $openCourseLesson['type'],
                 'mediaId'      => $openCourseLesson['mediaId'],
-                'openCourseId' => $openCourseLesson['courseId'],
+                'courseId' => $openCourseLesson['courseId'],
                 'chapterId'    => $openCourseLesson['chapterId'],
                 'number'       => $openCourseLesson['number'],
                 'free'         => $openCourseLesson['free'],
