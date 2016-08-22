@@ -64,9 +64,7 @@ class OpenCourses extends BaseResource
                 );
             }
             $course['tags'] = $courseTags;
-        }
 
-        foreach ($openCourses as &$course) {
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
                     'id'   => $categories[$course['categoryId']]['id'],

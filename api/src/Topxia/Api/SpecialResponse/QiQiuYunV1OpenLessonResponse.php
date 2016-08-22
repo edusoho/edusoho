@@ -2,10 +2,8 @@
 
 namespace Topxia\Api\SpecialResponse;
 
-use Topxia\Common\ArrayToolkit;
 
-
-class QiQiuYunV1OpenCourseLessonResponse implements SpecialResponse
+class QiQiuYunV1OpenLessonResponse implements SpecialResponse
 {
     public function filter($data)
     {

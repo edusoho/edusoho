@@ -13,6 +13,21 @@ class Lesson extends BaseResource
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
 
+        $lesson['startTime'] = empty($lesson['startTime']) ? '' : date('c', $lesson['startTime']);
+        $lesson['endTime']   = empty($lesson['endTime']) ? '' :date('c', $lesson['endTime']);
+
+        unset($lesson['free']);
+        unset($lesson['quizNum']);
+        unset($lesson['learnedNum']);
+        unset($lesson['viewedNum']);
+        unset($lesson['giveCredit']);
+        unset($lesson['requireCredit']);
+        unset($lesson['homeworkId']);
+        unset($lesson['exerciseId']);
+        unset($lesson['suggestHours']);
+        unset($lesson['testMode']);
+        unset($lesson['testStartTime']);
+
         switch ($lesson['type']) {
             case 'video':
                 return $this->getVideoLesson($lesson);
@@ -67,7 +82,7 @@ class Lesson extends BaseResource
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
+                                    'url' => $this->getHttpHost() . "/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -83,7 +98,7 @@ class Lesson extends BaseResource
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
+                                'url' => $this->getHttpHost() . "/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -109,14 +124,14 @@ class Lesson extends BaseResource
                         }
                     }
                 } else {
-                    $token = $this->getTokenService()->makeToken('local.media', array(
+                    $token              = $this->getTokenService()->makeToken('local.media', array(
                         'data'     => array(
                             'id' => $file['id']
                         ),
                         'duration' => 3600,
                         'userId'   => 0
                     ));
-                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
+                    $lesson['mediaUri'] = $this->getHttpHost() . "/player/{$file['id']}/file/{$token['token']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';
