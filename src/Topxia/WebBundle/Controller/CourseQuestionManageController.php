@@ -68,11 +68,14 @@ class CourseQuestionManageController extends BaseController
     public function createAction(Request $request, $courseId, $type)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $data       = $request->request->all();
+            $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->createQuestion($data);
+
+            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
 
             if ($data['submission'] == 'continue') {
                 $urlParams             = ArrayToolkit::parts($question, array('target', 'difficulty', 'parentId'));
@@ -131,9 +134,12 @@ class CourseQuestionManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
-            $question = $request->request->all();
+            $question   = $request->request->all();
+            $attachment = $request->request->get('attachment');
 
             $question = $this->getQuestionService()->updateQuestion($id, $question);
+            $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
+            $this->getUploadFileService()->createUseFiles($attachment['analysis']['fileIds'], $question['id'], $attachment['analysis']['targetType'], $attachment['analysis']['type']);
 
             $this->setFlashMessage('success', '题目修改成功！');
 

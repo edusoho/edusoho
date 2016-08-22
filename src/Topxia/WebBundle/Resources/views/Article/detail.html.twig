@@ -22,6 +22,8 @@
         
         {% include 'TopxiaWebBundle:Article/Part:detail-boy.html.twig' %}
 
+        {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'article', targetId: article.id })) }}
+
         {% include 'TopxiaWebBundle:Article/Part:detail-copyright.html.twig' %}
 
         {% include 'TopxiaWebBundle:Article/Part:detail-tags.html.twig' %}

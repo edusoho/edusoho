@@ -2,6 +2,7 @@
 
 {% block heading %}
   {{'（不定项）'|trans}}{{ question.stem|bbCode2Html|raw }}
+  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: question.id })) }}
 {% endblock %}
 
 {% block body %}

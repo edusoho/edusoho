@@ -1,7 +1,10 @@
 <div class="question-set-item-have-sub">
   {% set question = item.question %}
 
-  <div class="well editor-text">{{ question.stem|bbCode2Html|raw }}</div>
+  <div class="well editor-text">
+  	{{ question.stem|bbCode2Html|raw }}
+  	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: question.id })) }}
+  </div>
 
   {% for key,item in item.subItems %}
     {% include 'TopxiaWebBundle:Question:question-set-item.html.twig' %}

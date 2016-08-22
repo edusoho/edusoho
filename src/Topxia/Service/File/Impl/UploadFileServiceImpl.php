@@ -5,6 +5,7 @@ namespace Topxia\Service\File\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService;
+use Topxia\Service\File\FireWall\FireWallFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
@@ -59,7 +60,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function findFilesByIds(array $ids, $showCloud = 0)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
-
         if (empty($files)) {
             return array();
         }
@@ -96,7 +96,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId'));
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description', 'targetId', 'useType', 'usedCount'));
 
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->updateFile($file['id'], $fields);
@@ -181,10 +181,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $preparedFile = $implementor->prepareUpload($params);
-
-        $file       = $this->getUploadFileInitDao()->addFile($preparedFile);
-        $params     = array_merge($params, $file);
-        $initParams = $implementor->initUpload($params);
+        $file         = $this->getUploadFileInitDao()->addFile($preparedFile);
+        $params       = array_merge($params, $file);
+        $initParams   = $implementor->initUpload($params);
 
         if ($params['storage'] == 'cloud') {
             $file = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
@@ -496,6 +495,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'start'         => $start,
             'limit'         => $limit
         );
+        if (isset($conditions['resType'])) {
+            $cloudFileConditions['resType'] = $conditions['resType'];
+        }
+
         $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
 
         return $cloudFiles['data'];
@@ -515,7 +518,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $cloudFileConditions = array(
                 'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'))
             );
-
+            if (isset($conditions['resType'])) {
+                $cloudFileConditions['resType'] = $conditions['resType'];
+            }
             $cloudFiles = $this->getFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
@@ -555,13 +560,19 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $cloudFileConditions = array(
-            'processStatus' => $conditions['processStatus'],
-            'nos'           => implode(',', $globalIds)
+            'processStatus' => $conditions['processStatus']
         );
+        $globalArray = array_chunk($globalIds, 20);
+        $count       = 0;
 
-        $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
+        foreach ($globalArray as $key => $globals) {
+            $cloudFileConditions['nos'] = implode(',', $globals);
 
-        return $cloudFiles['count'];
+            $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
+            $count += $cloudFiles['count'];
+        }
+
+        return $count;
     }
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
@@ -1035,6 +1046,132 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $conditions;
     }
 
+    //================
+    public function createUseFiles($fileIds, $targetId, $targetType, $type)
+    {
+        $fileIds    = empty($fileIds) ? array() : explode(",", $fileIds);
+        $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
+        if (empty($newFileIds)) {
+            return false;
+        }
+
+        $attachments = array_map(function ($fileId) use ($targetType, $targetId, $type) {
+            $attachment = array(
+                'fileId'      => $fileId,
+                'targetType'  => $targetType,
+                'targetId'    => $targetId,
+                'type'        => $type,
+                'createdTime' => time()
+            );
+            return $attachment;
+        }, $newFileIds);
+
+        foreach ($attachments as $attachment) {
+            $this->getFileUsedDao()->create($attachment);
+        }
+
+        $files = $this->findFilesByIds($newFileIds);
+        foreach ($files as $file) {
+            $this->update($file['id'], array('useType' => $targetType, 'usedCount' => $file['usedCount'] + 1));
+        }
+    }
+
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
+    {
+        $conditions = array(
+            'type'       => $type,
+            'targetType' => $targetType,
+            'targetId'   => $targetId
+        );
+
+        $limit       = $this->getFileUsedDao()->count($conditions);
+        $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime', 'DESC'), 0, $limit);
+        $this->bindFiles($attachments);
+        return $attachments;
+    }
+
+    public function getUseFile($id)
+    {
+        $attachment = $this->getFileUsedDao()->get($id);
+        $this->bindFile($attachment);
+        return $attachment;
+    }
+
+    public function deleteUseFile($id)
+    {
+        $attachment = $this->getFileUsedDao()->get($id);
+        $file       = $this->getFile($attachment['fileId']);
+        if (empty($file)) {
+            $this->createNotFoundException("该附件不存在,或已被删除");
+        }
+        $fireWall = FireWallFactory::create($attachment['targetType']);
+        if (!$fireWall->canAccess($attachment)) {
+            $this->createAccessDeniedException("您无全删除该附件");
+        }
+
+        try {
+            $this->getFileUsedDao()->getConnection()->beginTransaction();
+
+            $this->getFileUsedDao()->delete($id);
+            $this->deleteFile($file['id']);
+
+            $this->getFileUsedDao()->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getFileUsedDao()->getConnection()->rollback();
+            throw $e;
+        }
+    }
+
+    protected function findCreatedFileIds($fileIds, $targetType, $targetId)
+    {
+        $conditions = array(
+            'targetType' => $targetType,
+            'targetId'   => $targetId
+        );
+        $existUseFiles = $this->getFileUsedDao()->search($conditions, array('createdTime', 'DESC'), 0, 100);
+        $existFileIds  = ArrayToolkit::column($existUseFiles, 'fileId');
+
+        return array_diff($fileIds, $existFileIds);
+    }
+
+    /**
+     * Impure Function
+     * 每个attachment 增加key file
+     * @param array $attachments
+     */
+    protected function bindFiles(array &$attachments)
+    {
+        $files = $this->getUploadFileDao()->findFilesByIds(ArrayToolkit::column($attachments, 'fileId'));
+        if (!empty($files)) {
+            $files = $this->getFileImplementor('cloud')->findFiles($files, array('resType' => 'attachment'));
+        }
+
+        $files = ArrayToolkit::index($files, 'id');
+        foreach ($attachments as $key => &$attachment) {
+            if (isset($files[$attachment['fileId']])) {
+                $attachment['file'] = $files[$attachment['fileId']];
+            } else {
+                $this->getFileUsedDao()->delete($attachment['id']);
+                unset($attachments[$key]);
+            }
+        }
+    }
+
+    /**
+     * Impure Function
+     * attachment 增加key file
+     * @param $attachment
+     */
+    protected function bindFile(&$attachment)
+    {
+        $file = $this->getFile($attachment['fileId']);
+        if (empty($file)) {
+            unset($attachments);
+        } else {
+            $attachment['file'] = $file;
+        }
+    }
+
     protected function generateKey($length = 0)
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -1100,6 +1237,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getUploadFileInitDao()
     {
         return $this->createDao('File.UploadFileInitDao');
+    }
+
+    protected function getFileUsedDao()
+    {
+        return $this->createDao('File.FileUsedDao');
     }
 
     private function _checkOrderBy($order)

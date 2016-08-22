@@ -413,7 +413,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'name'   => $file['fileName'],
             'size'   => $file['fileSize']
         );
-
+        if ($file['targetType'] == 'attachment') {
+            $params['type'] = $file['targetType'];
+        }
         if (isset($file['directives'])) {
             $params['directives'] = $file['directives'];
         }
@@ -562,7 +564,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'size'   => $params['size'],
             'extno'  => $file['id']
         );
-
+        if ($file['targetType'] == 'attachment') {
+            $params['type'] = $file['targetType'];
+        }
         $api                     = CloudAPIFactory::create('root');
         $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
         $file                    = $api->get("/resources/{$file['globalId']}", array("refresh" => true));
@@ -573,10 +577,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function search($conditions)
     {
-        $api          = CloudAPIFactory::create('root');
-        $url          = '/resources?'.http_build_query($conditions);
-        $result       = $api->get($url);
-        $cloudFiles   = $result['data'];
+        $api        = CloudAPIFactory::create('root');
+        $url        = '/resources?'.http_build_query($conditions);
+        $result     = $api->get($url);
+        $cloudFiles = $result['data'];
+
         $cloudFiles   = ArrayToolkit::index($cloudFiles, 'no');
         $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
 

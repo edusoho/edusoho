@@ -45,7 +45,6 @@ class UploaderToken
             'targetId' => $targetId,
             'bucket' => $bucket,
         );
-
     }
 
     private function base64Encode($data) { 

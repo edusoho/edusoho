@@ -1,0 +1,21 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_attachment' %}
+
+{% block main %}
+
+<div class="text-center">
+  <div class="error-content" style="padding: 100px 100px">
+    <h4>
+      您尚未开通云视频服务，无法使用云附件功能，
+      <a href={{path('admin_setting_cloud_video')}}>立即开通</a>
+      或
+      <a href="http://open.edusoho.com/show/cloud/video" target="_blank">了解云视频</a>
+    </h4>
+    <p>
+      “云附件”提供完善的附件功能，满足讨论区，小组，资讯，试题等多种场景的附件上传，让学习，互动，更加完整丰富。
+    </p>
+  </div>
+</div>
+
+{% endblock %}

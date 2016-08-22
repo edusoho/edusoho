@@ -10,7 +10,7 @@ class ArticleController extends BaseController
     public function indexAction(Request $request)
     {
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        $conditions =$this->fillOrgCode(array(
+        $conditions   = $this->fillOrgCode(array(
             'status' => 'published'
         ));
 
@@ -31,7 +31,7 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        $featuredConditions =$this->fillOrgCode(array(
+        $featuredConditions = $this->fillOrgCode(array(
             'status'   => 'published',
             'featured' => 1
         ));
@@ -49,7 +49,7 @@ class ArticleController extends BaseController
             $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-       $promotedConditions =$this->fillOrgCode(array(
+        $promotedConditions = $this->fillOrgCode(array(
             'status'   => 'published',
             'promoted' => 1
         ));
@@ -341,7 +341,7 @@ class ArticleController extends BaseController
 
     public function popularArticlesBlockAction()
     {
-        $conditions =$this->fillOrgCode(array(
+        $conditions = $this->fillOrgCode(array(
             'type'   => 'article',
             'status' => 'published'
         ));

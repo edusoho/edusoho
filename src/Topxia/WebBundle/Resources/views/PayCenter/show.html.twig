@@ -28,31 +28,31 @@
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         
-        {% set activePayment = order.payment %}
-        {% for payment,options in payments %}
-          {% if ( not is_micro_messenger() and activePayment == 'none' ) 
-            or (is_micro_messenger() and activePayment in ['none', 'alipay'] and not (payment == 'alipay')) %}
-            {% set activePayment = payment %}
-          {% endif %}
-        {% endfor %}
-        <input type="hidden" name="payment" value={{activePayment}}>
+        {% set activePayment = order.payment|default(firstEnabledPayment.name|default('')) %}
+        {% if order.payment == 'none' %}
+          {% set activePayment = firstEnabledPayment.name|default('') %}
+        {% endif %}
+
+        <input type="hidden" name="payment" value="{{activePayment}}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        {% set cbpay = false %}
+        {% set alipay = false %}
+
         <div class="form-group order-detail-bg">
-          {% for payment, options in payments %}
-            {% if payment == 'alipay' and is_micro_messenger() %}
-            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' class="hidden" href='javascript:;'>复制地址</a></p>
-            <div class="check disabled">
-              {% set picture = 'assets/img/order/'~payment~'.png' %}
-              <img src="{{ asset(picture) }}" />
-              <span class="icon"></span>
-            </div>
-            {% else %}
-            <div class="check {% if payment == activePayment %} active {% endif %}" id="{{payment}}">
-              {% set picture = 'assets/img/order/'~payment~'.png' %}
-              <img src="{{ asset(picture) }}" />
-              <span class="icon"></span>
-            </div>
+          {% for payment in payments %}
+            {% if payment.name in ['heepay', 'llcbpay'] and payment.enabled == 0 %}
+              {% set cbpay = true %}
+            {% elseif  payment.name == 'alipay' and payment.enabled == 0 %}
+              {% set alipay = true %}
             {% endif %}
+              {% if activePayment in ['none', ''] and payment.enabled %}
+                {% set activePayment = payment.name %}
+              {% endif %}
+              <div class="check {% if not payment.enabled %}disabled{% endif %} {% if activePayment == payment.name %}active{% endif %}" id="{{payment.name}}">
+                {% set picture = 'assets/img/order/'~payment.name~'.png' %}
+                <img src="{{ asset(picture) }}" />
+                <span class="icon"></span>
+              </div>
           {% else %}
             <div class="pay-type-label text-warning ">{{'支付方式未开启，请联系管理员。'|trans}}</div>
           {% endfor %}
@@ -79,6 +79,13 @@
             </ul>
           </div>
           {% endif %}
+          {% if alipay|default('') or cbpay|default('') %}
+              {% if is_micro_messenger() %}
+                <p class="color-danger">您正在使用微信浏览，暂不支持其他支付方式</p>
+              {% else %}
+                <p class="color-danger">若需使用网银支付，请使用IE浏览器</p>
+              {% endif %}
+          {% endif %}
         </div>
         <div class="form-group">
           <div class="total-price">
@@ -90,8 +97,9 @@
           {% if targetType in ['course', 'classroom', 'vip'] %}
             {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           {% endif %}
-          <button class="pay-button btn btn-primary"  type="submit">{{'确认支付'|trans}}</button>
+          <button class="pay-button btn btn-primary" {% if  activePayment == '' %}disabled="disabled"{% else %}type="submit"{% endif %} >{{'确认支付'|trans}}</button>
         </div>
+
       </form>
     </div>
   </div>

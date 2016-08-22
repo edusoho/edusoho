@@ -13,6 +13,7 @@
       {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
     <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
+    {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'classroom.thread.post', targetId: post.id })) }}
     <div class="comment-sns">
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>

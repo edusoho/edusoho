@@ -7,6 +7,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ThreadController extends BaseController
 {
+    /**
+     * [listAction description]
+     * @param  Request $request        [description]
+     * @param  [type]  $target         [description]
+     * @param  [type]  $filters        [description]
+     * @return [type]  [description]
+     */
     public function listAction(Request $request, $target, $filters)
     {
         $conditions = $this->convertFiltersToConditions($target['id'], $filters);
@@ -29,7 +36,6 @@ class ThreadController extends BaseController
             ArrayToolkit::column($threads, 'lastPostUserId')
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render("TopxiaWebBundle:Thread:list.html.twig", array(
             'target'    => $target,
             'threads'   => $threads,
@@ -117,6 +123,10 @@ class ThreadController extends BaseController
                 $data['targetId']   = $target['id'];
 
                 $thread = $this->getThreadService()->createThread($data);
+
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
+
                 return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                     "{$target['type']}Id" => $thread['targetId'],
                     'threadId'            => $thread['id']
@@ -144,7 +154,11 @@ class ThreadController extends BaseController
                     $data['maxUsers'] = 0;
                 }
 
-                $thread  = $this->getThreadService()->updateThread($thread['id'], $data);
+                $thread = $this->getThreadService()->updateThread($thread['id'], $data);
+
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
+
                 $message = array(
                     'title'      => $thread['title'],
                     'targetType' => $target['type'],
@@ -228,16 +242,18 @@ class ThreadController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields             = $request->request->all();
             $fields['threadId'] = $threadId;
-
+            unset($fields['attachment']);
             $post = $this->getThreadService()->createPost($fields);
-            // $authors = $this->getThreadService()->setUserBadgeTitle($thread, array($user['id'] => $user->toArray()));
+
+            $attachment = $request->request->get('attachment');
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
+
             return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
                 'post'    => $post,
                 'author'  => $user,
                 'service' => $this->getThreadService()
             ));
         }
-
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
             'thread'  => $thread,
             'service' => $this->getThreadService()
@@ -426,5 +442,10 @@ class ThreadController extends BaseController
     protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 }

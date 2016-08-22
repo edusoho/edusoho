@@ -14,13 +14,15 @@
         <option value="error">转码失败</option>
       </select>
     </div>
-    <div class="form-group" >
-      <select class="form-control js-use-status-select" name="useStatus">
-        <option value="">使用状态</option>
-        <option value="unused">未使用</option>
-        <option value="used">已使用</option>
-      </select>
-    </div>
+    {% if pageType == 'file' %}
+      <div class="form-group" >
+        <select class="form-control js-use-status-select" name="useStatus">
+          <option value="">使用状态</option>
+          <option value="unused">未使用</option>
+          <option value="used">已使用</option>
+        </select>
+      </div>
+    {% endif %}
   </div>
 
  {#  <div class="checkbox">

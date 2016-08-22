@@ -1,4 +1,4 @@
-
+ {% import _self as forms %}
   <tr>
     <td>
         <div class="materials-table-img">
@@ -54,16 +54,27 @@
     <td class="text-center">
       <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
     </td>
+    {% if pageType  == 'attachment' %}
+      <td class="text-center">
+        <span style="display:block">{{ forms.showType(cloudFile.useType) }}</span>
+      </td>
+    {% endif %}
     <td class="es-materillib-table text-center">
       <div class="btn-group ">
-        <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudFile.no}) }}">编辑</a>
+           {% if pageType  == 'attachment' %}
+            <a class="btn btn-default btn-sm " href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
+          {% else %}
+              <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudFile.no}) }}">编辑</a>
+        {% endif %}
 
         <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu pull-right">
           <li>
-            <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
+            {% if pageType  == 'file' %}
+              <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
+            {% endif %}
           </li>
           <li>
             <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete_modal_show') }}" data-id="{{ cloudFile.no }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
@@ -72,3 +83,19 @@
       </div>
     </td>
   </tr>
+
+{% macro showType( useType) %}
+    {% if useType == "article" %}
+      资讯
+    {% elseif useType in ['course.thread','course.thread.post'] %}
+      课程讨论区
+    {% elseif  useType in ['classroom.thread','classroom.thread.post'] %}
+      班级话题
+    {% elseif useType in ['group.thread', 'group.thread.post'] %}
+      小组
+    {% elseif useType in ['question.stem', 'question.analysis'] %}
+      试题
+    {% else %}
+      --
+    {% endif %}
+{% endmacro %}
