@@ -313,6 +313,10 @@ class CourseLessonController extends BaseController
                 } elseif ($lesson['type'] == 'ppt') {
                     $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
                 }
+
+                if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
+                    $json['liveMediaError'] = '抱歉，回放视频文件不存在，暂时无法学习。';
+                }
             }
         } elseif ($json['mediaSource'] == 'youku' && $this->isMobileClient()) {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);

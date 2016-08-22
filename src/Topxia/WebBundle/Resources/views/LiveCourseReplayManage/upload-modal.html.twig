@@ -15,18 +15,6 @@
 {% endif %}
 
 <form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
-  <div class="form-group">
-    <div class="col-md-10 col-md-offset-1  controls">
-      {#<ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
-        {% for material in materials %}
-          {% include 'TopxiaWebBundle:CourseMaterialManage:list-item.html.twig' %}
-        {% endfor %}
-      </ul>
-      {% if not materials %}
-        <span class="control-text text-warning">{{'暂无资料，请上传。'|trans}}</span>
-      {% endif %}#}
-    </div>
-  </div>
 
   {% set targetType = targetType|default('courselesson') %}
   {% set targetId   = course.id %}

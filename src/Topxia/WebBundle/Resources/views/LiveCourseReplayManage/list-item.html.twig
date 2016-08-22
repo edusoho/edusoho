@@ -35,7 +35,11 @@
 			{% elseif lesson.replayStatus == 'generated' %}
 				<span class="text-warning">({{'已录制回放'|trans}})</span>
 			{% elseif lesson.replayStatus == 'videoGenerated' %}
-				<span class="text-warning">({{'已上传录像'|trans}})</span>
+				{% if lesson.file %}
+					<span class="text-warning">({{'已上传录像'|trans}})</span>
+				{% else %} 
+					<span class="text-warning">({{'回放视频文件已删除'|trans}})</span>
+				{% endif %}
 			{% endif %}
 		{% endif %}
 

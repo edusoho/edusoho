@@ -432,8 +432,8 @@ define(function(require, exports, module) {
                                 
                                 $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ lesson.id +"'>查看回放</button>&nbsp;&nbsp;";
                                 $('body').on('click','.live-video-play-btn',function(){
-
-                                    if (lesson.mediaId == 0) {
+                                    
+                                    if (lesson.mediaId == 0 || ($.inArray('liveMediaError',lesson) != -1 && lesson.liveMediaError != '')) {
                                         Notify.danger('抱歉，视频文件不存在，暂时无法学习。');
                                         return;
                                     }

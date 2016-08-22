@@ -511,7 +511,8 @@ class LiveCourseController extends BaseController
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
-                $item["canRecord"] = $this->_canRecord($item['mediaId']);
+                $item["canRecord"] = $item['replayStatus'] == 'videoGenerated' ? false : $this->_canRecord($item['mediaId']);
+                $item['file']      = $this->getLiveReplayMedia($item);
                 $courseItems[$key] = $item;
             }
         }
@@ -522,6 +523,15 @@ class LiveCourseController extends BaseController
             'items'   => $courseItems,
             'default' => $default
         ));
+    }
+
+    protected function getLiveReplayMedia($lesson)
+    {
+        if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
+            return $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return '';
     }
 
     protected function getRootCategory($categoryTree, $category)

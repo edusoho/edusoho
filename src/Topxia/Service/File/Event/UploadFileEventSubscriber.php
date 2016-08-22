@@ -10,12 +10,12 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'          => 'onCourseDelete',
+            'course.delete'             => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete'   => 'onCourseLessonDelete',
-            'course.material.create' => 'onMaterialCreate',
-            'course.material.update' => 'onMaterialUpdate',
-            'course.material.delete' => 'onMaterialDelete',
+            'course.lesson.delete'      => 'onCourseLessonDelete',
+            'course.material.create'    => 'onMaterialCreate',
+            'course.material.update'    => 'onMaterialUpdate',
+            'course.material.delete'    => 'onMaterialDelete',
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
             'open.course.delete'        => 'onOpenCourseDelete'
@@ -25,7 +25,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     public function onCourseDelete(ServiceEvent $event)
     {
         $course = $event->getSubject();
-        
+
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
 
         if (!empty($lessons)) {
@@ -52,8 +52,8 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonDelete(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $lesson   = $context['lesson'];
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -65,27 +65,31 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $material = $context['material'];
 
-        if(!empty($material['fileId'])){
-            $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',1);
+        if (!empty($material['fileId'])) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
         }
     }
 
     public function onMaterialUpdate(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $material = $context['material'];
+        $context        = $event->getSubject();
+        $argument       = $context['argument'];
+        $material       = $context['material'];
+        $sourceMaterial = $context['sourceMaterial'];
 
-        if ($material['fileId'] != $argument['fileId'] && $argument['fileId']) {
-            $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount', 1);
-            $this->getUploadFileService()->waveUploadFile($argument['fileId'],'usedCount',-1);
+        if (!$material['lessonId'] && $sourceMaterial['lessonId']) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
+        } elseif ($material['fileId'] != $argument['fileId'] && $argument['fileId']) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
+            $this->getUploadFileService()->waveUploadFile($argument['fileId'], 'usedCount', -1);
+        } elseif (!$sourceMaterial['lessonId'] && $material['lessonId']) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
         }
-
     }
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $material  = $event->getSubject();
+        $material = $event->getSubject();
 
         $file = $this->getUploadFileService()->getFile($material['fileId']);
 
@@ -93,12 +97,12 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $this->getUploadFileService()->waveUploadFile($file['id'],'usedCount',-1);
+        $this->getUploadFileService()->waveUploadFile($file['id'], 'usedCount', -1);
 
         if (!$this->getUploadFileService()->canManageFile($file['id'])) {
             return false;
         }
-        
+
         if ($file['targetId'] == $material['courseId']) {
             $this->getUploadFileService()->update($material['fileId'], array('targetId' => 0));
         }
@@ -106,8 +110,8 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
 
     public function onOpenCourseLessonDelete(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $lesson   = $context['lesson'];
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -117,7 +121,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     public function onOpenCourseDelete(ServiceEvent $event)
     {
         $course = $event->getSubject();
-        
+
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         if (!empty($lessons)) {

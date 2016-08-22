@@ -19,7 +19,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         if (!empty($fields['fileId'])) {
             $courseMaterials = $this->searchMaterials(
                 array(
-                    'courseId' => $fields['courseId'], 
+                    'courseId' => $fields['courseId'],
                     'fileId'   => $fields['fileId'],
                     'lessonId' => 0,
                     'type'     => $fields['type']
@@ -54,9 +54,10 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function updateMaterial($id, $fields, $argument)
     {
-        $material = $this->getMaterialDao()->updateMaterial($id, $fields);
+        $sourceMaterial = $this->getMaterialDao()->getMaterial($id);
+        $material       = $this->getMaterialDao()->updateMaterial($id, $fields);
 
-        $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material));
+        $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
 
         return $material;
     }
@@ -83,27 +84,28 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->deleteMaterial($materialId);
     }
 
-    public function deleteMaterialsByLessonId($lessonId, $courseType='course')
+    public function deleteMaterialsByLessonId($lessonId, $courseType = 'course')
     {
         return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId, $courseType);
     }
-	public function deleteMaterialsByCourseId($courseId, $courseType='course')
-	{
-		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId, $courseType);
-	}
 
-	public function deleteMaterials($courseId, $fileIds, $courseType='course')
-	{
-		$materials = $this->searchMaterials(
-			array(
+    public function deleteMaterialsByCourseId($courseId, $courseType = 'course')
+    {
+        return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId, $courseType);
+    }
+
+    public function deleteMaterials($courseId, $fileIds, $courseType = 'course')
+    {
+        $materials = $this->searchMaterials(
+            array(
                 'courseId' => $courseId,
                 'fileIds'  => $fileIds,
                 'type'     => $courseType
             ),
-			array('createdTime','DESC'),
+            array('createdTime', 'DESC'),
             0,
             PHP_INT_MAX
-		);
+        );
 
         if (!$materials) {
             return false;
@@ -214,14 +216,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             return array();
         }
 
-        $fileIds = ArrayToolkit::column($materials,'fileId');
+        $fileIds = ArrayToolkit::column($materials, 'fileId');
         $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
 
         $files     = ArrayToolkit::index($files, 'id');
         $sortFiles = array();
         foreach ($materials as $key => $material) {
             if (isset($files[$material['fileId']])) {
-                $file = array_merge($material, $files[$material['fileId']]);
+                $file            = array_merge($material, $files[$material['fileId']]);
                 $sortFiles[$key] = $file;
             }
         }
@@ -231,14 +233,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     private function _getMaterialFields($material)
     {
-    	$fields = array(
+        $fields = array(
             'courseId'    => $material['courseId'],
             'lessonId'    => empty($material['lessonId']) ? 0 : $material['lessonId'],
             'description' => empty($material['description']) ? '' : $material['description'],
             'userId'      => $this->getCurrentUser()->id,
             'source'      => isset($material['source']) ? $material['source'] : 'coursematerial',
             'type'        => isset($material['type']) ? $material['type'] : 'course',
-            'createdTime' => time(),
+            'createdTime' => time()
         );
 
         if (empty($material['fileId'])) {

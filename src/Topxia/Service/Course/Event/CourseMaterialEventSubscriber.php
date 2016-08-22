@@ -391,7 +391,16 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
 
         if ($material) {
-            $this->getMaterialService()->updateMaterial($material[0]['id'], array('lessonId' => 0), array('lessonId' => 0, 'fileId' => $lesson['mediaId']));
+            $this->_resetExistMaterialLessonId($material[0]);
+
+            $fields = array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId'   => $lesson['mediaId'],
+                'source'   => 'courselesson',
+                'type'     => 'course'
+            );
+            $this->getMaterialService()->uploadMaterial($fields);
         } else {
             $fields = array(
                 'courseId' => $lesson['courseId'],
@@ -423,7 +432,16 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
         );
 
         if ($material) {
-            $this->getMaterialService()->updateMaterial($material[0]['id'], array('lessonId' => 0), array('lessonId' => 0, 'fileId' => $lesson['mediaId']));
+            $this->_resetExistMaterialLessonId($material[0]);
+
+            $fields = array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId'   => $lesson['mediaId'],
+                'source'   => 'opencourselesson',
+                'type'     => 'openCourse'
+            );
+            $this->getMaterialService()->uploadMaterial($fields);
         } else {
             $fields = array(
                 'courseId' => $lesson['courseId'],

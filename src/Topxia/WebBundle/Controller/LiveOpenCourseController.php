@@ -161,7 +161,8 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
             $lesson["isEnd"]                   = intval(time() - $lesson["endTime"]) > 0;
-            $lesson["canRecord"]               = $client->isAvailableRecord($lesson['mediaId']);
+            $lesson["canRecord"]               = $lesson['replayStatus'] == 'videoGenerated' ? false : $this->_canRecord($item['mediaId']);
+            $lesson['file']                    = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
 
@@ -230,6 +231,15 @@ class LiveOpenCourseController extends BaseOpenCourseController
             'lesson'     => $lesson,
             'targetType' => 'opencourselesson'
         ));
+    }
+
+    protected function getLiveReplayMedia($lesson)
+    {
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            return $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return '';
     }
 
     protected function getRootCategory($categoryTree, $category)

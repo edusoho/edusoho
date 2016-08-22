@@ -128,29 +128,7 @@ define(function (require, exports, module) {
             } else {
                 return;
             }
-            /*var html = '<iframe class="embed-responsive-item" src="' + playerUrl + '" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%"" style="border:0px;position:absolute; left:0; top:0;"></iframe>';
-
-
-            $videoContent.show();
-            $videoContent.html(html);
-
-            var messenger = new Messenger({
-                name: 'parent',
-                project: 'PlayerProject',
-                children: [document.getElementById('viewerIframe')],
-                type: 'parent'
-            });
-            var self = this;
-
-            messenger.on("ready", function () {
-                var player = self._getPlayer();
-                self.set('player', player);
-            });
-
-            messenger.on("ended", function () {
-                var onPlayEnd = _.bind(self._onPlayEnd, self);
-                onPlayEnd();
-            });*/
+            
             this._videoPlay(playerUrl);
         },
 
