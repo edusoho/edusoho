@@ -102,7 +102,7 @@ class TestpaperController extends BaseController
 
     public function reDoTestpaperAction(Request $request, $targetType, $targetId, $testId)
     {
-        $userId    = $this->getCurrentUser()->id;
+        $userId = $this->getCurrentUser()->id;
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
@@ -124,10 +124,9 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
         }
 
-
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('reviewing'));
 
-        if(!empty($testResult)){
+        if (!empty($testResult)) {
             throw $this->createAccessDeniedException("试卷还在批阅中");
         }
 
@@ -166,18 +165,20 @@ class TestpaperController extends BaseController
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
 
-        $total = $this->makeTestpaperTotal($testpaper, $items);
-
+        $total       = $this->makeTestpaperTotal($testpaper, $items);
+        $attachments = $this->findAttachments($testpaper['id']);
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
-            'items'     => $items,
-            'limitTime' => $testpaper['limitedTime'] * 60,
-            'paper'     => $testpaper,
-            'id'        => 0,
-            'isPreview' => 'preview',
-            'total'     => $total
+            'items'       => $items,
+            'limitTime'   => $testpaper['limitedTime'] * 60,
+            'paper'       => $testpaper,
+            'id'          => 0,
+            'isPreview'   => 'preview',
+            'total'       => $total,
+            'attachments' => $attachments
         ));
     }
 
+    //id testpaper resultId
     public function showTestAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
@@ -185,14 +186,12 @@ class TestpaperController extends BaseController
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
             return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
-
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($id);
-
-        $result = $this->getTestpaperService()->showTestpaper($id);
-        $items  = $result['formatItems'];
-        $total  = $this->makeTestpaperTotal($testpaper, $items);
+        $result           = $this->getTestpaperService()->showTestpaper($id);
+        $items            = $result['formatItems'];
+        $total            = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
         $targets   = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
@@ -207,6 +206,7 @@ class TestpaperController extends BaseController
                 $testpaperResult['usedTime'] = time() - $target['testStartTime'];
             }
         }
+        $attachments = $this->findAttachments($testpaper['id']);
 
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items'       => $items,
@@ -216,8 +216,26 @@ class TestpaperController extends BaseController
             'favorites'   => ArrayToolkit::column($favorites, 'questionId'),
             'id'          => $id,
             'total'       => $total,
-            'target'      => $target
+            'target'      => $target,
+            'attachments' => $attachments
         ));
+    }
+
+    private function findAttachments($testId)
+    {
+        $items       = $this->getTestpaperService()->getTestpaperItems($testId);
+        $questionIds = ArrayToolkit::column($items, 'questionId');
+        $conditions  = array(
+            'type'        => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds'   => $questionIds //
+        );
+        $attachments = $this->geUploadFileService()->searchUseFiles($conditions);
+        array_walk($attachments, function (&$attachment) {
+            $attachment['dkey'] = $attachment['targetType'].$attachment['targetId'];
+        });
+
+        return ArrayToolkit::group($attachments, 'dkey');
     }
 
     public function testResultAction(Request $request, $id)
@@ -259,7 +277,7 @@ class TestpaperController extends BaseController
         if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
             $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
         }
-
+        $attachments = $this->findAttachments($testpaper['id']);
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
             'items'       => $items,
             'accuracy'    => $accuracy,
@@ -271,7 +289,8 @@ class TestpaperController extends BaseController
             'student'     => $student,
             'source'      => $request->query->get('source', 'course'),
             'targetId'    => $request->query->get('targetId', 0),
-            'target'      => $target
+            'target'      => $target,
+            'attachments' => $attachments
         ));
     }
 
@@ -691,6 +710,11 @@ class TestpaperController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function geUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getTaskProcessor($taskType)

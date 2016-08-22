@@ -1,4 +1,9 @@
-{% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
+{% if attachments|default(null)%}
+	{% set attachments = attachments[targetType ~ targetId]|default(null) %}
+{% else %}
+	{% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
+{% endif %}
 {% include 'TopxiaWebBundle:Attachment:list.html.twig' %}
 
-{# {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: targetType, targetId: targetId })) }} #}
+{# 
+{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: targetType, targetId: targetId })) }} #}

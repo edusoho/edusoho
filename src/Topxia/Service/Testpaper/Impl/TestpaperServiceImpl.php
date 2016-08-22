@@ -353,6 +353,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         ksort($formatItems);
         return $formatItems;
+        // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
     }
 
     public function showTestpaper($testpaperResultId, $isAccuracy = null)
@@ -361,9 +362,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($testpaperResultId);
-
-        $items = $this->getTestpaperItems($testpaperResult['testId']);
-        $items = ArrayToolkit::index($items, 'questionId');
+        $items           = $this->getTestpaperItems($testpaperResult['testId']);
+        $items           = ArrayToolkit::index($items, 'questionId');
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         $questions = ArrayToolkit::index($questions, 'id');
@@ -883,7 +883,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if ($user->isSuperAdmin()) {
             return $user['id'];
         }
-
 
         $target = explode('-', $paper['target']);
 
