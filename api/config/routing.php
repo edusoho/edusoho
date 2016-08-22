@@ -38,6 +38,9 @@ $app->get(_u('/chaos_threads_posts/getThreadPosts'), 'res.ChaosThreadsPosts:getT
 $app->get(_u('/articles'), 'res.Articles:get');
 $app->get(_u('/articles/{id}'), 'res.Article:get');
 $app->get(_u('/article_categories'), 'res.ArticleCategories:get');
+$app->get(_u('/open_courses'), 'res.OpenCourses:get');
+$app->get(_u('/open_course_lessons'), 'res.OpenCourse/Lessons:get');
+
 
 $app->post(_u('/lessons/{id}/live_tickets'), 'res.LessonLiveTickets:post');
 $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get');
