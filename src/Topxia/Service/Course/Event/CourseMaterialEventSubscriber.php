@@ -392,24 +392,16 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
         if ($material) {
             $this->_resetExistMaterialLessonId($material[0]);
-
-            $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'courselesson',
-                'type'     => 'course'
-            );
-            $this->getMaterialService()->uploadMaterial($fields);
-        } else {
-            $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'courselesson'
-            );
-            $this->getMaterialService()->uploadMaterial($fields);
         }
+
+        $fields = array(
+            'courseId' => $lesson['courseId'],
+            'lessonId' => $lesson['id'],
+            'fileId'   => $lesson['mediaId'],
+            'source'   => 'courselesson',
+            'type'     => 'course'
+        );
+        $this->getMaterialService()->uploadMaterial($fields);
     }
 
     public function onLiveOpenFileReplay(ServiceEvent $event)
@@ -433,25 +425,16 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
         if ($material) {
             $this->_resetExistMaterialLessonId($material[0]);
-
-            $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
-            );
-            $this->getMaterialService()->uploadMaterial($fields);
-        } else {
-            $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
-            );
-            $this->getMaterialService()->uploadMaterial($fields);
         }
+
+        $fields = array(
+            'courseId' => $lesson['courseId'],
+            'lessonId' => $lesson['id'],
+            'fileId'   => $lesson['mediaId'],
+            'source'   => 'opencourselesson',
+            'type'     => 'openCourse'
+        );
+        $this->getMaterialService()->uploadMaterial($fields);
     }
 
     private function _resetExistMaterialLessonId(array $material)
