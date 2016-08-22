@@ -14,20 +14,20 @@ class QiQiuYunV1OpenLessonResponse implements SpecialResponse
         $resources = array();
         foreach ($data['resources'] as $openCourseLesson) {
             $resources[] = array(
-                'id'           => $openCourseLesson['id'],
-                'title'        => $openCourseLesson['title'],
-                'summary'      => $openCourseLesson['summary'],
-                'content'      => $openCourseLesson['content'],
-                'type'         => $openCourseLesson['type'],
-                'mediaId'      => $openCourseLesson['mediaId'],
-                'courseId' => $openCourseLesson['courseId'],
-                'chapterId'    => $openCourseLesson['chapterId'],
-                'number'       => $openCourseLesson['number'],
-                'free'         => $openCourseLesson['free'],
-                'learnedNum'   => $openCourseLesson['learnedNum'],
-                'viewedNum'    => $openCourseLesson['viewedNum'],
-                'createdTime'  => $openCourseLesson['createdTime'],
-                'updatedTime'  => $openCourseLesson['updatedTime'],
+                'id'          => $openCourseLesson['id'],
+                'title'       => $openCourseLesson['title'],
+                'summary'     => empty($openCourseLesson['summary']) ? '' : $openCourseLesson['summary'],
+                'content'     => empty($openCourseLesson['content']) ? '' : $openCourseLesson['content'],
+                'type'        => $openCourseLesson['type'],
+                'mediaId'     => $openCourseLesson['mediaId'],
+                'courseId'    => $openCourseLesson['courseId'],
+                'chapterId'   => $openCourseLesson['chapterId'],
+                'number'      => $openCourseLesson['number'],
+                'free'        => '0',
+                'learnedNum'  => '0',
+                'viewedNum'   => '0',
+                'createdTime' => $openCourseLesson['createdTime'],
+                'updatedTime' => $openCourseLesson['updatedTime'],
             );
 
         }
