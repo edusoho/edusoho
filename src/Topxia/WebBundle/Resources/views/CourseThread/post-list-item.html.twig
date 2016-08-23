@@ -21,6 +21,7 @@
       <span class="text-muted">{{ post.createdTime|smart_time }}</span>
     </div>
     <div class="editor-text">{{ post.content|raw }}</div>
+    {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'course.thread.post', targetId: post.id|default(0)})) }}
     {% if app.user.id != author.id %}
     <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >{{'回复'|trans}}</a></div>
     {% endif %}

@@ -61,7 +61,7 @@
       }}
     </div>
   </div>
-
+  {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'course.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
   <div class="form-group clearfix">
     <div class="controls pull-right">
       {{ form_rest(form) }}

@@ -93,6 +93,7 @@ class UploadFileController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['currentUserId'] = $user['id'];
+        $conditions['noTargetType']  = 'attachment';
         if (isset($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);

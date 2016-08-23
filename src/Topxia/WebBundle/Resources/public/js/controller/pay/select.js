@@ -53,10 +53,6 @@ define(function(require, exports, module){
             })
         })
 
-        if (navigator.userAgent.match(/mobile/i)) {
-            $("#heepay").css("display","none");
-        }
-
         $("input[name='payment']").val($('div .active').attr("id"));
 
         $("#copy").on('click',function(event){

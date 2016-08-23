@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Sms\SmsProcessor;
 
-use Topxia\Common\CurlToolkit;
+use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -55,9 +55,10 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $originUrl = $hostName;
         $originUrl .= $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
 
-        $url    = $this->changeLink($originUrl);
-        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $to     = '';
+        $shortUrl = SmsToolkit::getShortLink($originUrl);
+        $url      = empty($shortUrl) ? $originUrl : $shortUrl;
+        $course   = $this->getOpenCourseService()->getCourse($lesson['courseId']);
+        $to       = '';
 
         $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
 
@@ -75,26 +76,9 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
 
-        $parameters['url'] = $url;
+        $parameters['url'] = $url.' ';
 
         return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
-    }
-
-    private function changeLink($url)
-    {
-        $arrResponse = CurlToolkit::request('POST', "http://dwz.cn/create.php", array('url' => $url));
-
-        if ($arrResponse['status'] != 0) {
-            $qqArrResponse = CurlToolkit::request('POST', "http://qqurl.com/create/", array('url' => $url));
-
-            if ($qqArrResponse['status'] != 0) {
-                return $url.' ';
-            } else {
-                return $qqArrResponse['short_url'].' ';
-            }
-        } else {
-            return $arrResponse['tinyurl'].' ';
-        }
     }
 
     protected function getUserService()

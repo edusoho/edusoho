@@ -15,7 +15,7 @@ class QQVideoItemParserTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
 
-        $video = $this->createParser()->parse('http://v.qq.com/boke/page/h/0/5/h0150zpvfq5.html');
+        $video = $this->createParser()->parse('http://v.qq.com/x/page/h0150zpvfq5.html');
         $this->assertEquals('video', $video['type']);
         $this->assertEquals('qqvideo', $video['source']);
         $this->assertEquals('qqvideo:h0150zpvfq5', $video['uuid']);
@@ -23,10 +23,18 @@ class QQVideoItemParserTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
 
-        $video = $this->createParser()->parse('http://v.qq.com/page/w/1/e/w0168yk7k1e.html');
+        $video = $this->createParser()->parse('http://v.qq.com/x/page/w0168yk7k1e.html');
         $this->assertEquals('video', $video['type']);
         $this->assertEquals('qqvideo', $video['source']);
         $this->assertEquals('qqvideo:w0168yk7k1e', $video['uuid']);
+        $this->assertArrayHasKey('name', $video);
+        $this->assertArrayHasKey('page', $video);
+        $this->assertArrayHasKey('files', $video);
+
+        $video = $this->createParser()->parse('http://v.qq.com/x/cover/xrrzykd6tc27yjm/n0021xgipkj.html');
+        $this->assertEquals('video', $video['type']);
+        $this->assertEquals('qqvideo', $video['source']);
+        $this->assertEquals('qqvideo:n0021xgipkj', $video['uuid']);
         $this->assertArrayHasKey('name', $video);
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);

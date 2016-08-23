@@ -5,43 +5,43 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UploadFileService
 {
-	public function getFile($id);
+    public function getFile($id);
 
     public function getFileByGlobalId($globalId);
 
-	public function getFullFile($id);
+    public function getFullFile($id);
 
-	public function getUploadFileInit($id);
+    public function getUploadFileInit($id);
 
-	public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
+    public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
 
-	public function update($fileId, $fields);
+    public function update($fileId, $fields);
 
-	public function getDownloadMetas($id);
+    public function getDownloadMetas($id);
 
-	public function getUploadAuth($params);
+    public function getUploadAuth($params);
 
-	public function initUpload($params);
+    public function initUpload($params);
 
-	public function finishedUpload($params);
+    public function finishedUpload($params);
 
-	public function moveFile($targetType, $targetId, $originalFile = null, $data);
+    public function moveFile($targetType, $targetId, $originalFile = null, $data);
 
-	public function setFileProcessed($params);
+    public function setFileProcessed($params);
 
-	public function deleteByGlobalId($globalId);
+    public function deleteByGlobalId($globalId);
 
-	public function reconvertFile($id, $options = array());
+    public function reconvertFile($id, $options = array());
 
     public function reconvertOldFile($id, $convertCallback, $pipeline);
 
-	public function collectFile($userId, $fileId);
+    public function collectFile($userId, $fileId);
 
-	public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
+    public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
 
-	public function findCollectionsByUserId($userId);
+    public function findCollectionsByUserId($userId);
 
-	public function syncFile($file);
+    public function syncFile($file);
 
     public function getFileByHashId($hashId);
 
@@ -53,7 +53,7 @@ interface UploadFileService
 
     public function searchFileCount($conditions);
 
-    public function addFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile = null);
+    public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);
 
@@ -99,7 +99,16 @@ interface UploadFileService
 
     public function searchShareHistoryCount($conditions);
 
-	public function searchShareHistories($conditions, $orderBy, $start, $limit);
+    public function searchShareHistories($conditions, $orderBy, $start, $limit);
 
     public function waveUploadFile($id, $field, $diff);
+
+    //file-used api
+    public function createUseFiles($fileIds, $targetId, $targetType, $type);
+
+    public function getUseFile($id);
+
+    public function deleteUseFile($id);
+
+    public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 }

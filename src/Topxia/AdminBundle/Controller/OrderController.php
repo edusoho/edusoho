@@ -110,7 +110,7 @@ class OrderController extends BaseController
 
         $conditions = $this->buildExportCondition($request, $targetType);
 
-        $status         = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $status = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
 
         $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
@@ -123,12 +123,10 @@ class OrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        if ($targetType == 'course') {
-            $str = "订单号,订单状态,订单名称,课程名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
-        } elseif ($targetType == 'classroom') {
-            $str = "订单号,订单状态,订单名称,班级名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
-        } else {
+        if ($targetType == 'vip') {
             $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+        } else {
+            $str = "订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
         }
 
         $str .= "\r\n";
@@ -254,17 +252,10 @@ class OrderController extends BaseController
     private function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
     {
         foreach ($orders as $key => $orders) {
-            if ($targetType == 'course') {
-                $result = $this->getCourseService()->getCourse($orders['targetId']);
-            } else {
-                $result = $this->getClassroomService()->getClassroom($orders['targetId']);
-            }
-
             $member = "";
             $member .= $orders['sn'].",";
             $member .= $status[$orders['status']].",";
             $member .= $orders['title'].",";
-            $member .= "《".$result['title']."》".",";
 
             $member .= $orders['totalPrice'].",";
 
@@ -277,7 +268,9 @@ class OrderController extends BaseController
             $member .= $orders['couponDiscount'].",";
             $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
             $member .= $orders['amount'].",";
-            $member .= $payment[$orders['payment']].",";
+
+            $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
+            $member .= $payment[$orderPayment].",";
 
             $member .= $users[$orders['userId']]['nickname'].",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
