@@ -94,9 +94,7 @@ class SearchController extends BaseController
 
     public function cloudSearchAction(Request $request)
     {
-        $courses = $paginator = null;
 
-        $currentUser = $this->getCurrentUser();
         $pageSize    = 10;
         $keywords    = $request->query->get('q');
         $keywords    = $this->filterKeyWord(trim($keywords));
@@ -126,7 +124,6 @@ class SearchController extends BaseController
             $conditions['filters'] = json_encode(array('targetType' => 'group'));
         }
 
-        $counts = 0;
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {

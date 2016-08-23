@@ -119,7 +119,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $course = $this->updateCourse($id, array('status' => 'published'));
-
+        $this->dispatchEvent('open.course.publish', $course);
         $this->getLogService()->info('open_course', 'pulish_course', "发布公开课《{$course['title']}》(#{$course['id']})");
         return array('result' => true, 'course' => $course);
     }
@@ -133,6 +133,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         $this->getLogService()->info('open_course', 'close_course', "关闭公开课《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent('open.course.close', $course);
         return $this->getOpenCourseDao()->updateCourse($id, array('status' => 'closed'));
     }
 
@@ -387,14 +388,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $fields['title'] = $this->purifyHtml($fields['title']);
         }
 
-        $lesson['status']      = $course['status'] == 'published' ? 'unpublished' : 'published';
+        $lesson['status']      = 'unpublished';
         $lesson['number']      = $this->_getNextLessonNumber($lesson['courseId']);
         $lesson['seq']         = $this->_getNextCourseItemSeq($lesson['courseId']);
         $lesson['userId']      = $this->getCurrentUser()->id;
         $lesson['createdTime'] = time();
 
         if ($lesson['type'] == 'liveOpen') {
-            $lesson['status']       = 'published';
             $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
             $lesson['suggestHours'] = $lesson['length'] / 60;
         }
@@ -550,7 +550,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions = array(
+        $conditions  = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -569,20 +569,28 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createServiceException("课时#{$lessonId}不存在");
         }
 
-        return $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+        $publishedLesson = $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+
+        $this->dispatchEvent('open.course.lesson.publish', $publishedLesson);
+
+        return $publishedLesson;
     }
 
     public function unpublishLesson($courseId, $lessonId)
     {
         $course = $this->tryManageOpenCourse($courseId);
 
-        $lesson = $this->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseLesson($course['id'], $lessonId);
 
         if (empty($lesson)) {
             throw $this->createServiceException("课时#{$lessonId}不存在");
         }
 
-        return $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+        $lesson = $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+
+        $this->dispatchEvent('open.course.lesson.unpublish', $lesson);
+
+        return $lesson;
     }
 
     public function resetLessonMediaId($lessonId)
@@ -897,7 +905,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = explode(',', $fields['tags']);
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
-                    $item = (int) $item['id'];
+                    $item = (int)$item['id'];
                 }
 
                 );
