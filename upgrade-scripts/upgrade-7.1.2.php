@@ -43,6 +43,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $search = $this->getSettingService()->get('cloud_search');
 
+        if (!isset($search['search_enabled']) || !(bool)$search['search_enabled']) {
+            return;
+        }
+
         $site = $this->getSettingService()->get('site');
 
         if (empty($site)) {
@@ -69,7 +73,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $ret    = $remote->post('/search/accounts/me', array(
             'urls' => urlencode(json_encode($urls)),
         ));
-        
+
         if (!(bool)$ret['success']) {
             throw new \RuntimeException('注册公开课云搜索失败');
         }
