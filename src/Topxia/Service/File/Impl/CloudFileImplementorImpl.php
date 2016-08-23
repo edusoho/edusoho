@@ -635,6 +635,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             foreach ($syncData as $key => $value) {
                 $this->getUploadFileDao()->updateFile($key, array('globalId' => $value));
             }
+            return count($syncData);
         }
 
         return true;
