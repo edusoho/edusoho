@@ -43,10 +43,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $search = $this->getSettingService()->get('cloud_search');
 
-        if(!isset($search['search_enabled']) || !(bool)$search['search_enabled'] ){
-            return;
-        }
-
         $site = $this->getSettingService()->get('site');
 
         if (empty($site)) {
@@ -59,25 +55,21 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $host = rtrim(rtrim($host), '/');
 
-        $openCourseUrl = array(
-            'url'      => $host . '/api/open_courses?cursor=0&start=0&limit=100',
-            'category' => 'openCourse'
-        );
-        $openLessonUrl = array(
-            'url'      => $host . '/api/open_course_lessons?cursor=0&start=0&limit=100',
-            'category' => 'openLesson'
-        );
-
         $urls = array(
-            $openCourseUrl,
-            $openLessonUrl
+            array('category' => 'course', 'url' => $host . '/api/courses?cursor=0&start=0&limit=100'),
+            array('category' => 'lesson', 'url' => $host . '/api/lessons?cursor=0&start=0&limit=100'),
+            array('category' => 'user', 'url' => $host . '/api/users?cursor=0&start=0&limit=100'),
+            array('category' => 'thread', 'url' => $host . '/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
+            array('category' => 'article', 'url' => $host . '/api/articles?cursor=0&start=0&limit=100'),
+            array('category' => 'openCourse', 'url' => $host . '/api/open_courses?cursor=0&start=0&limit=100'),
+            array('category' => 'openLesson', 'url' => $host . '/api/open_course_lessons?cursor=0&start=0&limit=100'),
         );
 
         $remote = CloudAPIFactory::create();
         $ret    = $remote->post('/search/accounts/me', array(
             'urls' => urlencode(json_encode($urls)),
         ));
-
+        
         if (!(bool)$ret['success']) {
             throw new \RuntimeException('注册公开课云搜索失败');
         }
