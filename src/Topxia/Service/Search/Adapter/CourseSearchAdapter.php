@@ -20,9 +20,9 @@ class CourseSearchAdapter extends AbstractSearchAdapter
         }
 
         foreach ($courses as $index => $course) {
-            if ($this->isOpenCourse($course)){
+            if ($this->isOpenCourse($course)) {
                 $course = $this->adaptOpenCourse($course);
-            }else{
+            } else {
                 $course = $this->adaptCourse($course, $learningCourseIds);
             }
 
@@ -43,7 +43,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
             $course['middlePicture'] = $courseLocal['middlePicture'];
             $course['learning']      = in_array($course['courseId'], $learningCourseIds);
             $course['id']            = $courseLocal['id'];
-        }else{
+        } else {
             $course['rating']        = 0;
             $course['ratingNum']     = 0;
             $course['studentNum']    = 0;
@@ -59,10 +59,12 @@ class CourseSearchAdapter extends AbstractSearchAdapter
     {
         $local = $this->getOpenCourseService()->getCourse($openCourse['id']);
 
-        if(!empty($local)){
-            $openCourse['id'] = $local['id'];
-        }else{
-            $openCourse['id'] = $openCourse['courseId'];
+        if (!empty($local)) {
+            $openCourse['id']            = $local['id'];
+            $openCourse['middlePicture'] = $local['middlePicture'];
+        } else {
+            $openCourse['id']            = $openCourse['courseId'];
+            $openCourse['middlePicture'] = '';
         }
 
         return $openCourse;
