@@ -19,7 +19,7 @@ class QiQiuYunV1OpenCourseResponse implements SpecialResponse
                 'id'          => $openCourse['id'],
                 'title'       => $openCourse['title'],
                 'subtitle'    => $openCourse['subtitle'],
-                'type'        => 'public' . $openCourse['type'],
+                'type'        => 'public_' . $openCourse['type'],
                 'lessonNum'   => $openCourse['lessonNum'],
                 'studentNum'  => $openCourse['studentNum'],
                 'hitNum'      => $openCourse['hitNum'],

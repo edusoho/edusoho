@@ -70,7 +70,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
     protected function isOpenCourse($course)
     {
-        return strpos($course['type'], 'public') === 0;
+        return strpos($course['type'], 'public_') === 0;
     }
 
     protected function getUserService()
