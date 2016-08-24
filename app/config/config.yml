@@ -160,7 +160,7 @@ services:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     topxia.twig.web_extension:
-        class: Custom\WebBundle\Twig\Extension\WebExtension
+        class: Topxia\WebBundle\Twig\Extension\WebExtension
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }

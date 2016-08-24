@@ -11,8 +11,6 @@ define(function(require, exports, module) {
 
     require('mediaelementplayer');
 
-    alert(333);
-
     var Toolbar = require('../../../../topxiaweb/js/controller/lesson/lesson-toolbar');
 
     var SlidePlayer = require('../../../../topxiaweb/js/controller/widget/slider-player');
