@@ -60,7 +60,8 @@ class MeCourses extends BaseResource
             return $this->error('error', '缺少参数!');
         }
 
-        return $this->wrap($this->filter($courses), $total);
+        $courses = $this->filter($courses);
+        return $this->wrap($courses, count($courses));
     }
 
     public function filter($res)
@@ -70,11 +71,16 @@ class MeCourses extends BaseResource
 
     protected function multicallFilter($name, $res)
     {
+        $courses = array();
         foreach ($res as $key => $one) {
-            $res[$key] = $this->callFilter($name, $one);
+            $course = $this->callFilter($name, $one);
+            if (!isset($course['conversationId']) || empty($course['conversationId'])) {
+                continue;
+            }
+            $courses[] = $course;
         }
 
-        return $res;
+        return $courses;
     }
 
     protected function getCourseService()

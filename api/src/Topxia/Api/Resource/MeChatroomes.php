@@ -18,7 +18,7 @@ class MeChatroomes extends BaseResource
         $courseChatrooms = $this->getCourseChatrooms($user['id']);
 
         $chatrooms = array_merge($classRoomChatrooms, $courseChatrooms);
-        return $this->wrap($this->filter($chatrooms), $total);
+        return $this->wrap($this->filter($chatrooms), count($chatrooms));
     }
 
     private function getClassRoomChatrooms($userId) {
@@ -32,7 +32,7 @@ class MeChatroomes extends BaseResource
 
         $chatrooms = array();
         foreach ($classrooms as $classroom) {
-            if (!isset($classrooms['conversationId']) || empty($classrooms['conversationId'])) {
+            if (!isset($classroom['conversationId']) || empty($classroom['conversationId'])) {
                 continue;
             }
             $chatrooms[] = array(
