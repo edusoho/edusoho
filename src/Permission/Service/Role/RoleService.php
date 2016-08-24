@@ -13,6 +13,8 @@ interface RoleService
 
     public function updateRole($id, array $fiedls);
 
+    public function deleteRole($id);
+
     public function searchRoles($conditions, $sort, $start, $limit);
 
     public function searchRolesCount($conditions);

@@ -42,6 +42,15 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $role;
     }
 
+    public function deleteRole($id)
+    {
+        $role = $this->getRoleDao()->getRole($id);
+        if (!empty($role)) {
+            $this->getRoleDao()->deleteRole($id);
+            $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
+        }
+    }
+
     public function searchRoles($conditions, $sort, $start, $limit)
     {
         $conditions = $this->prepareSearchConditions($conditions);
@@ -58,7 +67,6 @@ class RoleServiceImpl extends BaseService implements RoleService
                 throw $this->createServiceException('参数sort不正确。');
                 break;
         }
-
         $roles = $this->getRoleDao()->searchRoles($conditions, $sort, $start, $limit);
 
         return $roles;
@@ -87,7 +95,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         if (empty($conditions['name'])) {
             unset($conditions['name']);
         } else {
-            $conditions['name'] = '%'.$conditions['name'].'%';
+            $conditions['nameLike'] = '%'.$conditions['name'].'%';
         }
 
         return $conditions;
@@ -103,16 +111,15 @@ class RoleServiceImpl extends BaseService implements RoleService
             return true;
         }
 
-        $tag = $this->getRoleDao()->getRoleByName($name);
-
-        return $tag ? false : true;
+        $role = $this->getRoleDao()->getRoleByName($name);
+        return $role ? false : true;
     }
 
     public function isRoleCodeAvalieable($code, $exclude = null)
     {
-        if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
-            return false;
-        }
+        // if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
+        //     return false;
+        // }
 
         if ($code == $exclude) {
             return true;

@@ -45,10 +45,12 @@ admin_classroom_thread_batch_delete:
 admin_classroom_set_recommend:
     path:   /classroom/{id}/recommend
     defaults: { _controller: ClassroomBundle:ClassroomAdmin:recommend }
+    permissions: [admin_classroom_manage]
 
 admin_classroom_cancel_recommend:
     path:   /classroom/{id}/recommend/cancel
     defaults: { _controller: ClassroomBundle:ClassroomAdmin:cancelRecommend }
+    permissions: [admin_classroom_manage]
 
 admin_classroom_recommend_list:
     path:   /classroom/recommend/list

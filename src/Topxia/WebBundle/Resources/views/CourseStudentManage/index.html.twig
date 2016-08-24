@@ -10,17 +10,19 @@
   <div class="panel-heading">
     {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}
     {% if role == 'student'%}
-    {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</a>
-    {% endif %}
-    {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
-      {% if course.status == 'published' %}
-        <a class="btn btn-info pull-right btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'course-member', courseId:course.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
-      {% else %}
-        <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="课程未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
+      {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
+        <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</a>
       {% endif %}
-      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</button>
-    {% endif %}
+      {% if has_permission('course_manage_student_create') %}
+          {% if course.status == 'published' %}
+            <a class="btn btn-info pull-right btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'course-member', courseId:course.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
+          {% else %}
+            <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="课程未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
+          {% endif %}
+
+          <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</button>
+        
+      {% endif %}
     {% endif %}
   </div>
 

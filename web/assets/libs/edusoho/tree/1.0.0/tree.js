@@ -15,7 +15,8 @@ define(function(require, exports, module) {
 
 	        var defaultSetting = {
 	            check: {
-	                enable: true
+	                enable: true,
+	                chkboxType: { "Y": "ps", "N": "s" }
 	            },
 	            data: {
 	                simpleData: {

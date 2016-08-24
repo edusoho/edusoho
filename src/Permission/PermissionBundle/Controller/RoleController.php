@@ -1,13 +1,13 @@
 <?php
 namespace Permission\PermissionBundle\Controller;
 
-use Permission\Common\PermissionBuilder;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\AdminBundle\Controller\BaseController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class RoleController extends BaseController
 {
@@ -23,7 +23,6 @@ class RoleController extends BaseController
         if (isset($fields['keywordType']) && !empty($fields['keywordType'])) {
             $conditons[$fields['keywordType']] = $fields['keyword'];
         }
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getRoleService()->searchRolesCount($conditons),
@@ -38,8 +37,8 @@ class RoleController extends BaseController
         );
 
         $userIds = ArrayToolkit::column($roles, 'createdUserId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $users = ArrayToolkit::index($users, 'id');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::index($users, 'id');
 
         return $this->render('PermissionBundle:Role:index.html.twig', array(
             'roles'     => $roles,
@@ -58,7 +57,10 @@ class RoleController extends BaseController
         }
 
         $res = PermissionBuilder::instance()->getOriginPermissionTree();
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($res),
+            'model' => 'create'
+        ));
     }
 
     public function editAction(Request $request, $id)
@@ -73,15 +75,25 @@ class RoleController extends BaseController
         }
 
         $originPermissions = PermissionBuilder::instance()->getOriginPermissionTree();
-        if(!empty($role['data'])){
+        if (!empty($role['data'])) {
             foreach ($originPermissions as $key => &$permission) {
-                if(in_array($permission['code'], $role['data'])) {
+                if (in_array($permission['code'], $role['data'])) {
                     $permission['checked'] = true;
                 }
             }
         }
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($originPermissions), 'model' => 'edit', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($originPermissions),
+            'model' => 'edit',
+            'role'  => $role
+        ));
+    }
+
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getRoleService()->deleteRole($id);
+        return $this->createJsonResponse(array('result' => true));
     }
 
     public function showAction(Request $request, $id)
@@ -93,11 +105,15 @@ class RoleController extends BaseController
             if (in_array($re['code'], $role['data'])) {
                 $re['checked'] = 'true';
             }
-            
+
             $re['chkDisabled'] = 'true';
         }
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
+            'menus' => json_encode($res),
+            'model' => 'show',
+            'role'  => $role
+        ));
     }
 
     protected function dataPrepare($position)
@@ -206,5 +222,4 @@ class RoleController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-
 }

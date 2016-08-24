@@ -9,7 +9,7 @@ admin_classroom:
             children:
                 admin_classroom_create:
                     name: 创建班级
-                    group: 2
+                    group: topBtn
                     blank: true
         admin_classroom_recommend:
             name: 班级推荐
@@ -24,7 +24,7 @@ admin_classroom_refunds:
     after: admin_course_refunds
     children:
         admin_classroom_refunds_manage:
-            name: 管理
+            name: 班级退款管理
             router_name: admin_order_refunds
             router_params:
                 targetType: classroom
@@ -40,11 +40,9 @@ admin_classroom_setting:
     name: 班级
     parent: admin_setting_course_setting
     after: admin_setting_live_course
-admin_classroom_review_tab:
+admin_classroom_review:
     name: 班级评价
     parent: admin_course_review
-    router_name: admin_classroom_review
-    group: 1
 admin_classroom_thread_manage:
     name: 班级话题
     parent: admin_course_thread

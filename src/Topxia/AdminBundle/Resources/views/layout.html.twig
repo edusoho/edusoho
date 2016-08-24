@@ -98,9 +98,16 @@
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                  {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                {% endfor %}
+
+                {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                  {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% endfor %}
+                {% else %}
+                  {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% endfor %}
+                {% endif %}
               {% endblock %}
 
             </div>

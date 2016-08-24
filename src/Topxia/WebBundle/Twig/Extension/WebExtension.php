@@ -119,6 +119,11 @@ class WebExtension extends \Twig_Extension
         );
     }
 
+    public function getAdminRoles()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
@@ -153,11 +158,6 @@ class WebExtension extends \Twig_Extension
         $config['string']    = $string;
         $config['signature'] = sha1($string);
         return json_encode($config);
-    }
-
-    public function getAdminRoles()
-    {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function renderNotification($notification)

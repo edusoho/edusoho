@@ -1324,11 +1324,29 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+        $permissions = $this->loadPermissions($user);
+
+        if (in_array('admin', $permissions)) {
             return true;
         }
 
         return false;
+    }
+
+    protected function loadPermissions($user)
+    {
+        $permissionCode = array();
+        foreach ($user['roles'] as $code) {
+            $role = $this->getRoleService()->getRoleByCode($code);
+
+            if (empty($role['data'])) {
+                $role['data'] = array();
+            }
+
+            $permissionCode = array_merge($permissionCode, $role['data']);
+        }
+
+        return $permissionCode;
     }
 
     public function isFollowed($fromId, $toId)

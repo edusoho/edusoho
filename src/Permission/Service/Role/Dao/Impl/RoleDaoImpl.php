@@ -33,7 +33,6 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         $marks = str_repeat('?,', count($codes) - 1).'?';
         $sql   = "SELECT * FROM {$this->getTable()} WHERE code IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $codes);
-
     }
 
     public function getRoleByName($name)
@@ -63,14 +62,20 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         return $this->getRole($id);
     }
 
+    public function deleteRole($id)
+    {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        return $result;
+    }
+
     public function searchRoles($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         $roles = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($roles, $this->serializeFields);
@@ -79,17 +84,18 @@ class RoleDaoImpl extends BaseDao implements RoleDao
     public function searchRolesCount($conditions)
     {
         $builder = $this->createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
     protected function createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere("name = :name")
-                        ->andWhere("code = :code")
-                        ->andWhere('createdUserId = :createdUserId');
+            ->from($this->table, $this->table)
+            ->andWhere("name = :name")
+            ->andWhere("name like :nameLike")
+            ->andWhere("code = :code")
+            ->andWhere('createdUserId = :createdUserId');
         return $builder;
     }
 

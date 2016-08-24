@@ -103,35 +103,35 @@ admin_dictionary_name_check:
 admin_content_create:
     pattern:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_edit:
     pattern:  /content/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Content:edit }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_publish:
     pattern:  /content/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Content:publish }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_trash:
     pattern:  /content/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Content:trash }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_delete:
     pattern:  /content/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Content:delete }
     methods:  [POST]
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
-    permissions: [admin_content_manage]
+    permissions: [admin_content]
 
 admin_block:
     pattern:  /block/list-{category}
@@ -256,7 +256,7 @@ admin_user_create_nickname_check:
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
-    permissions: [admin_user_manage,admin_teacher]
+    permissions: [admin]
 
 admin_user_edit:
     pattern:  /user/{id}/edit
@@ -450,23 +450,21 @@ admin_course_coping:
 admin_course_recommend:
     pattern: /course/{id}/recommend
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
-    permissions: [admin_course_manage,admin_course_recommend]
+    permissions: [admin_course_recommend_list, admin_course_recommend]
 
 admin_course_cancel_recommend:
     pattern: /course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
-    permissions: [admin_course_manage,admin_course_recommend]
+    permissions: [admin_course_recommend_list, admin_course_cancel_recommend]
 
-# admin_course_chooser:
-#     pattern: /course/chooser
-#     defaults: { _controller: TopxiaAdminBundle:Course:chooser }
-#     permissions: [admin_course_manage]
+admin_course_chooser:
+    pattern: /course/chooser
+    defaults: { _controller: TopxiaAdminBundle:Course:chooser }
 
 admin_course_recommend_list:
     pattern: /course/recommend/list
     defaults: { _controller: TopxiaAdminBundle:Course:recommendList }
-    permissions: [admin_course_recommend]
 
 admin_course_category:
     pattern: /course/category
@@ -531,18 +529,18 @@ admin_order_detail:
 admin_order_refunds:
     pattern: /order/refunds/{targetType}
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:refunds }
-    permissions: [admin_course_refunds_manage]
+    permissions: [admin_finance]
 
 admin_order_cancel_refund:
     pattern: /order/{id}/cancel_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:cancelRefund }
     methods: [POST]
-    permissions: [admin_course_refunds_manage]
+    permissions: [admin_finance]
 
 admin_order_audit_refund:
     pattern: /order/{id}/audit_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:auditRefund }
-    permissions: [admin_course_refunds_manage]
+    permissions: [admin_finance]
 
 admin_setting_site:
     pattern:  /setting/site
@@ -762,7 +760,7 @@ admin_setting_default_avatar_crop:
 admin_setting_default_course_picture_crop:
     pattern:  /setting/default/course/picture/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
-    permissions: [admin_user_avatar]
+    permissions: [admin_user_avatar,course_manage_picture]
 
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
@@ -848,7 +846,6 @@ admin_setting_consult_setting:
 admin_setting_es_bar:
     pattern:  /setting/es-bar
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
-    permissions: [admin_setting_live_course]
 
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
@@ -874,12 +871,10 @@ admin_setting_developer:
 admin_setting_developer_version:
     pattern:  /setting/developer/version
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:version }
-    permissions: [admin]
 
 admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
-    permissions: [admin]
 
 admin_setting_developer_sync_file_data:
     pattern:  /setting/developer/sync_upload_file
@@ -893,12 +888,10 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
-    permissions: [admin_setting_message]
 
 admin_setting_redis:
-    pattern:  /setting/redis
+    pattern:  /setting/developer/redis
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
-    permissions: [admin]
 
 admin_optimize:
     pattern:  /setting/optimize
@@ -1273,7 +1266,7 @@ admin_thread_delete:
     pattern: /thread/{id}/delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:delete }
     methods: [POST]
-    permissions: [admin_course_thread]
+    permissions: [admin_course_thread, admin_course_question_manage]
 
 admin_thread_batch_delete:
     pattern: /thread/batch_delete
@@ -1304,7 +1297,7 @@ admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
     methods:  [POST]
-    permissions: [admin_approval_approvals]
+    permissions: [admin_approval_cancel]
 
 show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
@@ -1687,12 +1680,11 @@ admin_coin_orders_log:
 admin_bill:
     pattern: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
-    permissions: [admin_coin_records]
 
 admin_bill_export_csv:
     pattern: /coin/bill/export/{cashType}
     defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
-    permissions: [admin_cash_bill,admin_coin_records]
+    permissions: [admin_bill,admin_coin_records]
 
 admin_order_manage_export_csv:
     pattern: /order/manage/export/{targetType}
@@ -1714,7 +1706,7 @@ admin_coin_flow_detail:
 admin_coin_model:
     path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
-    permissions: [admin_coin_user_records]
+    permissions: [admin_coin_settings]
 
 admin_coin_model_ajax:
     path: /setting/coin/model/ajax

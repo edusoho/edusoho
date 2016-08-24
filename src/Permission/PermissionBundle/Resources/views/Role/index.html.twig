@@ -1,6 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_role_namage' %}
+{% set menu = 'admin_role_manage' %}
+
+{% set script_controller = 'permissionbundle/controller/role/index' %}
 
 {% block main %}
 
@@ -10,7 +12,7 @@
 
   <div class="form-group">
     <select id="keywordType" class="form-control" name="keywordType">
-          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编号'} %}
+          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编码'} %}
           {{ select_options(options, app.request.get('keywordType')) }}
     </select>
   </div>
@@ -45,17 +47,14 @@
         <td>
           <div class="btn-group">
             <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
-            <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_edit', {id:role.id}) }}">编辑</a></li>
-            </ul>
+            
+            {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_role_manage', group:'groupBtn', role: role} %}
+
           </div>
         </td>
       </tr>
     {% else %}
-      <tr><td class="empty" colspan="20">无定时任务记录</tr>
+      <tr><td class="empty" colspan="20">暂无角色</tr>
     {% endfor %}
   </table>
 

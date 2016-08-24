@@ -16,11 +16,11 @@
 # admin_block_visual_edit_history:
 #     name: 历史记录
 #     parent: admin_operation_block
-#     router_params: {'blockTemplateId': 'block.blockTemplateId'}
-#     router_params_context: 1
+#     router_params: 
+#        blockTemplateId: (block.blockTemplateId)
 
 admin:
-    name: 后台
+    name: 后台管理员
     parent: null
     children:
         admin_user:
@@ -37,10 +37,6 @@ admin:
                                     name: '添加新用户'
                                     mode: modal
                                     group: topBtn
-                                admin_user_export:
-                                    name: '导出搜索结果'
-                                    mode: modal
-                                    group: none
                                 admin_user_edit:
                                     name: '编辑用户信息'
                                     mode: modal
@@ -133,7 +129,7 @@ admin:
                                 approvalStatus: approving
                             children:
                                 admin_approval_cancel:
-                                    name: 审核
+                                    name: 撤销
                                     router_params:
                                         id: (user.id)
                                     class: 'btn cancel-approval'
@@ -159,12 +155,6 @@ admin:
                                     router_name: course_create
                                     group: topBtn
                                     blank: 1
-                                admin_live_course_add:
-                                    name: 创建直播课程
-                                    router_name: course_create
-                                    router_params:
-                                        flag: isLive
-                                    group: topBtn
                                 admin_course_recommend:
                                     name: 推荐课程
                                     router_params:
@@ -191,7 +181,7 @@ admin:
                                     router_params:
                                         id: (course.id)
                                     group: groupButton
-                                    visable: ( filter == 'normal' and not course.type == 'live' )
+                                    visable: ( course.type == 'normal' and course.parentId == 0 )
                                     icon: 'glyphicon glyphicon-plus-sign'
                                     mode: modal
                                 admin_course_guest_member_preview:
@@ -238,6 +228,7 @@ admin:
                                         id: (course.id)
                                         filter: (filter)
                                     group: groupButton
+                                    class: publish-course
                                     icon: 'glyphicon glyphicon-ok-circle'
                                     mode: none
                                     visable: (course.status != 'published')
@@ -250,7 +241,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
-                                    visable: (course.status != 'published' and app.user.isSuperAdmin())
+                                    visable: ( course.status in ['closed', 'draft'])
                         admin_course_recommend_list:
                             name: 课程推荐
                         admin_course_data:
@@ -300,7 +291,7 @@ admin:
                                 admin_category_create:
                                     name: '添加分类'
                                     router_params:
-                                        groupId: group.id
+                                        groupId: (group.id)
                                     router_params_context: 1
                                     group: topBtn
                                     mode: modal
@@ -453,9 +444,8 @@ admin:
                 admin_bills:
                     name: 账单管理
                     children:
-                        admin_cash_bill:
+                        admin_bill:
                             name: 现金账单
-                            router_name: admin_bill
                         admin_coin_records:
                             name: 虚拟币账单
                 admin_coin_user:
@@ -668,7 +658,7 @@ admin:
                         admin_logs_prod:
                             name: 程序运行日志
 web:
-    name: 前台
+    name: 老师
     parent: null
     children:
         course_manage:
@@ -765,6 +755,9 @@ web:
                                 side_nav: students
                             router_params:
                                 id: (course.id)
+                            children:
+                                course_manage_student_create:
+                                    name: 添加学员
                 course_manage_questions:
                     name: 题库
                     children:
@@ -774,13 +767,6 @@ web:
                                 side_nav: question
                             router_params:
                                 courseId: (course.id)
-                        # course_question_plumber:
-                        #     name: 题目导入导出
-                        #     data: 
-                        #         side_nav: question_plumber
-                        #     router_params:
-                        #         courseId: (course.id)
-                        #         type: import
                         course_manage_testpaper:
                             name: 试卷管理
                             data: 
