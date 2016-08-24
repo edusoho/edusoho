@@ -1,0 +1,11 @@
+course_manage_base:
+    pattern:  /course/{id}/manage/base
+    defaults: { _controller: CustomWebBundle:CourseManage:base }
+
+course_learn:
+    pattern:  /course/{id}/learn
+    defaults: { _controller: CustomWebBundle:Course:learn }
+
+course_lesson_show:
+    pattern:  /course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: CustomWebBundle:CourseLesson:show }
