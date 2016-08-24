@@ -12,7 +12,13 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function cloudSearch($type, $conditions = array())
     {
         $api        = CloudAPIFactory::create('leaf');
+
+        if($type === 'course'){
+            $conditions['type'] = 'course,openCourse';
+        }
+
         $conditions = $this->searchBase64Encode($conditions);
+
         $result     = $api->get('/search', $conditions);
 
         if (empty($result['success'])) {

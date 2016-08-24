@@ -12,14 +12,14 @@ class QiQiuYunV1OpenCourseResponse implements SpecialResponse
         if (isset($data['error'])) {
             return $data;
         }
-        
+
         $resources = array();
         foreach ($data['resources'] as $openCourse) {
             $resources[] = array(
                 'id'          => $openCourse['id'],
                 'title'       => $openCourse['title'],
                 'subtitle'    => $openCourse['subtitle'],
-                'type'        => $openCourse['type'],
+                'type'        => 'public' . $openCourse['type'],
                 'lessonNum'   => $openCourse['lessonNum'],
                 'studentNum'  => $openCourse['studentNum'],
                 'hitNum'      => $openCourse['hitNum'],

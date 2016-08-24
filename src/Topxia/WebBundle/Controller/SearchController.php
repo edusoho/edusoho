@@ -19,10 +19,8 @@ class SearchController extends BaseController
         $cloud_search_setting = $this->getSettingService()->get('cloud_search');
 
         if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
-            $type       = $request->query->get('type', 'course');
             return $this->redirect($this->generateUrl('cloud_search', array(
-                'q'          => $keywords,
-                'type'       => $type
+                'q' => $keywords
             )));
         }
 
@@ -73,7 +71,7 @@ class SearchController extends BaseController
             $count
             , 12
         );
-        $courses = $this->getCourseService()->searchCourses(
+        $courses   = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',
             $paginator->getOffsetCount(),
@@ -95,14 +93,14 @@ class SearchController extends BaseController
     public function cloudSearchAction(Request $request)
     {
 
-        $pageSize    = 10;
-        $keywords    = $request->query->get('q');
-        $keywords    = $this->filterKeyWord(trim($keywords));
+        $pageSize = 10;
+        $keywords = $request->query->get('q');
+        $keywords = $this->filterKeyWord(trim($keywords));
 
-        $type       = $request->query->get('type', 'course');
-        $page       = $request->query->get('page', '1');
+        $type = $request->query->get('type', 'course');
+        $page = $request->query->get('page', '1');
 
-        if(empty($keywords)){
+        if (empty($keywords)) {
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,
                 'type'         => $type,
@@ -137,11 +135,11 @@ class SearchController extends BaseController
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);
 
         return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
-            'keywords'   => $keywords,
-            'type'       => $type,
-            'resultSet'  => $resultSet,
-            'counts'     => $counts,
-            'paginator'  => $paginator,
+            'keywords'  => $keywords,
+            'type'      => $type,
+            'resultSet' => $resultSet,
+            'counts'    => $counts,
+            'paginator' => $paginator,
         ));
     }
 
