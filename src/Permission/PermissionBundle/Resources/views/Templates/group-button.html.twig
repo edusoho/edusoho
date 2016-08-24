@@ -2,9 +2,21 @@
 
 {% set permissions = sub_permissions(parentCode, group|default(null)) %}
 
-{% if permissions|default(null) %}
+{% set dropdownMenusShow = false %}
+
+{% for permission in permissions %}
+    {% if permission.visable|default(false) %}
+      {% if eval_expression(permission.visable) %}
+        {% set dropdownMenusShow = true %}
+      {% endif %}
+    {% else %}
+      {% set dropdownMenusShow = true %}
+    {% endif %}
+{% endfor %}
+
+{% if dropdownMenusShow and permissions|default(null) %}
 <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-  <span class="caret"></span>
+  <span class="caret"></span> 
 </a>
 <ul class="dropdown-menu">
   {% for permission in permissions %}

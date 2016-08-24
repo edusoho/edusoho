@@ -1,6 +1,12 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% block title %}
-  {% if role.id|default(false) %}编辑角色{% else %}新增角色{% endif %}
+  {% if model == 'show' %}
+    角色详情
+  {% elseif model == 'edit' %}
+    编辑角色
+  {% else %}
+    新增角色
+  {% endif %}
 {% endblock %}
 {% set role = role|default(null) %}
 {% set modal = modal|default('create') %}

@@ -87,10 +87,8 @@ class OrgServiceImpl extends BaseService implements OrgService
     public function switchOrg($id)
     {
         $user = $this->getCurrentUser();
-
-        $data                  = $user->toArray();
-        $data['selectOrgCode'] = $org['orgCode'];
-        $data['selectOrg']     = $org;
+        $data              = $user->toArray();
+        $data['selectOrg'] = $this->checkBeforProccess($id);
         $user->fromArray($data);
         $this->getKernel()->setCurrentUser($user);
     }
