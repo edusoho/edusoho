@@ -178,7 +178,6 @@ class TestpaperController extends BaseController
         ));
     }
 
-    //id testpaper resultId
     public function showTestAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
@@ -228,7 +227,7 @@ class TestpaperController extends BaseController
         $conditions  = array(
             'type'        => 'attachment',
             'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds'   => $questionIds //
+            'targetIds'   => $questionIds
         );
         $attachments = $this->geUploadFileService()->searchUseFiles($conditions);
         array_walk($attachments, function (&$attachment) {

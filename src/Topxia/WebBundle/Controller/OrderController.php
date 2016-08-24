@@ -138,7 +138,6 @@ class OrderController extends BaseController
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-            var_dump($amount, $totalPrice, $couponResult);exit;
             $amount         = (string) ((float) $amount);
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
             //价格比较
