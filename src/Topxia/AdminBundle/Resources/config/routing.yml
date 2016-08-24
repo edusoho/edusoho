@@ -1770,6 +1770,10 @@ admin_edu_cloud_search:
     pattern: /setting/edu_cloud/search
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
 
+admin_edu_cloud_attachment:
+    pattern: /setting/edu_cloud/attachment
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:attachment }
+    
 admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
@@ -1860,3 +1864,11 @@ admin_report_status_ucenter:
 admin_report_status_email_send:
     pattern: /reports/status/email/send
     defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }
+
+admin_cloud_attachment:
+    pattern: /cloud_attachment
+    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
+
+admin_cloud_attachment_render:
+    pattern: /cloud_attachment/render
+    defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }

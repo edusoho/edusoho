@@ -6,6 +6,10 @@
 
 EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就不再叙述了。
 
+## 安装php56 
+    sudo add-apt-repository ppa:ondrej/php
+    sudo apt update 
+    sudo apt install php5.6 php5.6-cli php5.6-curl php5.6-fpm php5.6-intl php5.6-mcrypt php5.6-mysqlnd php5.6-gd php5.6-redis
 ## 下载EduSoho源码
     git clone https://github.com/EduSoho/EduSoho.git /var/www/edusoho
 

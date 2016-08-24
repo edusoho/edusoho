@@ -5,7 +5,9 @@
   {% include 'TopxiaWebBundle:Thread/Part:thread-crumbs.html.twig' with {target:target, thread:thread,type:thread.type, isUpdate:false} %}
 
   {% include 'TopxiaWebBundle:Thread/Part:' ~ thread.type ~ '-header.html.twig' %}
-
+  
+  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'classroom.thread', targetId: thread.id })) }}
+  
   {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
 
   {% include 'TopxiaWebBundle:Thread/Part:good-post.html.twig' with {posts:goodPosts} %}

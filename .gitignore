@@ -52,7 +52,6 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 /src/Tests/*
-/installFiles
 .crunch
 *.css.map
 *.codekit

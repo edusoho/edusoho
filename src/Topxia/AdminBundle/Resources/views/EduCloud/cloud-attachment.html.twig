@@ -1,0 +1,93 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+	 {% set menu = 'admin_edu_cloud_attachment' %} 
+	 {% set script_controller = 'educloud/attachment-setting' %} 
+	 {% block main %}
+         <div class="edu-service">
+            {% if info.accessCloud|default(0) == 0 or setting('storage.upload_mode') == 'local' or info.hasStorage == 0 %}
+                <div class="text-center">
+                  <div class="error-content" style="padding: 100px 100px">
+                    <h4>
+                      您尚未开通云视频服务，无法使用云附件管理功能，
+                      <a href={{path('admin_setting_cloud_video')}}>立即开通</a>
+                      或
+                      <a href="http://open.edusoho.com/show/cloud/video" target="_blank">了解云视频</a>
+                    </h4>
+                    <p>
+                   “云附件管理”提供完善的附件资源管理功能，您可以从附件的使用途径、上传时间、资源类型等多个维度对资源进行管理， 帮助您轻松掌控全站的附件资源，再也不用担心过期资源占用存储空间了
+                    </p>
+                  </div>
+                </div>
+            {% else %}
+                <div class="page-header clearfix">
+                     <h1 class="pull-left">云附件</h1>
+                 </div>
+                 <div class="edu-balance">
+                 {{ web_macro.flash_messages() }}
+                 <form id="cloud-attachment" class="form-horizontal" method="post" data-widget-cid="widget-0">
+                     <div class="form-group">
+                         <div class="col-md-3 control-label">
+                             <label>附件功能</label>
+                         </div>
+                         <div class="controls col-md-8 radios">
+                             <label>
+                                 <input type="radio" name="enable"
+                                        value="1" {% if attachment.enable %} checked {% endif %}> 开启
+                             </label>
+                             <label>
+                                 <input type="radio" name="enable"
+                                        value="0" {% if not attachment.enable %} checked {% endif %}> 关闭
+                             </label>
+                         </div>
+                     </div>
+                     <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
+                         <div class="col-md-3 control-label">
+                             <label>业务设置</label>
+                         </div>
+                         <div class="controls col-md-8 radios">
+                             <label class="">
+                                 <input type="checkbox" name="article"
+                                        value="1" {% if attachment.article %} checked {% endif %}>
+                                 资讯
+                             </label>
+                             <label>
+                                 <input type="checkbox" name="course"
+                                        value="1" {% if attachment.course %} checked {% endif %}>
+                                 课程讨论区
+                             </label>
+                             <label>
+                                 <input type="checkbox" name="classroom"
+                                        value="1" {% if attachment.classroom %} checked {% endif %}>
+                                 班级话题
+                             </label>
+                             <label>
+                                 <input type="checkbox" name="group"
+                                        value="1" {% if attachment.group %} checked {% endif %}> 小组
+                             </label>
+                             <label>
+                                 <input type="checkbox" name="question"
+                                        value="1" {% if attachment.question %} checked {% endif %}> 试题
+                             </label>
+                         </div>
+                     </div>
+                     <div class="form-group attachement_detail {% if not attachment.enable %} hidden {% endif %}">
+                         <div class="col-md-3 control-label">
+                             <label for="fileSize">附件大小</label>
+                         </div>
+                         <div class="col-md-8 controls">
+                             <input type="text" id="fileSize" name="fileSize" class="form-control width-input-large mrm" style="display:inline-block"
+                                    value="{{ attachment.fileSize }}">MB
+                             <p class="help-block">当前服务器附件大小上限为2048MB</p>
+                         </div>
+                     </div>
+                     <div class="row form-group">
+                         <div class="controls col-md-offset-3 col-md-8">
+                             <button type="submit" class="btn btn-primary">提交</button>
+                         </div>
+                     </div>
+                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                 </form>
+             </div>
+            {% endif %}
+            
+         </div>
+     {% endblock %}

@@ -26,6 +26,8 @@
             {% include 'TopxiaWebBundle:Question:question-actions.html.twig' with { flags:['favorite', 'analysis'] } %}
           </div>
           <div class="homework-question-analysis well editor-text" style="display:none;">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}
+            {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.analysis', targetId: question.id })) }}
+
           </div>
         {% endif %}
 

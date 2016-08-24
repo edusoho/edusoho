@@ -10,16 +10,24 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
      * 获取个人动态
      *
      *   count    必需
-     * @param  array $arguments 参数
+     * @param  array $arguments     参数
      * @return array 个人动态
      */
     public function getData(array $arguments)
     {
+        $publishedActicles = $this->getArticleService()->searchArticles(
+            array('status' => 'published'),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+        $targetIds = ArrayToolkit::column($publishedActicles, 'id');
+
         $articlePosts = $this->getThreadService()->searchPosts(
             array(
                 'targetType' => 'article',
-                'parentId' => 0,
-                'latest' => 'week'
+                'parentId'   => 0,
+                'targetIds'  => $targetIds,
+                'latest'     => 'week'
             ),
             array('ups' => 'DESC', 'createdTime' => 'DESC'),
             0,
@@ -29,10 +37,11 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         if ($arguments['count'] > count($articlePosts)) {
             $conditions = array(
                 'targetType' => 'article',
+                'targetIds'  => $targetIds
             );
 
             $excludeIds = ArrayToolkit::column($articlePosts, 'id');
-            if(!empty($excludeIds)) {
+            if (!empty($excludeIds)) {
                 $conditions['excludeIds'] = $excludeIds;
             }
 
@@ -55,7 +64,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         $articles = $this->getArticleService()->findArticlesByIds($articleIds);
 
         foreach ($articlePosts as $key => $articlePost) {
-            $articlePosts[$key]['user'] = $owners[$articlePost['userId']];
+            $articlePosts[$key]['user']    = $owners[$articlePost['userId']];
             $articlePosts[$key]['article'] = $articles[$articlePost['targetId']];
         }
 

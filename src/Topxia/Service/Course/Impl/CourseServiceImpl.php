@@ -633,11 +633,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteCourse($id)
     {
-        $course = $this->tryAdminCourse($id);
+        $course  = $this->tryAdminCourse($id);
+        $lessons = $this->getCourseLessons($course['id']);
 
         // Delete course related data
         $this->getMemberDao()->deleteMembersByCourseId($id);
         $this->getLessonDao()->deleteLessonsByCourseId($id);
+        $this->deleteCrontabs($lessons);
         $this->getChapterDao()->deleteChaptersByCourseId($id);
 
         $this->getCourseDao()->deleteCourse($id);
@@ -2781,6 +2783,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->hasAdminRole($courseId, $userId) || $this->hasTeacherRole($courseId, $userId);
     }
 
+    protected function deleteCrontabs($lessons)
+    {
+        if (!$lessons) {
+            return false;
+        }
+
+        foreach ($lessons as $key => $lesson) {
+            $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
+        }
+
+        return true;
+    }
+
     protected function getClassroomService()
     {
         return $this->createService('Classroom:Classroom.ClassroomService');
@@ -2894,6 +2909,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getDiscountService()
     {
         return $this->createService('Discount:Discount.DiscountService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
     }
 }
 

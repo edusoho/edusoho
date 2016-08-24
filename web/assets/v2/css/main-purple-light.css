@@ -30,13 +30,6 @@
   text-align: left;
   margin: 15px 0;
 }
-#post-action img {
-  max-width: 100%;
-  height: auto;
-}
-#post-action {
-  word-break: break-all;
-}
 .group-page .group-logo-sm {
   width: 50px;
   height: 50px;
@@ -9699,6 +9692,7 @@ textarea {
   height: 40px;
   line-height: 40px;
   float: left;
+  width: 99%;
 }
 .lesson-list .item-actions {
   visibility: hidden;
@@ -13288,7 +13282,7 @@ textarea {
 }
 .group-page .grouplist {
   height: 120px;
-  width: 82px;
+  width: 81px;
   float: left;
   text-align: center;
 }

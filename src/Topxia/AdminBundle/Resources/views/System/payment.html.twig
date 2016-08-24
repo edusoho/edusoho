@@ -9,7 +9,6 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" method="post" id="payment-form" novalidate >
-  
   <div class="form-group">
     <div class="col-md-3 control-label">
       <label >支付功能</label>
@@ -28,205 +27,12 @@
     </div>
   </div>
 
-
-  <fieldset>
-    <legend>支付宝</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>接口状态</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('alipay_enabled', {1:'开启', 0:'关闭'}, payment.alipay_enabled) }}
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipay_key">接口类型</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
-        <div class="help-block">
-          PID和Key可在申请支付宝接口后获取，
-          <a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218012942" target="_blank">如何申请？</a>
-          <br>
-          "立即到账接口"如需在移动客户端使用，请开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218008816" target="blank">手机网站支付</a>
-          <br>
-          “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipay_key">PID</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="alipay_key" name="alipay_key" class="form-control" value="{{payment.alipay_key}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipay_key">Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="alipay_secret" name="alipay_secret" class="form-control" value="{{payment.alipay_secret}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipay_key">支付宝账户</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="alipay_account" name="alipay_account" class="form-control" value="{{payment.alipay_account}}">
-        <div class="help-block">如需开启移动客户端支付，需填写支付宝账户。</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>启用支付宝交易关闭接口</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('close_trade_enabled', {1:'是', 0:'否'}, payment.close_trade_enabled|default(0)) }}
-        <div class="help-block">该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。</div>
-      </div>
-    </div>
-  </fieldset>
-
-  <fieldset>
-    <legend>微信支付</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>接口状态</label>
-      </div>
-      <div class="controls col-md-3 radios">
-        {{ radios('wxpay_enabled', {1:'开启', 0:'关闭'}, payment.wxpay_enabled) }}
-      </div>
-      <div class="controls col-md-4 radios">
-        <a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">简单申请介绍</a>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_key">PID</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_key" name="wxpay_key" class="form-control" value="{{payment.wxpay_key}}">
-        <div class="help-block">PID即为公众号APPID。</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_key">商户号</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
-        <div class="help-block">商户号即为微信支付商户号。</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="wxpay_key">商户平台Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
-      </div>
-    </div> 
-  </fieldset>
-
-  <fieldset>
-    <legend>网银支付</legend>
-    {% if setting('magic.quickpay', false) %}
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label>接口状态</label>
-        </div>
-        <div class="controls col-md-3 radios">
-          {{ radios('heepay_enabled', {1:'开启', 0:'关闭'}, payment.heepay_enabled) }}
-        </div>
-        <div class="controls col-md-4 radios">
-          <a href="http://www.edusoho.com/files/heepay.zip">下载接口申请说明文档</a>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label for="heepay_key">PID</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="heepay_key" name="heepay_key" class="form-control" value="{{payment.heepay_key}}">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label for="heepay_key">商户平台Key</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="heepay_secret" name="heepay_secret" class="form-control" value="{{payment.heepay_secret}}">
-        </div>
-      </div>
-    {% else %}
-      <div class="alert alert-info text-center" role="alert">
-        因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
-      </div>
-    {% endif %}
-  </fieldset>
-
-  <fieldset>
-    <legend>快捷支付</legend>
-    {% if setting('magic.quickpay', false) %}
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label>接口状态</label>
-        </div>
-        <div class="controls col-md-3 radios">
-          {{ radios('quickpay_enabled', {1:'开启', 0:'关闭'}, payment.quickpay_enabled) }}
-        </div>
-        <div class="controls col-md-4 radios">
-          <a href="http://www.edusoho.com/files/heepay.zip">下载接口申请说明文档</a>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label for="quickpay_key">PID</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="quickpay_key" name="quickpay_key" class="form-control" value="{{payment.quickpay_key}}">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label for="quickpay_key">Key</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="quickpay_secret" name="quickpay_secret" class="form-control" value="{{payment.quickpay_secret}}">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-3 control-label">
-          <label for="quickpay_key">Aes</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="quickpay_aes" name="quickpay_aes" class="form-control" value="{{payment.quickpay_aes}}">
-        </div>
-      </div>
-    {% else %}
-      <div class="alert alert-info text-center" role="alert">
-        因汇付宝公司事务引起网银支付申请暂停，对此造成不便，请您谅解，如有疑问，请联系EduSoho官方
-      </div>
-    {% endif %}
-
-  </fieldset>
+  {% include 'TopxiaAdminBundle:System/Pay:alipay.html.twig'%}
+  {% include 'TopxiaAdminBundle:System/Pay:wxpay.html.twig'%}
+  {% include 'TopxiaAdminBundle:System/Pay:heepay.html.twig'%}
+  {% include 'TopxiaAdminBundle:System/Pay:quickly.html.twig'%}
+  {% include 'TopxiaAdminBundle:System/Pay:llcbpay.html.twig'%}
+  {% include 'TopxiaAdminBundle:System/Pay:llquickpay.html.twig'%}
 
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
@@ -234,7 +40,6 @@
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>
-
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 

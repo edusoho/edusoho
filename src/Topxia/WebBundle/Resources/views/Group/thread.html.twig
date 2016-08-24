@@ -40,8 +40,11 @@
         {{'发表于'|trans}} {{ threadMain.createdTime|smart_time }}
         <span class="mll">{{ threadMain.hitNum }} {{'次查看'|trans}}</span>
       </div>
-
-      {{threadMain.content|raw}}
+      <div class="editor-text">
+        {{threadMain.content|raw}}
+      </div>
+      
+      {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'group.thread', targetId: threadMain.id })) }}
       {% if attachs %}
         <hr>
         <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
@@ -192,6 +195,7 @@
 
               <div class="content editor-text">
                 {{post.content|raw}}
+                  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'group.thread.post', targetId: post.id })) }}
               </div>
 
               <div class="actions">
@@ -295,6 +299,11 @@
               <textarea name="content" value="" rows="10" id="post_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}"></textarea>
             </div>
           </div>
+
+            <div class="form-group">
+                {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'group.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+            </div>
+
           <div class="form-group">
             <div class="controls">
             <button id="post-thread-btn" data-submiting-text="{{'正在回复'|trans}}" type="submit" class="post-thread-btn btn btn-primary pull-right">{{'发表'|trans}}</button>

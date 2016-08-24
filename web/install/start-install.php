@@ -173,35 +173,40 @@ function install_step3($init_data = 0)
 
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
         $init = new SystemInit();
+        $connection->beginTransaction();
+        try{
+            if (!empty($init_data)) {
+                $connection->exec("delete from `user` where id=1;");
+                $connection->exec("delete from `user_profile` where id=1;");
+            }
 
-        if (!empty($init_data)) {
-            $connection->exec("delete from `user` where id=1;");
-            $connection->exec("delete from `user_profile` where id=1;");
+            $admin = $init->initAdmin($_POST);
+            if (empty($init_data)) {
+                $init->initTag();
+                $init->initCategory();
+                $init->initFile();
+                $init->initPages();
+                $init->initNavigations();
+                $init->initBlocks();
+                $init->initThemes();
+                $init->initSetting($admin);
+                $init->initCrontabJob();
+                $init->initOrg();
+            } else {
+                $init->deleteKey();
+                $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '" . $_POST['nickname'] . "');");
+                $connection->exec("update `user` set id = 1 where nickname = '" . $_POST['nickname'] . "';");
+            }
+
+            $init->initFolders();
+            $init->initLockFile();
+            $connection->commit();
+            header("Location: start-install.php?step=4");
+            exit();
+        }catch (\Exception $e){
+            echo $e->getMessage();
+            $connection->rollBack();
         }
-
-        $admin = $init->initAdmin($_POST);
-        if (empty($init_data)) {
-            $init->initTag();
-            $init->initCategory();
-            $init->initFile();
-            $init->initPages();
-            $init->initNavigations();
-            $init->initBlocks();
-            $init->initThemes();
-            $init->initSetting($admin);
-            $init->initCrontabJob();
-            $init->initOrg();
-        } else {
-            $init->deleteKey();
-            $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '" . $_POST['nickname'] . "');");
-            $connection->exec("update `user` set id = 1 where nickname = '" . $_POST['nickname'] . "';");
-        }
-
-        $init->initFolders();
-        $init->initLockFile();
-
-        header("Location: start-install.php?step=4");
-        exit();
     }
 
     echo $twig->render('step-3.html.twig', array(
@@ -809,7 +814,7 @@ EOD;
                     $content = '';
                 }
 
-                $this->getBlockService()->createBlock(array(
+                $template = $this->getBlockService()->createBlockTemplate(array(
                     'title'        => $meta['title'],
                     'mode'         => 'template',
                     'templateName' => $meta['templateName'],
@@ -818,6 +823,13 @@ EOD;
                     'meta'         => $meta,
                     'data'         => $data,
                     'category'     => $category
+                ));
+
+                $this->getBlockService()->createBlock(array(
+                    'blockTemplateId' => $template['id'],
+                    'code'            => $code,
+                    'content'         => $content,
+                    'data'            => $data
                 ));
             }
         }

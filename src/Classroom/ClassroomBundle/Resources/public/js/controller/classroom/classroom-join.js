@@ -43,6 +43,27 @@ define(function(require, exports, module) {
             });
         }
 
+        if ($('.icon-vip').length > 0) {
+           $(".icon-vip").popover({
+                trigger: 'manual',
+                placement: 'auto top',
+                html: 'true',
+                container: 'body',
+                animation: false
+            }).on("mouseenter", function () {
+                var _this = $(this);
+                _this.popover("show");
+                
+            }).on("mouseleave", function () {
+                var _this = $(this);
+                setTimeout(function () {
+                    if (!$(".popover:hover").length) {
+                        _this.popover("hide")
+                    }
+                }, 100);
+            }); 
+        }
+
     };
 
 });

@@ -266,44 +266,76 @@ class BuildPackageAutoCommand extends BaseCommand
         }
         $prefix = 'release';
 
-        $this->output->writeln("<info>  使用 git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");
+        $gitRelease   = exec("git branch |grep v{$version}");
+        $gitToRelease = exec("git branch |grep release/{$toVersion}");
+        if (empty($gitRelease)) {
+            echo "标签 v{$version} 不存在, 无法生成差异文件\n";
+        }
+        if (empty($gitToRelease)) {
+            echo "分支 release/{$toVersion} 不存在, 无法生成差异文件\n";exit;
+        }
+        $this->output->writeln("<info>  使用 git  diff --name-status  v{$version} release{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");
 
         chdir($RootPath);
-        $command = "git  diff --name-status  {$prefix}/{$version} {$prefix}/{$toVersion} > build/diff-{$toVersion}";
+        $command = "git  diff --name-status  v{$version} release/{$toVersion} > build/diff-{$toVersion}";
         exec($command);
     }
 
     private function diffFilePrompt($diffFile, $version)
     {
-        $noSqlUpgrade = true;
-        $askFileEdit  = false;
-        $file         = @fopen($diffFile, "r");
+        $askDiffFile   = false;
+        $askAssetsLibs = false;
+        $askSqlUpgrade = false;
+
+        $this->output->writeln("<info>确认build/diff-{$version}差异文件</info>");
+        $file = @fopen($diffFile, "r");
         while (!feof($file)) {
             $line   = fgets($file);
             $op     = $line[0];
             $opFile = trim(substr($line, 1));
             if (!in_array($line[0], array('M', 'A', 'D')) && !empty($opFile)) {
                 echo "异常的文件更新模式：{$line}";
-                $askFileEdit = true;
+                $askDiffFile = true;
                 continue;
             }
-
-            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
-                $noSqlUpgrade = false;
-                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
-            }
+        }
+        $question = "请手动检查build/diff-{$version}文件是否需要编辑,继续请输入y (y/n)";
+        if ($askDiffFile && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+            $this->output->writeln('<error>制作升级包终止!</error>');
+            exit;
         }
 
-        $question = "请手动检查build/diff-{$version}文件是否需要编辑,继续请输入y (y/n)";
-        if ($askFileEdit && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+        $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
+        $file = @fopen($diffFile, "r");
+        while (!feof($file)) {
+            $line   = fgets($file);
+            $op     = $line[0];
+            $opFile = trim(substr($line, 1));
+
+            if (strpos($opFile, 'web/assets/libs') === 0) {
+                $askAssetsLibs = true;
+                $this->output->writeln("<comment>web/assets/libs文件：{$line}</comment>");
+            }
+        }
+        $question = "web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)";
+        if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
 
         $this->output->writeln("<info>准备制作升级脚本</info>");
+        $file = @fopen($diffFile, "r");
+        while (!feof($file)) {
+            $line   = fgets($file);
+            $op     = $line[0];
+            $opFile = trim(substr($line, 1));
+            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+                $askSqlUpgrade = true;
+                $this->output->writeln("<comment>SQL脚本：{$opFile}</comment>");
+            }
+        }
         $question = "请根据以上sql脚本完成 scripts/upgrade-{$version}.php,完成后输入y (y/n)";
-
-        if (!$noSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
+        if ($askSqlUpgrade && $this->input->isInteractive() && !$this->askConfirmation($question, $this->input, $this->output)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }

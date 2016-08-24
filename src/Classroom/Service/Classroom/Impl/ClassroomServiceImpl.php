@@ -176,8 +176,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('参数不正确，更新失败！');
         }
 
-        $fields = $this->fillOrgId($fields);
-
+        $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
         return $classroom;
     }
@@ -558,7 +557,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $member['levelId'] = $fields['levelId'];
                 $member['remark']  = $fields['remark'];
             } else {
-                $member['role'] = array('student');
+                $member['role']    = array('student');
+                $member['orderId'] = $fields['orderId'];
             }
 
             $member = MemberSerialize::serialize($member);

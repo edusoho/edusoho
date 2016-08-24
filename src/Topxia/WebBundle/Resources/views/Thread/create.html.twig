@@ -95,7 +95,9 @@
     {% endif %}
     
   </div>
-
+   {% if type != 'event' %}
+      {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'classroom.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+    {% endif %}
   <div class="clearfix">
       {% if thread %}
         <button type="submit" class="btn btn-primary pull-right">保存</button>

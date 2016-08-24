@@ -50,11 +50,11 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
-        $currentUserId        = $currentUser['id'];
-        $conditions           = $request->query->all();
-        $source               = $conditions['sourceFrom'];
-        $conditions['status'] = 'ok';
-
+        $currentUserId              = $currentUser['id'];
+        $conditions                 = $request->query->all();
+        $source                     = $conditions['sourceFrom'];
+        $conditions['status']       = 'ok';
+        $conditions['noTargetType'] = 'attachment';
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);

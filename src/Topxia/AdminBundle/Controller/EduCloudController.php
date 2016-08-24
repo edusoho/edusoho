@@ -115,7 +115,8 @@ class EduCloudController extends BaseController
         if (isset($overview['service']['storage']['startMonth'])
             && isset($overview['service']['storage']['endMonth'])
             && $overview['service']['storage']['startMonth']
-            && $overview['service']['storage']['endMonth']) {
+            && $overview['service']['storage']['endMonth']
+        ) {
             $overview['service']['storage']['startMonth'] = strtotime($this->dateFormat($videoInfo['startMonth']).'-'.'01');
 
             $endMonthFormated                           = $this->dateFormat($videoInfo['endMonth']);
@@ -140,6 +141,33 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function attachmentAction(Request $request)
+    {
+        $attachment  = $this->getSettingService()->get('cloud_attachment', array());
+        $defaultData = array('article' => 0, 'course' => 0, 'classroom' => 0, 'group' => 0, 'question' => 0);
+        $default     = array_merge($defaultData, array('enable' => 0, 'fileSize' => 500));
+        $attachment  = array_merge($default, $attachment);
+
+        if ($request->getMethod() == 'POST') {
+            $attachment = $request->request->all();
+            $attachment = array_merge($default, $attachment);
+            $this->getSettingService()->set('cloud_attachment', $attachment);
+            $this->setFlashMessage('success', '云附件设置已保存！');
+        }
+        //云端视频判断
+        try {
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-attachment.html.twig', array(
+            'attachment' => $attachment,
+            'info'       => $info
+        ));
+    }
+
     //云视频设置页
     public function videoAction(Request $request)
     {
@@ -156,6 +184,7 @@ class EduCloudController extends BaseController
             'video_embed_watermark_image' => '',
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
+            'video_fingerprint_time'      => 0.5,
             'video_header'                => null
         );
 
@@ -485,6 +514,7 @@ class EduCloudController extends BaseController
                 $copyright                   = $this->getSettingService()->get('copyright', array());
                 $copyright['owned']          = 1;
                 $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                $copyright['licenseDomains'] = $info['licenseDomains'];
                 $this->getSettingService()->set('copyright', $copyright);
             } else {
                 $this->getSettingService()->delete('copyright');
@@ -562,8 +592,7 @@ class EduCloudController extends BaseController
         }
 
         render:
-        return $this->render('TopxiaAdminBundle:EduCloud:key-update.html.twig', array(
-        ));
+        return $this->render('TopxiaAdminBundle:EduCloud:key-update.html.twig', array());
     }
 
     public function searchSettingAction(Request $request)
@@ -695,7 +724,8 @@ class EduCloudController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned'          => 1,
             'name'           => $request->request->get('name', ''),
-            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0
+            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0,
+            'licenseDomains' => isset($info['licenseDomains']) ? $info['licenseDomains'] : ''
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));

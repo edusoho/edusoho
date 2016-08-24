@@ -46,9 +46,13 @@ class GroupThreadController extends BaseController
                     'title'   => $threadData['thread']['title'],
                     'content' => $threadData['thread']['content'],
                     'groupId' => $id,
-                    'userId'  => $user['id']);
+                    'userId'  => $user['id']
+                );
 
                 $thread = $this->getThreadService()->addThread($info);
+
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -96,9 +100,13 @@ class GroupThreadController extends BaseController
                 $threadData = $request->request->all();
                 $fields     = array(
                     'title'   => $threadData['thread']['title'],
-                    'content' => $threadData['thread']['content']);
+                    'content' => $threadData['thread']['content']
+                );
 
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
+
+                $attachment = $request->request->get('attachment');
+                $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
                 if (isset($threadData['file'])) {
                     $file = $threadData['file'];
@@ -129,7 +137,8 @@ class GroupThreadController extends BaseController
             'groupinfo'      => $groupinfo,
             'thread'         => $thread,
             'attachs'        => $attachs,
-            'is_groupmember' => $this->getGroupMemberRole($id)));
+            'is_groupmember' => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function deleteAttachAction($goodsId)
@@ -155,7 +164,6 @@ class GroupThreadController extends BaseController
 
     public function checkUserAction(Request $request)
     {
-
         $nickname = $request->query->get('value');
         $result   = $this->getUserService()->isNicknameAvaliable($nickname);
 
@@ -317,7 +325,7 @@ class GroupThreadController extends BaseController
         $postMember       = $this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id),
-            array('postNum', 'DESC'), 0, 12);
+            array('postNum', 'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members   = $this->getUserService()->findUsersByIds($memberIds);
@@ -359,7 +367,8 @@ class GroupThreadController extends BaseController
             'postFiles'          => $postFiles,
             'postAttachs'        => $postAttachs,
             'threadMainContent'  => $threadMainContent,
-            'is_groupmember'     => $this->getGroupMemberRole($id)));
+            'is_groupmember'     => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function postReplyAction(Request $request, $postId)
@@ -468,7 +477,8 @@ class GroupThreadController extends BaseController
                 $data = array(
                     'GoodsId'     => $attach['id'],
                     'userId'      => $user->id,
-                    'createdTime' => time());
+                    'createdTime' => time()
+                );
                 $this->getThreadService()->addTrade($data);
 
                 $reward = $attach['coin'] * 0.5;
@@ -509,7 +519,8 @@ class GroupThreadController extends BaseController
 
         $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
         $content    = array(
-            'content' => $postContent['content'], 'fromUserId' => $fromUserId);
+            'content' => $postContent['content'], 'fromUserId' => $fromUserId
+        );
 
         if (isset($postContent['postId'])) {
             $post = $this->getThreadService()->postThread($content, $groupId, $user['id'], $threadId, $postContent['postId']);
@@ -521,6 +532,9 @@ class GroupThreadController extends BaseController
                 $this->getThreadService()->addPostAttach($file, $thread['id'], $post['id']);
             }
         }
+
+        $attachment = $request->request->get('attachment');
+        $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
         $message = array(
             'id'       => $groupId,
@@ -562,8 +576,10 @@ class GroupThreadController extends BaseController
             $this->getThreadService()->searchThreadsCount(array('status' => 'open', 'title' => $keyWord, 'groupId' => $id)),
             15
         );
-        $threads = $this->getThreadService()->searchThreads(array('status' => 'open', 'title' => $keyWord,
-            'groupId'                                                          => $id),
+        $threads = $this->getThreadService()->searchThreads(array(
+            'status'  => 'open', 'title' => $keyWord,
+            'groupId' => $id
+        ),
             array(array('createdTime', 'DESC')),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
@@ -583,7 +599,8 @@ class GroupThreadController extends BaseController
             'owner'           => $owner,
             'paginator'       => $paginator,
             'lastPostMembers' => $lastPostMembers,
-            'is_groupmember'  => $this->getGroupMemberRole($id)));
+            'is_groupmember'  => $this->getGroupMemberRole($id)
+        ));
     }
 
     public function setEliteAction($threadId)
@@ -802,7 +819,6 @@ class GroupThreadController extends BaseController
         );
 
         if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
-
             if ($action == 'setElite') {
                 $this->getThreadService()->setElite($threadId);
                 $message['type'] = 'elite';
@@ -1137,5 +1153,10 @@ class GroupThreadController extends BaseController
     protected function getCashAccountService()
     {
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 }

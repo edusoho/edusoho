@@ -43,7 +43,10 @@
 			</div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">
+			{{ item.question.analysis|bbCode2Html|raw|nl2br }}
+			{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.analysis', targetId: item.question.id })) }}
+		</div>
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 
@@ -57,8 +60,9 @@
 					</label>
 				{% endfor %}
 		  </div>
+
 		  <div class="testpaper-question-actions pull-right">
-			{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
 
@@ -69,7 +73,10 @@
 		  	</div>
 		  </div>
 
-		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+		  <div class="testpaper-question-analysis well">
+		  	{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}
+		    {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.analysis', targetId: item.question.id })) }}
+		  </div>
 		{% endif %}
 
 

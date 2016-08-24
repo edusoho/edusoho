@@ -36,6 +36,9 @@
       </div>
     </div>
     <div class="thread-body">{{ thread.content|raw }}</div>
+
+    {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'course.thread', targetId: thread.id })) }}
+
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >
         <a href="{{ path('course_thread_edit', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'编辑'|trans}}</a>

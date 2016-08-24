@@ -49,11 +49,13 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $article         = $request->request->all();
-            $article['tags'] = array_filter(explode(',', $article['tags']));
+            $formData        = $request->request->all();
+            $article['tags'] = array_filter(explode(',', $formData['tags']));
 
-            $article = $this->getArticleService()->createArticle($article);
+            $article = $this->getArticleService()->createArticle($formData);
 
+            $attachment = $request->request->get('attachment');
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -88,6 +90,10 @@ class ArticleController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $article  = $this->getArticleService()->updateArticle($id, $formData);
+
+            $attachment = $request->request->get('attachment');
+
+            $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -206,5 +212,10 @@ class ArticleController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 }

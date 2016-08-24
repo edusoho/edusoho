@@ -71,7 +71,6 @@ class CourseOrderController extends OrderController
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
             }
         }
-
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course'           => $course,
             'lessonId'         => $request->query->get('lessonId'),
@@ -300,8 +299,8 @@ class CourseOrderController extends OrderController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay');
-
+        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(

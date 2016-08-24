@@ -50,7 +50,7 @@
 
 
 
-    {% if info.copyright and info.thirdCopyright != 2 %}
+    {% if info.copyright and info.thirdCopyright != 2 and currentHost in info.licenseDomains|split(';')%}
       <div class="form-group">
         <label class="col-md-3 control-label">版权名称</label>
         <div class="col-md-6">

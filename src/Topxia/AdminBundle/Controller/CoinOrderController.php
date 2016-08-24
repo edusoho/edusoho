@@ -137,7 +137,10 @@ class CoinOrderController extends BaseController
             $member .= $users[$orders['userId']]['nickname'] . ",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'] . "," : "-" . ",";
             $member .= $orders['amount'] . ",";
-            $member .= $payment[$orders['payment']] . ",";
+
+            $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
+            $member .= $payment[$orderPayment].",";
+
             $member .= date('Y-n-d H:i:s', $orders['createdTime']) . ",";
 
             if ($orders['paidTime'] != 0) {

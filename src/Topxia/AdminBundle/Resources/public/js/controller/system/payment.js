@@ -4,14 +4,12 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
         var validator = new Validator({
                 element: '#payment-form'
             });
         
         $('[name=alipay_enabled]').change(function(e) {
             var radio = e.target.value;
-
             if (radio == '1') {
                 validator.addItem({
                     element: '[name="alipay_secret"]',
@@ -101,11 +99,52 @@ define(function(require, exports, module) {
             }
         });
 
+        $('[name=llcbpay_enabled]').change(function(e) {
+            var radio = e.target.value;
+
+            if (radio == '1') {
+                validator.addItem({
+                    element: '[name="llcbpay_key"]',
+                    required: true,
+                    errormessageRequired: '请输入商户账号'
+                });
+                validator.addItem({
+                    element: '[name=llcbpay_secret]',
+                    required: true,
+                    errormessageRequired: '请输入商户平台Key'
+                });
+            } else {
+                validator.removeItem('[name="llcbpay_key"]');
+                validator.removeItem('[name="llcbpay_secret"]');
+            }
+        });
+
+        $('[name=llquickpay_enabled]').change(function(e) {
+            var radio = e.target.value;
+            
+            if (radio == '1') {
+                validator.addItem({
+                    element: '[name="llquickpay_key"]',
+                    required: true,
+                    errormessageRequired: '请输入商户账号'
+                });
+                validator.addItem({
+                    element: '[name=llquickpay_secret]',
+                    required: true,
+                    errormessageRequired: '请输入商户平台Key'
+                });
+            } else {
+                validator.removeItem('[name="llquickpay_key"]');
+                validator.removeItem('[name="llquickpay_secret"]');
+            }
+        });
+
         $('input[name="alipay_enabled"]:checked').change();
         $('input[name="wxpay_enabled"]:checked').change();
         $('input[name="heepay_enabled"]:checked').change();
         $('input[name="quickpay_enabled"]:checked').change();
-
+        $('input[name="llcbpay_enabled"]:checked').change();
+        $('input[name="llquickpay_enabled"]:checked').change();
     };
 
 });
