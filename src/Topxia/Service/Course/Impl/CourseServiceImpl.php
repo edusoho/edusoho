@@ -1108,10 +1108,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
-        if (array_key_exists('copyId', $lesson)) {
-            $lesson['copyId'] = $lesson['copyId'];
-        }
-
         $lesson = $this->getLessonDao()->addLesson(
             LessonSerialize::serialize($lesson)
         );
@@ -1183,9 +1179,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $lesson['mediaSource'] = $media['source'];
                 $lesson['mediaUri']    = $media['uri'];
             }
-        } elseif ($lesson['type'] == 'testpaper') {
-            $lesson['mediaId'] = $lesson['mediaId'];
-        } elseif ($lesson['type'] == 'live') {
+        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'live') {
+            unset($lesson['media']);
+            return $lesson;
         } else {
             $lesson['mediaId']     = 0;
             $lesson['mediaName']   = '';
@@ -1743,10 +1739,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $chapter['number']   = $this->getNextChapterNumber($chapter['courseId']);
             $chapter['parentId'] = 0;
-        }
-
-        if (array_key_exists('copyId', $chapter)) {
-            $chapter['copyId'] = $chapter['copyId'];
         }
 
         $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
