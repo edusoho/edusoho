@@ -11106,6 +11106,7 @@ textarea {
   border-bottom: 1px solid #f5f5f5;
 }
 .search-course-list .course-item .course-img {
+  position: relative;
   float: left;
   width: 35%;
 }
@@ -11114,6 +11115,11 @@ textarea {
     width: 100%;
     float: none;
   }
+}
+.search-course-list .course-item .course-img .tags {
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
 .search-course-list .course-item .course-info {
   float: left;

@@ -91,11 +91,17 @@
     padding: 25px 0;
     border-bottom: 1px solid @gray-lighter;
     .course-img {
+      position: relative;
       float: left;
       width: 35%;
       @media(max-width: @screen-xs-max) {
         width: 100%;
         float: none;
+      }
+      .tags{
+        position: absolute;
+        left: 0px;
+        top: 0px;
       }
     }
     .course-info {
