@@ -19,7 +19,7 @@ class Setting extends BaseResource
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method), $res);
         } else {
-            return $res;
+            return array();
         }
     }
 
