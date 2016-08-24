@@ -94,14 +94,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort == 'popular') {
+        } elseif ($sort == 'popular' || $sort == 'hitNum') {
             $orderBy = array('hitNum', 'DESC');
         } elseif ($sort == 'recommended') {
             $orderBy = array('recommendedTime', 'DESC');
         } elseif ($sort == 'Rating') {
             $orderBy = array('Rating', 'DESC');
-        } elseif ($sort == 'hitNum') {
-            $orderBy = array('hitNum', 'DESC');
         } elseif ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
