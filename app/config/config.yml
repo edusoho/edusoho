@@ -180,12 +180,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    topxia.twig.menu_extension:
-        class: Topxia\WebBundle\Twig\Extension\MenuExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
     topxia.twig.block_extension:
         class: Topxia\WebBundle\Twig\Extension\BlockExtension
         arguments:    ['@service_container']

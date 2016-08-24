@@ -1,0 +1,13 @@
+admin_roles:
+    name: 角色管理
+    group: 2
+    parent: admin_system
+    children:
+        admin_role_namage:
+            name: 角色管理
+            router_name: admin_roles
+            children:
+                admin_role_create:
+                    name: 新增角色
+                    mode: modal
+                    group: topBtn

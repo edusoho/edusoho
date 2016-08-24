@@ -88,8 +88,9 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $user = $this->getCurrentUser();
 
-        $data              = $user->toArray();
-        $data['selectOrg'] = $this->checkBeforProccess($id);
+        $data                  = $user->toArray();
+        $data['selectOrgCode'] = $org['orgCode'];
+        $data['selectOrg']     = $org;
         $user->fromArray($data);
         $this->getKernel()->setCurrentUser($user);
     }
@@ -109,7 +110,6 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->findOrgsByIds($ids);
     }
 
-    // TODO: org
     public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理

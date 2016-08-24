@@ -42,7 +42,12 @@
     <th>用户组</th>
     <td>
       {% for role in user.roles %}
-        {{ dict_text('userRole', role) }}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
       {% endfor %}
     </td>
   </tr>

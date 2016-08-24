@@ -843,7 +843,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色必须包含ROLE_USER');
         }
 
-        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_BACKEND');
+        $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array(), 'created', 0, 9999), 'code'));
 
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
@@ -851,9 +852,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色不正确，设置用户角色失败。');
         }
 
-        $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
+        $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
 
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+
+        $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
     }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
@@ -1607,6 +1610,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->deleteUserPayAgreements($id);
     }
 
+    protected function getRoleService()
+    {
+        return $this->createService('Permission:Role.RoleService');
+    }
+
     protected function getFriendDao()
     {
         return $this->createDao("User.FriendDao");
@@ -1722,7 +1730,9 @@ class UserSerialize
             return null;
         }
 
-        $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+        $roles         = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+        $roles         = array_unique($roles);
+        $user['roles'] = $roles;
 
         $user = UserSerialize::_userRolesSort($user);
 

@@ -38,7 +38,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-//根据mobile查询user_profile获得userIds
+        //根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
@@ -82,13 +82,27 @@ class UserController extends BaseController
         $userIds  = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
+        $allRoles = $this->getAllRoles();
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users'          => $users,
+            'allRoles'       => $allRoles,
             'userCount'      => $userCount,
             'paginator'      => $paginator,
             'profiles'       => $profiles,
             'showUserExport' => $showUserExport
         ));
+    }
+
+    protected function getAllRoles()
+    {
+        $roles = $this->getRoleService()->searchRoles(array(), 'created', 0, PHP_INT_MAX);
+
+        $roleDicts = array();
+        foreach ($roles as $key => $role) {
+            $roleDicts[$role['code']] = $role['name'];
+        }
+        return $roleDicts;
     }
 
     public function emailCheckAction(Request $request)
@@ -257,45 +271,40 @@ class UserController extends BaseController
 
     public function rolesAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
-            && false === $this->get('security.context')->isGranted('ROLE_ADMIN')
-        ) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user        = $this->getUserService()->getUser($id);
         $currentUser = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
 
-            $this->getUserService()->changeUserRoles($user['id'], $roles);
+            $roleSet = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+            $roleCodes = ArrayToolkit::column($roleSet, 'code');
+            $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
 
-            $dataDict     = new UserRoleDict();
-            $roleDict     = $dataDict->getDict();
-            $role         = "";
-            $roleCount    = count($roles);
-            $deletedRoles = array_diff($user['roles'], $roles);
-            $addedRoles   = array_diff($roles, $user['roles']);
+            foreach ($roles as $key => $roleCode) {
+                if(in_array($roleCode, $roleCodes)){
+                    $role = $rolesByIndexCode[$roleCode];
+                    if(in_array('web', $role['data'])){
+                        $roles[] = 'ROLE_TEACHER';
+                    }
 
-            if (!empty($deletedRoles) || !empty($addedRoles)) {
-                for ($i = 0; $i < $roleCount; $i++) {
-                    $role .= $roleDict[$roles[$i]];
-
-                    if ($i < $roleCount - 1) {
-                        $role .= "、";
+                    if(in_array('admin', $role['data'])){
+                        $roles[] = 'ROLE_BACKEND';
                     }
                 }
+            }
+
+            $this->getUserService()->changeUserRoles($user['id'], $roles);
+
+            if (!empty($roles)) {
 
                 $message = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $role);
-                $this->getNotifiactionService()->notify($user['id'], 'role', $message);
-            }
+                    'role'     => $this->getRoleNames($roles, $rolesByIndexCode)
+                );
 
-            if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
-                $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
+                $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
 
             $user = $this->getUserService()->getUser($id);
@@ -310,6 +319,35 @@ class UserController extends BaseController
             'user'    => $user,
             'default' => $default
         ));
+    }
+
+    protected function getRoleNames($roles, $roleSet)
+    {
+        $roleName = '';
+        $roles = array_unique($roles);
+
+        $userRoleDict = new UserRoleDict();
+        $userRoleDict = $userRoleDict->getDict();
+        $roleDictCodes = array_keys($userRoleDict);
+
+        $i = 0;
+        foreach ($roles as $key => $role) {
+            if(in_array($role, $roleDictCodes)) {
+                $roleName = $roleName.$userRoleDict[$role];
+            } else if ($role == 'ROLE_BACKEND') {
+                continue;
+            } else {
+                $role = $roleSet[$role];
+                $roleName = $roleName.$role['name'];
+            }
+            
+            $i ++;
+
+            if($i < count($roles)-1) {
+                $roleName = $roleName.'，';
+            }
+        }
+        return $roleName;
     }
 
     public function avatarAction(Request $request, $id)
@@ -482,10 +520,6 @@ class UserController extends BaseController
         $currentUser = $this->getCurrentUser();
         $user        = $this->getUserService()->getUser($userId);
 
-        if (!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            throw $this->createAccessDeniedException();
-        }
-
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
@@ -507,6 +541,11 @@ class UserController extends BaseController
                 $this->getTokenService()->destoryToken($token['token']);
             }
         }
+    }
+    
+    protected function getRoleService()
+    {
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 
     protected function getNotificationService()

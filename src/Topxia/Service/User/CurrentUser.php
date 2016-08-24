@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
 {
     protected $data;
+    protected $permissions;
 
     protected $rootOrgId = 1;
 
@@ -143,7 +144,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isAdmin()
     {
-        if (count(array_intersect($this->getRoles(), array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+        if (in_array('admin', $this->getPermissions())) {
             return true;
         }
 
@@ -161,7 +162,18 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isTeacher()
     {
-        return in_array('ROLE_TEACHER', $this->getRoles());
+        return in_array('web', $this->getPermissions());
+    }
+
+    public function getCurrentOrgId()
+    {
+        $currentOrg = $this->getCurrentOrg();
+        return $currentOrg['id'];
+    }
+
+    public function getCurrentOrg()
+    {
+        return $this->org;
     }
 
     public function getSelectOrg()
@@ -212,5 +224,15 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function toArray()
     {
         return $this->data;
+    }
+
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+    }
+
+    public function getPermissions()
+    {
+        return $this->permissions;
     }
 }

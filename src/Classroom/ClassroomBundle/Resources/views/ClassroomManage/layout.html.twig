@@ -10,7 +10,7 @@
       {% block side %}
         {% set side_nav = side_nav|default(null) %}
         <div class="sidenav">
-          {{ render(controller('ClassroomBundle:ClassroomManage:menu',{classroom:classroom,sideNav:side_nav})) }}
+          {{ render(controller('ClassroomBundle:ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
         </div>
       {% endblock %}
     </div>

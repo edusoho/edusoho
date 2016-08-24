@@ -514,8 +514,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookTime'    => 0,
             'buyable'        => 0,
             'conversationId' => '',
-            'orgCode'        => '1.',
-            'orgId'          => 0
+            'orgCode'        => '',
+            'orgId'          => ''
         ));
 
         if (!empty($fields['tags'])) {
@@ -2476,7 +2476,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+        $permissions = $user->getPermissions();
+        if (!in_array('admin', array_keys($permissions))) {
             throw $this->createAccessDeniedException('您不是管理员，无权操作！');
         }
 

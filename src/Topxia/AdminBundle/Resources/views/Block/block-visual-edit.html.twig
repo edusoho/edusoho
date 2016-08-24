@@ -1,12 +1,13 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Block:block-visual-layout.html.twig' %}
 
-{% set menu = 'admin_block_visual_edit' %}
+{% set menu = menu|default('admin_block') %}
+{% set currentPage = 'admin_block_visual_edit' %}
 
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 
-{% block main %}
+{% block blockVisual %}
   <style type="text/css">
     .sortable-list .placeholder {
       margin: 10px 0;

@@ -111,6 +111,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
+            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
@@ -152,6 +153,11 @@ class WebExtension extends \Twig_Extension
         $config['string']    = $string;
         $config['signature'] = sha1($string);
         return json_encode($config);
+    }
+
+    public function getAdminRoles()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function renderNotification($notification)
@@ -414,6 +420,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'classroom';
         $names[] = 'materiallib';
         $names[] = 'sensitiveword';
+        $names[] = 'permission';
         $names[] = 'org';
 
         $paths = array(

@@ -1,0 +1,64 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_role_namage' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <select id="keywordType" class="form-control" name="keywordType">
+          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编号'} %}
+          {{ select_options(options, app.request.get('keywordType')) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+  </div>
+
+  <button class="btn btn-primary">搜索</button>
+
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="25%">角色名称</th>
+      <th width="25%">编码</th>
+      <th width="20%">创建时间</th>
+      <th width="20%">创建者</th>
+      <th>操作</th>
+    </tr>   
+    {% for role in roles %}
+      <tr>
+        <td>
+          {{ role.name }}
+        <td>
+          {{ role.code }}
+        </td>
+        <td>
+          {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
+        <td>
+          {{ users[role.createdUserId].nickname }}
+        </td>
+        <td>
+          <div class="btn-group">
+            <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+            <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_edit', {id:role.id}) }}">编辑</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">无定时任务记录</tr>
+    {% endfor %}
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

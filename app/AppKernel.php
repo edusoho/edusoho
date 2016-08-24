@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
+            new Permission\PermissionBundle\PermissionBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),

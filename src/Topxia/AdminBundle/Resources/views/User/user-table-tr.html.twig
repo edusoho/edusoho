@@ -10,7 +10,12 @@
     <br>
     <span class="text-muted text-sm">
       {% for role in user.roles %}
-        {{ dict_text('userRole', role) }}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
       {% endfor %}
     </span>
   </td>
@@ -65,52 +70,9 @@
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">编辑用户信息</a></li>
-        {% if setting('magic.enable_org','0') %}
-          <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_org_update', {id: user.id}) }}">修改用户组织机构</a></li>
-        {% endif %}
-        {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
-            {% if 'ROLE_SUPER_ADMIN' in user.roles %}
-                  <li></li>
-             {% else %}
-                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li>
-            {% endif %}
-       {% else %}
-                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li>
-        {% endif %}
+      
+      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_user_manage', group:'groupButton', user: user} %}
 
-        {% if is_granted('ROLE_SUPER_ADMIN') %}
-
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_avatar', {id:user.id}) }}">修改用户头像</a></li>
-
-        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_change_password', {userId:user.id}) }}">修改密码</a></li>
-
-        {% endif %}
-
-        {% if setting('mailer.enabled') and emailArr[1] != 'edusoho.net' %}
-          <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">发送密码重置邮件</a></li>
-
-          <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">发送Email验证邮件</a></li>
-        {% endif %}
-
-        {% if user.locked %}
-          <li><a class="unlock-user" href="javascript:" title="解禁用户{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">解禁用户</a></li>
-        {% else %}
-              {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
-                    {% if 'ROLE_SUPER_ADMIN' in user.roles %}
-                          <li></li>
-                           {% else %}
-                            <li><a class="lock-user" href="javascript:" title="封禁用户{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">封禁用户</a></li>
-                    {% endif %}
-               {% else %}
-                   <li><a class="lock-user" href="javascript:" title="封禁用户{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">封禁用户</a></li>
-              {% endif %}
-        {% endif %}
-      </ul>
     </div>
   </td>
 </tr>

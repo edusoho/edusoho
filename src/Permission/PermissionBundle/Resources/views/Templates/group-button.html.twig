@@ -1,0 +1,23 @@
+{% import "PermissionBundle:Templates:macro.html.twig" as self_macro %}
+
+{% set permissions = sub_permissions(parentCode, group|default(null)) %}
+
+{% if permissions|default(null) %}
+<a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+  <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+  {% for permission in permissions %}
+    <li>
+      {% if permission.visable|default(false) %}
+        {% if eval_expression(permission.visable) %}
+          {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+        {% endif %}
+      {% else %}
+        {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+      {% endif %}
+    </li>
+  {% endfor %}
+
+</ul>
+{% endif %}

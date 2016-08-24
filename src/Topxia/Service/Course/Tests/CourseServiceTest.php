@@ -2622,14 +2622,18 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'test course 1'
         );
 
+        $user = $this->getCurrentUser();
+
         $course2 = array(
             'title' => 'test course 2'
         );
-        $createCourse  = $this->getCourseService()->createCourse($course);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
-        $conditions    = array('unique' => true, 'role' => 'teacher');
-        $result        = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, 10);
 
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $conditions   = array('unique' => true, 'role' => 'teacher');
+        $result       = $this->getCourseService()->searchMemberIds($conditions, 'latest', 0, 10);
+        
+        $this->assertEquals($result[0]['userId'], $user['id']);
         $this->assertEquals($result[0]['userId'], $this->getCurrentUser()->id);
         $this->assertArrayEquals($result, array(array('userId' => $this->getCurrentUser()->id)));
     }

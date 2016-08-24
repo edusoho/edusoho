@@ -116,4 +116,18 @@ abstract class BaseService
 
         return $this->logger;
     }
+    protected function isAdminUser()
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user->id)) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $permissions = $user->getPermissions();
+        if (in_array('admin', array_keys($permissions))) {
+            return true;
+        }
+        return false;
+    }
 }

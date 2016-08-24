@@ -1,3 +1,7 @@
+parameters:
+    permission.path_regular_expression: ['/^\/admin/', '/^\/course\/\d+\/manage/', '/^\/classroom\/\d+\/manage/']
+
+
 services:
     topxia.user_provider:
         class: Topxia\Service\User\UserProvider
@@ -13,7 +17,6 @@ services:
     topxia.logout.success_handler:
         class: Topxia\WebBundle\Handler\LogoutSuccessHandler
         parent: security.logout.success_handler
-
 
     user.login_listener:
         class: Topxia\WebBundle\Handler\LoginSuccessHandler
@@ -63,13 +66,13 @@ security:
         - { path: ^/settings, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
-        - { path: ^/admin/course, role: ROLE_ADMIN }
-        - { path: ^/admin/user, role: ROLE_ADMIN }
-        - { path: ^/admin/app, role: ROLE_ADMIN }
-        - { path: ^/admin/setting, role: ROLE_SUPER_ADMIN }
-        - { path: ^/admin/logs, role: ROLE_SUPER_ADMIN }
-        - { path: ^/admin/upgrade, role: ROLE_SUPER_ADMIN }
-        - { path: ^/admin/optimize, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/course, role: ROLE_BACKEND }
+        - { path: ^/admin/user, role: ROLE_BACKEND }
+        - { path: ^/admin/app, role: ROLE_BACKEND }
+        - { path: ^/admin/setting, role: ROLE_BACKEND }
+        - { path: ^/admin/logs, role: ROLE_BACKEND }
+        - { path: ^/admin/upgrade, role: ROLE_BACKEND }
+        - { path: ^/admin/optimize, role: ROLE_BACKEND }
         - { path: ^/admin, role: ROLE_BACKEND }
         - { path: /.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
