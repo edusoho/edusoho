@@ -9,7 +9,41 @@ class Setting extends BaseResource
 {
     public function get(Application $app, Request $request, $settingName)
     {
-        return $this->getSettingService()->get($settingName);
+        if (!$this->canAccess($settingName)) {
+            return array();
+        }
+
+        $res = $this->getSettingService()->get($settingName);
+
+        $method = 'filter' . ucfirst($settingName);
+        if (method_exists($this, $method)) {
+            return call_user_func(array($this, $method), $res);
+        } else {
+            return $res;
+        }
+    }
+
+    public function filter($res)
+    {
+        return $res;
+    }
+
+
+    protected function filterCourse($res)
+    {
+        return $this->filterKeys($res, array('welcome_message_enabled'));
+    }
+
+    protected function filterKeys(array $input, array $allowed)
+    {
+        return array_diff_key($input, array_flip($allowed));
+    }
+
+    protected function canAccess($settingName)
+    {
+        return in_array($settingName, array(
+            'course'
+        ), true);
     }
 
     protected function getSettingService()
