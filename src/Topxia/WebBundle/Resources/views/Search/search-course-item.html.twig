@@ -1,5 +1,5 @@
 <div class="course-item clearfix">
-  {% set is_open_course = course.type|sub_str(0, 7) == 'public' %}
+  {% set is_open_course = 'public_' in course.type %}
 
   {% if is_open_course %}
     {% set course_show_url = path('open_course_show', { courseId: course.id }) %}
