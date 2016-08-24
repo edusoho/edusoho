@@ -2,7 +2,7 @@
 
 {% block heading %}
   {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
-  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: question.id })) }}
+{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
 {% endblock %}
 
 {% block body %}
