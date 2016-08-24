@@ -16,11 +16,10 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
         if (!ArrayToolKit::requireds($arguments, array('targetType', 'targetId'))) {
             throw new \Exception("缺少参数，无法获取附件列表");
         }
-        $type        = 'attachment';
-        $targetType  = $arguments['targetType'];
-        $targetId    = $arguments['targetId'];
-        $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
-        return $attachments;
+        $type       = 'attachment';
+        $targetType = $arguments['targetType'];
+        $targetId   = $arguments['targetId'];
+        return $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
     }
 
     protected function getUploadFileService()
