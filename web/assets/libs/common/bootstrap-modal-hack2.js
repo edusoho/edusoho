@@ -13,11 +13,10 @@ define(function(require, exports, module) {
         }
     });
 
-
-    //同时存在多个modal时，关闭时还有其他modal存在，防止无法上下拖动
-    $(document).on("hidden.bs.modal", ".modal", function() {
-        if ($(".modal").hasClass('in')) $(document.body).addClass("modal-open");
-    });
+     //同时存在多个modal时，关闭时还有其他modal存在，防止无法上下拖动
+     $(document).on("hidden.bs.modal", "#attachment-modal", function() {
+       if ($("#modal").attr('aria-hidden'))  $(document.body).addClass("modal-open");
+     });
 
     $('.modal').on('click', '[data-toggle=form-submit]', function(e) {
         e.preventDefault();
