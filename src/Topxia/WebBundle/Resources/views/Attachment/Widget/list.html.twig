@@ -4,6 +4,3 @@
 	{% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
 {% endif %}
 {% include 'TopxiaWebBundle:Attachment:list.html.twig' %}
-
-{# 
-{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: targetType, targetId: targetId })) }} #}
