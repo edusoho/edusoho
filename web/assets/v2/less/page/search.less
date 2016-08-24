@@ -98,7 +98,7 @@
         width: 100%;
         float: none;
       }
-      .tags{
+      .tags-left{
         position: absolute;
         left: 0px;
         top: 0px;
@@ -108,6 +108,18 @@
           height: 50px;
           background: url("@{img-src}tag_live.png") no-repeat;
           background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
+        }
+      }
+      .tags-right{
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        .tag-public{
+          display: inline-block;
+          width: 68px;
+          height: 68px;
+          background: url("@{img-src}tag_public.png") no-repeat;
+          background-image: -webkit-image-set(url("@{img-src}tag_public.png") 1x,url("@{img-src}tag_public@2x.png") 2x);
         }
       }
     }
