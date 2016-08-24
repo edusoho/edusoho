@@ -14,15 +14,8 @@ class MeChatroomes extends BaseResource
         $limit = $request->query->get('limit', 10);
 
         $user = $this->getCurrentUser();
-
-        $conditions = array('userId' => $user['id']);
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
-
-        $classroomIds = ArrayToolkit::column($members, 'classroomId');
-
-        $classRoomChatrooms = $this->getClassRoomChatrooms($userId);
-        $courseChatrooms = $this->getCourseChatrooms($userId);
+        $classRoomChatrooms = $this->getClassRoomChatrooms($user['id']);
+        $courseChatrooms = $this->getCourseChatrooms($user['id']);
 
         $chatrooms = array_merge($classRoomChatrooms, $courseChatrooms);
         return $this->wrap($this->filter($chatrooms), $total);
@@ -31,7 +24,7 @@ class MeChatroomes extends BaseResource
     private function getClassRoomChatrooms($userId) {
         $conditions = array('userId' => $userId);
         $total = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $total);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
@@ -57,7 +50,7 @@ class MeChatroomes extends BaseResource
     private function getCourseChatrooms($userId) {
         $conditions = array('userId' => $userId);
         $total = $this->getCourseService()->searchMemberCount($conditions);
-        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $total);
+        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
