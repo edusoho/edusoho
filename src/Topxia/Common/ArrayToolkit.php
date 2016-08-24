@@ -178,9 +178,7 @@ class ArrayToolkit
     public static function some($array, $callback = null)
     {
         foreach ($array as $value) {
-            if (is_null($callback) && $value) {
-                return true;
-            } elseif (is_callable($callback) && $callback($value)) {
+            if ((is_null($callback) && $value) || (is_callable($callback) && $callback($value))) {
                 return true;
             }
         }
