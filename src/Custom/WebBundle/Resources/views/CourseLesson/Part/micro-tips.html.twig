@@ -115,7 +115,24 @@
 {% elseif item.status == 'unpublished' %}
   <span class="period-state">{{'敬请期待'|trans}}</span>
 {% else %}
+  {% if item.type == 'video' %}
+    {% set itemIcon = 'es-icon-videoclass' %}
+  {% elseif item.type == 'audio' %}
+    {% set itemIcon = 'es-icon-audioclass' %}
+  {% elseif item.type == 'text' %}
+    {% set itemIcon = 'es-icon-graphicclass' %}
+  {% elseif item.type == 'testpaper' %}
+    {% set itemIcon = 'es-icon-check' %}
+  {% elseif item.type == 'ppt' %}
+    {% set itemIcon = 'es-icon-pptclass' %}
+  {% elseif item.type == 'document' %}
+    {% set itemIcon = 'es-icon-description' %}
+  {% elseif item.type == 'flash' %}
+    {% set itemIcon = 'es-icon-flashclass' %}
+  {% else %}
+    {% set itemIcon = 'es-icon-videocam' %}
+  {% endif %}
   <span class="course-type">
-    <i class="es-icon es-icon-lock" data-toggle="tooltip" data-placement="top" title="{{'请先学完之前课时'|trans}}"></i>
+    <i class="es-icon es-icon-lock" data-icon="{{ itemIcon }}" data-toggle="tooltip" data-placement="top" title="{{'请先学完之前课时'|trans}}"></i>
   </span>
 {% endif %}

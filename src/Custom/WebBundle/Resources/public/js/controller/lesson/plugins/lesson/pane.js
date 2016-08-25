@@ -75,25 +75,10 @@ define(function(require, exports, module) {
 
                             var $nextItemCourseTypeIcon = $nextItem.find('.course-type').find('.es-icon');
 
-                            $nextItemCourseTypeIcon.removeClass('es-icon-lock');
+                            var itemIcon = $nextItem.find('.course-type').find('.es-icon').data('icon');
 
-                            if (data.type == 'video') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-videoclass');
-                            } else if (data.type == 'audio') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-audioclass');
-                            } else if (data.type == 'text') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-graphicclass');
-                            } else if (data.type == 'testpaper') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-check');
-                            } else if (data.type == 'ppt') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-pptclass');
-                            } else if (data.type == 'document') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-description');
-                            } else if (data.type == 'flash') {
-                                $nextItemCourseTypeIcon.addClass('es-icon-flashclass');
-                            } else {
-                                $nextItemCourseTypeIcon.addClass('es-icon-videocam');
-                            }
+                            $nextItemCourseTypeIcon.removeClass('es-icon-lock');
+                            $nextItemCourseTypeIcon.addClass(itemIcon);
                         }
                         
                         $itemStatusIcon.removeClass('es-icon-doing').removeClass('es-icon-done1')
