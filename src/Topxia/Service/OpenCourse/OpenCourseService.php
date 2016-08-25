@@ -72,6 +72,8 @@ interface OpenCourseService
 
     public function getNextLesson($courseId, $lessonId);
 
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
+
     /**
      * open_course_member
      */
