@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     require('mediaelementplayer');
 
-    var Toolbar = require('../../../../topxiaweb/js/controller/lesson/lesson-toolbar');
+    var Toolbar = require('../lesson/lesson-toolbar');
 
     var SlidePlayer = require('../../../../topxiaweb/js/controller/widget/slider-player');
     var DocumentPlayer = require('../../../../topxiaweb/js/controller/widget/document-player');
@@ -84,12 +84,14 @@ define(function(require, exports, module) {
         _startLesson: function() {
             var toolbar = this._toolbar,
                 self = this;
+
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
             $.post(url, function(result) {
                 if (result == true) {
                     toolbar.trigger('learnStatusChange', {
                         lessonId: self.get('lessonId'),
-                        status: 'learning'
+                        status: 'learning',
+                        type: self.get('type')
                     });
                 }
             }, 'json');
@@ -121,7 +123,8 @@ define(function(require, exports, module) {
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 toolbar.trigger('learnStatusChange', {
                     lessonId: self.get('lessonId'),
-                    status: 'finished'
+                    status: 'finished',
+                    type: self.get('type')
                 });
 
             }, 'json');
@@ -200,7 +203,8 @@ define(function(require, exports, module) {
             }
 
             var self = this;
-            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
+            var lesson = this._toolbar.get('lesson');
+            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'), lesson.type);
             this._counter.setTimerId(setInterval(function() {
                 self._counter.execute()
             }, 1000));
@@ -742,13 +746,14 @@ define(function(require, exports, module) {
     });
 
     var Counter = Class.create({
-        initialize: function(dashboard, courseId, lessonId, watchLimit) {
+        initialize: function(dashboard, courseId, lessonId, watchLimit, type) {
             this.dashboard = dashboard;
             this.courseId = courseId;
             this.lessonId = lessonId;
             this.interval = 120;
             this.watched = false;
             this.watchLimit = watchLimit;
+            this.type = type;
         },
 
         setTimerId: function(timerId) {
