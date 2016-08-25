@@ -208,13 +208,13 @@
             从资料库中选择
           </a>
         </li>
-
+        {% if course.type == 'live' %}
         <li>
           <a href="#video-chooser-course-file" data-toggle="tab">
             从课程文件中选择
           </a>
         </li>
-
+        {% endif %}
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
