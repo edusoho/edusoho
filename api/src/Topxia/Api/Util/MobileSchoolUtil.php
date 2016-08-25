@@ -12,7 +12,7 @@ class MobileSchoolUtil
         $site = ServiceKernel::instance()->createService('System.SettingService')->get('site');
         $apps[1] = array(
             'id' => "1",
-            'code' => 'announcement',
+            'code' => 'global',
             'name' => $site['name'],
             'title' => $site['slogan'],
             'about' => $mobile['about'],
