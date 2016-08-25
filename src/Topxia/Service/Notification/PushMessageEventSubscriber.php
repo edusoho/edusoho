@@ -70,7 +70,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.check'            => 'onHomeworkCheck',
 
             'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate'
+            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+
+            'user.service.follow' => 'onUserFollow'
         );
     }
 
@@ -95,6 +97,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
+    }
+
+    public function onUserFollow(ServiceEvent $event) {
+        $friend = $event->getSubject();
+        $result = $this->pushCloud('user.service.follow', $friend);
     }
 
     public function onUserCreate(ServiceEvent $event)
