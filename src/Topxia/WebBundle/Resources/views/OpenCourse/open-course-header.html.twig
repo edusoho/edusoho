@@ -2,9 +2,9 @@
 {% do load_script('open-course/open-course-header') %}
 {% if course.type == 'open' %}
     <div class="col-md-9 open-course-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
-      {% if lesson %}
-        {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
-      {% endif %}
+      
+      {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
+      
       <div class="mask modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
