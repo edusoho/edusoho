@@ -575,7 +575,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lesson = $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
-        $this->dispatchEvent('open.course.lesson.unpublish', $lesson);
+        $this->dispatchEvent('open.course.lesson.unpublish', array('lesson' => $lesson));
 
         return $lesson;
     }
