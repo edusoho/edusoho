@@ -36,6 +36,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.quit'            => 'onClassroomQuit',
 
             'article.create'      => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
+            'article.publish'           => 'onArticleCreate',
             'article.update'            => 'onArticleUpdate',
             'article.trash'             => 'onArticleDelete',
             'article.unpublish'         => 'onArticleDelete',
