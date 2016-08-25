@@ -57,7 +57,7 @@ class CourseSearchAdapter extends AbstractSearchAdapter
 
     protected function adaptOpenCourse($openCourse)
     {
-        $local = $this->getOpenCourseService()->getCourse($openCourse['id']);
+        $local = $this->getOpenCourseService()->getCourse($openCourse['courseId']);
 
         if (!empty($local)) {
             $openCourse['id']            = $local['id'];
