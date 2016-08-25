@@ -101,7 +101,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onUserFollow(ServiceEvent $event) {
         $friend = $event->getSubject();
-        $result = $this->pushCloud('user.service.follow', $friend);
+
+        $data = array(
+            'from' => $this->getUserService()->getSimpleUser($friend['fromId']),
+            'to'   => $this->getUserService()->getSimpleUser($friend['toId']),
+        );
+
+        $this->pushCloud('friend.follow', $data);
     }
 
     public function onUserCreate(ServiceEvent $event)

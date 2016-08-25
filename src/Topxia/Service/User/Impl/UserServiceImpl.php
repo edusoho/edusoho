@@ -20,6 +20,19 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getSimpleUser($id)
+    {
+        $user = $this->getUser($id);
+
+        $simple = array();
+
+        $simple['id']       = $user['id'];
+        $simple['nickname'] = $user['nickname'];
+        $simple['title']    = $user['title'];
+        $simple['avatar']   = $this->getFileService()->parseFileUri($user['smallAvatar']);
+        return $simple;
+    }
+
     public function findUsersCountByLessThanCreatedTime($endTime)
     {
         return $this->getUserDao()->findUsersCountByLessThanCreatedTime($endTime);
