@@ -32,15 +32,13 @@
       </a>
     </h3>
     <div class="score">
-      {% if is_open_course %}
-        <span>{{ course.studentNum|default(0) }}{{ '人学习'|trans }}</span>
-      {% else %}
+      {% if not is_open_course %}
         {{ web_macro.star(course.rating|default(0)) }}
         <span>{{ course.ratingNum|default(0) }}人评价({{ course.studentNum|default(0) }}{{ '人学习'|trans }})</span>
       {% endif %}
     </div>
     <div class="content">{{ course.about|raw }}</div>
-    {% if course.lessons|default(null) %}
+    {% if not is_open_course and course.lessons|default(null) %}
       <ul class="ul-lesson">
         {% for lesson in course.lessons|slice(0, 3) %}
           <li>
