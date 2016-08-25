@@ -69,6 +69,10 @@ define(function(require, exports, module) {
                         if (status == 'done1') {
                             var $nextItem = $item.next();
 
+                            var url = $nextItem.find('a').data('lock');
+
+                            $nextItem.find('a').attr('href', url);
+
                             var $nextItemCourseTypeIcon = $nextItem.find('.course-type').find('.es-icon');
 
                             $nextItemCourseTypeIcon.removeClass('es-icon-lock');

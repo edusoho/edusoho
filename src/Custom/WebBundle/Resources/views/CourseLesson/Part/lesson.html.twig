@@ -19,8 +19,11 @@
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
     {% endif %}
   {% else %}
-    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-    <span class="title">{% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title|raw }}</span>
-    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+      <a {% if member %}data-lock="{{ lessonUrl }}" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
+      title="{{ item.title }}">
+      {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+      <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title|raw }}</span>
+      {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+      </a>
   {% endif %}
 </li>
