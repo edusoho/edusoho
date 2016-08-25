@@ -4,6 +4,7 @@ namespace Topxia\Service\OpenCourse\Event;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
 
 class OpenCourseEventSubscriber implements EventSubscriberInterface
 {
@@ -23,6 +24,16 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
+
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId'], true);
+
+        if (empty($course)) {
+            throw new \RuntimeException('添加课时失败，课程不存在。');
+        }
+
+        if($course['status'] === 'draft' || $lesson['type'] === 'liveOpen'){
+            $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
+        }
 
         $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
         $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
@@ -115,6 +126,9 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('Course.NoteService');
     }
 
+    /**
+     * @return OpenCourseServiceImpl
+     */
     protected function getOpenCourseService()
     {
         return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');

@@ -12,47 +12,47 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'user.service.registered'   => 'onUserCreate',
-            'user.unlock'               => 'onUserCreate',
-            'user.lock'                 => 'onUserDelete',
-            'user.update'               => 'onUserUpdate',
-            'user.change_nickname'      => 'onUserUpdate',
+            'user.service.registered' => 'onUserCreate',
+            'user.unlock'             => 'onUserCreate',
+            'user.lock'               => 'onUserDelete',
+            'user.update'             => 'onUserUpdate',
+            'user.change_nickname'    => 'onUserUpdate',
 
-            'course.publish'            => 'onCourseCreate',
-            'course.update'             => 'onCourseUpdate',
-            'course.delete'             => 'onCourseDelete',
-            'course.close'              => 'onCourseDelete',
-            'course.join'               => 'onCourseJoin',
-            'course.quit'               => 'onCourseQuit',
-            'course.create'             => 'onCourseCreate',
+            'course.publish' => 'onCourseCreate',
+            'course.update'  => 'onCourseUpdate',
+            'course.delete'  => 'onCourseDelete',
+            'course.close'   => 'onCourseDelete',
+            'course.join'    => 'onCourseJoin',
+            'course.quit'    => 'onCourseQuit',
+            'course.create'  => 'onCourseCreate',
 
-            'course.lesson.publish'     => 'onCourseLessonCreate',
-            'course.lesson.unpublish'   => 'onCourseLessonDelete',
-            'course.lesson.update'      => 'onCourseLessonUpdate',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
+            'course.lesson.publish'   => 'onCourseLessonCreate',
+            'course.lesson.unpublish' => 'onCourseLessonDelete',
+            'course.lesson.update'    => 'onCourseLessonUpdate',
+            'course.lesson.delete'    => 'onCourseLessonDelete',
 
-            'classroom.create'          => 'onClassroomCreate',
-            'classroom.join'            => 'onClassroomJoin',
-            'classroom.quit'            => 'onClassroomQuit',
+            'classroom.create' => 'onClassroomCreate',
+            'classroom.join'   => 'onClassroomJoin',
+            'classroom.quit'   => 'onClassroomQuit',
 
-            'article.publish'           => 'onArticleCreate',
-            'article.update'            => 'onArticleUpdate',
-            'article.trash'             => 'onArticleDelete',
-            'article.unpublish'         => 'onArticleDelete',
-            'article.delete'            => 'onArticleDelete',
+            'article.publish'      => 'onArticleCreate',
+            'article.update'       => 'onArticleUpdate',
+            'article.trash'        => 'onArticleDelete',
+            'article.unpublish'    => 'onArticleDelete',
+            'article.delete'       => 'onArticleDelete',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'             => 'onThreadCreate',
-            'thread.update'             => 'onThreadUpdate',
-            'thread.delete'             => 'onThreadDelete',
-            'course.thread.create'      => 'onThreadCreate',
-            'course.thread.update'      => 'onThreadUpdate',
-            'course.thread.delete'      => 'onThreadDelete',
-            'group.thread.create'       => 'onThreadCreate',
-            'group.thread.open'         => 'onThreadCreate',
-            'group.thread.update'       => 'onThreadUpdate',
-            'group.thread.delete'       => 'onThreadDelete',
-            'group.thread.close'        => 'onThreadDelete',
+            'thread.create'        => 'onThreadCreate',
+            'thread.update'        => 'onThreadUpdate',
+            'thread.delete'        => 'onThreadDelete',
+            'course.thread.create' => 'onThreadCreate',
+            'course.thread.update' => 'onThreadUpdate',
+            'course.thread.delete' => 'onThreadDelete',
+            'group.thread.create'  => 'onThreadCreate',
+            'group.thread.open'    => 'onThreadCreate',
+            'group.thread.update'  => 'onThreadUpdate',
+            'group.thread.delete'  => 'onThreadDelete',
+            'group.thread.close'   => 'onThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
@@ -62,20 +62,27 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'group.thread.post.create'  => 'onThreadPostCreate',
             'group.thread.post.delete'  => 'onThreadPostDelete',
 
-            'announcement.create'       => 'onAnnouncementCreate',
+            'announcement.create' => 'onAnnouncementCreate',
 
-            'testpaper.reviewed'        => 'onTestPaperReviewed',
+            'testpaper.reviewed' => 'onTestPaperReviewed',
 
-            'homework.check'            => 'onHomeworkCheck',
+            'homework.check' => 'onHomeworkCheck',
 
-            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate'
+            'open.course.publish' => 'onOpenCourseCreate',
+            'open.course.delete'  => 'onOpenCourseDelete',
+            'open.course.update'  => 'onOpenCourseUpdate',
+            'open.course.close'   => 'onOpenCourseDelete',
+
+            'open.course.lesson.publish'   => 'onOpenCourseLessonPublish',
+            'open.course.lesson.update'    => 'onOpenCourseLessonUpdate',
+            'open.course.lesson.delete'    => 'onOpenCourseLessonDelete',
+            'open.course.lesson.unpublish' => 'onOpenCourseLessonDelete'
         );
     }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
+        return $this->getCloudDataService()->push('school.' . $eventName, $data, time(), $level);
     }
 
     /**
@@ -143,10 +150,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             $currentUser = ServiceKernel::instance()->getCurrentUser();
             $message     = array(
                 'name'    => $course['title'],
-                'clients' => array(array(
-                    'clientId'   => $currentUser['id'],
-                    'clientName' => $currentUser['nickname']
-                ))
+                'clients' => array(
+                    array(
+                        'clientId'   => $currentUser['id'],
+                        'clientName' => $currentUser['nickname']
+                    )
+                )
             );
 
             $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
@@ -503,26 +512,66 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->pushCloud('testpaper.reviewed', $testpaperResult);
     }
 
-    public function onLiveOpenCourseLessonCreate(ServiceEvent $event)
+    public function onOpenCourseCreate(ServiceEvent $event)
     {
-        $context       = $event->getSubject();
-        $lesson        = $context['lesson'];
-        $mobileSetting = $this->getSettingService()->get('mobile');
+        $openCourse = $event->getSubject();
+        $this->pushCloud('open.course.create', $this->convertCourse($openCourse));
+    }
 
-        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            if ($lesson['status'] == 'published') {
-                $this->LiveOpenCreateJob($lesson);
-            }
+    public function onOpenCourseDelete(ServiceEvent $event)
+    {
+        $openCourse = $event->getSubject();
+        $this->pushCloud('open.course.delete', $this->convertCourse($openCourse));
+    }
+
+    public function onOpenCourseUpdate(ServiceEvent $event)
+    {
+        $subject = $event->getSubject();
+        $course  = $subject['course'];
+        $this->pushCloud('open.course.update', $this->convertCourse($course));
+    }
+
+    public function onOpenCourseLessonPublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+
+        if ($lesson['type'] === 'liveOpen') {
+            $this->_onLiveOpenCourseLessonPublish($lesson);
+        }
+
+        $this->pushCloud('open.course.lesson.create', $lesson);
+    }
+
+    protected function _onLiveOpenCourseLessonPublish($lesson)
+    {
+        $mobileSetting = $this->getSettingService()->get('mobile');
+        if ($lesson['status'] === 'published' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            $this->LiveOpenCreateJob($lesson);
         }
     }
 
-    public function onLiveOpenCourseLessonUpdate(ServiceEvent $event)
+    public function onOpenCourseLessonUpdate(ServiceEvent $event)
     {
-        $context       = $event->getSubject();
-        $lesson        = $context['lesson'];
-        $mobileSetting = $this->getSettingService()->get('mobile');
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+        $this->pushCloud('open.course.lesson.update', $lesson);
 
-        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && $lesson['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+        if ($lesson['type'] == 'liveOpen') {
+            $this->onLiveOpenCourseLessonUpdate($lesson);
+        }
+    }
+
+    public function onOpenCourseLessonDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+        $this->pushCloud('open.course.lesson.delete', $lesson);
+    }
+
+    protected function onLiveOpenCourseLessonUpdate($lesson)
+    {
+        $mobileSetting = $this->getSettingService()->get('mobile');
+        if (isset($lesson['startTime']) && $lesson['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
             $job = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId('LiveOpenPushNotificationOneHourJob', 'liveOpenLesson', $lesson['id']);
 
             if ($job) {
@@ -653,11 +702,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'       => "LiveOpenPushNotificationOneHourJob",
-                'cycle'      => 'once',
-                'jobClass'   => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
-                'targetType' => 'liveOpenLesson',
-                'targetId'   => $lesson['id'],
+                'name'            => "LiveOpenPushNotificationOneHourJob",
+                'cycle'           => 'once',
+                'jobClass'        => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
+                'targetType'      => 'liveOpenLesson',
+                'targetId'        => $lesson['id'],
                 'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
