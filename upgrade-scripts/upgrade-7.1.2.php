@@ -37,6 +37,15 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme()
     {
         $this->registerOpenCourseSearch(); // 注册公开课云搜索
+        $connection = $this->getConnection();
+
+        if($this->isFieldExist('course_lesson', 'replayStatus')){
+            $connection->exec("ALTER TABLE course_lesson MODIFY `replayStatus` enum('ungenerated','generating','generated','videoGenerated') NOT NULL DEFAULT 'ungenerated';");
+        }
+
+        if($this->isFieldExist('open_course_lesson', 'replayStatus')){
+            $connection->exec("ALTER TABLE open_course_lesson MODIFY `replayStatus` enum('ungenerated','generating','generated','videoGenerated') NOT NULL DEFAULT 'ungenerated';");
+        }
     }
 
     protected function registerOpenCourseSearch()
@@ -126,6 +135,9 @@ abstract class AbstractUpdater
         $this->kernel = $kernel;
     }
 
+    /**
+     * @return \Topxia\Service\Common\Connection
+     */
     public function getConnection()
     {
         return $this->kernel->getConnection();
