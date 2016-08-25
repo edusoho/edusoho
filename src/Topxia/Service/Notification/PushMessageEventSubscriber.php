@@ -515,20 +515,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onOpenCourseCreate(ServiceEvent $event)
     {
         $openCourse = $event->getSubject();
-        $this->pushCloud('open.course.create', $this->convertCourse($openCourse));
+        $this->pushCloud('openCourse.create', $this->convertCourse($openCourse));
     }
 
     public function onOpenCourseDelete(ServiceEvent $event)
     {
         $openCourse = $event->getSubject();
-        $this->pushCloud('open.course.delete', $this->convertCourse($openCourse));
+        $this->pushCloud('openCourse.delete', $this->convertCourse($openCourse));
     }
 
     public function onOpenCourseUpdate(ServiceEvent $event)
     {
         $subject = $event->getSubject();
         $course  = $subject['course'];
-        $this->pushCloud('open.course.update', $this->convertCourse($course));
+        $this->pushCloud('openCourse.update', $this->convertCourse($course));
     }
 
     public function onOpenCourseLessonPublish(ServiceEvent $event)
@@ -539,7 +539,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             $this->_onLiveOpenCourseLessonPublish($lesson);
         }
 
-        $this->pushCloud('open.course.lesson.create', $lesson);
+        $this->pushCloud('openLesson.create', $lesson);
     }
 
     protected function _onLiveOpenCourseLessonPublish($lesson)
@@ -554,7 +554,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
-        $this->pushCloud('open.course.lesson.update', $lesson);
+        $this->pushCloud('openLesson.update', $lesson);
 
         if ($lesson['type'] == 'liveOpen') {
             $this->onLiveOpenCourseLessonUpdate($lesson);
@@ -565,7 +565,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
-        $this->pushCloud('open.course.lesson.delete', $lesson);
+        $this->pushCloud('openLesson.delete', $lesson);
     }
 
     protected function onLiveOpenCourseLessonUpdate($lesson)
