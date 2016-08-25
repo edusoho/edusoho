@@ -6,7 +6,7 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class LlquickpayRequest extends Request
 {
-    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
+    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 
     public function form()
     {
