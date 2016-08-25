@@ -48,7 +48,11 @@ define(function(require, exports, module) {
 
                         $itemCourseTypeIcon.removeClass('es-icon-lock');
 
-                        if (data.type == 'text') {
+                        if (data.type == 'video') {
+                            $itemCourseTypeIcon.addClass('es-icon-videoclass');
+                        } else if (data.type == 'audio') {
+                            $itemCourseTypeIcon.addClass('es-icon-audioclass');
+                        } else if (data.type == 'text') {
                             $itemCourseTypeIcon.addClass('es-icon-graphicclass');
                         } else if (data.type == 'testpaper') {
                             $itemCourseTypeIcon.addClass('es-icon-check');
@@ -69,7 +73,11 @@ define(function(require, exports, module) {
 
                             $nextItemCourseTypeIcon.removeClass('es-icon-lock');
 
-                            if (data.type == 'text') {
+                            if (data.type == 'video') {
+                                $nextItemCourseTypeIcon.addClass('es-icon-videoclass');
+                            } else if (data.type == 'audio') {
+                                $nextItemCourseTypeIcon.addClass('es-icon-audioclass');
+                            } else if (data.type == 'text') {
                                 $nextItemCourseTypeIcon.addClass('es-icon-graphicclass');
                             } else if (data.type == 'testpaper') {
                                 $nextItemCourseTypeIcon.addClass('es-icon-check');
