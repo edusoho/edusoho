@@ -116,7 +116,7 @@
           <label>课程学习模式</label>
         </div>
         <div class="col-md-7 controls radios">
-          {{ radios('studyModel', {'ordered':'顺序模式', 'normal':'普通模式'}, course.studyModel|default(0)) }}
+          {{ radios('studyModel', {'ordered':'顺序模式', 'normal':'普通模式'}, course.studyModel|default('ordered')) }}
         <div class="help-block">顺序模式:学员必须学完当前课程才能继续学习下一节课程</div>
         </div>
       </div>
