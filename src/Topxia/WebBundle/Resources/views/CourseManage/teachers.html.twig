@@ -88,7 +88,7 @@
         </div>
       </div>
 
-      {% if course.type in ['live','liveOpen'] %}
+      {% if course.type in ['live','liveOpen'] and capacity.code|default(0) == 4 %}
         <div class="help-block">
           提示：排序第一位的老师默认为 <b>直播课堂管理员</b>，直播课堂管理员拥有 <b>直播课堂最高权限</b>
         </div>
