@@ -40,9 +40,8 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             $message   = $forbidden['message'];
             $exception = new AuthenticationException($message);
         } else {
-            $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
-
             if ($forbidden['user']) {
+                $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
                 if ($failed['ipFaildCount'] >= $setting['ip_temporary_lock_allowed_times']) {
                     $message = "您当前IP下帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试。";
                 } elseif ($failed['leftFailedCount']) {
@@ -52,8 +51,6 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
                 }
 
                 $exception = new AuthenticationException($message);
-            } else {
-                $message = $exception->getMessage();
             }
         }
 
