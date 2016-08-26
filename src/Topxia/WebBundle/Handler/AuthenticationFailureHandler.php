@@ -61,7 +61,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => false,
-                'message' => $message
+                'message' => empty($message) ? $exception->getMessage() : $message
             );
             return new JsonResponse($content, 400);
         }
