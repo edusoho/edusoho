@@ -204,7 +204,6 @@ define(function(require, exports, module) {
 
             var self = this;
             var lesson = this._toolbar.get('lesson');
-            console.log(lesson);
             this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'), lesson.type);
             this._counter.setTimerId(setInterval(function() {
                 self._counter.execute()
