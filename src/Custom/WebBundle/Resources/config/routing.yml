@@ -1,0 +1,21 @@
+course_manage_base:
+    pattern:  /course/{id}/manage/base
+    defaults: { _controller: CustomWebBundle:CourseManage:base }
+
+course_learn:
+    pattern:  /course/{id}/learn
+    defaults: { _controller: CustomWebBundle:Course:learn }
+
+course_lesson_show:
+    pattern:  /course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: CustomWebBundle:CourseLesson:show }
+
+course_lesson_learn_start:
+    pattern:  /course/{courseId}/lesson/{lessonId}/learn/start
+    defaults: { _controller: CustomWebBundle:CourseLesson:learnStart }
+    methods: [POST]
+
+course_lesson_learn_finish:
+    pattern:  /course/{courseId}/lesson/{lessonId}/learn/finish
+    defaults: { _controller: CustomWebBundle:CourseLesson:learnFinish }
+    methods: [POST]
