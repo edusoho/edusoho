@@ -78,6 +78,7 @@
             {% endverbatim %}
           </script>
 
+          
         </div>
       </div>
 
@@ -87,6 +88,11 @@
         </div>
       </div>
 
+      {% if course.type in ['live','liveOpen'] %}
+        <div class="help-block">
+          提示：排序第一位的老师默认为 <b>课堂管理员</b>，课堂管理员拥有 <b>课堂最高权限</b>
+        </div>
+      {% endif %}
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     </form>
