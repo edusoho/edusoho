@@ -537,7 +537,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions  = array(
+        $conditions = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -892,7 +892,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = explode(',', $fields['tags']);
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
-                    $item = (int)$item['id'];
+                    $item = (int) $item['id'];
                 }
 
                 );
@@ -983,7 +983,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
-    private function findCourseTeachers($courseId)
+    public function findCourseTeachers($courseId)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
     }
