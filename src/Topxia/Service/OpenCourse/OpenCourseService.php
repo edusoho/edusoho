@@ -35,6 +35,8 @@ interface OpenCourseService
 
     public function tryManageOpenCourse($courseId);
 
+    public function findCourseTeachers($courseId);
+
     /**
      * open_course_lesson
      */
