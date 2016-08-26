@@ -5,12 +5,6 @@
   {% if course.type == 'liveOpen' %}
     {% include 'TopxiaWebBundle:OpenCourse:live-open-course-header.html.twig' %}
   {% else %}
-    {% if lesson %}
-      {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
-    {% endif %}
-  {% endif %}
-
-  {% if lesson %}
     {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
   {% endif %}
   
