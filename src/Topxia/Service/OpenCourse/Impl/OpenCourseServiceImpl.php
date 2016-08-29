@@ -404,8 +404,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->updateCourse($course['id'], array('lessonNum' => ($lesson['number'] - 1)));
-
         $this->getLogService()->info('open_course', 'add_lesson', "添加公开课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("open.course.lesson.create", array('lesson' => $lesson));
 
@@ -537,7 +535,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions  = array(
+        $conditions = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -892,7 +890,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = explode(',', $fields['tags']);
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
-                    $item = (int)$item['id'];
+                    $item = (int) $item['id'];
                 }
 
                 );
