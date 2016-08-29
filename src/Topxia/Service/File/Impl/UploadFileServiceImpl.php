@@ -1117,9 +1117,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->createAccessDeniedException("您无全删除该附件");
         }
 
+        $this->getFileUsedDao()->getConnection()->beginTransaction();
         try {
-            $this->getFileUsedDao()->getConnection()->beginTransaction();
-
             $this->getFileUsedDao()->delete($id);
             $this->deleteFile($file['id']);
 
