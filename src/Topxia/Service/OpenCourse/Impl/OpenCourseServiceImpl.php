@@ -841,9 +841,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $lesson['mediaSource'] = $media['source'];
                 $lesson['mediaUri']    = $media['uri'];
             }
-        } elseif ($lesson['type'] == 'testpaper') {
-            $lesson['mediaId'] = $lesson['mediaId'];
-        } elseif ($lesson['type'] == 'live' || $lesson['type'] == 'liveOpen') {
+        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'liveOpen') {
+            unset($lesson['media']);
+            return $lesson;
         } else {
             $lesson['mediaId']     = 0;
             $lesson['mediaName']   = '';
@@ -981,7 +981,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
-    private function findCourseTeachers($courseId)
+    public function findCourseTeachers($courseId)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
     }

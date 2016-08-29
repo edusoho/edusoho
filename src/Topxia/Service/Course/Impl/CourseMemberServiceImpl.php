@@ -32,7 +32,10 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
         $orderTitle = "购买课程《{$course['title']}》";
 
         if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
-            $orderTitle = $orderTitle."(管理员添加)";
+            $orderTitle = $orderTitle . "(管理员添加)";
+            $payment    = 'outside';
+        } else {
+            $payment = 'none';
         }
 
         if (empty($data['price'])) {
@@ -46,7 +49,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
             'targetId'   => $course['id'],
             'amount'     => $data['price'],
             'totalPrice' => $data['price'],
-            'payment'    => 'outside',
+            'payment'    => $payment,
             'snPrefix'   => 'C'
         ));
 
