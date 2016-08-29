@@ -11,9 +11,9 @@ class LlquickpayRequest extends Request
     public function form()
     {
         $form           = array();
-        // if ($this->params['isMobile']) {
-        //     $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
-        // }
+        if ($this->params['isMobile']) {
+            $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
+        }
         $form['action'] = $this->url;
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
