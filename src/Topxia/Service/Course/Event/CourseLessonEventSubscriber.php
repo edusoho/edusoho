@@ -12,20 +12,21 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create'          => array('onCourseLessonCreate', 0),
-            'course.lesson.delete'          => array('onCourseLessonDelete', 0),
-            'course.lesson.update'          => 'onCourseLessonUpdate',
-            'course.lesson.generate.replay' => 'onCourseLessonGenerateReplay',
-            'course.lesson.publish'         => 'onCourseLessonPublish',
-            'course.lesson.unpublish'       => 'onCourseLessonUnpublish',
-            'course.lesson_start'           => 'onLessonStart',
-            'course.lesson_finish'          => 'onLessonFinish',
-            'course.material.create'        => 'onMaterialCreate',
-            'course.material.update'        => 'onMaterialUpdate',
-            'course.material.delete'        => 'onMaterialDelete',
-            'chapter.create'                => 'onChapterCreate',
-            'chapter.delete'                => 'onChapterDelete',
-            'chapter.update'                => 'onChapterUpdate'
+            'course.lesson.create'                => array('onCourseLessonCreate', 0),
+            'course.lesson.delete'                => array('onCourseLessonDelete', 0),
+            'course.lesson.update'                => 'onCourseLessonUpdate',
+            'course.lesson.generate.replay'       => 'onCourseLessonGenerateReplay',
+            'course.lesson.publish'               => 'onCourseLessonPublish',
+            'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
+            'course.lesson_start'                 => 'onLessonStart',
+            'course.lesson_finish'                => 'onLessonFinish',
+            'course.material.create'              => 'onMaterialCreate',
+            'course.material.update'              => 'onMaterialUpdate',
+            'course.material.delete'              => 'onMaterialDelete',
+            'chapter.create'                      => 'onChapterCreate',
+            'chapter.delete'                      => 'onChapterDelete',
+            'chapter.update'                      => 'onChapterUpdate',
+            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo'
         );
     }
 
@@ -334,6 +335,26 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onLiveLessonGenerateVideo(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+
+        if (!empty($lesson) && $lesson['replayStatus'] != 'videoGenerated') {
+            unset($argument['mediaId']);
+        }
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
+
+            foreach ($courseIds as $key => $courseId) {
+                $this->getCourseService()->generateLessonVideoReplay($courseId, $lessonIds[$key], $lesson['mediaId']);
+            }
+        }
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -430,13 +451,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function _waveLessonMaterialNum($material)
     {
-        if($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course'){
+        if ($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course') {
             $count = $this->getMaterialService()->searchMaterialCount(array(
-                    'courseId' => $material['courseId'],
-                    'lessonId' => $material['lessonId'],
-                    'source'   => 'coursematerial',
-                    'type'     => 'course'
-                )
+                'courseId' => $material['courseId'],
+                'lessonId' => $material['lessonId'],
+                'source'   => 'coursematerial',
+                'type'     => 'course'
+            )
             );
             $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
             return true;

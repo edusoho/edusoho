@@ -158,13 +158,18 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialUpdate(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $material = $context['material'];
+        $context        = $event->getSubject();
+        $argument       = $context['argument'];
+        $material       = $context['material'];
+        $sourceMaterial = $context['sourceMaterial'];
 
-        if ($material['fileId'] != $argument['fileId'] && $argument['fileId']) {
+        if (!$material['lessonId'] && $sourceMaterial['lessonId']) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
+        } elseif ($material['fileId'] != $argument['fileId'] && $argument['fileId']) {
             $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
             $this->getUploadFileService()->waveUploadFile($argument['fileId'], 'usedCount', -1);
+        } elseif (!$sourceMaterial['lessonId'] && $material['lessonId']) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
         }
     }
 

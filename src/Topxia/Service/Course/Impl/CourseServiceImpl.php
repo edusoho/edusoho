@@ -2629,7 +2629,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson       = $this->getLessonDao()->getLesson($lessonId);
         $mediaId      = $lesson["mediaId"];
         $client       = new EdusohoLiveClient();
-        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+        $replayList   = $client->createReplayList($mediaId, "查看回放", $lesson["liveProvider"]);
 
         if (array_key_exists("error", $replayList)) {
             return $replayList;
@@ -2661,6 +2661,35 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
 
         return $replayList;
+    }
+
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId)
+    {
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (!$file) {
+            throw $this->createServiceException("文件不存在");
+        }
+
+        $lessonFields = array(
+            'mediaId'      => $file['id'],
+            'mediaName'    => $file['filename'],
+            'mediaSource'  => 'self',
+            'replayStatus' => 'videoGenerated'
+        );
+
+        $updatedLesson = LessonSerialize::unserialize(
+            $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($lessonFields))
+        );
+
+        $this->dispatchEvent("course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
+
+        return $lesson;
     }
 
     public function entryReplay($lessonId, $courseLessonReplayId)

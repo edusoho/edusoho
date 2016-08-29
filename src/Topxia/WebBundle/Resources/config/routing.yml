@@ -336,6 +336,10 @@ live_course_lesson_replay_create:
     pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
 
+live_course_lesson_replay_upload:
+    pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:uploadModal }
+
 live_course_lesson_replay_entry:
     pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
@@ -2307,6 +2311,10 @@ live_open_course_manage_replay:
 live_open_course_lesson_replay_create:
     pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
+
+live_open_course_lesson_replay_upload:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:uploadModal }
 
 live_open_course_live_replay_entry:
     pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry

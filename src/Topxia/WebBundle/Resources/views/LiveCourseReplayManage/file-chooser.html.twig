@@ -1,0 +1,275 @@
+<style>
+.webuploader-container {
+  position: relative;
+}
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #fff;
+  padding: 5px 10px;
+  color: #333;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+.webuploader-pick-hover {
+  background: #e6e6e6;
+  border-color: #adadad;
+}
+
+.webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events:none;
+}
+
+.balloon-uploader {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.balloon-uploader-heading {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  display: none;
+}
+
+.balloon-uploader-footer {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 15px;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+
+.balloon-filelist {
+  width: 100%;
+}
+
+.balloon-filelist-heading {
+  padding: 8px 10px;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.balloon-uploader-body {
+  position: relative;
+
+}
+
+.balloon-filelist .file-name,
+.balloon-filelist .file-size,
+.balloon-filelist .file-status,
+.balloon-filelist .file-manage {
+  position: relative;
+  z-index: 1;
+}
+
+.balloon-filelist .file-name {
+  display: inline-block;
+  width: 40%;
+}
+
+.balloon-filelist .file-size {
+  display: inline-block;
+  width: 20%;
+}
+
+.balloon-filelist .file-status {
+  display: inline-block;
+  width: 18%;
+}
+.balloon-filelist .file-manage {
+  display: inline-block;
+  width: 20%;
+  z-index: 9999;
+  position: absolute;
+}
+
+.balloon-filelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+
+.balloon-filelist ul li {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 10px;
+}
+
+.balloon-dnd {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-uploader-footer,
+.balloon-uploader-none .balloon-uploader-body {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-dnd {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.balloon-nofile {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 100px;
+  text-align: center;
+  color: #999;
+}
+
+.balloon-uploader .file-pick-btn {
+  display: inline-block;
+}
+
+.balloon-uploader .start-upload-btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #5bc0de;
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #46b8da;
+  overflow: hidden;
+}
+
+.balloon-uploader .start-upload-btn:hover {
+  background: #31b0d5;
+  border-color: #269abc;
+}
+
+.balloon-filelist .file-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: -40px;
+  bottom: 0;
+}
+
+.balloon-filelist .file-progress-bar {
+  background: rgb(219,242,215);
+  background: rgba(59, 181, 33, 0.18);
+  float: left;
+  height: 100%;
+}
+
+</style>
+
+{% set courseType = courseType|default('course') %}
+{% if course.type in ['open','liveOpen'] %}
+  {% set courseMaterialUrl = 'open_course_manage_material_browser' %}
+{% else %}
+  {% set courseMaterialUrl = 'course_manage_material_browser' %}
+{% endif %}
+
+{% set lesson = lesson|default(null) %}
+<div id="media-choosers">
+
+  <div class="file-chooser" id="video-chooser"
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar" style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+      <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
+        <li>
+          <a href="#video-chooser-disk-pane" data-toggle="tab">
+            从资料库中选择
+          </a>
+        </li>
+        {% if course.type == 'live' %}
+        <li>
+          <a href="#video-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="video-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
+
+            {% set token = uploader_token(targetType, targetId, 'private') %}
+            <div class="balloon-uploader"
+              data-init-url="{{ path('uploader_init', {token:token}) }}"
+              data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
+              data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+              data-process="{{ uploader_process(targetType) }}"
+            ></div>
+
+
+            <div class="alert alert-info">
+              <ul>
+                {% if setting('storage.upload_mode') == 'cloud' %}
+                  <li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+                  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+                {% else %}
+                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+                  <li>
+                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="tab-pane" id="video-chooser-disk-pane">
+            <div id="file-browser-video" data-role="file-browser"
+            data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}"
+            data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
+            data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+            data-empty="暂无视频文件，请先上传。">
+              <div class="file-browser-list-container"></div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="video-chooser-course-file">
+            <div id="file-browser-video" data-role="course-file-browser"
+            data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'video', courseType:courseType}) }}"
+            data-empty="暂无视频文件，请先上传。">
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
