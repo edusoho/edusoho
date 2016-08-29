@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'course.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+  {{ render(controller('TopxiaWebBundle:Attachment:formFields', {targetType: 'course.thread.post', targetId: post.id|default(0)}, {'showLabel':false})) }}
   
   <div class="form-group">
     <div class="controls clearfix">
