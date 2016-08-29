@@ -40,7 +40,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o, order_log ol WHERE o.id = ol.orderId AND ol.type='created' AND o.userId = ol.userId AND o.status = 'paid' AND o.payment = 'outside';", array(), 0);
 
-        if(($index + 1) * 1000 < $count){
+        if(($index * 1000) < $count){
             $connection->exec("UPDATE orders o SET payment = 'none' WHERE (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1) IS NOT NULL AND userId = (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1)  AND o.status='paid' AND o.payment = 'outside' LIMIT 1000;");
             return array(
                 'index'    => $index + 1,
