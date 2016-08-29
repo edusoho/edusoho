@@ -61,7 +61,7 @@ class LlquickpayRequest extends Request
 
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
-        $converted['pay_type']   = '1';
+        $converted['pay_type']   = '2';
         $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId']));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
@@ -124,7 +124,7 @@ class LlquickpayRequest extends Request
     {
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         $random = $chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)];
-        $identify = uniqid().$random;
+        $identify = substr(uniqid().$random, 0, 12);
         $this->getSettingService()->set('llpay_identify', $identify);
         return $identify;
     }

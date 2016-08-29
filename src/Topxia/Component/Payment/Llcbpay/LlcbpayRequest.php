@@ -87,7 +87,7 @@ class LlcbpayRequest extends Request
     {
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         $random = $chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)];
-        $identify = uniqid().$random;
+        $identify = substr(uniqid().$random, 0, 12);
         $this->getSettingService()->set('llpay_identify', $identify);
 
         return $identify;
