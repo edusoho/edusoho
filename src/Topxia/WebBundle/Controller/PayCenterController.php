@@ -247,6 +247,11 @@ class PayCenterController extends BaseController
     {
         if ($name == 'llcbpay' || $name == 'llquickpay') {
             $returnArray              = $request->request->all();
+             if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
+                $name = 'llcbpay';
+              } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
+                $name == 'llquickpay';
+              }
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
@@ -269,7 +274,7 @@ class PayCenterController extends BaseController
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
-            return $this->redirect('pay_error');
+            return $this->redirect($this->generateUrl("pay_error"));
         }
 
         $processor = OrderProcessorFactory::create($order['targetType']);
@@ -294,7 +299,12 @@ class PayCenterController extends BaseController
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
         } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
-            $returnArray              = json_decode(file_get_contents('php://input'), true);
+              $returnArray              = json_decode(file_get_contents('php://input'), true);
+             if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
+                $name = 'llcbpay';
+              } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
+                $name == 'llquickpay';
+              }
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {

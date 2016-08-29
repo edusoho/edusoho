@@ -2,7 +2,6 @@
 namespace Topxia\Component\Payment\Llcbpay;
 
 use Topxia\Component\Payment\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class LlcbpayResponse extends Response
 {
@@ -22,7 +21,7 @@ class LlcbpayResponse extends Response
         $result= json_decode($this->confirmSellerSendGoods(), true);
 
 
-        if ($result['result_pay'] == 'SUCCESS') {
+        if (isset($result['result_pay']) && $result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
             $data['status'] = 'unknown';

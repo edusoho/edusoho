@@ -20,7 +20,7 @@ class LlquickpayResponse extends Response
             throw new \RuntimeException(sprintf('快捷支付校验失败(%s)。', $error));
         }
         $result= json_decode($this->confirmSellerSendGoods(), true);
-        if ($result['result_pay'] == 'SUCCESS') {
+        if (isset($result['result_pay']) && $result['result_pay'] == 'SUCCESS') {
             $data['status'] = 'success';
         } else {
             $data['status'] = 'unknown';

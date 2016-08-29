@@ -2,7 +2,7 @@
 namespace Topxia\Component\Payment\Llquickpay;
 
 use Topxia\Component\Payment\Request;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Topxia\Service\Common\ServiceKernel;
 
 class LlquickpayRequest extends Request
 {
@@ -49,7 +49,11 @@ class LlquickpayRequest extends Request
         $converted['oid_partner']  = $this->options['key'];
         $converted['sign_type']    = 'MD5';
         $converted['version']      = '1.0';
-        $converted['user_id']      = $params['userId'];
+        $identify = $this->getSettingService()->get('llpay_identify');
+        if (!$identify) {
+            $identify = $this->getIdentify();
+        }
+        $converted['user_id']      = $identify."_".$params['userId'];
         $converted['timestamp']    = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
@@ -57,7 +61,7 @@ class LlquickpayRequest extends Request
 
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
-        $converted['pay_type']   = '2';
+        $converted['pay_type']   = '1';
         $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId']));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
@@ -114,5 +118,19 @@ class LlquickpayRequest extends Request
         if (strpos($userAgent, 'WAP')) {
             return 'WAP';
         }
+    }
+
+    public function getIdentify()
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $random = $chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)].$chars[mt_rand(0, 61)];
+        $identify = uniqid().$random;
+        $this->getSettingService()->set('llpay_identify', $identify);
+        return $identify;
+    }
+
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
