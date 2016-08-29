@@ -489,7 +489,6 @@ class CourseManageController extends BaseController
         $courseId     = $id;
         $course       = $this->getCourseService()->getCourse($courseId);
         $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
-        $type         = $type;
         $title        = '';
         $url          = '';
 
