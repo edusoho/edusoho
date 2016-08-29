@@ -6,11 +6,11 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $this->batchUpdate($index);
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -34,11 +34,20 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    protected function batchUpdate($index)
     {
         $connection = $this->getConnection();
 
-        $connection->exec("UPDATE orders o SET payment = 'none' WHERE (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1) IS NOT NULL AND userId = (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1)  AND o.status='paid' AND o.payment = 'outside';");
+        $count = $connection->fetchColumn("SELECT COUNT(o.id) FROM orders o, order_log ol WHERE o.id = ol.orderId AND ol.type='created' AND o.userId = ol.userId AND o.status = 'paid' AND o.payment = 'outside';", array(), 0);
+
+        if(($index + 1) * 1000 < $count){
+            $connection->exec("UPDATE orders o SET payment = 'none' WHERE (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1) IS NOT NULL AND userId = (SELECT userId FROM order_log ol WHERE o.id = ol.orderId AND ol.type='created' ORDER BY ol.createdTime DESC LIMIT 1)  AND o.status='paid' AND o.payment = 'outside' LIMIT 1000;");
+            return array(
+                'index'    => $index + 1,
+                'message'  => '正在升级数据...',
+                'progress' => 4.4
+            );
+        }
     }
 
     protected function isFieldExist($table, $filedName)
