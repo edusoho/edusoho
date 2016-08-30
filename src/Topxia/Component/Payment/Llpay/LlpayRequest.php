@@ -54,8 +54,6 @@ class LlpayRequest extends Request
             $identify = $this->getIdentify();
         }
         $converted['user_id']      = $identify."_".$params['userId'];
-        var_dump($converted['user_id']);
-        exit();
         $converted['timestamp']    = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
