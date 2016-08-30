@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -446,9 +447,14 @@ class CourseManageController extends BaseController
             );
         }
 
+        //获取直播供应商
+        $client   = new EdusohoLiveClient();
+        $capacity = $client->getCapacity();
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course'   => $course,
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'capacity' => $capacity
         ));
     }
 
@@ -483,7 +489,6 @@ class CourseManageController extends BaseController
         $courseId     = $id;
         $course       = $this->getCourseService()->getCourse($courseId);
         $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
-        $type         = $type;
         $title        = '';
         $url          = '';
 

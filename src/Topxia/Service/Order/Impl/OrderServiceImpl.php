@@ -525,9 +525,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         $orderBy = array();
 
-        if ($sort == 'latest') {
-            $orderBy = array('createdTime', 'DESC');
-        } elseif ($sort == 'early') {
+        if ($sort == 'early') {
             $orderBy = array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');
@@ -543,9 +541,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         $orderBy = array();
 
-        if ($sort == 'latest') {
-            $orderBy = array('createdTime', 'DESC');
-        } elseif ($sort == 'early') {
+        if ($sort == 'early') {
             $orderBy = array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');

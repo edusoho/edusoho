@@ -50,9 +50,7 @@ class UserSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
-            if (isset($defaultSetting['user_name'])) {
-                $defaultSetting['user_name'] = $defaultSetting['user_name'];
-            } else {
+            if (!isset($defaultSetting['user_name'])) {
                 $defaultSetting['user_name'] = '学员';
             }
 

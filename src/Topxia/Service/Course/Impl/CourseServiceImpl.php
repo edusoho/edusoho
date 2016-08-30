@@ -94,14 +94,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (is_array($sort)) {
             $orderBy = $sort;
-        } elseif ($sort == 'popular') {
+        } elseif ($sort == 'popular' || $sort == 'hitNum') {
             $orderBy = array('hitNum', 'DESC');
         } elseif ($sort == 'recommended') {
             $orderBy = array('recommendedTime', 'DESC');
         } elseif ($sort == 'Rating') {
             $orderBy = array('Rating', 'DESC');
-        } elseif ($sort == 'hitNum') {
-            $orderBy = array('hitNum', 'DESC');
         } elseif ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
@@ -1110,10 +1108,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
-        if (array_key_exists('copyId', $lesson)) {
-            $lesson['copyId'] = $lesson['copyId'];
-        }
-
         $lesson = $this->getLessonDao()->addLesson(
             LessonSerialize::serialize($lesson)
         );
@@ -1185,9 +1179,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $lesson['mediaSource'] = $media['source'];
                 $lesson['mediaUri']    = $media['uri'];
             }
-        } elseif ($lesson['type'] == 'testpaper') {
-            $lesson['mediaId'] = $lesson['mediaId'];
-        } elseif ($lesson['type'] == 'live') {
+        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'live') {
+            unset($lesson['media']);
+            return $lesson;
         } else {
             $lesson['mediaId']     = 0;
             $lesson['mediaName']   = '';
@@ -1745,10 +1739,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $chapter['number']   = $this->getNextChapterNumber($chapter['courseId']);
             $chapter['parentId'] = 0;
-        }
-
-        if (array_key_exists('copyId', $chapter)) {
-            $chapter['copyId'] = $chapter['copyId'];
         }
 
         $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
@@ -2629,7 +2619,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson       = $this->getLessonDao()->getLesson($lessonId);
         $mediaId      = $lesson["mediaId"];
         $client       = new EdusohoLiveClient();
-        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+        $replayList   = $client->createReplayList($mediaId, "查看回放", $lesson["liveProvider"]);
 
         if (array_key_exists("error", $replayList)) {
             return $replayList;
@@ -2661,6 +2651,35 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
 
         return $replayList;
+    }
+
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId)
+    {
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (!$file) {
+            throw $this->createServiceException("文件不存在");
+        }
+
+        $lessonFields = array(
+            'mediaId'      => $file['id'],
+            'mediaName'    => $file['filename'],
+            'mediaSource'  => 'self',
+            'replayStatus' => 'videoGenerated'
+        );
+
+        $updatedLesson = LessonSerialize::unserialize(
+            $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($lessonFields))
+        );
+
+        $this->dispatchEvent("course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
+
+        return $lesson;
     }
 
     public function entryReplay($lessonId, $courseLessonReplayId)

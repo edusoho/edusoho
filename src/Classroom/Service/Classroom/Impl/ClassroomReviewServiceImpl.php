@@ -45,9 +45,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     private function _prepareReviewSearchConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if (is_array($value)) {
-                return true;
-            } elseif (ctype_digit((string) $value)) {
+            if (is_array($value) || ctype_digit((string) $value)) {
                 return true;
             }
 

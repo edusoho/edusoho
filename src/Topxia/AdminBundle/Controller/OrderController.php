@@ -136,7 +136,7 @@ class OrderController extends BaseController
         if ($targetType == 'vip') {
             $results = $this->generateVipExportData($orders, $status, $users, $profiles, $payment, $results);
         } else {
-            $results = $this->generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results);
+            $results = $this->generateExportData($orders, $status, $payment, $users, $profiles, $results);
         }
 
         $loop = $request->query->get('loop', 0);
@@ -249,7 +249,7 @@ class OrderController extends BaseController
         return $results;
     }
 
-    private function generateExportData($targetType, $orders, $status, $payment, $users, $profiles, $results)
+    private function generateExportData($orders, $status, $payment, $users, $profiles, $results)
     {
         foreach ($orders as $key => $orders) {
             $member = "";
