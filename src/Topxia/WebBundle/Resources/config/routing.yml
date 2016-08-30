@@ -649,6 +649,10 @@ course_manage:
     pattern:  /course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:CourseManage:index }
 
+course_manage_info:
+    path: /course/{id}/manage/info
+    defaults: { _controller: TopxiaWebBundle:CourseManage:info }
+
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:CourseManage:base }
@@ -793,6 +797,7 @@ course_manage_lesson_create:
 course_manage_lesson_file_status:
     pattern:  /course/{id}/manage/lesson/fileStatus
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+
 
 course_draft_create:
     pattern:  /course/draft/create

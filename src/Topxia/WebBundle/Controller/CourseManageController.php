@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseManageController extends BaseController
 {
@@ -17,10 +17,24 @@ class CourseManageController extends BaseController
         }
 
         $courseManagePermission = $this->getPermissionExtension()->getPermissionByCode('course_manage');
-        $defaultMenu            = $this->getPermissionExtension()->getFirstChild($this->getPermissionExtension()->getFirstChild($courseManagePermission));
+        $menu            = $this->getPermissionExtension()->getFirstChild($courseManagePermission);
+
+        $firstChild = $this->getPermissionExtension()->getFirstChild($menu);
+
+        if(!empty($firstChild)){
+            $menu = $firstChild;
+        }
 
         return $this->render('TopxiaWebBundle:CourseManage:index.html.twig', array(
-            'menu'   => $defaultMenu,
+            'menu'   => $menu,
+            'course' => $course
+        ));
+    }
+
+    public function infoAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage:layout.html.twig', array(
             'course' => $course
         ));
     }
@@ -114,7 +128,7 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
@@ -342,24 +356,24 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $key => $order) {
             $column = "";
-            $column .= $order['sn'].",";
-            $column .= $status[$order['status']].",";
-            $column .= $order['title'].",";
-            $column .= "《".$course['title']."》".",";
-            $column .= $order['totalPrice'].",";
+            $column .= $order['sn'] . ",";
+            $column .= $status[$order['status']] . ",";
+            $column .= $order['title'] . ",";
+            $column .= "《" . $course['title'] . "》" . ",";
+            $column .= $order['totalPrice'] . ",";
 
             if (!empty($order['coupon'])) {
-                $column .= $order['coupon'].",";
+                $column .= $order['coupon'] . ",";
             } else {
-                $column .= "无".",";
+                $column .= "无" . ",";
             }
 
-            $column .= $order['couponDiscount'].",";
-            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
-            $column .= $order['amount'].",";
-            $column .= $payment[$order['payment']].",";
-            $column .= $users[$order['userId']]['nickname'].",";
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $column .= $order['couponDiscount'] . ",";
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) . "," : '0,';
+            $column .= $order['amount'] . ",";
+            $column .= $payment[$order['payment']] . ",";
+            $column .= $users[$order['userId']]['nickname'] . ",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] . "," : "-" . ",";
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $column .= '管理员添加,';
@@ -367,7 +381,7 @@ class CourseManageController extends BaseController
                 $column .= "-,";
             }
 
-            $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
+            $column .= date('Y-n-d H:i:s', $order['createdTime']) . ",";
 
             if ($order['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
@@ -379,13 +393,13 @@ class CourseManageController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("%s-订单-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
@@ -416,7 +430,7 @@ class CourseManageController extends BaseController
             foreach ($data['ids'] as $teacherId) {
                 $teachers[] = array(
                     'id'        => $teacherId,
-                    'isVisible' => empty($data['visible_'.$teacherId]) ? 0 : 1
+                    'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
                 );
             }
 
