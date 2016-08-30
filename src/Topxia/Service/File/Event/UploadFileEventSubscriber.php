@@ -103,7 +103,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
         }
 
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions);
-        foreach ($attachments as $key => $attachment) {
+        foreach ($attachments as $attachment) {
             $this->getUploadFileService()->deleteUseFile($attachment['id']);
         }
     }
