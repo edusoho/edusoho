@@ -43,16 +43,14 @@ class LlpayResponse extends Response
 
     private function confirmSellerSendGoods()
     {
-        $params                  = $this->params;
-        $data                    = array();
+        $params                         = $this->params;
+        $data                              = array();
         $data['oid_partner']     = $params['oid_partner'];
-        $data['dt_order']        = $params['dt_order'];
-        $data['no_order']        = $params['no_order'];
-        $data['sign_type']       = $params['sign_type'];
-        $data['sign']            = $this->signParams($data);
+        $data['dt_order']          = $params['dt_order'];
+        $data['no_order']         = $params['no_order'];
+        $data['sign_type']        = $params['sign_type'];
+        $data['sign']                  = $this->signParams($data);
         $response = $this->postRequest($this->url, json_encode($data));
-        var_dump($response);
-        exit();
         return $response;
     }
 
@@ -73,7 +71,7 @@ class LlpayResponse extends Response
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
-        $timer = 1;
+        $timer = 0;
         while($timer <2) {
               if($curlinfo ['http_code'] == 200) {
                   break;
