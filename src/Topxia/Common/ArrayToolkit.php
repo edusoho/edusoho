@@ -156,7 +156,7 @@ class ArrayToolkit
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $array[$key] = self::trim($value);
+                $array[$key] = static::trim($value);
             } elseif (is_string($value)) {
                 $array[$key] = trim($value);
             }

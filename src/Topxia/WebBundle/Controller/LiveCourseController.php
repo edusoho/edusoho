@@ -508,7 +508,7 @@ class LiveCourseController extends BaseController
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
-                $item["canRecord"] = $item['replayStatus'] == 'videoGenerated' ? false : $this->_canRecord($item['mediaId']);
+                $item["canRecord"] = !($item['replayStatus'] == 'videoGenerated') && $this->_canRecord($item['mediaId']);
                 $item['file']      = $this->getLiveReplayMedia($item);
                 $courseItems[$key] = $item;
             }

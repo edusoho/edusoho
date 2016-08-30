@@ -404,8 +404,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->updateCourse($course['id'], array('lessonNum' => ($lesson['number'] - 1)));
-
         $this->getLogService()->info('open_course', 'add_lesson', "添加公开课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("open.course.lesson.create", array('lesson' => $lesson));
 
@@ -537,7 +535,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions  = array(
+        $conditions = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -843,9 +841,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $lesson['mediaSource'] = $media['source'];
                 $lesson['mediaUri']    = $media['uri'];
             }
-        } elseif ($lesson['type'] == 'testpaper') {
-            $lesson['mediaId'] = $lesson['mediaId'];
-        } elseif ($lesson['type'] == 'live' || $lesson['type'] == 'liveOpen') {
+        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'liveOpen') {
+            unset($lesson['media']);
+            return $lesson;
         } else {
             $lesson['mediaId']     = 0;
             $lesson['mediaName']   = '';
@@ -892,7 +890,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = explode(',', $fields['tags']);
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
-                    $item = (int)$item['id'];
+                    $item = (int) $item['id'];
                 }
 
                 );
@@ -983,7 +981,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
-    private function findCourseTeachers($courseId)
+    public function findCourseTeachers($courseId)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
     }

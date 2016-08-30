@@ -82,8 +82,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchColumn($sql, array($etag));
     }
 
-    public function searchFiles($conditions, $orderBy = array('id', 'DESC'), $start, $limit)
+    public function searchFiles($conditions, $orderBy, $start, $limit)
     {
+        if (empty($orderBy)) {
+            $orderBy = array('id', 'DESC');
+        }
+
         if ($this->hasEmptyInCondition($conditions, array("globalIds", "targetTypes", "targets", "ids", "createdUserIds", "idsOr"))) {
             return array();
         }
