@@ -51,6 +51,8 @@ class LlpayResponse extends Response
         $data['sign_type']       = $params['sign_type'];
         $data['sign']            = $this->signParams($data);
         $response = $this->postRequest($this->url, json_encode($data));
+        var_dump($response);
+        exit();
         return $response;
     }
 
