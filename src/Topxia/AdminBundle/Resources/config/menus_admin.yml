@@ -471,6 +471,7 @@ admin_edu_cloud_search:
    parent: admin_app
 admin_app_im:
    name: 即时聊天设置
+   parent: admin_app
 admin_edu_cloud_attachment:
    name: 云附件设置
    parent: admin_app
