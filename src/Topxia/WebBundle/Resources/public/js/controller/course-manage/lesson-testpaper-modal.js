@@ -27,6 +27,7 @@ define(function (require, exports, module) {
         events: {
             'change #lesson-mediaId-field': '_changeLessonMedia',
             'click [name=testMode]' : '_onSwitchTestMode',
+            'click [name=doTimes]' : 'showRedoInterval'
         },
 
         setup : function(){
@@ -131,6 +132,14 @@ define(function (require, exports, module) {
                 rule: 'decimal',
                 errormessageRequired: '请填写建议时长'
             });
+
+            if ($('[name="doTimes"]').val() == 0) {
+                validator.addItem({
+                    element: '[name="redoInterval"]',
+                    required: true,
+                    rule: 'integer',
+                });
+            }
 
             $('#lesson-suggest-hour-field').bind('blur',function(){
                 var val = $(this).val();
@@ -281,6 +290,23 @@ define(function (require, exports, module) {
                 });
             }
 
+        },
+
+        showRedoInterval: function(event) {
+            var $this = $(event.currentTarget);
+
+            if ($this.val() == 1) {
+                $('#lesson-redo-interval-field').closest('.form-group').hide();
+                $('#lesson-redo-interval-field').val(0);
+                this.get('_validator').removeItem('[name="redoInterval"]');
+            } else {
+                $('#lesson-redo-interval-field').closest('.form-group').show();
+                this.get('_validator').addItem({
+                    element: '[name="redoInterval"]',
+                    required: true,
+                    rule: 'integer',
+                });
+            }
         }
     });
 
@@ -288,6 +314,8 @@ define(function (require, exports, module) {
         var testpaper = new Testpaper({
             element: '#course-lesson-form'
         }).render();
+
+        $('[data-toggle="tooltip"]').tooltip();
     };
 });
 

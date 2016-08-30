@@ -637,6 +637,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         // Delete course related data
         $this->getMemberDao()->deleteMembersByCourseId($id);
         $this->getLessonDao()->deleteLessonsByCourseId($id);
+        $this->getLessonExtendDao()->deleteLessonsByCourseId($id);
         $this->deleteCrontabs($lessons);
         $this->getChapterDao()->deleteChaptersByCourseId($id);
 
@@ -974,6 +975,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
             return null;
         }
+        $lessonExtend = $this->getLessonExtendDao()->getLesson($lessonId);
+        $lesson       = array_merge($lesson, $lessonExtend);
 
         return LessonSerialize::unserialize($lesson);
     }
@@ -1111,6 +1114,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getLessonDao()->addLesson(
             LessonSerialize::serialize($lesson)
         );
+
+        $argument['id'] = $lesson['id'];
+        $lessonExtend   = $this->getLessonExtendDao()->addLesson($argument);
+        $lesson         = array_merge($lesson, $lessonExtend);
 
         $this->updateCourseCounter($course['id'], array(
             'lessonNum'  => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
@@ -1280,6 +1287,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
         );
 
+        $lessonExtend = $this->updateLessonExtend($updatedLesson, $argument);
+        $updateLesson = array_merge($updatedLesson, $lessonExtend);
+
         $this->updateCourseCounter($course['id'], array(
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
@@ -1329,6 +1339,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLessonLearnDao()->deleteLearnsByLessonId($lessonId);
 
         $this->getLessonDao()->deleteLesson($lessonId);
+        $this->getLessonExtendDao()->deleteLesson($lessonId);
 
         // 更新课时序号
         $this->updateCourseCounter($course['id'], array(
@@ -2814,6 +2825,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
+    protected function updateLessonExtend($lesson, $fields)
+    {
+        $lessonExtend = $this->getLessonExtendDao()->getLesson($lesson['id']);
+        if ($lessonExtend) {
+            return $this->getLessonExtendDao()->updateLesson($lesson['id'], $fields);
+        } else {
+            $fields['id']       = $lesson['id'];
+            $fields['courseId'] = $lesson['courseId'];
+            return $this->getLessonExtendDao()->addLesson($fields);
+        }
+    }
+
     protected function getClassroomService()
     {
         return $this->createService('Classroom:Classroom.ClassroomService');
@@ -2837,6 +2860,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getLessonDao()
     {
         return $this->createDao('Course.LessonDao');
+    }
+
+    protected function getLessonExtendDao()
+    {
+        return $this->createDao('Course.LessonExtendDao');
     }
 
     protected function getCourseDraftDao()

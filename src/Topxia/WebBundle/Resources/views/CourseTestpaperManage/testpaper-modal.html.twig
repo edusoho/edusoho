@@ -35,6 +35,21 @@
       </div>
 
       <div class="form-group">
+        <div class="col-md-2 control-label"><label>{{'考试次数'|trans}}</label></div>
+        <div class="col-md-9 controls radios">
+          {{ radios('doTimes', {1:'单次', 0:'不限'}, lesson.doTimes|default('0')) }}
+        </div>
+      </div>
+
+      <div class="form-group" {% if lesson.doTimes|default('0') %}style="display:none;" {% endif %}>
+        <div class="col-md-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
+        <div class="col-md-9 controls">
+          <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ lesson.redoInterval|default('0') }}"> {{'分钟'|trans}}
+          <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="重考时间间隔：完成批阅后开始计时，计时结速后才可开始考试。"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
         <div class="col-md-9 controls">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
