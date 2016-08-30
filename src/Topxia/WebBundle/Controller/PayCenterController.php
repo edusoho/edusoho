@@ -247,11 +247,6 @@ class PayCenterController extends BaseController
     {
         if ($name == 'llpay') {
              $returnArray              = $request->request->all();
-             // if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
-             //    $name = 'llcbpay';
-             //  } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
-             //    $name == 'llquickpay';
-             //  }
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
@@ -299,12 +294,7 @@ class PayCenterController extends BaseController
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
         } elseif ($name == 'llpay') {
-              $returnArray              = json_decode(file_get_contents('php://input'), true);
-             // if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
-             //    $name = 'llcbpay';
-             //  } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
-             //    $name == 'llquickpay';
-             //  }
+            $returnArray              = json_decode(file_get_contents('php://input'), true);
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
