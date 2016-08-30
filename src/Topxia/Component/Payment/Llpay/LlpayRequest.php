@@ -1,10 +1,10 @@
 <?php
-namespace Topxia\Component\Payment\Llquickpay;
+namespace Topxia\Component\Payment\Llpay;
 
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
 
-class LlquickpayRequest extends Request
+class LlpayRequest extends Request
 {
     protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 
@@ -94,7 +94,6 @@ class LlquickpayRequest extends Request
     {
         preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9.]*/iu', $text, $results);
         $title = '';
-
         if ($results) {
             foreach ($results[0] as $result) {
                 if (!empty($result)) {

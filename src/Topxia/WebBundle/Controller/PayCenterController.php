@@ -245,13 +245,13 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
-        if ($name == 'llcbpay' || $name == 'llquickpay') {
-            $returnArray              = $request->request->all();
-             if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
-                $name = 'llcbpay';
-              } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
-                $name == 'llquickpay';
-              }
+        if ($name == 'llpay') {
+             $returnArray              = $request->request->all();
+             // if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
+             //    $name = 'llcbpay';
+             //  } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
+             //    $name == 'llquickpay';
+             //  }
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
@@ -298,13 +298,13 @@ class PayCenterController extends BaseController
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
-        } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
+        } elseif ($name == 'llpay') {
               $returnArray              = json_decode(file_get_contents('php://input'), true);
-             if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
-                $name = 'llcbpay';
-              } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
-                $name == 'llquickpay';
-              }
+             // if (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(1, 8))) {
+             //    $name = 'llcbpay';
+             //  } elseif (isset($returnArray['pay_type']) && in_array($returnArray['pay_type'], array(2, 3))) {
+             //    $name == 'llquickpay';
+             //  }
             $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
@@ -329,9 +329,9 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == 'success') {
             list($success, $order) = $processor->pay($payData);
-
+            
             if ($success) {
-                if ($name == 'llcbpay' || $name == 'llquickpay') {
+                if ($name == 'llpay') {
                     return new Response("{'ret_code':'0000','ret_msg':'交易成功'}");
                 } else {
                     return new Response('success');
@@ -542,7 +542,6 @@ class PayCenterController extends BaseController
         $enableds = array();
 
         $setting = $this->setting('payment', array());
-
         if (empty($setting['enabled'])) {
             return $enableds;
         }
@@ -569,7 +568,6 @@ class PayCenterController extends BaseController
                 }
             }
         }
-
         return $enableds;
     }
 
