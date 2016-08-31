@@ -114,7 +114,7 @@
       {% endif %}
       ><span class="es-icon es-icon-edit prs"></span>{{'编辑'|trans}}</a>
     {% if lesson.type == 'testpaper' %}
-      <a class="btn btn-link" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="es-icon es-icon-visibility prs"></span>{{'预览'|trans}}</a>
+      <a class="btn btn-link" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId,lessonId:lesson.id}) }}" target="_blank"><span class="es-icon es-icon-visibility prs"></span>{{'预览'|trans}}</a>
     {% else %}
       <a class="btn btn-link" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="es-icon es-icon-visibility prs"></span>{{'预览'|trans}}</a>
     {% endif %}

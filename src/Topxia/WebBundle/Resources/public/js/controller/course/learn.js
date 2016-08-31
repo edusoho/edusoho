@@ -547,8 +547,64 @@ define(function(require, exports, module) {
                                     html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
-                                    var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
-                                    html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
+                                    var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
+                                    
+                                    var paperScore = (parseFloat(result.objectiveScore) + parseFloat(result.subjectiveScore)).toFixed(1);
+                                    html = '试卷已批阅，成绩：' + result.score + '／' + paperScore; 
+                                    if (result.passedStatus == 'unpassed') {
+                                        html += '<span class="text-warning mls mrs">未通过</span>';
+                                    } else {
+                                        html += '<span class="text-success mls mrs">已通过</span>';
+                                    }
+
+                                    html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">查看结果</a>';
+
+                                    var now = parseInt(new Date().getTime()/1000);
+                                    if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 60)) {
+                                        
+                                        if (iID) {
+                                            clearInterval(iID);
+                                        }
+
+                                        function generateTestHtml() {
+                                            var now = parseInt(new Date().getTime()/1000),
+                                                day=0,
+                                                hour=0,
+                                                minute=0,
+                                                second=0,
+                                                countDownHtml = '';
+                                            var diffTime = parseInt(parseInt(result.checkedTime) + parseInt(lesson.redoInterval * 60)) - now;
+
+                                            if (diffTime > 0) {
+                                                day = Math.floor(diffTime / (60 * 60 * 24));
+                                                hour = Math.floor(diffTime / (60 * 60)) - (day * 24);
+                                                minute = Math.floor(diffTime / 60) - (day * 24 * 60) - (hour * 60);
+                                                second = Math.floor(diffTime) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                                            }
+
+                                            if (hour <= 9) hour = '0' + hour;
+                                            if (minute <= 9) minute = '0' + minute;
+                                            if (second <= 9) second = '0' + second;
+                                            
+                                            if (diffTime <= 0) {
+                                                countDownHtml = html + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
+                                            } else {
+                                                countDownHtml = html + '<a href="javascript:;" class="btn btn-default btn-sm mrs" disabled="disabled">再做一次</a>';
+                                                countDownHtml += '<span class="text-warning">重考倒计时:' + hour + ':' + minute + ':' + second + '</span>';
+                                            }
+                                            
+                                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html(countDownHtml);
+
+                                            diffTime--;
+                                        }
+
+                                        generateTestHtml();
+
+                                        iID = setInterval(generateTestHtml, 1000);
+                                    } else if (lesson.doTimes == 0 && lesson.redoInterval == 0) {
+                                        html += '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
+                                    }
+
                                 } else if (result.status == 'doing' || result.status == 'paused') {
                                     html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
                                 } else if (result.status == 'reviewing') {
