@@ -48,7 +48,7 @@ class LlpayRequest extends Request
         }
         $converted['oid_partner']  = $this->options['key'];
         $converted['sign_type']    = 'MD5';
-        $converted['version']      = '1.2';
+        $converted['version']      = '1.0';
         $identify = $this->getSettingService()->get('llpay_identify');
         if (!$identify) {
             $identify = $this->getIdentify();
@@ -97,7 +97,7 @@ class LlpayRequest extends Request
 
         return $title;
     }
-    
+
     public function getIdentify()
     {
         $identify = substr(md5(uniqid()), 0, 12);
