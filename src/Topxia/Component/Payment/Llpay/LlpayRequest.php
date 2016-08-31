@@ -48,7 +48,7 @@ class LlpayRequest extends Request
         }
         $converted['oid_partner']  = $this->options['key'];
         $converted['sign_type']    = 'MD5';
-        $converted['version']      = '1.0';
+        $converted['version']      = '1.2';
         $identify = $this->getSettingService()->get('llpay_identify');
         if (!$identify) {
             $identify = $this->getIdentify();
@@ -62,7 +62,7 @@ class LlpayRequest extends Request
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$params['userId']));
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$identify."_".$params['userId']));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
@@ -77,15 +77,8 @@ class LlpayRequest extends Request
     public function convertMobileParams($converted, $userAgent)
     {
         unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
-        $mobileType = $this->mobileType($userAgent);
-        $converted['version'] = '1.0';
-        if ($mobileType == 'Android') {
-            $converted['app_request'] = 1;
-        } elseif ($mobileType == 'IOS') {
-            $converted['app_request'] = 2;
-        } elseif ($mobileType == 'WAP') {
-            $converted['app_request'] = 3;
-        }
+        $converted['version'] = '1.2';
+        $converted['app_request'] = 3;
         $converted['sign'] = $this->signParams($converted);
         return array('req_data'=>json_encode($converted));
     }
@@ -104,21 +97,7 @@ class LlpayRequest extends Request
 
         return $title;
     }
-    public function mobileType($userAgent)
-    {
-        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad')) {
-            return 'IOS';
-        }
-
-        if (strpos($userAgent, 'Android')) {
-            return 'Android';
-        }
-
-        if (strpos($userAgent, 'WAP')) {
-            return 'WAP';
-        }
-    }
-
+    
     public function getIdentify()
     {
         $identify = substr(md5(uniqid()), 0, 12);

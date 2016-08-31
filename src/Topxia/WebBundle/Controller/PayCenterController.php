@@ -247,7 +247,6 @@ class PayCenterController extends BaseController
     {
         if ($name == 'llpay') {
              $returnArray              = $request->request->all();
-            $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->query->all();
@@ -295,7 +294,6 @@ class PayCenterController extends BaseController
             $returnArray = $request->query->all();
         } elseif ($name == 'llpay') {
             $returnArray              = json_decode(file_get_contents('php://input'), true);
-            $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->request->all();
