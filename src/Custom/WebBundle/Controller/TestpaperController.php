@@ -20,14 +20,14 @@ class TestpaperController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIdsAndOrgId($testpaperIds, $status, in_array('ROLE_SUPER_ADMIN', $user['roles']) ? 0 : $user['orgId']),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIdsAndOrgId($testpaperIds, $status, $user['orgCode']),
             10
         );
 
         $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIdsAndOrgId(
             $testpaperIds,
             $status,
-            in_array('ROLE_SUPER_ADMIN', $user['roles']) ? 0 : $user['orgId'],
+            $user['orgCode'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

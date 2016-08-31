@@ -41,8 +41,7 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-
-        if (!(isset($conditions['orgCode']) && !in_array('ROLE_SUPER_ADMIN', $user['roles']) && $conditions['orgCode'] == '1.')) {
+        if (!(isset($conditions['orgCode']) && strlen($conditions['orgCode']) < strlen($user['orgCode']) && strpos($user['orgCode'], $conditions['orgCode']) == 0)) {
             $conditions = $this->fillOrgCode($conditions);
         }
 
@@ -84,6 +83,9 @@ class CourseController extends BaseController
             }
         }
 
+        $orgParentIds = explode('.', substr($user['orgCode'], 0, strlen($user['orgCode'])-1));
+        array_pop($orgParentIds);
+
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
@@ -106,7 +108,8 @@ class CourseController extends BaseController
             'default'        => $default,
             'classrooms'     => $classrooms,
             'filter'         => $filter,
-            'vips'           => $vips
+            'vips'           => $vips,
+            'orgParentIds'   => $orgParentIds
         ));
     }
 

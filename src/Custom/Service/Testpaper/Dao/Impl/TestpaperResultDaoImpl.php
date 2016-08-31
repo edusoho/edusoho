@@ -9,7 +9,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 {
     protected $table = 'testpaper_result';
 
-    public function findTestPaperResultCountByStatusAndTestIdsAndOrgId($ids, $status, $orgId)
+    public function findTestPaperResultCountByStatusAndTestIdsAndOrgId($ids, $status, $orgCode)
     {
         if (empty($ids)) {
             return null;
@@ -19,16 +19,12 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
         array_push($ids, $status);
 
-        $sql = "SELECT COUNT(*) FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ?";
+        $sql = "SELECT COUNT(*) FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ? AND `orgCode` LIKE '%{$orgCode}%'";
 
-        if (!empty($orgId)) {
-            $sql .= " AND orgId = ?";
-            array_push($ids, $orgId);
-        }
         return $this->getConnection()->fetchColumn($sql, $ids);
     }
 
-    public function findTestPaperResultsByStatusAndTestIdsAndOrgId($ids, $status, $orgId)
+    public function findTestPaperResultsByStatusAndTestIdsAndOrgId($ids, $status, $orgCode)
     {
         if (empty($ids)) {
             return null;
@@ -38,12 +34,8 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
         array_push($ids, $status);
 
-        $sql = "SELECT * FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ?";
+        $sql = "SELECT * FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ? AND `orgCode` LIKE '%{$orgCode}%'";
 
-        if (!empty($orgId)) {
-            $sql .= " AND orgId = ?";
-            array_push($ids, $orgId);
-        }
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 }

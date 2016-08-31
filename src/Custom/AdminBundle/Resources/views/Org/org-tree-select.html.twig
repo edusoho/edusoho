@@ -26,9 +26,10 @@
       {% endif %}
       
       <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
-        {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
-          <option value="1.">总部</option>
-        {% endif %}
+        {% for orgParentId in orgParentIds %}
+          {% set orgParent = data('Org',{id:orgParentId}) %};
+          <option value={{ orgParent.orgCode }}{% if app.request.query.get('orgCode') ==  orgParent.orgCode %} selected="selected" {% endif %}>{{ orgParent.name }}</option>
+        {% endfor %}
         {% for org in currentOrgTree %}
           <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
         {% endfor %}
