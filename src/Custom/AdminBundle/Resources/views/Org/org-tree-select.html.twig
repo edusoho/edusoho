@@ -26,7 +26,7 @@
       {% endif %}
       
       <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
-        {% for orgParentId in orgParentIds %}
+        {% for orgParentId in orgParentIds|default(null) %}
           {% set orgParent = data('Org',{id:orgParentId}) %};
           <option value={{ orgParent.orgCode }}{% if app.request.query.get('orgCode') ==  orgParent.orgCode %} selected="selected" {% endif %}>{{ orgParent.name }}</option>
         {% endfor %}
