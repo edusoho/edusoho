@@ -496,11 +496,15 @@ class CourseController extends CourseBaseController
             $postCoursePackages = $this->getPostCourseService()->findPostCoursePackagesByUser($user);
             $courses = ArrayToolkit::column($postCoursePackages, 'course');
             $courses = $this->getInternalTrainingService()->decideCoursesStudyStatus($courses, $user);
+            $currentCourse = $this->getInternalTrainingService()->chooseCurrentCourse($courses);
 
+            
             foreach ($courses as $key => $postCourse) {
                 if ($postCourse['id'] == $course['id']) {
-                    if ($courses[$key-1]['studyStatus'] != 'finished') {
-                        return $this->createMessageResponse('info', "请先完成上一节课程《{$courses[$key-1]['title']}》的学习", null, 3000, $this->generateUrl('internal_training_index'));
+                    for ($i = 1; $i <= $key-1; $i++) {
+                        if ($courses[$i]['studyStatus'] != 'finished') {
+                            return $this->createMessageResponse('info', "前置课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('internal_training_index'));
+                        }
                     }
                 }
             }
