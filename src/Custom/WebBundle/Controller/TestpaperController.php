@@ -4,9 +4,9 @@ namespace Custom\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\TestpaperController as BaseTestpaperController;
 
-class TestpaperController extends BaseController
+class TestpaperController extends BaseTestpaperController
 {
     public function teacherCheckInCourseAction(Request $request, $id, $status)
     {
@@ -53,15 +53,5 @@ class TestpaperController extends BaseController
     protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Custom:Testpaper.TestpaperService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

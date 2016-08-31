@@ -1,5 +1,7 @@
 parameters:
 #    custom_admin.example.class: Custom\AdminBundle\Example
+    template_overwrite_map:
+        OrgBundle : CustomAdminBundle
 
 services:
 #    custom_admin.example:

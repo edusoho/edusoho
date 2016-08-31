@@ -4,9 +4,9 @@ namespace Custom\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\AdminBundle\Controller\BaseController;
+use Topxia\AdminBundle\Controller\CourseController as BaseCourseController;
 
-class CourseController extends BaseController
+class CourseController extends BaseCourseController
 {
     public function indexAction(Request $request, $filter)
     {
@@ -98,7 +98,7 @@ class CourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('CustomAdminBundle:Course:index.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions'     => $conditions,
             'courses'        => $courses,
             'users'          => $users,
@@ -111,30 +111,5 @@ class CourseController extends BaseController
             'vips'           => $vips,
             'orgParentIds'   => $orgParentIds
         ));
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    protected function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getVipLevelService()
-    {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }
