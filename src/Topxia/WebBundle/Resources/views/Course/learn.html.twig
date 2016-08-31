@@ -151,7 +151,7 @@
         </div>
         <div class="modal-footer">
           {% if is_plugin_installed('InternalTraining') %}
-            <a href="{{ path('internal_training_index') }}" class="btn btn-primary">{{'会课程列表页'|trans}}</a>
+            <a href="{{ path('internal_training_index') }}" class="btn btn-primary">{{'回课程列表页'|trans}}</a>
           {% else %}
             <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">{{'回课程主页'|trans}}</a>
           {% endif %}
