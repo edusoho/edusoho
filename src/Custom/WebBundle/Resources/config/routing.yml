@@ -1,0 +1,3 @@
+course_manage_test_check:
+    pattern: /course/check/{id}/{status}/list
+    defaults: { _controller: CustomWebBundle:Testpaper:teacherCheckInCourse }
