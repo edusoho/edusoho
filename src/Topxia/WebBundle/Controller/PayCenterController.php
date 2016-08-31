@@ -245,9 +245,8 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
-        if ($name == 'llcbpay' || $name == 'llquickpay') {
-            $returnArray              = $request->request->all();
-            $returnArray['userAgent'] = $request->headers->get('User-Agent');
+        if ($name == 'llpay') {
+             $returnArray              = $request->request->all();
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->query->all();
@@ -269,7 +268,7 @@ class PayCenterController extends BaseController
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
-            return $this->redirect('pay_error');
+            return $this->redirect($this->generateUrl("pay_error"));
         }
 
         $processor = OrderProcessorFactory::create($order['targetType']);
@@ -293,9 +292,8 @@ class PayCenterController extends BaseController
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
-        } elseif ($name == 'llcbpay' || $name == 'llquickpay') {
+        } elseif ($name == 'llpay') {
             $returnArray              = json_decode(file_get_contents('php://input'), true);
-            $returnArray['userAgent'] = $request->headers->get('User-Agent');
             $returnArray['isMobile']  = $this->isMobileClient();
         } else {
             $returnArray = $request->request->all();
@@ -319,9 +317,9 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == 'success') {
             list($success, $order) = $processor->pay($payData);
-
+            
             if ($success) {
-                if ($name == 'llcbpay' || $name == 'llquickpay') {
+                if ($name == 'llpay') {
                     return new Response("{'ret_code':'0000','ret_msg':'交易成功'}");
                 } else {
                     return new Response('success');
@@ -532,7 +530,6 @@ class PayCenterController extends BaseController
         $enableds = array();
 
         $setting = $this->setting('payment', array());
-
         if (empty($setting['enabled'])) {
             return $enableds;
         }
@@ -559,7 +556,6 @@ class PayCenterController extends BaseController
                 }
             }
         }
-
         return $enableds;
     }
 
