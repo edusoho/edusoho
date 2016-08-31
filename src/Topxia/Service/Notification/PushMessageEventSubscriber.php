@@ -101,13 +101,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onUserFollow(ServiceEvent $event) {
         $friend = $event->getSubject();
-
-        $data = array(
-            'from' => $this->getUserService()->getSimpleUser($friend['fromId']),
-            'to'   => $this->getUserService()->getSimpleUser($friend['toId']),
-        );
-
-        $this->pushCloud('friend.follow', $data);
+        $result = $this->pushCloud('user.service.follow', $friend);
     }
 
     public function onUserCreate(ServiceEvent $event)
@@ -376,6 +370,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $article['thumb']         = $this->getFileUrl($article['thumb']);
         $article['originalThumb'] = $this->getFileUrl($article['originalThumb']);
         $article['picture']       = $this->getFileUrl($article['picture']);
+        $article['body']          = $article['title'];
         return $article;
     }
 
