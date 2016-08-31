@@ -370,7 +370,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $article['thumb']         = $this->getFileUrl($article['thumb']);
         $article['originalThumb'] = $this->getFileUrl($article['originalThumb']);
         $article['picture']       = $this->getFileUrl($article['picture']);
-        $article['body']          = $this->connvertHtml($article['title']);
         return $article;
     }
 
