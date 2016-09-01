@@ -144,6 +144,7 @@ define(function (require, exports, module) {
                     element: '[name="redoInterval"]',
                     required: true,
                     rule: 'arithmetic_float max{max:1000000000}',
+                    errormessageMax:'时间不能超过10位'
                 });
             }
 
@@ -303,14 +304,14 @@ define(function (require, exports, module) {
 
             if ($this.val() == 1) {
                 $('#lesson-redo-interval-field').closest('.form-group').hide();
-                $('#lesson-redo-interval-field').val(0);
                 this.get('_validator').removeItem('[name="redoInterval"]');
             } else {
                 $('#lesson-redo-interval-field').closest('.form-group').show();
                 this.get('_validator').addItem({
-                    element: '[name="arithmetic_float"]',
+                    element: '[name="redoInterval"]',
                     required: true,
-                    rule: 'arithmetic_number max{max:1000000000}',
+                    rule: 'arithmetic_float max{max:1000000000}',
+                    errormessageMax:'时间不能超过10位'
                 });
             }
         }
