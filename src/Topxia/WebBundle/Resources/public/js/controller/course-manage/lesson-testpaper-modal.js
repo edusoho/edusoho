@@ -143,7 +143,7 @@ define(function (require, exports, module) {
                 validator.addItem({
                     element: '[name="redoInterval"]',
                     required: true,
-                    rule: 'arithmetic_float',
+                    rule: 'arithmetic_float max{max:1000000000}',
                 });
             }
 
@@ -310,7 +310,7 @@ define(function (require, exports, module) {
                 this.get('_validator').addItem({
                     element: '[name="arithmetic_float"]',
                     required: true,
-                    rule: 'arithmetic_number',
+                    rule: 'arithmetic_number max{max:1000000000}',
                 });
             }
         }
