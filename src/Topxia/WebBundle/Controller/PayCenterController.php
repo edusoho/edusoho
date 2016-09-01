@@ -260,6 +260,10 @@ class PayCenterController extends BaseController
             return $this->forward('TopxiaWebBundle:PayCenter:resultNotice');
         }
 
+        if ($payData['status'] == 'unknown') {
+            return $this->redirect($this->generateUrl("pay_error"));
+        }
+
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
@@ -307,6 +311,11 @@ class PayCenterController extends BaseController
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
             return new Response('success');
         }
+
+        if ($payData['status'] == 'unknown') {
+            return new Response('success');
+        }
+        
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
