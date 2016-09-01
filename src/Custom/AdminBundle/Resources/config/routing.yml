@@ -1,3 +1,8 @@
 custom_admin_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: CustomAdminBundle:Default:index }
+
+admin_course:
+    pattern:  /course/{filter}/index
+    defaults: { _controller: CustomAdminBundle:Course:index, filter:'normal' }
+    permissions: [admin_course_manage]
