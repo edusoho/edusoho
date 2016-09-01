@@ -496,8 +496,6 @@ class CourseController extends CourseBaseController
             $postCoursePackages = $this->getPostCourseService()->findPostCoursePackagesByUser($user);
             $courses = ArrayToolkit::column($postCoursePackages, 'course');
             $courses = $this->getInternalTrainingService()->decideCoursesStudyStatus($courses, $user);
-            $currentCourse = $this->getInternalTrainingService()->chooseCurrentCourse($courses);
-
             
             foreach ($courses as $key => $postCourse) {
                 if ($postCourse['id'] == $course['id']) {
