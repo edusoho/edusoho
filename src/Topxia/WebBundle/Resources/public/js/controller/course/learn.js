@@ -589,7 +589,7 @@ define(function(require, exports, module) {
                                                 countDownHtml = html + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
                                             } else {
                                                 countDownHtml = html + '<a href="javascript:;" class="btn btn-default btn-sm mrs" disabled="disabled">再做一次</a>';
-                                                countDownHtml += '<span class="text-warning">重考倒计时:'+ day +'天' + hour + ':' + minute + ':' + second + '</span>';
+                                                countDownHtml += '<span class="text-warning">重考倒计时:'+ day +'天' + hour + '小时' + minute + '分钟' + second + '秒</span>';
                                             }
                                             
                                             $("#lesson-testpaper-content").find('.lesson-content-text-body').html(countDownHtml);
