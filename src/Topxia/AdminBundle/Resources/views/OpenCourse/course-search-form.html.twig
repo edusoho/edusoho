@@ -19,4 +19,10 @@
   </div>
   <button class="btn btn-primary">搜索</button>
 
+  <button class="btn btn-primary">搜索</button>
+  {% set tooltip_content = '<div style="width:250px;">
+              <span style="color:blue;">公开课说明</span><br>
+              1、编号无法修改以及排序；<br>
+            </div>' %}
+  {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign',content: tooltip_content,placement: 'left'} %}
 </form>
