@@ -674,11 +674,11 @@ class TestpaperController extends BaseController
 
         $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user);
 
-        $testResult['totalScore'] = $testpaper['score'];
-
         if (empty($testResult)) {
             return $this->createJsonResponse(array('status' => 'nodo'));
         }
+
+        $testResult['totalScore'] = $testpaper['score'];
 
         return $this->createJsonResponse($testResult);
     }
