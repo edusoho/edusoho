@@ -60,7 +60,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson       = $this->getLessonDao()->getLesson($id);
         $lessonExtend = $this->getLessonExtendDao()->getLesson($id);
 
-        return array_merge($lesson, $lessonExtend);
+        if ($lessonExtend) {
+            return array_merge($lesson, $lessonExtend);
+        } else {
+            return $lesson;
+        }
     }
 
     public function findLessonsByIds(array $ids)
@@ -976,7 +980,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getLesson($lessonId);
 
         if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
-            return null;
+            return array();
         }
 
         return LessonSerialize::unserialize($lesson);
