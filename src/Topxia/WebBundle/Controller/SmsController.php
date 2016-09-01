@@ -18,7 +18,7 @@ class SmsController extends BaseController
 
         if ($targetType == 'classroom') {
             $item                  = $this->getClassroomService()->getClassroom($id);
-            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('locked' => 0));
+            $verifiedMobileUserNum = $this->getUserService()->getUserCountByMobileNotEmpty();
             $url                   = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
@@ -31,7 +31,7 @@ class SmsController extends BaseController
                     $verifiedMobileUserNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'], 1);
                 }
             } else {
-                $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('locked' => 0));
+                $verifiedMobileUserNum = $this->getUserService()->getUserCountByMobileNotEmpty();
             }
         }
 
