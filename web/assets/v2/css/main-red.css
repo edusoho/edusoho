@@ -13699,6 +13699,11 @@ textarea {
     width: 32%;
   }
 }
+@media (max-width: 991px) {
+  .open-course-detail-operation .operation-list.no-border {
+    border-right: 1px solid transparent;
+  }
+}
 .open-course-detail-operation .operation-img.operation-share a {
   display: inline-block;
 }
@@ -13994,10 +13999,11 @@ textarea {
   position: relative;
   padding: 0;
   background-color: #000;
+  height: 500px;
 }
-@media (min-width: 992px) {
+@media (max-width: 767px) {
   .open-course-views {
-    height: 500px;
+    height: 300px;
   }
 }
 .open-course-views .mask-img {
@@ -14037,6 +14043,11 @@ textarea {
   margin-top: -80px;
   margin-left: -165px;
   text-align: center;
+}
+@media (max-width: 991px) {
+  .open-course-views .mask .mask-content {
+    margin-top: -60px;
+  }
 }
 .open-course-views .mask .mask-content h2 {
   color: #fff;
