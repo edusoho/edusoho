@@ -238,6 +238,8 @@ class CourseLessonController extends BaseController
         $json['testStartTime']          = $lesson['testStartTime'];
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
         $json['replayStatus']           = $lesson['replayStatus'];
+        $json['doTimes']                = isset($lesson['doTimes']) ? $lesson['doTimes'] : 0;
+        $json['redoInterval']           = isset($lesson['redoInterval']) ? $lesson['redoInterval'] : 0;
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
@@ -754,7 +756,8 @@ class CourseLessonController extends BaseController
             return $message = '不是试卷所属课程老师或学生';
         }
 
-        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $lesson          = $this->getCourseService()->getLesson($lessonId);
+        $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper = $this->getTestpaperService()->getTestpaper($testId);
@@ -766,8 +769,6 @@ class CourseLessonController extends BaseController
             }
 
             if ($status == 'do') {
-                $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
-
                 if ($testpaperResult) {
                     return $message = '您已经提交试卷，不能继续考试!';
                 }
@@ -775,6 +776,24 @@ class CourseLessonController extends BaseController
                 return $message = '实时考试，不能再考一次!';
             }
         }
+
+        if ($testpaperResult) {
+            if (isset($lesson['doTimes']) && $lesson['doTimes']) {
+                return $message = '本次考试仅有一次机会，不能再次考试!';
+            } elseif (isset($lesson['redoInterval']) && $lesson['redoInterval'] != 0 && (time() < ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600))) {
+                $leftTime = ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600) - time();
+                $hour     = ceil($leftTime / 3600);
+                if ($hour == 0) {
+                    $text = $hour.'小时';
+                } else {
+                    $minute = ceil($leftTime / 60);
+                    $text   = $minute.'分钟';
+                }
+                return '本次考试已设置重考间隔，请在'.$text.'后再来!';
+            }
+        }
+
+        return $message;
     }
 
     protected function getCourseService()
