@@ -260,6 +260,10 @@ class PayCenterController extends BaseController
             return $this->forward('TopxiaWebBundle:PayCenter:resultNotice');
         }
 
+        if ($payData['status'] == 'insufficient balance') {
+            return $this->createMessageResponse('error', '由于余额不足，支付失败，请重新支付。', null, 3000, $this->generateUrl('homepage'));
+        }
+
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
@@ -307,6 +311,7 @@ class PayCenterController extends BaseController
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
             return new Response('success');
         }
+
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         } else {
