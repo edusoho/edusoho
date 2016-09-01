@@ -25,8 +25,8 @@
       {% endif %}
     </div>
     
-    <div class="metas">
-      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+    <div class="metas text-sm">
+      <a href="{{ path('user_show', {id:author.id}) }}" class="color-gray">{{ author.nickname }}</a>
       <span>发起了{{ dict_text('threadType', thread.type) }}</span>
       {% if thread.postNum > 0 %}
         {% set poster = users[thread.lastPostUserId] %}
