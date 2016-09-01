@@ -42,7 +42,8 @@
 
       {% set tooltip_content = '<div style="width:250px;">
               <span style="color:blue;">课程说明</span><br>
-              1、编号无法修改以及排序；<br>
+              1、编号及排序无法修改；<br>
+              2、课程地址：域名/course/课程编号；
             </div>' %}
       {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign',content: tooltip_content,placement: 'left'} %}
     </form>
