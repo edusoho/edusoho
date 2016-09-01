@@ -10,7 +10,9 @@ class LlpayResponse extends Response
     
     public function getPayData()
     {
-        if ($this->params['isMobile']) {
+        if ($this->params['isMobile']) { 
+            var_dump($this->params);
+            exit();
             $this->params = json_decode($this->params['res_data'], true);
         }
         $params = $this->params;
