@@ -73,7 +73,13 @@ class LessonExtendDaoImpl extends BaseDao implements LessonExtendDao
     protected function filterFields($lesson)
     {
         $tableColumn = $this->getTableColumns();
-        return ArrayToolkit::parts($lesson, $tableColumn);
+        $lesson      = ArrayToolkit::parts($lesson, $tableColumn);
+
+        if (!empty($lesson['doTimes'])) {
+            $lesson['redoInterval'] = 0;
+        }
+
+        return $lesson;
     }
 
     protected function getTableColumns()

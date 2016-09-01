@@ -783,7 +783,8 @@ class CourseLessonController extends BaseController
             } elseif (isset($lesson['redoInterval']) && $lesson['redoInterval'] != 0 && (time() < ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600))) {
                 $leftTime = ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600) - time();
                 $hour     = ceil($leftTime / 3600);
-                if ($hour == 0) {
+
+                if ($hour > 0) {
                     $text = $hour.'小时';
                 } else {
                     $minute = ceil($leftTime / 60);
