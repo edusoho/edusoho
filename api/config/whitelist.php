@@ -2,6 +2,7 @@
 
 return array(
     'GET'  => array(
+        '/^\/api\/user\/\d+$/',
         '/^\/api\/users$/',
         '/^\/api\/users\/pages$/',
         '/^\/api\/users\/\d+$/',
