@@ -56,6 +56,11 @@
 			width: 32%;
 		}
 	}
+	.operation-list.no-border{
+		@media(max-width:@screen-sm-max)  {
+			border-right: 1px solid transparent;
+		}
+	}
 	.operation-img.operation-share a{
 		display: inline-block;
 	}
@@ -327,9 +332,10 @@
 	position: relative;
 	padding: 0;
 	background-color: #000;
-	@media(min-width:@screen-md-min) {
-		height: 500px;
-	}
+	height: 500px;
+		@media(max-width:@screen-xs-max) {
+			height: 300px;
+		}
 	.mask-img{
 		width: 100%;
 		padding-top: 10px;
@@ -362,6 +368,9 @@
 			margin-top: -80px;
 			margin-left: -165px;
 			text-align: center;
+			@media(max-width:@screen-sm-max) {
+				margin-top: -60px;
+			}
 			h2 {
 				color: #fff;
 				font-size: 20px;

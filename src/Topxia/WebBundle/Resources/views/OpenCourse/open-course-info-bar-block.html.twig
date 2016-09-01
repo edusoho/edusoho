@@ -28,7 +28,7 @@
       </div>
       {{ '分享'|trans }}
     </div>
-    <div class="operation-list ">
+    <div class="operation-list  no-border">
       <div class="operation-img operation-collection {% if memberFavorite %}active{% endif %}">
         <a href="javascript:;" class="js-favorite-num"
            data-cancel-favorite-url="{{ path('open_course_unfavorite',{id:course.id}) }}"
@@ -39,7 +39,7 @@
       </div>
       <span>{% if memberFavorite %}{{ '已收藏'|trans }}{% else %}{{ '收藏'|trans }}{% endif %}</span>
     </div>
-    <div class="operation-list hidden-xs">
+    <div class="operation-list hidden-sm hidden-xs">
       <div class="operation-img  operation-code">
         <a class="js-qrcode qrcode-popover top"> 
           <i class="es-icon es-icon-phone1"></i>
