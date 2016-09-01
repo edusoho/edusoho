@@ -10,7 +10,10 @@ class LlpayResponse extends Response
     
     public function getPayData()
     {
-        if ($this->params['isMobile'] && isset($this->params['res_data'])) { 
+        if ($this->params['isMobile']) { 
+            if (empty($this->params['res_data'])) {
+              return $this->redirect($this->generateUrl("pay_error"));
+            }
             $this->params = json_decode($this->params['res_data'], true);
         }
         $params = $this->params;
@@ -35,7 +38,7 @@ class LlpayResponse extends Response
 
     private function hasError()
     {
-        if (isset($this->params['result_pay']) && $this->params['result_pay'] != 'SUCCESS') {
+        if ($this->params['result_pay'] != 'SUCCESS') {
             return '支付异常';
         }
         return false;
