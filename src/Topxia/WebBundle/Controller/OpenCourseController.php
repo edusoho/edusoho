@@ -415,7 +415,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
-            'context' => array('hideBeginning' => 1)
+            'context' => array('hideBeginning' => 1, 'hideQuestion' => 1)
         ));
     }
 

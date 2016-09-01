@@ -715,7 +715,7 @@ class CourseLessonController extends BaseController
         $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
         $visableReplays = array();
 
-        foreach ($replaysLesson as $key => $value) {
+        foreach ($replaysLesson as $value) {
             if ($value['hidden'] == 0) {
                 $value['url'] = $this->generateUrl('live_course_lesson_replay_entry', array(
                     'courseId'             => $lesson['courseId'],

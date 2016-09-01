@@ -1077,8 +1077,8 @@ class ClassroomController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay', 'wxpay');
-
+        $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
+        $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(
