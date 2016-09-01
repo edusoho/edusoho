@@ -551,7 +551,7 @@ define(function(require, exports, module) {
                                     
                                     html = '试卷已批阅，成绩：' + result.score + '／' + result.totalScore; 
                                     if (result.passedStatus == 'unpassed') {
-                                        html += '<span class="text-warning mls mrs">未通过</span>';
+                                        html += '<span class="text-danger mls mrs">未通过</span>';
                                     } else {
                                         html += '<span class="text-success mls mrs">已通过</span>';
                                     }
