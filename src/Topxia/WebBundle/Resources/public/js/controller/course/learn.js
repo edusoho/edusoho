@@ -559,7 +559,7 @@ define(function(require, exports, module) {
                                     html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">查看结果</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
-                                    if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 60)) {
+                                    if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
                                         
                                         if (iID) {
                                             clearInterval(iID);
@@ -572,7 +572,7 @@ define(function(require, exports, module) {
                                                 minute=0,
                                                 second=0,
                                                 countDownHtml = '';
-                                            var diffTime = parseInt(parseInt(result.checkedTime) + parseInt(lesson.redoInterval * 60)) - now;
+                                            var diffTime = parseInt(parseInt(result.checkedTime) + parseInt(lesson.redoInterval * 3600)) - now;
 
                                             if (diffTime > 0) {
                                                 day = Math.floor(diffTime / (60 * 60 * 24));

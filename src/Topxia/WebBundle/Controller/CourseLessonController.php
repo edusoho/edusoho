@@ -780,9 +780,16 @@ class CourseLessonController extends BaseController
         if ($testpaperResult) {
             if (isset($lesson['doTimes']) && $lesson['doTimes']) {
                 return $message = '本次考试仅有一次机会，不能再次考试!';
-            } elseif (isset($lesson['redoInterval']) && $lesson['redoInterval'] != 0 && (time() < ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 60))) {
-                $minutes        = floor((($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 60) - time()) / 60);
-                return $message = '本次考试已设置重考间隔，请在'.$minutes.'分钟后再来!';
+            } elseif (isset($lesson['redoInterval']) && $lesson['redoInterval'] != 0 && (time() < ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600))) {
+                $leftTime = ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600) - time();
+                $hour     = ceil($leftTime / 3600);
+                if ($hour == 0) {
+                    $text = $hour.'小时';
+                } else {
+                    $minute = ceil($leftTime / 60);
+                    $text   = $minute.'分钟';
+                }
+                return '本次考试已设置重考间隔，请在'.$text.'后再来!';
             }
         }
 

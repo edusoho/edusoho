@@ -25,8 +25,8 @@
       {% if paperResult.passedStatus == 'unpassed' and target|default(null) %}
         {% if target.doTimes|default('0') %}
           <div class="alert alert-danger">您未通过考试！</div>
-        {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 60) %}
-          <div class="alert alert-danger">您未通过考试，<span class="text-success">{{ (paperResult.checkedTime + target.redoInterval * 60)|date('Y-m-d H:i:s') }}</span> 后可重考，请复习！</div>
+        {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
+          <div class="alert alert-danger">您未通过考试，<span class="text-success">{{ (paperResult.checkedTime + target.redoInterval * 3600)|date('Y-m-d H:i:s') }}</span> 后可重考，请复习！</div>
         {% else %}
           <div class="alert alert-danger">
             您未通过考试，请<a href="{{ path('course_lesson_redo_test', {lessonId:target.id,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。

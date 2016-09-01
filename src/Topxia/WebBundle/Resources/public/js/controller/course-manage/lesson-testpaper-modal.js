@@ -22,6 +22,12 @@ define(function (require, exports, module) {
         '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
     );
 
+    Validator.addRule(
+        'arithmetic_float',
+        /^[0-9]+(\.[0-9]?)?$/,
+        '{{display}}必须为正数，保留一位小数'
+    );
+
     var Testpaper = Widget.extend({
 
         events: {
@@ -137,7 +143,7 @@ define(function (require, exports, module) {
                 validator.addItem({
                     element: '[name="redoInterval"]',
                     required: true,
-                    rule: 'integer',
+                    rule: 'arithmetic_float',
                 });
             }
 
@@ -302,9 +308,9 @@ define(function (require, exports, module) {
             } else {
                 $('#lesson-redo-interval-field').closest('.form-group').show();
                 this.get('_validator').addItem({
-                    element: '[name="redoInterval"]',
+                    element: '[name="arithmetic_float"]',
                     required: true,
-                    rule: 'integer',
+                    rule: 'arithmetic_number',
                 });
             }
         }
