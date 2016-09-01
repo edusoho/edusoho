@@ -3,7 +3,12 @@
 {% set menu = 'admin_course_category' %}
 
 {% block main %}
-
+<style>
+  .js-tooltip-twig-widget{
+    width: 100%;
+    text-align: right;
+  }
+</style>
   {% set tooltip_content = '<div style="width:250px;">
               <span style="color:blue;">分类地址规则</span><br>
               1、分类地址：域名/course/分类编码; <br>
