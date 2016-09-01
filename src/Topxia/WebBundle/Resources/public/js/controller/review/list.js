@@ -75,6 +75,10 @@ define(function(require, exports, module) {
         }
         
         var $reviews = $('.js-reviews');
+        var $fullLength = $reviews.find('.full-content').text().length;
+        if( $fullLength<100){
+            $reviews.find('.actions').remove();
+        }
 
         $reviews.on('click', '.show-full-btn', function(){
             var $review = $(this).parents('.media');
