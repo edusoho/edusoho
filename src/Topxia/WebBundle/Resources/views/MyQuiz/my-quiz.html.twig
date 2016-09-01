@@ -9,6 +9,7 @@
     	<tbody>
     		{% for myTestpaperResult in myTestpaperResults %}
     			{% set myTestpaper = myTestpapers[myTestpaperResult.testId]|default(null) %}
+          {% set lesson = data('CourseLesson',{'lessonId':myTestpaperResult.lessonId})|default(null) %}
     			{% if myTestpaper %}
     				{% set course = courses[myTestpaper.target|get_course_id] %}
     			{% endif %}

@@ -549,8 +549,7 @@ define(function(require, exports, module) {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
                                     
-                                    var paperScore = (parseFloat(result.objectiveScore) + parseFloat(result.subjectiveScore)).toFixed(1);
-                                    html = '试卷已批阅，成绩：' + result.score + '／' + paperScore; 
+                                    html = '试卷已批阅，成绩：' + result.score + '／' + result.totalScore; 
                                     if (result.passedStatus == 'unpassed') {
                                         html += '<span class="text-warning mls mrs">未通过</span>';
                                     } else {
@@ -590,7 +589,7 @@ define(function(require, exports, module) {
                                                 countDownHtml = html + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
                                             } else {
                                                 countDownHtml = html + '<a href="javascript:;" class="btn btn-default btn-sm mrs" disabled="disabled">再做一次</a>';
-                                                countDownHtml += '<span class="text-warning">重考倒计时:' + hour + ':' + minute + ':' + second + '</span>';
+                                                countDownHtml += '<span class="text-warning">重考倒计时:'+ day +'天' + hour + ':' + minute + ':' + second + '</span>';
                                             }
                                             
                                             $("#lesson-testpaper-content").find('.lesson-content-text-body').html(countDownHtml);
