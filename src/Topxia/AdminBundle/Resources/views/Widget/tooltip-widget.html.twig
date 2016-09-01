@@ -1,0 +1,10 @@
+<div class="js-tooltip-twig-widget pull-right mll mts">
+  <span class="glyphicon {{ icon|default('glyphicon-question-sign') }} text-muted js-twig-widget-tips"
+        data-toggle="tooltip" data-placement="{{ placement|default('bottom') }}" href="javascript:;" title=""
+        data-original-title=""></span>
+  <div class="js-twig-widget-html" style="display:none;">
+    {{ content|default('')|raw }}
+  </div>
+</div>
+
+{% do load_script('widget/tooltip-widget') %}
