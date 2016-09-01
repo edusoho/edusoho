@@ -1,8 +1,8 @@
 <?php
 
+use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -42,7 +42,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
-        if(!$this->isTableExist('dictionary_item')){
+        if (!$this->isTableExist('dictionary_item')) {
             $this->getConnection()->exec("CREATE TABLE `dictionary_item` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
              `type` varchar(255) NOT NULL COMMENT '字典类型',
@@ -60,8 +60,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("INSERT INTO `dictionary_item` (`type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('refund_reason', NULL, '老师服务态度不好', '0', '0', '0');");
         }
 
-
-        if(!$this->isTableExist('dictionary')){
+        if (!$this->isTableExist('dictionary')) {
             $this->getConnection()->exec("CREATE TABLE `dictionary` (
                          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                          `name` varchar(255) NOT NULL COMMENT '字典名称',
@@ -110,33 +109,33 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         global $kernel;
         $block = $this->getBlockService()->getBlockByCode($code);
-        
+
         $default = array();
         foreach ($meta['items'] as $i => $item) {
             $default[$i] = $item['default'];
         }
 
         if (empty($block)) {
-            $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->createBlock(array(
-                'code' => $code,
-                'mode' => 'template',
-                'category' => empty($meta['category']) ? 'system' : $meta['category'],
-                'meta' => $meta,
-                'data' => $default,
+                'code'         => $code,
+                'mode'         => 'template',
+                'category'     => empty($meta['category']) ? 'system' : $meta['category'],
+                'meta'         => $meta,
+                'data'         => $default,
                 'templateName' => $meta['templateName'],
-                'title' => $meta['title'],
-                'content' => $html
+                'title'        => $meta['title'],
+                'content'      => ''
             ));
-            
+            $html = BlockToolkit::render($block, $kernel->getContainer());
+
             $block = $this->getBlockService()->updateBlock($block['id'], array(
                 'content' => $html
             ));
         } else {
-            $html = BlockToolkit::render($block, $kernel->getContainer());
+            $html  = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->updateBlock($block['id'], array(
-                'meta' => $meta,
-                'data' => $block['data'],
+                'meta'    => $meta,
+                'data'    => $block['data'],
                 'content' => $html
             ));
         }
