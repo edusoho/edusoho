@@ -13709,7 +13709,6 @@ textarea {
   color: #fff;
   border-radius: 50%;
   text-align: center;
-  line-height: 36px;
   margin-right: 8px;
   background: #919191;
   -webkit-transition: all 0.3s ease;
@@ -13723,6 +13722,11 @@ textarea {
 }
 .open-course-detail-operation .operation-img i {
   font-size: 18px;
+  line-height: 36px;
+}
+.open-course-detail-operation .operation-img .qrcode-popover.top .qrcode-content {
+  left: -77px;
+  top: -247px;
 }
 .open-course-detail-operation .operation-zan.active,
 .open-course-detail-operation .operation-zan:hover {
