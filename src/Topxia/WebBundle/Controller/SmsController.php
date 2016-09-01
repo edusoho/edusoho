@@ -2,12 +2,10 @@
 
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SmsToolkit;
+use Topxia\Common\StringToolkit;
 
 class SmsController extends BaseController
 {
@@ -20,7 +18,7 @@ class SmsController extends BaseController
 
         if ($targetType == 'classroom') {
             $item                  = $this->getClassroomService()->getClassroom($id);
-            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
+            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('locked' => 0));
             $url                   = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
@@ -33,7 +31,7 @@ class SmsController extends BaseController
                     $verifiedMobileUserNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'], 1);
                 }
             } else {
-                $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
+                $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('locked' => 0));
             }
         }
 
@@ -52,7 +50,7 @@ class SmsController extends BaseController
     {
         $smsType     = 'sms_'.$targetType.'_publish';
         $index       = $request->query->get('index');
-        $onceSendNum = 1000;
+        $onceSendNum = 100;
         $url         = $request->query->get('url');
         $count       = $request->query->get('count');
         $parameters  = array();
@@ -64,7 +62,7 @@ class SmsController extends BaseController
             $classroom['title']            = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description                   = $parameters['classroom_title'].'发布';
-            $students                      = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true), array('createdTime', 'DESC'), $index, $onceSendNum);
+            $students                      = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), $index, $onceSendNum);
         } elseif ($targetType == 'course') {
             $course                     = $this->getCourseService()->getCourse($id);
             $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
@@ -79,7 +77,7 @@ class SmsController extends BaseController
                     $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime', 'Desc'), $index, $onceSendNum);
                 }
             } else {
-                $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true), array('createdTime', 'DESC'), $index, $onceSendNum);
+                $students = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), $index, $onceSendNum);
             }
         }
 
