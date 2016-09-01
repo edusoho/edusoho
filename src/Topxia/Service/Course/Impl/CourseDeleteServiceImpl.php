@@ -159,6 +159,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
 
                 $result = $this->getLessonDao()->deleteLesson($lesson['id']);
+                $this->getLessonExtendDao()->deleteLesson($lesson['id']);
                 $count += $result;
             }
 
@@ -502,6 +503,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getLessonDao()
     {
         return $this->createDao('Course.LessonDao');
+    }
+
+    protected function getLessonExtendDao()
+    {
+        return $this->createDao('Course.LessonExtendDao');
     }
 
     protected function getLessonLearnDao()

@@ -1584,7 +1584,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->deleteLesson($course['id'], $lesson1['id']);
 
-        $this->assertNull($this->getCourseService()->getCourseLesson($course['id'], $lesson1['id']));
+        $this->assertEmpty($this->getCourseService()->getCourseLesson($course['id'], $lesson1['id']));
 
 // @FIXME
 

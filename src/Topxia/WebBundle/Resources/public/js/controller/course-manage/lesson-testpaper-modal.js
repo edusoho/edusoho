@@ -22,11 +22,18 @@ define(function (require, exports, module) {
         '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
     );
 
+    Validator.addRule(
+        'arithmetic_float',
+        /^[0-9]+(\.[0-9]?)?$/,
+        '{{display}}必须为正数，保留一位小数'
+    );
+
     var Testpaper = Widget.extend({
 
         events: {
             'change #lesson-mediaId-field': '_changeLessonMedia',
             'click [name=testMode]' : '_onSwitchTestMode',
+            'click [name=doTimes]' : 'showRedoInterval'
         },
 
         setup : function(){
@@ -131,6 +138,15 @@ define(function (require, exports, module) {
                 rule: 'decimal',
                 errormessageRequired: '请填写建议时长'
             });
+
+            if ($('[name="doTimes"]').val() == 0) {
+                validator.addItem({
+                    element: '[name="redoInterval"]',
+                    required: true,
+                    rule: 'arithmetic_float max{max:1000000000}',
+                    errormessageMax:'时间不能超过10位'
+                });
+            }
 
             $('#lesson-suggest-hour-field').bind('blur',function(){
                 var val = $(this).val();
@@ -281,6 +297,23 @@ define(function (require, exports, module) {
                 });
             }
 
+        },
+
+        showRedoInterval: function(event) {
+            var $this = $(event.currentTarget);
+
+            if ($this.val() == 1) {
+                $('#lesson-redo-interval-field').closest('.form-group').hide();
+                this.get('_validator').removeItem('[name="redoInterval"]');
+            } else {
+                $('#lesson-redo-interval-field').closest('.form-group').show();
+                this.get('_validator').addItem({
+                    element: '[name="redoInterval"]',
+                    required: true,
+                    rule: 'arithmetic_float max{max:1000000000}',
+                    errormessageMax:'时间不能超过10位'
+                });
+            }
         }
     });
 
@@ -288,6 +321,8 @@ define(function (require, exports, module) {
         var testpaper = new Testpaper({
             element: '#course-lesson-form'
         }).render();
+
+        $('[data-toggle="tooltip"]').tooltip();
     };
 });
 

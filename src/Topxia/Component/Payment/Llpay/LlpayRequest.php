@@ -1,16 +1,19 @@
 <?php
-namespace Topxia\Component\Payment\Llcbpay;
+namespace Topxia\Component\Payment\Llpay;
 
 use Topxia\Component\Payment\Request;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Topxia\Service\Common\ServiceKernel;
 
-class LlcbpayRequest extends Request
+class LlpayRequest extends Request
 {
     protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
 
     public function form()
     {
         $form           = array();
+        if ($this->params['isMobile']) {
+            $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
+        }
         $form['action'] = $this->url;
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
@@ -46,7 +49,11 @@ class LlcbpayRequest extends Request
         $converted['oid_partner']  = $this->options['key'];
         $converted['sign_type']    = 'MD5';
         $converted['version']      = '1.0';
-        $converted['user_id']      = $params['userId'];
+        $identify = $this->getSettingService()->get('llpay_identify');
+        if (!$identify) {
+            $identify = $this->getIdentify();
+        }
+        $converted['user_id']      = $identify."_".$params['userId'];
         $converted['timestamp']    = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
@@ -54,16 +61,32 @@ class LlcbpayRequest extends Request
 
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
-        $converted['pay_type']   = '1';
+        $converted['pay_type']   = '2';
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$identify."_".$params['userId']));
+        if ($params['isMobile']) {
+            $converted['back_url'] = $params['backUrl'];
+        }
         $converted['sign']       = $this->signParams($converted);
-        return $converted;
+        if ($params['isMobile']) {
+            return $this->convertMobileParams($converted, $params['userAgent']);
+        } else {
+            return $converted;
+        }
+    }
+
+    public function convertMobileParams($converted, $userAgent)
+    {
+        unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
+        $converted['version'] = '1.2';
+        $converted['app_request'] = 3;
+        $converted['sign'] = $this->signParams($converted);
+        return array('req_data'=>json_encode($converted));
     }
 
     protected function filterText($text)
     {
         preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9.]*/iu', $text, $results);
         $title = '';
-
         if ($results) {
             foreach ($results[0] as $result) {
                 if (!empty($result)) {
@@ -73,5 +96,17 @@ class LlcbpayRequest extends Request
         }
 
         return $title;
+    }
+
+    public function getIdentify()
+    {
+        $identify = substr(md5(uniqid()), 0, 12);
+        $this->getSettingService()->set('llpay_identify', $identify);
+        return $identify;
+    }
+
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
