@@ -12,7 +12,7 @@ class LlpayResponse extends Response
     {
         if ($this->params['isMobile']) {
             if (empty($this->params['res_data'])) {
-                $data['status'] = 'unknown';
+                $data['status'] = 'insufficient balance';
 
                 return $data;
             }

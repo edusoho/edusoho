@@ -260,7 +260,7 @@ class PayCenterController extends BaseController
             return $this->forward('TopxiaWebBundle:PayCenter:resultNotice');
         }
 
-        if ($payData['status'] == 'unknown') {
+        if ($payData['status'] == 'insufficient balance') {
             return $this->redirect($this->generateUrl("pay_error"));
         }
 
@@ -309,10 +309,6 @@ class PayCenterController extends BaseController
 
         $payData = $response->getPayData();
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
-            return new Response('success');
-        }
-
-        if ($payData['status'] == 'unknown') {
             return new Response('success');
         }
         
