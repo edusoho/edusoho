@@ -41,10 +41,12 @@
     </div>
     <div class="operation-list hidden-xs">
       <div class="operation-img  operation-code">
-        <a class="js-qrcode qrcode-popover top"> <i
-              class="es-icon es-icon-phone1"></i>
+        <a class="js-qrcode qrcode-popover top"> 
+          <i class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
             <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
+            <div class="color-gray">{{'扫二维码继续学习'|trans}}</div>
+            <div class="color-gray">{{'二维码时效为半小时'|trans}}</div>
           </div>
         </a>
       </div>
