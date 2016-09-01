@@ -42,6 +42,9 @@ abstract class BaseDao
         }
     }
 
+    /**
+     * @return Connection
+     */
     public function getConnection()
     {
         return $this->connection;

@@ -12,6 +12,8 @@ interface UserService
 
     public function getUserByVerifiedMobile($mobile);
 
+    public function getUserCountByMobileNotEmpty();
+
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);
