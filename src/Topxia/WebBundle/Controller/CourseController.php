@@ -495,7 +495,7 @@ class CourseController extends CourseBaseController
         if ($this->isPluginInstalled('InternalTraining')) {
             $postCoursePackages = $this->getPostCourseService()->findPostCoursePackagesByUser($user);
             $courses = ArrayToolkit::column($postCoursePackages, 'course');
-            $courses = $this->getInternalTrainingService()->decideCoursesStudyStatus($courses, $user);
+            $courses = $this->getTrainingCourseService()->decideCoursesStudyStatus($courses, $user);
             
             foreach ($courses as $key => $postCourse) {
                 if ($postCourse['id'] == $course['id']) {
@@ -990,8 +990,8 @@ class CourseController extends CourseBaseController
         return $this->getServiceKernel()->createService('InternalTraining:PostCourse.PostCourseService');
     }
 
-    protected function getInternalTrainingService()
+    protected function getTrainingCourseService()
     {
-        return $this->getServiceKernel()->createService('InternalTraining:InternalTraining.InternalTrainingService');
+        return $this->createService('InternalTraining:TrainingCourse.TrainingCourseService');
     }
 }
