@@ -1,13 +1,12 @@
 <?php
 namespace Topxia\Service\User;
 
-use Topxia\Service\User\CurrentUser;
 use Permission\Common\PermissionBuilder;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProvider implements UserProviderInterface
 {
@@ -56,7 +55,7 @@ class UserProvider implements UserProviderInterface
             return $user;
         }
 
-        $permissionBuilder = new PermissionBuilder();
+        $permissionBuilder = PermissionBuilder::instance();
         $originPermissions = $permissionBuilder->getOriginPermissions();
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             return $originPermissions;
@@ -76,7 +75,7 @@ class UserProvider implements UserProviderInterface
         $permissions = array();
         foreach ($originPermissions as $key => $value) {
             if (in_array($key, $permissionCode)) {
-                $permissions[$key] = $originPermissions[$key];
+                $permissions[$key] = $value;
             }
         }
 

@@ -658,7 +658,7 @@ admin:
                         admin_logs_prod:
                             name: 程序运行日志
 web:
-    name: 老师
+    name: 资源管理
     parent: null
     children:
         course_manage:
