@@ -1,0 +1,43 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {% if lesson.replayStatus == 'videoGenerated' %}{{ '编辑回放视频'|trans }}{% else %}{{'添加回放视频'|trans}}{% endif %}
+{% endblock %}
+
+{% block body %}
+
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
+{% else %}
+  {% set uploadUrl = path('live_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
+{% endif %}
+
+<form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
+
+  {% set targetType = targetType|default('courselesson') %}
+  {% set targetId   = course.id %}
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
+      {% include 'TopxiaWebBundle:LiveCourseReplayManage:file-chooser.html.twig' %}
+      <input type="hidden" name="fileId">
+      <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls">
+      <button class="btn btn-primary" id="material-upload-btn" type="submit">{{'添加'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<script>app.load('live-course-manage/replay-lesson-video-modal')</script>
+
+{% endblock %}
+
+{% set hide_footer = true %}

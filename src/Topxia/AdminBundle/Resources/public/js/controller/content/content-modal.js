@@ -28,6 +28,7 @@ define(function(require, exports, module) {
         _initDatetimeFields($form);
         _changeEditor(editor);
 
+        $('[data-toggle="tooltip"]').popover();
 	};
 
     function _changeEditor(editor)

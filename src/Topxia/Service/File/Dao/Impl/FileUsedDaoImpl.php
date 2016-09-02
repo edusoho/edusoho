@@ -2,7 +2,6 @@
 
 namespace Topxia\Service\File\Dao\Impl;
 
-
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\File\Dao\FileUsedDao;
 
@@ -67,12 +66,20 @@ class FileUsedDaoImpl extends BaseDao implements FileUsedDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['targetTypes'])) {
+            unset($conditions['targetType']);
+        }
+        if (isset($conditions['targetIds'])) {
+            unset($conditions['targetId']);
+        }
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'file_used')
             ->andWhere('id = :id')
             ->andWhere('type = :type')
             ->andWhere('targetType = :targetType')
+            ->andWhere('targetType IN ( :targetTypes )')
             ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN ( :targetIds )')
             ->andWhere('fileId = :fileId')
         ;
         return $builder;

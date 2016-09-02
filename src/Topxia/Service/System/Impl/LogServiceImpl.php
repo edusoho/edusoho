@@ -98,9 +98,7 @@ class LogServiceImpl extends BaseService implements LogService
             unset($conditions['endDateTime']);
         }
 
-        if (!empty($conditions['level']) && in_array($conditions['level'], array('info', 'warning', 'error'))) {
-            $conditions['level'] = $conditions['level'];
-        } else {
+        if (empty($conditions['level']) || !in_array($conditions['level'], array('info', 'warning', 'error'))) {
             unset($conditions['level']);
         }
 

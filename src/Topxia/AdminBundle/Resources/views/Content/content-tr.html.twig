@@ -8,6 +8,8 @@
 			<span class="text-muted text-sm">分类：{{ category.name }}</span>
 		{% endif %}
 	</td>
+	{% set content_uri = url('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) %}
+	<td><a href="{{ content_uri }}" target="_blank">{{ content_uri }}</a></td>
 	<td>{{ dict_text('contentType', content.type) }}</td>
 	<td>{{ dict_text('contentStatus:html', content.status) }}</td>
 	<td>

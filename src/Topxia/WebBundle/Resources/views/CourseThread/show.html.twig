@@ -37,7 +37,7 @@
     </div>
     <div class="thread-body">{{ thread.content|raw }}</div>
 
-    {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'course.thread', targetId: thread.id })) }}
+    {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'course.thread', targetId:thread.id} %}
 
     {% if isManager or app.user.id == author.id %}
       <div class="thread-footer" >

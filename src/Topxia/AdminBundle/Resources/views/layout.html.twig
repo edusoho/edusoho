@@ -85,6 +85,23 @@
         <div class="col-md-2">
           {% block sidebar %}
             {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
+            {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
+
+              <div class="list-group">
+                {% for m in groupedMenus %}
+                {% set array = {'0':'admin_my_cloud','1':'admin_cloud_video_setting','2':'admin_setting_cloud','3':'admin_edu_cloud_sms','4':'admin_edu_cloud_search','5':'admin_edu_cloud_attachment'} %}
+                 {% if m.code not in  array or is_granted('ROLE_SUPER_ADMIN') %}
+                            
+                  {% if not menu_hiddens[m.code]|default(false)  %}
+                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
+                  {% endif %}
+                      
+                  {% endif %}
+
+                {% endfor %}
+              </div>
+            {% endfor %}
           {% endblock %}
         </div>
 

@@ -2,11 +2,10 @@
   <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
   {{ attachment.file.filename }}
   <span class="pull-right">
-  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
-  		
+  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document']  and  attachment.file.ext not in ['xlsx', 'xls'] %}
   	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document'] and attachment.file.processStatus|default(null) == "ok" %}
     {% if can_preview_type and (not can_preview) %}
-       {% set can_preview = attachment.file.type in ['audio', 'image', 'flash'] %}    
+       {% set can_preview = attachment.file.type in ['audio'] %}    
     {% endif %}
   	{% if not (can_preview_type and can_preview )%}   
   		<a  class="attachment-preview color-gray"  href="javascript:;" data-toggle="tooltip" data-placement="top" title="

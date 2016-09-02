@@ -388,8 +388,6 @@ class LoginBindController extends BaseController
     {
         switch ($type) {
             case 'weixinweb':
-                return '微信注册帐号';
-                break;
             case 'weixinmob':
                 return '微信注册帐号';
                 break;
@@ -411,8 +409,6 @@ class LoginBindController extends BaseController
     {
         switch ($type) {
             case 'weixinweb':
-                return '微信绑定已有账号';
-                break;
             case 'weixinmob':
                 return '微信绑定已有账号';
                 break;

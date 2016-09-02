@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}核实用户密码{% endblock %}
+{% block title %}核实用户{% endblock %}
 {% block body %}
   <form id="delete-form" action="{{path('admin_check_password')}}">
     <div class="row form-group">
@@ -8,7 +8,7 @@
         <label for="title">用户密码</label>
       </div>
       <div class="col-md-8 controls">
-        <input type="password" name="password" class="form-control">
+        <input type="password" name="password" class="form-control" placeholder="请输入你的登录密码">
       </div>
     </div>
     <input type="hidden" name="courseId" value="{{course.id}}"/>
