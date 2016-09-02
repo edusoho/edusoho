@@ -18,9 +18,9 @@ class LlpayResponse extends Response
             }
             $this->params = json_decode($this->params['res_data'], true);
         }
-        $params = $this->params;
+        $params          = $this->params;
         $data['payment'] = 'llpay';
-        $error = $this->hasError();
+        $error           = $this->hasError();
         if ($error) {
             throw new \RuntimeException(sprintf('连连支付校验失败(%s)。', $error));
         }
@@ -31,10 +31,10 @@ class LlpayResponse extends Response
             $data['status'] = 'unknown';
         }
 
-        $data['amount'] = $params['money_order'];
-        $data['sn'] = $params['no_order'];
+        $data['amount']   = $params['money_order'];
+        $data['sn']       = $params['no_order'];
         $data['paidTime'] = time();
-        $data['raw'] = $params;
+        $data['raw']      = $params;
 
         return $data;
     }
@@ -50,16 +50,15 @@ class LlpayResponse extends Response
 
     private function confirmSellerSendGoods()
     {
-        $params = $this->params;
-        $data = array();
+        $params              = $this->params;
+        $data                = array();
         $data['oid_partner'] = $params['oid_partner'];
-        $data['dt_order'] = $params['dt_order'];
-        $data['no_order'] = $params['no_order'];
-        $data['sign_type'] = $params['sign_type'];
-        $data['sign'] = $this->signParams($data);
-        $response = $this->postRequest($this->url, json_encode($data));
+        $data['dt_order']    = $params['dt_order'];
+        $data['no_order']    = $params['no_order'];
+        $data['sign_type']   = $params['sign_type'];
+        $data['sign']        = $this->signParams($data);
 
-        return $response;
+        return $this->postRequest($this->url, json_encode($data));
     }
 
     private function postRequest($url, $params)
@@ -79,9 +78,9 @@ class LlpayResponse extends Response
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
-        $timer = 0;
+        $timer    = 0;
         while ($timer < 2) {
-            if ($curlinfo ['http_code'] == 200) {
+            if ($curlinfo['http_code'] == 200) {
                 break;
             }
             sleep(1);
