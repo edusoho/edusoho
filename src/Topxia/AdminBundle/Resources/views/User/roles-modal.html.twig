@@ -7,16 +7,11 @@
 
 <form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">
   <div class="checkboxs" id="old-checkboxs">
-    <label>
-      <input type="checkbox" id="user" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked="checked"{% endif %}>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}
-    </label>
     {% set admin_roles = get_admin_roles() %}
-    {% for role in admin_roles%}
-      {% if role.code in app.user.roles or role.createdUserId == app.user.id or  'ROLE_SUPER_ADMIN' in app.user.roles   %}
-          <label>
-            <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}
-          </label>
-       {% endif %}
+    {% for role in admin_roles if role.code in app.user.roles or role.createdUserId == app.user.id or 'ROLE_SUPER_ADMIN' in app.user.roles %}
+      <label>
+        <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}
+      </label>
     {% endfor %}
   </div>
 
