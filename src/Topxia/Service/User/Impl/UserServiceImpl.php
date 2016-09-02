@@ -847,7 +847,7 @@ class UserServiceImpl extends BaseService implements UserService
         $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId'=>$currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
         if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            throw $this->createServiceException('用户角色不正确，设置用户角色失败。');
+            throw $this->createServiceException('用户角色不正确('.implode(",",$notAllowedRoles).')，设置用户角色失败。');
         }
 
         $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
