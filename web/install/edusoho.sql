@@ -2083,4 +2083,12 @@ CREATE TABLE `order_referer` (
   KEY `order_referer_uv_expiredTime_index` (`uv`,`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';
 
+DROP TABLE IF EXISTS `course_lesson_extend`;
+CREATE TABLE `course_lesson_extend` (
+  `id` int(10) NOT NULL COMMENT '课时ID',
+  `courseId` int(10) NOT NULL DEFAULT '0' COMMENT '课程ID',
+  `doTimes` int(10) NOT NULL DEFAULT '0' COMMENT '可考试次数',
+  `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课时扩展表';
+
 
