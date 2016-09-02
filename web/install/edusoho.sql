@@ -1039,6 +1039,7 @@ CREATE TABLE `upload_files` (
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
+  `useType` varchar(64) DEFAULT NULL COMMENT '文件使用的模块类型' ,
   `filename` varchar(1024) NOT NULL DEFAULT '' COMMENT '文件名',
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
