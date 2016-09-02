@@ -16,7 +16,7 @@ class Version20160901155607 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("alter table course_lesson_extend change redoInterval redoInterval float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时);");
+        $this->addSql("alter table course_lesson_extend change redoInterval redoInterval float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)';");
     }
 
     /**
