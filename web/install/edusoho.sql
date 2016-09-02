@@ -2096,7 +2096,7 @@ CREATE TABLE `file_used` (
     KEY `file_used_type_targetType_targetId_index` (`type`,`targetType`,`targetId`),
     KEY `file_used_type_targetType_targetId_fileId_index` (`type`,`targetType`,`targetId`,`fileId`),
     KEY `file_used_fileId_index` (`fileId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_lesson_extend`;
 CREATE TABLE `course_lesson_extend` (
