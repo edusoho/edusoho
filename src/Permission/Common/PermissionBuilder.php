@@ -1,8 +1,8 @@
 <?php
 namespace Permission\Common;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilder
@@ -11,6 +11,10 @@ class PermissionBuilder
 
     private static $builder;
     private $cached = array();
+
+    private function __construct()
+    {
+    }
 
     public static function instance()
     {
@@ -142,7 +146,7 @@ class PermissionBuilder
         $permissions = $this->getOriginPermissions();
 
         $tree = array();
-        $tree = $this->getPermissionTree($tree, array('web', 'admin'), $permissions);
+        $tree = $this->getPermissionTree($tree, array('admin', 'web'), $permissions);
 
         $this->cached['getOriginPermissionTree'] = $tree;
         return $tree;
@@ -276,6 +280,10 @@ class PermissionBuilder
         return $grouped;
     }
 
+    /**
+     * 时间复杂度O(n)  n 为 用户所拥有的权限
+     * @return array
+     */
     private function buildPermissions()
     {
         $menus = $this->loadPermissions();
@@ -309,9 +317,7 @@ class PermissionBuilder
 
         uasort($menus, function ($a, $b) {
             return $a['weight'] > $b['weight'] ? 1 : -1;
-        }
-
-        );
+        });
 
         foreach ($menus as $code => $menu) {
             if (empty($menu['parent'])) {
