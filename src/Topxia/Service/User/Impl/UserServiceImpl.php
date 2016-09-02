@@ -1,16 +1,16 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\User\UserService;
+use Topxia\Common\StringToolkit;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\User\UserService;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -847,7 +847,7 @@ class UserServiceImpl extends BaseService implements UserService
         $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId'=>$currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
         if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            throw $this->createServiceException('用户角色不正确('.implode(",",$notAllowedRoles).')，设置用户角色失败。');
+            throw $this->createServiceException(sprintf('用户角色不正确(%s)，设置用户角色失败。', implode(",",$notAllowedRoles)));
         }
 
         $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
