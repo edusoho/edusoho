@@ -403,7 +403,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             case 'ppt':
                 return $this->getPPTLesson($lesson);
             case 'audio':
-                return $this->getVideoLesson($lesson);
             case 'video':
                 return $this->getVideoLesson($lesson);
             case 'testpaper':

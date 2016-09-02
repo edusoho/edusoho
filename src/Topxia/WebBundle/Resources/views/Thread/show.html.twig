@@ -6,7 +6,7 @@
 
   {% include 'TopxiaWebBundle:Thread/Part:' ~ thread.type ~ '-header.html.twig' %}
   
-  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'classroom.thread', targetId: thread.id })) }}
+  {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'classroom.thread', targetId:thread.id} %}
   
   {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
 

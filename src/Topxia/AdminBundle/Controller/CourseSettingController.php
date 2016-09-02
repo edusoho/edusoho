@@ -45,15 +45,11 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
-            if (isset($defaultSetting['chapter_name'])) {
-                $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
-            } else {
+            if (!isset($defaultSetting['chapter_name'])) {
                 $defaultSetting['chapter_name'] = '章';
             }
 
-            if (isset($defaultSetting['part_name'])) {
-                $defaultSetting['part_name'] = $defaultSetting['part_name'];
-            } else {
+            if (!isset($defaultSetting['part_name'])) {
                 $defaultSetting['part_name'] = '节';
             }
 

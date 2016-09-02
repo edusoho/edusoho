@@ -137,8 +137,9 @@ class OrderController extends BaseController
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-            $amount                                   = (string) ((float) $amount);
-            $shouldPayMoney                           = (string) ((float) $fields["shouldPayMoney"]);
+
+            $amount         = (string) ((float) $amount);
+            $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {

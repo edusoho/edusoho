@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <!-- 小组动态 -->
-{% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
-{% set reviews = data('LatestCourseReviews',{'count':config.count|default(4)}) %}
+{% set groups = data('HotGroup',{'count':6}) %}
+{% set reviews = data('LatestCourseReviews',{'count':4}) %}
 <section class="dynamic-section {{config.background|default("")}}">
   <div class="container">
     <div class="text-line gray">

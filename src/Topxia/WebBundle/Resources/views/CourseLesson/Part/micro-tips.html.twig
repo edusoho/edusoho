@@ -101,7 +101,7 @@
       {% elseif item.endTime < currentTime %}
 
         <small class="type">
-          {% if item.replayStatus == 'generated' %}
+          {% if item.replayStatus in ['generated','videoGenerated'] %}
             {{'回放'|trans}}
           {% else %}
             {{'直播结束'|trans}}

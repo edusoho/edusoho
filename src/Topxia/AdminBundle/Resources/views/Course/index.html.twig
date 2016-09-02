@@ -10,7 +10,7 @@
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
       {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
-      
+
       <div class="form-group">
         <select class="form-control" style="width:150px;" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
@@ -22,20 +22,28 @@
         </select>
       </div>
       {% if filter == 'normal' %}
-      <div class="form-group">
-        <select style="max-width:150px;" class="form-control" name="chargeStatus">
-          {{ select_options({free:'免费课程',charge:'收费课程'}, app.request.get('chargeStatus'), '收费状态') }}
-        </select>
-      </div>
+        <div class="form-group">
+          <select style="max-width:150px;" class="form-control" name="chargeStatus">
+            {{ select_options({free:'免费课程',charge:'收费课程'}, app.request.get('chargeStatus'), '收费状态') }}
+          </select>
+        </div>
       {% endif %}
 
       <div class="form-group">
         <input class="form-control" type="text" placeholder="标题" name="title" value="{{ app.request.get('title') }}">
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
+        <input class="form-control" type="text" placeholder="创建者" name="creator"
+               value="{{ app.request.get('creator') }}">
       </div>
       <button class="btn btn-primary">搜索</button>
+
+      {% set tooltip_content = '<div style="width:250px;">
+              <span style="color:blue;">课程说明</span><br>
+              1、编号无法修改以及排序；<br>
+              2、课程地址规则：域名/course/课程编号;
+            </div>' %}
+      {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign',content: tooltip_content,placement: 'left'} %}
     </form>
   </div>
 
@@ -48,10 +56,12 @@
       {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
       <th width="">连载状态</th>
       {% if filter == 'classroom' %}
-        <th>所在{{setting("classroom.name")|default("班级")}}</th>
+        <th>所在{{ setting("classroom.name")|default("班级") }}</th>
       {% else %}
-        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
-        
+        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员') }}{% else %}学员{% endif %}
+          数
+        </th>
+
       {% endif %}
       {% if filter == 'course' %}
         <th>收入(元)</th>
@@ -64,16 +74,20 @@
     </tr>
     </thead>
     <tbody>
-      {% for course in courses %}
-        {% set user = users[course.userId]|default(null) %}
-        {% set category = categories[course.categoryId]|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
-      {% else %}
-        <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
-      {% endfor %}
+    {% for course in courses %}
+      {% set user = users[course.userId]|default(null) %}
+      {% set category = categories[course.categoryId]|default(null) %}
+      {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">暂无课程记录</div>
+        </td>
+      </tr>
+    {% endfor %}
     </tbody>
   </table>
-   {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
   {{ admin_macro.paginator(paginator) }}
 
 {% endblock %}

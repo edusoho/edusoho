@@ -35,6 +35,8 @@ interface OpenCourseService
 
     public function tryManageOpenCourse($courseId);
 
+    public function findCourseTeachers($courseId);
+
     /**
      * open_course_lesson
      */
@@ -71,6 +73,8 @@ interface OpenCourseService
     public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);
 
     public function getNextLesson($courseId, $lessonId);
+
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
     /**
      * open_course_member
