@@ -12,17 +12,12 @@
     </label>
     {% set admin_roles = get_admin_roles() %}
     {% for role in admin_roles%}
-      {% if role.code in app.user.roles or role.createdUserId == app.user.id  %}
+      {% if role.code in app.user.roles or role.createdUserId == app.user.id or  'ROLE_SUPER_ADMIN' in app.user.roles   %}
           <label>
             <input type="checkbox" name="roles[]" value="{{role.code}}" {% if role.code in user.roles %}checked="checked"{% endif %}>{{role.name}}
           </label>
        {% endif %}
     {% endfor %}
-    {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
-      <label>
-      <input type="checkbox" name="roles[]" value="ROLE_SUPER_ADMIN" {% if 'ROLE_SUPER_ADMIN' in user.roles %}checked="checked"{% endif %}>超级管理员
-    </label>
-    {% endif %}
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
