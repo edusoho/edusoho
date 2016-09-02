@@ -100,7 +100,7 @@ class PluginRegisterCommand extends BaseCommand
             throw new \RuntimeException("插件元信息文件{$metaFile}不存在！");
         }
 
-        $meta = json_decode(file_get_contents($metaFile), JSON_OBJECT_AS_ARRAY);
+        $meta = json_decode(file_get_contents($metaFile), true);
         if (empty($meta)) {
             throw new \RuntimeException("插件元信息文件{$metaFile}格式不符合JSON规范，解析失败，请检查元信息文件格式");
         }
@@ -145,5 +145,20 @@ class PluginRegisterCommand extends BaseCommand
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 1,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
     }
 }
