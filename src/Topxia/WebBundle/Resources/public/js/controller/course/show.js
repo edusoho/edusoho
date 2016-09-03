@@ -24,6 +24,10 @@ define(function(require, exports, module) {
         if (!reviewTabInited) {
             var $reviewTab = $("#course-review-pane-show");
 
+            if($reviewTab.data('url') === undefined){
+                return;
+            }
+
             $.get($reviewTab.data('url'), function(html) {
                 $reviewTab.html(html);
                 reviewTabInited = true;

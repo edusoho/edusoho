@@ -55,6 +55,11 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getUserCountByMobileNotEmpty()
+    {
+        return $this->getUserDao()->getCountByMobileNotEmpty();
+    }
+
     public function getUserByEmail($email)
     {
         if (empty($email)) {
@@ -473,7 +478,6 @@ class UserServiceImpl extends BaseService implements UserService
         } elseif ($mode == 'mobile') {
             if (isset($registration['mobile']) && !empty($registration['mobile'])) {
                 if (SimpleValidator::mobile($registration['mobile'])) {
-                    $registration['mobile']         = $registration['mobile'];
                     $registration['verifiedMobile'] = $registration['mobile'];
                     $registration['type']           = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {

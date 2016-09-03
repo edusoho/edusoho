@@ -336,6 +336,10 @@ live_course_lesson_replay_create:
     pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveCourse:replayCreate }
 
+live_course_lesson_replay_upload:
+    pattern:  /livecourse/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:uploadModal }
+
 live_course_lesson_replay_entry:
     pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
@@ -649,6 +653,10 @@ course_manage:
     pattern:  /course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:CourseManage:index }
 
+course_manage_info:
+    path: /course/{id}/manage/info
+    defaults: { _controller: TopxiaWebBundle:CourseManage:info }
+
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:CourseManage:base }
@@ -793,6 +801,7 @@ course_manage_lesson_create:
 course_manage_lesson_file_status:
     pattern:  /course/{id}/manage/lesson/fileStatus
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+
 
 course_draft_create:
     pattern:  /course/draft/create
@@ -2307,6 +2316,10 @@ live_open_course_manage_replay:
 live_open_course_lesson_replay_create:
     pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
+
+live_open_course_lesson_replay_upload:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/replay/upload
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:uploadModal }
 
 live_open_course_live_replay_entry:
     pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry

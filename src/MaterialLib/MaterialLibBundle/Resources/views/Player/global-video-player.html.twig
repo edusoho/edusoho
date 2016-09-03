@@ -21,7 +21,7 @@
         data-agent-in-white-list="{{agentInWhiteList}}"
         data-balloon-video-player="1"
         {% if not params.watermarkOpened|default(false) == 'hidden' and not file.directives.watermarks|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-          data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+          data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null, true) }}"
         {% endif %}
         {% if setting('storage.video_fingerprint') and app.user %}
           data-fingerprint="{{ finger_print() }}"

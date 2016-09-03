@@ -332,7 +332,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $time = time();
         $sql  = "SELECT min(startTime) as startTime, courseId FROM {$this->table} WHERE endTime >= {$time} AND status='published' AND
-                type = 'live' GROUP BY courseId ORDER BY startTime ASC";
+                type = 'live' AND copyId = 0 GROUP BY courseId ORDER BY startTime ASC";
 
         return $this->getConnection()->fetchAll($sql);
     }

@@ -39,7 +39,7 @@ class DumpInitDataCommand extends BaseCommand
 
         $time = time();
 
-        $command = "ssh -l root {$domain} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table={$database}.cache --ignore-table={$database}.cloud_app_logs --ignore-table={$database}.sessions --ignore-table={$database}.log --ignore-table={$database}.session2 --ignore-table={$database}.user_token --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
+        $command = "ssh -l root {$domain} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table={$database}.cache --ignore-table={$database}.cloud_app_logs --ignore-table={$database}.sessions --ignore-table={$database}.log --ignore-table={$database}.session2 --ignore-table={$database}.user_token --ignore-table={$database}.status --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
         $output->writeln("<info>{$command}</info>");
         exec($command);
 

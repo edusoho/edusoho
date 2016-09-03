@@ -54,6 +54,12 @@ class UserDaoImpl extends BaseDao implements UserDao
         );
     }
 
+    public function getCountByMobileNotEmpty()
+    {
+        $sql = "SELECT COUNT(u.id) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` LIKE '1%'";
+        return $this->getConnection()->fetchColumn($sql, array(), 0);
+    }
+
     public function findUserByVerifiedMobile($mobile)
     {
         $that = $this;

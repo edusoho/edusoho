@@ -658,7 +658,7 @@ admin:
                         admin_logs_prod:
                             name: 程序运行日志
 web:
-    name: 老师
+    name: 资源管理
     parent: null
     children:
         course_manage:
@@ -666,6 +666,8 @@ web:
             children:
                 course_manage_info:
                     name: 课程信息
+                    router_params:
+                        id: (course.id)
                     children:
                         course_manage_base:
                             name: 基本信息
@@ -691,37 +693,6 @@ web:
                                 side_nav: lesson
                             router_params:
                                 id: (course.id)
-                            children:
-                                course_manage_lesson_create:
-                                    name: 创建课时
-                                course_manage_lesson_edit:
-                                    name: 编辑课时
-                                course_manage_lesson_delete:
-                                    name: 删除课时
-                                course_manage_lesson_preview:
-                                    name: 课时预览
-                                course_manage_lesson_create_testpaper:
-                                    name: 创建试卷
-                                course_manage_chapter_create:
-                                    name: 创建章节
-                                course_manage_chapter_edit:
-                                    name: 编辑章节
-                                course_manage_chapter_delete:
-                                    name: 删除章节
-                                course_manage_lesson_create_homework:
-                                    name: 布置作业
-                                course_manage_lesson_delete_homework:
-                                    name: 删除作业
-                                course_manage_lesson_create_exercise:
-                                    name: 新增练习
-                                course_manage_lesson_delete_exercise:
-                                    name: 删除练习
-                                course_manage_lesson_create_material:
-                                    name: 添加资料
-                                course_manage_lesson_publish:
-                                    name: 课时发布
-                                course_manage_lesson_unpublish:
-                                    name: 取消发布
                         live_course_manage_replay:
                             name: 录播管理
                             data: 

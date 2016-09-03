@@ -44,7 +44,8 @@
         {{threadMain.content|raw}}
       </div>
       
-      {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'group.thread', targetId: threadMain.id })) }}
+      {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'group.thread', targetId:threadMain.id} %}
+
       {% if attachs %}
         <hr>
         <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
@@ -195,7 +196,7 @@
 
               <div class="content editor-text">
                 {{post.content|raw}}
-                  {{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'group.thread.post', targetId: post.id })) }}
+                  {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'group.thread.post', targetId:post.id} %}
               </div>
 
               <div class="actions">

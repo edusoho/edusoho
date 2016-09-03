@@ -56,6 +56,9 @@ class ServiceKernel
         return $instance;
     }
 
+    /**
+     * @return ServiceKernel
+     */
     public static function instance()
     {
         if (empty(self::$_instance)) {

@@ -754,11 +754,6 @@ class GroupController extends BaseController
                 );
                 break;
             case 'byStick':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('createdTime', 'DESC')
-                );
-                break;
             case 'byCreatedTime':
                 $orderBys = array(
                     array('isStick', 'DESC'),

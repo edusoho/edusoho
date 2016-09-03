@@ -41,8 +41,6 @@ class AlipaySubmit
                 $mysign = md5Sign($prestr, $this->alipay_config['key']);
                 break;
             case "RSA":
-                $mysign = rsaSign($prestr, $this->alipay_config['private_key_path']);
-                break;
             case "0001":
                 $mysign = rsaSign($prestr, $this->alipay_config['private_key_path']);
                 break;

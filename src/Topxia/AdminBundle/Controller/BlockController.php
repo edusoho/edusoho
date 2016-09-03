@@ -301,9 +301,7 @@ class BlockController extends BaseController
     {
         $code                = $request->query->get('value');
         $blockTemplateByCode = $this->getBlockService()->getBlockTemplateByCode($code);
-        if (empty($blockTemplateByCode)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-        } elseif ($id == $blockTemplateByCode['id']) {
+        if (empty($blockTemplateByCode) || $id == $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
         } elseif ($id != $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));

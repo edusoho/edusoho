@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\EdusohoLiveClient;
@@ -107,12 +108,17 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             throw $this->createServiceException('您不是课程学员，不能参加直播！');
         }
 
-        if ($courseMember['role'] == 'teacher' && $lesson['userId'] == $user['id']) {
-            $role = 'teacher';
-        } elseif ($courseMember['role'] == 'teacher') {
-            $role = 'speaker';
-        } else {
-            $role = 'student';
+        $role              = 'student';
+        $courseTeachers    = $this->getCourseService($lesson['type'])->findCourseTeachers($lesson['courseId']);
+        $courseTeachersIds = ArrayToolkit::column($courseTeachers, 'userId');
+
+        if (in_array($user['id'], $courseTeachersIds)) {
+            $firstTeacher = array_shift($courseTeachers);
+            if ($firstTeacher['userId'] == $user['id']) {
+                $role = 'teacher';
+            } else {
+                $role = 'speaker';
+            }
         }
 
         return $role;

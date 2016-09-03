@@ -67,7 +67,8 @@ define(function (require, exports, module) {
             "getRecommendCourseUrl": null
         },
         events: {
-            'click .js-player-replay': '_replay'
+            'click .js-player-replay': '_replay',
+            'click .live-video-replay-btn': 'onLiveVideoPlay'
         },
         setup: function () {
             $('.media-unconvert').hide();
@@ -117,8 +118,7 @@ define(function (require, exports, module) {
 
         _onVideo: function () {
             var lesson = this.get('lesson');
-            var $videoContent = $('#lesson-preview-player');
-            $videoContent.html("");
+            
             if (lesson.type == 'video' || lesson.type == 'audio') {
                 if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                     $('.media-unconvert').show();
@@ -128,30 +128,8 @@ define(function (require, exports, module) {
             } else {
                 return;
             }
-            var html = '<iframe class="embed-responsive-item" src="' + playerUrl + '" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%"" style="border:0px;position:absolute; left:0; top:0;"></iframe>';
-
-
-            $videoContent.show();
-            $videoContent.html(html);
-
-            var messenger = new Messenger({
-                name: 'parent',
-                project: 'PlayerProject',
-                children: [document.getElementById('viewerIframe')],
-                type: 'parent'
-            });
-            var self = this;
-
-            messenger.on("ready", function () {
-                var player = self._getPlayer();
-                self.set('player', player);
-            });
-
-            messenger.on("ended", function () {
-                var onPlayEnd = _.bind(self._onPlayEnd, self);
-                onPlayEnd();
-            });
-
+            
+            this._videoPlay(playerUrl);
         },
 
         _onSWF: function () {
@@ -200,6 +178,62 @@ define(function (require, exports, module) {
         _getPlayer: function () {
             return window.frames["viewerIframe"].window.BalloonPlayer ||
                 window.frames["viewerIframe"].window.player;
+        },
+
+        _videoPlay: function(playerUrl) {
+            var $videoContent = $('#lesson-preview-player');
+            $videoContent.html("");
+
+            var html = '<iframe class="embed-responsive-item" src="' + playerUrl + '" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%"" style="border:0px;position:absolute; left:0; top:0;"></iframe>';
+
+            $videoContent.show();
+            $videoContent.html(html);
+
+            var messenger = new Messenger({
+                name: 'parent',
+                project: 'PlayerProject',
+                children: [document.getElementById('viewerIframe')],
+                type: 'parent'
+            });
+            var self = this;
+
+            messenger.on("ready", function () {
+                var player = self._getPlayer();
+                self.set('player', player);
+            });
+
+            messenger.on("ended", function () {
+                var onPlayEnd = _.bind(self._onPlayEnd, self);
+                onPlayEnd();
+            });
+        },
+
+        onLiveVideoPlay: function(){
+            $('.live-header-mask').hide();
+
+            var self = this;
+            $.get(this.get('url'), function (lesson) {
+
+                if (lesson.mediaError) {
+                    $('#media-error-dialog').show();
+                    $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
+                    return;
+                }
+                $('#media-error-dialog').hide();
+                self.set('lesson', lesson);
+            
+                if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
+                    if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                        $('.media-unconvert').show();
+                        return;
+                    }
+                    var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                } else {
+                    return;
+                }
+
+                self._videoPlay(playerUrl);
+            })
         }
     });
 

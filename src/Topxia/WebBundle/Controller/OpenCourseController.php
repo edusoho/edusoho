@@ -415,7 +415,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
-            'context' => array('hideBeginning' => 1)
+            'context' => array('hideBeginning' => 1, 'hideQuestion' => 1)
         ));
     }
 
@@ -589,8 +589,6 @@ class OpenCourseController extends BaseOpenCourseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         } elseif ($lesson['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -598,8 +596,6 @@ class OpenCourseController extends BaseOpenCourseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
 

@@ -110,11 +110,7 @@ class PermissionExtension extends \Twig_Extension
 
     private function createPermissionBuilder()
     {
-        if (empty($this->builder)) {
-            $this->builder = new PermissionBuilder();
-        }
-
-        return $this->builder;
+        return PermissionBuilder::instance();
     }
 
     public function initRuntime(\Twig_Environment $environment)
