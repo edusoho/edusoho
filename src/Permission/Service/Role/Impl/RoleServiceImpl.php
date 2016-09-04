@@ -80,42 +80,42 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function initRoles()
     {
-        $getSuperAdminRole = PermissionBuilder::instance()->getOriginPermissionTree();
-        $getSuperAdminRole = ArrayToolkit::column($getSuperAdminRole, 'code');
+        // $getSuperAdminRole = PermissionBuilder::instance()->getOriginPermissionTree();
+        // $getSuperAdminRole = ArrayToolkit::column($getSuperAdminRole, 'code');
         
-        $getAdminRole = PermissionBuilder::instance()->findpersmissionsbycode('web');
-        $getAdminRole = ArrayToolkit::column($getAdminRole, 'code');
+        // $getAdminRole = PermissionBuilder::instance()->findpersmissionsbycode('web');
+        // $getAdminRole = ArrayToolkit::column($getAdminRole, 'code');
         
-        $getTeacherRole = PermissionBuilder::instance()->findpersmissionsbycode('web');
-        $getTeacherRole = ArrayToolkit::column($getTeacherRole, 'code');
+        // $getTeacherRole = PermissionBuilder::instance()->findpersmissionsbycode('web');
+        // $getTeacherRole = ArrayToolkit::column($getTeacherRole, 'code');
 
-        $superAdminRole = $this->getRoleDao()->getRoleByCode('ROLE_SUPER_ADMIN');
-        $adminRole      = $this->getRoleDao()->getRoleByCode('ROLE_ADMIN');
-        $teacherRole    = $this->getRoleDao()->getRoleByCode('ROLE_TEACHER');
-        $userRole       = $this->getRoleDao()->getRoleByCode('ROLE_USER');
-        if (empty($superAdminRole)) {
-            $superAdminRole = $this->makeRole('ROLE_SUPER_ADMIN', $getSuperAdminRole);
-            $superAdminRole = $this->initCreateRole($superAdminRole);
-        } else {
-            $superAdminRole = $this->getRoleDao()->updateRole($superAdminRole['id'], $getSuperAdminRole);
-        }
-        if (empty($adminRole)) {
-            $adminRole = $this->makeRole('ROLE_ADMIN', $getAdminRole);
-            $adminRole = $this->initCreateRole($adminRole);
-        } else {
-            $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], $getAdminRole);
-        }
-        if (empty($teacherRole)) {
-            $teacherRole = $this->makeRole('ROLE_TEACHER', $getTeacherRole);
-            $teacherRole = $this->initCreateRole($teacherRole);
-        } else {
-            $teacherRole = $this->getRoleDao()->updateRole($teacherRole['id'], $getTeacherRole);
-        }
-        if (empty($userRole)) {
-            $userRole = $this->makeRole('ROLE_USER', array());
-            $userRole = $this->initCreateRole($userRole);
-        }
-        return array($superAdminRole, $adminRole, $teacherRole, $userRole);
+        // $superAdminRole = $this->getRoleDao()->getRoleByCode('ROLE_SUPER_ADMIN');
+        // $adminRole      = $this->getRoleDao()->getRoleByCode('ROLE_ADMIN');
+        // $teacherRole    = $this->getRoleDao()->getRoleByCode('ROLE_TEACHER');
+        // $userRole       = $this->getRoleDao()->getRoleByCode('ROLE_USER');
+        // if (empty($superAdminRole)) {
+        //     $superAdminRole = $this->makeRole('ROLE_SUPER_ADMIN', $getSuperAdminRole);
+        //     $superAdminRole = $this->initCreateRole($superAdminRole);
+        // } else {
+        //     $superAdminRole = $this->getRoleDao()->updateRole($superAdminRole['id'], $getSuperAdminRole);
+        // }
+        // if (empty($adminRole)) {
+        //     $adminRole = $this->makeRole('ROLE_ADMIN', $getAdminRole);
+        //     $adminRole = $this->initCreateRole($adminRole);
+        // } else {
+        //     $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], $getAdminRole);
+        // }
+        // if (empty($teacherRole)) {
+        //     $teacherRole = $this->makeRole('ROLE_TEACHER', $getTeacherRole);
+        //     $teacherRole = $this->initCreateRole($teacherRole);
+        // } else {
+        //     $teacherRole = $this->getRoleDao()->updateRole($teacherRole['id'], $getTeacherRole);
+        // }
+        // if (empty($userRole)) {
+        //     $userRole = $this->makeRole('ROLE_USER', array());
+        //     $userRole = $this->initCreateRole($userRole);
+        // }
+        // return array($superAdminRole, $adminRole, $teacherRole, $userRole);
     }
 
     protected function makeRole($code, $role)
@@ -156,10 +156,10 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     protected function initCreateRole($role)
     {
-        $role['createdTime']   = time();
-        $role['createdUserId'] = 1;
-        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$role['name'].'"', $role);
-        return $this->getRoleDao()->createRole($role);        
+        // $role['createdTime']   = time();
+        // $role['createdUserId'] = 1;
+        // $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$role['name'].'"', $role);
+        // return $this->getRoleDao()->createRole($role);        
     }
 
     protected function prepareSearchConditions($conditions)

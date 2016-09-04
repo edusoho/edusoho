@@ -66,7 +66,10 @@ class RoleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-
+        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        if (in_array($role['code'], $notUpdateRoles)) {
+            throw $this->createAccessDeniedException('该权限不能修改！');
+        }
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
@@ -92,6 +95,11 @@ class RoleController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
+        $role = $this->getRoleService()->getRole($id);
+        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        if (in_array($role['code'], $notUpdateRoles)) {
+            throw $this->createAccessDeniedException('该权限不能删除！');
+        }
         $this->getRoleService()->deleteRole($id);
         return $this->createJsonResponse(array('result' => true));
     }
