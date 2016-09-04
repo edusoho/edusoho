@@ -1039,6 +1039,7 @@ CREATE TABLE `upload_files` (
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
+  `useType` varchar(64) DEFAULT NULL COMMENT '文件使用的模块类型' ,
   `filename` varchar(1024) NOT NULL DEFAULT '' COMMENT '文件名',
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
@@ -2082,5 +2083,13 @@ CREATE TABLE `order_referer` (
   PRIMARY KEY (`id`),
   KEY `order_referer_uv_expiredTime_index` (`uv`,`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';
+
+DROP TABLE IF EXISTS `course_lesson_extend`;
+CREATE TABLE `course_lesson_extend` (
+  `id` int(10) NOT NULL COMMENT '课时ID',
+  `courseId` int(10) NOT NULL DEFAULT '0' COMMENT '课程ID',
+  `doTimes` int(10) NOT NULL DEFAULT '0' COMMENT '可考试次数',
+  `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课时扩展表';
 
 

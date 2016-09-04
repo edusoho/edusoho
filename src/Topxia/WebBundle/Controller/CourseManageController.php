@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,10 +18,24 @@ class CourseManageController extends BaseController
         }
 
         $courseManagePermission = $this->getPermissionExtension()->getPermissionByCode('course_manage');
-        $defaultMenu            = $this->getPermissionExtension()->getFirstChild($this->getPermissionExtension()->getFirstChild($courseManagePermission));
+        $menu            = $this->getPermissionExtension()->getFirstChild($courseManagePermission);
+
+        $firstChild = $this->getPermissionExtension()->getFirstChild($menu);
+
+        if(!empty($firstChild)){
+            $menu = $firstChild;
+        }
 
         return $this->render('TopxiaWebBundle:CourseManage:index.html.twig', array(
-            'menu'   => $defaultMenu,
+            'menu'   => $menu,
+            'course' => $course
+        ));
+    }
+
+    public function infoAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage:layout.html.twig', array(
             'course' => $course
         ));
     }
@@ -452,9 +467,14 @@ class CourseManageController extends BaseController
             );
         }
 
+        //获取直播供应商
+        $client   = new EdusohoLiveClient();
+        $capacity = $client->getCapacity();
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course'   => $course,
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'capacity' => $capacity
         ));
     }
 
@@ -489,7 +509,6 @@ class CourseManageController extends BaseController
         $courseId     = $id;
         $course       = $this->getCourseService()->getCourse($courseId);
         $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
-        $type         = $type;
         $title        = '';
         $url          = '';
 

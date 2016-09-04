@@ -92,6 +92,8 @@ define(function(require, exports, module) {
             autoSubmit: false
         });
 
+        var timeInterval = 5000;
+        var lastClickTime = 0;
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
                 return;
@@ -101,6 +103,13 @@ define(function(require, exports, module) {
                     Notify.danger('文件正在上传，等待上传完后再保存。');
                     return;
                 }
+            }
+
+            var currentTime = new Date().getTime();
+            if (currentTime - lastClickTime < timeInterval) {
+                return;
+            } else {
+                lastClickTime = currentTime;
             }
 
             $('#course-lesson-btn').button('submiting').addClass('disabled');

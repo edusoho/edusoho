@@ -1,24 +1,12 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
+use Sensio\Bundle\GeneratorBundle\Generator\BundleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
-use Symfony\Component\Console\Output\Output;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Sensio\Bundle\GeneratorBundle\Generator\BundleGenerator;
-use Sensio\Bundle\GeneratorBundle\Manipulator\KernelManipulator;
-use Sensio\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
-use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
-use Sensio\Bundle\GeneratorBundle\Command\Validators;
 use Symfony\Component\Filesystem\Filesystem;
-
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
 
 class PluginCreateCommand extends GeneratorCommand
 {
@@ -77,7 +65,7 @@ class PluginCreateCommand extends GeneratorCommand
             "description": "",
             "author": "EduSoho官方",
             "version": "1.0.0",
-            "supprot_version": "1.0.0"
+            "support_version": "1.0.0"
         }';
 
         file_put_contents ($filename, $data);

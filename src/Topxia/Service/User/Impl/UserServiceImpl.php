@@ -1,16 +1,16 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\User\UserService;
+use Topxia\Common\StringToolkit;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\User\UserService;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -53,6 +53,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
         return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserCountByMobileNotEmpty()
+    {
+        return $this->getUserDao()->getCountByMobileNotEmpty();
     }
 
     public function getUserByEmail($email)
@@ -473,7 +478,6 @@ class UserServiceImpl extends BaseService implements UserService
         } elseif ($mode == 'mobile') {
             if (isset($registration['mobile']) && !empty($registration['mobile'])) {
                 if (SimpleValidator::mobile($registration['mobile'])) {
-                    $registration['mobile']         = $registration['mobile'];
                     $registration['verifiedMobile'] = $registration['mobile'];
                     $registration['type']           = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
@@ -830,7 +834,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeUserRoles($id, array $roles)
     {
         $user = $this->getUser($id);
-
+        $currentUser = $this->getCurrentUser();
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，设置用户角色失败。');
         }
@@ -843,13 +847,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色必须包含ROLE_USER');
         }
 
-        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_BACKEND');
-        $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array(), 'created', 0, 9999), 'code'));
-
+        $allowedRoles = $currentUser['roles'];
+        $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId'=>$currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
-
-        if (!empty($notAllowedRoles)) {
-            throw $this->createServiceException('用户角色不正确，设置用户角色失败。');
+        if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+            throw $this->createServiceException(sprintf('用户角色不正确(%s)，设置用户角色失败。', implode(",",$notAllowedRoles)));
         }
 
         $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));

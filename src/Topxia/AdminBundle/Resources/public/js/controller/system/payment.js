@@ -99,43 +99,23 @@ define(function(require, exports, module) {
             }
         });
 
-        $('[name=llcbpay_enabled]').change(function(e) {
-            var radio = e.target.value;
-
-            if (radio == '1') {
-                validator.addItem({
-                    element: '[name="llcbpay_key"]',
-                    required: true,
-                    errormessageRequired: '请输入商户账号'
-                });
-                validator.addItem({
-                    element: '[name=llcbpay_secret]',
-                    required: true,
-                    errormessageRequired: '请输入商户平台Key'
-                });
-            } else {
-                validator.removeItem('[name="llcbpay_key"]');
-                validator.removeItem('[name="llcbpay_secret"]');
-            }
-        });
-
-        $('[name=llquickpay_enabled]').change(function(e) {
+        $('[name=llpay_enabled]').change(function(e) {
             var radio = e.target.value;
             
             if (radio == '1') {
                 validator.addItem({
-                    element: '[name="llquickpay_key"]',
+                    element: '[name="llpay_key"]',
                     required: true,
                     errormessageRequired: '请输入商户账号'
                 });
                 validator.addItem({
-                    element: '[name=llquickpay_secret]',
+                    element: '[name=llpay_secret]',
                     required: true,
                     errormessageRequired: '请输入商户平台Key'
                 });
             } else {
-                validator.removeItem('[name="llquickpay_key"]');
-                validator.removeItem('[name="llquickpay_secret"]');
+                validator.removeItem('[name="llpay_key"]');
+                validator.removeItem('[name="llpay_secret"]');
             }
         });
 
@@ -143,8 +123,7 @@ define(function(require, exports, module) {
         $('input[name="wxpay_enabled"]:checked').change();
         $('input[name="heepay_enabled"]:checked').change();
         $('input[name="quickpay_enabled"]:checked').change();
-        $('input[name="llcbpay_enabled"]:checked').change();
-        $('input[name="llquickpay_enabled"]:checked').change();
+        $('input[name="llpay_enabled"]:checked').change();
     };
 
 });

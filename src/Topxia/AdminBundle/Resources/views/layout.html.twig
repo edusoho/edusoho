@@ -21,8 +21,7 @@
     {% block title %}
       {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
     {% endblock %}
-
-    {% if not setting('copyright.owned') %} Powerd by EduSoho{% endif %}
+    {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
 
   {% if setting('site.favicon') %}

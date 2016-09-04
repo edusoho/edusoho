@@ -81,7 +81,9 @@
           <div class="panel-body">
             <div class="form-group">
               <div class="controls">
-                <input class="form-control" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
+                <input class="form-control width-input width-input-large" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
+
+                <i class="glyphicon glyphicon-question-sign text-muted" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-html="false" data-content="{{'页面地址：域名/page/URL路径（编号）'|trans}}"></i>
               </div>
             </div>
           </div>

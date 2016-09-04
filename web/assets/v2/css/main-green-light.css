@@ -11106,6 +11106,7 @@ textarea {
   border-bottom: 1px solid #f5f5f5;
 }
 .search-course-list .course-item .course-img {
+  position: relative;
   float: left;
   width: 35%;
 }
@@ -11114,6 +11115,30 @@ textarea {
     width: 100%;
     float: none;
   }
+}
+.search-course-list .course-item .course-img .tags-left {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.search-course-list .course-item .course-img .tags-left .tag-live {
+  display: inline-block;
+  width: 40px;
+  height: 50px;
+  background: url("../img/tag_live.png") no-repeat;
+  background-image: -webkit-image-set(url("../img/tag_live.png") 1x, url("../img/tag_live@2x.png") 2x);
+}
+.search-course-list .course-item .course-img .tags-right {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.search-course-list .course-item .course-img .tags-right .tag-public {
+  display: inline-block;
+  width: 68px;
+  height: 68px;
+  background: url("../img/tag_public.png") no-repeat;
+  background-image: -webkit-image-set(url("../img/tag_public.png") 1x, url("../img/tag_public@2x.png") 2x);
 }
 .search-course-list .course-item .course-info {
   float: left;
@@ -12085,7 +12110,7 @@ textarea {
   position: absolute;
   left: 50px;
   top: 55px;
-  width: 225px;
+  width: 233px;
   height: 400px;
 }
 .es-mobile .mobile-first .mobile-content {
@@ -13674,6 +13699,11 @@ textarea {
     width: 32%;
   }
 }
+@media (max-width: 991px) {
+  .open-course-detail-operation .operation-list.no-border {
+    border-right: 1px solid transparent;
+  }
+}
 .open-course-detail-operation .operation-img.operation-share a {
   display: inline-block;
 }
@@ -13684,7 +13714,6 @@ textarea {
   color: #fff;
   border-radius: 50%;
   text-align: center;
-  line-height: 36px;
   margin-right: 8px;
   background: #919191;
   -webkit-transition: all 0.3s ease;
@@ -13698,6 +13727,11 @@ textarea {
 }
 .open-course-detail-operation .operation-img i {
   font-size: 18px;
+  line-height: 36px;
+}
+.open-course-detail-operation .operation-img .qrcode-popover.top .qrcode-content {
+  left: -77px;
+  top: -247px;
 }
 .open-course-detail-operation .operation-zan.active,
 .open-course-detail-operation .operation-zan:hover {
@@ -13965,10 +13999,11 @@ textarea {
   position: relative;
   padding: 0;
   background-color: #000;
+  height: 500px;
 }
-@media (min-width: 992px) {
+@media (max-width: 767px) {
   .open-course-views {
-    height: 500px;
+    height: 300px;
   }
 }
 .open-course-views .mask-img {
@@ -14008,6 +14043,11 @@ textarea {
   margin-top: -80px;
   margin-left: -165px;
   text-align: center;
+}
+@media (max-width: 991px) {
+  .open-course-views .mask .mask-content {
+    margin-top: -60px;
+  }
 }
 .open-course-views .mask .mask-content h2 {
   color: #fff;
