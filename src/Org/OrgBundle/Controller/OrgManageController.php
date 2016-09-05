@@ -1,6 +1,7 @@
 <?php
 namespace Org\OrgBundle\Controller;
 
+use Org\Service\Org\Impl\OrgServiceImpl;
 use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,12 +10,12 @@ use Topxia\AdminBundle\Controller\BaseController;
 class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
-    {   
+    {
         $user = $this->getCurrentUser();
         $org  = $this->getOrgService()->getOrg($user['orgId']);
         $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
 
-        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq' , $org['parentId']);
+        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq', $org['parentId']);
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
@@ -73,6 +74,21 @@ class OrgManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function checkNameAction(Request $request)
+    {
+        $parentId    = $request->query->get('parentId');
+        $name        = $request->query->get('value');
+        $exclude     = $request->query->get('exclude');
+        $isAvaliable = $this->getOrgService()->isNameAvaliable($name, $parentId, $exclude);
+
+        if ($isAvaliable) {
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '名称已被占用,请换一个');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     public function sortAction(Request $request)
     {
         $ids = $request->request->get('ids');
@@ -96,6 +112,9 @@ class OrgManageController extends BaseController
         return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module' => $module));
     }
 
+    /**
+     * @return OrgServiceImpl
+     */
     protected function getOrgService()
     {
         return $this->getServiceKernel()->createService('Org:Org.OrgService');
