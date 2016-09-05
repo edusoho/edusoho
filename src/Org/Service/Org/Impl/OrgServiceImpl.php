@@ -2,6 +2,9 @@
 
 namespace Org\Service\Org\Impl;
 
+use Org\Service\Org\Dao\Impl\OrgDaoImpl;
+use Org\Service\Org\orgName;
+use Org\Service\Org\orgParentId;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
@@ -47,10 +50,10 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = array();
 
         if (empty($parentOrg)) {
-            $fields['orgCode'] = $org['id'].'.';
+            $fields['orgCode'] = $org['id'] . '.';
             $fields['depth']   = 1;
         } else {
-            $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
+            $fields['orgCode'] = $parentOrg['orgCode'] . $org['id'] . '.';
             $fields['depth']   = $parentOrg['depth'] + 1;
         }
 
@@ -125,9 +128,8 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         if (empty($org)) {
             return true;
-        } else {
-            return ($org['code'] === $exclude) ? true : false;
         }
+        return ($org['code'] === $exclude) ? true : false;
     }
 
     private function checkBeforProccess($id)
@@ -176,6 +178,18 @@ class OrgServiceImpl extends BaseService implements OrgService
         $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
     }
 
+    public function isNameAvaliable($name, $parentId, $exclude)
+    {
+        $org = $this->getOrgDao()->findOrgByNameAndParentId($name, $parentId);
+        if (empty($org)) {
+            return true;
+        }
+        return $org['id'] == $exclude ? true : false;
+    }
+
+    /**
+     * @return OrgDaoImpl
+     */
     protected function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
