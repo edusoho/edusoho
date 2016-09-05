@@ -7,14 +7,14 @@ use Custom\Service\Testpaper\TestpaperService;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
-    public function findTestpaperResultCountByStatusAndTestIdsAndOrgId($testpaperIds, $status, $orgCode)
+    public function findTestPaperResultCountByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
-        return $this->getTestpaperResultDao()->findTestpaperResultCountByStatusAndTestIdsAndOrgId($testpaperIds, $status, $orgCode);
+        return $this->getTestpaperResultDao()->findTestPaperResultCountByStatusAndTestIdsAndUserIds($ids, $status, $userIds);
     }
 
-    public function findTestpaperResultsByStatusAndTestIdsAndOrgId($testpaperIds, $status, $orgCode)
+    public function findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
-        return $this->getTestpaperResultDao()->findTestpaperResultsByStatusAndTestIdsAndOrgId($testpaperIds, $status, $orgCode);
+        return $this->getTestpaperResultDao()->findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds);
     }
 
     public function findAllTestpapersByTarget($id)

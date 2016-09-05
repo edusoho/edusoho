@@ -11,6 +11,8 @@ class TestpaperController extends BaseTestpaperController
     public function teacherCheckInCourseAction(Request $request, $id, $status)
     {
         $user = $this->getCurrentUser();
+        $users = $this->getUserService()->findUsersByOrgCode($user['orgCode']);
+        $userIds = ArrayToolkit::column($users, 'id');
 
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -20,14 +22,14 @@ class TestpaperController extends BaseTestpaperController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIdsAndOrgId($testpaperIds, $status, $user['orgCode']),
+            $this->getTestpaperService()->findTestPaperResultCountByStatusAndTestIdsAndUserIds($testpaperIds, $status, $userIds),
             10
         );
 
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIdsAndOrgId(
+        $testpaperResults = $this->getTestpaperService()->findTestPaperResultsByStatusAndTestIdsAndUserIds(
             $testpaperIds,
             $status,
-            $user['orgCode'],
+            $userIds,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -53,5 +55,10 @@ class TestpaperController extends BaseTestpaperController
     protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Custom:Testpaper.TestpaperService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('Custom:User.UserService');
     }
 }
