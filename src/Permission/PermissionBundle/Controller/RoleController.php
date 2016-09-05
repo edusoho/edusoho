@@ -131,7 +131,7 @@ class RoleController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '权限名称已存在');
+            $response = array('success' => false, 'message' => '角色名称已存在');
         }
 
         return $this->createJsonResponse($response);
