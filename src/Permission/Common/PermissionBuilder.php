@@ -3,6 +3,7 @@ namespace Permission\Common;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use Topxia\Common\Tree;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilder
@@ -138,6 +139,9 @@ class PermissionBuilder
         return $configPaths;
     }
 
+    /**
+     * @return Tree
+     */
     public function getOriginPermissionTree()
     {
         if (isset($this->cached['getOriginPermissionTree'])) {
@@ -146,8 +150,7 @@ class PermissionBuilder
 
         $permissions = $this->getOriginPermissions();
 
-        $tree = array();
-        $tree = $this->getPermissionTree($tree, array('admin', 'web'), $permissions);
+        $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
 
         $this->cached['getOriginPermissionTree'] = $tree;
         return $tree;
@@ -193,7 +196,7 @@ class PermissionBuilder
         return $permissions;
     }
 
-    protected function getPermissionTree(&$tree, $roots, $menus)
+    /*protected function getPermissionTree(&$tree, $roots, $menus)
     {
         $id = 0;
 
@@ -224,7 +227,7 @@ class PermissionBuilder
                 $this->getSubTree($tree, $id, $menu, $menus);
             }
         }
-    }
+    }*/
 
     public function getParentPermissionByCode($code)
     {
@@ -244,6 +247,7 @@ class PermissionBuilder
         foreach ($parents as $key => $value) {
             if (isset($value['children'])) {
                 $childrenMenu = $value['children'];
+
                 unset($value['children']);
 
                 foreach ($childrenMenu as $childKey => $childValue) {
@@ -251,7 +255,7 @@ class PermissionBuilder
                     $menus                = array_merge($menus, $this->loadPermissionsFromConfig(array($childKey => $childValue)));
                 }
             }
-
+            $value['code'] = $key;
             $menus[$key] = $value;
         }
 
