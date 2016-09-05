@@ -104,72 +104,41 @@ class RoleServiceImpl extends BaseService implements RoleService
         $teacherRole    = $this->getRoleDao()->getRoleByCode('ROLE_TEACHER');
         $userRole       = $this->getRoleDao()->getRoleByCode('ROLE_USER');
         if (empty($superAdminRole)) {
-            $superAdminRole = $this->makeRole('ROLE_SUPER_ADMIN', $getSuperAdminRole);
-            $superAdminRole = $this->initCreateRole($superAdminRole);
+            $superAdminRole = $this->initCreateRole('ROLE_SUPER_ADMIN', $getSuperAdminRole);
         } else {
             $superAdminRole = $this->getRoleDao()->updateRole($superAdminRole['id'], array('data' => $getSuperAdminRole));
         }
         if (empty($adminRole)) {
-            $adminRole = $this->makeRole('ROLE_ADMIN', array_diff($getSuperAdminRole, $getAdminRole));
-            $adminRole = $this->initCreateRole($adminRole);
+            $adminRole = $this->initCreateRole('ROLE_ADMIN', array_diff($getSuperAdminRole, $getAdminRole));
         } else {
             $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], array('data' => array_diff($getSuperAdminRole, $adminRole)));
         }
         if (empty($teacherRole)) {
-            $teacherRole = $this->makeRole('ROLE_TEACHER', $getTeacherRole->column('code'));
-            $teacherRole = $this->initCreateRole($teacherRole);
+            $teacherRole = $this->initCreateRole('ROLE_TEACHER', $getTeacherRole->column('code'));
         } else {
             $teacherRole = $this->getRoleDao()->updateRole($teacherRole['id'], array('data' => $getTeacherRole->column('code')));
         }
         if (empty($userRole)) {
-            $userRole = $this->makeRole('ROLE_USER', array());
-            $userRole = $this->initCreateRole($userRole);
+            $userRole = $this->initCreateRole('ROLE_USER', array());
         }
         return array($superAdminRole, $adminRole, $teacherRole, $userRole);
     }
 
-    protected function makeRole($code, $role)
+    protected function initCreateRole($code, $role)
     {
-        if ($code == 'ROLE_SUPER_ADMIN') {
-            $condition = array(
-                'name' => '超级管理员',
-                'code' => 'ROLE_SUPER_ADMIN',
-                'data' => $role
-            );
-            return $condition;
-        }
-        if ($code == 'ROLE_ADMIN') {
-            $condition = array(
-                'name' => '管理员',
-                'code' => 'ROLE_ADMIN',
-                'data' => $role
-            );
-            return $condition;
-        }
-        if ($code == 'ROLE_TEACHER') {
-            $condition = array(
-                'name' => '教师',
-                'code' => 'ROLE_TEACHER',
-                'data' => $role
-            );
-            return $condition;            
-        }
-        if ($code == 'ROLE_USER') {
-            $condition = array(
-                'name' => '学员',
-                'code' => 'ROLE_USER',
-                'data' => $role
-            );
-            return $condition;
-        }
-    }
+        $userRoles = array(
+            'ROLE_SUPER_ADMIN'=>array('name'=>'超级管理员','code'=>'ROLE_SUPER_ADMIN'),
+            'ROLE_ADMIN'=>array('name'=>'管理员','code'=>'ROLE_ADMIN'),
+            'ROLE_TEACHER'=>array('name'=>'教师','code'=>'ROLE_TEACHER'),
+            'ROLE_USER'=>array('name'=>'学员','code'=>'ROLE_USER'),
+        );
+        $userRole = $userRoles[$code];
 
-    protected function initCreateRole($role)
-    {
-        $role['createdTime']   = time();
-        $role['createdUserId'] = 1;
-        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$role['name'].'"', $role);
-        return $this->getRoleDao()->createRole($role);        
+        $userRole['data'] =  $role;
+        $userRole['createdTime']   = time();
+        $userRole['createdUserId'] = 1;
+        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
+        return $this->getRoleDao()->createRole($userRole);
     }
 
     protected function prepareSearchConditions($conditions)
