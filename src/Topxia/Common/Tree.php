@@ -2,7 +2,11 @@
 
 namespace Topxia\Common;
 
-
+/**
+ * Class Tree 多叉树 数据结构类
+ * 对树的操作是递归的，如有特殊需求导致递归会爆栈 可以改用stack来实现递归的效果
+ * @package Topxia\Common
+ */
 class Tree
 {
 
@@ -82,10 +86,14 @@ class Tree
      */
     public function toArray()
     {
-        return $this->reduce(function ($ret, $tree){
-            array_push($ret, $tree->data);
-            return $ret;
-        }, array());
+        $ret = $this->data;
+        $ret['children'] = array();
+
+        foreach ($this->getChildren() as $child) {
+            array_push($ret['children'], $child->toArray());
+        }
+
+        return $ret;
     }
 
     /**
@@ -138,8 +146,9 @@ class Tree
                 }
             }
 
-            $buildingArray = array_filter($buildingArray, function ($array) use ($map, $key, $parentKey) {
-                return !in_array($array[$key], array_keys($map), true);
+            $completedArrayKeys = array_keys($map);
+            $buildingArray = array_filter($buildingArray, function ($array) use ($key, $completedArrayKeys) {
+                return !in_array($array[$key], $completedArrayKeys, true);
             });
         }
 

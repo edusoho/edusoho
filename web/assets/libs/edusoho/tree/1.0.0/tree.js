@@ -1,12 +1,17 @@
 define(function(require, exports, module) {
 
+
     require('z_tree');
-    require('z_tree_css');
+	require('z_tree_css');
+	require('z_tree_exhide');
+
+
     var Widget = require('widget');
 
     var Tree = Widget.extend({
 
     	attrs: {
+    		zTree: null
         },
 
     	setup: function() {
@@ -20,24 +25,35 @@ define(function(require, exports, module) {
 	            },
 	            data: {
 	                simpleData: {
-	                    enable: true
+	                    enable: true,
+						idKey: 'code',
+						pIdKey: 'parent'
 	                }
 	            }
 	        };
 
 	        var setting = $.extend(self.get(), defaultSetting);
-
 	        var zNodes = element.find('textarea').text();
-	        zNodes = eval('('+zNodes+')');
-	        $.fn.zTree.init($(element), setting, zNodes);
+
+	        this.set('zTree', $.fn.zTree.init($(element), setting, JSON.parse(zNodes)));
+
+            this.hideNodes();
 	    },
 
 	    getCheckedNodes: function() {
-	    	var self = this;
-    		var element = self.element;
-            var tree = $.fn.zTree.getZTreeObj($(element).attr("id"));
-            var nodes = tree.getCheckedNodes(true);
-            return nodes;
+            var tree = this.get('zTree');
+            var chkedNodes = tree.getCheckedNodes(true);
+            var hiddenNodes = tree.getNodesByFilter(function (node) {
+                return node.isHidden;
+            }, false);
+            hiddenNodes = tree.transformToArray(hiddenNodes);
+            return chkedNodes.concat(hiddenNodes);
+        },
+
+        hideNodes: function () {
+            var tree = this.get('zTree');
+            var needHiddenNodes = tree.getNodesByParam('visible', false);
+            tree.hideNodes(needHiddenNodes);
         }
     });
 

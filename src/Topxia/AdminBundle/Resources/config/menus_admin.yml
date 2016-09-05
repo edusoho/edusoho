@@ -12,6 +12,7 @@
 #   data:                   //可选
 #   before:                 //可选
 #   after:                  //可选
+#   visible:                //角色管理分配权限时 是否展示
 
 # admin_block_visual_edit_history:
 #     name: 历史记录
@@ -660,6 +661,7 @@ admin:
 web:
     name: 资源管理
     parent: null
+    visible: false
     children:
         course_manage:
             name: 课程管理
