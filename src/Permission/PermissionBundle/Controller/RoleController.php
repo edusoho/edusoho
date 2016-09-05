@@ -3,7 +3,6 @@ namespace Permission\PermissionBundle\Controller;
 
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Yaml\Yaml;
 use Topxia\AdminBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
@@ -120,66 +119,6 @@ class RoleController extends BaseController
             'model' => 'show',
             'role'  => $role
         ));
-    }
-
-    protected function dataPrepare($position)
-    {
-        $configPaths = array();
-        $rootDir     = realpath(__DIR__.'/../../../../');
-
-        $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
-        $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
-
-        $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
-
-        $count = $this->getAppService()->findAppCount();
-        $apps  = $this->getAppService()->findApps(0, $count);
-
-        foreach ($apps as $app) {
-            if ($app['type'] != 'plugin') {
-                continue;
-            }
-
-            $code          = ucfirst($app['code']);
-            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
-        }
-
-        $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
-        $configPaths[] = "{$rootDir}/src/Custom/AdminBundle/Resources/config/menus_{$position}.yml";
-
-        $menus = array();
-
-        foreach ($configPaths as $path) {
-            if (!file_exists($path)) {
-                continue;
-            }
-
-            $menu = Yaml::parse($path);
-
-            if (empty($menu)) {
-                continue;
-            }
-
-            $menus = array_merge($menus, $menu);
-        }
-
-        $i = 0;
-
-        foreach ($menus as $key => &$menu) {
-            $menu['id'] = $i++;
-
-            if (!empty($menu['parent'])) {
-                $menu['pId'] = $menus[$menu['parent']]['id'];
-            } else {
-                $menu['pId'] = 0;
-            }
-
-            $menu['code'] = $key;
-        }
-
-        $menus = ArrayToolkit::index($menus, 'id');
-
-        return $menus;
     }
 
     public function checkNameAction(Request $request)
