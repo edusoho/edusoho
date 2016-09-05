@@ -1,4 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
   {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}

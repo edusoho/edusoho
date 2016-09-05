@@ -54,7 +54,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
-            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn'))
+            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale'))
         );
     }
