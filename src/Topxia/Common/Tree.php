@@ -82,10 +82,20 @@ class Tree
      */
     public function toArray()
     {
-        return $this->reduce(function ($ret, $tree){
-            array_push($ret, $tree->data);
+        $ret = $this->data;
+        $ret['children'] = array();
+
+        foreach ($this->getChildren() as $child) {
+            array_push($ret['children'], $child->toArray());
+        }
+
+        return $ret;
+
+        /*return $this->reduce(function ($ret, $tree){
+            $array = $tree->data;
+            $array['children'] = array()
             return $ret;
-        }, array());
+        });*/
     }
 
     /**
