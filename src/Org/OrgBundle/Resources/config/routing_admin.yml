@@ -19,6 +19,9 @@ admin_org_checkcode:
     pattern: /org/checkcode
     defaults: { _controller: OrgBundle:OrgManage:checkCode }
 
+admin_org_checkname:
+    pattern: /org/checkname
+    defaults: { _controller:OrgBundle:OrgManage:checkName }
 admin_org_sort:
     pattern:  /org/sort
     defaults: { _controller: OrgBundle:OrgManage:sort }

@@ -22,4 +22,6 @@ interface OrgDao
 
     public function searchOrgs($conditions, $orderBy, $start, $limit);
 
+    public function findOrgByNameAndParentId($name, $parentId);
+
 }
