@@ -10,7 +10,7 @@ services:
 
     kernel.controller.permission_listener:
         class: Permission\Listener\KernelControllerListener
-        arguments:    [@service_container, '%permission.path_regular_expression%']
+        arguments:    ['@service_container', '%permission.path_regular_expression%']
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
 

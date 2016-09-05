@@ -497,6 +497,11 @@ admin:
                     children:
                         admin_edu_cloud_search:
                             name: 云搜索
+                admin_setting_cloud_attachment:
+                    name: 云附件设置
+                    children:
+                        admin_cloud_attachment:
+                            name: 云附件设置
                 admin_app_center_show:
                     name: ES应用
                     router_name: admin_app_center
@@ -571,9 +576,8 @@ admin:
                             name: 用户中心
                         admin_setting_user_fields:
                             name: 用户信息设置
-                        admin_user_avatar:
+                        admin_setting_avatar:
                             name: 默认头像
-                            router_name: admin_setting_avatar
                 admin_setting_course_setting:
                     name: 课程设置
                     children:

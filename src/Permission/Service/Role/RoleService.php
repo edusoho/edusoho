@@ -18,4 +18,6 @@ interface RoleService
     public function searchRoles($conditions, $sort, $start, $limit);
 
     public function searchRolesCount($conditions);
+
+    public function initRoles();
 }
