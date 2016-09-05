@@ -156,7 +156,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
         if ($code == 'ROLE_USER') {
             $condition = array(
-                'name' => '学生',
+                'name' => '学员',
                 'code' => 'ROLE_USER',
                 'data' => $role
             );
