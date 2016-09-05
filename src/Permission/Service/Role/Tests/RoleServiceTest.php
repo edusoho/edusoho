@@ -31,11 +31,11 @@ class  RoleServiceTest extends BaseTestCase
         });
         $getUserRole = array();
 
-        list($superAdminRole1, $adminRole1, $teacherRole1, $userRole1) = $this->getRoleService()->initRoles();
-        $this->assertEquals(count($getSuperAdminRole), count($superAdminRole1['data']));
-        $this->assertEquals(count($getAdminRole), count($adminRole1['data']));
-        $this->assertEquals(count($getTeacherRole->column('code')), count($teacherRole1['data']));
-        $this->assertEquals(count($getUserRole), count($userRole1['data']));
+        $userRoles = $this->getRoleService()->initRoles();
+        $this->assertEquals(count($getSuperAdminRole), count($userRoles['ROLE_SUPER_ADMIN']['data']));
+        $this->assertEquals(count($getAdminRole), count($userRoles['ROLE_ADMIN']['data']));
+        $this->assertEquals(count($getTeacherRole->column('code')), count($userRoles['ROLE_TEACHER']['data']));
+        $this->assertEquals(count($getUserRole), count($userRoles['ROLE_USER']['data']));
     }
 
     protected function getRoleService()

@@ -84,47 +84,44 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $getAllRole = PermissionBuilder::instance()->getOriginPermissions();
         $permissionTree = Tree::buildWithArray($getAllRole, null, 'code', 'parent');
-        $getSuperAdminRole = ArrayToolkit::column($getAllRole, 'code');
+        $getSuperAdminRoles = ArrayToolkit::column($getAllRole, 'code');
 
-        $adminRootRoles = array('admin_user_avatar', 'admin_user_change_password','admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
+        $adminForbidRoles = array('admin_user_avatar', 'admin_user_change_password','admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
 
-        $getAdminRole = array();
-        foreach ($adminRootRoles as $adminRootRole) {
-            $adminRole = $permissionTree->find(function ($tree) use ($adminRootRole){
-                return $tree->data['code'] === $adminRootRole;
+        $getAdminForbidRoles = array();
+        foreach ($adminForbidRoles as $adminForbidRole) {
+            $adminRole = $permissionTree->find(function ($tree) use ($adminForbidRole){
+                return $tree->data['code'] === $adminForbidRole;
             });
-            $getAdminRole = array_merge($adminRole->column('code'), $getAdminRole);
+            $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
         }
-        $getTeacherRole = $permissionTree->find(function ($tree){
+        
+        $getTeacherRoles = $permissionTree->find(function ($tree){
             return $tree->data['code'] === 'web';
         });
+        $getTeacherRoles = $getTeacherRoles->column('code');
 
-        $superAdminRole = $this->getRoleDao()->getRoleByCode('ROLE_SUPER_ADMIN');
-        $adminRole      = $this->getRoleDao()->getRoleByCode('ROLE_ADMIN');
-        $teacherRole    = $this->getRoleDao()->getRoleByCode('ROLE_TEACHER');
-        $userRole       = $this->getRoleDao()->getRoleByCode('ROLE_USER');
-        if (empty($superAdminRole)) {
-            $superAdminRole = $this->initCreateRole('ROLE_SUPER_ADMIN', $getSuperAdminRole);
-        } else {
-            $superAdminRole = $this->getRoleDao()->updateRole($superAdminRole['id'], array('data' => $getSuperAdminRole));
+        $roles = array(
+            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles, 
+            'ROLE_ADMIN'       => array_diff($getSuperAdminRoles, $getAdminForbidRoles), 
+            'ROLE_TEACHER'     => $getTeacherRoles, 
+            'ROLE_USER'        => array()
+        );
+        $userPermission = array();
+        foreach ($roles as $key => $value) {
+            $userRole = $this->getRoleDao()->getRoleByCode($key);
+            if (empty($userRole)) {
+                $userRole = $this->initCreateRole($key, array_values($value));
+            } else {
+                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array_values($value));
+            }
+            $userPermission[$key] = $userRole;
         }
-        if (empty($adminRole)) {
-            $adminRole = $this->initCreateRole('ROLE_ADMIN', array_diff($getSuperAdminRole, $getAdminRole));
-        } else {
-            $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], array('data' => array_diff($getSuperAdminRole, $adminRole)));
-        }
-        if (empty($teacherRole)) {
-            $teacherRole = $this->initCreateRole('ROLE_TEACHER', $getTeacherRole->column('code'));
-        } else {
-            $teacherRole = $this->getRoleDao()->updateRole($teacherRole['id'], array('data' => $getTeacherRole->column('code')));
-        }
-        if (empty($userRole)) {
-            $userRole = $this->initCreateRole('ROLE_USER', array());
-        }
-        return array($superAdminRole, $adminRole, $teacherRole, $userRole);
+
+        return $userPermission;
     }
 
-    protected function initCreateRole($code, $role)
+    private function initCreateRole($code, $role)
     {
         $userRoles = array(
             'ROLE_SUPER_ADMIN'=>array('name'=>'超级管理员','code'=>'ROLE_SUPER_ADMIN'),
