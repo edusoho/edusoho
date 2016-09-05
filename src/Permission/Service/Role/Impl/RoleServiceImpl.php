@@ -1,6 +1,8 @@
 <?php
 namespace Permission\Service\Role\Impl;
 
+use Permission\Common\PermissionBuilder;
+use Topxia\Common\Tree;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Permission\Service\Role\RoleService;
@@ -34,6 +36,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function updateRole($id, array $fields)
     {
+        $this->checkChangeRole($id);
         $user                  = $this->getCurrentUser();
         $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
         $fields['updatedTime'] = time();
@@ -44,7 +47,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function deleteRole($id)
     {
-        $role = $this->getRoleDao()->getRole($id);
+        $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->deleteRole($id);
             $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
@@ -76,6 +79,72 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $conditions = $this->prepareSearchConditions($conditions);
         return $this->getRoleDao()->searchRolesCount($conditions);
+    }
+
+    public function refreshRoles()
+    {
+        $getAllRole = PermissionBuilder::instance()->getOriginPermissionTree();
+        $getSuperAdminRoles = $getAllRole->column('code');
+        $adminForbidRoles = array('admin_user_avatar', 'admin_user_change_password','admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
+
+        $getAdminForbidRoles = array();
+        foreach ($adminForbidRoles as $adminForbidRole) {
+            $adminRole = $getAllRole->find(function ($tree) use ($adminForbidRole){
+                return $tree->data['code'] === $adminForbidRole;
+            });
+            $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
+        }
+
+        $getTeacherRoles = $getAllRole->find(function ($tree){
+            return $tree->data['code'] === 'web';
+        });
+        $getTeacherRoles = $getTeacherRoles->column('code');
+
+        $roles = array(
+            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles, 
+            'ROLE_ADMIN'       => array_diff($getSuperAdminRoles, $getAdminForbidRoles), 
+            'ROLE_TEACHER'     => $getTeacherRoles, 
+            'ROLE_USER'        => array()
+        );
+        $userPermission = array();
+        foreach ($roles as $key => $value) {
+            $userRole = $this->getRoleDao()->getRoleByCode($key);
+            if (empty($userRole)) {
+                $userRole = $this->initCreateRole($key, array_values($value));
+            } else {
+                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array_values($value));
+            }
+            $userPermission[$key] = $userRole;
+        }
+
+        return $userPermission;
+    }
+
+    private function initCreateRole($code, $role)
+    {
+        $userRoles = array(
+            'ROLE_SUPER_ADMIN'=>array('name'=>'超级管理员','code'=>'ROLE_SUPER_ADMIN'),
+            'ROLE_ADMIN'=>array('name'=>'管理员','code'=>'ROLE_ADMIN'),
+            'ROLE_TEACHER'=>array('name'=>'教师','code'=>'ROLE_TEACHER'),
+            'ROLE_USER'=>array('name'=>'学员','code'=>'ROLE_USER'),
+        );
+        $userRole = $userRoles[$code];
+
+        $userRole['data'] =  $role;
+        $userRole['createdTime']   = time();
+        $userRole['createdUserId'] = 1;
+        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
+        return $this->getRoleDao()->createRole($userRole);
+    }
+
+    private function checkChangeRole($id)
+    {
+        $role = $this->getRoleDao()->getRole($id);
+        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        if (in_array($role['code'], $notUpdateRoles)) {
+            throw $this->createAccessDeniedException('该权限不能修改！');
+        }
+        return $role;
     }
 
     protected function prepareSearchConditions($conditions)
@@ -138,5 +207,10 @@ class RoleServiceImpl extends BaseService implements RoleService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

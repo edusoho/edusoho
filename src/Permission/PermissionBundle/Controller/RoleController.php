@@ -94,6 +94,8 @@ class RoleController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
+        $role = $this->getRoleService()->getRole($id);
+
         $this->getRoleService()->deleteRole($id);
         return $this->createJsonResponse(array('result' => true));
     }

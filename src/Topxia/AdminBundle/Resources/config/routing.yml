@@ -755,12 +755,12 @@ admin_setting_share:
 admin_setting_default_avatar_crop:
     pattern:  /setting/default/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatarCrop }
-    permissions: [admin_user_avatar]
+    permissions: [admin_setting_avatar]
 
 admin_setting_default_course_picture_crop:
     pattern:  /setting/default/course/picture/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
-    permissions: [admin_user_avatar,course_manage_picture]
+    permissions: [admin_setting_avatar,course_manage_picture]
 
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
@@ -815,7 +815,7 @@ admin_setting_user_center:
 admin_setting_avatar:
     pattern:  /setting/user-avatar
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userAvatar }
-    permissions: [admin_user_avatar]
+    permissions: [admin_setting_avatar]
 
 admin_setting_user_fields:
     pattern:  /setting/user-fields
