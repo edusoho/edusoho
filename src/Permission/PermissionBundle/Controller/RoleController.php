@@ -1,13 +1,12 @@
 <?php
 namespace Permission\PermissionBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Symfony\Component\Yaml\Yaml;
 use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Yaml;
 use Topxia\AdminBundle\Controller\BaseController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class RoleController extends BaseController
 {
@@ -56,9 +55,10 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $res = PermissionBuilder::instance()->getOriginPermissionTree();
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+        $res = $tree->toArray();
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
-            'menus' => json_encode($res),
+            'menus' => json_encode($res['children']),
             'model' => 'create'
         ));
     }
@@ -77,17 +77,20 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $originPermissions = PermissionBuilder::instance()->getOriginPermissionTree();
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+
         if (!empty($role['data'])) {
-            foreach ($originPermissions as $key => &$permission) {
-                if (in_array($permission['code'], $role['data'])) {
-                    $permission['checked'] = true;
+            $tree->each(function (&$tree) use ($role) {
+                if (in_array($tree->data['code'], $role['data'])) {
+                    $tree->data['checked'] = true;
                 }
-            }
+            });
         }
 
+        $originPermissions = $tree->toArray();
+
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
-            'menus' => json_encode($originPermissions),
+            'menus' => json_encode($originPermissions['children']),
             'model' => 'edit',
             'role'  => $role
         ));
@@ -107,18 +110,21 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res  = PermissionBuilder::instance()->getOriginPermissionTree();
+        $tree  = PermissionBuilder::instance()->getOriginPermissionTree();
 
-        foreach ($res as $key => &$re) {
-            if (in_array($re['code'], $role['data'])) {
-                $re['checked'] = 'true';
+
+        $tree->each(function (&$tree) use ($role) {
+            if (in_array($tree->data['code'], $role['data'])) {
+                $tree->data['checked'] = true;
             }
 
-            $re['chkDisabled'] = 'true';
-        }
+            $tree->data['chkDisabled'] = 'true';
+        });
+
+        $treeArray = $tree->toArray();
 
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
-            'menus' => json_encode($res),
+            'menus' => json_encode($treeArray['children']),
             'model' => 'show',
             'role'  => $role
         ));
