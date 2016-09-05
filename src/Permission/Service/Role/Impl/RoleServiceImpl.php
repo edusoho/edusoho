@@ -47,8 +47,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function deleteRole($id)
     {
-        $this->checkChangeRole($id);
-        $role = $this->getRoleDao()->getRole($id);
+        $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->deleteRole($id);
             $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
@@ -145,6 +144,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         if (in_array($role['code'], $notUpdateRoles)) {
             throw $this->createAccessDeniedException('该权限不能修改！');
         }
+        return $role;
     }
 
     protected function prepareSearchConditions($conditions)
