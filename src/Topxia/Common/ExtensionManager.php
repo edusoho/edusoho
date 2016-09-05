@@ -55,7 +55,7 @@ class ExtensionManager
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException('ExtensionManager尚未实例化。');
+            throw new \RuntimeException(self::getServiceKernel()->trans('ExtensionManager尚未实例化。'));
         }
 
         return self::$_instance;
@@ -66,7 +66,7 @@ class ExtensionManager
         $this->loadTemplates('statusTemplates');
 
         if (!isset($this->statusTemplates[$status['type']])) {
-            return '无法显示该动态。';
+            return $this->getServiceKernel()->trans('无法显示该动态。');
         }
 
         return $this->kernel->getContainer()->get('templating')->render(
@@ -95,7 +95,7 @@ class ExtensionManager
         $this->loadDataTagClassmap();
 
         if (!isset($this->dataTagClassmap[$name])) {
-            throw new \RuntimeException("数据标签`{$name}`尚未定义。");
+            throw new \RuntimeException($this->getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' =>$name )));
         }
 
         $class = $this->dataTagClassmap[$name];
@@ -256,4 +256,8 @@ class ExtensionManager
 
         return $this->bundles;
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 }

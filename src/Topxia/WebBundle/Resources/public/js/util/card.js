@@ -7,7 +7,7 @@ define(function (require, exports, module) {
 
             var _this = $(this);
             var userId = _this.data('userId');
-            var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
+            var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span>'+ Translator.trans('名片加载中')+'</div>';
 
             var timer = setTimeout(function(){
 

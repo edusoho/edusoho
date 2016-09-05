@@ -25,8 +25,8 @@ define(function(require, exports, module) {
                 element: '[name="sign"]',
                 required: true,
                 rule:'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
-                display: "签名",
-                errormessageRequired: '签名3-8字，建议使用汉字'
+                display: Translator.trans('签名'),
+                errormessageRequired: Translator.trans('签名3-8字，建议使用汉字')
             });
         });
 

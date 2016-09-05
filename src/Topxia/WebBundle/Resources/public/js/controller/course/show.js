@@ -103,10 +103,10 @@ define(function(require, exports, module) {
                 if (result == true) {
                     window.location.reload();
                 } else {
-                    alert('加入学习失败，请联系管理员！');
+                    alert(Translator.trans('加入学习失败，请联系管理员！'));
                 }
             }, 'json').error(function() {
-                alert('加入学习失败，请联系管理员！');
+                alert(Translator.trans('加入学习失败，请联系管理员！'));
             });
         });
 

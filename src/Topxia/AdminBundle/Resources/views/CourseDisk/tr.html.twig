@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="disk-table-{{file.id}}" data-role="item">
   <td><input value="{{file.id}}" type="checkbox"  data-role="batch-item" ></td>
@@ -6,13 +7,13 @@
     {{ admin_macro.bytesToSize(file.size) }}
   </td>
 
-  <td>{{ dict_text('fileType:html', file.type) }}</td>
+  <td>{{ dict_macro.fileType(file.type) }}</td>
 
   <td>
       {% if file.storage == 'local' %}
-       本地存储
+       {{'本地存储'|trans}}
       {% elseif file.storage == 'cloud' %}
-       云视频
+       {{'云视频'|trans}}
       {% endif %}
   </td>
 
@@ -22,14 +23,14 @@
   
   <td>
     {% if file.createdTime > 0 %}
-      <span class="text-muted text-sm" title="创建时间">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
+      <span class="text-muted text-sm" title="{{'创建时间'|trans}}">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
     {% else %}
       --
     {% endif %}
   </td>
 
   <td>
-  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="文件" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">删除</button>
+  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'文件'|trans}}" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">{{'删除'|trans}}</button>
 </td>
 
 

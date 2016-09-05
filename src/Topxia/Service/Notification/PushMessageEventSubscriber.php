@@ -628,7 +628,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             case 'global':
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
-                $target['title'] = '网校公告';
+                $target['title'] = $this->getKernel()->trans('网校公告');
                 $target['id']    = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
                 break;

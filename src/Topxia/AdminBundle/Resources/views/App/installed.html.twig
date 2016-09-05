@@ -8,11 +8,11 @@
 
   <div class="mbl btn-group">
 
-      <a href="{{ url('admin_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">全部</a>
+      <a href="{{ url('admin_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">{{'全部'|trans}}</a>
 
-      <a href=" {{ url('admin_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">主题</a>
+      <a href=" {{ url('admin_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">{{'主题'|trans}}</a>
 
-      <a href=" {{ url('admin_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">应用</a>
+      <a href=" {{ url('admin_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">{{'应用'|trans}}</a>
   </div>
 
   <table class="table table-striped table-hover">
@@ -50,23 +50,23 @@
             <div class="info mtm mbm clearfix">
               <div class="left-info pull-left">
 
-                <div class="text-muted">作者： {{ app.developerName }}</div>
-                <div class="mts text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
+                <div class="text-muted">{{'作者：'|trans}} {{ app.developerName }}</div>
+                <div class="mts text-muted">{% if app.type == "theme" %}{{'主题'|trans}}{% else %}{{'应用'|trans}}{% endif %}
                 </div>
                 <div class="class-rating mtm">
                   {% if app.installed|default(0) %}
-                  <span class="text-muted">版本：{{ app.version }}</span>
+                  <span class="text-muted">{{'版本：'|trans}}{{ app.version }}</span>
                   {% else %}
-                  <span class="text-muted">版本：{{ app.latestVersion }}</span>
+                  <span class="text-muted">{{'版本：'|trans}}{{ app.latestVersion }}</span>
                   {% endif %}
                 </div>
               </div>
 
               <div class="middle-info pull-left ">
                 {% if app.installed|default(0) %}
-                  <div class="text-muted">最后更新： {{ app.updatedTime|date('Y-m-d') }}</div>
+                  <div class="text-muted">{{'最后更新：'|trans}} {{ app.updatedTime|date('Y-m-d') }}</div>
                 {% else %}
-                  <div class="text-muted">最后更新： {{ app.latestTime|date('Y-m-d') }}</div>
+                  <div class="text-muted">{{'最后更新：'|trans}} {{ app.latestTime|date('Y-m-d') }}</div>
                 {% endif %}
               </div>
               
@@ -75,17 +75,17 @@
 
                   {% if setting('developer.debug') and app.code|lower != 'main' %}
                     <br>
-                    <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">卸载</a>
+                    <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">{{'卸载'|trans}}</a>
                   {% endif %}
 
                   {% if route_exsit(app.code|lower ~ '_manage_index') %}
-                    <a href="{{ path(app.code|lower ~ '_manage_index') }}"  class="btn btn-primary mtm">管理</a>
+                    <a href="{{ path(app.code|lower ~ '_manage_index') }}"  class="btn btn-primary mtm">{{'管理'|trans}}</a>
                   {% endif %}
 
               </div>
               {% else %}
               <div class="right-info pull-right">
-                  <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">安装
+                  <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}" class="btn btn-primary" data-keyboard="false" data-backdrop="static">{{'安装'|trans}}
                   </a>
 
               </div>

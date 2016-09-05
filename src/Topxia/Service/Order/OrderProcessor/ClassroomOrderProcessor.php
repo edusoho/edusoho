@@ -11,22 +11,22 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
-            return array('error' => '已经是班级的学员了!');
+            return array('error' => $this->getKernel()->trans('已经是班级的学员了!'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         if (!$classroom['buyable']) {
-            return array('error' => '该班级不可购买，如有需要，请联系客服');
+            return array('error' => $this->getKernel()->trans('该班级不可购买，如有需要，请联系客服'));
         }
 
         if ($classroom['status'] != 'published') {
-            return array('error' => '不能加入未发布班级!');
+            return array('error' => $this->getKernel()->trans('不能加入未发布班级!'));
         }
 
         if (!$classroom['buyable']) {
             $classroomSetting = $this->getSettingService()->get('classroom');
-            return array('error' => "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
+            return array('error' => $this->getKernel()->trans('该%name%不可购买，如有需要，请联系客服', array('%name%' => $classroomSetting['name'])));
         }
 
         return array();
@@ -37,12 +37,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         if (empty($classroom)) {
-            throw new Exception("找不到要购买的班级!");
+            throw new Exception($this->getKernel()->trans('找不到要购买的班级!'));
         }
 
-        $courses   = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
         $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $users = array();
 
@@ -50,7 +50,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $users = array_merge($this->getUserService()->findUsersByIds($course['teacherIds']), $users);
         }
 
-        $users       = ArrayToolkit::index($users, "id");
+        $users = ArrayToolkit::index($users, "id");
         $headTeacher = $this->getUserService()->getUser($classroom["headTeacherId"]);
 
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
@@ -89,14 +89,14 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             }
 
             return array(
-                'totalPrice'  => $totalPrice,
-                'targetId'    => $targetId,
-                'targetType'  => "classroom",
+                'totalPrice' => $totalPrice,
+                'targetId' => $targetId,
+                'targetType' => "classroom",
 
-                'classroom'   => empty($classroom) ? null : $classroom,
-                'courses'     => $courses,
+                'classroom' => empty($classroom) ? null : $classroom,
+                'courses' => $courses,
                 'paidCourses' => $paidCourses,
-                'users'       => $users,
+                'users' => $users,
                 'headTeacher' => $headTeacher
             );
         }
@@ -124,21 +124,21 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $totalPrice = NumberToolkit::roundUp($totalPrice);
 
         return array(
-            'classroom'      => empty($classroom) ? null : $classroom,
-            'courses'        => $courses,
-            'paidCourses'    => $paidCourses,
-            'users'          => $users,
-            'headTeacher'    => $headTeacher,
+            'classroom' => empty($classroom) ? null : $classroom,
+            'courses' => $courses,
+            'paidCourses' => $paidCourses,
+            'users' => $users,
+            'headTeacher' => $headTeacher,
 
-            'totalPrice'     => $totalPrice,
-            'targetId'       => $targetId,
-            'targetType'     => "classroom",
-            'cashRate'       => $cashRate,
-            'priceType'      => $priceType,
-            'account'        => $account,
+            'totalPrice' => $totalPrice,
+            'targetId' => $targetId,
+            'targetType' => "classroom",
+            'cashRate' => $cashRate,
+            'priceType' => $priceType,
+            'account' => $account,
             'hasPayPassword' => $hasPayPassword,
-            'coinPayAmount'  => $coinPayAmount,
-            'maxCoin'        => $maxCoin
+            'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin
         );
     }
 
@@ -148,7 +148,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             return '0%';
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return $percent;
     }
@@ -156,7 +156,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
     {
         $totalPrice = 0;
-        $classroom  = $this->getClassroomService()->getClassroom($targetId);
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         if ($priceType == "RMB") {
             $totalPrice = $classroom["price"];
@@ -164,17 +164,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"] * $cashRate;
         }
 
-        $totalPrice = (float) $totalPrice;
-        $amount     = $totalPrice;
+        $totalPrice = (float)$totalPrice;
+        $amount = $totalPrice;
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
 
         if (empty($courses) || count($courses) == 0) {
-            throw new Exception("班级中还未设置课程，请联系管理员!");
+            throw new Exception($this->getKernel()->trans('班级中还未设置课程，请联系管理员!'));
         }
 
         $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
 
@@ -182,9 +182,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $classroomSetting      = $this->getSettingService()->get("classroom");
+        $classroomSetting = $this->getSettingService()->get("classroom");
         $paidCoursesTotalPrice = 0;
-        $paidCourses           = array();
+        $paidCourses = array();
 
         if (!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
@@ -349,7 +349,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function generateOrderToken()
     {
-        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+        return 'c' . date('YmdHis', time()) . mt_rand(10000, 99999);
     }
 
     public function getOrderInfoTemplate()
@@ -406,5 +406,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getPayCenterService()
     {
         return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

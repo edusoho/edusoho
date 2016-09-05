@@ -31,36 +31,36 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="host"]',
                     required: true,
-                    errormessageRequired: '请输入SMTP服务器地址'
+                    errormessageRequired: Translator.trans('请输入SMTP服务器地址')
                 });
                 validator.addItem({
                     element: '[name="port"]',
                     required: true,
                     rule:'integer',
-                    errormessageRequired: '请输入SMTP端口号'
+                    errormessageRequired: Translator.trans('请输入SMTP端口号')
                 });
                 validator.addItem({
                     element: '[name="username"]',
                     required: true,
                     rule: 'email',
-                    errormessageRequired: '请输入SMTP用户名'
+                    errormessageRequired: Translator.trans('请输入SMTP用户名')
                 });
                 validator.addItem({
                     element: '[name="password"]',
                     required: true,
                     rule:'password',
-                    errormessageRequired: '请输入SMTP密码'
+                    errormessageRequired: Translator.trans('请输入SMTP密码')
                 });
                 validator.addItem({
                     element: '[name="from"]',
                     required: true,
                     rule: 'email',
-                    errormessageRequired: '请输入发信人地址'
+                    errormessageRequired: Translator.trans('请输入发信人地址')
                 });
                 validator.addItem({
                     element: '[name="name"]',
                     required: true,
-                    errormessageRequired: '请输入发信人名称'
+                    errormessageRequired: Translator.trans('请输入发信人名称')
                 });
             } else {
                 validator.removeItem('[name="host"]');

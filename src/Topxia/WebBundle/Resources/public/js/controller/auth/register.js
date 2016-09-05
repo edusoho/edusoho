@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             }
             return  result;  
         },
-            "{{display}}格式错误"
+          Translator.trans('%display%格式错误',{display:'{{display}}'})
     );
 
     Validator.addRule(
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                 }
                 return result;
             },
-                "{{display}}不允许以1开头的11位纯数字"
+                Translator.trans('%display%不允许以1开头的11位纯数字',{display:'{{display}}'})
         );
 
     exports.run = function() {
@@ -77,7 +77,7 @@ define(function(require, exports, module) {
                 required: true,
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
-                    if (message == "验证码错误"){
+                    if (message == Translator.trans('验证码错误')){
                         $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
                     }
                 }                
@@ -114,7 +114,7 @@ define(function(require, exports, module) {
                 element: '[name="emailOrMobile"]',
                 required: true,
                 rule: 'email_or_mobile_check email_or_mobile_remote',
-                display: '手机/邮箱',
+                display: Translator.trans('手机/邮箱'),
                 onItemValidated: function(error, message, eleme) {
                     if (error) {
                         $('.js-sms-send').addClass('disabled');
@@ -136,14 +136,14 @@ define(function(require, exports, module) {
             element: '[name="password"]',
             required: true,
             rule: 'minlength{min:5} maxlength{max:20}',
-            display: '密码'
+            display: Translator.trans('密码')
         });
         if($('.invitecode').length>0){  
         validator.addItem({
             element: '[name="invite_code"]',
             required: false,
             rule: 'reg_inviteCode invitecode_remote',
-            display: '邀请码'
+            display: Translator.trans('邀请码')
         });
         }
 
@@ -151,7 +151,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#user_terms',
             required: true,
-            errormessageRequired: '勾选同意此服务协议，才能继续注册'
+            errormessageRequired: Translator.trans('勾选同意此服务协议，才能继续注册')
         });
 
 
@@ -174,7 +174,7 @@ define(function(require, exports, module) {
                     element: '[name="sms_code"]',
                     required: true,
                     rule: 'integer fixedLength{len:6} remote',
-                    display: '短信验证码'           
+                    display: Translator.trans('短信验证码')           
                 });
 
                 validator.removeItem('[name="captcha_code"]');
@@ -196,7 +196,7 @@ define(function(require, exports, module) {
                     required: true,
                     rule: 'alphanumeric remote',
                     onItemValidated: function(error, message, eleme) {
-                        if (message == "验证码错误"){
+                        if (message == Translator.trans('验证码错误')){
                             $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
                         }
                     }                

@@ -91,7 +91,7 @@ seajs.config({
 
     // 变量配置
     vars: {
-        'locale': 'zh-cn'
+        'locale': app.lang
     },
 
     charset: 'utf-8',

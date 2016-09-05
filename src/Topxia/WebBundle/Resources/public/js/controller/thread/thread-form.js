@@ -1,3 +1,4 @@
+
 define(function(require, exports, module) {
 
     require('es-ckeditor');
@@ -7,7 +8,7 @@ define(function(require, exports, module) {
     Validator.addRule(
          'time_check',
          /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/, 
-         '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
+         Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm')
      );
     var Widget = require('widget');
     require('common/validator-rules').inject(Validator);
@@ -107,7 +108,7 @@ define(function(require, exports, module) {
 
                    uploader.on('uploadSuccess', function(file, response ) {
                         self.$('[name=actvityPicture]').val(response.url);
-                        Notify.success('上传成功！', 1);
+                        Notify.success(Translator.trans('上传成功！'), 1);
                    });
 
                 }

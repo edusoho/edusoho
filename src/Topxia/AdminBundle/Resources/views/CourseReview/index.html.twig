@@ -10,7 +10,7 @@
 
     <div class="form-group">
       <select class="form-control" name="rating">
-        {{ select_options({1:'1星', 2:'2星', 3:'3星', 4:'4星', 5:'5星'}, app.request.get('rating'), '评分') }}
+        {{ select_options({1:'1星'|trans, 2:'2星'|trans, 3:'3星'|trans, 4:'4星'|trans, 5:'5星'|trans}, app.request.get('rating'), '评分'|trans) }}
       </select>
     </div>
 
@@ -19,18 +19,18 @@
     </div> #}
     
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="课程名" name="courseTitle" value="{{ app.request.get('courseTitle') }}">
+      <input class="form-control" type="text" placeholder="{{'课程名'|trans}}" name="courseTitle" value="{{ app.request.get('courseTitle') }}">
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="作者" name="author" value="{{ app.request.get('author') }}">
+      <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="评价内容关键词" name="content" value="{{ app.request.get('content') }}">
+      <input class="form-control" type="text" placeholder="{{'评价内容关键词'|trans}}" name="content" value="{{ app.request.get('content') }}">
     </div>
 
-    <button class="btn btn-primary">搜索</button>
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
   </form>
 
   <div id="review-table-container">
@@ -38,10 +38,10 @@
       <thead>
         <tr>
           <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
-          <th width="60%">评价内容</th>
-          <th width="8">评分</th>
-          <th width="20%">作者</th>
-          <th width="8%">操作</th>
+          <th width="60%">{{'评价内容'|trans}}</th>
+          <th width="8">{{'评分'|trans}}</th>
+          <th width="20%">{{'作者'|trans}}</th>
+          <th width="8%">{{'操作'|trans}}</th>
         </tr>
       </thead>
       <tbody>
@@ -53,36 +53,36 @@
             <td>
               <div class="short-long-text">
                 <div class="short-text">
-                  {{ review.content|plain_text(60) }} <span class="text-muted trigger">(展开)</span>
+                  {{ review.content|plain_text(60) }} <span class="text-muted trigger">({{'展开'|trans}})</span>
                 </div>
-                <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
+                <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">({{'收起'|trans}})</span></div>
               </div>
               <div class="mts">
                 {% if course %}
                   <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
                 {% else %}
-                  <span class="text-muted text-sm">课程已删除</span>
+                  <span class="text-muted text-sm">{{'课程已删除'|trans}}</span>
                 {% endif %}
               </div>
             </td>
-            <td>{{ review.rating }}星</td>
+            <td>{{ review.rating }}{{'星'|trans}}</td>
             <td>
               {{ admin_macro.user_link(author) }}<br>
               <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
             </td>
             <td>
-              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="评价" data-url="{{ path('admin_review_delete', {id:review.id}) }}">删除</button>
+              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'评价'|trans}}" data-url="{{ path('admin_review_delete', {id:review.id}) }}">{{'删除'|trans}}</button>
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">暂无评价记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'暂无评价记录'|trans}}</div></td></tr>
         {% endfor %}
       </tbody>
     </table>
 
     <div>
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_review_batch_delete') }}" data-role="batch-delete" data-name="评价">删除</button>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_review_batch_delete') }}" data-role="batch-delete" data-name="{{ '评价'|trans }}">{{'删除'|trans}}</button>
     </div>
   </div>
 

@@ -36,7 +36,8 @@ class AppKernel extends Kernel
             new Classroom\ClassroomBundle\ClassroomBundle(),
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
-            new Org\OrgBundle\OrgBundle()
+            new Org\OrgBundle\OrgBundle(),
+            new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';

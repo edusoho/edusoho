@@ -6,10 +6,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Filesystem\Filesystem;
-
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 
-class PluginUtil
+class PluginUtil extends BaseService
 {
 	private static $filesystem;
 	private static $kernel;
@@ -47,7 +47,7 @@ class PluginUtil
 
         $dataDirectory = realpath(self::$kernel->getParameter('kernel.root_dir') . '/data/');
         if (empty($dataDirectory)) {
-            throw new \RuntimeException('app/data目录不存在，请先创建');
+            throw new \RuntimeException( $this->getKernel()->trans('app/data目录不存在，请先创建'));
         }
 
         $metaFilePath = $dataDirectory . '/plugin_installed.php';

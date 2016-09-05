@@ -2,7 +2,7 @@
 {% if classroom %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">所属{{ setting('classroom.name')|default("班级") }}</h3>
+    <h3 class="panel-title">{{'所属%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</h3>
   </div>
   <div class="panel-body classroom-block">
     <div class="classroom-img img-responsive">

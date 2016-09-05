@@ -8,7 +8,7 @@
   <div class="course-banner es-banner">
     <div class="container">
       <div class="title">
-        <span>{{'搜索'|trans}}</span>SEARCH
+        <span>{{'搜索'|trans}}</span>{% if app.request.locale == 'zh_CN' %}SEARCH{% endif %}
       </div>
     </div>
   </div>
@@ -18,7 +18,11 @@
 
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
-      共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
+  {% if keywords %}
+    {{'共找到<span>%count%</span>门<span>“%keywords%”</span>相关课程'|trans({'%count%': count, '%keywords%': keywords})|raw}}
+  {% else %}
+    {{'共找到<span>%count%</span>门课程'|trans({'%count%': count})|raw}}
+    {% endif %}
     </div>
     <ul class="nav nav-pills hidden-xs" role="tablist">
       <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>

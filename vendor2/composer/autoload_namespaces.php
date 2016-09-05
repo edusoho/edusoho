@@ -32,5 +32,6 @@ return array(
     'Doctrine\\Bundle\\DoctrineCacheBundle' => array($vendorDir.'/doctrine/doctrine-cache-bundle'),
     'Assetic'                               => array($vendorDir.'/kriswallsmith/assetic/src'),
     ''                                      => array($baseDir.'/src', $baseDir.'/plugins'),
+    'Bazinga\\Bundle\\JsTranslationBundle'  => array($vendorDir.'/willdurand/js-translation-bundle'),
     'Mockery'                               => array($vendorDir.'/mockery/mockery/library')
 );

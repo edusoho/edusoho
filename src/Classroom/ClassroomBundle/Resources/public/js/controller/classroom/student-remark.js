@@ -20,10 +20,10 @@ define(function(require, exports, module) {
                     $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
                     var user_name = $('#student-remark-form').data('user') ;
-                    Notify.success('备注'+user_name+'成功');
+                    Notify.success(Translator.trans('备注%username%成功',{username:user_name}));
                 }).error(function(){
                     var user_name = $('#student-remark-form').data('user') ;
-                    Notify.danger('备注'+user_name+'失败，请重试！');
+                    Notify.danger(Translator.trans('备注%username%失败，请重试！',{username:user_name}));
                 });
             }
 
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
             element: '#student-remark',
             required: false,
             rule: 'maxlength{max:80}',
-            display: '备注'
+            display: Translator.trans('备注')
         });
 
     };

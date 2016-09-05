@@ -1,6 +1,6 @@
 {% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
 
-{% block title %}{{ setting('classroom.name')|default("班级") }}管理 - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('classroom.name')|default("班级"|trans) }}{{'管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'main' %}
 {% set script_controller = 'classroombundle/controller/classroom/index' %}
@@ -15,17 +15,17 @@
     <div class="row">
       <div class="col-md-4">
         <div class="well">
-          <h4>设置</h4>
+          <h4>{{'设置'|trans}}</h4>
           <table class="table">
             <tr>
-              <td>简介</td>
+              <td>{{'简介'|trans}}</td>
               {% if not classroom.about %}
                 <td>
                   <a class="btn btn-danger btn-xs pull-right" href="{{path('classroom_manage_set_info',{id:classroom.id})}}">
-                    未设置 <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                    {{'未设置'|trans}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
                   </a>
                 </td>
-                {% set unsetted = unsetted ~ ",简介" %}
+                {% set unsetted = unsetted ~ ',简介'|trans %}
               {% else %}
                 <td>
                   <i class="glyphicon glyphicon-ok-sign pull-right text-success"></i>
@@ -33,14 +33,14 @@
               {% endif %}
             </tr>
             <tr>
-              <td>图片</td>
+              <td>{{'图片'|trans}}</td>
               {% if not classroom.smallPicture %}
                 <td>
                   <a class="btn btn-danger btn-xs pull-right" href="{{path('classroom_manage_set_picture',{id:classroom.id})}}">
-                    未设置 <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                    {{'未设置'|trans}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
                   </a>
                 </td>
-                {% set unsetted = unsetted ~ ",图片" %}
+                {% set unsetted = unsetted ~ ',图片'|trans %}
               {% else %}
                 <td>
                   <i class="glyphicon glyphicon-ok-sign pull-right text-success"></i>
@@ -48,18 +48,18 @@
               {% endif %}
             </tr>
             <tr>
-              <td>价格</td>
+              <td>{{'价格'|trans}}</td>
               <td>
                 <a class="btn btn-info btn-xs pull-right" href="{{path('classroom_manage_set_price',{id:classroom.id})}}">
                   {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                     {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
                     {% if classroom.price * setting('coin.cash_rate')  == 0 %}
-                      {% set unsetted = unsetted ~ ",价格" %}
+                      {% set unsetted = unsetted ~ ',价格'|trans %}
                     {% endif %}
                   {% else %}
-                    {{ classroom.price }}元
+                    {{ classroom.price }}{{'元'|trans}}
                     {% if classroom.price == 0 %}
-                      {% set unsetted = unsetted ~ ",价格" %}
+                      {% set unsetted = unsetted ~ ',价格'|trans %}
                     {% endif %}
                   {% endif %}
                   <i class="glyphicon glyphicon-circle-arrow-right"></i>
@@ -71,21 +71,21 @@
       </div>
       <div class="col-md-4">
         <div class="well">
-          <h4>课程</h4>
+          <h4>{{'课程'|trans}}</h4>
           <table class="table">
             <tr>
-              <td>课程数</td>
+              <td>{{'课程数'|trans}}</td>
               <td>
                 <a class="btn btn-{% if classroom.courseNum > 0 %}info{% else %}danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">
                   {{classroom.courseNum|default(0)}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
                 </a>
               </td>
               {% if classroom.courseNum == 0 %}
-                {% set unsetted = unsetted ~ ",课程" %}
+                {% set unsetted = unsetted ~ ',课程'|trans %}
               {% endif %}
             </tr>
             <tr>
-              <td>课时数</td>
+              <td>{{'课时数'|trans}}</td>
               <td><span class="label label-default pull-right">{{classroom.lessonNum}}</span></td>
             </tr>
           </table>
@@ -93,10 +93,10 @@
       </div>
       <div class="col-md-4">
         <div class="well">
-          <h4>学员</h4>
+          <h4>{{'学员'|trans}}</h4>
           <table class="table">
             <tr>
-              <td>学员数</td>
+              <td>{{'学员数'|trans}}</td>
               <td>
                 <a class="btn {% if (classroom.studentNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_students', {id:classroom.id}) }}">
                   {{classroom.studentNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
@@ -104,7 +104,7 @@
               </td>
             </tr>
             <tr>
-              <td>旁听生数</td>
+              <td>{{'旁听生数'|trans}}</td>
               <td>
                 <a class="btn {% if (classroom.auditorNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_aduitor', {id:classroom.id}) }}">
                   {{classroom.auditorNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
@@ -119,30 +119,30 @@
       <hr>
       <div class="row">
         <div class="col-md-6">
-          <h4>{{ setting('classroom.name')|default("班级") }}学习情况</h4>
+          <h4>{{'%name%学习情况'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</h4>
           <table class="table">
             <thead>
               <th></th>
-              <th>昨日</th>
-              <th>今日</th>
+              <th>{{'昨日'|trans}}</th>
+              <th>{{'今日'|trans}}</th>
             </thead>
             <tr>
-              <td>全部学员数</td>
+              <td>{{'全部学员数'|trans}}</td>
               <td>{{yestodayAllCount}}</td>
               <td>{{allCount}}</td>
             </tr>
             <tr>
-              <td>正式学员数</td>
+              <td>{{'正式学员数'|trans}}</td>
               <td>{{yestodayStudentCount}}</td>
               <td>{{studentCount}}</td>
             </tr>
             <tr>
-              <td>课时完成学习数</td>
+              <td>{{'课时完成学习数'|trans}}</td>
               <td>{{yesterdayFinishedLessonNum}}</td>
               <td>{{todayFinishedLessonNum}}</td>
             </tr>
             <tr>
-                <td>新增话题数</td>
+                <td>{{'新增话题数'|trans}}</td>
                 <td>{{yesterdayThreadCount}}</td>
                 <td>{{todayThreadCount}}</td>
             </tr>
@@ -150,7 +150,7 @@
         </div>
 
         <div class="col-md-6 reviews">
-          <h4>最新评价</h4>
+          <h4>{{'最新评价'|trans}}</h4>
           <br>
           {% if reviews%}
             {% for review in reviews %}
@@ -162,14 +162,14 @@
                   <div class="media-body">
                     <div class="stars-{{ (review.rating)|number_format }}"></div>
                     &nbsp;&nbsp;&nbsp;&nbsp;<time>{{review.createdTime|smart_time}}</time>                                                    
-                    <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">私信</button>
+                    <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">{{'私信'|trans}}</button>
                   </div>
                   <p>{{ review.content|plain_text(40) }}</p>
                 </div>
               {% endif %}
             {% endfor %}
           {% else %}
-            <div class="empty">该{{ setting('classroom.name')|default("班级") }}尚无评价</div>
+            <div class="empty">{{'该%name%尚无评价'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
           {% endif %}
         </div>
       </div>

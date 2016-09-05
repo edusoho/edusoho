@@ -8,7 +8,7 @@
     <div>
       {% set target = targets[question.target]|default(null) %}
       {% if target.type|default(null) != 'course' %}
-        <small class="text-muted">从属于 {{targets[question.target].simple_name|default('')}}</small>
+        <small class="text-muted">{{'从属于%simple_name%'|trans({'%simple_name%': targets[question.target].simple_name|default(''|trans)})}}</small>
       {% else %}
         <small class="text-muted">{{'从属于 本课程'|trans}}</small>
       {% endif %}

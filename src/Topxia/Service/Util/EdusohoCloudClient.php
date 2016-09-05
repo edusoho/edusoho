@@ -5,7 +5,7 @@ namespace Topxia\Service\Util;
 use \RuntimeException;
 use Topxia\Common\ArrayToolkit;
 
-class EdusohoCloudClient implements CloudClient
+class EdusohoCloudClient extends BaseService implements CloudClient
 {
     protected $accessKey;
 
@@ -184,7 +184,7 @@ class EdusohoCloudClient implements CloudClient
     public function getBucket()
     {
         if (empty($this->bucket)) {
-            throw new \RuntimeException('云视频bucket不能为空，请更改云视频设置。');
+            throw new \RuntimeException($this->getKernel()->trans('云视频bucket不能为空，请更改云视频设置。'));
         }
 
         return $this->bucket;

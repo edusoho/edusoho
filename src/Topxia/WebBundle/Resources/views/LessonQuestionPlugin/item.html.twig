@@ -4,9 +4,9 @@
 		<div class="title mbm"><a href="javascript:void(0);" class="show-question-item" data-id="{{ thread.id }}">{{ thread.title }}</a>
 		</div>
 		<div class="metas">
-			{{ web_macro.user_link(user) }} {{'发表于'|trans}} {{ thread.createdTime|smart_time }}
+			{{ web_macro.user_link(user) }} {{'发表于%createdTime%'|trans({'%createdTime%':thread.createdTime|smart_time})}} 
 			<span class="bullet">•</span>
-			<a href="#">{{ thread.postNum }}{{'回答'|trans}}</a>
+			<a href="#">{{'%postNum%回答'|trans({'%postNum%':thread.postNum})}}</a>
 		</div>
 	</div>
 </li>

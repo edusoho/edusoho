@@ -18,7 +18,7 @@
           <tr>
             <td>{{ incomeRecord.amount }}</td>
             <td></td>
-            <td>{{ incomeRecord.transactionNo }}{{'元'|trans}}</td>
+            <td>{{'%transactionNo%元'|trans({'%transactionNo%':incomeRecord.transactionNo})}}</td>
             <td>{{ incomeRecord.createdTime|date('Y-n-d H:i') }}</td>
           </tr>
         {% else %}

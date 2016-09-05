@@ -19,7 +19,7 @@ class TudouVideoItemParser extends AbstractItemParser
 
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
-            throw $this->createParseException("获取土豆视频({$url})页面内容失败！");
+            throw $this->createParseException($this->getServiceKernel()->trans('获取土豆视频(%url%)页面内容失败！', array('%url%' =>$url )));
         }
 
         $p3matched = preg_match($this->patterns['p3'], $url, $matches);
@@ -29,7 +29,7 @@ class TudouVideoItemParser extends AbstractItemParser
             $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'/s', $response['content'], $matches);
         }
         if (!$matched) {
-            throw $this->createParseException("解析土豆视频信息失败");
+            throw $this->createParseException($this->getServiceKernel()->trans('解析土豆视频信息失败'));
         }
 
         $videoId =  $matches[2];

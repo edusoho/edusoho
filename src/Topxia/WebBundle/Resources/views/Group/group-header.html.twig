@@ -1,7 +1,7 @@
 {% set groupNav = groupNav|default(null) %}
 <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
-  <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页'|trans) }}</a></li>
-  <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道'|trans) }}</a></li>
+  <li><a href="{{path('homepage')}}">{{ homepage.name|default('首页'|trans) }}</a></li>
+  <li><a href="{{path('group')}}">{{ group.name|default('小组频道'|trans) }}</a></li>
   <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
 </ol>
 <div class="group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
@@ -23,9 +23,11 @@
 
       </h2>
       <div class="media-metas">
-        {{ groupinfo.memberNum }}{{'个成员'|trans}}
-        <span class="mlm">{{groupinfo.threadNum}}{{'个话题'|trans}}</span>
-        <span class="fsn mlm">{{'创建时间：'|trans}}{{groupinfo.createdTime|date('Y-m-d')}}</span>
+
+        {{'%memberNum%个成员'|trans({'%memberNum%':groupinfo.memberNum})}}
+        <span class="mlm">{{'%threadNum%个话题'|trans({'%threadNum%':groupinfo.threadNum})}}</span>
+        <span class="fsn mlm">{{'创建时间：%createdTime%'|trans({'%createdTime%':groupinfo.createdTime|date('Y-m-d')})}}</span>
+
       </div>
     </div>
   </div>

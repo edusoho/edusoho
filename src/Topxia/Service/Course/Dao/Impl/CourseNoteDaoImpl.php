@@ -53,7 +53,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
     {
         $fields = array('likeNum');
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%s字段不允许增减，只有%s才被允许增减'), $field, implode(',', $fields)));
         }
         $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
         return $this->getConnection()->executeQuery($sql, array($diff, $id));

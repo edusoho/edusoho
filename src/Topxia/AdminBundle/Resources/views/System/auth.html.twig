@@ -10,20 +10,20 @@
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
 
   <fieldset>
-    <legend>注册设置</legend>
+    <legend>{{'注册设置'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >用户注册模式</label>
+        <label >{{'用户注册模式'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <div class="btn-group">
-          <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">邮箱注册</button>
-          <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">手机注册</button>
-          <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">邮箱或手机注册</button>
-          <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">关闭</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'邮箱注册'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'手机注册'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">{{'邮箱或手机注册'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">{{'关闭'|trans}}</button>
         </div>
         <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
-        <div class="help-block" >开启云短信后，才可使用“手机注册”或“邮箱或手机注册”</div>
+        <div class="help-block" >{{'开启云短信后，才可使用“手机注册”或“邮箱或手机注册”'|trans}}</div>
       </div>
     </div>
 
@@ -31,13 +31,13 @@
     <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label >邮箱验证登录</label>
+          <label >{{'邮箱验证登录'|trans}}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
-         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">检测邮箱服务</button>
-         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">正在检测.....</div>
-         <div class="help-block">开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置</div>
+          {{ radios('email_enabled', {'opened':'开启'|trans, 'closed':'关闭'|trans}, auth.email_enabled) }}
+         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_report_status_email_send') }}">{{ '检测邮箱服务'|trans }}</button>
+         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">{{ '正在检测.....'|trans }}</div>
+         <div class="help-block">{{ '开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置'|trans }}</div>
         </div>
       </div>
 
@@ -45,7 +45,7 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="email_activation_title" >新用户激活邮件标题</label>
+          <label for="email_activation_title" >{{'新用户激活邮件标题'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
@@ -54,20 +54,18 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="email_activation_body">新用户激活邮件内容</label>
+          <label for="email_activation_body">{{'新用户激活邮件内容'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
           <div class="help-block">
-            {% verbatim %}
-            <div>变量说明：</div>
+            <div>{{'变量说明：'|trans}}</div>
             <ul>
-              <li>{{nickname}} 为接收方用户昵称</li>
-              <li>{{sitename}} 为网站名称</li>
-              <li>{{siteurl}} 为网站的地址</li>
-              <li>{{verifyurl}} 为邮箱验证地址</li>
+              <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户昵称'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网站名称'|trans}}</li>
+              <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'为网站的地址'|trans}}</li>
+              <li>{% verbatim %}{{verifyurl}}{% endverbatim %} {{'为邮箱验证地址'|trans}}</li>
             </ul>
-            {% endverbatim %}
           </div>
         </div>
       </div>
@@ -76,45 +74,45 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >注册防护机制</label>
+        <label >{{'注册防护机制'|trans}}</label>
       </div>
 
       <div class="controls col-md-8 radios">
         <label>
-          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
+          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> {{'无'|trans}}
         </label>
         <label>
-          <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
+          <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> {{'低'|trans}}
         </label>
         <label>
-          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
+          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> {{'中'|trans}}
         </label>
         <label>
-          <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
+          <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> {{'高'|trans}}
         </label>
       </div>
 
       <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
-          方案说明：
-          <p class="mll mtm">1：注册时需填写验证码。</p>
+          {{'方案说明：'|trans}}
+          <p class="mll mtm">1：{{'注册时需填写验证码。'|trans}}</p>
         </div>
       </div>
 
       <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
-          方案说明：
-          <p class="mll mtm">1：注册时需填写验证码。</p>
-          <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
+          {{'方案说明：'|trans}}
+          <p class="mll mtm">1：{{'注册时需填写验证码。'|trans}}</p>
+          <p class="mll mtm">2：{{'同一IP24小时內只能注册30次。'|trans}}</p>
         </div>
       </div>
 
       <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
         <div class="well">
-          方案说明：
-          <p class="mll mtm">1：注册时需填写验证码。</p>
-          <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
-          <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
+          {{'方案说明：'|trans}}
+          <p class="mll mtm">1：{{'注册时需填写验证码。'|trans}}</p>
+          <p class="mll mtm">2：{{'同一IP24小时內只能注册10次。'|trans}}</p>
+          <p class="mll mtm">3：{{'同一IP1小时內只能注册1个账号。'|trans}}</p>
         </div>
       </div>
     </div>
@@ -122,41 +120,41 @@
   </fieldset>
 
   <fieldset>
-    <legend>欢迎信息设置</legend>
+    <legend>{{'欢迎信息设置'|trans}}</legend>
 
     <div class="form-group" style="display:none;">
       <div class="col-md-3 control-label">
-        <label>发送欢迎信息</label>
+        <label>{{'发送欢迎信息'|trans}}</label>
       </div>
       <div class="controls col-md-8 checkboxs">
-        {{ checkboxs('welcome_methods', {'message':'站内私信', 'email':'电子邮件'}, auth.welcome_methods) }}
-        <div class="help-block">新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效。</div>
+        {{ checkboxs('welcome_methods', {'message':'站内私信'|trans, 'email':'电子邮件'|trans}, auth.welcome_methods) }}
+        <div class="help-block">{{'新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效'|trans}}。</div>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="welcome_title">发送欢迎信息</label>
+        <label for="welcome_title">{{'发送欢迎信息'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('welcome_enabled', {'opened':'开启', 'closed':'关闭'}, auth.welcome_enabled) }}
-        <div class="help-block">欢迎信以站内私信的方式，发送给新用户。</div>
+        {{ radios('welcome_enabled', {'opened':'开启'|trans, 'closed':'关闭'|trans}, auth.welcome_enabled) }}
+        <div class="help-block">{{'欢迎信以站内私信的方式，发送给新用户。'|trans}}</div>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="welcome_sender">欢迎信息发送方</label>
+        <label for="welcome_sender">{{'欢迎信息发送方'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
-        <div class="help-block">通常为这个网站的管理员，请输入用户用户名。</div>
+        <div class="help-block">{{'通常为这个网站的管理员，请输入用户用户名。'|trans}}</div>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="welcome_title">欢迎信息标题</label>
+        <label for="welcome_title">{{'欢迎信息标题'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
@@ -165,40 +163,38 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="welcome_body">欢迎信息内容</label>
+        <label for="welcome_body">{{'欢迎信息内容'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
         <div class="help-block">
-          {% verbatim %}
-          <div>注意： 私信长度不能超过1000个字符</div>
-          <div>变量说明：</div>
+          <div>{{'注意： 私信长度不能超过1000个字符'|trans}}</div>
+          <div>{{'变量说明：'|trans}}</div>
           <ul>
-            <li>{{nickname}} 为接收方用户用户名</li>
-            <li>{{sitename}} 为网站名称</li>
-            <li>{{siteurl}} 为网站的地址</li>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户用户名'|trans}}</li>
+            <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网站名称'|trans}}</li>
+            <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'为网站的地址'|trans}}</li>
           </ul>
-          {% endverbatim %}
         </div>
       </div>
     </div>
   </fieldset>
 
   <fieldset>
-    <legend>服务条款设置</legend>
+    <legend>{{'服务条款设置'|trans}}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="user_terms">是否开启服务条款</label>
+        <label for="user_terms">{{'是否开启服务条款'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('user_terms', {'opened':'开启', 'closed':'关闭'}, auth.user_terms) }}
-        <div class="help-block">开启后用户注册时必须同意条款才能注册</div>
+        {{ radios('user_terms', {'opened':'开启'|trans, 'closed':'关闭'|trans}, auth.user_terms) }}
+        <div class="help-block">{{'开启后用户注册时必须同意条款才能注册'|trans}}</div>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="user_terms_body">条款内容</label>
+        <label for="user_terms_body">{{'条款内容'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.user_terms_body }}</textarea>
@@ -210,18 +206,18 @@
 
   {% if setting('magic.username_setting')|default(false) %}
     <fieldset>
-      <legend>名称设置</legend>
+      <legend>{{'名称设置'|trans}}</legend>
       <div class="row form-group">
           <div class="col-md-2 col-md-offset-2 control-label">
-              <label for="user_name">用户名称</label>
+              <label for="user_name">{{'用户名称'|trans}}</label>
           </div>
           <div class="controls col-md-4">
-            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员'|trans)}}" {% endif %}>
           </div>
       </div>
 
       <div class="alert alert-info deduction text-center">
-        <p><strong> 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+        <p><strong> {{'注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称'|trans}}
         </strong></p>
       </div>
     </fieldset> 
@@ -230,7 +226,7 @@
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary">提交</button>  
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>  
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

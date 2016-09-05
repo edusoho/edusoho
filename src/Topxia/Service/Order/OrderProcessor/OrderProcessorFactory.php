@@ -6,17 +6,20 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessor;
 
 class OrderProcessorFactory
 {
-
-	public static function create($type)
+    public static function create($type)
     {
-			$map = JoinPointToolkit::load('order');
+        $map = JoinPointToolkit::load('order');
 
-			if (!array_key_exists($type, $map)) {
-					throw new NotFoundException('订单类型不存在: ' . $type);
-			}
+        if (!array_key_exists($type, $map)) {
+            throw new NotFoundException(self::getKernel()->trans('订单类型不存在：').$type);
+        }
 
-			$class = $map[$type]['processor'];
-			return new $class();
+        $class = $map[$type]['processor'];
+        return new $class();
     }
 
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

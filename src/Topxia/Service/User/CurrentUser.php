@@ -119,6 +119,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return true;
     }
 
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
     public function isEqualTo(UserInterface $user)
     {
         if ($this->email !== $user->getUsername()) {
@@ -146,7 +151,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-
         return false;
     }
 
@@ -155,7 +159,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-
         return false;
     }
 

@@ -95,7 +95,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag                = $this->setTagOrg($tag);
         $tag                = $this->getTagDao()->addTag($tag);
 
-        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
+        $this->getLogService()->info('tag', 'create', $this->getKernel()->trans('添加标签%name%(#%id%)', array('%name%' => $tag['name'], '%id%' => $tag['id'])));
 
         return $tag;
     }
@@ -111,7 +111,7 @@ class TagServiceImpl extends BaseService implements TagService
         $user       = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
-        if(empty($currentOrg)){
+        if (empty($currentOrg)) {
             return $tag;
         }
 
@@ -126,14 +126,13 @@ class TagServiceImpl extends BaseService implements TagService
         $tag = $this->getTag($id);
 
         if (empty($tag)) {
-            throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
+            throw $this->createServiceException($this->getKernel()->trans('标签(#%id%)不存在，更新失败！', array('%id%' => $id)));
         }
 
         $fields = ArrayToolkit::parts($fields, array('name'));
         $this->filterTagFields($fields, $tag);
 
-        $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
-
+        $this->getLogService()->info('tag', 'update', $this->getKernel()->trans('编辑标签%name%(#%id%)', array('%name%' => $fields['name'], '%id%' => $id)));
         return $this->getTagDao()->updateTag($id, $fields);
     }
 
@@ -147,7 +146,7 @@ class TagServiceImpl extends BaseService implements TagService
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
-            throw $this->createServiceException('标签名不能为空，添加失败！');
+            throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
         $tag['name'] = (string) $tag['name'];
@@ -155,7 +154,7 @@ class TagServiceImpl extends BaseService implements TagService
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
         if (!$this->isTagNameAvalieable($tag['name'], $exclude)) {
-            throw $this->createServiceException('该标签名已存在，添加失败！');
+            throw $this->createServiceException($this->getKernel()->trans('该标签名已存在，添加失败！'));
         }
 
         return $tag;

@@ -16,10 +16,10 @@ define(function(require, exports, module) {
                 $('#edit-user-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function() {
-                    Notify.success('修改用户所属机构成功');
+                    Notify.success(Translator.trans('修改用户所属机构成功'));
                     window.location.reload();
                 }).error(function() {
-                    Notify.danger('操作失败');
+                    Notify.danger(Translator.trans('操作失败'));
                 });
             }
         });

@@ -49,7 +49,7 @@ define(function (require, exports, module) {
                     var $parent = $('#' + $form.data('parentid'));
                     if ($item.length) {
                         $item.replaceWith(html);
-                        Notify.success('课时已保存');
+                        Notify.success(Translator.trans('课时已保存'));
                     } else {
                         $panel.find('.empty').remove();
                         if ($parent.length) {
@@ -85,7 +85,7 @@ define(function (require, exports, module) {
                         } else {
                             $("#course-item-list").append(html);
                         }
-                        Notify.success('添加直播课时成功');
+                        Notify.success(Translator.trans('添加直播课时成功'));
                     }
                     $modal.modal('hide');
                 }).error(function (event) {
@@ -94,7 +94,7 @@ define(function (require, exports, module) {
                         error = JSON.parse(error);
                         Notify.danger(error.error.message);
                     } else {
-                        Notify.danger('操作失败');
+                        Notify.danger(Translator.trans('操作失败'));
                     }
                 });
             }
@@ -131,7 +131,8 @@ define(function (require, exports, module) {
                 } else {
                     return false;
                 }
-            }, "请输入一个晚于现在的时间"
+            },Translator.trans('请输入一个晚于现在的时间')
+
         );
 
         var thisTime = $('[name=startTime]').val();
@@ -142,9 +143,9 @@ define(function (require, exports, module) {
         if (nowTime > thisTime) {
             $('[name=startTime]').attr('disabled', true);
             $('#live-length-field').attr('disabled', true);
-            $('#starttime-help-block').html("直播已经开始或者结束,无法编辑");
+            $('#starttime-help-block').html(Translator.trans('直播已经开始或者结束,无法编辑'));
             $('#starttime-help-block').css('color', '#a94442');
-            $('#timelength-help-block').html("直播已经开始或者结束,无法编辑");
+            $('#timelength-help-block').html(Translator.trans('直播已经开始或者结束,无法编辑'));
             $('#timelength-help-block').css('color', '#a94442');
         } else {
             $('[name=startTime]').attr('disabled', false);
@@ -161,14 +162,14 @@ define(function (require, exports, module) {
             element: '[name=startTime]',
             required: true,
             rule: 'live_date_check',
-            errormessageRequired: '请输入直播的开始时间'
+            errormessageRequired: Translator.trans('请输入直播的开始时间')
         });
 
         validator.addItem({
             element: '[name=timeLength]',
             required: true,
             rule: 'positive_integer remote_check',
-            display: '直播时长',
+            display: Translator.trans('直播时长'),
             onItemValidated: function (error, message, elem) {
                 if (error) {
                     return;
@@ -184,7 +185,7 @@ define(function (require, exports, module) {
                     var maxStudentNum = parseInt($(elem).data('maxStudentNum'));
                     var leftCapacity = parseInt(response);
                     if (maxStudentNum > leftCapacity) {
-                        var message = '在此时间段内开课，将会超出教室容量<strong>' + (maxStudentNum - leftCapacity) + '</strong>人，届时有可能会导致满额后部分学员无法进入直播。';
+                        var message = Translator.trans('在此时间段内开课，将会超出教室容量') + '<strong>' + (maxStudentNum - leftCapacity) + '</strong> ' + Translator.trans('人，届时有可能会导致满额后部分学员无法进入直播。');
                         $(elem).parent().find('.help-block').html('<div class="alert alert-warning">' + message + '</div>');
                     }
                 }, 'json');

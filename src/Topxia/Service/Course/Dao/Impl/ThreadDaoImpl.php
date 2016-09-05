@@ -171,7 +171,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $fields = array('postNum', 'hitNum', 'followNum');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%s字段不允许增减，只有%s才被允许增减'), $field, implode(',', $fields)));
         }
 
         $currentTime = time();

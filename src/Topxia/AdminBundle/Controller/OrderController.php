@@ -110,7 +110,13 @@ class OrderController extends BaseController
 
         $conditions = $this->buildExportCondition($request, $targetType);
 
-        $status = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $status = array(
+            'created'   => $this->trans('未付款'),
+            'paid'      => $this->trans('已付款'),
+            'refunding' => $this->trans('退款中'),
+            'refunded'  => $this->trans('已退款'),
+            'cancelled' => $this->trans('已关闭')
+        );
 
         $payment        = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orderCount     = $this->getOrderService()->searchOrderCount($conditions);
@@ -124,9 +130,30 @@ class OrderController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         if ($targetType == 'vip') {
-            $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+            $str = $this->trans('订单号').','.
+            $this->trans('订单状态').','.
+            $this->trans('订单名称').','.
+            $this->trans('购买者').','.
+            $this->trans('姓名').','.
+            $this->trans('实付价格').','.
+            $this->trans('支付方式').','.
+            $this->trans('创建时间').','.
+            $this->trans('付款时间');
         } else {
-            $str = "订单号,订单状态,订单名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
+            $str = $this->trans('订单号').','.
+            $this->trans('订单状态').','.
+            $this->trans('订单名称').','.
+            $this->trans('订单价格').','.
+            $this->trans('优惠码').','.
+            $this->trans('优惠金额').','.
+            $this->trans('虚拟币支付').','.
+            $this->trans('实付价格').','.
+            $this->trans('支付方式').','.
+            $this->trans('购买者').','.
+            $this->trans('姓名').','.
+            $this->trans('操作').','.
+            $this->trans('创建时间').','.
+            $this->trans('付款时间');
         }
 
         $str .= "\r\n";
@@ -275,8 +302,8 @@ class OrderController extends BaseController
             $member .= $users[$orders['userId']]['nickname'].",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
 
-            if (preg_match('/管理员添加/', $orders['title'])) {
-                $member .= '管理员添加,';
+            if (preg_match($this->trans('/管理员添加/'), $orders['title'])) {
+                $member .= $this->trans('管理员添加,');
             } else {
                 $member .= "-,";
             }

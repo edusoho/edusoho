@@ -25,7 +25,7 @@
         <span class="text-muted text-sm">{{order.createdTime|date('Y-m-d H:i:s')}}</span>
       </td>
       <td>
-      {{ dict_text('orderStatus:html', order.status) }}
+      {{ dict_macro.orderStatus(order.status) }}
       </td>
       <td>
         <span class="money-text">{{order.amount}}</span>
@@ -47,7 +47,7 @@
   {% else %}
     <tr>
       <td colspan="6">
-        <div class="empty">暂无虚拟币订单记录</div>
+        <div class="empty">{{'暂无虚拟币订单记录'|trans}}</div>
       </td>
     </tr>
   {% endfor %}
