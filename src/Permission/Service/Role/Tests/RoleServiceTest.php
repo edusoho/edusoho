@@ -10,7 +10,7 @@ use Permission\Common\PermissionBuilder;
 
 class  RoleServiceTest extends BaseTestCase
 {
-    public function testInitRoles()
+    public function testrefreshRoles()
     {
         $getAllRole = PermissionBuilder::instance()->getOriginPermissions();
         $permissionTree = Tree::buildWithArray($getAllRole, null, 'code', 'parent');
@@ -31,7 +31,7 @@ class  RoleServiceTest extends BaseTestCase
         });
         $getUserRole = array();
 
-        $userRoles = $this->getRoleService()->initRoles();
+        $userRoles = $this->getRoleService()->refreshRoles();
         $this->assertEquals(count($getSuperAdminRole), count($userRoles['ROLE_SUPER_ADMIN']['data']));
         $this->assertEquals(count($getAdminRole), count($userRoles['ROLE_ADMIN']['data']));
         $this->assertEquals(count($getTeacherRole->column('code')), count($userRoles['ROLE_TEACHER']['data']));

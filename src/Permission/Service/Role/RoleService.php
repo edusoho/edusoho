@@ -19,5 +19,5 @@ interface RoleService
 
     public function searchRolesCount($conditions);
 
-    public function initRoles();
+    public function refreshRoles();
 }
