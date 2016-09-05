@@ -37,7 +37,6 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function updateRole($id, array $fields)
     {
         $this->checkChangeRole($id);
-        $user                  = $this->getCurrentUser();
         $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
         $fields['updatedTime'] = time();
         $role                  = $this->getRoleDao()->updateRole($id, $fields);
@@ -112,7 +111,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             if (empty($userRole)) {
                 $userRole = $this->initCreateRole($key, array_values($value));
             } else {
-                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array_values($value));
+                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array('data' => array_values($value)));
             }
             $userPermission[$key] = $userRole;
         }
