@@ -10,23 +10,23 @@ define(function(require, exports, module) {
     var lessonId = videoHtml.data("lesson-id");
     var mediaLength = 30;
     $.ajax({
-      type: "get", 
-      url: $('.toolbar-question-marker').data('marker-metas-url'), 
-      cache:false, 
-      async:false, 
-      success:function(data){
-        initMarkerArry = data.markersMeta;
-        mediaLength =data.videoTime;
-      }
+        type: "get",
+        url: $('.js-pane-question-content').data('marker-metas-url'),
+        cache: false,
+        async: false,
+        success: function(data) {
+            initMarkerArry = data.markersMeta;
+            mediaLength = data.videoTime;
+        }
     });
     var tempid = 0;
 
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initMarkerArry:initMarkerArry,
-        videotime:mediaLength,
-        addScale: function(markerJson,$marker) {
-            var url = $('.toolbar-question-marker').data('queston-marker-add-url');
+        initMarkerArry: initMarkerArry,
+        _video_time: 139,
+        addScale: function(markerJson, $marker, markers_array) {
+            var url = $('.js-pane-question-content').data('queston-marker-add-url');
             var param = {
                 markerId: markerJson.id,
                 second: markerJson.second,
@@ -37,57 +37,62 @@ define(function(require, exports, module) {
                 if (data.id == undefined) {
                     return;
                 }
+                //新增时间刻度
                 if (markerJson.id == undefined) {
-                    markerJson.id = data.markerId;
                     $marker.attr('id', data.markerId);
+                    markers_array.push({ id: data.markerId, time: markerJson.second });
+                    //排序
+
                 }
-                //显示时间轴
-                if ($marker.is(":hidden")) {
-                    $marker.show();
-                }
-                // 返回题目的ID
-                if (markerJson.questionMarkers[0].id == undefined) {
-                    $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
-                }
+                $marker.removeClass('hidden');
+                $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
             });
             return markerJson;
         },
-        mergeScale: function(markerJson, $marker, $merg_emarker, childrenum) {
-            var url = $('.toolbar-question-marker').data('marker-merge-url');
-
+        mergeScale: function(markerJson, $marker, $merg_emarker, markers_array) {
+            var url = $('.js-pane-question-content').data('marker-merge-url');
             $.post(url, {
                 sourceMarkerId: markerJson.id,
                 targetMarkerId: markerJson.merg_id
             }, function(data) {
-                // 删除被合并的marker
-                if ($marker.is(":hidden")) {
-                    $marker.remove();
+                $marker.remove();
+                for (i in markers_array) {
+                    if (markers_array[i].id == markerJson.id) {
+                        markers_array.splice(i, 1);
+                        break;
+                    }
                 }
-                //删除驻点
+                console.log(markers_array);
             });
             return markerJson;
         },
-        updateScale: function($marker, markerJson, old_position, old_time) {
-            var url = $('.toolbar-question-marker').data('marker-update-url');
-
+        updateScale: function(markerJson, $marker) {
+            var url = $('.js-pane-question-content').data('marker-update-url');
             var param = {
                 id: markerJson.id,
                 second: markerJson.second
             };
-            $.post(url, param, function(data) {
-                //删除驻点
-            });
-
+            $.post(url, param, function(data) {});
             return markerJson;
         },
-        deleteScale: function(markerJson, $marker, $marker_list_item) {
-            var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
+        deleteScale: function(markerJson, $marker, $marker_question, marker_questions_num, markers_array) {
+            var url = $('.js-pane-question-content').data('queston-marker-delete-url');
             $.post(url, {
                 questionId: markerJson.questionMarkers[0].id
             }, function(data) {
-                if ($marker.is(":hidden")) {
+                $marker_question.remove();
+                $('#subject-lesson-list').find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
+                if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
                     $marker.remove();
-                    //查找
+                    for (i in markers_array) {
+                        if (markers_array[i].id == markerJson.questionMarkers[0].id) {
+                            markers_array.splice(i, 1);
+                            break;
+                        }
+                    }
+                } else {
+                    //剩余排序
+                    sortList($marker.find('[data-role="scale-blue-list"]'));
                 }
             });
         },
@@ -96,16 +101,21 @@ define(function(require, exports, module) {
                 return;
             }
 
-            var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
+            var url = $('.js-pane-question-content').data('queston-marker-sort-url');
             param = new Array();
 
             for (var i = 0; i < markerJson.questionMarkers.length; i++) {
                 param.push(markerJson.questionMarkers[i].id);
             }
 
-            $.post(url, {questionIds: param});
+            $.post(url, { questionIds: param });
         }
     });
+
+    function sortList($list) {
+        myDraggableWidget._sortList($list);
+    }
+
 
     exports.run = function() {
 

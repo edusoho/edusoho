@@ -13,8 +13,8 @@ define(function(require, exports, module) {
         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
         $("#lesson-video-content").html(html);
 
-        $.get($('.question').data('url'),function(response){
-        	$('.question').html(response);
+        $.get($('.js-pane-question').data('url'),function(response){
+        	$('.js-pane-question').html(response);
         })
     }
 });

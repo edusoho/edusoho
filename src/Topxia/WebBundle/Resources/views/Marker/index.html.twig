@@ -2,21 +2,45 @@
 {% block title %}{{'弹题管理'|trans}}{% endblock %}
 
 {% set script_controller = 'marker/index' %}
-{% set bodyClass="question-manage" %}
+{% set bodyClass="marker-manage" %}
 
 {% block body %}
-    <div class="mvl mhl">
-      <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="btn btn-primary mrm">返回课时管理</a>
-      <a href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" class="btn btn-default mrm" target="_blank">{{'预览弹题'|trans}}</a>
-      <span class="text-sm color-gray">{{'本页面所有操作自动保存'|trans}}</span>
-    </div>
-  	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
+  {#<div class="mvl mhl">
+    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="btn btn-primary mrm">返回课时管理</a>
+    <a href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" class="btn btn-default mrm" target="_blank">{{'预览弹题'|trans}}</a>
+    <span class="text-sm color-gray">{{'本页面所有操作自动保存'|trans}}</span>
+  </div>
+  <div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
     data-lesson-mediaid="{{ lesson.mediaId }}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
-  		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
-  		<div class="question hidden-xs" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}"></div>
-  	</div>
-	<div class="modal"></div>
+    {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
+    <div class="question hidden-xs" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}"></div>
+  </div>
+	<div class="modal"></div>#}
+  
+  <div class="marker-manage-content" id="lesson-dashboard"
+    data-course-id="{{ course.id }}"
+    data-lesson-id="{{ lesson.id }}"
+    data-lesson-mediaid="{{ lesson.mediaId }}"
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
+    
+    {% include 'TopxiaWebBundle:Marker:player.html.twig' %}
+    <div class="manage-edit-body">
+      <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">随堂练习</a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">字幕</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active pane-question js-pane-question" id="home" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}">
+        </div>
+        <div role="tabpanel" class="tab-pane" id="profile">
+          字幕
+        </div>
+      </div>
+    </div>
+    {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
+  </div>
+  <div class="modal"></div>
 {% endblock %}
