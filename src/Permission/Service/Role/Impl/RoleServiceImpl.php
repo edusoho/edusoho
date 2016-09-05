@@ -36,6 +36,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function updateRole($id, array $fields)
     {
+        $this->checkChangeRole($id);
         $user                  = $this->getCurrentUser();
         $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
         $fields['updatedTime'] = time();
@@ -46,7 +47,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function deleteRole($id)
     {
-        $role = $this->getRoleDao()->getRole($id);
+        $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->deleteRole($id);
             $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
@@ -80,23 +81,21 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $this->getRoleDao()->searchRolesCount($conditions);
     }
 
-    public function initRoles()
+    public function refreshRoles()
     {
-        $getAllRole = PermissionBuilder::instance()->getOriginPermissions();
-        $permissionTree = Tree::buildWithArray($getAllRole, null, 'code', 'parent');
-        $getSuperAdminRoles = ArrayToolkit::column($getAllRole, 'code');
-
+        $getAllRole = PermissionBuilder::instance()->getOriginPermissionTree();
+        $getSuperAdminRoles = $getAllRole->column('code');
         $adminForbidRoles = array('admin_user_avatar', 'admin_user_change_password','admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
 
         $getAdminForbidRoles = array();
         foreach ($adminForbidRoles as $adminForbidRole) {
-            $adminRole = $permissionTree->find(function ($tree) use ($adminForbidRole){
+            $adminRole = $getAllRole->find(function ($tree) use ($adminForbidRole){
                 return $tree->data['code'] === $adminForbidRole;
             });
             $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
         }
-        
-        $getTeacherRoles = $permissionTree->find(function ($tree){
+
+        $getTeacherRoles = $getAllRole->find(function ($tree){
             return $tree->data['code'] === 'web';
         });
         $getTeacherRoles = $getTeacherRoles->column('code');
@@ -136,6 +135,16 @@ class RoleServiceImpl extends BaseService implements RoleService
         $userRole['createdUserId'] = 1;
         $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
         return $this->getRoleDao()->createRole($userRole);
+    }
+
+    private function checkChangeRole($id)
+    {
+        $role = $this->getRoleDao()->getRole($id);
+        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        if (in_array($role['code'], $notUpdateRoles)) {
+            throw $this->createAccessDeniedException('该权限不能修改！');
+        }
+        return $role;
     }
 
     protected function prepareSearchConditions($conditions)
