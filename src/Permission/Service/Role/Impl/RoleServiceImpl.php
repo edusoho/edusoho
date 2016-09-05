@@ -110,10 +110,10 @@ class RoleServiceImpl extends BaseService implements RoleService
             $superAdminRole = $this->getRoleDao()->updateRole($superAdminRole['id'], array('data' => $getSuperAdminRole));
         }
         if (empty($adminRole)) {
-            $adminRole = $this->makeRole('ROLE_ADMIN', $getAdminRole);
+            $adminRole = $this->makeRole('ROLE_ADMIN', array_diff($getSuperAdminRole, $getAdminRole));
             $adminRole = $this->initCreateRole($adminRole);
         } else {
-            $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], array('data' => $getAdminRole));
+            $adminRole = $this->getRoleDao()->updateRole($adminRole['id'], array('data' => array_diff($getSuperAdminRole, $adminRole)));
         }
         if (empty($teacherRole)) {
             $teacherRole = $this->makeRole('ROLE_TEACHER', $getTeacherRole->column('code'));
@@ -123,7 +123,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
         if (empty($userRole)) {
             $userRole = $this->makeRole('ROLE_USER', array());
-            $userRole = $this->initCreateRole(array('data' => $userRole));
+            $userRole = $this->initCreateRole($userRole);
         }
         return array($superAdminRole, $adminRole, $teacherRole, $userRole);
     }
