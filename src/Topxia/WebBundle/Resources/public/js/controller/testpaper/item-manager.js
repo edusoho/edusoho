@@ -60,7 +60,7 @@ define(function(require, exports, module) {
 
         onRequestSave: function(e) {
             var isOk = true;
-            $("#testpaper-table").find('[name="scores[]"]').each(function() {
+            $("#testpaper-table").find('[name="scores[]"]:not(:hidden)').each(function() {
                 var score = $(this).val();
 
                 if (score == '0') {
