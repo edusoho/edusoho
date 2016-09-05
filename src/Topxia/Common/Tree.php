@@ -152,8 +152,9 @@ class Tree
                 }
             }
 
-            $buildingArray = array_filter($buildingArray, function ($array) use ($map, $key, $parentKey) {
-                return !in_array($array[$key], array_keys($map), true);
+            $completedArrayKeys = array_keys($map);
+            $buildingArray = array_filter($buildingArray, function ($array) use ($key, $completedArrayKeys) {
+                return !in_array($array[$key], $completedArrayKeys, true);
             });
         }
 
