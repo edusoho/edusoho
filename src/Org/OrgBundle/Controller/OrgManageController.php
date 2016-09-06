@@ -54,8 +54,12 @@ class OrgManageController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $this->getOrgService()->deleteOrg($id);
-        return $this->createJsonResponse(true);
+        $relatedDatas = $this->getOrgService()->findRelatedModuleDatas($id);
+        if (empty($relatedDatas)) {
+            $this->getOrgService()->deleteOrg($id);
+            return $this->createJsonResponse(array('status' => 'success'));
+        }
+        return $this->createJsonResponse(array('status' => 'error', 'data' => $relatedDatas));
     }
 
     public function checkCodeAction(Request $request)
@@ -111,6 +115,7 @@ class OrgManageController extends BaseController
         }
         return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module' => $module));
     }
+
 
     /**
      * @return OrgServiceImpl

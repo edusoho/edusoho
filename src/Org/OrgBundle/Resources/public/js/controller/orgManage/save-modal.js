@@ -2,7 +2,6 @@ define(function (require, exports, module) {
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
-
     var $form = $('#org-manage-form');
     var $modal = $form.parents('.modal');
     var $table = $('#org-manage-table');
@@ -38,6 +37,7 @@ define(function (require, exports, module) {
         rule: 'alpha_numeric not_all_digital remote byte_maxlength{max:30}'
     });
 
+
     Validator.addRule("chinese_english", /^([\u4E00-\uFA29]|[a-zA-Z])*$/i, "{{display}}必须是中文字、英文字母组成");
     Validator.addRule("alpha_numeric", /^[a-zA-Z0-9]+$/i, "{{display}}必须是英文字母、数字组成");
 
@@ -46,10 +46,23 @@ define(function (require, exports, module) {
             return;
         }
 
-        $.post($(this).data('url'), function (html) {
+        $.post($(this).data('url'), function (response) {
+            if (response && response.status == 'error') {
+                var msg = "该织机构下含有数据 ";
+                $.each(response.data, function ($key) {
+                    msg += $key + ' : ' + response.data[$key] + "条\t";
+                });
+                msg += "请先转移到其他组织机构在进行删除!";
+                Notify.danger(msg, 8);
+                return false;
+            }
+            Notify.success("组织机构已删除");
+
             $modal.modal('hide');
             window.location.reload();
         });
 
     });
+
+
 });

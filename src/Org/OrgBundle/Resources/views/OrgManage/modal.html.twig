@@ -44,9 +44,9 @@
 {% endblock %}
 
 {% block footer %}
-    {# {% if org.id %}
+     {% if org.id %}
         <button type="button" class="btn btn-default pull-left delete-org" data-url="{{ path('admin_org_delete', {id:org.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-    {% endif %} #}
+    {% endif %}
 
     <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
     <button id="org-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary"
