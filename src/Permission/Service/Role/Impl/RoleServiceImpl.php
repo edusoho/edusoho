@@ -2,10 +2,9 @@
 namespace Permission\Service\Role\Impl;
 
 use Permission\Common\PermissionBuilder;
-use Topxia\Common\Tree;
+use Permission\Service\Role\RoleService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Permission\Service\Role\RoleService;
 
 class RoleServiceImpl extends BaseService implements RoleService
 {
@@ -112,7 +111,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             if (empty($userRole)) {
                 $userRole = $this->initCreateRole($key, array_values($value));
             } else {
-                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array_values($value));
+                $userRole = $this->getRoleDao()->updateRole($userRole['id'], array('data' => array_values($value)));
             }
             $userPermission[$key] = $userRole;
         }
