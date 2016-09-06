@@ -55,6 +55,18 @@ class RoleController extends BaseController
         }
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
+
+        $webTree = $tree->find(function ($tree){
+            return $tree->data['code'] === 'web';
+        });
+
+        //课程权限隐藏了所以要默认选中
+        if(!is_null($webTree)){
+            $webTree->each(function (&$tree){
+                $tree->data['checked'] = true;
+            });
+        }
+
         $res = $tree->toArray();
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array(
             'menus' => json_encode($res['children']),
