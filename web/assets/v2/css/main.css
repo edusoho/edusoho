@@ -12637,6 +12637,16 @@ textarea {
     left: 4px;
   }
 }
+.marker-manage {
+  min-height: 100%;
+  background-color: #313131;
+}
+.marker-manage.slideing {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: move!important;
+}
 .marker-manage .nav.nav-tabs.nav-tabs-edit {
   margin-bottom: 0;
   border-bottom: none;
@@ -12707,6 +12717,9 @@ textarea {
   top: 12px;
   right: 5px;
 }
+.marker-manage .lesson-list .placeholder {
+  border-bottom: 1px dashed #46c37b;
+}
 .marker-manage-content {
   position: fixed;
   width: 100%;
@@ -12775,6 +12788,149 @@ textarea {
   color: #ff8a0c;
   font-size: 16px;
   margin-right: 10px;
+}
+.marker-manage-content .editbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 160px;
+  bottom: 0;
+  background-color: #313131;
+}
+.marker-manage-content .editbox .lesson-list {
+  height: 100%;
+  background-color: #414141;
+  padding: 0 160px 0 20px;
+}
+.marker-manage-content .editbox .lesson-list .placeholder {
+  border-color: transparent;
+}
+.marker-manage-content .editbox .scale-content {
+  height: 111px;
+  padding-top: 10px;
+  border-top: 1px solid #292929;
+}
+.marker-manage-content .editbox .scalebox {
+  position: relative;
+  height: 21px;
+  border-bottom: 1px solid #404040;
+}
+.marker-manage-content .editbox .scalebox .lesson-list {
+  height: auto;
+  padding: 0;
+  background-color: transparent;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson {
+  position: relative;
+  padding: 0 10px;
+  margin-bottom: 0;
+  text-align: left;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson:hover {
+  background-color: #46c37b;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson .title {
+  display: none;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .item-lesson .sqe-number {
+  display: inline;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder {
+  border-color: #46c37b;
+}
+.marker-manage-content .editbox .scalebox .scale {
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: 1;
+  padding-left: 5px;
+  color: #fff;
+  height: 20px;
+  line-height: 20px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-red .line {
+  top: 0;
+  height: 160px;
+  border-color: red;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-red .scale-details {
+  visibility: visible;
+  font-size: 12px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue {
+  cursor: pointer;
+  height: 132px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue .line {
+  top: 32px;
+  height: 100px;
+  border-color: #2b9cf0;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover {
+  width: 8px;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .line,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover .line {
+  border-color: transparent;
+  background-color: rgba(45, 183, 245, 0.5);
+  -moz-animation: boxshow 1s ease infinite;
+  -webkit-animation: boxshow 1s ease infinite;
+  animation: boxshow 1s ease infinite;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.highlight .scale-details,
+.marker-manage-content .editbox .scalebox .scale.scale-blue:hover .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .line {
+  -moz-animation: boxshow 0 ease infinite;
+  -webkit-animation: boxshow 0 ease infinite;
+  animation: boxshow 0 ease infinite;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-blue.moveing .scale-details {
+  width: 220px;
+  margin-left: -110px;
+  visibility: visible;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-white .line {
+  height: 106px;
+  top: 26px;
+  border-color: #fff;
+}
+.marker-manage-content .editbox .scalebox .scale.scale-white .line i {
+  position: absolute;
+  left: -8.5px;
+  top: -13.5px;
+}
+.marker-manage-content .editbox .scalebox .scale .scale-details {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  visibility: hidden;
+  min-width: 50px;
+  margin-left: -25px;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  color: #fff;
+}
+.marker-manage-content .editbox .scalebox .scale .line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  border-left: 1px solid #616161;
+}
+.marker-manage-content .editbox .scalebox .scale .line.line-dashed {
+  top: 32px;
+  height: 100px;
+  border-left: 1px dashed #a3a3a3;
+}
+.marker-manage-content .editbox .scalebox .scale .scale-time {
+  display: inline-block;
+  font-size: 12px;
+  -webkit-transform: scale(0.83);
 }
 .marker-modal .question-heading {
   padding-bottom: 15px;
@@ -12884,168 +13040,6 @@ textarea {
   margin-top: -3px;
   font-size: 12px;
   color: #919191;
-}
-.marker-manage {
-  min-height: 100%;
-  background-color: #313131;
-}
-.marker-manage.slideing {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  user-select: none;
-  cursor: move!important;
-}
-.marker-manage .question-menu {
-  position: relative;
-  height: 90%;
-  border: 1px solid #ccc;
-  background: #fff;
-  line-height: 40px;
-  margin-bottom: 15px;
-  margin-left: 20px;
-}
-.marker-manage .question-menu .lesson-list {
-  min-height: 100px;
-}
-.marker-manage .editbox {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 160px;
-  bottom: 0;
-  background-color: #313131;
-}
-.marker-manage .editbox .lesson-list {
-  height: 100%;
-  background-color: #414141;
-  padding: 0 160px 0 20px;
-}
-.marker-manage .editbox .scale-content {
-  height: 111px;
-  padding-top: 10px;
-  border-top: 1px solid #292929;
-}
-.marker-manage .editbox .scalebox {
-  position: relative;
-  height: 21px;
-  border-bottom: 1px solid #404040;
-}
-.marker-manage .editbox .scalebox .lesson-list {
-  height: auto;
-  padding: 0;
-  background-color: transparent;
-}
-.marker-manage .editbox .scalebox .lesson-list .item-lesson {
-  position: relative;
-  padding: 0 10px;
-  margin-bottom: 0;
-  text-align: left;
-}
-.marker-manage .editbox .scalebox .lesson-list .item-lesson:hover {
-  background-color: #46c37b;
-}
-.marker-manage .editbox .scalebox .lesson-list .item-lesson .title {
-  display: none;
-}
-.marker-manage .editbox .scalebox .lesson-list .item-lesson .sqe-number {
-  display: inline;
-}
-.marker-manage .editbox .scalebox .scale {
-  position: absolute;
-  top: 0;
-  display: block;
-  z-index: 1;
-  padding-left: 5px;
-  color: #fff;
-  height: 20px;
-  line-height: 20px;
-}
-.marker-manage .editbox .scalebox .scale.scale-red .line {
-  top: 0;
-  height: 160px;
-  border-color: red;
-}
-.marker-manage .editbox .scalebox .scale.scale-red .scale-details {
-  visibility: visible;
-  font-size: 12px;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue {
-  cursor: pointer;
-  height: 132px;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue .line {
-  top: 32px;
-  height: 100px;
-  border-color: #2b9cf0;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue.highlight,
-.marker-manage .editbox .scalebox .scale.scale-blue:hover {
-  width: 8px;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue.highlight .line,
-.marker-manage .editbox .scalebox .scale.scale-blue:hover .line {
-  border-color: transparent;
-  background-color: rgba(45, 183, 245, 0.5);
-  -moz-animation: boxshow 1s ease infinite;
-  -webkit-animation: boxshow 1s ease infinite;
-  animation: boxshow 1s ease infinite;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue.highlight .scale-details,
-.marker-manage .editbox .scalebox .scale.scale-blue:hover .scale-details {
-  width: 220px;
-  margin-left: -110px;
-  visibility: visible;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue.moveing .line {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-.marker-manage .editbox .scalebox .scale.scale-blue.moveing .scale-details {
-  width: 220px;
-  margin-left: -110px;
-  visibility: visible;
-}
-.marker-manage .editbox .scalebox .scale.scale-white .line {
-  height: 106px;
-  top: 26px;
-  border-color: #fff;
-}
-.marker-manage .editbox .scalebox .scale.scale-white .line i {
-  position: absolute;
-  left: -8.5px;
-  top: -13.5px;
-}
-.marker-manage .editbox .scalebox .scale .scale-details {
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  visibility: hidden;
-  min-width: 50px;
-  margin-left: -25px;
-  background-color: rgba(0, 0, 0, 0.8);
-  text-align: center;
-  color: #fff;
-}
-.marker-manage .editbox .scalebox .scale .line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  border-left: 1px solid #616161;
-}
-.marker-manage .editbox .scalebox .scale .line.line-dashed {
-  top: 32px;
-  height: 100px;
-  border-left: 1px dashed #a3a3a3;
-}
-.marker-manage .editbox .scalebox .scale .scale-time {
-  display: inline-block;
-  font-size: 12px;
-  -webkit-transform: scale(0.83);
-}
-.ballon-video-player .vjs-marker.bg-primary {
-  background-color: #46c37b !important;
 }
 .user-center-header {
   position: relative;

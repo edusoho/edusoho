@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     require('jquery.sortable');
     var Widget = require('widget');
+    var Messenger = require('../player/messenger');
 
     var DraggableWidget = Widget.extend({
         attrs: {
@@ -46,6 +47,52 @@ define(function(require, exports, module) {
             this._initeditbox(false);
             this._initMarkerArry(this.get('initMarkerArry'));
             this._lisentresize();
+            this.initPlayer();
+        },
+        initPlayer: function() {
+            var _self = this;
+            var changeleft = true;
+            var $editbox_list = $('#editbox-lesson-list');
+            var videoHtml = $('#lesson-dashboard');
+            var courseId = videoHtml.data("course-id");
+            var lessonId = videoHtml.data("lesson-id");
+            var mediaId = videoHtml.data("lesson-mediaid");
+
+            var playerUrl = '/course/' + courseId + '/lesson/' + lessonId + '/player?hideBeginning=true&hideQuestion=1';
+            var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+            // var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+            $("#lesson-video-content").html(html);
+
+            var messenger = new Messenger({
+                name: 'parent',
+                project: 'PlayerProject',
+                children: [document.getElementById('viewerIframe')],
+                type: 'parent'
+            });
+
+            messenger.on("timechange", function(data) {
+                if(changeleft) {
+                    $('.scale-white').css('left',_self._getleft(data.currentTime));
+                }
+            });
+
+            $('.scale-white').on('mousedown', function() {
+                changeleft = false;
+                $(document).on('mousemove.playertime',function(){
+                    window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+                    var left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
+                     $('.scale-white').css('left',left);
+                     var times = _self._gettime(left);
+                     console.log(times);
+                    messenger.sendToChild({ id: 'viewerIframe' }, 'setCurrentTime', { time: times });
+                }).on('mouseup.playertime',function(){
+                    $(document).off('mousemove.playertime');
+                    $(document).off('mousedown.playertime');
+                    changeleft = true;
+                    messenger.sendToChild({ id: 'viewerIframe' }, 'setPlayerPlay');
+                });
+
+            });
         },
         itemRmove: function(e) {
             console.log('itemRmove');
@@ -88,7 +135,7 @@ define(function(require, exports, module) {
                 $dragingitemcopy = $dragingitem.clone().removeClass('drag').addClass('disdragg');
 
             $dragingitem.after($dragingitemcopy);
-            _self._maskToggle();
+            _self._maskShow(true);
             //查询现有的时间刻度：数组保存现有的所有时间刻度 markers_array
             $(document).on('mousemove.dragitem', function(event) {
                 if ($editbox_list.find('.placeholder').length <= 0) {
@@ -126,7 +173,7 @@ define(function(require, exports, module) {
             }).on('mouseup.dragitem', function() {
                 $(document).off('mousemove.dragitem');
                 $(document).off('mouseup.dragitem');
-                _self._maskToggle();
+                _self._maskShow(false);
                 $scale_red.addClass('hidden');
                 $editbox_list.removeClass('highlight');
                 //未拖动
@@ -144,7 +191,7 @@ define(function(require, exports, module) {
                     _self._addScale($merge_marker, marker_array[0].time, $list.children().length, _self.get('markers_array'));
                     $merge_marker.removeClass('highlight');
                     _self._newSortList($list);
-                } else {//新增标记和题目
+                } else { //新增标记和题目
                     var $scale_blue = $('[data-role="scale-blue"]'),
                         $new_scale_blue = $scale_blue.clone().css('left', _mover_left).removeAttr('data-role'),
                         $scale_blue_list = $new_scale_blue.find('[data-role="scale-blue-list"]'),
@@ -167,7 +214,7 @@ define(function(require, exports, module) {
             var $moveitem = $(e.currentTarget),
                 $editbox_list = $('#editbox-lesson-list'),
                 _oldleft = $moveitem.css('left');
-            _self._maskToggle();
+            _self._maskShow(true);
             $('.marker-manage').addClass('slideing');
             $moveitem.addClass('moveing');
             $(document).on('mousemove.slide', function(event) {
@@ -182,7 +229,7 @@ define(function(require, exports, module) {
                     marker_array = [];
                     $merge_marker = null;
                     for (i in _self.get('markers_array')) {
-                        if (Math.abs(_self.get('markers_array')[i].time - _move_time) <= 5) {
+                        if (Math.abs(_self.get('markers_array')[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.get('markers_array')[i].id) {
                             console.log(Math.abs(_self.get('markers_array')[i].time - _move_time));
                             marker_array = [{
                                 id: _self.get('markers_array')[i].id,
@@ -197,7 +244,7 @@ define(function(require, exports, module) {
             }).on('mouseup.slide', function() {
                 $(document).off('mousemove.slide');
                 $(document).off('mouseup.slide');
-                _self._maskToggle();
+                _self._maskShow(false);
                 $moveitem.removeClass('moveing');
                 $('.marker-manage').removeClass('slideing');
                 if (marker_array.length > 0) {
@@ -214,8 +261,8 @@ define(function(require, exports, module) {
                 }
             })
         },
-        _maskToggle: function() {
-            $('[data-role="player-mask"]').toggleClass('hidden');
+        _maskShow: function(show) {
+            (show) ? $('[data-role="player-mask"]').removeClass('hidden'): $('[data-role="player-mask"]').addClass('hidden');
         },
         _initSortable: function() {
             var _obj = this;
@@ -292,7 +339,6 @@ define(function(require, exports, module) {
                     this.get('markers_array').push({ id: initMarkerArry[i].id, time: initMarkerArry[i].second });
 
                 }
-                console.log( this.get('markers_array'));
                 var $list = $('.scalebox').find('[data-role="scale-blue-list"]');
                 this._newSortList($list);
             }
@@ -330,38 +376,31 @@ define(function(require, exports, module) {
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
                     _super($item, container);
-                    // var $scale_blue = $item.closest('.scale-blue');
-                    // var markerJson = {
-                    //     "id": '',
-                    //     "questionMarkers": []
-                    // };
-                    // markerJson.id = $scale_blue.attr('id');
-                    // _self._sortList($scale_blue.find('data-role="scale-blue-list"'));
-                    // $scale.find("li").each(function() {
-                    //     var questionMarkers = {
-                    //         'id': $(this).attr('id'),
-                    //         'seq': $(this).find('[]').html()
-                    //     };
-                    //     markerJson.questionMarkers.push(questionMarkers);
-                    // });
-                    // _self._updateSeq($scale, markerJson);
-                    // $item.closest('.scale-details').removeClass('visible');
-
+                    _self._maskShow(false);
+                    var $scale_blue = $item.closest('.scale-blue');
+                    var markerJson = {
+                        "id": '',
+                        "questionMarkers": []
+                    };
+                    markerJson.id = $scale_blue.attr('id');
+                    _self._sortList($scale_blue.find('[data-role="scale-blue-list"]'));
+                    $scale_blue.find("li").each(function() {
+                        var questionMarkers = {
+                            'id': $(this).attr('id'),
+                            'seq': $(this).find('[data-role="sqe-number"]').html()
+                        };
+                        markerJson.questionMarkers.push(questionMarkers);
+                    });
+                    _self._updateSeq($scale_blue, markerJson);
+                    $scale_blue.removeClass('moveing');
                 },
                 serialize: function(parent, children, isContainer) {
                     return isContainer ? children : parent.attr('id');
                 },
                 isValidTarget: function($item, container) {
-                    $('.dashboard-content .mask').show();
-                    $item.closest('.scale-details').addClass('visible');
-                    if (_self.get('updateSqeArry').length <= 0) {
-                        _self.get('updateSqeArry').push($item.find('.number .num').html());
-                    }
-                    if ($item.siblings('li').length) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    _self._maskShow(true);
+                    $item.closest('.scale-blue').addClass('moveing');
+                    return true;
                 }
             });
         },
@@ -453,7 +492,17 @@ define(function(require, exports, module) {
         },
         _updateSeq: function($scale, markerJson) {
             $.extend(this.get("updateSeq")($scale, markerJson));
-        }
+        },
+        _getleft: function(time) {
+            var _width = $('#editbox-lesson-list').width();
+            var _totaltime = parseInt(this.get("_video_time"));
+            _left = time * _width / _totaltime;
+            return _left+20;
+        },
+        _gettime: function(left) {
+
+            return Math.round((left - 20) * this.get('_video_time') / $('#editbox-lesson-list').width());
+        },
     });
     module.exports = DraggableWidget;
 });
