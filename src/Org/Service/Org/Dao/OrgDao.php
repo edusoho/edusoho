@@ -16,7 +16,7 @@ interface OrgDao
 
     public function delete($id);
 
-    public function deleteOrgsByOrgCode($orgCode);
+    public function deleteOrgsStartByOrgCode($orgCode);
 
     public function findOrgsStartByOrgCode($orgCode);
 

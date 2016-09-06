@@ -78,13 +78,17 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $org = $this->checkBeforProccess($id);
 
-        if ($org['parentId']) {
-            $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
-        }
 
-        $this->getOrgDao()->delete($id);
-        //删除辖下
-        $this->getOrgDao()->deleteOrgsByOrgCode($org['orgCode']);
+        $this->getOrgDao()->getConnection()->transactional(function () use ($org, $id) {
+            if ($org['parentId']) {
+                $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
+            }
+            $this->getOrgDao()->delete($id);
+            //删除辖下
+            $this->getOrgDao()->deleteOrgsStartByOrgCode($org['orgCode']);
+        });
+
+
     }
 
     public function switchOrg($id)
@@ -186,6 +190,20 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
         return $org['id'] == $exclude ? true : false;
     }
+
+    public function findRelatedModuleDatas($orgId)
+    {
+        $org          = $this->getOrg($orgId);
+        $modules      = OrgBatchUpdateFactory::getModules();
+        $modalesDatas = array();
+        $conditions   = array('likeOrgCode' => $org['orgCode']);
+        foreach ($modules as $module => $service) {
+            $dispay                = OrgBatchUpdateFactory::getDispayModuleName($module);
+            $modalesDatas[$dispay] = $this->createService($service)->searchCount($conditions);
+        }
+        return array_filter($modalesDatas);;
+    }
+
 
     /**
      * @return OrgDaoImpl

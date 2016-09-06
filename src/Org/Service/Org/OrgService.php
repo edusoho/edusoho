@@ -55,4 +55,11 @@ interface OrgService
      * @return mixed is name avaliable under the parent
      */
     public function isNameAvaliable($name, $parentId, $exclude);
+
+    /**
+     * 给定组织机构id,获取该组织机构(含辖下)的所有模块的数据
+     * @param $orgId
+     * @return mixed
+     */
+    public function  findRelatedModuleDatas($orgId);
 }
