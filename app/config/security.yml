@@ -53,7 +53,7 @@ security:
                 success_handler: topxia.authentication.success_handler
             remember_me:
                 key: "%secret%"
-                lifetime: 31536000
+                lifetime: 604800
                 path: /
                 domain: ~
             logout:
