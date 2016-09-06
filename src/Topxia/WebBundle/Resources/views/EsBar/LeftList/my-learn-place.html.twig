@@ -1,1 +1,6 @@
-<li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="{{'我的课程/%name%'|trans({'%name%'|trans: setting('classroom.name')|default('班级'|trans)}) }}"><a href="javascript:;" data-url="{{ path('esbar_my_course') }}"><i class="es-icon es-icon-book"></i></a></li>
+<li data-id="#bar-course-list" data-placement="left" data-toggle="tooltip" title="{{'我的课程/%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}">
+  <a data-url="{{ path('esbar_my_course') }}" href="javascript:;">
+    <i class="es-icon es-icon-book">
+    </i>
+  </a>
+</li>
