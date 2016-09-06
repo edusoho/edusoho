@@ -92,7 +92,6 @@ admin:
                                     visable: (user.locked == 1)
                                     router_params:
                                         id: (user.id)
-                                    visible: false
                         admin_login_record:
                             name: 登录日志
                 admin_teacher:
