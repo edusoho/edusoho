@@ -69,8 +69,8 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
-                    Notify.danger('题目分值只能填写数字，且最多一位小数。');
+                if (!/^(([1-9]{1}\d{0,3})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目分值只能填写数字，并且在3位数以内，保留一位小数。');
                     $(this).focus();
                     isOk = false;
                     return false;
@@ -190,8 +190,9 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="passedScore"]',
                     required: true,
-                    rule: 'score',
-                    display: '分数'
+                    rule: 'score maxlength{max:3}',
+                    display: '分数',
+                     errormessageMaxlength:'分数的长度必须在3位数以内'
                 });
             }
         },
@@ -328,8 +329,9 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="passedScore"]',
                 required: true,
-                rule: 'score',
-                display: '分数'
+                rule: 'score maxlength{max:3}',
+                display: '分数',
+                errormessageMaxlength:'分数的长度必须在3位数以内'
             });
         }
 
