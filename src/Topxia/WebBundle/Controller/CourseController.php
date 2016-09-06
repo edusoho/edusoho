@@ -492,6 +492,22 @@ class CourseController extends CourseBaseController
             return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
+        if ($this->isPluginInstalled('InternalTraining')) {
+            $postCoursePackages = $this->getPostCourseService()->findPostCoursePackagesByUser($user);
+            $courses = ArrayToolkit::column($postCoursePackages, 'course');
+            $courses = $this->getTrainingCourseService()->decideCoursesStudyStatus($courses, $user);
+            
+            foreach ($courses as $key => $postCourse) {
+                if ($postCourse['id'] == $course['id']) {
+                    for ($i = 1; $i <= $key-1; $i++) {
+                        if ($courses[$i]['studyStatus'] != 'finished') {
+                            return $this->createMessageResponse('info', "前置课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('homepage'));
+                        }
+                    }
+                }
+            }
+        }
+
         try {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
@@ -967,5 +983,15 @@ class CourseController extends CourseBaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getPostCourseService()
+    {
+        return $this->getServiceKernel()->createService('InternalTraining:PostCourse.PostCourseService');
+    }
+
+    protected function getTrainingCourseService()
+    {
+        return $this->createService('InternalTraining:TrainingCourse.TrainingCourseService');
     }
 }

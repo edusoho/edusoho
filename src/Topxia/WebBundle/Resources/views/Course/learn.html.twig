@@ -33,7 +33,11 @@
       {% if classroom %}
         <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('classroom_show', {id:classroom.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回班级'|trans}}</a>
       {% else %}
-        <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程'|trans}}</a>
+        {% if is_plugin_installed('InternalTraining') %}
+          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程列表'|trans}}</a>
+        {% else %}
+          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程'|trans}}</a>
+        {% endif %}
       {% endif %}
 
        <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="{{'上一课时'|trans}}"><span class="glyphicon glyphicon-chevron-up" title="{{'上一课时'|trans}}"></span></a>
@@ -151,7 +155,11 @@
           <p class="text-success">{{'赞一个，这个课程你已经都学完啦，你可以再回顾一下或者去看看别的课程'|trans}}～～～</p>
         </div>
         <div class="modal-footer">
-          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">{{'回课程主页'|trans}}</a>
+          {% if is_plugin_installed('InternalTraining') %}
+            <a href="{{ path('homepage') }}" class="btn btn-primary">{{'回课程列表页'|trans}}</a>
+          {% else %}
+            <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">{{'回课程主页'|trans}}</a>
+          {% endif %}
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
