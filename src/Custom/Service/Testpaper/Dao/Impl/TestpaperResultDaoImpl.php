@@ -9,33 +9,37 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 {
     protected $table = 'testpaper_result';
 
-    public function findTestPaperResultCountByStatusAndTestIdsAndOrgId($ids, $status, $orgCode)
+    public function findTestPaperResultCountByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
         if (empty($ids)) {
             return null;
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
+        $userIdMarks = str_repeat('?,', count($userIds) - 1).'?';
 
         array_push($ids, $status);
+        $params = array_merge($ids, $userIds);
 
-        $sql = "SELECT COUNT(*) FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ? AND `orgCode` LIKE '%{$orgCode}%'";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ? AND `userId` IN ({$userIdMarks})";
 
-        return $this->getConnection()->fetchColumn($sql, $ids);
+        return $this->getConnection()->fetchColumn($sql, $params);
     }
 
-    public function findTestPaperResultsByStatusAndTestIdsAndOrgId($ids, $status, $orgCode)
+    public function findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
         if (empty($ids)) {
             return null;
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
+        $userIdMarks = str_repeat('?,', count($userIds) - 1).'?';
 
         array_push($ids, $status);
+        $params = array_merge($ids, $userIds);
 
-        $sql = "SELECT * FROM {$this->table} INNER JOIN user ON {$this->table}.userId = user.id WHERE `testId` IN ({$marks}) AND `status` = ? AND `orgCode` LIKE '%{$orgCode}%'";
+        $sql = "SELECT * FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ? AND `userId` IN ({$userIdMarks})";
 
-        return $this->getConnection()->fetchAll($sql, $ids);
+        return $this->getConnection()->fetchAll($sql, $params);
     }
 }

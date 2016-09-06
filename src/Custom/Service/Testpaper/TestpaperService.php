@@ -4,9 +4,9 @@ namespace Custom\Service\Testpaper;
 
 interface TestpaperService
 {
-    public function findTestPaperResultCountByStatusAndTestIdsAndOrgId($ids, $status, $orgCode);
+    public function findTestPaperResultCountByStatusAndTestIdsAndUserIds($ids, $status, $userIds);
 
-    public function findTestPaperResultsByStatusAndTestIdsAndOrgId($ids, $status, $orgCode);
+    public function findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds);
 
     public function findAllTestpapersByTarget($id);
 }
