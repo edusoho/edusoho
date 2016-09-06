@@ -21,7 +21,7 @@ interface OrgService
      *  获取后台管理组织机构数据
      *  如果没有传orgcode, 默认获取所有
      */
-    public function findOrgsStartByOrgCode($orgCode = null);
+    public function findOrgsByPrefixOrgCode($orgCode = null);
 
     public function isCodeAvaliable($value, $exclude);
 

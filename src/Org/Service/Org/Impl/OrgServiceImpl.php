@@ -85,7 +85,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             }
             $this->getOrgDao()->delete($id);
             //删除辖下
-            $this->getOrgDao()->deleteOrgsStartByOrgCode($org['orgCode']);
+            $this->getOrgDao()->deleteOrgsByPrefixOrgCode($org['orgCode']);
         });
 
 
@@ -116,14 +116,14 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->findOrgsByIds($ids);
     }
 
-    public function findOrgsStartByOrgCode($orgCode = null)
+    public function findOrgsByPrefixOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
         $user = $this->getCurrentUser();
 
         $org = $this->getOrg($user['orgId']);
 
-        return $this->getOrgDao()->findOrgsStartByOrgCode($org['orgCode']);
+        return $this->getOrgDao()->findOrgsByPrefixOrgCode($org['orgCode']);
     }
 
     public function isCodeAvaliable($value, $exclude)

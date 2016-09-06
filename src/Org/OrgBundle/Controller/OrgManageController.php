@@ -13,7 +13,7 @@ class OrgManageController extends BaseController
     {
         $user = $this->getCurrentUser();
         $org  = $this->getOrgService()->getOrg($user['orgId']);
-        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
 
         $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq', $org['parentId']);
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');

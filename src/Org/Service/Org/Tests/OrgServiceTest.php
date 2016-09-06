@@ -81,7 +81,7 @@ class OrgServiceTest extends BaseTestCase
         $this->assertNull($getOrg);
     }
 
-    public function testfindOrgsStartByOrgCode()
+    public function testfindOrgsByPrefixOrgCode()
     {
         $org = $this->mookOrg($name = "edusoho");
         $org = $this->getOrgService()->createOrg($org);
@@ -90,8 +90,8 @@ class OrgServiceTest extends BaseTestCase
         $childOrg['parentId'] = $org['id'];
         $childOrg             = $this->getOrgService()->createOrg($childOrg);
 
-        $orgs     = $this->getOrgService()->findOrgsStartByOrgCode($org['orgCode']);
-        $orgsless = $this->getOrgService()->findOrgsStartByOrgCode($childOrg['orgCode']);
+        $orgs     = $this->getOrgService()->findOrgsByPrefixOrgCode($org['orgCode']);
+        $orgsless = $this->getOrgService()->findOrgsByPrefixOrgCode($childOrg['orgCode']);
 
         $this->assertEquals(2, count($orgs));
         $this->assertEquals(1, count($orgsless));
@@ -117,12 +117,12 @@ class OrgServiceTest extends BaseTestCase
         $org  = $this->getOrgService()->createOrg($org);
         $org  = $this->getOrgService()->createOrg($org1);
 
-        $orgs   = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs   = $this->getOrgService()->findOrgsByPrefixOrgCode();
         $seqs   = ArrayToolkit::column($orgs, 'seq');
         $orgIds = ArrayToolkit::column($orgs, 'id');
         $this->getOrgService()->sortOrg($orgIds);
 
-        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
 
         $sortSeqs = ArrayToolkit::column($orgs, 'seq');
         $this->assertGreaterThan(array_sum($seqs), array_sum($sortSeqs));
