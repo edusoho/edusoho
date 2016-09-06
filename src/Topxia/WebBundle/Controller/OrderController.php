@@ -212,7 +212,7 @@ class OrderController extends BaseController
     public function couponCheckAction(Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
-            $code = $request->request->get('code');
+            $code = trim($request->request->get('code'));
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
                 throw new \RuntimeException($this->trans('优惠券不支持的购买项目。'));

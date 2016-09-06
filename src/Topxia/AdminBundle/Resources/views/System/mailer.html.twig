@@ -1,6 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'system/mailer' %}
+{% set script_arguments = { registerEmailVerified: setting('auth.email_enabled','closed') } %}
 
 {% set menu = 'admin_setting_mailer' %}
 

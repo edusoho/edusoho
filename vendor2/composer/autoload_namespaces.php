@@ -33,5 +33,8 @@ return array(
     'Assetic'                               => array($vendorDir.'/kriswallsmith/assetic/src'),
     ''                                      => array($baseDir.'/src', $baseDir.'/plugins'),
     'Bazinga\\Bundle\\JsTranslationBundle'  => array($vendorDir.'/willdurand/js-translation-bundle'),
-    'Mockery'                               => array($vendorDir.'/mockery/mockery/library')
+    'Mockery'                               => array($vendorDir.'/mockery/mockery/library'),
+    'OAuth2\\ServerBundle'                  => array($vendorDir.'/bshaffer/oauth2-server-bundle'),
+    'OAuth2\\HttpFoundationBridge'          => array($vendorDir.'/bshaffer/oauth2-server-httpfoundation-bridge/src'),
+    'OAuth2'                                => array($vendorDir.'/bshaffer/oauth2-server-php/src')
 );

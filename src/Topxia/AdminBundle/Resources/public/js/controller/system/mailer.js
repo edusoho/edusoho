@@ -63,6 +63,13 @@ define(function(require, exports, module) {
                     errormessageRequired: Translator.trans('请输入发信人名称')
                 });
             } else {
+                if (app.arguments.registerEmailVerified == 'opened') {
+                    Notify.danger('您开启了注册邮箱验证，请先关闭邮箱验证！');
+                    
+                    $('[name=enabled][value="0"]').prop('checked',false);
+                    $('[name=enabled][value="1"]').prop('checked',true);
+                    return;
+                }
                 validator.removeItem('[name="host"]');
                 validator.removeItem('[name="port"]');
                 validator.removeItem('[name="username"]');

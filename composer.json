@@ -53,7 +53,8 @@
 		"asm89/twig-cache-extension": "~1.0",
 		"flexihash/flexihash": "^1.0.0",
 		"mockery/mockery": "^0.9.4",
-		"endroid/qrcode-bundle": "~1.6"
+		"endroid/qrcode-bundle": "~1.6",
+		"bshaffer/oauth2-server-bundle": "^0.3.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [

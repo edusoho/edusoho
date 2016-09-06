@@ -37,7 +37,8 @@ class AppKernel extends Kernel
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
             new Org\OrgBundle\OrgBundle(),
-            new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle()
+            new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
+            new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
