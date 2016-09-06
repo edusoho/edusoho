@@ -28,14 +28,18 @@ define(function (require, exports, module) {
     validator.addItem({
         element: '#org-name-field',
         required: true,
-        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:40}, remote',
+        rule: 'chinese_english byte_maxlength{max:30} remote'
     });
 
     validator.addItem({
         element: '#org-code-field',
         required: true,
-        rule: 'alphanumeric not_all_digital remote'
+        rule: 'alpha_numeric not_all_digital remote byte_maxlength{max:30}'
     });
+
+
+    Validator.addRule("chinese_english", /^([\u4E00-\uFA29]|[a-zA-Z])*$/i, "{{display}}必须是中文字、英文字母组成");
+    Validator.addRule("alpha_numeric", /^[a-zA-Z0-9]+$/i, "{{display}}必须是英文字母、数字组成");
 
     $modal.find('.delete-org').on('click', function () {
         if (!confirm('真的要删除该组织机构及其辖下组织机构吗？')) {
@@ -53,6 +57,7 @@ define(function (require, exports, module) {
                 return false;
             }
             Notify.success("组织机构已删除");
+
             $modal.modal('hide');
             window.location.reload();
         });
