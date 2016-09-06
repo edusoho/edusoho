@@ -13,7 +13,7 @@ class CourseRelatedDataDataTag extends CourseBaseDataTag implements DataTag
      *   courseId 必需 课程ID
      *
      * @param  array $arguments     参数
-     * @return array 课程话题
+     * @return array 课程数据
      */
 
     public function getData(array $arguments)
