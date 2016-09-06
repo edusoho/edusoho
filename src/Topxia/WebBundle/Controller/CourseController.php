@@ -501,7 +501,7 @@ class CourseController extends CourseBaseController
                 if ($postCourse['id'] == $course['id']) {
                     for ($i = 1; $i <= $key-1; $i++) {
                         if ($courses[$i]['studyStatus'] != 'finished') {
-                            return $this->createMessageResponse('info', "前置课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('internal_training_index'));
+                            return $this->createMessageResponse('info', "前置课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('homepage'));
                         }
                     }
                 }

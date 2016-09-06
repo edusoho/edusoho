@@ -34,7 +34,7 @@
         <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('classroom_show', {id:classroom.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回班级'|trans}}</a>
       {% else %}
         {% if is_plugin_installed('InternalTraining') %}
-          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('internal_training_index') }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程列表'|trans}}</a>
+          <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('homepage') }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程列表'|trans}}</a>
         {% else %}
           <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> {{'返回课程'|trans}}</a>
         {% endif %}
