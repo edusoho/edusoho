@@ -275,9 +275,9 @@ class ServiceKernel
      */
     public function transArray($messages, $arguments = array(), $domain = null, $locale = null)
     {
-        array_walk($messages, function (&$message, $key, $params) {
-            $message = $this->trans($message, $params[0], $params[1], $params[2]);
-        }, array($arguments, $domain, $locale));
+        foreach ($messages as &$message) {
+            $message = $this->trans($message, $arguments, $domain, $locale);
+        }
         return $messages;
     }
 
