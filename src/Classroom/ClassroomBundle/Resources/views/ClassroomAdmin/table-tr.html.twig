@@ -65,12 +65,9 @@
 
   <div class="btn-group">
 
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-      编辑
-      <span class="caret"></span>
-    </button>
+      <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
 
- <ul class="dropdown-menu">
+ {#<ul class="dropdown-menu">
        <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理{{setting("classroom.name")|default("班级")}}</a></li>
         
         {% if classroom.recommended %}
@@ -87,11 +84,12 @@
        {% else %}
        <li><a href="javascript:" class="open-classroom" title="发布{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布{{setting("classroom.name")|default("班级")}}</a></li>
 
-       {% endif %}
+       {% endif %}}
 
        {% if classroom.status=='draft'%}
       <li><a href="javascript:" class="delete-classroom" title="删除{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> 删除{{setting("classroom.name")|default("班级")}}</a></li>
-      {% endif %}
+      {% endif %}#}
+      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_classroom_manage', group:'groupButton', classroom: classroom} %}
   </div>
  </td>
 </tr>

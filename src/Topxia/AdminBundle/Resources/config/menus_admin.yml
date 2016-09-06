@@ -12,7 +12,7 @@
 #   data:                   //可选
 #   before:                 //可选
 #   after:                  //可选
-#   visible:                //角色管理分配权限时 是否展示
+#   disible:                //角色管理分配权限时 是否展示
 
 # admin_block_visual_edit_history:
 #     name: 历史记录
@@ -151,6 +151,13 @@ admin:
                             name: 课程管理
                             router_name: admin_course
                             children:
+                                admin_course_content_manage:
+                                    name: 管理课程
+                                    router_name: course_manage
+                                    group: btn
+                                    router_params:
+                                        id: (course.id)
+                                    blank: true
                                 admin_course_add:
                                     name: 创建课程
                                     router_name: course_create
@@ -298,6 +305,7 @@ admin:
                         admin_course_category_manage:
                             name: 分类管理
                             router_name: admin_course_category
+                            visible: false
                             children:
                                 admin_category_create:
                                     name: '添加分类'
@@ -306,7 +314,6 @@ admin:
                                     router_params_context: 1
                                     group: topBtn
                                     mode: modal
-                            visible: false
                 admin_course_tag:
                     name: '标签管理'
                     children:
