@@ -34,7 +34,7 @@ admin_operation_article:
 admin_operation_group:
     name: 小组管理
     parent: admin_operation
-    router_name: admin_group
+    router_name: admin_groupThread
 admin_operation_invite:
     name: 邀请管理
     parent: admin_operation
@@ -124,6 +124,7 @@ admin_operation_group_manage:
     name: 小组管理
     parent: admin_operation_group
     router_name: admin_group
+    after: admin_operation_group_thread
 admin_operation_invite_manage:
     name: 邀请管理
     parent: admin_operation_invite

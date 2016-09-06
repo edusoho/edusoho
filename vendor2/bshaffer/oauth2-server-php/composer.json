@@ -1,0 +1,27 @@
+{
+    "name": "bshaffer/oauth2-server-php",
+    "description":"OAuth2 Server for PHP",
+    "keywords":["oauth","oauth2","auth"],
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Brent Shaffer",
+            "email": "bshafs@gmail.com",
+            "homepage":"http://brentertainment.com"
+        }
+    ],
+    "homepage": "http://github.com/bshaffer/oauth2-server-php",
+    "require":{
+        "php":">=5.3.9"
+    },
+    "autoload": {
+        "psr-0": { "OAuth2": "src/" }
+    },
+    "suggest": {
+        "predis/predis": "Required to use the Redis storage engine",
+        "thobbs/phpcassa": "Required to use the Cassandra storage engine",
+        "aws/aws-sdk-php": "~2.8 is required to use the DynamoDB storage engine",
+        "firebase/php-jwt": "~2.2 is required to use JWT features"
+    }
+}
