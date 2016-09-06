@@ -50,11 +50,20 @@
       <td>{{ '应用更新'|trans }}</td>
       <td>{% if app_count %}
           {% if status|default(0) == 1 and app_count == 1 %}
-            <span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '所有应用都已是最新版本'|trans }}
-          {% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还有'|trans }} <span class="badge"
-          {% if status|default(0) == 1 %}{{ app_count - 1 }}{% else %}
-            {{ app_count }}
-          {% endif %}</span> {{ '个应用没有更新'|trans }} <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{ '立即更新'|trans }}</a>
+            <span class="glyphicon glyphicon-ok-sign text-success"></span> 
+            {{ '所有应用都已是最新版本'|trans }}
+          {% else %}
+            <span class="glyphicon glyphicon-info-sign text-info"></span>
+            {{ '还有'|trans }} 
+            <span class="badge">
+              {% if status|default(0) == 1 %}
+                {{ app_count - 1 }}
+              {% else %}
+                {{ app_count }}
+              {% endif %}
+            </span>
+            {{ '个应用没有更新'|trans }}
+            <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{ '立即更新'|trans }}</a>
           {% endif %}
         {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '所有应用都已是最新版本'|trans }}
         {% endif %}</td>

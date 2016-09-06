@@ -2,8 +2,8 @@
 
 namespace Topxia\Service\Util;
 
-use \RuntimeException;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
 
 class EdusohoCloudClient extends BaseService implements CloudClient
 {
@@ -37,10 +37,10 @@ class EdusohoCloudClient extends BaseService implements CloudClient
             throw new \RuntimeException('云平台accessKey/secretKey不能为空，请更改云视频设置。');
         }
 
-        $this->apiServer     = rtrim($options['apiServer'], '/');
-        $this->accessKey     = $options['accessKey'];
-        $this->secretKey     = $options['secretKey'];
-        $this->bucket        = $options['bucket'];
+        $this->apiServer = rtrim($options['apiServer'], '/');
+        $this->accessKey = $options['accessKey'];
+        $this->secretKey = $options['secretKey'];
+        $this->bucket    = $options['bucket'];
 
         if (isset($options['videoCommands'])) {
             $this->videoCommands = $options['videoCommands'];
@@ -69,7 +69,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
         $cleanParams['bucket'] = (string) $bucket;
 
         if (empty($cleanParams['bucket'])) {
-            throw new RuntimeException('bucket不能为空');
+            throw new \RuntimeException('bucket不能为空');
         }
 
         if (!empty($params['duration'])) {
