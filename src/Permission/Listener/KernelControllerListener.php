@@ -1,16 +1,17 @@
 <?php
 namespace Permission\Listener;
 
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\AccessDeniedException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Service\Common\ServiceKernel;
 
 class KernelControllerListener
 {
     protected $paths;
 
-    public function __construct($container, $paths)
+    public function __construct(Container $container, $paths)
     {
         $this->container = $container;
         $this->paths     = $paths;
@@ -22,8 +23,6 @@ class KernelControllerListener
             return;
         }
 
-        $currentUser = ServiceKernel::instance()->getCurrentUser();
-
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
         $permissions = $this->container
@@ -33,14 +32,14 @@ class KernelControllerListener
             ->getPermissions();
 
         $requestPath = $request->getPathInfo();
-
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
         foreach ($this->paths as $key => $path) {
             if (preg_match($path, $requestPath)
                 && !empty($permissions)
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-                $currentUserPermissions = $currentUser->getPermissions();
+
                 foreach ($permissions as $permission) {
-                    if (!empty($currentUserPermissions[$permission])) {
+                    if($this->container->get('permission.twig.permission_extension')->hasPermission($permission)){
                         return;
                     }
                 }

@@ -5,11 +5,10 @@ define(function(require, exports, module) {
 	require('z_tree_css');
 	require('z_tree_exhide');
 
+	/*前台隐藏的方案 现在暂时也用后台去做控制
 	var _ = require('underscore');
-
 	var z_data = $.fn.zTree._z.data;
-
-	// Override zTree getTreeCheckedNodes method in jquery.ztree.exhide extension
+    Override zTree getTreeCheckedNodes method in jquery.ztree.exhide extension
 	z_data.getTreeCheckedNodes = function(setting, nodes, checked, results) {
 		if (!nodes) return [];
 		var childKey = setting.data.key.children,
@@ -31,7 +30,7 @@ define(function(require, exports, module) {
 			}
 		}
 		return results;
-	};
+	};*/
 
     var Widget = require('widget');
 
@@ -46,9 +45,9 @@ define(function(require, exports, module) {
     		var element = self.element;
 
 	        var defaultSetting = {
-	        	callback: {
+	        	/*callback: {
 					onCheck: _.bind(this.onCheckHandler, this)
-				},
+				},*/
 	            check: {
 	                enable: true,
 	                chkboxType: { "Y": "ps", "N": "s" }
@@ -66,14 +65,14 @@ define(function(require, exports, module) {
 	        var zNodes = element.find('textarea').text();
 
 	        this.set('zTree', $.fn.zTree.init($(element), setting, JSON.parse(zNodes)));
-            this.hideNodes();
+			//this.hieNodes();
 	    },
 
 	    getCheckedNodes: function() {
             var tree = this.get('zTree');
             return tree.getCheckedNodes(true);
         },
-
+		/*前台隐藏的方案 现在暂时也用后台去做控制
         hideNodes: function () {
             var tree = this.get('zTree');
             var needHiddenNodes = tree.getNodesByParam('visible', false);
@@ -89,13 +88,13 @@ define(function(require, exports, module) {
 
 			_.each(visibleNodes, this.cancelCheckNode, this);
 		},
-		
+
 		cancelCheckNode: function (node) {
 			node.checked = false;
 			var tree = this.get('zTree');
 			//修改 checked 勾选状态不会触发 beforeCheck / onCheck 事件回调函数 防止时间复杂度呈指数增长
 			tree.updateNode(node);
-		}
+		}*/
     });
 
     module.exports = Tree;
