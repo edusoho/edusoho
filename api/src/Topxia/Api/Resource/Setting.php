@@ -43,7 +43,7 @@ class Setting extends BaseResource
     {
         return in_array($settingName, array(
             'course',
-            'app_im'
+            'im_app'
         ), true);
     }
 
