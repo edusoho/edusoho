@@ -50,7 +50,7 @@ class JsApiPay
 
     public function getRedirectUri()
     {
-        $url = $this->request->request->getUri() . '?' . http_build_query($this->request->request->all());
+        $url = $this->request->getUri() . '?' . http_build_query($this->request->request->all());
         return urlencode($url);
     }
 
