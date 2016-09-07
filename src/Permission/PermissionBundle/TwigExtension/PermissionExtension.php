@@ -2,6 +2,7 @@
 namespace Permission\PermissionBundle\TwigExtension;
 
 use Permission\Common\PermissionBuilder;
+use Topxia\Service\Common\ServiceKernel;
 
 class PermissionExtension extends \Twig_Extension
 {
@@ -37,10 +38,16 @@ class PermissionExtension extends \Twig_Extension
 
     public function getFirstChild($menu) 
     {
+
         $menus = $this->getSubPermissions($menu['code']);
-        
+
         if(empty($menus)){
-            return array();
+            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
+            if(empty($permissions)){
+                return array();
+            }else{
+                $menus = $permissions;
+            }
         }
 
         return current($menus);
@@ -84,18 +91,55 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionByCode($code)
     {
-        return $this->createPermissionBuilder()->getPermissionByCode($code);
+        return $permission = $this->createPermissionBuilder()->getOriginPermissionByCode($code);
     }
 
     public function hasPermission($code)
     {
-        $permission = $this->createPermissionBuilder()->getPermissionByCode($code);
-        return !empty($permission);
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
+        $currentUserPermissions = $currentUser->getPermissions();
+        if(!empty($currentUserPermissions[$code])){
+            return true;
+        }
+
+        $tree = $this->createPermissionBuilder()->getOriginPermissionTree(true);
+        $codeTree = $tree->find(function ($tree) use ($code){
+            return $tree->data['code'] === $code;
+        });
+
+        if(empty($codeTree)){
+            return false;
+        }
+
+        $disableTree = $codeTree->findToParent(function ($parent){
+            return isset($parent->data['disable']) && (bool)$parent->data['disable'];
+        });
+
+        if(is_null($disableTree)){
+            return false;
+        }
+
+        $parent = $disableTree->getParent();
+
+        if(is_null($parent)){
+            return false;
+        }
+
+        if(empty($parent->data['parent'])){
+            return true;
+        }else{
+            return !empty($currentUserPermissions[$parent->data['code']]);
+        }
     }
 
     public function getSubPermissions($code, $group=null)
     {
-        return $this->createPermissionBuilder()->getSubPermissions($code, $group);
+        $permission = $this->getPermissionByCode($code);
+        if(isset($permission['disable']) && $permission['disable']){
+            return $this->createPermissionBuilder()->getOriginSubPermissions($code);
+        }else{
+            return $this->createPermissionBuilder()->getSubPermissions($code, $group);
+        }
     }
 
     public function groupedPermissions($code)
@@ -105,7 +149,15 @@ class PermissionExtension extends \Twig_Extension
 
     public function getParentPermission($code)
     {
-        return $this->createPermissionBuilder()->getParentPermissionByCode($code);
+        $permission = $this->createPermissionBuilder()->getOriginPermissionByCode($code);
+
+        if(isset($permission['disable']) && $permission['disable']){
+            $parent = $this->createPermissionBuilder()->getOriginPermissionByCode($permission['parent']);
+        }else{
+            $parent = $this->createPermissionBuilder()->getParentPermissionByCode($code);
+        }
+
+        return $parent;
     }
 
     private function createPermissionBuilder()
