@@ -59,7 +59,9 @@ class PermissionBuilder
         $subPermission = $this->getOriginSubPermissions($code);
 
         foreach ($subPermission as $value) {
-            if(isset($value['disable']) && $value['disable']){
+            $issetDisable = isset($value['disable']) && $value['disable'];
+            $isGroup = empty($group) || (isset($value['group']) && $value['group'] == $group);
+            if($issetDisable && $isGroup){
                 $children[] = $value;
             }
         }
