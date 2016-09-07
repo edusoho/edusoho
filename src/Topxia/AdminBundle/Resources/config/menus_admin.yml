@@ -467,19 +467,23 @@ admin:
                     children:
                         admin_bill:
                             name: 现金账单
+                            disable: true
                         admin_coin_records:
                             name: 虚拟币账单
+                            disable: true
                 admin_coin_user:
                     name: 虚拟币管理
                     children:
                         admin_coin_user_records:
                             name: 记录
+                            disable: true
                             router_name: admin_coin_user_records
                 admin_course_refunds:
                     name: 课程退款管理
                     children:
                         admin_course_refunds_manage:
                             name: 课程退款管理
+                            disable: true
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: course
