@@ -34,6 +34,11 @@ class Setting extends BaseResource
         return $this->filterKeys($res, array('welcome_message_enabled'));
     }
 
+    protected function filterApp_im($res)
+    {
+        return $this->filterKeys($res, array('welcome_message_enabled'));
+    }
+
     protected function filterKeys(array $input, array $allowed)
     {
         return array_diff_key($input, array_flip($allowed));
@@ -43,7 +48,7 @@ class Setting extends BaseResource
     {
         return in_array($settingName, array(
             'course',
-            'im_app'
+            'app_im'
         ), true);
     }
 
