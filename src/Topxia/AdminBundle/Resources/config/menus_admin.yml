@@ -188,7 +188,6 @@ admin:
                                     visable: ( filter == 'normal' and course.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
-                                    disable: true
                                 admin_course_copy:
                                     name: 复制课程
                                     router_params:
@@ -206,7 +205,6 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                    disable: true
                                 admin_course_member_preview:
                                     name: 预览：作为已购买用户
                                     router_name: course_show
@@ -216,7 +214,6 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                    disable: true
                                 admin_course_close:
                                     name: 关闭课程
                                     router_params:
@@ -227,7 +224,6 @@ admin:
                                     mode: none
                                     class: close-course
                                     visable: (course.status == 'published')
-                                    disable: true
                                 admin_course_sms_prepare:
                                     name: 发送发布通知短信
                                     router_name: sms_prepare
@@ -238,7 +234,6 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (course.status == 'published')
-                                    disable: true
                                 admin_course_publish:
                                     name: 发布课程
                                     router_params:

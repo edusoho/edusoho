@@ -64,8 +64,9 @@
     <td>
 
   <div class="btn-group">
-
-      <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
+      {% if has_permission('admin_classroom_content_manage') %}
+        <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
+      {% endif %}
 
  {#<ul class="dropdown-menu">
        <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理{{setting("classroom.name")|default("班级")}}</a></li>
