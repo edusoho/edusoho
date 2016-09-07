@@ -448,13 +448,13 @@ admin:
                         admin_course_order:
                             name: 课程订单
                             router_name: admin_course_order_manage
-                            visible: false
+                            disable: true
                 admin_coin_order_manange:
                     name: 虚拟币订单
                     children:
                         admin_coin_orders:
                             name: 虚拟币订单
-                            visible: false
+                            disable: true
         admin_finance:
             name: 账务
             children:

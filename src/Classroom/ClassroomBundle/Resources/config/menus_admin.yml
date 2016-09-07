@@ -36,7 +36,7 @@ admin_classroom_order_manage:
     children:
         admin_classroom_order:
             name: 班级订单
-            visible: false
+            disable: true
 admin_classroom_setting:
     name: 班级
     parent: admin_setting_course_setting
