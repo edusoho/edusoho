@@ -1,4 +1,3 @@
-
 {% set tabMenus = sub_permissions(menu|parent_permission.code|default(null)) %}
 {% if tabMenus|default(null) and tabMenus|length > 1 %}
 	<ul class="nav nav-tabs mbm">

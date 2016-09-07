@@ -12,7 +12,7 @@
 #   data:                   //可选
 #   before:                 //可选
 #   after:                  //可选
-#   visible:                //角色管理分配权限时 是否展示
+#   disable:                //角色管理分配权限默认开启不用选中
 
 # admin_block_visual_edit_history:
 #     name: 历史记录
@@ -320,6 +320,7 @@ admin:
                     children:
                         admin_operation_article_manage:
                             name: 资讯管理
+                            disable: true
                             router_name: admin_article
                             children:
                                 admin_operation_article_create:
@@ -328,6 +329,7 @@ admin:
                                     group: topBtn
                         admin_operation_article_category:
                             name: '栏目管理'
+                            disable: true
                             router_name: admin_article_category
                             children:
                                 admin_operation_category_create:
@@ -340,6 +342,7 @@ admin:
                     children:
                         admin_operation_group_manage:
                             name: 小组管理
+                            disable: true
                             router_name: admin_group
                             children:
                                 admin_operation_group_create:
@@ -349,15 +352,18 @@ admin:
                                     blank: 1
                         admin_operation_group_thread:
                             name: 话题管理
+                            disable: true
                             router_name: admin_groupThread
                 admin_operation_invite:
                     name: 邀请管理
                     children:
                         admin_operation_invite_manage:
                             name: 邀请管理
+                            disable: true
                             router_name: admin_invite
                         admin_operation_invite_coupon:
                             name: 奖励查询
+                            disable: true
                             router_name: admin_invite_coupon
                 admin_announcement:
                     name: '网站公告管理'
@@ -365,6 +371,7 @@ admin:
                     children:
                         admin_announcement_manage:
                             name: '网站公告管理'
+                            disable: true
                             router_name: admin_announcement
                             children:
                                 admin_announcement_create:
@@ -377,6 +384,7 @@ admin:
                     children:
                         admin_batch_notification:
                             name: '全站站内通知'
+                            disable: true
                             children:
                                 admin_batch_notification_create:
                                     name: '创建站内通知'
@@ -387,6 +395,7 @@ admin:
                     children:
                         admin_block:
                             name: 编辑区管理
+                            disable: true
                             router_params:
                                 category: all
                             children:
@@ -400,6 +409,7 @@ admin:
                     children:
                         admin_content:
                             name: 自定义页面管理
+                            disable: true
                             router_params:
                                 type: page
                 admin_operation_mobile:
@@ -408,12 +418,15 @@ admin:
                     children:
                         admin_operation_mobile_banner_manage:
                             name: 轮播图设置
+                            disable: true
                             router_name: admin_operation_mobile
                         admin_operation_mobile_select_manage:
                             name: 每周精选设置
+                            disable: true
                             router_name: admin_operation_mobile_select
                         admin_discovery_column_index:
                             name: '发现页栏目管理'
+                            disable: true
                             children:
                                 admin_discovery_column_create:
                                     name: '添加栏目'
@@ -424,6 +437,7 @@ admin:
                     group: 3
                     children:
                         admin_operation_analysis:
+                            disable: true
                             name: 数据统计
                             router_params:
                                 tab: trend
@@ -669,7 +683,7 @@ admin:
 web:
     name: 资源管理
     parent: null
-    visible: false
+    disable: true
     children:
         course_manage:
             name: 课程管理
