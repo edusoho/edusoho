@@ -116,14 +116,23 @@ class Tree
         return $ret;
     }
 
+    public function findToParent(\Closure $closure)
+    {
+        $parent = $this;
+        $ret = array();
+        while (!is_null($parent)){
+            if($closure($parent)){
+                $ret[] = $parent;
+            }
+
+            $parent = $parent->getParent();
+        }
+
+        return array_pop($ret);
+    }
+
     public static function buildWithArray(array $input, $rootId = 0, $key = 'id', $parentKey = 'parentId')
     {
-        /* 过滤掉构建不出树的元素
-         * $ids = ArrayToolkit::column($input, $key);
-        $input = array_filter($input, function ($array) use ($parentKey, $ids){
-            return in_array($array[$parentKey], $ids, true);
-        });*/
-
         $root = new self(array(
             $key => $rootId
         ));
@@ -136,6 +145,7 @@ class Tree
         $buildingArray = $input;
 
         while (!empty($buildingArray)) {
+            $buildingCount = count($buildingArray);
             foreach ($buildingArray as $value) {
                 if (isset($map[$value[$parentKey]])) {
                     $tree = new Tree($value);
@@ -150,6 +160,11 @@ class Tree
             $buildingArray = array_filter($buildingArray, function ($array) use ($key, $completedArrayKeys) {
                 return !in_array($array[$key], $completedArrayKeys, true);
             });
+
+            //一次构建树后剩下元素不变。 说明这些元素的父节点不存在树的节点里，是构建不出的树的
+            if($buildingCount === count($buildingArray)){
+                break;
+            }
         }
 
         return $root;
