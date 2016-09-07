@@ -155,6 +155,13 @@ admin:
                             name: 课程管理
                             router_name: admin_course
                             children:
+                                admin_course_content_manage:
+                                    name: 管理课程
+                                    router_name: course_manage
+                                    group: btn
+                                    router_params:
+                                        id: (course.id)
+                                    blank: true
                                 admin_course_add:
                                     name: 创建课程
                                     router_name: course_create
@@ -259,12 +266,14 @@ admin:
                             router_params:
                                 status: coming
                             router_name: admin_live_course
+                            disable: true
                 admin_course_thread:
                     name: 话题管理
                     children:
                         admin_course_thread_manage:
                             name: 课程话题
                             router_name: admin_thread
+                            disable: true
                 admin_course_question:
                     name: 问答管理
                     children:
@@ -273,12 +282,14 @@ admin:
                             router_name: admin_question
                             router_params:
                                 postStatus: unPosted
+                            disable: true
                 admin_course_note:
                     name: 笔记管理
                     children:
                         admin_course_note_manage:
                             name: 笔记管理
                             router_name: admin_course_note
+                            disable: true
                 admin_course_review:
                     name: 评价管理
                     children:
@@ -286,12 +297,14 @@ admin:
                             name: 课程评价
                             router_name: admin_review
                             group: 1
+                            disable: true
                 admin_course_category:
                     name: 分类管理
                     children:
                         admin_course_category_manage:
                             name: 分类管理
                             router_name: admin_course_category
+                            disable: true
                             children:
                                 admin_category_create:
                                     name: '添加分类'
@@ -306,6 +319,7 @@ admin:
                         admin_course_tag_manage:
                             name: '标签管理'
                             router_name: admin_tag
+                            disable: true
                             children:
                                 admin_course_tag_add:
                                     name: '新增标签'

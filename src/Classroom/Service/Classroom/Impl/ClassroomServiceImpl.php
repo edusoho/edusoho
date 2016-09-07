@@ -983,10 +983,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$user->isLogin()) {
             return false;
         }
-
-        if ($user->isAdmin()) {
+        global $kernel;
+        $container = $kernel->getContainer();
+        
+        if ($container->get('permission.twig.permission_extension')->hasPermission('admin_classroom_content_manage')) {
             return true;
         }
+        
         $member = $this->getClassroomMember($id, $user['id']);
 
         if (empty($member)) {
