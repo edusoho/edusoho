@@ -25,6 +25,7 @@
 
       <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">{{'支付方式'|trans}}</div></div>
       {% set form_action = path('pay_center_wxpay') %}
+      {#{% set form_action = path('pay_center_pay') %}#}
       <form class="form-paytype" method="post" action="{{ form_action }}">
         <input type="hidden" name="targetType" value="{{order.targetType}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>

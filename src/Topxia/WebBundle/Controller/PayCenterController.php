@@ -118,16 +118,51 @@ class PayCenterController extends BaseController
         ));
     }
 
+    /**
+     * wxjs pay
+     * @param Request $request
+     * @return Response|\Topxia\WebBundle\Controller\Response
+     */
     public function wxpayAction(Request $request)
     {
-        $fields = $request->request->all();
+        $fields  = $request->request->all();
         $payment = 'wxpay';
         $options = $this->getPaymentOptions($payment);
 
-        $jsApi = New JsApiPay($options,$request);
+        $jsApi = New JsApiPay($options, $request);
 
-        $converted['openid'] = $jsApi->GetOpenid();
-        var_dump($converted['openid']);
+        $openid = $jsApi->GetOpenid();
+        if ($request->getMethod() == 'GET') {
+            $fields = $request->query->all();
+            $user   = $this->getCurrentUser();
+
+            if (!$user->isLogin()) {
+                return $this->createMessageResponse('error', '用户未登录，支付失败。');
+            }
+
+            if (!array_key_exists('orderId', $fields)) {
+                return $this->createMessageResponse('error', '缺少订单，支付失败');
+            }
+
+            if (!isset($fields['payment'])) {
+                return $this->createMessageResponse('error', '支付方式未开启，请先开启');
+            }
+
+            $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
+
+            if ($user['id'] != $order['userId']) {
+                return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+            }
+
+            if ($order['status'] == 'paid') {
+                return $this->redirectOrderTarget($order);
+            } else {
+                return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
+                    'order' => $order
+                ));
+            }
+        }
+
     }
 
     public function payAction(Request $request)
@@ -164,6 +199,7 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
+        var_dump($request->getMethod());exit;
         if (empty($order['payment'])) {
             return $this->createMessageResponse('error', '请选择支付方式');
         }

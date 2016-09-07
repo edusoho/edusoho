@@ -613,7 +613,7 @@ admin_setting_login_bind:
 
 admin_setting_payment:
     pattern:  /setting/payment
-    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
+    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:paytment }
 
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video

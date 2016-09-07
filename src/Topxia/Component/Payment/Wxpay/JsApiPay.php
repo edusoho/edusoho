@@ -75,7 +75,6 @@ class JsApiPay
             header("Location: $url");
             exit();
         } else {
-            var_dump($this->request->query->all());
             //获取code码，以获取openid
             $code   = $_GET['code'];
             $openid = $this->getOpenidFromMp($code);
