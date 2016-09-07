@@ -136,7 +136,7 @@ class PermissionExtension extends \Twig_Extension
     {
         $permission = $this->getPermissionByCode($code);
         if(isset($permission['disable']) && $permission['disable']){
-            return $this->createPermissionBuilder()->getOriginSubPermissions($code);
+            return $this->createPermissionBuilder()->getOriginSubPermissions($code, $group);
         }else{
             return $this->createPermissionBuilder()->getSubPermissions($code, $group);
         }
