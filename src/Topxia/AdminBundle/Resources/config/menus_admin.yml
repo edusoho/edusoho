@@ -184,7 +184,7 @@ admin:
                                     visable: ( filter == 'normal' and course.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
-                                    visible: false
+                                    disable: true
                                 admin_course_copy:
                                     name: 复制课程
                                     router_params:
@@ -202,7 +202,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                    visible: false
+                                    disable: true
                                 admin_course_member_preview:
                                     name: 预览：作为已购买用户
                                     router_name: course_show
@@ -212,7 +212,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                    visible: false
+                                    disable: true
                                 admin_course_close:
                                     name: 关闭课程
                                     router_params:
@@ -223,7 +223,7 @@ admin:
                                     mode: none
                                     class: close-course
                                     visable: (course.status == 'published')
-                                    visible: false
+                                    disable: true
                                 admin_course_sms_prepare:
                                     name: 发送发布通知短信
                                     router_name: sms_prepare
@@ -234,7 +234,7 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (course.status == 'published')
-                                    visible: false
+                                    disable: true
                                 admin_course_publish:
                                     name: 发布课程
                                     router_params:
@@ -267,14 +267,14 @@ admin:
                             router_params:
                                 status: coming
                             router_name: admin_live_course
-                            visible: false
+                            disable: true
                 admin_course_thread:
                     name: 话题管理
                     children:
                         admin_course_thread_manage:
                             name: 课程话题
                             router_name: admin_thread
-                            visible: false
+                            disable: true
                 admin_course_question:
                     name: 问答管理
                     children:
@@ -283,14 +283,14 @@ admin:
                             router_name: admin_question
                             router_params:
                                 postStatus: unPosted
-                            visible: false
+                            disable: true
                 admin_course_note:
                     name: 笔记管理
                     children:
                         admin_course_note_manage:
                             name: 笔记管理
                             router_name: admin_course_note
-                            visible: false
+                            disable: true
                 admin_course_review:
                     name: 评价管理
                     children:
@@ -298,14 +298,14 @@ admin:
                             name: 课程评价
                             router_name: admin_review
                             group: 1
-                            visible: false
+                            disable: true
                 admin_course_category:
                     name: 分类管理
                     children:
                         admin_course_category_manage:
                             name: 分类管理
                             router_name: admin_course_category
-                            visible: false
+                            disable: true
                             children:
                                 admin_category_create:
                                     name: '添加分类'
@@ -320,7 +320,7 @@ admin:
                         admin_course_tag_manage:
                             name: '标签管理'
                             router_name: admin_tag
-                            visible: false
+                            disable: true
                             children:
                                 admin_course_tag_add:
                                     name: '新增标签'

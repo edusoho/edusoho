@@ -28,7 +28,7 @@ admin_classroom:
                         id: (classroom.id)
                         ref: classroomList
                     visable: ( classroom.recommended )
-                    visible: false
+                    disable: true
                 admin_classroom_set_recommend:
                     name: 推荐班级
                     mode: modal
@@ -66,7 +66,7 @@ admin_classroom:
                     router_params:
                         id: (classroom.id)
                     visable: ( classroom.status != 'published' )
-                    visible: false
+                    disable: true
                 admin_classroom_delete:
                     name: 删除班级
                     mode: none
@@ -76,7 +76,7 @@ admin_classroom:
                     router_params:
                         id: (classroom.id)
                     visable: ( classroom.status=='draft' )    
-                    visible: false                                    
+                    disable: true                                    
         admin_classroom_recommend:
             name: 班级推荐
             router_name: admin_classroom_recommend_list
@@ -109,9 +109,9 @@ admin_classroom_setting:
 admin_classroom_review:
     name: 班级评价
     parent: admin_course_review
-    visible: false
+    disable: true
 admin_classroom_thread_manage:
     name: 班级话题
     parent: admin_course_thread
     router_name: admin_classroom_thread
-    visible: false
+    disable: true
