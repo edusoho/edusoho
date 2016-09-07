@@ -134,11 +134,20 @@ class PermissionBuilder
         return $this->cached['getPermissionByCode'][$code];
     }
 
-    public function getOriginSubPermissions($code)
+    public function getOriginSubPermissions($code, $group=null)
     {
-        if (isset($this->cached['getOriginSubPermissions'][$code])) {
-            return $this->cached['getOriginSubPermissions'][$code];
+        if (isset($this->cached['getOriginSubPermissions'][$code][$group])) {
+            return $this->cached['getOriginSubPermissions'][$code][$group];
         }
+
+        if (!isset($this->cached['getOriginSubPermissions'])) {
+            $this->cached['getOriginSubPermissions'] = array();
+        }
+
+        if (!isset($this->cached['getOriginSubPermissions'][$code])) {
+            $this->cached['getOriginSubPermissions'][$code] = array();
+        }
+
 
         $tree = $this->getOriginPermissionTree(true);
 
@@ -149,12 +158,14 @@ class PermissionBuilder
         $permissions = array();
         if(!is_null($codeTree)){
             foreach ($codeTree->getChildren() as $child){
-                $permissions[] = $child->data;
+                if (empty($group) || (isset($child->data['group']) && $child->data['group'] == $group)){
+                    $permissions[] = $child->data;
+                }
             }
         }
 
-        $this->cached['getOriginSubPermissions'][$code] = $permissions;
-        return $this->cached['getOriginSubPermissions'][$code];
+        $this->cached['getOriginSubPermissions'][$code][$group] = $permissions;
+        return $this->cached['getOriginSubPermissions'][$code][$group];
     }
 
     public function getPermissionConfig()
