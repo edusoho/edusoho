@@ -22,10 +22,12 @@ namespace Topxia\Component\Payment\Wxpay;
 class JsApiPay
 {
     private $config;
+    private $request;
 
-    public function __construct($config)
+    public function __construct($config, $request)
     {
-        $this->config = $config;
+        $this->config  = $config;
+        $this->request = $request;
     }
 
     /**
@@ -45,6 +47,13 @@ class JsApiPay
      */
     public $data = null;
 
+
+    public function getRedirectUri()
+    {
+        $url = $this->request->request->getUri() . '?' . http_build_query($this->request->request->all());
+        return urlencode($url);
+    }
+
     /**
      *
      * 通过跳转获取用户的openid，跳转流程如下：
@@ -59,11 +68,11 @@ class JsApiPay
         //通过code获得openid
         if (!isset($_GET['code'])) {
             //触发微信返回code码
-            $baseUrl = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $_SERVER['QUERY_STRING']);
-            $url     = $this->__CreateOauthUrlForCode($baseUrl);
-            header("Location: $url"); exit();
+            $url = $this->__createOauthUrlForCode();
+            header("Location: $url");
+            exit();
         } else {
-            var_dump( 'code', $_GET['code'] ); exit;
+            var_dump($this->request->query->all());
             //获取code码，以获取openid
             $code   = $_GET['code'];
             $openid = $this->getOpenidFromMp($code);
@@ -79,25 +88,25 @@ class JsApiPay
      *
      * @return json数据，可直接填入js函数作为参数
      */
-   /* public function GetJsApiParameters($UnifiedOrderResult)
-    {
-        if (!array_key_exists("appid", $UnifiedOrderResult)
-            || !array_key_exists("prepay_id", $UnifiedOrderResult)
-            || $UnifiedOrderResult['prepay_id'] == ""
-        ) {
-            throw new WxPayException("参数错误");
-        }
-        $jsapi = new WxPayJsApiPay();
-        $jsapi->SetAppid($UnifiedOrderResult["appid"]);
-        $timeStamp = time();
-        $jsapi->SetTimeStamp("$timeStamp");
-        $jsapi->SetNonceStr(WxPayApi::getNonceStr());
-        $jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
-        $jsapi->SetSignType("MD5");
-        $jsapi->SetPaySign($jsapi->MakeSign());
-        $parameters = json_encode($jsapi->GetValues());
-        return $parameters;
-    }*/
+    /* public function GetJsApiParameters($UnifiedOrderResult)
+     {
+         if (!array_key_exists("appid", $UnifiedOrderResult)
+             || !array_key_exists("prepay_id", $UnifiedOrderResult)
+             || $UnifiedOrderResult['prepay_id'] == ""
+         ) {
+             throw new WxPayException("参数错误");
+         }
+         $jsapi = new WxPayJsApiPay();
+         $jsapi->SetAppid($UnifiedOrderResult["appid"]);
+         $timeStamp = time();
+         $jsapi->SetTimeStamp("$timeStamp");
+         $jsapi->SetNonceStr(WxPayApi::getNonceStr());
+         $jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
+         $jsapi->SetSignType("MD5");
+         $jsapi->SetPaySign($jsapi->MakeSign());
+         $parameters = json_encode($jsapi->GetValues());
+         return $parameters;
+     }*/
 
     /**
      *
@@ -156,10 +165,10 @@ class JsApiPay
      *
      * @return 返回构造好的url
      */
-    private function __CreateOauthUrlForCode($redirectUrl)
+    private function __createOauthUrlForCode()
     {
         $urlObj["appid"]         = $this->config['appid'];
-        $urlObj["redirect_uri"]  = "$redirectUrl";
+        $urlObj["redirect_uri"]  = $this->getRedirectUri();
         $urlObj["response_type"] = "code";
         $urlObj["scope"]         = "snsapi_base";
         $urlObj["state"]         = "STATE" . "#wechat_redirect";

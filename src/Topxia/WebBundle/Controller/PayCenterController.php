@@ -120,10 +120,11 @@ class PayCenterController extends BaseController
 
     public function wxpayAction(Request $request)
     {
+        $fields = $request->request->all();
         $payment = 'wxpay';
         $options = $this->getPaymentOptions($payment);
 
-        $jsApi = New JsApiPay($options);
+        $jsApi = New JsApiPay($options,$request);
 
         $converted['openid'] = $jsApi->GetOpenid();
         var_dump($converted['openid']);
