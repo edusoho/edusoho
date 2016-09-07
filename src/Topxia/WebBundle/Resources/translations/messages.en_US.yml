@@ -3278,21 +3278,22 @@ Flash: Flash
 'Account #%userId% is not exist.': 'Account #%userId% is not exist.'
 'message must be a string': 'message must be a string'
 'UNKNOWN IMPORTER TYPE: %importerType%': 'UNKNOWN IMPORTER TYPE: %importerType%'
-班级说明: classroom direction
-'编号及排序无法修改；': 'None of the ID or SORT can be modified;'
-'班级地址规则：域名/classroom/班级编号；': 'Classroom url rule：{domain}/classroom/{classroomId}'
-课程说明: course direction
-'课程地址规则：域名/course/课程编号；': 'Course url rule：{domain}/course/{coureId}'
 更新Coin虚拟币设置: updated setting of coin
 '创建编辑区模板成功!': 'Success to create the editable block template!'
 '更新编辑区模板成功!': 'Success to update the editable block template!'
 '确认要删除此编辑区模板吗？': 'Are you sure to delete the editable block template?'
 '删除编辑区模板成功!': 'Success to delete the editable block template!'
 请输入标签: Please entry the label
-'您尚未开通云视频服务，无法使用资源管理功能，': 'Your Cloud Video Service is not activated, can not use the `MaterialLib` feature,'
-立即开通: Click to Activate Cloud Video Service Now
-了解云视频: get more about the Activate Cloud Video Service
-'“云资源管理”提供完善的资源管理功能，您可以从课程、上传时间、资源类型等多个维度对资源进行管理，帮助您轻松掌控全站的视频、音频、图片、文档等资源，再也不用担心过期资源占用存储空间了。': 'The `MaterialLib` feature provides a full resource management function, which can help you to organize the videos, the audios, the pictures, the documents and other files effectively. And it takes up no space from your server hdd.'
+尚未开通云视频提示: >
+  <h4>
+    Your Cloud Video Service is not activated, can not use the `Cloud Files` feature,
+    <a href="%settingCloudVideoUrl%">Click to Activate Cloud Video Service Now</a>
+     or 
+    <a href="%showCloudVideoUrl%" target="_blank">Clink get more about it</a>
+  </h4>
+  <p>
+  The `Cloud Files` feature provides a full resource management function, which can help you to organize the videos, the audios, the pictures, the documents and other files effectively. And it takes up no space from your server hdd.
+  </p>
 '请上传png, gif, jpg格式的大于等于50*50的': 'please select the file of png, gif, jpg, and the size >= 50*50 '
 等比例: 'with equal ratio '
 '图片，否则无法上传': ', otherwise it will be failed to upload'
