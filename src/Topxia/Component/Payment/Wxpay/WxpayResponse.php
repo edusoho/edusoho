@@ -43,7 +43,7 @@ class WxpayResponse extends Response
     {
         $params                    = $this->params;
         $converted                 = array();
-        $converted['appid']        = $this->options['key'];
+        $converted['appid']        = $this->options['appid'];
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
@@ -96,7 +96,7 @@ class WxpayResponse extends Response
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key='.$this->options['key'];
 
         return md5($sign);
     }

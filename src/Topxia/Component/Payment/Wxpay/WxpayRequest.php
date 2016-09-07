@@ -13,15 +13,17 @@ class WxpayRequest extends Request
     public function form()
     {
         $params         = array();
-        $form['action'] = $this->unifiedOrderUrl.'?_input_charset=utf-8';
+        $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
         $form['method'] = 'post';
-        $form['params'] = $this->convertParams($this->params);
+        $form['params'] =array();
         return $form;
     }
 
     public function unifiedOrder()
     {
+
         $params   = $this->convertParams($this->params);
+
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
         return $response;
@@ -31,7 +33,7 @@ class WxpayRequest extends Request
     {
         $params                    = $this->params;
         $converted                 = array();
-        $converted['appid']        = $this->options['key'];
+        $converted['appid']        = $this->options['appid'];
         $settings                  = $this->getSettingService()->get('payment');
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
@@ -63,11 +65,11 @@ class WxpayRequest extends Request
                 continue;
             }
 
-            $sign .= $key.'='.$value.'&';
+            $sign .= $key . '=' . $value . '&';
         }
 
         $sign = substr($sign, 0, -1);
-        $sign .= '&key='.$this->options['secret'];
+        $sign .= '&key=' . $this->options['key'];
 
         return md5($sign);
     }
@@ -75,8 +77,10 @@ class WxpayRequest extends Request
     protected function convertParams($params)
     {
         $converted = array();
+        $jsApi     = New JsApiPay($this->options);
 
-        $converted['appid']            = $this->options['key'];
+        $converted['openid']           = $jsApi->GetOpenid();
+        $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
         $settings                      = $this->getSettingService()->get('payment');
@@ -86,7 +90,7 @@ class WxpayRequest extends Request
         $converted['out_trade_no']     = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee']        = $this->getAmount($params['amount']);
-        $converted['trade_type']       = 'NATIVE';
+        $converted['trade_type']       = 'JSAPI';//'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
 
@@ -101,12 +105,12 @@ class WxpayRequest extends Request
             $suffix = $array[1];
             $len    = strlen($suffix);
             for ($i = $len; $i < 2; $i++) {
-                $suffix = $suffix.'0';
+                $suffix = $suffix . '0';
             }
 
-            $amount = $array[0].$suffix;
+            $amount = $array[0] . $suffix;
         } else {
-            $amount = $amount.'00';
+            $amount = $amount . '00';
         }
 
         return intval($amount);
@@ -114,13 +118,24 @@ class WxpayRequest extends Request
 
     private function toXml($array, $xml = false)
     {
-        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
-
-        foreach ($array as $k => $v) {
-            $simxml->addChild($k, $v);
+        if (!is_array($array)
+            || count($array) <= 0
+        ) {
+            throw new WxPayException("数组数据异常！");
         }
 
-        return $simxml->saveXML();
+        $xml = "<xml>";
+        foreach ($array as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= "<" . $key . ">" . $val . "</" . $key . ">";
+            } else {
+                $xml .= "<" . $key . "><![CDATA[" . $val . "]]></" . $key . ">";
+            }
+        }
+        $xml .= "</xml>";
+        return $xml;
+
+
     }
 
     private function getNonceStr($length = 32)

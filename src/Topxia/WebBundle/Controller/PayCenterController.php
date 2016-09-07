@@ -161,7 +161,7 @@ class PayCenterController extends BaseController
             'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
             'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType' => $order['targetType']), true)
         );
-        $payment = $request->request->get('payment');
+        $payment       = $request->request->get('payment');
 
         if ($payment == 'quickpay') {
             $authBank = array();
@@ -184,6 +184,7 @@ class PayCenterController extends BaseController
 
         if ($payment == 'wxpay') {
             $returnXml = $paymentRequest->unifiedOrder();
+            var_dump(  $returnXml );
 
             if (!$returnXml) {
                 throw new \RuntimeException('xml数据异常！');
@@ -246,8 +247,8 @@ class PayCenterController extends BaseController
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
         if ($name == 'llpay') {
-             $returnArray              = $request->request->all();
-            $returnArray['isMobile']  = $this->isMobileClient();
+            $returnArray             = $request->request->all();
+            $returnArray['isMobile'] = $this->isMobileClient();
         } else {
             $returnArray = $request->query->all();
         }
@@ -297,8 +298,8 @@ class PayCenterController extends BaseController
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
         } elseif ($name == 'llpay') {
-            $returnArray              = json_decode(file_get_contents('php://input'), true);
-            $returnArray['isMobile']  = $this->isMobileClient();
+            $returnArray             = json_decode(file_get_contents('php://input'), true);
+            $returnArray['isMobile'] = $this->isMobileClient();
         } else {
             $returnArray = $request->request->all();
         }
@@ -322,7 +323,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == 'success') {
             list($success, $order) = $processor->pay($payData);
-            
+
             if ($success) {
                 if ($name == 'llpay') {
                     return new Response("{'ret_code':'0000','ret_msg':'交易成功'}");
@@ -395,8 +396,8 @@ class PayCenterController extends BaseController
                 'notifyUrl' => '',
                 'showUrl'   => ''
             ));
-            $returnXml   = $paymentRequest->orderQuery();
-            $returnArray = $this->fromXml($returnXml);
+            $returnXml      = $paymentRequest->orderQuery();
+            $returnArray    = $this->fromXml($returnXml);
 
             if ($returnArray['trade_state'] == 'SUCCESS') {
                 $payData             = array();
@@ -425,6 +426,7 @@ class PayCenterController extends BaseController
     protected function createPaymentRequest($order, $requestParams)
     {
         $options       = $this->getPaymentOptions($order['payment']);
+
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order['targetType']);
         $targetId      = isset($order['targetId']) ? $order['targetId'] : $order['id'];
@@ -476,7 +478,6 @@ class PayCenterController extends BaseController
     protected function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
-
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
@@ -485,7 +486,7 @@ class PayCenterController extends BaseController
             throw new \RuntimeException('支付模块未开启，请先开启。');
         }
 
-        if (empty($settings[$payment.'_enabled'])) {
+        if (empty($settings[$payment . '_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
@@ -505,13 +506,19 @@ class PayCenterController extends BaseController
                 'secret' => $settings["{$payment}_secret"],
                 'aes'    => $settings["{$payment}_aes"]
             );
+        } elseif ($payment == 'wxpay') {
+            $options = array(
+                'appid'   => $settings["{$payment}_appid"],
+                'account' => $settings["{$payment}_account"],
+                'key'     => $settings["{$payment}_key"],
+                'secret'  => $settings["{$payment}_secret"],
+            );
         } else {
             $options = array(
                 'key'    => $settings["{$payment}_key"],
                 'secret' => $settings["{$payment}_secret"]
             );
         }
-
         return $options;
     }
 
@@ -542,10 +549,10 @@ class PayCenterController extends BaseController
         $payment  = $this->get('topxia.twig.web_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $key => $payName) {
-            if (!empty($setting[$payName.'_enabled'])) {
+            if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$key] = array(
                     'name'    => $payName,
-                    'enabled' => $setting[$payName.'_enabled']
+                    'enabled' => $setting[$payName . '_enabled']
                 );
 
                 if ($this->isWxClient() && $payName == 'alipay') {
