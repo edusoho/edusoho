@@ -571,83 +571,108 @@ admin:
                         admin_setting_message:
                             name: 基础信息
                             router_name: admin_setting_site
+                            disable: true
                         admin_setting_theme:
                             name: 主题
+                            disable: true
                         admin_setting_mailer:
                             name: 邮件服务器设置
+                            disable: true
                         admin_top_navigation:
                             name: 顶部导航
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: top
                         admin_foot_navigation:
                             name: 底部导航
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: foot
                         admin_friendlyLink_navigation:
                             name: '友情链接'
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: friendlyLink
                         admin_setting_consult_setting:
                             name: 客服
+                            disable: true
                         admin_setting_es_bar:
                             name: '侧边栏'
+                            disable: true
                         admin_setting_share:
                             name: 分享
+                            disable: true
                 admin_setting_user:
                     name: 用户设置
                     children:
                         admin_user_auth:
                             name: 注册
+                            disable: true
                             router_name: admin_setting_auth
                         admin_setting_login_bind:
                             name: 登录
+                            disable: true
                         admin_setting_user_center:
                             name: 用户中心
+                            disable: true
                         admin_setting_user_fields:
                             name: 用户信息设置
+                            disable: true
                         admin_setting_avatar:
                             name: 默认头像
+                            disable: true
                 admin_setting_course_setting:
                     name: 课程设置
                     children:
                         admin_setting_course:
                             name: 课程
+                            disable: true
                             router_name: admin_setting_course_setting
                         admin_setting_live_course:
                             name: 直播
+                            disable: true
                             router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: 题库
+                            disable: true
                         admin_setting_course_avatar:
                             name: 默认图片
+                            disable: true
                 admin_setting_operation:
                     name: 运营设置
                     children:
                         admin_article_setting:
                             name: 资讯
+                            disable: true
                         admin_group_set:
                             name: 小组
+                            disable: true
                         admin_invite_set:
                             name: '邀请码设置'
+                            disable: true
                 admin_setting_finance:
                     name: 账务设置
                     children:
                         admin_payment:
                             name: 支付
+                            disable: true
                             router_name: admin_setting_payment
                         admin_coin_settings:
                             name: 虚拟币
+                            disable: true
                             router_name: admin_coin_settings
                         admin_setting_refund:
                             name: 退款
+                            disable: true
                 admin_setting_mobile:
                     name: 移动端设置
                     children:
                         admin_setting_mobile_settings:
                             name: 移动端设置
+                            disable: true
                             router_name: admin_setting_mobile
                 admin_optimize:
                     name: 优化和备份
@@ -655,6 +680,7 @@ admin:
                     children:
                         admin_optimize_settings:
                             name: 优化和备份
+                            disable: true
                             router_name: admin_optimize
                 admin_jobs:
                     name: 定时任务
@@ -662,6 +688,7 @@ admin:
                     children:
                         admin_jobs_manage:
                             name: 定时任务
+                            disable: true
                             router_name: admin_jobs
                 admin_setting_ip_blacklist:
                     name: IP黑名单
@@ -669,6 +696,7 @@ admin:
                     children:
                         admin_setting_ip_blacklist_manage:
                             name: IP黑名单
+                            disable: true
                             router_name: admin_setting_ip_blacklist
                 admin_setting_post_num_rules:
                     name: 发帖限制设置
@@ -676,6 +704,7 @@ admin:
                     children:
                         admin_setting_post_num_rules_settings:
                             name: 发帖限制设置
+                            disable: true
                             router_name: admin_setting_post_num_rules
                 admin_report_status:
                     name: 系统自检
@@ -683,6 +712,7 @@ admin:
                     children:
                         admin_report_status_list:
                             name: 系统自检
+                            disable: true
                             router_name: admin_report_status
                 admin_logs:
                     name: 系统日志
@@ -690,9 +720,11 @@ admin:
                     children:
                         admin_logs_query:
                             name: 系统操作日志
+                            disable: true
                             router_name: admin_logs
                         admin_logs_prod:
                             name: 程序运行日志
+                            disable: true
 web:
     name: 资源管理
     parent: null

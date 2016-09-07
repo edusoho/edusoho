@@ -5,6 +5,7 @@ admin_org_manage:
     children:
         admin_org:
             name: 组织机构
+            disable: true
 
 admin_user_org_update:
     name: '修改用户组织机构'

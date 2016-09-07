@@ -39,6 +39,7 @@ admin_classroom_order_manage:
             disable: true
 admin_classroom_setting:
     name: 班级
+    disable: true
     parent: admin_setting_course_setting
     after: admin_setting_live_course
 admin_classroom_review:
