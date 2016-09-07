@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Component\Payment\Wxpay\JsApiPay;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
@@ -117,6 +118,17 @@ class PayCenterController extends BaseController
         ));
     }
 
+    public function wxpayAction(Request $request)
+    {
+        $payment = 'wxpay';
+        $options = $this->getPaymentOptions($payment);
+
+        $jsApi = New JsApiPay($options);
+
+        $converted['openid'] = $jsApi->GetOpenid();
+        var_dump($converted['openid']);
+    }
+
     public function payAction(Request $request)
     {
         $fields = $request->request->all();
@@ -184,7 +196,7 @@ class PayCenterController extends BaseController
 
         if ($payment == 'wxpay') {
             $returnXml = $paymentRequest->unifiedOrder();
-            var_dump(  $returnXml );
+            var_dump($returnXml);
 
             if (!$returnXml) {
                 throw new \RuntimeException('xml数据异常！');
@@ -425,7 +437,7 @@ class PayCenterController extends BaseController
 
     protected function createPaymentRequest($order, $requestParams)
     {
-        $options       = $this->getPaymentOptions($order['payment']);
+        $options = $this->getPaymentOptions($order['payment']);
 
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order['targetType']);
