@@ -43,6 +43,7 @@ define(function (require, exports, module) {
             if(this.$el.parent().find('.open-course-wechat-qrcode').length > 0 ){
                 return;
             }
+           
             if (isWxAndroidBrowser()) {
                 document.getElementById('viewerIframe').contentWindow.document.getElementById('lesson-player').style.display = "none";
                 this.$el.on('hide.bs.modal', function () {
@@ -108,6 +109,7 @@ define(function (require, exports, module) {
         },
 
         _onIframe: function () {
+
             var lesson = this.get('lesson');
             var $ifrimeContent = $('#lesson-preview-iframe');
             $ifrimeContent.empty();
@@ -117,6 +119,7 @@ define(function (require, exports, module) {
         },
 
         _onVideo: function () {
+
             var lesson = this.get('lesson');
             
             if (lesson.type == 'video' || lesson.type == 'audio') {
@@ -133,6 +136,7 @@ define(function (require, exports, module) {
         },
 
         _onSWF: function () {
+
             var lesson = this.get('lesson');
             var $swfContent = $('#lesson-preview-swf-player');
             swfobject.removeSWF('lesson-preview-swf-player');
@@ -176,11 +180,13 @@ define(function (require, exports, module) {
         },
 
         _getPlayer: function () {
+            $('.black-mask').remove();
             return window.frames["viewerIframe"].window.BalloonPlayer ||
                 window.frames["viewerIframe"].window.player;
         },
 
         _videoPlay: function(playerUrl) {
+
             var $videoContent = $('#lesson-preview-player');
             $videoContent.html("");
 
