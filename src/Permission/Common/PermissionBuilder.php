@@ -3,6 +3,7 @@ namespace Permission\Common;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Tree;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -55,13 +56,14 @@ class PermissionBuilder
                 $children[] = $child->data;
             }
         }
-
+        $childrenCodes = ArrayToolkit::column($children, 'code');
         $subPermission = $this->getOriginSubPermissions($code);
 
         foreach ($subPermission as $value) {
             $issetDisable = isset($value['disable']) && $value['disable'];
             $isGroup = empty($group) || (isset($value['group']) && $value['group'] == $group);
-            if($issetDisable && $isGroup){
+            $isExist = in_array($value['code'], $childrenCodes, true);
+            if($issetDisable && $isGroup && !$isExist){
                 $children[] = $value;
             }
         }
