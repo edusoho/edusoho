@@ -493,16 +493,12 @@ class CourseController extends CourseBaseController
         }
 
         if ($this->isPluginInstalled('InternalTraining')) {
-            $postCoursePackages = $this->getPostCourseService()->findPostCoursePackagesByUser($user);
-            $courses = ArrayToolkit::column($postCoursePackages, 'course');
-            $courses = $this->getTrainingCourseService()->decideCoursesStudyStatus($courses, $user);
+            $postCoursePackages = $this->getPostCourseService()->findUserPostCoursePackagesWithStudyStatus($user);
             
-            foreach ($courses as $key => $postCourse) {
-                if ($postCourse['id'] == $course['id']) {
-                    for ($i = 1; $i <= $key-1; $i++) {
-                        if ($courses[$i]['studyStatus'] != 'finished') {
-                            return $this->createMessageResponse('info', "前置课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('homepage'));
-                        }
+            foreach ($postCoursePackages as $key => $postCoursePackage) {
+                if ($postCoursePackage['courseId'] == $course['id']) {
+                    if ($postCoursePackage['course']['studyStatus'] == 'lock') {
+                        return $this->createMessageResponse('info', "前面课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('homepage'));
                     }
                 }
             }
