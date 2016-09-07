@@ -12,7 +12,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-<<<<<<< HEAD
+
             'user.service.registered'   => 'onUserCreate',
             'user.unlock'               => 'onUserCreate',
             'user.lock'                 => 'onUserDelete',
@@ -42,36 +42,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'article.trash'             => 'onArticleDelete',
             'article.unpublish'         => 'onArticleDelete',
             'article.delete'            => 'onArticleDelete',
-=======
-            'user.service.registered' => 'onUserCreate',
-            'user.unlock'             => 'onUserCreate',
-            'user.lock'               => 'onUserDelete',
-            'user.update'             => 'onUserUpdate',
-            'user.change_nickname'    => 'onUserUpdate',
-
-            'course.publish' => 'onCourseCreate',
-            'course.update'  => 'onCourseUpdate',
-            'course.delete'  => 'onCourseDelete',
-            'course.close'   => 'onCourseDelete',
-            'course.join'    => 'onCourseJoin',
-            'course.quit'    => 'onCourseQuit',
-            'course.create'  => 'onCourseCreate',
-
-            'course.lesson.publish'   => 'onCourseLessonCreate',
-            'course.lesson.unpublish' => 'onCourseLessonDelete',
-            'course.lesson.update'    => 'onCourseLessonUpdate',
-            'course.lesson.delete'    => 'onCourseLessonDelete',
-
-            'classroom.create' => 'onClassroomCreate',
-            'classroom.join'   => 'onClassroomJoin',
-            'classroom.quit'   => 'onClassroomQuit',
-
-            'article.publish'      => 'onArticleCreate',
-            'article.update'       => 'onArticleUpdate',
-            'article.trash'        => 'onArticleDelete',
-            'article.unpublish'    => 'onArticleDelete',
-            'article.delete'       => 'onArticleDelete',
->>>>>>> feature/14692-app-im-setting
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create'        => 'onThreadCreate',
@@ -100,22 +70,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'homework.check' => 'onHomeworkCheck',
 
-<<<<<<< HEAD
             'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
 
             'user.service.follow' => 'onUserFollow'
-=======
-            'open.course.publish' => 'onOpenCourseCreate',
-            'open.course.delete'  => 'onOpenCourseDelete',
-            'open.course.update'  => 'onOpenCourseUpdate',
-            'open.course.close'   => 'onOpenCourseDelete',
-
-            'open.course.lesson.publish'   => 'onOpenCourseLessonPublish',
-            'open.course.lesson.update'    => 'onOpenCourseLessonUpdate',
-            'open.course.lesson.delete'    => 'onOpenCourseLessonDelete',
-            'open.course.lesson.unpublish' => 'onOpenCourseLessonDelete'
->>>>>>> feature/14692-app-im-setting
         );
     }
 
