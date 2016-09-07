@@ -440,7 +440,11 @@ class OpenCourseServiceTest extends BaseTestCase
         $lesson1 = $this->_createOpenCourseLesson($course);
         $lesson2 = $this->_createOpenCourseLesson($course);
 
+        $lesson1 = $this->getOpenCourseService()->publishLesson($course['id'], $lesson1['id']);
+        $lesson2 = $this->getOpenCourseService()->publishLesson($course['id'], $lesson2['id']);
+
         $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson1['id']);
+
         $this->assertArrayEquals($lesson2, $nextLesson);
 
         $nextLesson = $this->getOpenCourseService()->getNextLesson($course['id'], $lesson2['id']);

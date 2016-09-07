@@ -32,6 +32,10 @@
     {% if 'coursematerial' in fileQuotes or 'opencoursematerial' in fileQuotes %}
       <span class="label label-success tip">{{'资料'|trans}}</span>
     {% endif %}
+
+    {% if not fileQuotes %}
+      <span class="label label-default tip">{{'未使用'|trans}}</span>
+    {% endif %}
   </td>
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>

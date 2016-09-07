@@ -1,22 +1,6 @@
 {% extends 'TopxiaWebBundle:Theme:edit-modal-layout.html.twig' %}
 
-{% block custom_count %}
-  <div class="form-group">
-    <label class="col-sm-3 control-label">小组数量设置</label>
-    <div class="col-sm-9">
-      <select class="form-control width-input-large" name="count">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-      </select>
-    </div>
-  </div>
-{% endblock %}
+{% block custom_count %}{% endblock %}
 
 {% block custom_category_count %}
   <div class="form-group">
@@ -41,3 +25,5 @@
     </div>
   </div>
 {% endblock %}
+
+{% block custom_orderby %}{% endblock %}

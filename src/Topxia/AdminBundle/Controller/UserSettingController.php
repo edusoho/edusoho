@@ -152,6 +152,8 @@ class UserSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
+            $loginConnect = ArrayToolkit::trim($loginConnect);
+
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->setFlashMessage('success', '登录设置已保存！');

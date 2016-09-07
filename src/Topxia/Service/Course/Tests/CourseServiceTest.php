@@ -116,12 +116,12 @@ class CourseServiceTest extends BaseTestCase
         $empty = $this->getCourseService()->findRandomCourses(array(), 10);
         $this->assertEquals(empty($empty), true);
         $this->assertEquals(count($empty), 0);
-        foreach (range(0, 9) as $i){
+        foreach (range(0, 9) as $i) {
             $course = array(
                 'title' => 'test course'.$i
             );
             $course = $this->getCourseService()->createCourse($course);
-            if($i % 2 == 0){
+            if ($i % 2 == 0) {
                 $this->getCourseService()->recommendCourse($course['id'], $i);
             }
         }
@@ -1584,7 +1584,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->deleteLesson($course['id'], $lesson1['id']);
 
-        $this->assertNull($this->getCourseService()->getCourseLesson($course['id'], $lesson1['id']));
+        $this->assertEmpty($this->getCourseService()->getCourseLesson($course['id'], $lesson1['id']));
 
 // @FIXME
 
@@ -2027,7 +2027,7 @@ class CourseServiceTest extends BaseTestCase
         $createLesson  = $this->getCourseService()->createLesson($lesson);
         $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
         $publishLesson = $this->getCourseService()->publishLesson($createLesson['id'], $createLesson['id']);
-        $result        = $this->getCourseService()->getUserNextLearnLesson($user['id'], $createCourse['id']);-
+        $result        = $this->getCourseService()->getUserNextLearnLesson($user['id'], $createCourse['id']);
         $this->assertEquals('1', $result['id']);
     }
 

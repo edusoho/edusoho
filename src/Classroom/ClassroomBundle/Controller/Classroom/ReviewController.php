@@ -12,8 +12,7 @@ class ReviewController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $courses    = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
-        $coursesNum = count($courses);
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
         $user = $this->getCurrentUser();
 
