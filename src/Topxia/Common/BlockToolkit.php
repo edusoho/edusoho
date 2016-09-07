@@ -141,7 +141,7 @@ class BlockToolkit
             }
         }
 
-        $blockService->updateBlockTemplate($block['id'], array(
+        $blockService->updateBlockTemplate($blockTemplate['id'], array(
             'data' => $data,
         ));
     }
