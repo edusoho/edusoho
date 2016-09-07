@@ -95,7 +95,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag                = $this->setTagOrg($tag);
         $tag                = $this->getTagDao()->addTag($tag);
 
-        $this->getLogService()->info('tag', 'create', $this->getKernel()->trans('添加标签%name%(#%id%)', array('%name%' => $tag['name'], '%id%' => $tag['id'])));
+        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 
         return $tag;
     }
