@@ -6,12 +6,12 @@
   {% if item.questionType == 'fill' %}
     <div class="testpaper-question-stem">
     	{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
-    	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: item.question.id })) }}
+      {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:item.question.id|default(null)  } %}
     </div>
   {% else %}
     <div class="testpaper-question-stem">
     	{{ item.question.stem|bbCode2Html|raw|nl2br }}
-    	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: item.question.id })) }}
+      {% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:item.question.id|default(null)  } %}
     </div>
     {% endif %}
 </div>

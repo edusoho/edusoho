@@ -1090,6 +1090,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $attachments;
     }
 
+    public function searchUseFiles($conditions)
+    {
+        $limit       = $this->getFileUsedDao()->count($conditions);
+        $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime', 'DESC'), 0, $limit);
+        $this->bindFiles($attachments);
+        return $attachments;
+    }
+
     public function getUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
@@ -1109,9 +1117,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->createAccessDeniedException("您无全删除该附件");
         }
 
+        $this->getFileUsedDao()->getConnection()->beginTransaction();
         try {
-            $this->getFileUsedDao()->getConnection()->beginTransaction();
-
             $this->getFileUsedDao()->delete($id);
             $this->deleteFile($file['id']);
 

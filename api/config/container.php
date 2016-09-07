@@ -62,7 +62,11 @@ $resources = array(
     'ClassRoomThreads',
     'ThreadPosts',
     'ThreadPost',
-    'Setting'
+    'Setting',
+    'OpenCourse',
+    'OpenCourses',
+    'OpenCourse/Lesson',
+    'OpenCourse/Lessons'
 );
 
 foreach ($resources as $res) {

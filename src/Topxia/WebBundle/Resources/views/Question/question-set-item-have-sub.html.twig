@@ -3,7 +3,7 @@
 
   <div class="well editor-text">
   	{{ question.stem|bbCode2Html|raw }}
-  	{{ render(controller('TopxiaWebBundle:Attachment:list', {targetType: 'question.stem', targetId: question.id })) }}
+{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
   </div>
 
   {% for key,item in item.subItems %}

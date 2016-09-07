@@ -40,6 +40,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             $message   = $forbidden['message'];
             $exception = new AuthenticationException($message);
         } else {
+
             $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
 
             if ($forbidden['user']) {
@@ -52,8 +53,6 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
                 }
 
                 $exception = new AuthenticationException($message);
-            } else {
-                $message = $exception->getMessage();
             }
         }
 
@@ -62,7 +61,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => false,
-                'message' => $message
+                'message' => empty($message) ? $exception->getMessage() : $message
             );
             return new JsonResponse($content, 400);
         }

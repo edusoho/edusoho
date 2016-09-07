@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveOpenCourseController extends BaseOpenCourseController
 {
@@ -24,7 +23,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $user               = $this->getCurrentUser();
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
-        $this->createRefererLog( $request, $course);
+        $this->createRefererLog($request, $course);
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
@@ -162,7 +161,8 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
             $lesson["isEnd"]                   = intval(time() - $lesson["endTime"]) > 0;
-            $lesson["canRecord"]               = $client->isAvailableRecord($lesson['mediaId']);
+            $lesson["canRecord"]               = $lesson['replayStatus'] == 'videoGenerated' ? false : $client->isAvailableRecord($lesson['mediaId']);
+            $lesson['file']                    = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
 
@@ -200,6 +200,48 @@ class LiveOpenCourseController extends BaseOpenCourseController
         ));
     }
 
+    public function uploadModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $file = array();
+        if ($lesson['replayStatus'] == 'videoGenerated') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file)) {
+                $lesson['media'] = array(
+                    'id'     => $file['id'],
+                    'status' => $file['convertStatus'],
+                    'source' => 'self',
+                    'name'   => $file['filename'],
+                    'uri'    => ''
+                );
+            } else {
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+            }
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $fileId = $request->request->get('fileId', 0);
+            $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fileId);
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
+            'course'     => $course,
+            'lesson'     => $lesson,
+            'targetType' => 'opencourselesson'
+        ));
+    }
+
+    protected function getLiveReplayMedia($lesson)
+    {
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            return $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return '';
+    }
+
     protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
@@ -235,5 +277,10 @@ class LiveOpenCourseController extends BaseOpenCourseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

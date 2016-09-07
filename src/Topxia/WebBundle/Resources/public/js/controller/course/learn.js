@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
             'click [data-role=finish-lesson]': 'onFinishLesson',
-            'click [data-role=ask-question]': 'onAskQuestion',
+            'click [data-role=ask-question]': 'onAskQuestion'
         },
 
         attrs: {
@@ -288,7 +288,7 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if (lesson.type == 'video' || lesson.type == 'audio') {
-                    if (lesson.mediaSource == 'self') {
+                    /*if (lesson.mediaSource == 'self') {
                         var lessonVideoDiv = $('#lesson-video-content');
 
                         if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
@@ -332,6 +332,7 @@ define(function(require, exports, module) {
                         });
 
                         that.set("player", {});
+
                     } else {
                         $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
                         swfobject.embedSWF(lesson.mediaUri,
@@ -340,7 +341,8 @@ define(function(require, exports, module) {
                                 allowFullScreen: 'true'
                             });
                         $("#lesson-swf-content").show();
-                    }
+                    }*/
+                    self._videoPlay(lesson);
                 } else if (lesson.type == 'text') {
                     $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
                     $("#lesson-text-content").show();
@@ -422,12 +424,29 @@ define(function(require, exports, module) {
                         };
 
                         if (endLeftSeconds <= 0) {
+
                             $liveNotice = "<p>直播已经结束</p>";
                             $countDown = "";
-                            if (lesson.replays && lesson.replays.length > 0) {
-                                $.each(lesson.replays, function(i, n) {
-                                    $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+
+                            if (lesson.replayStatus == 'videoGenerated') {
+                                
+                                $countDown += "<button class='btn btn-primary live-video-play-btn' data-lesson-id='"+ lesson.id +"'>查看回放</button>&nbsp;&nbsp;";
+                                $('body').on('click','.live-video-play-btn',function(){
+                                    
+                                    if (lesson.mediaId == 0 || ($.inArray('liveMediaError',lesson) != -1 && lesson.liveMediaError != '')) {
+                                        Notify.danger('抱歉，视频文件不存在，暂时无法学习。');
+                                        return;
+                                    }
+                                    $('#lesson-live-content').hide();
+                                    $('#lesson-video-content').html('');
+                                    self._videoPlay(lesson);
                                 });
+                            } else {
+                                if (lesson.replays && lesson.replays.length > 0) {
+                                    $.each(lesson.replays, function(i, n) {
+                                        $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+                                    });
+                                }
                             }
                         };
 
@@ -437,7 +456,11 @@ define(function(require, exports, module) {
                     }
 
                     generateHtml();
-                    iID = setInterval(generateHtml, 1000);
+                    var millisecond = 0;
+                    if (lesson.endTime > lesson.nowDate) {
+                        millisecond = 1000;
+                    }
+                    iID = setInterval(generateHtml, millisecond);
 
                     $("#lesson-live-content").show();
                     $("#lesson-live-content").perfectScrollbar({
@@ -732,6 +755,64 @@ define(function(require, exports, module) {
             };
 
             return $countDown;          
+        },
+
+        _videoPlay: function(lesson){
+            var self = this;
+
+            if (lesson.mediaSource == 'self') {
+                var lessonVideoDiv = $('#lesson-video-content');
+
+                if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                    Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                    return;
+                }
+
+                var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                if (self.get('starttime')) {
+                    playerUrl += "?starttime=" + self.get('starttime');
+                }
+                var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+
+                $("#lesson-video-content").show();
+                $("#lesson-video-content").html(html);
+
+                var messenger = new Messenger({
+                    name: 'parent',
+                    project: 'PlayerProject',
+                    children: [document.getElementById('viewerIframe')],
+                    type: 'parent'
+                });
+
+                messenger.on("ended", function() {
+                    var player = self.get("player");
+                    player.playing = false;
+                    self.set("player", player);
+                    self._onFinishLearnLesson();
+                });
+
+                messenger.on("playing", function() {
+                    var player = self.get("player");
+                    player.playing = true;
+                    self.set("player", player);
+                });
+
+                messenger.on("paused", function() {
+                    var player = self.get("player");
+                    player.playing = false;
+                    self.set("player", player);
+                });
+
+                self.set("player", {});
+            } else {
+                $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                swfobject.embedSWF(lesson.mediaUri,
+                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
+                        wmode: 'opaque',
+                        allowFullScreen: 'true'
+                    });
+                $("#lesson-swf-content").show();
+            }
         },
 
     });

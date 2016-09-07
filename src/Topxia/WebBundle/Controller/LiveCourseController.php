@@ -201,13 +201,9 @@ class LiveCourseController extends BaseController
         $furtureLiveCourses = array();
 
         if ($furtureLiveLessonCourses) {
-            $conditions['courseIds'] = $furtureLiveCourseIds;
-            $furtureLiveCourses      = $this->getCourseService()->searchCourses(
-                $conditions,
-                array('createdTime', 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
+            $pageCourseIds      = array_slice($furtureLiveCourseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+            $furtureLiveCourses = $this->getCourseService()->findCoursesByIds($pageCourseIds);
+
             $furtureLiveCourses = ArrayToolkit::index($furtureLiveCourses, 'id');
             $furtureLiveCourses = $this->_liveCourseSort($furtureLiveCourseIds, $furtureLiveCourses, 'furture');
         }
@@ -215,7 +211,8 @@ class LiveCourseController extends BaseController
         $replayLiveCourses = array();
 
         if (count($furtureLiveCourses) < $paginator->getPerPageCount()) {
-            $replayLiveCourses = $this->_searchReplayLiveCourse($request, $conditions, $furtureLiveCourseIds, $furtureLiveCourses);
+            $conditions['courseIds'] = $furtureLiveCourseIds;
+            $replayLiveCourses       = $this->_searchReplayLiveCourse($request, $conditions, $furtureLiveCourseIds, $furtureLiveCourses);
         }
 
         $liveCourses = array_merge($furtureLiveCourses, $replayLiveCourses);
@@ -444,6 +441,39 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    public function uploadModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $file = array();
+        if ($lesson['replayStatus'] == 'videoGenerated') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if (!empty($file)) {
+                $lesson['media'] = array(
+                    'id'     => $file['id'],
+                    'status' => $file['convertStatus'],
+                    'source' => 'self',
+                    'name'   => $file['filename'],
+                    'uri'    => ''
+                );
+            } else {
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+            }
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $fileId = $request->request->get('fileId', 0);
+            $this->getCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fileId);
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:upload-modal.html.twig', array(
+            'course'     => $course,
+            'lesson'     => $lesson,
+            'targetType' => 'courselesson'
+        ));
+    }
+
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
@@ -478,7 +508,8 @@ class LiveCourseController extends BaseController
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
-                $item["canRecord"] = $this->_canRecord($item['mediaId']);
+                $item["canRecord"] = $item['replayStatus'] == 'videoGenerated' ? false : $this->_canRecord($item['mediaId']);
+                $item['file']      = $this->getLiveReplayMedia($item);
                 $courseItems[$key] = $item;
             }
         }
@@ -489,6 +520,15 @@ class LiveCourseController extends BaseController
             'items'   => $courseItems,
             'default' => $default
         ));
+    }
+
+    protected function getLiveReplayMedia($lesson)
+    {
+        if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
+            return $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return '';
     }
 
     protected function getRootCategory($categoryTree, $category)
@@ -548,7 +588,7 @@ class LiveCourseController extends BaseController
             $start = 0;
             $limit = $pageSize - ($futureLiveCoursesCount % $pageSize);
         } else {
-            $start = ($currentPage - $pages - 1) * $pageSize + ($pageSize - ($futureLiveCoursesCount % $pageSize));
+            $start = ($currentPage - $pages - 1) * $pageSize;
             $limit = $pageSize;
         }
 
@@ -618,5 +658,10 @@ class LiveCourseController extends BaseController
     public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

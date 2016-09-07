@@ -25,7 +25,6 @@ class EduSohoOpenClient
         $connectTimeout = 10;
         $timeout        = 10;
 
-        $url  = $url;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
