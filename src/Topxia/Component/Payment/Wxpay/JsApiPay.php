@@ -22,7 +22,10 @@ namespace Topxia\Component\Payment\Wxpay;
 class JsApiPay
 {
     private $config;
+
     private $request;
+
+    private $curl_timeout = 10;
 
     public function __construct($config, $request)
     {
