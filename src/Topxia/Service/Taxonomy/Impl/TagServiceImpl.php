@@ -95,7 +95,7 @@ class TagServiceImpl extends BaseService implements TagService
         $tag                = $this->setTagOrg($tag);
         $tag                = $this->getTagDao()->addTag($tag);
 
-        $this->getLogService()->info('tag', 'create', $this->getKernel()->trans('添加标签%name%(#%id%)', array('%name%' => $tag['name'], '%id%' => $tag['id'])));
+        $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 
         return $tag;
     }
@@ -126,13 +126,13 @@ class TagServiceImpl extends BaseService implements TagService
         $tag = $this->getTag($id);
 
         if (empty($tag)) {
-            throw $this->createServiceException($this->getKernel()->trans('标签(#%id%)不存在，更新失败！', array('%id%' => $id)));
+            throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
         $fields = ArrayToolkit::parts($fields, array('name'));
         $this->filterTagFields($fields, $tag);
 
-        $this->getLogService()->info('tag', 'update', $this->getKernel()->trans('编辑标签%name%(#%id%)', array('%name%' => $fields['name'], '%id%' => $id)));
+        $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
         return $this->getTagDao()->updateTag($id, $fields);
     }
 
