@@ -492,23 +492,25 @@ admin:
                     children:
                         admin_my_cloud_overview:
                             name: 账户概览
-                            visible: false
+                            disable: true
                         admin_cloud_bill:
                             name: 云视频账单
+                            disable: true
                             router_name: admin_cloud_bill
-                            visible: false
                 admin_cloud_video_setting:
                     name: 云视频设置
                     router_name: admin_setting_cloud_video
                     children:
                         admin_setting_cloud_video:
                             name: 云视频设置
+                            disable: true
                 admin_edu_cloud_sms:
                     name: 云短信设置
                     children:
                         admin_edu_cloud_sms_setting:
                             name: 云短信设置
                             router_name: admin_edu_cloud_sms
+                            disable: true
                 # admin_edu_cloud_email:
                 #     name: 云邮件设置
                 #     children:
@@ -520,12 +522,13 @@ admin:
                     children:
                         admin_edu_cloud_search:
                             name: 云搜索
-                            visible: false
+                            disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     children:
                         admin_cloud_attachment:
                             name: 云附件设置
+                            disable: true
                 admin_app_center_show:
                     name: ES应用
                     router_name: admin_app_center
@@ -535,28 +538,28 @@ admin:
                         admin_app_center:
                             name: 应用中心
                             router_name: admin_app_center
-                            visible: false
+                            disable: true
                             router_params:
                                 postStatus: all
                         admin_app_installed:
                             name: 已购项目
-                            visible: false
+                            disable: true
                             router_params:
                                 postStatus: all
                         admin_app_upgrades:
                             name: 更新
                             class: app-upgrade
-                            visible: false
+                            disable: true
                         admin_app_logs:
                             name: 更新日志
-                            visible: false
+                            disable: true
                 admin_setting_cloud:
                     name: 授权信息
                     children:
                         admin_setting_my_cloud:
                             name: 授权信息
                             router_name: admin_setting_cloud
-                            visible: false
+                            disable: true
         admin_system:
             name: 系统
             router_name: admin_setting_site
