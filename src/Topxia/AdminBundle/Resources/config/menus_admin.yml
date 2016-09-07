@@ -100,7 +100,7 @@ admin:
                         admin_teacher_manage:
                             name: 教师管理
                             router_name: admin_teacher
-                            visible: false
+                            disable: true
                             children: 
                                 admin_teacher_promote:
                                     name: 推荐老师
@@ -122,7 +122,7 @@ admin:
                                         id: (user.id)
                         admin_teacher_promote_list:
                             name: 教师推荐
-                            visible: false
+                            disable: true
                 admin_approval_manage:
                     name: 实名认证管理
                     children:
@@ -130,7 +130,7 @@ admin:
                             name: 实名认证管理
                             router_params:
                                 approvalStatus: approving
-                            visible: false
+                            disable: true
                             children:
                                 admin_approval_cancel:
                                     name: 撤销
@@ -144,7 +144,7 @@ admin:
                     children:
                         admin_message:
                             name: 私信管理
-                            visible: false
+                            disable: true
         admin_course:
             name: 课程
             children:
