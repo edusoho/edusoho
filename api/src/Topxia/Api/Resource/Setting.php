@@ -42,7 +42,8 @@ class Setting extends BaseResource
     protected function canAccess($settingName)
     {
         return in_array($settingName, array(
-            'course'
+            'course',
+            'app_im'
         ), true);
     }
 
