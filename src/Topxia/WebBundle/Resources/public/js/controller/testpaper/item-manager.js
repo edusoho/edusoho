@@ -46,6 +46,7 @@ define(function(require, exports, module) {
         },
 
         onChangeScore: function(e) {
+            this._checkItemScore();
             this.refreshTestpaperStats();
         },
 
@@ -59,28 +60,8 @@ define(function(require, exports, module) {
         },
 
         onRequestSave: function(e) {
-            var isOk = true;
-            $("#testpaper-table").find('[name="scores[]"]:not(:hidden)').each(function() {
-                var score = $(this).val();
-
-                if (score == '0') {
-                    Notify.danger('题目分值不能为0。');
-                    isOk = false;
-                    return false;
-                }
-
-                if (!/^(([1-9]{1}\d{0,3})|([0]{1}))(\.(\d){1})?$/.test(score)) {
-                    Notify.danger('题目分值只能填写数字，并且在3位数以内，保留一位小数。');
-                    $(this).focus();
-                    isOk = false;
-                    return false;
-                }
-            });
-            if ($("#testpaper-table").find('[name="scores[]"]').length == 0) {
-                Notify.danger('请选择题目。');
-                isOk = false;
-                return false;
-            }
+            
+            var isOk = this._checkItemScore();
 
             if (!isOk) {
                 return ;
@@ -190,9 +171,8 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="passedScore"]',
                     required: true,
-                    rule: 'score maxlength{max:3}',
-                    display: '分数',
-                     errormessageMaxlength:'分数的长度必须在3位数以内'
+                    rule: 'score max{max:999}',
+                    display: '分数'
                 });
             }
         },
@@ -295,6 +275,31 @@ define(function(require, exports, module) {
                     self.refreshSeqs();
                 }
             });
+        },
+        _checkItemScore: function(){
+
+            var isOk = true;
+            if ($("#testpaper-table").find('[name="scores[]"]').length == 0) {
+                Notify.danger('请选择题目。');
+                isOk = false;
+            }
+
+            $("#testpaper-table").find('input[type="text"][name="scores[]"]').each(function() {
+                var score = $(this).val();
+
+                if (score == '0') {
+                    Notify.danger('题目分值不能为0。');
+                    isOk = false;
+                }
+
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目分值只能填写数字，并且在3位数以内，保留一位小数。');
+                    $(this).focus();
+                    isOk = false;
+                }
+            });
+
+            return isOk;
         }
 
     });
@@ -329,9 +334,8 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="passedScore"]',
                 required: true,
-                rule: 'score maxlength{max:3}',
-                display: '分数',
-                errormessageMaxlength:'分数的长度必须在3位数以内'
+                rule: 'score max{max:999}',
+                display: '分数'
             });
         }
 
