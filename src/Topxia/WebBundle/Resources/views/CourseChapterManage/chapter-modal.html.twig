@@ -3,7 +3,7 @@
 {% set chapter = chapter|default(null) %}
 
 {% block title %}
-  {% if chapter %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{% else %}{% if setting('default.chapter_name') %}}{{ setting('default.part_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{% endif %}
+  {% if chapter %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}{% else %}{% if setting('default.chapter_name') %}{{ setting('default.part_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}{% endif %}
 {% endblock %}
 {% block body %}
 
