@@ -25,6 +25,7 @@ admin_classroom_refunds:
     children:
         admin_classroom_refunds_manage:
             name: 班级退款管理
+            visible: false
             router_name: admin_order_refunds
             router_params:
                 targetType: classroom
