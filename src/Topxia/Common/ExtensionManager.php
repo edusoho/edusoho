@@ -95,7 +95,7 @@ class ExtensionManager
         $this->loadDataTagClassmap();
 
         if (!isset($this->dataTagClassmap[$name])) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' =>$name )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('数据标签`%name%`尚未定义。', array('%name%' => $name)));
         }
 
         $class = $this->dataTagClassmap[$name];
@@ -256,8 +256,9 @@ class ExtensionManager
 
         return $this->bundles;
     }
+
     protected function getServiceKernel()
     {
-            return ServiceKernel::instance();
-     }
+        return ServiceKernel::instance();
+    }
 }

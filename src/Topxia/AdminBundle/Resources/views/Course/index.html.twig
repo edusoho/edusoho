@@ -39,12 +39,7 @@
       </div>
       <button class="btn btn-primary">{{'搜索'|trans}}</button>
 
-      {% set tooltip_content = '<div style="width:250px;">
-              <span style="color:blue;">{{"课程说明"|trans}}</span><br>
-              1. {{"编号及排序无法修改；"|trans}}<br>
-              2. {{"课程地址规则：域名/course/课程编号；"|trans}}
-            </div>' %}
-      {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign',content: tooltip_content,placement: 'left'} %}
+      {% include 'TopxiaAdminBundle:Widget:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '课程说明Tooltip'|trans|raw, placement: 'left'} %}
     </form>
   </div>
 
