@@ -253,6 +253,12 @@ discountStatus:
     running: 进行中
     finished: 已结束
 
+#to be delete, discount插件正在使用，等插件升级了就删除
+discountStatus:html:
+    unstart: 未开始
+    running: 进行中
+    finished: 已结束
+
 discountAuditStatus:
     passed: 已通过
     rejected: 未通过
