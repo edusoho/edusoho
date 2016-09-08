@@ -5,7 +5,7 @@ admin_cloud_file_manage:
     children:
         admin_cloud_file:
             name: 云资源
-            
+            disable: true
 # admin_material_lib_stats:
 #     name: 数据统计
 #     parent: admin_material_lib
