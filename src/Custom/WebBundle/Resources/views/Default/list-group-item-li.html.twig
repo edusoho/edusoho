@@ -1,0 +1,38 @@
+<li class="list-group-item col-md-6
+{% if postCoursePackage.course.studyStatus == 'lock' and postCoursePackage.courseId != currentCourse.id|default() %}
+  item-not-done
+{% elseif postCoursePackage.course.studyStatus == 'finished' %}
+  item-done
+{% else %}
+  item-doing
+{% endif %}">
+  <a class="item-name"
+  {% if postCoursePackage.course.studyStatus == 'finished' %}
+     target="_blank" href="{{ path('course_learn', {id:postCoursePackage.course.id}) }}#lesson/{{postCoursePackage.course.lastLesson.id}}"
+  {% elseif postCoursePackage.course.studyStatus == 'learning' %}
+    {% if postCoursePackage.courseId == currentCourse.id %}
+      target="_blank" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}"
+    {% else %}
+      title = "请先学习前面课程"
+    {% endif %}
+  {% else %}
+    {% if postCoursePackage.courseId == currentCourse.id %}
+      data-toggle="modal" data-target="#modal" data-url="{{ path('internal_training_course_unlock', {courseId:currentCourse.id}) }}"
+    {% else %}
+      title = "请先学习前面课程"
+    {% endif %}
+  {% endif %}>{{ index }}.{{ postCoursePackage.course.title }}</a> 
+
+  <i class="item-status iconfont 
+      {% if postCoursePackage.course.studyStatus == 'lock' %}
+        {% if postCoursePackage.courseId != currentCourse.id %}
+          icon-suo1
+        {% else %}
+          icon-suo1 warning
+        {% endif %}
+      {% elseif postCoursePackage.course.studyStatus == 'finished' %}
+        icon-gou
+      {% else %}
+        icon-group7zhuanhuan
+      {% endif %}"></i>
+</li>
