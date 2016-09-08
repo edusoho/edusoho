@@ -13,7 +13,7 @@ define(function(require, exports, module) {
             accept: {
 	            title: 'Images',
 	            extensions: 'gif,jpg,jpeg,png,ico',
-	            mimeTypes: 'image/*'
+	            mimeTypes: 'image/png,image/jpg,image/jpeg,imge/bmp,image/gif'
 	        },
 	        uploader: null,
 	        fileVal: 'file'
