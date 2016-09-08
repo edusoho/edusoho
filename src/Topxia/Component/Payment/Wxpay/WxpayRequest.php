@@ -157,8 +157,9 @@ class WxpayRequest extends Request
             throw new \RuntimeException("参数错误");
         }
         $jsApi              = array();
+        $timeStamp          = time();
         $jsApi['appId']     = $UnifiedOrderResult["appid"];
-        $jsApi['timeStamp'] = time();
+        $jsApi['timeStamp'] = "$timeStamp";
         $jsApi['nonceStr']  = $this->getNonceStr();
         $jsApi['package']   = "prepay_id=" . $UnifiedOrderResult['prepay_id'];
         $jsApi['signType']  = "MD5";
