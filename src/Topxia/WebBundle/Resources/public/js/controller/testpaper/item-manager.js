@@ -111,6 +111,7 @@ define(function(require, exports, module) {
             }
 
             $('input[name="passedScore"]').attr('data-score-total',stats.total.score.toFixed(1));
+            $('input[name="passedScore"]').val(Math.ceil((stats.total.score * 0.6).toFixed(1)));
             $("#testpaper-stats").html(html);
         },
 
