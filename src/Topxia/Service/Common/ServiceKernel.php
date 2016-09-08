@@ -20,6 +20,8 @@ class ServiceKernel
     protected $debug;
     protected $booted;
 
+    protected $translator;
+
     protected $parameterBag;
 
     protected $currentUser;
@@ -131,16 +133,30 @@ class ServiceKernel
     public function getParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException('尚未初始化ParameterBag');
+            throw new \RuntimeException($this->trans('尚未初始化ParameterBag'));
         }
 
         return $this->parameterBag->get($name);
     }
 
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function getTranslator()
+    {
+        if (is_null($this->translator)) {
+            throw new \RuntimeException($this->trans('尚未初始化Translator'));
+        }
+
+        return $this->translator;
+    }
+
     public function hasParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException('尚未初始化ParameterBag');
+            throw new \RuntimeException($this->trans('尚未初始化ParameterBag'));
         }
 
         return $this->parameterBag->has($name);
@@ -155,7 +171,7 @@ class ServiceKernel
     public function getCurrentUser()
     {
         if (is_null($this->currentUser)) {
-            throw new \RuntimeException('尚未初始化CurrentUser');
+            throw new \RuntimeException($this->trans('尚未初始化CurrentUser'));
         }
 
         return $this->currentUser;
@@ -183,7 +199,7 @@ class ServiceKernel
     public function getConnection()
     {
         if (is_null($this->connection)) {
-            throw new \RuntimeException('尚未初始化数据库连接');
+            throw new \RuntimeException($this->trans('尚未初始化数据库连接'));
         }
 
         return $this->connection;
@@ -247,6 +263,35 @@ class ServiceKernel
         }
 
         return $this->_moduleConfig[$key];
+    }
+
+    /**
+     * 翻译数组文本
+     * @param  [type] $message        要翻译的数组文本
+     * @param  array  $arguments      占位符
+     * @param  [type] $domain         [description]
+     * @param  [type] $locale         [description]
+     * @return [type] [description]
+     */
+    public function transArray($messages, $arguments = array(), $domain = null, $locale = null)
+    {
+        foreach ($messages as &$message) {
+            $message = $this->trans($message, $arguments, $domain, $locale);
+        }
+        return $messages;
+    }
+
+    /**
+     * 翻译文本
+     * @param  [type] $message        要翻译的文本
+     * @param  array  $arguments      占位符
+     * @param  [type] $domain         [description]
+     * @param  [type] $locale         [description]
+     * @return [type] [description]
+     */
+    public function trans($message, $arguments = array(), $domain = null, $locale = null)
+    {
+        return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
     }
 
     protected function getClassName($type, $name)

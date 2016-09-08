@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
-            '{{display}}不能全为数字'
+            Translator.trans('%display%不能全为数字', {display:'{{display}}'})
         ], 
         [
             'visible_character',
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            '{{display}}请输入可见性字符'
+            Translator.trans('%display%请输入可见性字符', {display:'{{display}}'})
         ],
         [
             'chinese_limit',
@@ -39,37 +39,37 @@ define(function(require, exports, module) {
                 var l = strlen(element.val());
                 return l <= Number(options.max);
             },
-            '{{display}}的长度必须小于等于{{max}}字符,一个中文为2个字符'
+            Translator.trans('%display%的长度必须小于等于%max%字符,一个中文为2个字符', {display: '{{display}}', max: '{{max}}'})
         ],
         [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
-            '{{display}}必须是中文字'
+            Translator.trans('%display%必须是中文字', {display: '{{display}}'})
         ],
         [
             'phone', 
             /^1\d{10}$/,
-            '请输入有效的{{display}}'
+            Translator.trans('请输入有效的%display%', {display: '{{display}}'})
         ],
         [
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i,
-            '{{display}}必须是中文字、英文字母、数字及下划线组成'
+            Translator.trans('%display%必须是中文字、英文字母、数字及下划线组成', {display: '{{display}}'})
         ],
         [
            'reg_inviteCode',
             /^[a-z0-9A-Z]{5}$/,
-            '{{display}}必须是5位数字、英文字母组成'
+            Translator.trans('%display%必须是5位数字、英文字母组成', {display: '{{display}}'})
         ],
         [
             'alphanumeric',
             /^[a-zA-Z0-9_]+$/i,
-            '{{display}}必须是英文字母、数字及下划线组成'
+            Translator.trans('%display%必须是英文字母、数字及下划线组成', {display: '{{display}}'})
         ],
         [
             'alphabet_underline',
             /^[a-zA-Z_]+[a-zA-Z0-9_]*/i,
-            '{{display}}必须以英文字母或下划线开头'
+            Translator.trans('%display%必须以英文字母或下划线开头', {display: '{{display}}'})
         ],
         [
             'byte_minlength',
@@ -78,12 +78,12 @@ define(function(require, exports, module) {
                 var l = calculateByteLength(element.val());
                 return l >= Number(options.min);
             },
-            '{{display}}的长度必须大于等于{{min}}，一个中文字算2个字符'
+            Translator.trans('%display%的长度必须大于等于%min%，一个中文字算2个字符', {display: '{{display}}', min: '{{min}}'})
         ],
         [
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
-            '请输入合法的{{display}},如:200, 221.99, 0.99, 0等'
+            Translator.trans('请输入合法的%display%,如:200, 221.99, 0.99, 0等', {display: '{{display}}'})
         ],      
         [
             'byte_maxlength',
@@ -92,7 +92,7 @@ define(function(require, exports, module) {
                 var l = calculateByteLength(element.val());
                 return l <= Number(options.max);
             },
-            '{{display}}的长度必须小于等于{{max}}，一个中文字算2个字符'
+            Translator.trans('%display%的长度必须小于等于%max%，一个中文字算2个字符', {display: '{{display}}', max: '{{max}}'})
         ],
         [
         'idcard',
@@ -136,52 +136,52 @@ define(function(require, exports, module) {
             }
             return true;
         },
-        '{{display}}格式不正确'
+            Translator.trans('%display%格式不正确', {display: '{{display}}'})
         ],
         [
             'password',
             /^[\S]{4,20}$/i,
-            '{{display}}只能由4-20个字符组成'
+            Translator.trans('%display%只能由4-20个字符组成', {display: '{{display}}'})
         ],
         [
             'second_range',
             /^([0-9]|[012345][0-9]|59)$/,
-            '秒数只能在0-59之间'
+            Translator.trans('秒数只能在0-59之间')
         ],
         [
             'date',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/,
-            '请输入正确的日期,格式如XXXX-MM-DD'
+            Translator.trans('请输入正确的日期,格式如XXXX-MM-DD')
         ],
         [
             'qq',
             /^[1-9]\d{4,}$/,
-            '{{display}}格式不正确'
+            Translator.trans('%display%格式不正确', {display: '{{display}}'})
         ],
         [
             'integer',
             /^[+-]?\d+$/,
-            '{{display}}必须为整数'
+            Translator.trans('%display%必须为整数', {display: '{{display}}'})
         ],
         [
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
-            '请输入正确的小数,只保留到两位小数'
+            Translator.trans('请输入正确的小数,只保留到两位小数')
         ],
         [
             'decimal',
             /^(([+]?[1-9]{1}\d*)|([+]?[0]{1}))(\.(\d){1})?$/i,
-            '请输入正确的小数,只保留到一位小数'
+            Translator.trans('请输入正确的小数,只保留到一位小数')
         ],    
         [
             'int',
             /^[+-]?\d{1,9}$/,
-            '{{display}}必须为整数,最大到9位整数'
+            Translator.trans('%display%必须为整数,最大到9位整数', {display: '{{display}}'})
         ], 
         [
             'positive_integer',
             /^[1-9]\d*$/,
-            '{{display}}必须为正整数'
+            Translator.trans('%display%必须为正整数', {display: '{{display}}'})
         ],
         [
             'unsigned_integer',
@@ -191,12 +191,12 @@ define(function(require, exports, module) {
         [
             'arithmetic_number',
             /^(?!0+(\.0+)?$)\d+(\.\d+)?$/,
-            '{{display}}必须为正数'
+            Translator.trans('%display%必须为正数', {display: '{{display}}'})
         ],
         [
             'percent_number',
             /^(100|[1-9]\d|\d)$/,
-            '必须在0~100之间'
+            Translator.trans('必须在0~100之间')
         ],
         [
             'maxsize_image',
@@ -210,7 +210,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            '{{display}}必须小于2M'
+            Translator.trans('{{display}}必须小于2M', {display: '{{display}}'})
         ],
         [
             'remote',
@@ -282,7 +282,8 @@ define(function(require, exports, module) {
                 }else{
                     return false;
                 }
-            },"开始时间必须小于或等于结束时间"
+            },
+            Translator.trans('开始时间必须小于或等于结束时间')
         ],
         
 
@@ -291,7 +292,7 @@ define(function(require, exports, module) {
         [
             'date_and_time',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
-            '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss'
+            Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss')
         ],        
 
         [
@@ -300,7 +301,8 @@ define(function(require, exports, module) {
                 var startTime = $('[name=startTime]').val();
                 var endTime = $('[name=endTime]').val();
                 return (startTime < endTime);
-            },"结束时间不能早于或等于开始时间"
+            },
+            Translator.trans('结束时间不能早于或等于开始时间')
         ],        
 
         [
@@ -326,7 +328,8 @@ define(function(require, exports, module) {
                     return true;
                 }
                 return true;
-            },"有效期必须大于等于当前日期"
+            },
+            Translator.trans('有效期必须大于等于当前日期')
         ],
         [
             'fixedLength',
@@ -334,7 +337,8 @@ define(function(require, exports, module) {
                 var element = options.element;
                 var l = element.val().length;
                 return l == Number(options.len);
-            },"{{display}}的长度必须等于{{len}}"
+            },
+            Translator.trans('%display%的长度必须等于%length%', {display: '{{display}}', length: '{{len}}'})
         ],
         [
             'email_or_mobile',
@@ -355,7 +359,74 @@ define(function(require, exports, module) {
                 }
                 return  result;  
              },
-             "{{display}}格式错误"
+            Translator.trans('%display%格式错误', {display: '{{display}}'})
+        ],
+        [
+            'mobile',
+            /^1\d{10}$/,
+            Translator.trans('请输入正确的%display%', {display:'{{display}}'})
+        ],
+        [
+            'email',
+            /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'url',
+            /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'number',
+            /^[+-]?[1-9][0-9]*(\.[0-9]+)?([eE][+-][1-9][0-9]*)?$|^[+-]?0?\.[0-9]+([eE][+-][1-9][0-9]*)?$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+            'date',
+            /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/,
+            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+        ],
+        [
+           'min',
+            function(options) {
+                var element = options.element, min = options.min;
+                return Number(element.val()) >= Number(min);
+            },
+            Translator.trans('%display%必须大于或者等于%min%', {display:'{{display}}', min:'{{min}}'})
+        ],
+        [
+            'max',
+            function(options) {
+                var element = options.element, max = options.max;
+                return Number(element.val()) <= Number(max);
+            },
+            Translator.trans('%display%必须小于或者等于%max%', {display:'{{display}}', max:'{{max}}'})
+        ],
+        [
+            'minlength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l >= Number(options.min);
+            },
+            Translator.trans('%display%的长度必须大于或等于%min%', {display:'{{display}}', min:'{{min}}'})
+        ],
+        [
+            'maxlength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l <= Number(options.max);
+            },
+            Translator.trans('%display%的长度必须小于或等于%max%', {display:'{{display}}', max:'{{max}}'})
+        ],
+        [
+            'confirmation',
+            function(options) {
+                var element = options.element, target = $(options.target);
+                return element.val() == target.val();
+            },
+            Translator.trans('两次输入的%display%不一致，请重新输入', {display: '{{display}}'})
         ]
     ];
 
@@ -371,7 +442,7 @@ define(function(require, exports, module) {
             }   
         }   
         return len;  
-    }  
+    }
 
     exports.inject = function(Validator) {
         $.each(rules, function(index, rule){

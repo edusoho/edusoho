@@ -50,7 +50,7 @@ class GroupController extends BaseController
     public function addGroupAction(Request $request)
     {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建小组!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('目前只允许管理员创建小组!'));
         }
 
         $user = $this->getCurrentUser();
@@ -61,7 +61,7 @@ class GroupController extends BaseController
             $title = trim($mygroup['group']['grouptitle']);
 
             if (empty($title)) {
-                $this->setFlashMessage('danger', "小组名称不能为空！");
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('小组名称不能为空！'));
 
                 return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");
             }
@@ -309,7 +309,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if ($group['status'] == "close") {
-            return $this->createMessageResponse('info', '该小组已被关闭');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该小组已被关闭'));
         }
 
         list($user, $groupOwner, $recentlyJoinMember, $recentlyMembers, $userIsGroupMember) = $this->_getMemberList($group);
@@ -370,7 +370,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if ($group['status'] == "close") {
-            return $this->createMessageResponse('info', '该小组已被关闭');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该小组已被关闭'));
         }
 
         list($user, $groupOwner, $recentlyJoinMember, $recentlyMembers, $userIsGroupMember) = $this->_getMemberList($group);
@@ -453,7 +453,7 @@ class GroupController extends BaseController
     public function deleteMembersAction(Request $request, $id)
     {
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         $deleteMemberIds = $request->request->all();
@@ -479,7 +479,7 @@ class GroupController extends BaseController
     public function setAdminAction(Request $request, $id)
     {
         if (!$this->checkOwnerPermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         $memberIds = $request->request->all();
@@ -505,7 +505,7 @@ class GroupController extends BaseController
     public function removeAdminAction(Request $request, $id)
     {
         if (!$this->checkOwnerPermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         $memberIds = $request->request->all();
@@ -534,7 +534,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-info.html.twig", array(
@@ -551,7 +551,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -585,7 +585,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
@@ -602,7 +602,7 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
@@ -677,7 +677,7 @@ class GroupController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         try {
@@ -704,7 +704,7 @@ class GroupController extends BaseController
     public function groupEditAction(Request $request, $id)
     {
         if (!$this->checkManagePermission($id)) {
-            return $this->createMessageResponse('info', '您没有权限!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您没有权限!'));
         }
 
         $groupinfo = $request->request->all();
@@ -773,7 +773,7 @@ class GroupController extends BaseController
                 break;
             default:
 
-                throw $this->createNotFoundException('参数sort不正确。');
+                throw $this->createNotFoundException($this->getServiceKernel()->trans('参数sort不正确。'));
         }
 
         return $orderBys;

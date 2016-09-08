@@ -1,8 +1,9 @@
+
 <li id="category-table-body" data-sort-url="{{ path('admin_category_sort') }}">
     {% if categories is not empty %}
         {{ _self.showCategoryTree(categories, group, false) }}
     {% else %}
-        <div class="row empty">暂无分类记录</div>
+        <div class="row empty">{{'暂无分类记录'|trans}}</div>
     {% endif %}
 </li>
 
@@ -26,10 +27,10 @@
                     <div class="td col-md-2 code">{{ category.code }}</div>
                     <div class="td col-md-3 operation">
                         <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal">
-                            <i class="glyphicon glyphicon-edit"></i> 编辑
+                            <i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}
                         </a>
                         {% if group.depth > category.depth %}
-                            <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_category_create', {parentId:category.id, groupId:group.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加子分类</a>
+                            <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_category_create', {parentId:category.id, groupId:group.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{'添加子分类'|trans}}</a>
                         {% endif %}
 
                     </div>

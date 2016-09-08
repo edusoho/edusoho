@@ -25,12 +25,12 @@ define(function(require, exports, module) {
                var btn = $(this);
                if(btn.data('toggle') && btn.siblings(".content").height()) {
                    btn.siblings(".content").addClass("active");
-                   btn.addClass('more-hidden').removeClass('more-show').text("[收起全文]");
+                   btn.addClass('more-hidden').removeClass('more-show').text(Translator.trans('[收起全文]'));
                    btn.data('toggle', false);
 
                } else {
                    btn.siblings(".content").removeClass("active");
-                   btn.addClass('more-show').removeClass('more-hidden').text("[展开全文]");
+                   btn.addClass('more-show').removeClass('more-hidden').text(Translator.trans('[展开全文]'));
                    btn.data('toggle', true);
                }
 

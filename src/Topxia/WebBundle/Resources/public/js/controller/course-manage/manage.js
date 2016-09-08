@@ -5,11 +5,11 @@ define(function(require, exports, module) {
 		var $table = $('#learning-data-table');
 
 		$table.on('click', '.publish-course', function(){
-			if (!confirm('您确认要发布此课程吗？')) return false;
+			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
 			$.post($(this).data('url'), function(html){
 				var $tr = $(html);
 				$table.find('#' + $tr.attr('id')).replaceWith(html);
-				Notify.success('课程发布成功！');
+				Notify.success(Translator.trans('课程发布成功！'));
 			});
 		});
 	};

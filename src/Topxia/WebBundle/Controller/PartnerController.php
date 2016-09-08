@@ -16,7 +16,7 @@ class PartnerController extends BaseController
 	{
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户尚未登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户尚未登录！'));
         }
 
         $loginScript = $this->getAuthService()->syncLogin($user['id']);
@@ -25,8 +25,8 @@ class PartnerController extends BaseController
 
         $response = $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
             'type' => 'info',
-            'title' => '登录成功',
-            'message' => '正在跳转页面，请稍等....',
+            'title' => $this->getServiceKernel()->trans('登录成功'),
+            'message' => $this->getServiceKernel()->trans('正在跳转页面，请稍等....'),
             'duration' => 3000,
             'goto' => $goto,
             'script' => $loginScript,
@@ -41,7 +41,7 @@ class PartnerController extends BaseController
 
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
-            return $this->createMessageResponse('error', '用户不存在，退出登录失败！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户不存在，退出登录失败！'));
         }
 
         $logoutScript = $this->getAuthService()->syncLogout($user['id']);
@@ -50,8 +50,8 @@ class PartnerController extends BaseController
 
         return $this->render('TopxiaWebBundle:Partner:message.html.twig', array(
             'type' => 'info',
-            'title' => '退出成功',
-            'message' => '正在跳转页面，请稍等....',
+            'title' => $this->getServiceKernel()->trans('退出成功'),
+            'message' => $this->getServiceKernel()->trans('正在跳转页面，请稍等....'),
             'duration' => 3000,
             'goto' => $goto,
             'script' => $logoutScript,

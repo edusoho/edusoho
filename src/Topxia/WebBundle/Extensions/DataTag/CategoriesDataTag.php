@@ -25,7 +25,7 @@ class CategoriesDataTag extends CourseBaseDataTag implements DataTag
 
         $group = $this->getCategoryService()->getGroupByCode($arguments['group']);
         if (empty($group)) {
-            throw new \InvalidArgumentException("group:{$arguments['group']}不存在");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('group:%argumentsGroup%不存在', array('%argumentsGroup%' =>$arguments['group'] )));
         }
 
         if(array_key_exists("parentId", $arguments)){

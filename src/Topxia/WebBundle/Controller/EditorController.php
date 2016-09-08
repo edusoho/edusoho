@@ -20,7 +20,7 @@ class EditorController extends BaseController
             $token = $maker->parse($token);
 
             if (empty($token)) {
-                throw new \RuntimeException("上传授权码已过期，请刷新页面后重试！");
+                throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
             }
 
             $isWebuploader = $request->query->get('isWebuploader', 0);
@@ -33,16 +33,16 @@ class EditorController extends BaseController
 
             if ($token['type'] == 'image') {
                 if (!FileToolkit::isImageFile($file)) {
-                    throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
+                    throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是图片文件，请重新上传。'));
                 }
             } elseif ($token['type'] == 'flash') {
                 $errors = FileToolkit::validateFileExtension($file, 'swf');
 
                 if (!empty($errors)) {
-                    throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
+                    throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是Flash文件，请重新上传。'));
                 }
             } else {
-                throw new \RuntimeException("上传类型不正确！");
+                throw new \RuntimeException($this->getServiceKernel()->trans('上传类型不正确！'));
             }
 
             $record = $this->getFileService()->uploadFile($token['group'], $file);
@@ -89,7 +89,7 @@ class EditorController extends BaseController
         $token = $maker->parse($token);
 
         if (empty($token)) {
-            throw new \RuntimeException("上传授权码已过期，请刷新页面后重试！");
+            throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
         }
 
         $name = date("Ymdhis")."_formula.jpg";

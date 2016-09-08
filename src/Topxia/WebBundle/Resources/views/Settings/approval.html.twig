@@ -6,7 +6,7 @@
 
 {% block main %}
 
-{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
 
         {% block heading %}  {{'实名认证'|trans}}
         {% endblock %}
@@ -119,6 +119,6 @@
 
         {% endblock %}
 
-{% endembed %}
+    {% endembed %}
 
 {% endblock %}

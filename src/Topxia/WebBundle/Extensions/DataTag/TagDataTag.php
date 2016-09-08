@@ -28,7 +28,7 @@ class TagDataTag extends BaseDataTag implements DataTag
     protected function checkTagId(array $arguments)
     {
         if (empty($arguments['tagId'])) {
-            throw new \InvalidArgumentException("参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('参数缺失'));
         }
     }
 

@@ -22,7 +22,10 @@
       <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">{{'我也要说'|trans}}</a>
       {% if posts|length > 5 %}
       <div class="lookOver-{{postMain.id}}">
-        <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">点击查看</a>
+
+
+        <span class="text-muted ">{{'还有%postReplyCount%条回复'|trans({'%postReplyCount%':postReplyCount[post.id]-5})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'点击查看'|trans}}</a>
+
       </div>
       {% endif %}
       <span class="text-muted">&nbsp;</sapn>

@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\User\AuthProvider;
 
-class PhpwindAuthProvider implements AuthProvider
+use Topxia\Service\Common\BaseService;
+
+class PhpwindAuthProvider extends BaseService implements AuthProvider
 {
     public function register($registration)
     {
@@ -167,34 +169,34 @@ class PhpwindAuthProvider implements AuthProvider
             case \WindidError::SUCCESS:
                 return array('success', '');
             case \WindidError::NAME_EMPTY:
-                return array('error_empty_name', '名称为空');
+                return array('error_empty_name', $this->getKernel()->trans('名称为空'));
             case \WindidError::NAME_LEN:
-                return array('error_length_invalid', '名称长度不符合');
+                return array('error_length_invalid', $this->getKernel()->trans('名称长度不符合'));
             case \WindidError::NAME_ILLEGAL_CHAR:
-                return array('error_illegal_char', '名称含有非法字符');
+                return array('error_illegal_char', $this->getKernel()->trans('名称含有非法字符'));
             case \WindidError::NAME_FORBIDDENNAME:
-                return array('error_forbidden_name', '名称含有禁用字符');
+                return array('error_forbidden_name', $this->getKernel()->trans('名称含有禁用字符'));
             case \WindidError::NAME_DUPLICATE:
-                return array('error_duplicate', '名称已被注册');
+                return array('error_duplicate', $this->getKernel()->trans('名称已被注册'));
             case \WindidError::EMAIL_EMPTY:
-                return array('error_empty', 'Email为空为空');
+                return array('error_empty', $this->getKernel()->trans('Email为空为空'));
             case \WindidError::EMAIL_ILLEGAL:
-                return array('error_illegal', 'Email格式不正确');
+                return array('error_illegal', $this->getKernel()->trans('Email格式不正确'));
             case \WindidError::EMAIL_WHITE_LIST:
-                return array('error_white_list', 'Email不在白名单');
+                return array('error_white_list', $this->getKernel()->trans('Email不在白名单'));
             case \WindidError::EMAIL_BLACK_LIST:
-                return array('error_black_list', 'Email处在黑名单');
+                return array('error_black_list', $this->getKernel()->trans('Email处在黑名单'));
             case \WindidError::EMAIL_DUPLICATE:
-                return array('error_duplicate', 'Email已存在');
+                return array('error_duplicate', $this->getKernel()->trans('Email已存在'));
             case \WindidError::PASSWORD_LEN:
-                return array('error_password_length_invalid', '密码长度不符合');
+                return array('error_password_length_invalid', $this->getKernel()->trans('密码长度不符合'));
             case \WindidError::PASSWORD_ILLEGAL_CHAR:
-                return array('error_password_illegal_char', '密码含有非法字符');
+                return array('error_password_illegal_char', $this->getKernel()->trans('密码含有非法字符'));
             case \WindidError::PASSWORD_ERROR:
-                return array('error_password_error', '原密码错误');
+                return array('error_password_error', $this->getKernel()->trans('原密码错误'));
             case \WindidError::FAIL:
             default:
-                return array('error_unknown', '未知错误');
+                return array('error_unknown', $this->getKernel()->trans('未知错误'));
         }
     }
 

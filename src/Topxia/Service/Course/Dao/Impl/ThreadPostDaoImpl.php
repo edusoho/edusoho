@@ -33,10 +33,10 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createThreadPostSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         if (!empty($groupBy)) {
             $builder->addGroupBy($groupBy);
@@ -48,7 +48,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     public function searchThreadPostsCount($conditions, $groupBy = '')
     {
         $builder = $this->createThreadPostSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         if (!empty($groupBy)) {
             $builder->addGroupBy($groupBy);
@@ -105,14 +105,15 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('lessonId = :lessonId')
-                        ->andWhere('threadId = :threadId')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('isElite = :isElite')
-                        ->andWhere('content LIKE :content');
+            ->from($this->table, $this->table)
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('courseId IN ( :courseIds)')
+            ->andWhere('lessonId = :lessonId')
+            ->andWhere('threadId = :threadId')
+            ->andWhere('userId = :userId')
+            ->andWhere('isElite = :isElite')
+            ->andWhere('content LIKE :content');
 
         return $builder;
     }
