@@ -12,10 +12,9 @@ class WxpayRequest extends Request
 
     public function form()
     {
-        $params         = array();
         $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
         $form['method'] = 'post';
-        $form['params'] = array();
+        $form['params'] = $this->convertParams($this->params);
         return $form;
     }
 
@@ -30,7 +29,7 @@ class WxpayRequest extends Request
             throw new \RuntimeException('xml数据异常！');
         }
         $response = $this->fromXml($response);
-
+        $this->checkSign($response);
         return $response;
     }
 
@@ -63,7 +62,7 @@ class WxpayRequest extends Request
         unset($params['sign']);
 
         ksort($params);
-
+        reset($params);
         $sign = '';
 
         foreach ($params as $key => $value) {
@@ -76,7 +75,7 @@ class WxpayRequest extends Request
 
         $sign = substr($sign, 0, -1);
         $sign .= '&key=' . $this->options['key'];
-
+        var_dump($sign);
         return md5($sign);
     }
 
@@ -106,23 +105,23 @@ class WxpayRequest extends Request
         $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
-        $settings                      = $this->getSettingService()->get('payment');
-        $converted['mch_id']           = $settings["wxpay_account"];
+        $converted['mch_id']           = $this->options['account'];
         $converted['nonce_str']        = $this->getNonceStr();
         $converted['notify_url']       = $params['notifyUrl'];
         $converted['out_trade_no']     = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee']        = $this->getAmount($params['amount']);
-        $converted['trade_type']       = 'JSAPI';//'NATIVE';
+        $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
+        var_dump($converted);
 
         return $converted;
     }
 
     protected function getAmount($amount)
     {
-        $array = explode('.', $amount);
+        $array = explode(' . ', $amount);
 
         if (isset($array[1])) {
             $suffix = $array[1];

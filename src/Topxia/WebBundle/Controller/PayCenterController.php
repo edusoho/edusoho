@@ -453,8 +453,7 @@ class PayCenterController extends BaseController
                 'notifyUrl' => '',
                 'showUrl'   => ''
             ));
-            $returnXml      = $paymentRequest->orderQuery();
-            $returnArray    = $this->fromXml($returnXml);
+            $returnArray      = $paymentRequest->orderQuery();
 
             if ($returnArray['trade_state'] == 'SUCCESS') {
                 $payData             = array();
@@ -565,10 +564,11 @@ class PayCenterController extends BaseController
             );
         } elseif ($payment == 'wxpay') {
             $options = array(
-                'appid'   => $settings["{$payment}_appid"],
-                'account' => $settings["{$payment}_account"],
-                'key'     => $settings["{$payment}_key"],
-                'secret'  => $settings["{$payment}_secret"],
+                'appid'            => $settings["{$payment}_appid"],
+                'account'          => $settings["{$payment}_account"],
+                'key'              => $settings["{$payment}_key"],
+                'secret'           => $settings["{$payment}_secret"],
+                'isMicroMessenger' => $this->getWebExtension()->isMicroMessenger(),
             );
         } else {
             $options = array(
@@ -626,6 +626,11 @@ class PayCenterController extends BaseController
             }
         }
         return $enableds;
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
     protected function getCouponService()

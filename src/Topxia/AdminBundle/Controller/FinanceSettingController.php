@@ -3,7 +3,6 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Common\ArrayToolkit;
 
 class FinanceSettingController extends BaseController
@@ -24,12 +23,10 @@ class FinanceSettingController extends BaseController
             'tenpay_key'       => '',
             'tenpay_secret'    => '',
             'wxpay_enabled'    => 0,
-
-            'wxpay_appid'   => '',
-            'wxpay_account' => '',
-            'wxpay_key'     => '',
-            'wxpay_secret'  => '',
-
+            'wxpay_appid'      => '',
+            'wxpay_account'    => '',
+            'wxpay_key'        => '',
+            'wxpay_secret'     => '',
             'heepay_enabled'   => 0,
             'heepay_key'       => '',
             'heepay_secret'    => '',

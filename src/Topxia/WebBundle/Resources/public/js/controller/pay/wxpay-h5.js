@@ -12,9 +12,8 @@ define(function (require, exports, module) {
          ;
          });
          }*/
-        var jsApiParameters = $("#jsApiParameters").data('value');
+
         $('.section-wxpay').on('click', '.js-wxpay', function () {
-            alert(jsApiParameters);
             if (typeof WeixinJSBridge == "undefined") {
                 if (document.addEventListener) {
                     document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -27,7 +26,7 @@ define(function (require, exports, module) {
             }
         });
 
-
+        var jsApiParameters = $("#jsApiParameters").data('value');
         //调用微信JS api 支付
         function jsApiCall() {
             WeixinJSBridge.invoke(
