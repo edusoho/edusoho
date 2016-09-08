@@ -1,6 +1,6 @@
 define(function (require, exports, module) {
     exports.run = function () {
-        $('.section-wxpay').on('click', '.js-wxpay', function () {
+        $('.panel-wxpay').on('click', '.js-wxpay', function () {
             if (typeof WeixinJSBridge == "undefined") {
                 if (document.addEventListener) {
                     document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
