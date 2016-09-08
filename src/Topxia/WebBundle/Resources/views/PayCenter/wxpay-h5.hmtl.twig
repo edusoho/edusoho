@@ -1,117 +1,22 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{'微信支付'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{ '微信支付'|trans }} - {{ parent() }}{% endblock %}
 {% block esBar %}{% endblock %}
-{% set script_controller = 'pay/wxpay-roll' %}
+{% set script_controller = 'pay/wxpay-h5' %}
 {% block content %}
 
-  <div class="es-section section-wxpay">
-    <ul class="es-step es-step-3 clearfix">
-      <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>{{'订单确认'|trans}}</li>
-      <li class="doing"><span class="number">2</span>{{'微信支付'|trans}}</li>
-      <li><span class="number">3</span>{{'订单完成'|trans}}</li>
-    </ul>
-    <div class="order-pay-body">
-      <div class="alert alert-success alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        {{'订单已提交，请在４８小时内完成支付！逾期订单将被取消。'|trans}}
-      </div>
-      <div class="pay-qrcode-body clearfix">
-        <div class="qrcode-img">
-          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{order:order}) }}"
-               data-goto="{% if order.targetType|default(null) and order.targetType == 'coin' %} {{ path('my_coin') }}{% else %}{{ path('pay_success_show',{id:order['id']}) }}{% endif %}">
-          <div class="text-qrcode hidden-xs">
-            {{'请使用微信扫一扫'|trans}}<br>{{'扫描二维码支付'|trans}}
-          </div>
-          <div class="text-qrcode visible-xs">
-            {{'请长按二维码支付'|trans}}
-          </div>
-        </div>
-        <div class="qrcode-img-two hidden-xs">
-          <img class="img-responsive" src="{{asset('assets/v2/img/pay_phone.jpg')}}" alt="">
-        </div>
-      </div>
-      <div class="pay-qrcode-footer">
-        <a href="{% if order.targetType|default(null) %} {{ path('pay_center_show',{sn:order['sn'],targetType:order['targetType']}) }} {% else %}{{ path('my_coin_buy') }} {% endif %} " class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>{{'选择其他支付方式'|trans}}</a>
-        {{'应付金额：'|trans}}<span class="pay-rmb">¥{{order['amount']}}</span>
-      </div>
-    </div>
+<div class="es-section section-wxpay">
+  <font color="#f00"><b>支付信息</b></font><br/>
+  <font color='#00ff55;'>订单号</font> : {{ order.sn }} <br/>
+  <font color='#00ff55;'>订单详情</font> : {{ order.title }} <br/>
+  <font color='#00ff55;'>订单价格</font> : >¥{{ order.amount }} <br/>
+  <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
+  <div id="jsApiParameters" data-value="{{ jsApiParameters }}">
   </div>
-{% endblock %}
-
-
-<html>
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>微信支付样例-支付</title>
-  <script type="text/javascript">
-    //调用微信JS api 支付
-    function jsApiCall()
-    {
-      WeixinJSBridge.invoke(
-          'getBrandWCPayRequest',
-      <?php echo $jsApiParameters; ?>,
-      function(res){
-        WeixinJSBridge.log(res.err_msg);
-        alert(res.err_code+res.err_desc+res.err_msg);
-      }
-    );
-    }
-
-    function callpay()
-    {
-      if (typeof WeixinJSBridge == "undefined"){
-        if( document.addEventListener ){
-          document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-        }else if (document.attachEvent){
-          document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-          document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-        }
-      }else{
-        jsApiCall();
-      }
-    }
-  </script>
-  <script type="text/javascript">
-    //获取共享地址
-    function editAddress()
-    {
-      WeixinJSBridge.invoke(
-          'editAddress',
-      <?php echo $editAddress; ?>,
-      function(res){
-        var value1 = res.proviceFirstStageName;
-        var value2 = res.addressCitySecondStageName;
-        var value3 = res.addressCountiesThirdStageName;
-        var value4 = res.addressDetailInfo;
-        var tel = res.telNumber;
-
-        alert(value1 + value2 + value3 + value4 + ":" + tel);
-      }
-    );
-    }
-
-    window.onload = function(){
-      if (typeof WeixinJSBridge == "undefined"){
-        if( document.addEventListener ){
-          document.addEventListener('WeixinJSBridgeReady', editAddress, false);
-        }else if (document.attachEvent){
-          document.attachEvent('WeixinJSBridgeReady', editAddress);
-          document.attachEvent('onWeixinJSBridgeReady', editAddress);
-        }
-      }else{
-        editAddress();
-      }
-    };
-
-  </script>
-</head>
-<body>
-<br/>
-<font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
-<div align="center">
-  <button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
-</div>
-</body>
-</html>
+  <div align="center">
+    <button
+        style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;"
+        type="button" onclick="callpay()">立即支付
+    </button>
+  </div>
+  {% endblock %}

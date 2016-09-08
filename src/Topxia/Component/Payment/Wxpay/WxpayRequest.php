@@ -139,6 +139,34 @@ class WxpayRequest extends Request
         return intval($amount);
     }
 
+
+    /**
+     *
+     * 获取jsapi支付的参数
+     * @param array $UnifiedOrderResult 统一支付接口返回的数据
+     * @throws WxPayException
+     *
+     * @return json数据，可直接填入js函数作为参数
+     */
+    public function getJsApiParameters($UnifiedOrderResult)
+    {
+        if (!array_key_exists("appid", $UnifiedOrderResult)
+            || !array_key_exists("prepay_id", $UnifiedOrderResult)
+            || $UnifiedOrderResult['prepay_id'] == ""
+        ) {
+            throw new \RuntimeException("参数错误");
+        }
+        $jsApi              = array();
+        $jsApi['appId']     = UnifiedOrderResult["appid"];
+        $jsApi['timeStamp'] = time();
+        $jsApi['nonceStr']  = $this->getNonceStr();
+        $jsApi['package']   = "prepay_id=" . $UnifiedOrderResult['prepay_id'];
+        $jsApi['signType']  = "MD5";
+        $jsApi['paySign']   = $this->signParams($jsApi);
+
+        return json_encode($jsApi);
+    }
+
     private function toXml($array, $xml = false)
     {
         if (!is_array($array)
