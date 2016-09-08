@@ -14,5 +14,5 @@
     </div>
   </div>
   <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-  <div class="metas">{{ '共有<span>%courseNum%</span>门课程'|trans({'%courseNum%':classroom.courseNum}) }}</div>
+  <div class="metas">{{ '共有%courseNum%门课程'|trans({'%courseNum%': '<span>'+classroom.courseNum+'</span>'}) }}</div>
 </div>
