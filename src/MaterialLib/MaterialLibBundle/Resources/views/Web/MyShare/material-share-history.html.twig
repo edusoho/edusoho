@@ -8,19 +8,7 @@
 {% set parentId = parentId | default(null)%}
 
 {% block body %}
-<script type="text/javascript">
-$("#target-teachers-input").select2({
-    multiple: true,
-    data:[
-        {% for contact in allTeachers %}
-            {% if contact.id != currentUserId %}
-                {id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
-            {% endif %}
-        {% endfor %}
-        ]
-});
 
-</script>
 <div id="share-history-table-container" class="materials-modal-body">
   <form id="share-materials-form" class="form-horizontal" method="post" action="{{ path('material_lib_save_sharing') }}">
     <div class="form-group">
@@ -85,4 +73,18 @@ $("#target-teachers-input").select2({
     data-target="#share-materials-form" data-submiting-text="正在保存...">{{'保存'|trans}}</button>
 <button type="button" class="btn btn-link pull-right"
     data-dismiss="modal">{{'取消'|trans}}</button>
+    
+<script type="text/javascript">
+$("#target-teachers-input").select2({
+    multiple: true,
+    data:[
+      {% for contact in allTeachers %}
+        {% if contact.id != currentUserId %}
+            {id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
+        {% endif %}
+      {% endfor %}
+    ]
+});
+
+</script>
 {% endblock %}
