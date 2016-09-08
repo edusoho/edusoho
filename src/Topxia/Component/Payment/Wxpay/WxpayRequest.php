@@ -20,9 +20,7 @@ class WxpayRequest extends Request
 
     public function unifiedOrder($openid = null)
     {
-
         $params = $this->convertParams($this->params, $openid);
-        var_dump($params);
 
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
@@ -30,7 +28,7 @@ class WxpayRequest extends Request
             throw new \RuntimeException('xml数据异常！');
         }
         $response = $this->fromXml($response);
-        $this->checkSign($response);
+         $this->checkSign($response);
         return $response;
     }
 
@@ -77,7 +75,6 @@ class WxpayRequest extends Request
 
         $sign = substr($sign, 0, -1);
         $sign .= '&key=' . $this->options['key'];
-        var_dump($sign);
         return md5($sign);
     }
 
@@ -115,12 +112,13 @@ class WxpayRequest extends Request
         $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
+
         return $converted;
     }
 
     protected function getAmount($amount)
     {
-        $array = explode(' . ', $amount);
+        $array = explode('.', $amount);
 
         if (isset($array[1])) {
             $suffix = $array[1];
