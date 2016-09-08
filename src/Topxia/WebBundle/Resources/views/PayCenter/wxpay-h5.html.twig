@@ -12,7 +12,7 @@
   <font color='#00ff55;'>订单价格</font> : ¥{{ order.amount }} <br/>
   <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
   <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
-       data-goto="{{ path('pay_success_show',{id:order['id']}) }}">
+       data-goto="{{ url('pay_success_show',{id:order['id']}) }}">
   </div>
   <div align="center">
     <button class="js-wxpay"
