@@ -58,7 +58,7 @@ class ClassroomMemberImporter extends Importer
 
                 $order = $this->getOrderService()->createOrder(array(
                     'userId'     => $user['id'],
-                    'title'      => $this->getKernel()->trans('购买班级《%title%》(管理员添加)', array('%title%' => $targetObject['title'])),
+                    'title'      => $this->getServiceKernel()->trans('购买班级《%title%》(管理员添加)', array('%title%' => $targetObject['title'])),
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
                     'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
@@ -75,7 +75,7 @@ class ClassroomMemberImporter extends Importer
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'note'    => empty($orderData['remark']) ? $this->getKernel()->trans('通过批量导入添加') : $orderData['remark']
+                    'note'    => empty($orderData['remark']) ? $this->getServiceKernel()->trans('通过批量导入添加') : $orderData['remark']
                 );
 
                 if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -162,13 +162,13 @@ class ClassroomMemberImporter extends Importer
         $repeatArray   = array();
 
         if (!empty($repeatRow)) {
-            $repeatRowInfo .= $this->getKernel()->trans('字段对应用户数据重复').'</br>';
+            $repeatRowInfo .= $this->getServiceKernel()->trans('字段对应用户数据重复').'</br>';
 
             foreach ($repeatRow as $row) {
-                $repeatRowInfo .= $this->getKernel()->trans('重复行：').'</br>';
+                $repeatRowInfo .= $this->getServiceKernel()->trans('重复行：').'</br>';
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= $this->getKernel()->trans('第%value%行 ', array('%value%' => $value));
+                    $repeatRowInfo .= $this->getServiceKernel()->trans('第%value%行 ', array('%value%' => $value));
                 }
 
                 $repeatRowInfo .= "</br>";
@@ -202,7 +202,7 @@ class ClassroomMemberImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = $this->getKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
+                $checkInfo[] = $this->getServiceKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
                 continue;
             }
 
@@ -241,21 +241,21 @@ class ClassroomMemberImporter extends Importer
     protected function validateExcelFile($file)
     {
         if (!is_object($file)) {
-            return $this->createDangerResponse($this->getKernel()->trans('请选择上传的文件'));
+            return $this->createDangerResponse($this->getServiceKernel()->trans('请选择上传的文件'));
         }
 
         if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
-            return $this->createDangerResponse($this->getKernel()->trans('Excel格式不正确！'));
+            return $this->createDangerResponse($this->getServiceKernel()->trans('Excel格式不正确！'));
         }
 
         $this->excelAnalyse($file);
 
         if ($this->rowTotal > 1000) {
-            return $this->createDangerResponse($this->getKernel()->trans('Excel超过1000行数据!'));
+            return $this->createDangerResponse($this->getServiceKernel()->trans('Excel超过1000行数据!'));
         }
 
         if (!$this->checkNecessaryFields($this->excelFields)) {
-            return $this->createDangerResponse($this->getKernel()->trans('缺少必要的字段'));
+            return $this->createDangerResponse($this->getServiceKernel()->trans('缺少必要的字段'));
         }
     }
 
@@ -284,7 +284,7 @@ class ClassroomMemberImporter extends Importer
         }
 
         if (!$user) {
-            $errorInfo = $this->getKernel()->trans('第 %row%行的信息有误，用户数据不存在，请检查。', array('%row%' => $row));
+            $errorInfo = $this->getServiceKernel()->trans('第 %row%行的信息有误，用户数据不存在，请检查。', array('%row%' => $row));
         }
         return $errorInfo;
     }
@@ -326,12 +326,12 @@ class ClassroomMemberImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= $this->getKernel()->trans('第%col%列重复:', array('%col%' => ($nickNameCol+1))).'<br>';
+                $repeatRow .= $this->getServiceKernel()->trans('第%col%列重复:', array('%col%' => ($nickNameCol + 1))).'<br>';
 
                 for ($i = 1; $i <= $value; $i++) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= $this->getKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
+                    $repeatRow .= $this->getServiceKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
 
                     unset($array[$row - 3]);
                 }
@@ -415,7 +415,7 @@ class ClassroomMemberImporter extends Importer
     public function getNecessaryFields()
     {
         $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
-        return $this->getKernel()->transArray($necessaryFields);
+        return $this->getServiceKernel()->transArray($necessaryFields);
     }
 
     protected function getUserService()
