@@ -20,11 +20,11 @@ class LogController extends BaseController
         );
 
         if (!empty($fields)) {
-            $conditions = $fields;
+            $conditions = array_merge($conditions, $fields);
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getLogService()->searchLogCount($conditions),
             30
         );
