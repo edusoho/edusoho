@@ -172,10 +172,7 @@ class PayCenterController extends BaseController
                 var_dump($returnArray);
 
                 if ($returnArray['return_code'] == 'SUCCESS') {
-                    $url = $returnArray['code_url'];
-
                     return $this->render('TopxiaWebBundle:PayCenter:wxpay-h5.html.twig', array(
-                        'url'             => $url,
                         'order'           => $order,
                         'jsApiParameters' => $paymentRequest->getJsApiParameters($returnArray)
                     ));
@@ -255,7 +252,10 @@ class PayCenterController extends BaseController
             $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
+                $url = $returnArray['code_url'];
+
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
+                    'url'   => $url,
                     'order' => $order
                 ));
             } else {
