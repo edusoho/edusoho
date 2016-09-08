@@ -10,19 +10,16 @@ admin_roles:
             children:
                 admin_role_create:
                     name: 新增角色
-                    disable: true
                     mode: modal
                     group: topBtn
                 admin_role_edit:
                     name: 编辑角色
-                    disable: true
                     mode: modal
                     group: groupBtn
                     router_params:
                         id: (role.id)
                 admin_role_delete:
                     name: 删除角色
-                    disable: true
                     class: role-delete
                     group: groupBtn
                     mode: none
