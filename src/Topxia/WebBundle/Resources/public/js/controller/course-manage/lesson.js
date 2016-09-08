@@ -3,9 +3,11 @@ define(function(require, exports, module) {
     require('jquery.sortable');
     var Sticky = require('sticky');
     var Notify = require('common/bootstrap-notify');
-
+    var chapterAnimate =require('topxiawebbundle/controller/course/widget/general-chapter-animate')
     exports.run = function() {
-
+        new chapterAnimate({
+            'element': '.lesson-manage-panel'
+        });
         var sortList = function($list) {
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids:data}, function(response){
