@@ -114,7 +114,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '#question-score-field',
                 required: false,
-                rule:'number'
+                rule:'number max{max:999}'
             });
 
             validator.on('formValidated', function(error, msg, $form) {

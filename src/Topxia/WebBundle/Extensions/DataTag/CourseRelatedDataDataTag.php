@@ -28,8 +28,9 @@ class CourseRelatedDataDataTag extends CourseBaseDataTag implements DataTag
         $courseData['threadNum'] = $this->getThreadService()->searchThreadCount($threadConditions);
 
         $materialConditions = array(
-            'courseId' => $arguments['courseId'],
-            'source'   => 'coursematerial'
+            'courseId'        => $arguments['courseId'],
+            'excludeLessonId' => 0,
+            'source'          => 'coursematerial'
         );
         $courseData['materialNum'] = $this->getCourseMaterialService()->searchMaterialCount($materialConditions);
 

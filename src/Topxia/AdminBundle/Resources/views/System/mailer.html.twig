@@ -28,7 +28,7 @@
     </div>
   {% else %}
     {{ web_macro.flash_messages() }}
-    <form class="form-horizontal" method="post" id="mailer-form" {#hidden="hidden"#}novalidate>
+    <form class="form-horizontal" method="post" id="mailer-form" {#hidden="hidden"#}novalidate data-user-setting="{{ path('admin_setting_auth') }}">
       <div class="row form-group">
         <div class="col-md-3 control-label">
           <label >{{'邮件发送'|trans}}</label>

@@ -18,6 +18,7 @@ abstract class BaseController extends Controller
      *
      * 如果当前用户为游客，那么返回id为0, nickanme为"游客", currentIp为当前IP的CurrentUser对象。
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
+     * @return CurrentUser
      */
 
     protected function getCurrentUser()
@@ -176,7 +177,7 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    protected function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = null)
     {
         if ($message) {
             return new AccessDeniedException($message);

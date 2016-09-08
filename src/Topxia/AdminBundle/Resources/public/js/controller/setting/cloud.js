@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             name: 'watermark',
             action: $('#cloud-video-watermark-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/png,image/jpg,image/jpeg,imge/bmp,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传云视频播放器水印失败，请重试！'));
             },
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             name: 'watermark',
             action: $('#cloud-video-embed-watermark-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/png,image/jpg,image/jpeg,imge/bmp,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传云视频内嵌水印失败，请重试！'));
             },

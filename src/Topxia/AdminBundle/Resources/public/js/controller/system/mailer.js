@@ -64,7 +64,8 @@ define(function(require, exports, module) {
                 });
             } else {
                 if (app.arguments.registerEmailVerified == 'opened') {
-                    Notify.danger('您开启了注册邮箱验证，请先关闭邮箱验证！');
+                    var emailSetUrl = $('#mailer-form').data('userSetting');
+                    Notify.danger('您开启了用户注册模式下的邮箱验证登录，请先关闭<a href="'+emailSetUrl+'">邮箱验证登录</a>功能！');
                     
                     $('[name=enabled][value="0"]').prop('checked',false);
                     $('[name=enabled][value="1"]').prop('checked',true);
