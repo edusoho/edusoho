@@ -15,17 +15,22 @@ class WxpayRequest extends Request
         $params         = array();
         $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
         $form['method'] = 'post';
-        $form['params'] =array();
+        $form['params'] = array();
         return $form;
     }
 
-    public function unifiedOrder()
+    public function unifiedOrder($openid = null)
     {
 
-        $params   = $this->convertParams($this->params);
+        $params = $this->convertParams($this->params, $openid);
 
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
+        if (!$response) {
+            throw new \RuntimeException('xml数据异常！');
+        }
+        $response = $this->fromXml($response);
+
         return $response;
     }
 
@@ -42,6 +47,7 @@ class WxpayRequest extends Request
 
         $xml      = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+        $this->checkSign($response);
         return $response;
     }
 
@@ -74,12 +80,29 @@ class WxpayRequest extends Request
         return md5($sign);
     }
 
-    protected function convertParams($params)
+    /**
+     *
+     * 检测签名
+     */
+    public function checkSign($params)
+    {
+        //fix异常
+        if (empty($params['sign'])) {
+            throw new \RuntimeException("签名错误！");
+        }
+
+        $sign = $this->signParams($params);
+        if ($params['sign'] == $sign) {
+            return true;
+        }
+        throw new \RuntimeException("签名错误！");
+    }
+
+    protected function convertParams($params, $openid = null)
     {
         $converted = array();
-        $jsApi     = New JsApiPay($this->options);
 
-        $converted['openid']           = $jsApi->GetOpenid();
+        $converted['openid']           = $openid;
         $converted['appid']            = $this->options['appid'];
         $converted['attach']           = '支付';
         $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
@@ -92,7 +115,7 @@ class WxpayRequest extends Request
         $converted['total_fee']        = $this->getAmount($params['amount']);
         $converted['trade_type']       = 'JSAPI';//'NATIVE';
         $converted['product_id']       = $params['orderSn'];
-        $converted['sign']             = strtoupper($this->signParams($converted));
+        $converted['sign']             = strtoupper($this->makeSign($converted));
 
         return $converted;
     }

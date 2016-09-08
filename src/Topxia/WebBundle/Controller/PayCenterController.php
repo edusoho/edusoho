@@ -156,10 +156,32 @@ class PayCenterController extends BaseController
 
             if ($order['status'] == 'paid') {
                 return $this->redirectOrderTarget($order);
-            } else {
-                return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
-                    'order' => $order
-                ));
+            }
+
+            $requestParams = array(
+                'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
+                'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+                'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
+                'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType' => $order['targetType']), true)
+            );
+            $payment       = $request->request->get('payment');
+
+            $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+
+            if ($payment == 'wxpay') {
+                $returnArray = $paymentRequest->unifiedOrder($openid);
+                var_dump($returnArray); exit;
+
+                if ($returnArray['return_code'] == 'SUCCESS') {
+                    $url = $returnArray['code_url'];
+
+                    return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
+                        'url'   => $url,
+                        'order' => $order
+                    ));
+                } else {
+                    throw new \RuntimeException($returnArray['return_msg']);
+                }
             }
         }
 
@@ -199,7 +221,6 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
-        var_dump($request->getMethod());exit;
         if (empty($order['payment'])) {
             return $this->createMessageResponse('error', '请选择支付方式');
         }
@@ -232,14 +253,7 @@ class PayCenterController extends BaseController
         $params         = $formRequest['params'];
 
         if ($payment == 'wxpay') {
-            $returnXml = $paymentRequest->unifiedOrder();
-            var_dump($returnXml);
-
-            if (!$returnXml) {
-                throw new \RuntimeException('xml数据异常！');
-            }
-
-            $returnArray = $paymentRequest->fromXml($returnXml);
+            $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
                 $url = $returnArray['code_url'];
