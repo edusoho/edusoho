@@ -4,6 +4,8 @@ seajs.config({
         'jquery': 'jquery/1.11.2/jquery',
         '$': 'jquery/1.11.2/jquery',
         '$-debug': 'jquery/1.11.2/jquery',
+        "jquery.intro": "jquery-plugin/intro/intro",
+        "jquery.intro-css": "jquery-plugin/intro/introjs.min.css",
         "jquery.form": "jquery-plugin/form/3.44.0/form",
         "jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
         "jquery.raty": "jquery-plugin/raty/2.5.2/raty",

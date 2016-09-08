@@ -1080,6 +1080,10 @@ course_lesson_marker_manage:
     pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
+course_lesson_marker_manage_preview:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/managePreview
+    defaults: { _controller: TopxiaWebBundle:Marker:managePreview }
+
 course_lesson_marker_show:
     pattern:  /course/lesson/{lessonId}/marker/show
     defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }

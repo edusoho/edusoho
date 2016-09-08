@@ -16,6 +16,20 @@ class MarkerController extends BaseController
         ));
     }
 
+    public function managePreviewAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        // var_dump('test');
+        // var_dump($lesson);
+        // var_dump($course);
+        return $this->render('TopxiaWebBundle:Marker:preview.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson
+        ));
+    }
+
+
     //驻点合并
     public function mergeAction(Request $request, $courseId, $lessonId)
     {

@@ -23,7 +23,7 @@
 }
 
 .marker-manage {
-  min-height: 100%;
+  height: 100%;
   background-color: @gray-darker;
   &.slideing {
     -moz-user-select: none; 
@@ -40,6 +40,10 @@
         color: @gray;
         font-size: 14px;
         padding: 20px 15px;
+        i:hover {
+          color: @brand-warning;
+          cursor: pointer;
+        }
       }
       &:hover,
       &.active {
@@ -47,6 +51,21 @@
           background-color: #414141;
           color: #f5f5f5;
           border-color: transparent;
+        }
+      }
+      &.static {
+        .border {
+          border-left: 1px solid @gray;
+          padding-left: 15px;
+        }
+        >a {
+          padding-left: 0;
+        }
+        &:hover {
+          >a {
+            background-color: @gray-darker;
+            color: @gray;
+          }
         }
       }
     }
@@ -76,15 +95,26 @@
   .lesson-list { 
     border: 0;
     margin: 0;
+    overflow: auto;
+    padding-right: 15px;
     &.highlight {
       border:  1px dashed red;
     }
     .item-lesson {
+      position: relative;
       background-color: transparent;
       border: none;
       line-height: 40px;
       margin-bottom: 10px;
       margin-left: 0;
+      .btn-preview {
+        top: 0;
+        right: 0;
+        color: @gray;
+        &:hover {
+          color: @brand-primary;
+        }
+      }
       &.dragged {
         border: 1px dashed @gray;
       }
@@ -105,6 +135,33 @@
         right: 5px;
       }
     }
+    .more-questions {
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      left: 0;
+      text-align: right;
+      color: @gray;
+      font-size: 12px;
+      .loading {
+        display: none;
+        img {
+          height: 30px;
+          margin-right: 10px;
+        }
+      }
+      &.loading {
+        .loading {
+          display: inline;
+        }
+      }
+      a {
+        color: @gray;
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
     .placeholder {
       border-bottom: 1px dashed @brand-primary;
     }
@@ -112,8 +169,6 @@
 }
  
 .marker-manage-content {
-  position: fixed;
-  width: 100%;
   height: 100%;
   padding-bottom: 160px;
   .manage-player-body {
@@ -143,13 +198,19 @@
     }
   }
   .manage-edit-body {
+    position: relative;
     float: left;
     width: 30%;
     height: 100%;
     background-color: #414141;
     color: #f5f5f5;
+    .btn-preview {
+      position: absolute;
+      right: 15px;
+      top: 12px;
+    }
     .tab-pane {
-      padding: 30px 15px 30px 20px;
+      padding: 30px 0 30px 20px;
     }
     .btn-search {
       position: absolute;
@@ -191,6 +252,9 @@
       height: 100%;
       background-color: #414141;
       padding: 0 160px 0 20px;
+      .btn-preview {
+        display: none;
+      }
       .placeholder {
         border-color: transparent;
       }
@@ -436,3 +500,95 @@
     }
   }
 }
+
+.marker-manage {
+  .introjs-nextbutton.introjs-fullbutton,
+  .introjs-button.introjs-skipbutton {
+    background: transparent;
+    border-color: transparent;
+    color: @gray;
+    margin: 0;
+    padding-right: 0;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      background: transparent;
+      border-color: transparent;
+      .box-shadow(none);
+      outline: none;
+    }
+  }
+  .introjs-overlay {
+    .opacity(0.5);
+  }
+  .introjs-fixedTooltip {
+    background-color: transparent;
+    border:none;
+    box-shadow: none;
+  }
+  .introjs-helperNumberLayer,
+  .introjs-skipbutton,
+   {
+    display: none;
+  }
+  .introjs-helperLayer  {
+    background-color: transparent;
+    .box-shadow(none);
+    border-color: transparent;
+  }
+  .introjs-arrow.top-middle {
+    margin-left: 0;
+  }
+  .introjs-tooltip {
+    text-align: justify;
+    font-size: 12px;
+    color: @gray-darker;
+    padding: 15px;
+    .title {
+      color: @gray;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+    .remask {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+  }
+  .intro-img {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: #fff;
+    font-size: 20px;
+    img {
+      display: block;
+      margin-left: 70px;
+    }
+  }
+}
+
+.marker-preview {
+  height: 100%;
+  background-color: #f1f4f6;
+  .marker-preview-content {
+    position: relative;
+    height: 100%;
+    padding-top: 30px;
+    color: @gray-darker;
+    text-align: center;
+    .title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .marker-preview-player {
+      position: absolute;
+      left: 120px;
+      right: 120px;
+      top: 132px;
+      bottom: 5%;
+    }
+  }
+}
+
+

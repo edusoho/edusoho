@@ -40,7 +40,7 @@ define(function(require, exports, module) {
             'mousedown .scale-blue': 'slideScale',
             'mouseenter .scale-blue': 'hoverScale',
             'mousedown .scale-blue .item-lesson': 'itemSqe',
-            'mousedown .marker-preview': 'previewMouseDown',
+            'mousedown .js-question-preview': 'previewMouseDown',
         },
         setup: function() {
             this._initSortable();
@@ -60,7 +60,6 @@ define(function(require, exports, module) {
 
             var playerUrl = '/course/' + courseId + '/lesson/' + lessonId + '/player?hideBeginning=true&hideQuestion=1';
             var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-            // var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
             $("#lesson-video-content").html(html);
 
             var messenger = new Messenger({
@@ -158,8 +157,6 @@ define(function(require, exports, module) {
                     $merge_marker = null;
                     for (i in _self.get('markers_array')) {
                         if (Math.abs(_self.get('markers_array')[i].time - _move_time) <= 5) {
-                            console.log(_self.get('markers_array')[i].time);
-                            console.log(Math.abs(_self.get('markers_array')[i].time - _move_time));
                             marker_array = [{
                                 id: _self.get('markers_array')[i].id,
                                 time: _self.get('markers_array')[i].time
@@ -288,7 +285,7 @@ define(function(require, exports, module) {
             var _obj = this;
             var $_editbox = $(_obj.get("editbox"));
             var _width = $('#editbox-lesson-list').width();
-            $_editbox.find('.scale.white').remove();
+            $_editbox.find('.scale.scale-default').remove();
             // 以秒为单位
             var _totaltime = _obj.get("_video_time");
             var _partnum = _obj.get("timepartnum");
@@ -299,7 +296,7 @@ define(function(require, exports, module) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(Math.round(num));
                     var left = Math.round((i * _partwidth) + 20);
-                    $('[data-role="scale-blue"]').before('<a class="scale" style="left:' + left + 'px">' + '<span class="line"></span><span class="line line-dashed"></span><div class="scale-details"><ul class="lesson-list"></ul></div>' + '<span class="scale-time">' + time + '</span></a>');
+                    $('[data-role="scale-blue"]').before('<a class="scale scale-default" style="left:' + left + 'px">' + '<span class="line"></span><span class="line line-dashed"></span><div class="scale-details"><ul class="lesson-list"></ul></div>' + '<span class="scale-time">' + time + '</span></a>');
                 }
             }
             if (isresize) {
@@ -375,6 +372,7 @@ define(function(require, exports, module) {
                 distance: 20,
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
+                    console.log('onDrop');
                     _super($item, container);
                     _self._maskShow(false);
                     var $scale_blue = $item.closest('.scale-blue');
@@ -395,9 +393,11 @@ define(function(require, exports, module) {
                     $scale_blue.removeClass('moveing');
                 },
                 serialize: function(parent, children, isContainer) {
+                    console.log('serialize');
                     return isContainer ? children : parent.attr('id');
                 },
                 isValidTarget: function($item, container) {
+                    console.log('isValidTarget');
                     _self._maskShow(true);
                     $item.closest('.scale-blue').addClass('moveing');
                     return true;
@@ -453,6 +453,7 @@ define(function(require, exports, module) {
         },
         _addScale: function($marker, time, seq, markers_array) {
             var $marker_item = $marker.find('li' + ':last');
+            console.log($marker_item);
             var markerJson = {
                 "id": $marker.attr('id'),
                 "second": time,

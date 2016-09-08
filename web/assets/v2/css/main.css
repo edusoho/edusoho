@@ -12638,7 +12638,7 @@ textarea {
   }
 }
 .marker-manage {
-  min-height: 100%;
+  height: 100%;
   background-color: #313131;
 }
 .marker-manage.slideing {
@@ -12657,11 +12657,26 @@ textarea {
   font-size: 14px;
   padding: 20px 15px;
 }
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li a i:hover {
+  color: #ff8a0c;
+  cursor: pointer;
+}
 .marker-manage .nav.nav-tabs.nav-tabs-edit > li:hover > a,
 .marker-manage .nav.nav-tabs.nav-tabs-edit > li.active > a {
   background-color: #414141;
   color: #f5f5f5;
   border-color: transparent;
+}
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static .border {
+  border-left: 1px solid #919191;
+  padding-left: 15px;
+}
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static > a {
+  padding-left: 0;
+}
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover > a {
+  background-color: #313131;
+  color: #919191;
 }
 .marker-manage .nav.nav-tabs.nav-tabs-edit .highlight {
   border-bottom: none;
@@ -12686,16 +12701,27 @@ textarea {
 .marker-manage .lesson-list {
   border: 0;
   margin: 0;
+  overflow: auto;
+  padding-right: 15px;
 }
 .marker-manage .lesson-list.highlight {
   border: 1px dashed red;
 }
 .marker-manage .lesson-list .item-lesson {
+  position: relative;
   background-color: transparent;
   border: none;
   line-height: 40px;
   margin-bottom: 10px;
   margin-left: 0;
+}
+.marker-manage .lesson-list .item-lesson .btn-preview {
+  top: 0;
+  right: 0;
+  color: #919191;
+}
+.marker-manage .lesson-list .item-lesson .btn-preview:hover {
+  color: #46c37b;
 }
 .marker-manage .lesson-list .item-lesson.dragged {
   border: 1px dashed #919191;
@@ -12717,12 +12743,35 @@ textarea {
   top: 12px;
   right: 5px;
 }
+.marker-manage .lesson-list .more-questions {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  left: 0;
+  text-align: right;
+  color: #919191;
+  font-size: 12px;
+}
+.marker-manage .lesson-list .more-questions .loading {
+  display: none;
+}
+.marker-manage .lesson-list .more-questions .loading img {
+  height: 30px;
+  margin-right: 10px;
+}
+.marker-manage .lesson-list .more-questions.loading .loading {
+  display: inline;
+}
+.marker-manage .lesson-list .more-questions a {
+  color: #919191;
+}
+.marker-manage .lesson-list .more-questions a:hover {
+  color: #46c37b;
+}
 .marker-manage .lesson-list .placeholder {
   border-bottom: 1px dashed #46c37b;
 }
 .marker-manage-content {
-  position: fixed;
-  width: 100%;
   height: 100%;
   padding-bottom: 160px;
 }
@@ -12753,14 +12802,20 @@ textarea {
   background-color: #000;
 }
 .marker-manage-content .manage-edit-body {
+  position: relative;
   float: left;
   width: 30%;
   height: 100%;
   background-color: #414141;
   color: #f5f5f5;
 }
+.marker-manage-content .manage-edit-body .btn-preview {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+}
 .marker-manage-content .manage-edit-body .tab-pane {
-  padding: 30px 15px 30px 20px;
+  padding: 30px 0 30px 20px;
 }
 .marker-manage-content .manage-edit-body .btn-search {
   position: absolute;
@@ -12801,6 +12856,9 @@ textarea {
   height: 100%;
   background-color: #414141;
   padding: 0 160px 0 20px;
+}
+.marker-manage-content .editbox .lesson-list .btn-preview {
+  display: none;
 }
 .marker-manage-content .editbox .lesson-list .placeholder {
   border-color: transparent;
@@ -13040,6 +13098,98 @@ textarea {
   margin-top: -3px;
   font-size: 12px;
   color: #919191;
+}
+.marker-manage .introjs-nextbutton.introjs-fullbutton,
+.marker-manage .introjs-button.introjs-skipbutton {
+  background: transparent;
+  border-color: transparent;
+  color: #919191;
+  margin: 0;
+  padding-right: 0;
+  cursor: pointer;
+}
+.marker-manage .introjs-nextbutton.introjs-fullbutton:hover,
+.marker-manage .introjs-button.introjs-skipbutton:hover,
+.marker-manage .introjs-nextbutton.introjs-fullbutton:focus,
+.marker-manage .introjs-button.introjs-skipbutton:focus {
+  background: transparent;
+  border-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+.marker-manage .introjs-overlay {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.marker-manage .introjs-fixedTooltip {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+.marker-manage .introjs-helperNumberLayer,
+.marker-manage .introjs-skipbutton {
+  display: none;
+}
+.marker-manage .introjs-helperLayer {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+.marker-manage .introjs-arrow.top-middle {
+  margin-left: 0;
+}
+.marker-manage .introjs-tooltip {
+  text-align: justify;
+  font-size: 12px;
+  color: #313131;
+  padding: 15px;
+}
+.marker-manage .introjs-tooltip .title {
+  color: #919191;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.marker-manage .introjs-tooltip .remask {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.marker-manage .intro-img {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  color: #fff;
+  font-size: 20px;
+}
+.marker-manage .intro-img img {
+  display: block;
+  margin-left: 70px;
+}
+.marker-preview {
+  height: 100%;
+  background-color: #f1f4f6;
+}
+.marker-preview .marker-preview-content {
+  position: relative;
+  height: 100%;
+  padding-top: 30px;
+  color: #313131;
+  text-align: center;
+}
+.marker-preview .marker-preview-content .title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.marker-preview .marker-preview-content .marker-preview-player {
+  position: absolute;
+  left: 120px;
+  right: 120px;
+  top: 132px;
+  bottom: 5%;
 }
 .user-center-header {
   position: relative;
