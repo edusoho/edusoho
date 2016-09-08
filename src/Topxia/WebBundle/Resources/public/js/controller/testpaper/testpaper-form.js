@@ -176,19 +176,20 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
-                    Notify.danger('题目分值只能填写数字，且最多一位小数。');
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger('题目分值只能填写数字，并且在3位数以内，保留一位小数。');
                     $(this).focus();
                     isOk = false;
                     return false;
                 }
+                
             });
 
             $form.find('.item-miss-score').each(function() {
                 var missScore = $(this).val();
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(missScore)) {
-                    Notify.danger('题目漏选分值只能填写数字，且最多一位小数。');
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(missScore)) {
+                    Notify.danger('题目漏选分值只能填写数字，并且在3位数以内，保留一位小数。');
                     $(this).focus();
                     isOk = false;
                     return false;
