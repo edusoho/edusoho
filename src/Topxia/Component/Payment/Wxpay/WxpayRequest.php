@@ -41,7 +41,7 @@ class WxpayRequest extends Request
         $converted['mch_id']       = $settings["wxpay_account"];
         $converted['nonce_str']    = $this->getNonceStr();
         $converted['out_trade_no'] = $params['orderSn'];
-        $converted['sign']         = strtoupper($this->signParams($converted));
+        $converted['sign']         = $this->signParams($converted);
 
         $xml      = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
@@ -75,7 +75,7 @@ class WxpayRequest extends Request
 
         $sign = substr($sign, 0, -1);
         $sign .= '&key=' . $this->options['key'];
-        return md5($sign);
+        return strtoupper(md5($sign));
     }
 
     /**
@@ -89,6 +89,7 @@ class WxpayRequest extends Request
         }
 
         $sign = $this->signParams($params);
+
         if ($params['sign'] == $sign) {
             return true;
         }
@@ -111,8 +112,7 @@ class WxpayRequest extends Request
         $converted['total_fee']        = $this->getAmount($params['amount']);
         $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
-        $converted['sign']             = strtoupper($this->signParams($converted));
-
+        $converted['sign']             = $this->signParams($converted);
         return $converted;
     }
 
