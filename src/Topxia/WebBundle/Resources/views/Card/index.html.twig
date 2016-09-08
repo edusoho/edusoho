@@ -35,11 +35,12 @@
         {% if cards is not null %}
           {% for card in cards %}
             <div class="col-lg-4 col-md-6 col-sm-6">
-              {% if card.cardType == 'coupon'%}
-                {% include 'TopxiaWebBundle:Card:coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
-              {% endif %}
-              {% if card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}
-                {% include 'TopxiaWebBundle:Card:moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+              {% if cardDetails[card.cardId] is defined %}{# this if condition is to be delete #}
+                {% if card.cardType == 'coupon' %}
+                  {% include 'TopxiaWebBundle:Card:coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+                {% elseif card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}
+                  {% include 'TopxiaWebBundle:Card:moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+                {% endif %}
               {% endif %}
             </div>
           {% endfor %}

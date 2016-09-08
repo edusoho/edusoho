@@ -1,23 +1,21 @@
 #项目国际化翻译文档
 
-目前edusoho已经支持语言国际化,实现的原理主要是 The Symfony Components Translation,主要翻译分为三部分:
+EduSoho已经支持语言国际化, 技术选型：
+[Symfony Translation Component](http://symfony.com/doc/current/components/translation/usage.html){:target="_blank"}
+[JsTranslationBundle](https://github.com/willdurand/BazingaJsTranslationBundle){:target="_blank"}
 
-1.页面(.HTML.twig, js)
-2.后台(.php)
-3.配置(data_dict.yml, menus_admin.yml)
+**<font color='red'>!!重要的事情提前说：以后开发过程中要实时做国际化</font>**
+需要翻译的内容:
+```
+1. 配置文件(data_dict.yml, menus_admin.yml)
+2. 前端(twig, js)
+3. 后台(php)
+4. 插件
+```
 
-页面具体实现方案如下.在以后的开发中如果涉及到一下模块,请按照本文档的指导编程, 以Translation支持你写的新模块.
+### 一. data_dict.yml 数据字典的配置项
 
-1. data_dict 支持国际化：干掉html方式的定义改用宏的方式，语言串扫描工具，增加扫描data_dict.yml文件。
-2. js: 生成一个js语言文件，
-3. php中的
-4. 菜单
-5. 插件的语言包
-
-实现方案
-#### 1.1.data_dict.yml
-	该文件是数据字典的配置项
-    
+已经干掉了html方式的定义改用宏的方式
 ```yml
 -'discountStatus:html':
 -    unstart: <span class="text-muted">未开始</span>
@@ -42,9 +40,10 @@
 ```
 
 
-#### 2.1.twig
-    twig页面翻译修改
-    
+### 二. twig翻译修改
+
+##### 1. 纯文本及变量占位符
+
 ```twig
 {#/var/www/edusoho/src/Topxia/WebBundle/Resources/views/Coin/bill-bar.html.twig#}
 
@@ -66,8 +65,32 @@
 有参数的翻译文本格式为：{{'翻译文%foo%本'|trans({'%foo%':参数})}}
 注意：参数后|default('虚拟币'|trans)(见上)中如有需翻译文本，目前不匹配自动查找的正则，无法自动添加词条到messages.*.yml中
 
-#### 2.2.js
-	js页面翻译修改
+##### 2. 文案中夹杂html标签和样式
+
+各个语言文件中定义完整文案(含html)，如：
+/src/Topxia/WebBundle/Resources/translations/messages.zh_CN.yml
+
+```yml
+尚未开通云视频提示: >
+  <h4>
+    您尚未开通云视频服务，无法使用资源管理功能，
+    <a href="%settingCloudVideoUrl%">立即开通</a>
+    或
+    <a href="%showCloudVideoUrl%" target="_blank">了解云视频</a>
+  </h4>
+  <p>
+  “云资源管理”提供完善的资源管理功能，您可以从课程、上传时间、资源类型等多个维度对资源进行管理，帮助您轻松掌控全站的视频、音频、图片、文档等资源，再也不用担心过期资源占用存储空间了。
+  </p>
+```
+
+在twig中引用
+
+```twig
+{{ '尚未开通云视频提示'|trans({'%settingCloudVideoUrl%': path('admin_setting_cloud_video'), '%showCloudVideoUrl%': 'http://open.edusoho.com/show/cloud/video'})|raw }}
+```
+
+
+### 三. js翻译修改
     
 ```js
 {#/var/www/edusoho/src/Topxia/WebBundle/Resources/public/js/controller/testpaper/testpaper-form.js#}
@@ -85,9 +108,9 @@ Notify.danger(Translator.trans('试卷题目总数量不%foo%能为0。',{foo:12
 格式为：Translator.trans('翻译%foo%文本',{foo:参数})
 同样以上不要随意在里面添加空格，统一使用单引号
 
-#### 3
-	php页面翻译修改
-    
+### 四. php翻译修改
+>注意：这是非完美方案，理论上国际化只在twig/js中修改。
+
 ```php
 $this->setFlashMessage('success', '基础信息保存成功。');
 $this->setFlashMessage('danger', '不能修改已绑定的手机。');
@@ -107,3 +130,9 @@ throw new \RuntimeException($this->getServiceKernel()->trans('主题目录%theme
 ```
 格式为$this->getServiceKernel()->trans('翻译%foo%文本', array('%foo%' =>参数 ))，
 同样以上不要随意在里面添加空格，统一使用单引号
+
+### 思考
+
+* 抛异常时，自定义不同类型的异常，文案在异常类里固定好，调用时只传入参数（预定义常量），如找不到异常、参数异常等，国际化可以在异常base类或listener中做；
+
+**<font color='red'>!!重要的事情再说一遍：以后开发过程中要实!时!做国际化</font>**

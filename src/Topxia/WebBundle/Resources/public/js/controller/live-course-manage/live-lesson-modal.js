@@ -194,7 +194,6 @@ define(function (require, exports, module) {
         });
 
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true
         }).on('hide', function (ev) {
             validator.query('[name=startTime]').execute();

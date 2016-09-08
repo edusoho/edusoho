@@ -21,7 +21,6 @@ define(function(require, exports, module) {
 
 
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -30,7 +29,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setStartDate', $('#paidClassroomStartDate').attr("value"));
         
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
