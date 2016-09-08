@@ -92,6 +92,7 @@
               <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
             </ul>
           </li>
+          <li class="back-home"><a href="{{ path('homepage') }}"> <i class="iconfont icon-shouye"></i> </a></li>
           {% endif %}
       </div>
     </nav>
