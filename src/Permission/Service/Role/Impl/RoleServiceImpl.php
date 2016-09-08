@@ -91,6 +91,11 @@ class RoleServiceImpl extends BaseService implements RoleService
             $adminRole = $getAllRole->find(function ($tree) use ($adminForbidRole){
                 return $tree->data['code'] === $adminForbidRole;
             });
+
+            if(is_null($adminRole)){
+                continue;
+            }
+
             $getAdminForbidRoles = array_merge($adminRole->column('code'), $getAdminForbidRoles);
         }
 
