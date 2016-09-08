@@ -19,13 +19,14 @@ define(function (require, exports, module) {
                 'getBrandWCPayRequest',
                 $("#jsApiParameters").data('value'),
                 function (res) {
-                    alert($("#jsApiParameters").data('goto'));
-                    alert(res.err_msg);
                     if (res.err_msg == 'get_brand_wcpay_request:ok') {
                         window.location.href = $("#jsApiParameters").data('goto');
                     } else {
-                        alert(res.err_msg);
-                        window.location.href = $("#jsApiParameters").data('goto');
+                        if (res.err_msg == 'get_brand_wcpay_request:fail') {
+                            alert('支付失败');
+                        } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+                           // alert('取消')
+                        }
                     }
 
                 }
