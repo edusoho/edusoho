@@ -116,7 +116,7 @@ admin_operation_article_category:
     router_name: admin_article_category
 admin_operation_group_create:
     name: 创建小组
-    parent: admin_operation_group_manage
+    parent: admin_operation_group_thread
     router_name: group_add
     group: 2
     blank: 1
