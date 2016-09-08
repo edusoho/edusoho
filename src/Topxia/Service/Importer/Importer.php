@@ -1,26 +1,24 @@
 <?php
 
-
 namespace Topxia\Service\Importer;
 
-
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\ServiceException;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class Importer
 {
-    const DANGER_STATUS = 'danger';
-    const ERROR_STATUS = 'error';
+    const DANGER_STATUS  = 'danger';
+    const ERROR_STATUS   = 'error';
     const SUCCESS_STATUS = 'success';
 
-    public abstract function import(Request $request);
+    abstract public function import(Request $request);
 
-    public abstract function check(Request $request);
+    abstract public function check(Request $request);
 
-    public abstract function getTemplate(Request $request);
+    abstract public function getTemplate(Request $request);
 
-    public abstract function tryImport(Request $request);
+    abstract public function tryImport(Request $request);
 
     protected function getServiceKernel()
     {
@@ -35,12 +33,12 @@ abstract class Importer
 
     protected function createDangerResponse($message)
     {
-        if(!is_string($message)){
-            throw new ServiceException($this->getKernel()->trans('message must be a string'));
+        if (!is_string($message)) {
+            throw new ServiceException($this->getServiceKernel()->trans('message must be a string'));
         }
 
         return array(
-            'status' => self::DANGER_STATUS,
+            'status'  => self::DANGER_STATUS,
             'message' => $message
         );
     }
@@ -48,7 +46,7 @@ abstract class Importer
     protected function createErrorResponse(array $errorInfo)
     {
         return array(
-            'status' => self::ERROR_STATUS,
+            'status'    => self::ERROR_STATUS,
             'errorInfo' => $errorInfo
         );
     }
@@ -56,9 +54,9 @@ abstract class Importer
     protected function createSuccessResponse(array $importData, array $checkInfo, array $customParams = array())
     {
         $response = array(
-            'status' => self::SUCCESS_STATUS,
+            'status'     => self::SUCCESS_STATUS,
             'importData' => $importData,
-            'checkInfo' => $checkInfo
+            'checkInfo'  => $checkInfo
         );
         $response = array_merge($customParams, $response);
         return $response;
