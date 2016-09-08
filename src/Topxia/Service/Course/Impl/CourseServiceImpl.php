@@ -2802,9 +2802,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.CourseLessonReplayDao');
     }
 
-    protected function hasAdminRole($courseId, $userId)
+    protected function hasAdminRole()
     {
-        return $this->getUserService()->hasAdminRoles($userId);
+        global $kernel;
+        $container = $kernel->getContainer();
+        return $container->get('permission.twig.permission_extension')->hasPermission('admin_course_content_manage');
     }
 
     public function hasTeacherRole($courseId, $userId)
@@ -2815,7 +2817,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function hasCourseManagerRole($courseId, $userId)
     {
-        return $this->hasAdminRole($courseId, $userId) || $this->hasTeacherRole($courseId, $userId);
+        return $this->hasTeacherRole($courseId, $userId) || $this->hasAdminRole();
     }
 
     protected function deleteCrontabs($lessons)
