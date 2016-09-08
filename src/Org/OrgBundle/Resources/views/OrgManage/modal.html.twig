@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block footer %}
-     {% if org.id %}
+     {% if org.id|default(null) %}
         <button type="button" class="btn btn-default pull-left delete-org" data-url="{{ path('admin_org_delete', {id:org.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> 删除</button>
     {% endif %}
 
