@@ -37,7 +37,7 @@
             	</div>
             {% endif %}
 					</div>
-				
+
 					<div class="form-group">
 						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
 						<div class="col-md-7 controls radios">
@@ -149,7 +149,7 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>公开</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
 					</div>
 
 					<div class="form-group">
@@ -158,7 +158,7 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>公开</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>{{'公开'|trans}}</div>
 					</div>
 
 					<div class="form-group">
@@ -167,7 +167,7 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
-						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>公开</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>{{'公开'|trans}}</div>
 					</div>
 
 

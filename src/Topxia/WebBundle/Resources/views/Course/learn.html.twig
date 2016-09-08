@@ -49,19 +49,19 @@
           <span class="chapter-label">
             {% if not setting('course.custom_chapter_enabled')|default(true) %}
             <span
-                data-role="custom-chapter-number">第{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章') }}{% else %}章{% endif %}</span></span>
+                data-role="custom-chapter-number">{{'第'|trans}}{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}</span></span>
           {% else %}
-            第<span
-              data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章') }}{% else %}章{% endif %}</span>
+            {{'第'|trans}}<span
+              data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}</span>
           {% endif %}
           <span class="divider">&raquo;</span>
           <span class="chapter-label">
             {% if not setting('course.custom_chapter_enabled')|default(true) %}
             <span
-                data-role="custom-unit-number">第{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节') }}{% else %}节{% endif %}</span></span>
+                data-role="custom-unit-number">{{'第'|trans}}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}</span></span>
         {% else %}
-          第<span
-            data-role="unit-number"></span>{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节') }}{% else %}节{% endif %}</span>
+          {{'第'|trans}}<span
+            data-role="unit-number"></span>{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节') }}{% else %}{{'节'|trans}}{% endif %}</span>
           {% endif %}
           <span class="divider">&raquo;</span>
           <span class="item-label">{% if  setting('course.custom_chapter_enabled')|default(true) %}{{ '课时'|trans }}<span

@@ -13,13 +13,13 @@ define(function (require, exports, module) {
             var now = new Date();
             return testStartTime > now;
         },
-        "考试结束日期不得早于当前日期"
+        Translator.trans('考试结束日期不得早于当前日期')
     );
 
     Validator.addRule(
         'date_and_time',
         /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
-        '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
+        Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm')
     );
 
     Validator.addRule(
@@ -124,7 +124,7 @@ define(function (require, exports, module) {
             validator.addItem({
                 element: '#lesson-mediaId-field',
                 required: true,
-                errormessageRequired: '请选择试卷'
+                errormessageRequired: Translator.trans('请选择试卷')
             });
 
             validator.addItem({
@@ -136,7 +136,7 @@ define(function (require, exports, module) {
                 element: '#lesson-suggest-hour-field',
                 required: true,
                 rule: 'decimal',
-                errormessageRequired: '请填写建议时长'
+                errormessageRequired: Translator.trans('请填写建议时长')
             });
 
             if ($('[name="doTimes"]').val() == 0) {
@@ -172,7 +172,7 @@ define(function (require, exports, module) {
                     var $parent = $('#' + $form.data('parentid'));
                     if ($item.length) {
                         $item.replaceWith(html);
-                        Notify.success('试卷课时已保存');
+                        Notify.success(Translator.trans('试卷课时已保存'));
                     } else {
                         $panel.find('.empty').remove();
 
@@ -210,7 +210,7 @@ define(function (require, exports, module) {
                         } else {
                             $("#course-item-list").append(html);
                         }
-                        Notify.success('添加试卷课时成功');
+                        Notify.success(Translator.trans('添加试卷课时成功'));
                     }
                     $(id).find('.btn-link').tooltip();
                     $form.parents('.modal').modal('hide');
@@ -260,7 +260,7 @@ define(function (require, exports, module) {
                     element: this.get('_$testStartTime'),
                     required: true,
                     rule: 'gt_current_time date_and_time',
-                    display:"考试开始时间"
+                    display:Translator.trans('考试开始时间')
                 });
             }
         },
@@ -287,13 +287,13 @@ define(function (require, exports, module) {
                     element: '#lesson-mediaId-field',
                     required: true,
                     rule: 'remote',
-                    errormessageRequired: '请选择试卷'
+                    errormessageRequired: Translator.trans('请选择试卷')
                 });
             }else {
                 this.get('_validator').addItem({
                     element: '#lesson-mediaId-field',
                     required: true,
-                    errormessageRequired: '请选择试卷'
+                    errormessageRequired: Translator.trans('请选择试卷')
                 });
             }
 

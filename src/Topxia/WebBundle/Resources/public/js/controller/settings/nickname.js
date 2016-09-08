@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 }
                 return result;
             },
-                "{{display}}不允许以1开头的11位纯数字"
+                Translator.trans('%display%不允许以1开头的11位纯数字',{display:'{{display}}'})
         );
 
         validator.addItem({

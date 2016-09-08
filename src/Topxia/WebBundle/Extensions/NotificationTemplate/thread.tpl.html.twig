@@ -6,8 +6,8 @@
     <div class="notification-body">
       {% set data = notification.content %}
       <a href="{{ path('user_show', {id:data.threadUserId}) }}" target="_blank">{{ data.threadUserNickname }}</a>
-      在课程 <a href="{{ path('course_show', {id:data.courseId}) }}">{{ data.courseTitle|purify_html  }}</a>
-      发表了{% if data.threadType == 'question' %}问题{% else %}话题{% endif %}
+      {{'在课程'|trans}} <a href="{{ path('course_show', {id:data.courseId}) }}">{{ data.courseTitle|purify_html  }}</a>
+      {{'发表了'|trans}}{% if data.threadType == 'question' %}{{'问题'|trans}}{% else %}{{'话题'|trans}}{% endif %}
       <a href="{{ path('course_thread_show', {courseId:data.courseId, threadId:data.threadId}) }}"  target="_blank">{{ data.threadTitle|purify_html }}</a>。
     </div>
     <div class="notification-footer">

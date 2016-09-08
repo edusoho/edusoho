@@ -7,16 +7,16 @@
   <table class="table table-striped table-bordered">
     <thead>
     <tr>
-      <th width="40%">环境检测</th>
-      <th width="20%">推荐配置</th>
-      <th width="20%">当前状态</th>
-      <th width="20%">最低要求</th>
+      <th width="40%">{{ '环境检测'|trans }}</th>
+      <th width="20%">{{ '推荐配置'|trans }}</th>
+      <th width="20%">{{ '当前状态'|trans }}</th>
+      <th width="20%">{{ '最低要求'|trans }}</th>
     </tr>
     </thead>
     <tbody>
 
     <tr>
-      <td>操作系统</td>
+      <td>{{ '操作系统'|trans }}</td>
       <td>Linux</td>
       <td>
         <span class="text-success">√ {{ env.os }}</span>
@@ -25,7 +25,7 @@
     </tr>
 
     <tr>
-      <td>PHP版本 （<a href="{{ path('admin_report_status_php') }}">更多信息</a>）</td>
+      <td>{{ 'PHP版本'|trans }} （<a href="{{ path('admin_report_status_php') }}">{{ '更多信息'|trans }}</a>）</td>
       <td>5.5.x</td>
       <td>
         {% if env.phpVersionOk %}
@@ -38,7 +38,7 @@
     </tr>
 
     <tr>
-      <td>PHP运行用户</td>
+      <td>{{ 'PHP运行用户'|trans }}</td>
       <td>-</td>
       <td>
         <span class="text-success">√ {{ env.user }}</span>
@@ -47,37 +47,37 @@
     </tr>
 
     <tr>
-      <td>安全模式</td>
-      <td>关闭</td>
+      <td>{{ '安全模式'|trans }}</td>
+      <td>{{ '关闭'|trans }}</td>
       <td>
         {% if env.safemode == 'Off' %}
-          <span class="text-danger">X 开启</span>
+          <span class="text-danger">X {{ '开启'|trans }}</span>
         {% else %}
-          <span class="text-success">√ 关闭</span>
+          <span class="text-success">√ {{ '关闭'|trans }}</span>
         {% endif %}
       </td>
-      <td>关闭</td>
+      <td>{{ '关闭'|trans }}</td>
     </tr>
 
     <tr>
       <td>PDO_MySQL</td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.pdoMysqlOk %}
-          <span class="text-success">√ 已安装</span>
+          <span class="text-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X 尚未安装MySQL_PDO</span>
+          <span class="text-danger">X {{ '尚未安装MySQL_PDO'|trans }}</span>
         {% endif %}
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
     </tr>
 
     <tr>
       <td>
-        文件上传大小
-        <div class="text-muted">该值决定可以上传视频的最大大小</div>
+        {{ '文件上传大小'|trans }}
+        <div class="text-muted">{{ '该值决定可以上传视频的最大大小'|trans }}</div>
       </td>
-      <td>大于200M</td>
+      <td>{{ '大于200M'|trans }}</td>
       <td>
         {% if env.uploadMaxFilesizeOk %}
           <span class="text-success">√ {{ env.uploadMaxFilesize }}</span>
@@ -90,10 +90,10 @@
 
     <tr>
       <td>
-        表单数据大小
-        <div class="text-muted">该值不能小于文件上传大小的值</div>
+        {{ '表单数据大小'|trans }}
+        <div class="text-muted">{{ '该值不能小于文件上传大小的值'|trans }}</div>
       </td>
-      <td>大于200M</td>
+      <td>{{ '大于200M'|trans }}</td>
       <td>
         {% if env.postMaxsizeOk %}
           <span class="text-success">√ {{ env.postMaxsize }}</span>
@@ -106,66 +106,66 @@
 
     <tr>
       <td>
-        PHP脚本最大执行时间
-        <div class="text-muted">该值决定上传视频时，最长可使用的时间</div>
+        {{ 'PHP脚本最大执行时间'|trans }}
+        <div class="text-muted">{{ '该值决定上传视频时，最长可使用的时间'|trans }}</div>
       </td>
-      <td>大于300秒</td>
+      <td>{{ '大于300秒'|trans }}</td>
       <td>
         {% if env.maxExecutionTimeOk %}
-          <span class="text-success">√ {{ env.maxExecutionTime }}秒</span>
+          <span class="text-success">√ {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% else %}
-          <span class="text-danger">X {{ env.maxExecutionTime }}秒</span>
+          <span class="text-danger">X {{ env.maxExecutionTime }}{{ '秒'|trans }}</span>
         {% endif %}
       </td>
-      <td>30秒</td>
+      <td>{{ '30秒'|trans }}</td>
     </tr>
 
     <tr>
       <td>
-        PHP扩展：mbstring
-        <div class="text-muted">该扩展用于处理中文字符</div>
+        {{ 'PHP扩展：'|trans }}mbstring
+        <div class="text-muted">{{ '该扩展用于处理中文字符'|trans }}</div>
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.mbstringOk %}
-          <span class="text-success">√ 已安装</span>
+          <span class="text-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X 尚未安装</span>
+          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
     </tr>
 
     <tr>
       <td>
-        PHP扩展：curl
-        <div class="text-muted">该扩展用于远程读取文件</div>
+        {{ 'PHP扩展：'|trans }}curl
+        <div class="text-muted">{{ '该扩展用于远程读取文件'|trans }}</div>
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.curlOk %}
-          <span class="text-success">√ 已安装</span>
+          <span class="text-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X 尚未安装</span>
+          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
     </tr>
 
     <tr>
       <td>
-        PHP扩展：GD
-        <div class="text-muted">该扩展用于处理图片</div>
+        {{ 'PHP扩展：'|trans }}GD
+        <div class="text-muted">{{ '该扩展用于处理图片'|trans }}</div>
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
       <td>
         {% if env.gdOk %}
-          <span class="text-success">√ 已安装</span>
+          <span class="text-success">√ {{ '已安装'|trans }}</span>
         {% else %}
-          <span class="text-danger">X 尚未安装</span>
+          <span class="text-danger">X {{ '尚未安装'|trans }}</span>
         {% endif %}
       </td>
-      <td>必须</td>
+      <td>{{ '必须'|trans }}</td>
     </tr>
     </tbody>
   </table>
@@ -173,21 +173,21 @@
   <table class="table table-hover table-striped table-bordered">
     <thead>
     <tr>
-      <th width="60%">通信情况</th>
-      <th width="40%">状态</th>
+      <th width="60%">{{ '通信情况'|trans }}</th>
+      <th width="40%">{{ '状态'|trans }}</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <td>与Discuz Ucenter的连接</td>
+      <td>{{ '与Discuz Ucenter的连接'|trans }}</td>
       <td><span class="text-muted js-ucenter-check"
-                data-url="{{ path('admin_report_status_ucenter') }}">正在检测.....</span></td>
+                data-url="{{ path('admin_report_status_ucenter') }}">{{ '正在检测.....'|trans }}</span></td>
     </tr>
     {% if setting("cloud_email.status")|default("disable") == "disable" %}
       <tr>
-        <td>邮件发送 <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top"
-                    title="每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看"></i></td>
-        <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_report_status_email_send') }}">正在检测.....</span>
+        <td>{{ '邮件发送'|trans }} <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top"
+                    title="{{ '每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看'|trans }}"></i></td>
+        <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_report_status_email_send') }}">{{ '正在检测.....'|trans }}</span>
         </td>
       </tr>
     {% endif %}
@@ -199,14 +199,14 @@
            data-url="{{ path('admin_report_status_directory') }}">
       <thead>
       <tr>
-        <th width="60%">系统文件、目录权限检查</th>
-        <th width="20%">当前状态</th>
-        <th width="20%">所需状态</th>
+        <th width="60%">{{ '系统文件、目录权限检查'|trans }}</th>
+        <th width="20%">{{ '当前状态'|trans }}</th>
+        <th width="20%">{{ '所需状态'|trans }}</th>
       </tr>
       </thead>
       <tbody>
       <tr>
-        <td colspan="6" style="text-align: center;color: #c1c1c1;padding: 50px;">正常扫描文件......</td>
+        <td colspan="6" style="text-align: center;color: #c1c1c1;padding: 50px;">{{ '正常扫描文件......'|trans }}</td>
       </tr>
       </tbody>
     </table>
@@ -217,10 +217,10 @@
            data-url="{{ path('admin_report_status_directory') }}">
       <thead>
       <tr>
-        <th width="30%">系统空间占用</th>
-        <th width="20%">可用</th>
-        <th width="25%">总共</th>
-        <th width="25%">剩余</th>
+        <th width="30%">{{ '系统空间占用'|trans }}</th>
+        <th width="20%">{{ '可用'|trans }}</th>
+        <th width="25%">{{ '总共'|trans }}</th>
+        <th width="25%">{{ '剩余'|trans }}</th>
       </tr>
       </thead>
       <tbody>

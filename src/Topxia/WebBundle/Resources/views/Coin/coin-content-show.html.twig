@@ -7,7 +7,7 @@
 {% set bodyClass = 'coin-detail-page' %}
 {% block content %}
 <div class="es-section">
-  <div class="section-header"><h1>{{setting('coin.coin_name')}}{{'说明'|trans}}</h1></div>
+  <div class="section-header"><h1>{{'%coin_name%说明'|trans({'%coin_name%': setting('coin.coin_name')|default('虚拟币'|trans)})}}</h1></div>
 
   {% if coinSetting.coin_content %}
   	{{ coinSetting.coin_content|raw }}

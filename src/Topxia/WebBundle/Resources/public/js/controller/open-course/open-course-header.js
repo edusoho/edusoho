@@ -72,7 +72,6 @@ define(function (require, exports, module) {
             'click .live-video-replay-btn': 'onLiveVideoPlay'
         },
         setup: function () {
-            $('.media-unconvert').hide();
             $('.lesson-content').hide();
             this._showPlayer();
         },
@@ -123,8 +122,9 @@ define(function (require, exports, module) {
             var lesson = this.get('lesson');
             
             if (lesson.type == 'video' || lesson.type == 'audio') {
-                if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                    $('.media-unconvert').show();
+                if (lesson.convertStatus != 'success') {
+                    $('#media-error-dialog').show();
+                    $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                     return;
                 }
                 var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
@@ -227,10 +227,11 @@ define(function (require, exports, module) {
                 }
                 $('#media-error-dialog').hide();
                 self.set('lesson', lesson);
-            
+
                 if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
-                    if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                        $('.media-unconvert').show();
+                    if ((lesson.convertStatus != 'success')) {
+                        $('#media-error-dialog').show();
+                        $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                         return;
                     }
                     var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';

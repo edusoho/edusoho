@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
         $('.tbody').on('click', 'button.remind-teachers', function() {
             $.post($(this).data('url'), function(response) {
-                Notify.success('提醒教师的通知，发送成功！');
+                Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
         noticeModal();
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
                     data: postData,
                     type: 'post'
                 }).done(function(data) {
-                    $('.upgrade-status').html('<span class="label label-warning">升级受理中</span>');
+                    $('.upgrade-status').html('<span class="label label-warning">'+Translator.trans('升级受理中')+'</span>');
                 }).fail(function(xhr, textStatus) {
                     Notify.danger(xhr.responseJSON.error.message);
                 }).always(function(xhr, textStatus) {
@@ -57,14 +57,14 @@ define(function(require, exports, module) {
 
     function step4() {
         $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html("当前在线："+res.onlineCount+"人");
+            $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
             step5();
         });
     }
 
     function step5() {
         $.post($('#loginNum').data('url'),function(res){
-            $('#loginNum').html("登录人数："+res.loginCount+"人");
+            $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
         });
     }
 

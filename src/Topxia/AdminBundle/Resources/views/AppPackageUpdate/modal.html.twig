@@ -1,19 +1,19 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set updateName = package.type == 'upgrade' ? '升级' : '安装' %}
+{% set updateName = package.type == 'upgrade' ? '升级'|trans : '安装'|trans %}
 
 
-{% block title %}{{ updateName }}应用{% endblock %}
+{% block title %}{{ updateName }}{{'应用'|trans}}{% endblock %}
 
 {% block body %}
 <input type="hidden" name="package-type" value="{{app.request.get('type')|default('')}}">
 <table class="table">
   <thead>
     <tr>
-      <th width="40%">应用名称</th>
-      <th width="25%">版本</th>
-      <th>备份数据库</th>
-      <th>备份文件</th>
+      <th width="40%">{{'应用名称'|trans}}</th>
+      <th width="25%">{{'版本'|trans}}</th>
+      <th>{{'备份数据库'|trans}}</th>
+      <th>{{'备份文件'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -26,8 +26,8 @@
           <strong class="text-success">{{ package.toVersion }}</strong>
         {% endif %}
       </td>
-      <td>{% if package.backupDB == 1 %}是{% elseif package.backupDB == 0 %}否{% endif %}</td>
-      <td>{% if package.backupFile == 1 %}是{% elseif package.backupFile == 0 %}否{% endif %}</td>
+      <td>{% if package.backupDB == 1 %}{{'是'|trans}}{% elseif package.backupDB == 0 %}{{'否'|trans}}{% endif %}</td>
+      <td>{% if package.backupFile == 1 %}{{'是'|trans}}{% elseif package.backupFile == 0 %}{{'否'|trans}}{% endif %}</td>
     </tr>
   </tbody>
 </table>
@@ -57,9 +57,9 @@
     {% if app.request.get('type') == 'upgrade' %}
     data-check-newest-url="{{ path('admin_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
     {% endif %}
-  >开始{{ updateName }}</button>
+  >{{'开始'|trans}}{{ updateName }}</button>
 
-  <strong class="text text-danger" id="updating-hint" style="display:none;">正在安装，请不要关闭当前窗口...</strong>
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{'正在安装，请不要关闭当前窗口...'|trans}}</strong>
 
-  <button id="finish-update-btn" data-loading-text="正在完成安装/升级, 请稍等..." class="btn btn-primary" style="display:none">完成安装/升级</button>
+  <button id="finish-update-btn" data-loading-text="{{'正在完成安装/升级, 请稍等...'|trans}}" class="btn btn-primary" style="display:none">{{'完成安装/升级'|trans}}</button>
 {% endblock %}

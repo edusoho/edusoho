@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             element: '[name="mobile"]',
             required: true,
             rule: 'phone',
-            display: '手机号码'
+            display: Translator.trans('手机号码')
         })
 
 	};

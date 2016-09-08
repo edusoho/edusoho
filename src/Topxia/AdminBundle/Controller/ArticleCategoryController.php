@@ -1,16 +1,15 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ArticleCategoryController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $categories = $this->getCategoryService()->getCategoryStructureTree();
-        
+
         return $this->render('TopxiaAdminBundle:ArticleCategory:index.html.twig', array(
             'categories' => $categories
         ));
@@ -18,28 +17,27 @@ class ArticleCategoryController extends BaseController
 
     public function createAction(Request $request)
     {
-
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->createCategory($request->request->all());
             return $this->renderTbody();
         }
         $category = array(
-            'id' => 0,
-            'name' => '',
-            'code' => '',
-            'parentId' => (int) $request->query->get('parentId', 0),
-            'weight' => 0,
+            'id'             => 0,
+            'name'           => '',
+            'code'           => '',
+            'parentId'       => (int) $request->query->get('parentId', 0),
+            'weight'         => 0,
             'publishArticle' => 1,
-            'seoTitle' => '',
-            'seoKeyword' => '',
-            'seoDesc' => '',
-            'published' => 1
+            'seoTitle'       => '',
+            'seoKeyword'     => '',
+            'seoDesc'        => '',
+            'published'      => 1
         );
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
-            'category' => $category,
-            'categoryTree'  => $categoryTree
+            'category'     => $category,
+            'categoryTree' => $categoryTree
         ));
     }
 
@@ -66,10 +64,10 @@ class ArticleCategoryController extends BaseController
             return $this->renderTbody();
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
-        
+
         return $this->render('TopxiaAdminBundle:ArticleCategory:modal.html.twig', array(
-            'category' => $category,
-            'categoryTree'  => $categoryTree
+            'category'     => $category,
+            'categoryTree' => $categoryTree
         ));
     }
 
@@ -81,12 +79,11 @@ class ArticleCategoryController extends BaseController
         }
 
         if ($this->canDeleteCategory($id)) {
-            return $this->createJsonResponse(array('status' => 'error', 'message'=>'此栏目有子栏目，无法删除'));
+            return $this->createJsonResponse(array('status' => 'error', 'message' => $this->getServiceKernel()->trans('此栏目有子栏目，无法删除')));
         } else {
             $this->getCategoryService()->deleteCategory($id);
-            return $this->createJsonResponse(array('status' => 'success', 'message'=>'栏目已删除' ));
+            return $this->createJsonResponse(array('status' => 'success', 'message' => $this->getServiceKernel()->trans('栏目已删除')));
         }
-        
     }
 
     public function canDeleteCategory($id)
@@ -101,11 +98,11 @@ class ArticleCategoryController extends BaseController
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
-  
+
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '编码已被占用，请换一个。');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('编码已被占用，请换一个。'));
         }
 
         return $this->createJsonResponse($response);
@@ -118,7 +115,7 @@ class ArticleCategoryController extends BaseController
         $currentId = $request->query->get('currentId');
 
         if ($currentId == $selectedParentId && $selectedParentId != 0) {
-            $response = array('success' => false, 'message' => '不能选择自己作为父栏目');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('不能选择自己作为父栏目'));
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -130,8 +127,8 @@ class ArticleCategoryController extends BaseController
     {
         $categories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
-            'categories' => $categories,
-            'categoryTree'  => $categories
+            'categories'   => $categories,
+            'categoryTree' => $categories
         ));
     }
 

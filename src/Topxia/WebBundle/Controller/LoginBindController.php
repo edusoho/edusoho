@@ -53,7 +53,7 @@ class LoginBindController extends BaseController
             $user = $this->getUserService()->getUser($bind['toId']);
 
             if (empty($user)) {
-                $this->setFlashMessage('danger', '绑定的用户不存在，请重新绑定。');
+                $this->setFlashMessage('danger', $this->trans('绑定的用户不存在，请重新绑定。'));
 
                 return $this->redirect($this->generateUrl('register'));
             }
@@ -90,9 +90,9 @@ class LoginBindController extends BaseController
             $message = $e->getMessage();
 
             if ($message == 'unaudited') {
-                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientMeta['name'].'登录连接的审核还未通过。';
+                $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。', array('%name%' => $clientMeta['name']));
             } else {
-                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+                $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%message%', array('%message%' => $message));
             }
 
             $this->setFlashMessage('danger', $message);
@@ -120,7 +120,7 @@ class LoginBindController extends BaseController
         $token = $request->getSession()->get('oauth_token');
 
         if (empty($token)) {
-            $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
+            $response = array('success' => false, 'message' => $this->trans('页面已过期，请重新登录。'));
             goto response;
         }
 
@@ -129,19 +129,19 @@ class LoginBindController extends BaseController
         $oauthUser['createdIp'] = $request->getClientIp();
 
         if (empty($oauthUser['id'])) {
-            $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
+            $response = array('success' => false, 'message' => $this->trans('网络超时，获取用户信息失败，请重试。'));
             goto response;
         }
 
         if (!$this->getAuthService()->isRegisterEnabled()) {
-            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
+            $response = array('success' => false, 'message' => $this->trans('注册功能未开启，请联系管理员！'));
             goto response;
         }
 
         $user = $this->generateUser($type, $token, $oauthUser, $setData = array());
 
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '登录失败，请重试！');
+            $response = array('success' => false, 'message' => $this->trans('登录失败，请重试！'));
             goto response;
         }
 
@@ -180,7 +180,7 @@ class LoginBindController extends BaseController
         $token = $request->getSession()->get('oauth_token');
 
         if (empty($token)) {
-            $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
+            $response = array('success' => false, 'message' => $this->trans('页面已过期，请重新登录。'));
             goto response;
         }
 
@@ -189,19 +189,19 @@ class LoginBindController extends BaseController
         $oauthUser['createdIp'] = $request->getClientIp();
 
         if (empty($oauthUser['id'])) {
-            $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
+            $response = array('success' => false, 'message' => $this->trans('网络超时，获取用户信息失败，请重试。'));
             goto response;
         }
 
         if (!$this->getAuthService()->isRegisterEnabled()) {
-            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
+            $response = array('success' => false, 'message' => $this->trans('注册功能未开启，请联系管理员！'));
             goto response;
         }
 
         $user = $this->generateUser($type, $token, $oauthUser, $setData);
 
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '登录失败，请重试！');
+            $response = array('success' => false, 'message' => $this->trans('登录失败，请重试！'));
             goto response;
         }
 
@@ -277,7 +277,7 @@ class LoginBindController extends BaseController
         }
 
         if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-            return $this->createMessageResponse('error', '用户名中含有敏感词！');
+            return $this->createMessageResponse('error', $this->trans('用户名中含有敏感词！'));
         }
 
         $registration['password']  = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
@@ -305,22 +305,22 @@ class LoginBindController extends BaseController
         $oauthUser = $client->getUserInfo($token);
         $data      = $request->request->all();
 
-        $message = 'Email地址或手机号码输入错误';
+        $message = $this->trans('Email地址或手机号码输入错误');
 
         if (SimpleValidator::email($data['emailOrMobile'])) {
             $user    = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
-            $message = '该Email地址尚未注册';
+            $message = $this->trans('该Email地址尚未注册');
         } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
             $user    = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
-            $message = '该手机号码尚未注册';
+            $message = $this->trans('该手机号码尚未注册');
         }
 
         if (empty($user)) {
             $response = array('success' => false, 'message' => $message);
         } elseif (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
-            $response = array('success' => false, 'message' => '密码不正确，请重试！');
+            $response = array('success' => false, 'message' => $this->trans('密码不正确，请重试！'));
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
-            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
+            $response = array('success' => false, 'message' => $this->trans('该%siteName%帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！', array('%siteName%' => $this->setting('site.name'))));
         } else {
             $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
@@ -340,22 +340,22 @@ class LoginBindController extends BaseController
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
         $data      = $request->request->all();
 
-        $message = 'Email地址或手机号码输入错误';
+        $message = $this->trans('Email地址或手机号码输入错误');
 
         if (SimpleValidator::email($data['emailOrMobile'])) {
             $user    = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
-            $message = '该Email地址尚未注册';
+            $message = $this->trans('该Email地址尚未注册');
         } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
             $user    = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
-            $message = '该手机号码尚未注册或绑定';
+            $message = $this->trans('该手机号码尚未注册或绑定');
         }
 
         if (empty($user)) {
             $response = array('success' => false, 'message' => $message);
         } elseif (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
-            $response = array('success' => false, 'message' => '密码不正确，请重试！');
+            $response = array('success' => false, 'message' => $this->trans('密码不正确，请重试！'));
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
-            $response = array('success' => false, 'message' => '该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！');
+            $response = array('success' => false, 'message' => $this->trans('该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！'));
         } else {
             $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
@@ -370,7 +370,7 @@ class LoginBindController extends BaseController
         $token = $request->getSession()->get('oauth_token');
 
         if (empty($token)) {
-            return $this->createMessageResponse('error', '页面已过期，请重新登录。');
+            return $this->createMessageResponse('error', $this->trans('页面已过期，请重新登录。'));
         }
 
         $client    = $this->createOAuthClient($type);
@@ -389,16 +389,16 @@ class LoginBindController extends BaseController
         switch ($type) {
             case 'weixinweb':
             case 'weixinmob':
-                return '微信注册帐号';
+                return $this->trans('微信注册帐号');
                 break;
             case 'weibo':
-                return '微博注册帐号';
+                return $this->trans('微博注册帐号');
                 break;
             case 'qq':
-                return 'QQ注册账号';
+                return $this->trans('QQ注册账号');
                 break;
             case 'renren':
-                return '人人注册账号';
+                return $this->trans('人人注册账号');
                 break;
             default:
                 return '';
@@ -410,16 +410,16 @@ class LoginBindController extends BaseController
         switch ($type) {
             case 'weixinweb':
             case 'weixinmob':
-                return '微信绑定已有账号';
+                return $this->trans('微信绑定已有账号');
                 break;
             case 'weibo':
-                return '微博绑定已有账号';
+                return $this->trans('微博绑定已有账号');
                 break;
             case 'qq':
-                return 'QQ绑定已有账号';
+                return $this->trans('QQ绑定已有账号');
                 break;
             case 'renren':
-                return '人人绑定已有账号';
+                return $this->trans('人人绑定已有账号');
                 break;
             default:
                 return '';
@@ -431,15 +431,15 @@ class LoginBindController extends BaseController
         $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
-            throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+            throw new \RuntimeException($this->trans('第三方登录系统参数尚未配置，请先配置。'));
         }
 
         if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-            throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+            throw new \RuntimeException($this->trans('第三方登录(%type%)系统参数尚未配置，请先配置。', array('%type%' => $type)));
         }
 
         if (!$settings[$type.'_enabled']) {
-            throw new \RuntimeException("第三方登录({$type})未开启");
+            throw new \RuntimeException($this->trans('第三方登录(%type%)未开启', array('%type%' => $type)));
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
