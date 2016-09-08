@@ -1,10 +1,10 @@
 #项目国际化翻译文档
 
 EduSoho已经支持语言国际化, 技术选型：
-[Symfony Translation Component](http://symfony.com/doc/current/components/translation/usage.html){:target="_blank"}
-[JsTranslationBundle](https://github.com/willdurand/BazingaJsTranslationBundle){:target="_blank"}
+* [Symfony Translation Component](http://symfony.com/doc/current/components/translation/usage.html)
+* [JsTranslationBundle](https://github.com/willdurand/BazingaJsTranslationBundle)
 
-**<font color='red'>!!重要的事情提前说：以后开发过程中要实时做国际化</font>**
+**!!重要的事情提前说：以后开发过程中要实时做国际化**
 需要翻译的内容:
 ```
 1. 配置文件(data_dict.yml, menus_admin.yml)
@@ -135,4 +135,4 @@ throw new \RuntimeException($this->getServiceKernel()->trans('主题目录%theme
 
 * 抛异常时，自定义不同类型的异常，文案在异常类里固定好，调用时只传入参数（预定义常量），如找不到异常、参数异常等，国际化可以在异常base类或listener中做；
 
-**<font color='red'>!!重要的事情再说一遍：以后开发过程中要实!时!做国际化</font>**
+**!!重要的事情再说一遍：以后开发过程中要实!时!做国际化**

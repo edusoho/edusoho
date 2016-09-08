@@ -27,8 +27,8 @@ class UserLocaleListener
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        if (null !== $user->getLocale()) {
-            $this->session->set('_locale', $user->getLocale());
+        if ($locale = $user->getLocale()) {
+            $this->session->set('_locale', $locale);
         }
     }
 }

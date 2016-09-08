@@ -10,7 +10,7 @@ class LocaleListener implements EventSubscriberInterface
 {
     private $defaultLocale;
 
-    public function __construct($defaultLocale = 'en_US')
+    public function __construct($defaultLocale)
     {
         $this->defaultLocale = $defaultLocale;
     }
@@ -21,15 +21,8 @@ class LocaleListener implements EventSubscriberInterface
         if (!$request->hasPreviousSession()) {
             return;
         }
-        // try to see if the locale has been set as a _locale routing parameter
-        if ($locale = $request->attributes->get('_locale')) {
-            $request->getSession()->set('_locale', $locale);
-        } else {
-            // if no explicit locale has been set on this request, use one from the session
-            $locale = $request->cookies->get('locale');
-            $locale = $locale ? $locale : $request->getSession()->get('_locale', $this->defaultLocale);
-            $request->setLocale($locale);
-        }
+        $locale = $request->getSession()->get('_locale', $request->cookies->get('_last_logout_locale') ?: $this->defaultLocale);
+        $request->setLocale($locale);
     }
 
     public static function getSubscribedEvents()
