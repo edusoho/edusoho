@@ -9,6 +9,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "course_show";
 
+    public function getTarget($targetId)
+    {
+        return $this->getCourseService()->getCourse($targetId);
+    }
+
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
@@ -78,7 +83,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if (!isset($maxCoin)) {
             $maxCoin = $coinPayAmount;
         }
-        
+
         return array(
             'course'         => empty($course) ? null : $course,
             'users'          => empty($users) ? null : $users,
@@ -285,9 +290,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
+
     protected function getKernel()
     {
         return ServiceKernel::instance();
     }
-
 }
