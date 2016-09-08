@@ -437,7 +437,7 @@
             data-init-url="{{ path('uploader_init', {token:token}) }}"
             data-finish-url="{{ path('uploader_finished', {token:token}) }}"
             data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
-            data-accept="{{ uploader_accept('headLeader', 'cloud_video')|json_encode }}"
+            data-accept="{{ uploader_accept('attachment', 'video')|json_encode }}"
             data-process="{{ uploader_process('headLeader') }}">
           </div>
 
