@@ -40,7 +40,6 @@ define(function(require, exports, module) {
         });
 
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

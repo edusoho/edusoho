@@ -92,7 +92,6 @@ define(function(require, exports, module) {
             },
             _initDatetimepicker: function() {
                 this.$("#startTime").datetimepicker({
-                    language: 'zh-CN',
                     autoclose: true,
                     format: 'yyyy-mm-dd hh:ii',
                     minView: 'hour'

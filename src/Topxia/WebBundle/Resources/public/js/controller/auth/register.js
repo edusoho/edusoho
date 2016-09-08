@@ -49,7 +49,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         $(".date").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

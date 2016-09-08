@@ -26,8 +26,7 @@ define(function(require, exports, module) {
         },
         _initTime: function() {
             $("#startDate").datetimepicker({
-                autoclose: true,
-                language: 'zh-CN'
+                autoclose: true
             }).on('changeDate',function(){
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
             });
@@ -35,8 +34,7 @@ define(function(require, exports, module) {
             $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
 
             $("#endDate").datetimepicker({
-                autoclose: true,
-                language: 'zh-CN'
+                autoclose: true
             }).on('changeDate',function(){
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));

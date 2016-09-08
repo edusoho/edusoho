@@ -84,7 +84,6 @@ define(function(require, exports, module) {
                     autoplay: false,
                     preload: 'none',
                     starttime: self.get('starttime'),
-                    language: 'zh-CN',
                     width:'100%',
                     height:'100%',
                     plugins: plugins

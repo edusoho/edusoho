@@ -4,10 +4,9 @@ define(function(require, exports, module){
 
 	exports.run = function(){
 		$("#nextExcutedStartTime,#nextExcutedEndTime").datetimepicker({
-			language: 'zh-CN',
-            // autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
+			// autoclose: true,
+      format: 'yyyy-mm-dd',
+      minView: 'month'
 		});	
 
 		$("#log-table").on('click', '.show-data', function(){

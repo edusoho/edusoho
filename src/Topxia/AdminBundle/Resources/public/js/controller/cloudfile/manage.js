@@ -480,8 +480,7 @@ define(function(require, exports, module) {
                 var self = this;
                 $("#startDate").datetimepicker({
                     autoclose: true,
-                    language: 'zh-CN',
-                }).on('changeDate',function(){
+                        }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
                     self.renderTable();
                 });
@@ -490,8 +489,7 @@ define(function(require, exports, module) {
 
                 $("#endDate").datetimepicker({
                     autoclose: true,
-                    language: 'zh-CN',
-                }).on('changeDate',function(){
+                        }).on('changeDate',function(){
                     $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
                     self.renderTable();
                 });

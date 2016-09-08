@@ -1,7 +1,7 @@
-define("jquery-plugin/bootstrap-datetimepicker/1.0.0/i18n/zh-cn-debug", [ "$-debug" ], function(require) {
+define("jquery-plugin/bootstrap-datetimepicker/1.0.1/i18n/zh_CN-debug", [ "$-debug" ], function(require) {
     var jQuery = require("$-debug");
     (function($) {
-        $.fn.datetimepicker.dates["zh-CN"] = {
+        $.fn.datetimepicker.dates["lang"] = {
             days: [ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日" ],
             daysShort: [ "周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日" ],
             daysMin: [ "日", "一", "二", "三", "四", "五", "六", "日" ],
