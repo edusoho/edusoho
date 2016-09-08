@@ -198,7 +198,11 @@ class ChaosThreads extends BaseResource
 
         $userCourses = $this->getCourseService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
-        $conditions['courseIds'] = $userCourses ? ArrayToolkit::column($userCourses, 'id') : array();
+        if (!$userCourses) {
+            return array();
+        }
+
+        $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
 
         $total = $this->getCourseThreadService()->searchThreadCount($conditions);
         $start = $start == -1 ? rand(0, $total - 1) : $start;
