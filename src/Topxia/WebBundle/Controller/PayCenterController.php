@@ -255,10 +255,7 @@ class PayCenterController extends BaseController
             $returnArray = $paymentRequest->unifiedOrder();
 
             if ($returnArray['return_code'] == 'SUCCESS') {
-                $url = $returnArray['code_url'];
-
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
-                    'url'   => $url,
                     'order' => $order
                 ));
             } else {
