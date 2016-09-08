@@ -1746,7 +1746,7 @@ Email地址: 'Email Address'
 在学: Learning
 粉丝: Fans
 在学%classroom.name%: 'studying in %classroom.name%'
-'共%classroom.courseNum%门课程': 'have % classroom.courseNum% courses'
+'共%classroom.courseNum%门课程': 'have %classroom.courseNum% courses'
 '无在学的%classroom.name%！': 'No learning %classroom.name%'
 在教%name%: 'Teaching %name%'
 '无在教的%name%': 'No teaching %name%.'
