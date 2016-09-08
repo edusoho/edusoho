@@ -10,6 +10,11 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     protected $router    = "";
     protected $orderType = "groupSell";
 
+    public function getTarget($targetId)
+    {
+        return $this->getGroupSellService()->getGroupSell($targetId);
+    }
+
     public function preCheck($targetId, $userId)
     {
         $group = $this->getGroupSellService()->getGroupSell($targetId);
@@ -182,6 +187,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
+
     protected function getKernel()
     {
         return ServiceKernel::instance();

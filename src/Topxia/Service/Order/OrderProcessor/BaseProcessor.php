@@ -9,6 +9,11 @@ class BaseProcessor
 {
     protected $router = 'homepage';
 
+    public function getTarget($targetId)
+    {
+        return array();
+    }
+
     public function callbackUrl($order, $container)
     {
         $goto = $container->get('router')->generate($this->router, array('id' => $order["targetId"]), true);
@@ -30,9 +35,7 @@ class BaseProcessor
 
         if ($priceType == "RMB") {
             $coinPreferentialPrice = $coinPayAmount / $cashRate;
-        } else
-
-        if ($priceType == "Coin") {
+        } elseif ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
 
@@ -84,9 +87,7 @@ class BaseProcessor
                 } else {
                     $coinPayAmount = $totalPrice;
                 }
-            } else
-
-            if ($priceType == "RMB") {
+            } elseif ($priceType == "RMB") {
                 if ($totalPrice * 100 > $accountCash / $cashRate * 100) {
                     $coinPayAmount = $accountCash;
                 } else {
@@ -130,6 +131,7 @@ class BaseProcessor
     {
         return ServiceKernel::instance()->createService('CloudPlatform.AppService');
     }
+
     protected function getKernel()
     {
         return ServiceKernel::instance();
