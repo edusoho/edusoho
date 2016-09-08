@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var chapterAnimate = Widget.extend({
         events: {
-            'click .js-period-list .js-chapter': 'onClickChapter'
+            'click .js-period-list .js-icon': 'onClickChapter'
         },
 
         setup: function() {
@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         },
 
         onClickChapter: function(e) {
-            var $target = $(e.currentTarget);
+            var $target = $(e.currentTarget).parents('.js-chapter');
             $target.nextUntil(".js-chapter").animate({
                     visibility: 'toggle',
                     opacity: 'toggle',
