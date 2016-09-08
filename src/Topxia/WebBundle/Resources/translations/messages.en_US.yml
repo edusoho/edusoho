@@ -1240,7 +1240,7 @@ Email地址: 'Email Address'
 交卷: 'hand in paper'
 '批阅': Review
 总分: 'total score'
-'客观题%objectiveScore%分 / 主观题%subjectiveScore%分': 'objective question…points/subjective question…points'
+'客观题%objectiveScore%分 / 主观题%subjectiveScore%分': 'objective question %objectiveScore% points/subjective question %subjectiveScore% points'
 批于: 'Reviewed at'
 '还没有等待批阅的试卷': 'No test paper waiting for review.'
 '还没有已经批阅的试卷': 'No paper reviewed.'
