@@ -138,6 +138,8 @@ class OrderController extends BaseController
         try {
             if (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券')) {
                 $fields["couponCode"] = "";
+            } else {
+                $fields["couponCode"] = trim($fields["couponCode"]);
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
