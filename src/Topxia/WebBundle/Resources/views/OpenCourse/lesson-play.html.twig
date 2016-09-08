@@ -15,12 +15,6 @@
   <input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}">
 {% endif %}
 
-<div class="mask media-unconvert" style="display:none;">
-  <div class="mask-content">
-    <h2>{{'视频文件正在转换中，稍后完成后即可查看'|trans}}</h2>
-  </div>
-</div>
-
 <div class="mask" {% if lesson %}style="display:none"{% endif %} id="media-error-dialog">
   <div class="modal-dialog" style="width:230px;margin:22% auto;">
     <div class="modal-content">
