@@ -292,7 +292,7 @@ class CourseManageController extends BaseController
         }
 
         $status  = array('created' => $this->getServiceKernel()->trans('未付款'), 'paid' => $this->getServiceKernel()->trans('已付款'), 'refunding' => $this->getServiceKernel()->trans('退款中'), 'refunded' => $this->getServiceKernel()->trans('已退款'), 'cancelled' => $this->getServiceKernel()->trans('已关闭'));
-        $payment = array('alipay' => $this->getServiceKernel()->trans('支付宝'), 'wxpay' => $this->getServiceKernel()->trans('微信支付'), 'cion' => $this->getServiceKernel()->trans('虚拟币支付'), 'none' => '--');
+        $payment = array('alipay' => $this->getServiceKernel()->trans('支付宝'), 'wxpay' => $this->getServiceKernel()->trans('微信支付'), 'cion' => $this->getServiceKernel()->trans('虚拟币支付'), 'outside' => $this->getServiceKernel()->trans('站外支付'), 'none' => '--');
 
         $conditions = $request->query->all();
 
@@ -330,20 +330,20 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $str = $this->getServiceKernel()->trans('订单号').','
-            . $this->getServiceKernel()->trans('订单状态').','
-            . $this->getServiceKernel()->trans('订单名称').','
-            . $this->getServiceKernel()->trans('课程名称').','
-            . $this->getServiceKernel()->trans('订单价格').','
-            . $this->getServiceKernel()->trans('优惠码').','
-            . $this->getServiceKernel()->trans('优惠金额').','
-            . $this->getServiceKernel()->trans('虚拟币支付').','
-            . $this->getServiceKernel()->trans('实付价格').','
-            . $this->getServiceKernel()->trans('支付方式').','
-            . $this->getServiceKernel()->trans('购买者').','
-            . $this->getServiceKernel()->trans('姓名').','
-            . $this->getServiceKernel()->trans('操作').','
-            . $this->getServiceKernel()->trans('创建时间').','
-            . $this->getServiceKernel()->trans('付款时间');
+        .$this->getServiceKernel()->trans('订单状态').','
+        .$this->getServiceKernel()->trans('订单名称').','
+        .$this->getServiceKernel()->trans('课程名称').','
+        .$this->getServiceKernel()->trans('订单价格').','
+        .$this->getServiceKernel()->trans('优惠码').','
+        .$this->getServiceKernel()->trans('优惠金额').','
+        .$this->getServiceKernel()->trans('虚拟币支付').','
+        .$this->getServiceKernel()->trans('实付价格').','
+        .$this->getServiceKernel()->trans('支付方式').','
+        .$this->getServiceKernel()->trans('购买者').','
+        .$this->getServiceKernel()->trans('姓名').','
+        .$this->getServiceKernel()->trans('操作').','
+        .$this->getServiceKernel()->trans('创建时间').','
+        .$this->getServiceKernel()->trans('付款时间');
 
         $str .= "\r\n";
 
