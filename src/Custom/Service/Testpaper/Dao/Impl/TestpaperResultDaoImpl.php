@@ -29,7 +29,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
     public function findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
         if (empty($ids)) {
-            return null;
+            return array();
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
@@ -40,6 +40,6 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
         $sql = "SELECT * FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ? AND `userId` IN ({$userIdMarks})";
 
-        return $this->getConnection()->fetchAll($sql, $params);
+        return $this->getConnection()->fetchAll($sql, $params)?: array();
     }
 }
