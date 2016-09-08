@@ -1,0 +1,100 @@
+<header class="es-header  navbar">
+  {% set navigations = data('NavigationsTree', {}) %}
+  <div class="container">
+    <div class="navbar-header">
+      <a href="{{ path('homepage') }}" class="navbar-brand">
+        {% if setting('site.logo') %}
+          <img src="{{ asset(setting('site.logo')) }}">
+        {% else %}
+          {{ setting('site.name', 'Gymbostudy') }}
+        {% endif %}
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse">
+      <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
+        <ul class="nav user-nav">
+          {% if app.user %}
+          <li class="user-avatar-li nav-hover">
+            <a href="javascript:;" class="dropdown-toggle">
+              <img class="" src=" {{ asset('bundles/customweb/img/person.png')}}">
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
+              <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'个人设置'|trans}}</a></li>
+              {% if 'ROLE_TEACHER' in app.user.roles %}
+                <li>
+                  <a href="{{ path('my') }}">
+                    <i class="es-icon es-icon-eventnote"></i>{{'我的教学'|trans}}
+                  </a>
+                </li>
+              {% endif %}
+              {% if has_permission('admin') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'管理后台'|trans}}</a></li>
+              {% endif %}
+              <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'退出登录'|trans}}</a></li>
+            </ul>
+          </li>
+          <li class=" nav-hover">
+            {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
+              <a href="#">
+                <img class="" src=" {{ asset('bundles/customweb/img/message.png')}}">
+                <div class="circle">
+                  <div class="num">
+                    {% if app.user %}
+                      {% if app.user.newMessageNum > 0 or app.user.newNotificationNum > 0 %}
+                        {{ app.user.newMessageNum + app.user.newNotificationNum }}
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
+               <a href="#">
+                <img class="" src=" {{ asset('bundles/customweb/img/message.png')}}">
+                <div class="circle">
+                  <div class="num">
+                    {% if app.user %}
+                      {% if app.user.newMessageNum > 0 or app.user.newNotificationNum > 0 %}
+                        {{ app.user.newMessageNum + app.user.newNotificationNum }}
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+                </a>
+            {% else %}
+              <a href="#">
+                <img class="" src=" {{ asset('bundles/customweb/img/message.png')}}">
+              </a>
+            {% endif %}
+
+            <ul class="dropdown-menu" role="menu">
+              {% if not setting('esBar.enabled', 0) %}
+                <li>
+                  <a href="{{ path('notification') }}">
+                    <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
+                    <i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}
+                  </a>
+                </li>
+              {% endif %}
+              <li>
+                <a href="{{ path('message') }}">
+                  <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
+                  <i class="es-icon es-icon-mail"></i>{{'私信'|trans}}
+                </a>
+              </li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="user-avatar-li nav-hover ">
+            <a href="javascript:;" class="dropdown-toggle">
+              <img class="" src=" {{ asset('bundles/customweb/img/person.png')}}">
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
+            </ul>
+          </li>
+          <li class="back-home"><a href="{{ path('homepage') }}"> <i class="iconfont icon-shouye"></i> </a></li>
+          {% endif %}
+      </div>
+    </nav>
+  </div>
+</header>

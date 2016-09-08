@@ -1,7 +1,6 @@
 parameters:
 #    custom_web.example.class: Custom\WebBundle\Example
-    template_overwrite_map:
-        TopxiaWebBundle : CustomWebBundle
+
 services:
 #    custom_web.example:
 #        class: %custom_web.example.class%

@@ -27,11 +27,11 @@
 
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
-    {% include 'InternalTrainingBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/internaltraining/css/bootstrap-theme.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/internaltraining/css/theme.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/internaltraining/css/main.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/internaltraining/css/iconfont.css')}}">
+    {% include 'CustomWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/customweb/css/bootstrap-theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/customweb/css/theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/customweb/css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/customweb/css/iconfont.css')}}">
   {% endblock %}
 
   <!--[if lt IE 9]>
@@ -49,7 +49,7 @@
 
     {% block header %}
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
-      {% include 'InternalTrainingBundle:Default:header.html.twig' %}
+      {% include 'CustomWebBundle:Default:header.html.twig' %}
     {% endblock %}
 
     {% block full_content %}

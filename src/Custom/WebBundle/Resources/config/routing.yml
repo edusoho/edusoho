@@ -1,3 +1,11 @@
+homepage:
+    path:     /
+    defaults: { _controller: CustomWebBundle:Default:index }
+
+login:
+    path:     /login
+    defaults: { _controller: CustomWebBundle:Login:index }
+
 course_manage_test_check:
     pattern: /course/check/{id}/{status}/list
     defaults: { _controller: CustomWebBundle:Testpaper:teacherCheckInCourse }

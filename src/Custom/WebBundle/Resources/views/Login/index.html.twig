@@ -1,0 +1,76 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{'登录'|trans}} - {{ parent() }}{% endblock %}
+{% set script_controller = 'customwebbundle/controller/auth/login' %}
+{% block header %}
+  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/customweb/css/login.css') }}">
+{% endblock %}
+
+{% block full_content %}
+{% if app.request.cookies.get('modalOpened') == 1 %}
+ <a href="#modal" class=" hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden" ><span class="receive-modal"></span></a>
+{% endif %}
+<div class="login-full" style=" background-image:url('{{asset('assets/img/common/bg.png')}}')">
+  <div class="es-section login-section reset-section">
+    <div class="login-tip">欢迎回来</div>
+    <div class="login-sub-tip"></div>
+    <div class="login-main">
+      <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
+
+        {% if error %}
+          <div class="alert alert-danger">{{ error.message|trans }}</div>
+        {% endif %}
+        {{ web_macro.flash_messages() }}
+        <div class="form-group ">
+          <div class="controls">
+            <div class="text-controls">
+              <input class="form-control " id="login_username" type="text" name="_username" value="{{ last_username }}" required placeholder='{{'邮箱 / 手机 / 用户名'|trans}}' />
+            </div>
+            <div class="help-block"></div>
+          </div>
+        </div>
+        <div class="form-group ">
+          <div class="controls ">
+            <div class="text-controls">
+              <input class="form-control" id="login_password" type="password" name="_password" required placeholder='{{'输入密码'|trans}}'/>
+            </div>
+            <div class="help-block"></div>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <div class="controls">
+            <label class="remember-me glyphicon glyphicon-ok" for="remember" >     
+            </label>
+            <input id="remember" class="remember-input" type="checkbox" name="_remember_me" checked="checked"> <span> {{'七天内自动登录'|trans}}</span>
+          </div>
+        </div>
+        <div class="form-group ">
+          <button type="submit" class="btn btn-primary btn-block">{{'登 录'|trans}}</button>
+        </div>
+
+        <input type="hidden" name="_target_path" value="{{ _target_path }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+
+      <div class="mbl">
+        <a class="forget-psd" href="{{ path('password_reset') }}">{{'忘记密码?'|trans}}</a>
+      </div>
+      {% if setting('login_bind.enabled') %}
+        <div class="social-login">
+          <span>
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+          </span>
+          <div class="line"></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="bottom-brand">
+      <img class="img-responsive" src="{{asset('assets/img/common/logo_bottom.png')}}">
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+{{load_script('customwebbundle/controller/login/index')}}
+{% endblock %}

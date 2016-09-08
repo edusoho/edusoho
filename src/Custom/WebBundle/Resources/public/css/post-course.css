@@ -1,0 +1,11 @@
+.edit-sort {
+  width: 5%;
+}
+
+.edit-sort span{
+  color: #aaa;
+}
+
+.edit-sort span:hover {
+  color: #444;
+}
