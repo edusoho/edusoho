@@ -44,7 +44,7 @@ class BaseProcessor
 
     protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType, $cashRate)
     {
-        $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, $targetType, $targetId, $amount);
+        $couponResult = $this->getCouponService()->checkCouponUseable(trim($couponCode), $targetType, $targetId, $amount);
         return $couponResult;
     }
 
