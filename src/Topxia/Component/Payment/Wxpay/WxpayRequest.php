@@ -115,7 +115,7 @@ class WxpayRequest extends Request
         $converted['total_fee']        = $this->getAmount($params['amount']);
         $converted['trade_type']       = 'JSAPI';//'NATIVE';
         $converted['product_id']       = $params['orderSn'];
-        $converted['sign']             = strtoupper($this->makeSign($converted));
+        $converted['sign']             = strtoupper($this->signParams($converted));
 
         return $converted;
     }

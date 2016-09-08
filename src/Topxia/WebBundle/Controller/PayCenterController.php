@@ -164,7 +164,6 @@ class PayCenterController extends BaseController
                 'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
                 'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType' => $order['targetType']), true)
             );
-            $payment       = $request->request->get('payment');
 
             $paymentRequest = $this->createPaymentRequest($order, $requestParams);
 
