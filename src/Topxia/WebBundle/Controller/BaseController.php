@@ -176,7 +176,7 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    protected function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = null)
     {
         if ($message) {
             return new AccessDeniedException($message);
