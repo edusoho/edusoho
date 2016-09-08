@@ -210,7 +210,7 @@ class CourseManageController extends BaseController
                 $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
-                $lessons[$key]['score'] = $finishedNum == 0 ? 0 : intval($score / $paperNum);
+                $lessons[$key]['score'] = ($finishedNum == 0 || $paperNum == 0) ? 0 : intval($score / $paperNum);
             }
         }
 
