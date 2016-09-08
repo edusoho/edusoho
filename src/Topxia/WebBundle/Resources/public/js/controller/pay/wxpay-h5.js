@@ -33,6 +33,10 @@ define(function (require, exports, module) {
                 'getBrandWCPayRequest',
                 jsApiParameters,
                 function (res) {
+                    var msg = res.err_msg.split(':');
+                    if (msg.pop() == 'ok') {
+                        window.location.href = jsApiParameters.data('goto');
+                    }
                     WeixinJSBridge.log(res.err_msg);
                     alert(res.err_code + res.err_desc + res.err_msg);
                 }
