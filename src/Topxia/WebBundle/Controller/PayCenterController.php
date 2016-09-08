@@ -169,8 +169,6 @@ class PayCenterController extends BaseController
 
             if ($payment == 'wxpay') {
                 $returnArray = $paymentRequest->unifiedOrder($openid);
-                var_dump($returnArray);
-
                 if ($returnArray['return_code'] == 'SUCCESS') {
                     return $this->render('TopxiaWebBundle:PayCenter:wxpay-h5.html.twig', array(
                         'order'           => $order,
