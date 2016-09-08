@@ -1,0 +1,37 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+{% block title %}{{'安全设置'|trans}} - {{ parent() }}{% endblock %}
+{# {% set script_controller = 'settings/security' %}  #}
+{% set side_nav = 'security' %}
+
+{% block main %}
+ {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}{{'安全设置'|trans}}{% endblock %}
+    {% block body %}
+    {{ web_macro.flash_messages() }}
+
+    <div class="row">
+      <div class="col-xs-2 tar
+        {% if hasLoginPassword %}
+          text-success
+        {% else %}
+          text-danger
+        {% endif %}
+      " style="font-size:20px">
+        {% if hasLoginPassword %}
+          <span class="glyphicon glyphicon-ok"></span>
+        {% else %}
+          <span class="glyphicon glyphicon-warning-sign"></span>
+        {% endif %}
+      </div>
+
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'登录密码'|trans}}</span>
+
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'登录网校时需要输入的密码'|trans}}</span>
+
+      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'修改'|trans}}</a>
+    </div>
+    <hr>
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
