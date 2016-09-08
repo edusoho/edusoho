@@ -77,6 +77,18 @@ class EduSohoUpgrade extends AbstractUpdater
                 $connection->exec($delSql);
             }
         }
+
+        if (!$this->isFieldExist('user', 'locale')) {
+            $connection->exec("ALTER TABLE `user` ADD `locale` VARCHAR(20) AFTER `payPasswordSalt`;");
+        }
+
+        if (!$this->isFieldExist('cloud_app', 'edusohoMinVersion')) {
+            $connection->exec("ALTER TABLE `cloud_app` ADD `edusohoMinVersion`  VARCHAR(32) NOT NULL DEFAULT '0.0.0' COMMENT '依赖Edusoho的最小版本';");
+        }
+
+        if (!$this->isFieldExist('cloud_app', 'edusohoMaxVersion')) {
+            $connection->exec("ALTER TABLE `cloud_app` ADD `edusohoMaxVersion`  VARCHAR(32) NOT NULL DEFAULT 'up' COMMENT '依赖Edusoho的最大版本';");
+        }
     }
 
     protected function isFieldExist($table, $filedName)
