@@ -131,7 +131,7 @@ class PayCenterController extends BaseController
 
         $jsApi = New JsApiPay($options, $request);
 
-        $openid = $jsApi->GetOpenid();
+        $openid = $jsApi->getOpenid();
         if ($request->getMethod() == 'GET') {
             $fields = $request->query->all();
             $user   = $this->getCurrentUser();
@@ -159,10 +159,7 @@ class PayCenterController extends BaseController
             }
 
             $requestParams = array(
-                'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-                'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-                'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
-                'backUrl'   => $this->generateUrl('pay_center_show', array('sn' => $order['sn'], 'targetType' => $order['targetType']), true)
+                'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true)
             );
 
             $paymentRequest = $this->createPaymentRequest($order, $requestParams);
@@ -568,7 +565,7 @@ class PayCenterController extends BaseController
                 'account'          => $settings["{$payment}_account"],
                 'key'              => $settings["{$payment}_key"],
                 'secret'           => $settings["{$payment}_secret"],
-                'isMicroMessenger' => $this->getWebExtension()->isMicroMessenger(),
+                'isMicroMessenger' => $this->getWebExtension()->isMicroMessenger()
             );
         } else {
             $options = array(

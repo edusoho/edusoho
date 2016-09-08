@@ -22,6 +22,7 @@ class WxpayRequest extends Request
     {
 
         $params = $this->convertParams($this->params, $openid);
+        var_dump($params);
 
         $xml      = $this->toXml($params);
         $response = $this->postRequest($this->unifiedOrderUrl, $xml);
@@ -46,6 +47,7 @@ class WxpayRequest extends Request
 
         $xml      = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+        $response = $this->fromXml($response);
         $this->checkSign($response);
         return $response;
     }
@@ -85,7 +87,6 @@ class WxpayRequest extends Request
      */
     public function checkSign($params)
     {
-        //fix异常
         if (empty($params['sign'])) {
             throw new \RuntimeException("签名错误！");
         }
@@ -114,8 +115,6 @@ class WxpayRequest extends Request
         $converted['trade_type']       = $this->options['isMicroMessenger'] ? 'JSAPI' : 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
         $converted['sign']             = strtoupper($this->signParams($converted));
-        var_dump($converted);
-
         return $converted;
     }
 

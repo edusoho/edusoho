@@ -65,7 +65,7 @@ class JsApiPay
      *
      * @return 用户的openid
      */
-    public function GetOpenid()
+    public function getOpenid()
     {
 
         //通过code获得openid
@@ -84,34 +84,6 @@ class JsApiPay
 
     /**
      *
-     * 获取jsapi支付的参数
-     * @param array $UnifiedOrderResult 统一支付接口返回的数据
-     * @throws WxPayException
-     *
-     * @return json数据，可直接填入js函数作为参数
-     */
-    /* public function GetJsApiParameters($UnifiedOrderResult)
-     {
-         if (!array_key_exists("appid", $UnifiedOrderResult)
-             || !array_key_exists("prepay_id", $UnifiedOrderResult)
-             || $UnifiedOrderResult['prepay_id'] == ""
-         ) {
-             throw new WxPayException("参数错误");
-         }
-         $jsapi = new WxPayJsApiPay();
-         $jsapi->SetAppid($UnifiedOrderResult["appid"]);
-         $timeStamp = time();
-         $jsapi->SetTimeStamp("$timeStamp");
-         $jsapi->SetNonceStr(WxPayApi::getNonceStr());
-         $jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
-         $jsapi->SetSignType("MD5");
-         $jsapi->SetPaySign($jsapi->MakeSign());
-         $parameters = json_encode($jsapi->GetValues());
-         return $parameters;
-     }*/
-
-    /**
-     *
      * 通过code从工作平台获取openid机器access_token
      * @param string $code 微信跳转回来带上的code
      *
@@ -119,7 +91,7 @@ class JsApiPay
      */
     public function GetOpenidFromMp($code)
     {
-        $url = $this->__CreateOauthUrlForOpenid($code);
+        $url = $this->__createOauthUrlForOpenid($code);
         //初始化curl
         $ch = curl_init();
         //设置超时
@@ -146,7 +118,7 @@ class JsApiPay
      *
      * @return 返回已经拼接好的字符串
      */
-    private function ToUrlParams($urlObj)
+    private function toUrlParams($urlObj)
     {
         $buff = "";
         foreach ($urlObj as $k => $v) {
@@ -174,7 +146,7 @@ class JsApiPay
         $urlObj["response_type"] = "code";
         $urlObj["scope"]         = "snsapi_base";
         $urlObj["state"]         = "STATE" . "#wechat_redirect";
-        $bizString               = $this->ToUrlParams($urlObj);
+        $bizString               = $this->toUrlParams($urlObj);
         return "https://open.weixin.qq.com/connect/oauth2/authorize?" . $bizString;
     }
 
@@ -185,13 +157,13 @@ class JsApiPay
      *
      * @return 请求的url
      */
-    private function __CreateOauthUrlForOpenid($code)
+    private function __createOauthUrlForOpenid($code)
     {
         $urlObj["appid"]      = $this->config['appid'];
         $urlObj["secret"]     = $this->config['secret'];
         $urlObj["code"]       = $code;
         $urlObj["grant_type"] = "authorization_code";
-        $bizString            = $this->ToUrlParams($urlObj);
+        $bizString            = $this->toUrlParams($urlObj);
         return "https://api.weixin.qq.com/sns/oauth2/access_token?" . $bizString;
     }
 }
