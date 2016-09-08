@@ -1,16 +1,17 @@
 <?php
 namespace Topxia\Service\Question\Type;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class FillQuestionType extends AbstractQuestionType
 {
-
     public function filter($fields, $mode = 'create')
     {
         $fields = $this->commonFilter($fields, $mode);
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
-        if (empty($answer[1])){
-            throw $this->createServiceException('该问题没有答案或答案格式不正确！');
+        if (empty($answer[1])) {
+            throw $this->createServiceException($this->getServiceKernel()->trans('该问题没有答案或答案格式不正确！'));
         }
 
         $fields['answer'] = array();
@@ -28,7 +29,7 @@ class FillQuestionType extends AbstractQuestionType
     public function judge(array $question, $answer)
     {
         $questionAnswers = array_values($question['answer']);
-        $answer = array_values($answer);
+        $answer          = array_values($answer);
 
         if (count($answer) != count($questionAnswers)) {
             return array('status' => 'wrong');
@@ -38,8 +39,8 @@ class FillQuestionType extends AbstractQuestionType
         foreach ($questionAnswers as $index => $rightAnswer) {
             $expectAnswer = array();
             foreach ($rightAnswer as $key => $value) {
-                $value = trim($value);
-                $value = preg_replace("/([\x20\s\t]){2,}/", " ", $value);
+                $value          = trim($value);
+                $value          = preg_replace("/([\x20\s\t]){2,}/", " ", $value);
                 $expectAnswer[] = $value;
             }
 
@@ -60,4 +61,8 @@ class FillQuestionType extends AbstractQuestionType
         }
     }
 
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

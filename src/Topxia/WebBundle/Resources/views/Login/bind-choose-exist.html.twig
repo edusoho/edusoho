@@ -16,7 +16,7 @@
       <label class="control-label" for="bind-email-field">{{'Email / 手机'|trans}}</label>
         <div class="controls">
           <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
-          <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
+          <p class="help-block">{{'请填写在%name%注册时填写的Email地址/手机号码'|trans({'%name%':setting('site.name')})}}</p>
         </div>
     </div>
     {% else %}
@@ -24,7 +24,7 @@
       <label class="control-label" for="bind-email-field">{{'Email地址'|trans}}</label>
         <div class="controls">
           <input id="bind-email-field" class="form-control" type="email" name="emailOrMobile">
-          <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+          <p class="help-block">{{'请填写在%name%注册时填写的Email地址'|trans({'%name%':setting('site.name')})}}</p>
         </div>
     </div>
     {% endif %}

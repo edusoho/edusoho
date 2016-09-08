@@ -1,11 +1,12 @@
 <div class="table-responsive" id = "table-responsive">
   <table class="table" style="table-layout:fixed;word-break:break-all">
     <tr>
-      <th width="40%">会员</th>
-      <th>人民币价格</th>
-      <th>最大可抵扣比率</th>
-      <th>最大可抵扣金额</th>
-      <th>最大可用{{ setting('coin.coin_name')|default('虚拟币') }}</th>
+      <th width="40%">{{'会员'|trans}}</th>
+      <th>{{'人民币价格'|trans}}</th>
+      <th>{{'最大可抵扣比率'|trans}}</th>
+      <th>{{'最大可抵扣金额'|trans}}</th>
+      <th>{{'最大可用'|trans}}{{ setting('coin.coin_name')|default('虚拟币'|trans) }}</th>
+    </tr>
     </tr>
     {% if items %}
       {% for item in items %}
@@ -24,10 +25,10 @@
             <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
           </td>
           <td>
-            <span id="deRmb{{item.id}}">{{ (item.maxRate * item.monthPrice / 100)|number_format(2, '.') }}</sapn>
+            <span id="deRmb{{item.id}}">{{ (item.maxRate * item.monthPrice / 100)|number_format(2, '.') }}</span>
           </td>
           <td>
-            <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.monthPrice * set.cash_rate)|number_format(2, '.') }}</sapn>
+            <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.monthPrice * set.cash_rate)|number_format(2, '.') }}</span>
           </td>
         </tr>
       {% endfor %}

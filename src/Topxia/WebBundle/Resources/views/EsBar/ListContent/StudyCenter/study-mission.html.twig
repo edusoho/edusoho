@@ -17,7 +17,7 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
-          {{ setting('classroom.name')|default("班级"|trans) }}: {{ classroom.title }}
+          {{ setting('classroom.name')|default('班级'|trans) }}:{{ classroom }}
           {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo|default(null) %}
             <span>{{ userPlanTaskNumInfo.allDoneNum ~ '/' ~ userPlanTaskNumInfo.tasksNum }}</span>
           {% else %}
@@ -43,9 +43,9 @@
           {% for lesson in classroom['lessons'] %}
             {% set status = lesson.isLearned %}
             {% if status %}
-              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时'|trans}}{{ lesson.number }}-{{ lesson.title }}</a></li>
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
             {% else %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时'|trans}}{{ lesson.number }}-{{ lesson.title }}</a></li>
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -56,7 +56,7 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
-          {{'课程'|trans}}: {{ course.title }}
+          {{'课程:%title%'|trans({'%title%': course.title}) }}
           <span>{{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}</span>
         </div>
       </div>
@@ -66,9 +66,9 @@
           {% for lesson in course['lessons'] %}
             {% set status = lesson.isLearned %}
             {% if status %}
-              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时'|trans}}{{ lesson.number }}-{{ lesson.title }}</a></li>
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
             {% else %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时'|trans}}{{ lesson.number }}-{{ lesson.title }}</a></li>
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}

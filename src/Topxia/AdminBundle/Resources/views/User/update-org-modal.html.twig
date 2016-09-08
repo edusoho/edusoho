@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}编辑用户所属组织{% endblock %}
+{% block title %}{{'编辑用户所属组织'|trans}}{% endblock %}
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_org_update', {id:user.id}) }}">
@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button id="edit-user-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">{{'保存'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('user/update-org-modal')</script>
 {% endblock %}

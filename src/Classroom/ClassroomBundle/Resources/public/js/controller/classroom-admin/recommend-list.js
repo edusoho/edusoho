@@ -6,15 +6,15 @@ define(function(require, exports, module) {
 
         $table.on('click', '.cancel-recommend-classroom', function() {          
             var $trigger = $(this);
-            if (!confirm($trigger.attr('title') + '吗？')) {
+            if (!confirm(Translator.trans('%title%吗？',{title:$trigger.attr('title')}))) {
                     return ;
                 }
             $.post($(this).data('url'), function(html){
-                    Notify.success($trigger.attr('title') + '成功！');
+                    Notify.success(Translator.trans('%title%成功！',{title:$trigger.attr('title')}));
                      var $tr = $(html);
                     $('#' + $tr.attr('id')).remove();
                 }).error(function(){
-                    Notify.danger($trigger.attr('title') + '失败');
+                    Notify.danger(Translator.trans('%title%失败!',{title:$trigger.attr('title')}));
                 });
 
         });

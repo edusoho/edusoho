@@ -16,7 +16,7 @@ class UploaderController extends BaseController
         $params = $this->parseToken($request);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('上传授权码不正确，请重试！')));
         }
 
         $params = array_merge($request->request->all(), $params);
@@ -42,7 +42,7 @@ class UploaderController extends BaseController
         $params = $this->parseToken($request);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '授权码不正确，请重试！'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('授权码不正确，请重试！')));
         }
 
         $params = array_merge($request->request->all(), $params);
@@ -77,7 +77,7 @@ class UploaderController extends BaseController
         $params = $parser->parse($token);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('上传授权码不正确，请重试！')));
         }
 
         return $this->render('TopxiaWebBundle:Uploader:batch-upload-modal.html.twig', array(

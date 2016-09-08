@@ -16,7 +16,7 @@
         <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <p style = "text-align:center;font-size:16px">{{'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。'|trans}}
+        <p style = "text-align:center;font-size:16px">{{'当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。'|trans}} 
         {{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
         <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
         </p>
@@ -34,19 +34,19 @@
           <label >{{'邮件发送'|trans}}</label>
         </div>
         <div class="controls col-md-8 radios">
-          {{ radios('enabled', {1:'开启', 0:'关闭'}, mailer.enabled) }}
+          {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, mailer.enabled) }}
           <p class="help-block">{{'需要登录邮箱，并在邮箱设置中开启smtp服务才能发送验证邮件'|trans}}</p>
         </div>
       </div>
 
       <div class="row form-group">
         <div class="col-md-3 control-label">
-          <label for="host">{{'SMTP服务器地址'|trans}}</label>
+          <label for="host">SMTP{{'服务器地址'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <input type="text" id="host" name="host" class="form-control" value="{{mailer.host}}">
           <p class="help-block">
-            {{'每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址。'|trans}}{{'如：'|trans}}smtp.yourmail.com
+            {{'每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com'|trans}}
             {% if not setting('copyright.owned') or setting('copyright.thirdCopyright') == "2" %}
               <a href="http://www.qiqiuyu.com/article/785" target="_blank">{{'常用邮箱配置文档'|trans}}</a>
             {% endif %}
@@ -60,7 +60,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="port" name="port" class="form-control" value="{{mailer.port}}">
-          <p class="help-block">{{'通常端口号为25'|trans}}</p>
+          <p class="help-block">{{'通常端口号为'|trans}}25</p>
         </div>
       </div>
      <p></p>
@@ -70,7 +70,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="username" name="username" class="form-control" value="{{mailer.username}}">
-          <p class="help-block">{{'正确格式应为abc@mail.com'|trans}}</p>
+          <p class="help-block">{{'正确格式应为'|trans}}abc@mail.com</p>
         </div>
       </div>
      <p></p>
@@ -92,7 +92,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="from" name="from" class="form-control" value="{{mailer.from}}">
-          <p class="help-block">{{'正确格式应为abc@mail.com'|trans}}</p>
+          <p class="help-block">{{'正确格式应为'|trans}}abc@mail.com</p>
         </div>
       </div>
      <p></p>

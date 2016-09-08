@@ -28,7 +28,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 $sort = array('nextExcutedTime', 'DESC');
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createServiceException($this->getKernel()->trans('参数sort不正确。'));
                 break;
         }
 

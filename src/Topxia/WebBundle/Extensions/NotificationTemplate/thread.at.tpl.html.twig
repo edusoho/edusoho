@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> 在话题 <a href="{{ path('thread_jump', {threadId:data.id}) }}" target="_blank">{{ data.title }}</a> 中提到了你。
+      <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> {{'在话题'|trans}} <a href="{{ path('thread_jump', {threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中提到了你。'|trans}}
       <blockquote>
         {{ data.content }}
       </blockquote>

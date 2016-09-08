@@ -64,13 +64,13 @@ define(function(require, exports, module) {
 
                     var html = '<span class="control-text"><strong class="money">'
                             + response.afterAmount
-                            + '</strong><span class="text-muted"> 元</span> - <span class="text-muted">已优惠 </span><strong>'
+                            + '</strong><span class="text-muted">'+ Translator.trans('元')+'</span> - <span class="text-muted">'+Translator.trans('已优惠') +'</span><strong>'
                             + response.decreaseAmount
-                            + '</strong><span class="text-muted"> 元</span></span>';
+                            + '</strong><span class="text-muted">'+ Translator.trans('元')+'</span></span>';
 
                     $('.money-text').html(html);
                     if (response.afterAmount === '0.00') {
-                        $('#course-pay').text('去学习');
+                        $('#course-pay').text(Translator.trans('去学习'));
                     }
 
                     $('.coupon-error').html('');
