@@ -89,6 +89,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('cloud_app', 'edusohoMaxVersion')) {
             $connection->exec("ALTER TABLE `cloud_app` ADD `edusohoMaxVersion`  VARCHAR(32) NOT NULL DEFAULT 'up' COMMENT '依赖Edusoho的最大版本';");
         }
+
+        $connection->exec("delete from cloud_app where code='mooc';");
     }
 
     protected function isFieldExist($table, $filedName)
