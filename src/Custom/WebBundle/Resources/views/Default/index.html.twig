@@ -23,7 +23,7 @@
           <div class="progress">
             <div class="{% if passPercentage == 100 %}
               progress-bar more
-            {% elseif passPercentage < 100 %}
+            {% elseif passPercentage < 100 and passPercentage >= 50 %}
               progress-bar less
             {% elseif passPercentage < 50 %}
               progress-bar
