@@ -7,7 +7,6 @@
 	data-marker-update-url="{{path('course_lesson_marker_update',{'courseId':course.id,'lessonId':lesson.id})}}"
 	data-queston-marker-sort-url="{{path('course_lesson_question_marker_sort',{'courseId':course.id,'lessonId':lesson.id})}}"
 	>
-	<!-- <div class="question-menu"> -->
 		<form class="form-horizontal mark-from" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="form-group">
@@ -17,7 +16,7 @@
 					</select>
 				</div>
 				<div class="col-xs-7">
-					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}"  >
+					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'请输入搜索关键词...'|trans}}"  >
 					<button class="es-icon es-icon-search btn-search"></button>
 				</div>
 			</div>
@@ -36,18 +35,9 @@
 				</li>
 			</ul>
 		</div>
-		<div class="question-remask"><i class="es-icon es-icon-xinxi remask-icon"></i>仅支持选择题、判断题两类客观题。</div>
-		{#<div class="list-title">
-			<div class="row ">
-				<div class="col-xs-6">{{'题干'|trans}}</div>
-				<div class="col-xs-3 content">{{'题型'|trans}}</div>
-				<div class="col-xs-1 content">{{'难度'|trans}}</div>
-				<div class="col-xs-2 content ">{{'操作'|trans}}</div>
-			</div>
-		</div>#}
-		<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list" data-intro-img={{ asset('assets/v2/img/marksintro_1.png') }}  >
-
-		</ul>
-	<!-- </div> -->
+		<div class="question-remask">
+			<i class="es-icon es-icon-xinxi remask-icon"></i>仅支持选择题、判断题两类客观题。
+		</div>
+		<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list" data-intro-img={{ asset('assets/v2/img/marksintro_1.png') }}  ></ul>
 </div>
 <script>app.load('marker/question')</script>

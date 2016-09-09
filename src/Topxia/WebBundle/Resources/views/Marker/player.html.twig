@@ -1,35 +1,26 @@
 {% block stylesheets %}
   <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
 {% endblock %}
-
-<!-- <div class="dashboard-content"> -->
-  <!-- <div class="dashboard-body"> -->
-  <!-- lesson-content -->
-  <div class="manage-player-body">
-    <div class="manage-player-header">
-      <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
-      <ol class="breadcrumb breadcrumb-o">
-        <li>
-          <a href="/">{{course.title}}</a>
-        </li>
-        <li class="active">{{lesson.title}}</li>
-        </ol>
-    </div>
-    <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
-      0 and setting('storage.video_watermark_image') %}
-        data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
-      {% endif %}
-      {% if setting('storage.video_fingerprint') and app.user %}
-        data-fingerprint="{{ finger_print() }}"
-      {% endif %}
-        data-user-id="{{ app.user.id }}"
-    >
-    </div>
-    <div class="mask hidden" data-role="player-mask"></div>
-    <div class="watermarkEmbedded"></div>
+<div class="manage-player-body">
+  <div class="manage-player-header">
+    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
+    <ol class="breadcrumb breadcrumb-o">
+      <li>
+        <a href="/">{{course.title}}</a>
+      </li>
+      <li class="active">{{lesson.title}}</li>
+      </ol>
   </div>
-    
-  <!-- </div> -->
-  
-  
-<!-- </div> -->
+  <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
+    0 and setting('storage.video_watermark_image') %}
+      data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+    {% endif %}
+    {% if setting('storage.video_fingerprint') and app.user %}
+      data-fingerprint="{{ finger_print() }}"
+    {% endif %}
+      data-user-id="{{ app.user.id }}"
+  >
+  </div>
+  <div class="mask hidden" data-role="player-mask"></div>
+  <div class="watermarkEmbedded"></div>
+</div>
