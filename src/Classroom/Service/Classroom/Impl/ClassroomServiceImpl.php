@@ -2,10 +2,10 @@
 
 namespace Classroom\Service\Classroom\Impl;
 
+use Classroom\Service\Classroom\ClassroomService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Classroom\Service\Classroom\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -983,10 +983,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$user->isLogin()) {
             return false;
         }
-        global $kernel;
-        $container = $kernel->getContainer();
         
-        if ($container->get('permission.twig.permission_extension')->hasPermission('admin_classroom_content_manage')) {
+        if ($user->hasPermission('admin_classroom_content_manage')) {
             return true;
         }
         

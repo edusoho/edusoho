@@ -1,9 +1,10 @@
 <?php
 namespace Topxia\Service\User;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
 {
@@ -243,5 +244,46 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function getPermissions()
     {
         return $this->permissions;
+    }
+
+    /**
+     * @param string  $code  权限编码
+     * @return bool
+     */
+    public function hasPermission($code)
+    {
+        $currentUserPermissions = $this->getPermissions();
+        if(!empty($currentUserPermissions[$code])){
+            return true;
+        }
+
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree(true);
+        $codeTree = $tree->find(function ($tree) use ($code){
+            return $tree->data['code'] === $code;
+        });
+
+        if(empty($codeTree)){
+            return false;
+        }
+
+        $disableTree = $codeTree->findToParent(function ($parent){
+            return isset($parent->data['disable']) && (bool)$parent->data['disable'];
+        });
+
+        if(is_null($disableTree)){
+            return false;
+        }
+
+        $parent = $disableTree->getParent();
+
+        if(is_null($parent)){
+            return false;
+        }
+
+        if(empty($parent->data['parent'])){
+            return true;
+        }else{
+            return !empty($currentUserPermissions[$parent->data['code']]);
+        }
     }
 }

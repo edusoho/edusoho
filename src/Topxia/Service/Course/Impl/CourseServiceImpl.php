@@ -2804,9 +2804,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function hasAdminRole()
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-        return $container->get('permission.twig.permission_extension')->hasPermission('admin_course_content_manage');
+        $user = $this->getCurrentUser();
+        return $user->hasPermission('admin_course_content_manage');
     }
 
     public function hasTeacherRole($courseId, $userId)

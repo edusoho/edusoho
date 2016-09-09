@@ -97,39 +97,7 @@ class PermissionExtension extends \Twig_Extension
     public function hasPermission($code)
     {
         $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $currentUserPermissions = $currentUser->getPermissions();
-        if(!empty($currentUserPermissions[$code])){
-            return true;
-        }
-
-        $tree = $this->createPermissionBuilder()->getOriginPermissionTree(true);
-        $codeTree = $tree->find(function ($tree) use ($code){
-            return $tree->data['code'] === $code;
-        });
-
-        if(empty($codeTree)){
-            return false;
-        }
-
-        $disableTree = $codeTree->findToParent(function ($parent){
-            return isset($parent->data['disable']) && (bool)$parent->data['disable'];
-        });
-
-        if(is_null($disableTree)){
-            return false;
-        }
-
-        $parent = $disableTree->getParent();
-
-        if(is_null($parent)){
-            return false;
-        }
-
-        if(empty($parent->data['parent'])){
-            return true;
-        }else{
-            return !empty($currentUserPermissions[$parent->data['code']]);
-        }
+        return $currentUser->hasPermission($code);
     }
 
     public function getSubPermissions($code, $group=null)
