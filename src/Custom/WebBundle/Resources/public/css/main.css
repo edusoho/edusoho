@@ -143,6 +143,12 @@ a {
   border-radius: 7px;
   background-color: #f49c00;
 }
+.header-section .header-content .progress .progress-bar.less {
+  background-color: #ff3333;
+}
+.header-section .header-content .progress .progress-bar.more {
+  background-color: #5ce25c;
+}
 .header-section .header-content .btn-primary {
   font-size: 12px;
   margin-right: 10px;

@@ -1,0 +1,105 @@
+@import 'variables.less';
+@import 'mixins.less';
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+.placeholder-style {
+  text-align: center;
+  color: #22b2e9;
+}
+.text-controls {
+  .box-shadow(0 0 0 6px #22b2e9) ;
+  border-radius: 4px;
+  border: none;
+  input {
+    width: 430px;
+    font-size: 20px;
+    border: none;
+    height: 54px;
+    &::-webkit-input-placeholder { .placeholder-style }
+    &::-moz-placeholder { .placeholder-style } /* firefox 19+ */
+    &:-ms-input-placeholder { .placeholder-style } /* ie */
+    &:-moz-placeholder { .placeholder-style }
+  }
+}
+.es-wrap {
+  position: relative;
+  height: 100%;
+}
+.login-full {
+  height: 100%;
+  background-size: cover;
+  .login-section {
+    color: #ffffff;
+    margin: 0 auto;
+    width: 550px;
+    text-align: center;
+    .login-tip {
+      font-size: 52px;  
+      margin-top: 40px;
+    }
+    .login-sub-tip {
+      font-size: 22px;
+      margin-top: 10px;
+    }
+    .login-main {
+      padding: 20px 45px 20px 45px;
+      font-size: 20px;
+      .form-group {
+        margin: 0;
+        .controls {
+          .help-block {
+            text-align: left;
+            margin: 0;
+            height: 30px;
+            .text-danger {
+              font-size: 16px;
+            }
+          }
+          .remember-me {
+            height: 18px;
+            width: 18px;
+            margin-right: 20px;
+            border: 2px solid #ffffff;
+            font-size: 10px;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 15px;
+          }
+          .remember-input {
+            opacity: 0;
+            display: none;
+          }
+        }
+      }
+      .btn-block {
+        display: inline-block;
+        margin: 30px auto 20px auto;
+        width: 220px;
+        height: 52px;
+        text-align: center;
+        border: none;
+        border-radius: 26px;
+        font-size: 20px;
+        color:  #22b2e9;
+        background-color: #ffffff;
+
+      }
+    }
+    a {
+      color: #ffffff;
+      &:hover,&:focus {
+        color: ;
+      }
+    }
+    .forget-psd {
+    }
+  }
+  .reset-section {
+    background-color: transparent;
+    border: none;
+  }
+}
