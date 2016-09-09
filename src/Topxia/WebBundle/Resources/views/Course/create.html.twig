@@ -9,9 +9,9 @@
         <div class="panel panel-default panel-page panel-create-course">
             <div class="panel-heading"><h2>{{ '创建课程'|trans }}</h2></div>
 
-            {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
+            {# {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
                 {% include 'TopxiaWebBundle:Settings:user-profile.html.twig' %}
-            {% else %}
+            {% else %} #}
                 <form id="course-create-form" class="form-horizontal" method="post">
 
                     {{ web_macro.flash_messages() }}
@@ -100,7 +100,7 @@
                     </div>
                 </form>
 
-            {% endif %}
+            {# {% endif %} #}
         </div>
     </div>
 {% endblock %}
