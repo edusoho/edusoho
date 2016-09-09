@@ -279,7 +279,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         try {
             $package = $this->getCenterPackageInfo($packageId);
-            $errors  = $this->checkPluginDepend($package);
+            // $errors  = $this->checkPluginDepend($package);
 
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
                 $errors[] = $this->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION));
