@@ -142,7 +142,7 @@ define(function(require, exports, module) {
                 $editbox_list.addClass('highlight');
 
                 _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
-                _move_time = Math.round((_mover_left - 20) * _self.get('_video_time') / $editbox_list.width());
+                _move_time = _self._gettime(_mover_left);
                 $scale_red_details.text(_self._convertTime(_move_time));
                 $scale_red.removeClass('hidden').css('left', _mover_left);
 
@@ -278,44 +278,38 @@ define(function(require, exports, module) {
             });
         },
         _initeditbox: function(isresize) {
-            var _obj = this;
-            var $_editbox = $(_obj.get("editbox"));
-            var _width = $('#editbox-lesson-list').width();
-            $_editbox.find('.scale.scale-default').remove();
-            // 以秒为单位
-            var _totaltime = _obj.get("_video_time");
-            var _partnum = _obj.get("timepartnum");
-            if (_partnum > 0) {
-                var _parttime = _totaltime / _partnum;
-                var _partwidth = _width / _partnum;
-                for (var i = 0; i <= _partnum; i++) {
-                    var num = i * _parttime;
-                    var time = _obj._convertTime(Math.round(num));
-                    var left = Math.round((i * _partwidth) + 20);
-                    $('[data-role="scale-blue"]').before('<a class="scale scale-default" style="left:' + left + 'px">' + '<span class="line"></span><span class="line line-dashed"></span><div class="scale-details"><ul class="lesson-list"></ul></div>' + '<span class="scale-time">' + time + '</span></a>');
-                }
-            }
+            var _self = this,
+                $_editbox = $(_self.get("editbox"));
             if (isresize) {
-                //找到所有的蓝色时间轴计算时间轴位置；
-                $_editbox.find('.scale.blue').each(function() {
-                    var $this = $(this);
-                    var _selftime = _obj._convertSec($this.find('.time').html());
-                    $this.css('left', Math.round(_selftime * _width / _totaltime));
+                $_editbox.find('.scale.scale-default:visible').each(function() {
+                    $(this).css('left', _self._getleft(_self._convertSec($(this).find('[data-role="scale-time"]').text())));
                 });
+                $_editbox.find('.scale.scale-blue:visible').each(function() {
+                    $(this).css('left', _self._getleft(_self._convertSec($(this).find('[data-role="scale-blue-time"]').text())));
+                });
+            } else {
+                var _partnum = _self.get("timepartnum");
+                var _parttime = _self.get("_video_time") / _partnum;
+                for (var i = 0; i <= _partnum; i++) {
+                    console.log();
+                    var $new_scale_default = $('[data-role="scale-default"]').clone().css('left', _self._getleft(_parttime * i)).removeClass('hidden').removeAttr('data-role');
+                    $new_scale_default.find('[data-role="scale-time"]').text(_self._convertTime(Math.round(_parttime * i)));
+                    $('[data-role="scale-default"]').before($new_scale_default);
+                }
             }
         },
         _lisentresize: function() {
-            var _obj = this;
+            var _self = this;
             $(window).resize(function() {
-                _obj._initeditbox(true);
+                _self._initeditbox(true);
             });
         },
         _initMarkerArry: function(initMarkerArry) {
             if (initMarkerArry.length > 0) {
                 var $scale_blue = $('[data-role="scale-blue"]');
                 for (var i = 0; i < initMarkerArry.length; i++) {
-                    this._getleft(initMarkerArry[i].second);
-                    $new_scale_blue = $scale_blue.clone().css('left', _left).removeAttr('data-role').removeClass('hidden').attr('id', initMarkerArry[i].id);
+                    console.log(initMarkerArry[i].second);
+                    $new_scale_blue = $scale_blue.clone().css('left', this._getleft(initMarkerArry[i].second)).removeAttr('data-role').removeClass('hidden').attr('id', initMarkerArry[i].id);
                     $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(this._convertTime(initMarkerArry[i].second));
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     var $scale_blue_item = $new_scale_blue.find('[data-role="scale-blue-item"]');
@@ -344,7 +338,7 @@ define(function(require, exports, module) {
         _newSortList: function($list) {
             var _self = this;
             $list.sortable({
-                distance: 20,
+                delay: 500,
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
                     console.log('onDrop');
@@ -472,11 +466,10 @@ define(function(require, exports, module) {
         _getleft: function(time) {
             var _width = $('#editbox-lesson-list').width();
             var _totaltime = parseInt(this.get("_video_time"));
-            _left = time * _width / _totaltime;
+            var _left = time * _width / _totaltime;
             return _left + 20;
         },
         _gettime: function(left) {
-
             return Math.round((left - 20) * this.get('_video_time') / $('#editbox-lesson-list').width());
         },
     });
@@ -593,21 +586,21 @@ define(function(require, exports, module) {
 
 
 // if (initMarkerArry.length > 0) {
-            //     var $editbox = $(this.get('editbox'));
-            //     var $subject_lesson_list = $(this.get('subject_lesson_list'));
-            //     for (var i = 0; i < initMarkerArry.length; i++) {
-            //         var time = parseInt(this.get("_video_time"));
-            //         var width = $(".dashboard-content").width();
-            //         var left = Math.round(initMarkerArry[i].second * width / time);
-            //         var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", left).appendTo($editbox.find('.scalebox'));
-            //         var $lesson_list = $newscale.find('.lesson-list');
-            //         var questionMarkers = initMarkerArry[i].questionMarkers;
-            //         for (var j = 0; j < questionMarkers.length; j++) {
-            //             var pic = questionMarkers[j].includeImg ? '<span class="glyphicon glyphicon-picture"></span>' : "";
-            //             var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + pic + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
-            //             $li.appendTo($lesson_list);
-            //         }
-            //     }
-            //     var $list = $editbox.find('.lesson-list');
-            //     this._newSortList($list);
-            // }
+//     var $editbox = $(this.get('editbox'));
+//     var $subject_lesson_list = $(this.get('subject_lesson_list'));
+//     for (var i = 0; i < initMarkerArry.length; i++) {
+//         var time = parseInt(this.get("_video_time"));
+//         var width = $(".dashboard-content").width();
+//         var left = Math.round(initMarkerArry[i].second * width / time);
+//         var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", left).appendTo($editbox.find('.scalebox'));
+//         var $lesson_list = $newscale.find('.lesson-list');
+//         var questionMarkers = initMarkerArry[i].questionMarkers;
+//         for (var j = 0; j < questionMarkers.length; j++) {
+//             var pic = questionMarkers[j].includeImg ? '<span class="glyphicon glyphicon-picture"></span>' : "";
+//             var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + pic + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
+//             $li.appendTo($lesson_list);
+//         }
+//     }
+//     var $list = $editbox.find('.lesson-list');
+//     this._newSortList($list);
+// }

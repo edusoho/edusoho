@@ -12698,6 +12698,9 @@ textarea {
   font-size: 12px;
   padding: 0 15px;
 }
+.marker-manage .breadcrumb li.active {
+  color: #fff;
+}
 .marker-manage .lesson-list {
   border: 0;
   margin: 0;
@@ -12753,6 +12756,18 @@ textarea {
   filter: alpha(opacity=30);
   cursor: default;
 }
+.marker-manage .lesson-list .placeholder {
+  position: relative;
+  height: 10px;
+}
+.marker-manage .lesson-list .placeholder:after {
+  content: "";
+  border: 5px solid;
+  border-color: transparent transparent transparent #e83d2c;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .marker-manage .lesson-list .more-questions {
   position: absolute;
   right: 15px;
@@ -12795,11 +12810,13 @@ textarea {
   top: 0;
   width: 70%;
   height: 60px;
-  line-height: 60px;
 }
 .marker-manage-content .manage-player-body .manage-player-header .title-link {
+  float: left;
   font-size: 16px;
   color: #fff;
+  line-height: 60px;
+  margin-right: 20px;
 }
 .marker-manage-content .manage-player-body .manage-player-header .title-link i {
   font-size: 16px;
@@ -12917,9 +12934,6 @@ textarea {
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson .sqe-number {
   display: inline;
-}
-.marker-manage-content .editbox .scalebox .lesson-list .placeholder {
-  border: 1px dashed #46c37b;
 }
 .marker-manage-content .editbox .scalebox .scale {
   position: absolute;

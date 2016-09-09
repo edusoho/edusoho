@@ -7,8 +7,13 @@
   <!-- lesson-content -->
   <div class="manage-player-body">
     <div class="manage-player-header">
-    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="btn title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
-      <!-- <span class="text-sm color-gray">{{'本页面所有操作自动保存'|trans}}</span> -->
+      <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
+      <ol class="breadcrumb breadcrumb-o">
+        <li>
+          <a href="/">{{course.title}}</a>
+        </li>
+        <li class="active">{{lesson.title}}</li>
+        </ol>
     </div>
     <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
       0 and setting('storage.video_watermark_image') %}
