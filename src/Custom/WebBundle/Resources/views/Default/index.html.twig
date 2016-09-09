@@ -19,18 +19,21 @@
             当前没有学习任务
           {% endif %}
         </span></div>
+
+        {% if postCoursePackages %}
         <div class="item header-progress hidden-xs">
           <div class="progress">
             <div class="{% if passPercentage == 100 %}
               progress-bar more
             {% elseif passPercentage < 100 and passPercentage >= 50 %}
-              progress-bar less
-            {% elseif passPercentage < 50 %}
               progress-bar
+            {% elseif passPercentage < 50 %}
+              progress-bar less
             {% endif %}" role="progressbar" style="width: {{ passPercentage }}%;"></div>
           </div>
         </div>
         <div class="item progress-text hidden-xs"> {{ passRate }}</div>
+        {% endif %}
 
         {% if currentCourse.studyStatus|default() == 'learning' %}
           <a class="btn btn-primary" target="_blank" role="button" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}">
@@ -45,70 +48,76 @@
     </div>
   </div>
   <div class="container content-section">
-    <div class="panel-group" id="accordion" role="tablist">
-      {% for post in posts %}
-        <div class="panel panel-course 
-        {% if currentCoursePackage is null %}
-          {% if loop.index == loop.length %}active{% endif %}
-        {% else %}
-          {% if currentCoursePackage.postId == post.id %}active{% endif %}
-        {% endif %}
-          ">
-          <div class="panel-heading js-panel-heading" role="tab" id="heading-{{ post.id }}">
-            <h4 class="panel-title">
-              <a class="link collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ post.id }}">
-                {{ post.name }}
-                <div class="pull-right text-more hidden-xs">MORE<span class="glyphicon glyphicon-menu-right"></span></div>
-              </a>
-            </h4>
-          </div>
-          <div id="collapse-{{ post.id }}" class="panel-collapse 
+    {% if not postCoursePackages %}
+      <div class="panel-group" id="accordion" role="tablist">
+        <h1 align="center" style="line-height: 400px;font-size: 50px">当前没有课程需要学习</h1>
+      </div>
+    {% else %}
+      <div class="panel-group" id="accordion" role="tablist">
+        {% for post in posts %}
+          <div class="panel panel-course 
           {% if currentCoursePackage is null %}
-            {% if loop.last %} collapse in {% else %} collapse {% endif %}
+            {% if loop.index == loop.length %}active{% endif %}
           {% else %}
-            {% if currentCoursePackage.postId == post.id %}collapse in{% else %} collapse {% endif %}"
+            {% if currentCoursePackage.postId == post.id %}active{% endif %}
           {% endif %}
-          role="tabpanel">
-            <div class="panel-body">
-              {% for postCourseCategory in postCourseCategorys %}
-                {% if postCourseCategory.postId == post.id %}
-                  <div class="panel panel-theme">                
-                      <div class="panel-title">
-                          <div class="title-detail">
-                            {% if postCourseCategory.categoryId %}
-                              {% set category = data('Category', {categoryId:postCourseCategory.categoryId}) %}{{category.name}}
-                            {% else %}
-                              默认分类
-                            {% endif %}
-                          </div>
-                      </div>
-                      <div class="panel-body panel-body-theme">
-                        <div class="row">
-                            <div class="item-container ">
-                              <ul class="list-group list-group-course clearfix">
-                                {% set index = 1 %}
-                                {% for postCoursePackage in postCoursePackages %}
-                                  {% if postCoursePackage.postId == post.id %}
-                                    {% if postCoursePackage.course.categoryId == postCourseCategory.categoryId %}
-                                        {% include 'CustomWebBundle:Default:list-group-item-li.html.twig' %}
-                                      {% set index = index + 1 %}
-                                    {% endif %}
-                                  {% endif %}
-                                {% endfor %}
-                              </ul>
-                              <div class="line"></div>
+            ">
+            <div class="panel-heading js-panel-heading" role="tab" id="heading-{{ post.id }}">
+              <h4 class="panel-title">
+                <a class="link collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ post.id }}">
+                  {{ post.name }}
+                  <div class="pull-right text-more hidden-xs">MORE<span class="glyphicon glyphicon-menu-right"></span></div>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-{{ post.id }}" class="panel-collapse 
+            {% if currentCoursePackage is null %}
+              {% if loop.last %} collapse in {% else %} collapse {% endif %}
+            {% else %}
+              {% if currentCoursePackage.postId == post.id %}collapse in{% else %} collapse {% endif %}"
+            {% endif %}
+            role="tabpanel">
+              <div class="panel-body">
+                {% for postCourseCategory in postCourseCategorys %}
+                  {% if postCourseCategory.postId == post.id %}
+                    <div class="panel panel-theme">                
+                        <div class="panel-title">
+                            <div class="title-detail">
+                              {% if postCourseCategory.categoryId %}
+                                {% set category = data('Category', {categoryId:postCourseCategory.categoryId}) %}{{category.name}}
+                              {% else %}
+                                默认分类
+                              {% endif %}
                             </div>
                         </div>
+                        <div class="panel-body panel-body-theme">
+                          <div class="row">
+                              <div class="item-container ">
+                                <ul class="list-group list-group-course clearfix">
+                                  {% set index = 1 %}
+                                  {% for postCoursePackage in postCoursePackages %}
+                                    {% if postCoursePackage.postId == post.id %}
+                                      {% if postCoursePackage.course.categoryId == postCourseCategory.categoryId %}
+                                          {% include 'CustomWebBundle:Default:list-group-item-li.html.twig' %}
+                                        {% set index = index + 1 %}
+                                      {% endif %}
+                                    {% endif %}
+                                  {% endfor %}
+                                </ul>
+                                <div class="line"></div>
+                              </div>
+                          </div>
 
-                      </div>
-                  </div>
-                {% endif %}
-              {% endfor %}
+                        </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
           </div>
-        </div>
-      {% endfor %}
-    </div>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
 

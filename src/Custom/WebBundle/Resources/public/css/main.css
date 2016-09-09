@@ -82,6 +82,7 @@ a {
 }
 .header-section .header-title {
   display: inline-block;
+  padding-left: 40px;
   font-size: 22px;
   font-weight: bold;
 }
