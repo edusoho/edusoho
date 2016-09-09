@@ -45,7 +45,7 @@ class CourseAnnouncementController extends BaseController
 
 	        	$message = array(
 	        		'title'=> $course['title'],
-					'url' => $$this->generateUrl('course_show', array('id'=>$courseId), true),
+					'url' => $this->generateUrl('course_show', array('id'=>$courseId), true),
 					'type'=>'course');
 	        	foreach ($members as $member) {
 		        	$result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
@@ -67,7 +67,7 @@ class CourseAnnouncementController extends BaseController
 
         $announcement = $this->getCourseService()->getCourseAnnouncement($courseId, $id);
         if (empty($announcement)) {
-        	return $this->createNotFoundException("课程公告(#{$id})不存在。");
+        	return $this->createNotFoundException($this->getServiceKernel()->trans('课程公告(#%id%)不存在。', array('%id%' => $id )));
         }
 
 	    if($request->getMethod() == 'POST') {

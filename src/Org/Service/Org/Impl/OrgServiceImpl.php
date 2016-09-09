@@ -16,7 +16,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = ArrayToolkit::parts($org, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($org, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
         }
 
         $org['createdUserId'] = $user['id'];
@@ -64,7 +64,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'description'));
 
         if (!ArrayToolkit::requireds($fields, array('name', 'code'))) {
-            throw $this->createServiceException('缺少必要字段,添加失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段,添加失败'));
         }
 
         $org = $this->getOrgDao()->updateOrg($id, $fields);
@@ -113,11 +113,13 @@ class OrgServiceImpl extends BaseService implements OrgService
     public function findOrgsStartByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
-        $user = $this->getCurrentUser();
-
-        $org = $this->getOrg($user['orgId']);
-
-        return $this->getOrgDao()->findOrgsStartByOrgCode($org['orgCode']);
+        if ($orgCode == null){
+            $user = $this->getCurrentUser();
+            $org = $this->getOrg($user['orgId']);
+            $orgCode = $org['orgCode'];
+        }
+        
+        return $this->getOrgDao()->findOrgsStartByOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)
@@ -136,7 +138,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $org = $this->getOrg($id);
 
         if (empty($org)) {
-            throw $this->createServiceException('组织机构不存在,更新失败');
+            throw $this->createServiceException($this->getServiceKernel()->trans('组织机构不存在,更新失败'));
         }
 
         return $org;

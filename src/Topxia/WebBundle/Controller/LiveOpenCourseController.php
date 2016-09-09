@@ -24,6 +24,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
         $this->createRefererLog($request, $course);
+
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 

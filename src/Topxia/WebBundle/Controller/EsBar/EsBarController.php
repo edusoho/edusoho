@@ -7,10 +7,9 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class EsBarController extends BaseController
 {
-
     public function studyCenterAction(Request $request)
     {
-         return $this->render("TopxiaWebBundle:EsBar:ListContent/study-center.html.twig", array(
+        return $this->render("TopxiaWebBundle:EsBar:ListContent/study-center.html.twig", array(
         ));
     }
 
@@ -19,7 +18,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $conditions = array(
@@ -67,7 +66,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $memberConditions = array(
@@ -107,7 +106,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $notifications = $this->getNotificationService()->findUserNotifications(
@@ -127,7 +126,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录,不能查看!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $homeworkResults  = array();

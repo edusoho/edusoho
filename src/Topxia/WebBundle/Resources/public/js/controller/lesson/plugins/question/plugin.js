@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	var QuestionPlugin = BasePlugin.extend({
 		code: 'question',
-		name: '问答',
+		name: Translator.trans('问答'),
 		iconClass: 'glyphicon glyphicon-question-sign',
 		api: {
 			init: '../../lessonplugin/question/init',

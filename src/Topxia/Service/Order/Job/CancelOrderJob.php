@@ -6,18 +6,17 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CancelOrderJob implements Job
 {
-	public function execute($params)
+    public function execute($params)
     {
-    	$conditions = array(
-    		"status" => "created",
-    		"createdTime_LT" => time()-47*60*60
-    	);
+        $conditions = array(
+            "status"         => "created",
+            "createdTime_LT" => time() - 47 * 60 * 60
+        );
 
         $orders = $this->getOrderService()->searchOrders($conditions, $sort = 'latest', 0, 10);
         foreach ($orders as $key => $order) {
-        	$this->getOrderService()->cancelOrder($order["id"],"系统自动取消");
+            $this->getOrderService()->cancelOrder($order["id"], $this->getServiceKernel()->trans('系统自动取消'));
         }
-
     }
 
     protected function getOrderService()
@@ -29,5 +28,4 @@ class CancelOrderJob implements Job
     {
         return ServiceKernel::instance();
     }
-
 }

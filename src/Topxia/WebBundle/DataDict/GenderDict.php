@@ -1,14 +1,17 @@
 <?php
 namespace Topxia\WebBundle\DataDict;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class GenderDict implements DataDictInterface
 {
     public function getDict() {
         return array(
-            'male' => '男',
-            'female' => '女',
+            'male' => $this->getServiceKernel()->trans('男'),
+            'female' => $this->getServiceKernel()->trans('女'),
         );
     }
+
 
     public function getRenderedDict() {
         return $this->getDict();
@@ -16,5 +19,10 @@ class GenderDict implements DataDictInterface
 
     public function getGroupedDict() {
         return $this->getDict();
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

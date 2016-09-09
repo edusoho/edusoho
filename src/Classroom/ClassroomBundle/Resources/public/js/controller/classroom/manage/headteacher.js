@@ -29,7 +29,7 @@ define(function(require, exports, module) {
             var error = '';
             dynamicCollection.element.find('input[name="ids[]"]').each(function(i, item) {
                 if (parseInt(data.id) == parseInt($(item).val())) {
-                    error = '该用户已添加，不能重复添加！';
+                    error = Translator.trans('该用户已添加，不能重复添加！');
                 }
             });
 

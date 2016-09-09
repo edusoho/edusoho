@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block title %}{{groupinfo.title}}{{'小组'|trans}} {{ parent() }}{% endblock %}
+
+{% block title %}{{'%title%小组'|trans({'%title%': groupinfo.title})}} {{ parent() }}{% endblock %}
+
+
 {% block keywords %}{{groupinfo.title}}{% endblock %}
 {% block description %}{{groupAbout|default('')|plain_text(100)}}{% endblock %}
 {% set groupNav = 'index' %}
@@ -123,7 +126,7 @@
         </div>
         <div class="media-body">
           <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
-          <span class="text-sm gray-medium">{{groupOwner.title|default("无"|trans)}}</span>
+          <span class="text-sm gray-medium">{{ groupOwner.title|default('无'|trans) }}</span>
         </div>
       </div>
     </div>

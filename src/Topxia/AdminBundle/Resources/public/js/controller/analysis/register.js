@@ -15,12 +15,11 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: ['注册人数'],
+                      labels: [Translator.trans('注册人数')],
                       xLabels:"day"
                     });
           }
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -28,7 +27,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setEndDate', now);
         $('[name=endTime]').datetimepicker('setStartDate', $('#registerStartDate').attr("value"));
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

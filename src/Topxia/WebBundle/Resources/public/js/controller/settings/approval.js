@@ -40,7 +40,7 @@ define(function(require, exports, module) {
             var file = options.element[0]['files'][0];
             var types = file['type'].split('/');
             return types[0] == 'image';
-        }, '{{display}}只能上传图片');
+        }, Translator.trans('%display%只能上传图片',{display:'{{display}}'}));
 
         Validator.addRule('limitSize', function(options) {
             if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             }
             var file = options.element[0]['files'][0];
             return file['size'] / 1024 <= 2048;
-        }, '{{display}}大小不能超过2M');
+        }, Translator.trans('%display%大小不能超过2M',{display:'{{display}}'}));
     };
 
 });

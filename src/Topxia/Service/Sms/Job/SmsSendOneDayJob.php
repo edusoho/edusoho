@@ -24,7 +24,7 @@ class SmsSendOneDayJob implements Job
                     $api = CloudAPIFactory::create('leaf');
                     $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
                 } catch (\RuntimeException $e) {
-                    throw new \RuntimeException("发送失败！");
+                    throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
             }   
         }
     }
@@ -34,7 +34,7 @@ class SmsSendOneDayJob implements Job
         return ServiceKernel::instance()->createService('Sms.SmsService');
     }
 
-    protected function getServiceKernel()
+    protected function getKernel()
     {
         return ServiceKernel::instance();
     }
