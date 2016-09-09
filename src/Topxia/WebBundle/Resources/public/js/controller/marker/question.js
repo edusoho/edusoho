@@ -124,7 +124,7 @@ define(function(require, exports, module) {
         $.post($form.attr('action'), $form.serialize(), function(response) {
             $('#subject-lesson-list').html(response);
             $('[data-toggle="popover"]').popover();
-            initIntro();
+            // initIntro();
             if(!Cookie.get("marker-manage-guide")){
                 initIntro();
             } 

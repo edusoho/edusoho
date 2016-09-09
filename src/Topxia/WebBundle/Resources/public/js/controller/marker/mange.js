@@ -326,9 +326,10 @@ define(function(require, exports, module) {
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     var $scale_blue_item = $new_scale_blue.find('[data-role="scale-blue-item"]');
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $new_scale_blue_item = $scale_blue_item.clone().removeAttr('data-role').attr({ 'question-id': questionMarkers[j].questionId, 'id': questionMarkers[j].id }).append(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
+                        var $new_scale_blue_item = $scale_blue_item.clone().removeAttr('data-role').attr({ 'question-id': questionMarkers[j].questionId, 'id': questionMarkers[j].id });
                         $new_scale_blue_item.find('[data-role="sqe-number"]').text(j + 1);
                         $new_scale_blue_item.find('[data-role="question-type"]').text('单选题');
+                        $new_scale_blue_item.find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
                         $scale_blue_item.before($new_scale_blue_item);
                     }
                     $scale_blue.after($new_scale_blue);

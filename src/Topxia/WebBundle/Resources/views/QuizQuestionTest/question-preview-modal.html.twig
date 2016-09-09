@@ -1,4 +1,15 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+
+<div class="modal-dialog mark-questions-modal">
+  <div class="modal-content">
+    {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
+    <script>app.load('quiz-question/preview');</script>
+  </div>
+</div>
+
+
+{#{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'题目预览'|trans}}{% endblock %}
 
@@ -12,4 +23,4 @@
 {% block footer %}
   <button type="button" class="btn btn-default" data-dismiss="modal">{{'关闭'|trans}}</button>
   <script>app.load('quiz-question/preview');</script>
-{% endblock %}
+{% endblock %}#}
