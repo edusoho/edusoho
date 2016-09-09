@@ -1,0 +1,52 @@
+
+.es-transform(@x:1.1 , @y:1.1) {
+  -webkit-transform: scale(@x, @y);
+     -moz-transform: scale(@x, @y);
+      -ms-transform: scale(@x, @y);
+       -o-transform: scale(@x, @y);
+          transform: scale(@x, @y);
+}
+
+.es-transition(@time:.3s) {
+  -webkit-transition: all @time ease;
+     -moz-transition: all @time ease;
+       -o-transition: all @time ease;
+          transition: all @time ease;
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
+
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+         -o-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+
