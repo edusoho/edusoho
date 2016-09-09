@@ -8,18 +8,22 @@
 {% endif %}">
   <a class="item-name"
   {% if postCoursePackage.course.studyStatus == 'finished' %}
-     target="_blank" href="{{ path('course_learn', {id:postCoursePackage.course.id}) }}#lesson/{{postCoursePackage.course.lastLesson.id}}"
+     {% if postCoursePackage.course.lastLesson.id|default(false) %}
+        target="_blank" href="{{ path('course_learn', {id:postCoursePackage.course.id}) }}#lesson/{{postCoursePackage.course.lastLesson.id}}"
+     {% else %}
+        title = "课程下无课时"
+     {% endif %}
   {% elseif postCoursePackage.course.studyStatus == 'learning' %}
     {% if postCoursePackage.courseId == currentCourse.id %}
       target="_blank" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}"
     {% else %}
-      title = "请先学习前面课程"
+      title = "请先完成前面课程"
     {% endif %}
   {% else %}
     {% if postCoursePackage.courseId == currentCourse.id %}
       data-toggle="modal" data-target="#modal" data-url="{{ path('internal_training_course_unlock', {courseId:currentCourse.id}) }}"
     {% else %}
-      title = "请先学习前面课程"
+      title = "请先完成前面课程"
     {% endif %}
   {% endif %}>{{ index }}.{{ postCoursePackage.course.title }}</a> 
 
