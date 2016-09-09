@@ -73,7 +73,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         foreach ($userProfiles as $profile) {
             if (empty($profile['uid'])) {
-                $delSql = "delete user_profile where id=".$profile['id'];
+                $delSql = "delete from user_profile where id=".$profile['id'];
                 $connection->exec($delSql);
             }
         }
