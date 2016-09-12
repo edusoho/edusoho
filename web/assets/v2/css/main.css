@@ -12640,6 +12640,7 @@ textarea {
 .marker-manage {
   height: 100%;
   background-color: #313131;
+  overflow: hidden;
 }
 .marker-manage.slideing {
   -moz-user-select: none;
@@ -12916,6 +12917,7 @@ textarea {
   height: auto;
   padding: 0;
   background-color: transparent;
+  overflow: visible;
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson {
   position: relative;

@@ -84,7 +84,7 @@ define(function(require, exports, module) {
                     $(document).off('mousemove.playertime');
                     $(document).off('mousedown.playertime');
                     changeleft = true;
-                    messenger.sendToChild({ id: 'viewerIframe' }, 'setPlayerPlay');
+                    // messenger.sendToChild({ id: 'viewerIframe' }, 'setPlayerPlay');
                 });
 
             });
