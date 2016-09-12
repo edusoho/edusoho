@@ -296,7 +296,6 @@ EOD;
             'upload_mode'      => 'local',
             'cloud_api_server' => 'http://api.edusoho.net',
             'cloud_access_key' => '',
-            'cloud_bucket'     => '',
             'cloud_secret_key' => ''
         );
 
