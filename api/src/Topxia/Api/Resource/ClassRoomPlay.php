@@ -44,7 +44,7 @@ class ClassRoomPlay extends BaseResource
 		}
 		$playArray = array();
 		foreach ($courseLabels as $key => $value) {
-			array_merge($playArray, $value);
+			$playArray = array_merge($playArray, $value);
 		}
 		return $playArray;
 	}
