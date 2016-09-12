@@ -108,7 +108,7 @@ class LlpayRequest extends Request
 
     protected function geUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 
     private function getSettingService()
