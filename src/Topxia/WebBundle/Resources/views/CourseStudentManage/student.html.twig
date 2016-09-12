@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseStudentManage:index.html.twig' %}
 
-{% block title %}学员管理 - {{ parent() }}{% endblock %}
+{% block title %}{{'学员管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set submenu = 'student' %}
 
@@ -30,7 +30,7 @@
       {% set isFollowing = user.id in followingIds %}
       {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
     {% else %}
-      <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+      <tr class="empty"><td colspan="20">{{'无'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}{{'学员'|trans}}{% endif %}{{'记录'|trans}}</td></tr>
     {% endfor %}
   </tbody>
 </table>

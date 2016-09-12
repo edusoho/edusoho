@@ -1,0 +1,151 @@
+//out: ../css/main-en-us.css
+@import "main.less";
+.nav.nav-tabs {
+  >li >a {
+    padding: 5px 15px 15px;
+  }
+}
+
+.card-pack-item {
+  .stamp {
+    &.stamp-outdate {
+      background: url('@{img-src}en-us/card.png') no-repeat 0 -349px;
+    }
+    &.stamp-cancel {
+      background: url('@{img-src}en-us/card.png') no-repeat -410px -351px;
+    }
+  }
+  &.coupon-item {
+    background: url('@{img-src}en-us/card.png') no-repeat;
+    &.useless {
+      background: url('@{img-src}en-us/card.png') no-repeat 0 -174px;
+    }
+    .stamp-used {
+      background: url('@{img-src}en-us/card.png') no-repeat -140px -349px;
+    }
+  }
+
+  &.card-item {
+    background: url('@{img-src}en-us/card.png') no-repeat -260px 0;
+    &.useless {
+      background: url('@{img-src}en-us/card.png') no-repeat -260px -174px;
+    }
+    .stamp-used {
+      background: url('@{img-src}en-us/card.png') no-repeat -275px -351px;
+    }
+  }
+}
+
+.course-list {
+  .course-item {
+    .course-img {
+      position: relative;
+      overflow: hidden;
+      .border-top-left-radius();
+      .border-top-right-radius();
+      .tag-discount {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 68px;
+        height: 68px;
+        background: url("@{img-src}en-us/tag_discount.png");
+        background-image: -webkit-image-set(url("@{img-src}en-us/tag_discount.png") 1x,url("@{img-src}en-us/tag_discount@2x.png") 2x);
+        &.free {
+          background: url("@{img-src}en-us/tag_limitfree.png");
+          background-image: -webkit-image-set(url("@{img-src}en-us/tag_limitfree.png") 1x,url("@{img-src}en-us/tag_limitfree@2x.png") 2x);
+        }
+      }
+      .img-responsive {
+        width: 100%;
+        padding: 10px;
+      }
+    }
+    .tags {
+      position: absolute;
+      top: 0;
+      left: 0px;
+      .tag-live,
+      .tag-serialing,
+      .tag-finished {
+        display: inline-block;
+        height: 24px;
+      }
+      .tag-live {
+        background: url("@{img-src}en-us/tag_live.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}en-us/tag_live.png") 1x,url("@{img-src}en-us/tag_live@2x.png") 2x);
+        width: 58px;
+      }
+      .tag-serialing {
+        background: url("@{img-src}en-us/tag_serialing.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}en-us/tag_serialing.png") 1x,url("@{img-src}en-us/tag_serialing@2x.png") 2x);
+        width: 103px;
+      }
+      .tag-finished {
+        background: url("@{img-src}en-us/tag_finished.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}en-us/tag_finished.png") 1x,url("@{img-src}en-us/tag_finished@2x.png") 2x);
+        width: 84px;
+      }
+    }
+  }
+}
+
+
+.live-course-body{
+  .es-live-all{
+    .media-left{
+      position: relative;
+      .re-live{
+        position: absolute;
+        left: 0;top:0;
+        display: inline-block;
+        width: 68px;
+        height: 68px;
+        background: url("@{img-src}en-us/tag_recommend.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}en-us/tag_recommend.png") 1x,url("@{img-src}en-us/tag_recommend@2x.png") 2x);
+      }
+    }
+  }
+}
+
+.course-detail-header {
+  .course-img {
+    .tags {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .tag-serialing,
+    .tag-live,
+    .tag-finished {
+      display: inline-block;
+      height: 24px;
+    }
+    .tag-serialing {
+      background: url("@{img-src}en-us/tag_serialing.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_serialing.png") 1x,url("@{img-src}en-us/tag_serialing@2x.png") 2x);
+      width: 58px;
+    }
+    .tag-live {
+      background: url("@{img-src}en-us/tag_live.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_live.png") 1x,url("@{img-src}en-us/tag_live@2x.png") 2x);
+      width: 103px;
+    }
+    .tag-finished {
+      background: url("@{img-src}en-us/tag_finished.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}en-us/tag_finished.png") 1x,url("@{img-src}en-us/tag_finished@2x.png") 2x);
+      width: 84px;
+    }
+  }
+}
+
+.class-header {
+  .class-serve {
+    .serve-frame {
+      width: 50px;
+    }
+    >ul {
+      padding: 25px 10px 25px 60px
+    }
+  }
+}

@@ -9,7 +9,7 @@ define(function(require, exports, module) {
                 message = $btn.data('message');
 
             if (!message) {
-                message = '真的要删除该' + name + '吗？';
+                message = Translator.trans('真的要删除该') + name + Translator.trans('吗？');
             }
 
             if (!confirm(message)) {
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     onSuccess.call($element, $item);
                 } else {
                     $btn.parents('[data-role=item]').remove();
-                    Notify.success('删除' + name + '成功');
+                    Notify.success(Translator.trans('删除') + name + Translator.trans('成功'));
                 }
             });
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 一个完整的permission配置如下：
 # admin_user_manage:
 #   name: 用户管理
@@ -14,12 +15,18 @@
 #   after:                  //可选
 #   disable:                //角色管理分配权限默认开启不用选中
 
-# admin_block_visual_edit_history:
-#     name: 历史记录
-#     parent: admin_operation_block
-#     router_params: 
-#        blockTemplateId: (block.blockTemplateId)
-
+#admin_block_visual_edit:
+#    name: 编辑
+#    parent: admin_operation_block
+#    router_params: {'blockTemplateId': 'block.blockTemplateId'}
+#    router_params_context: 1
+#
+#admin_block_visual_edit_history:
+#    name: 历史记录
+#    parent: admin_operation_block
+#    router_params: {'blockTemplateId': 'block.blockTemplateId'}
+#    router_params_context: 1
+# 合并master出现的 暂时不清楚是干嘛的
 admin:
     name: 后台管理员
     parent: null
@@ -258,6 +265,13 @@ admin:
                             name: 课程推荐
                         admin_course_data:
                             name: 课程统计
+                admin_open_course_manage:
+                    name: 公开课管理
+                    router_name: admin_open_course
+                    children:
+                        admin_open_course:
+                            name: 公开课管理
+                            router_name: admin_open_course
                 admin_live_course:
                     name: 直播管理
                     children:

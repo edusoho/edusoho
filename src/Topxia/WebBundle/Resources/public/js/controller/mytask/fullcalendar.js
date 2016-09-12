@@ -17,8 +17,8 @@ define(function(require, exports, module) {
 						right: 'month'
 					},
 					buttonText: {    
-		                today: '今天',
-		                month: '月',
+		                today: Translator.trans('今天'),
+		                month: Translator.trans('月'),
 		            },
 					lang:'zh-cn',
 					allDayDefault:true,

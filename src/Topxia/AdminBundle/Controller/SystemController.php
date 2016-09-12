@@ -2,11 +2,11 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\MailFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
-use Topxia\Common\StringToolkit;
 
 class SystemController extends BaseController
 {
@@ -32,12 +32,12 @@ class SystemController extends BaseController
             $discuzProvider = new DiscuzAuthProvider();
 
             if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
+                return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('通信成功')));
             } else {
-                return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('通信失败')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '未开通Ucenter'));
+            return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('未开通Ucenter')));
         }
     }
 
@@ -51,7 +51,7 @@ class SystemController extends BaseController
         if (!empty($mailer['enabled'])) {
             try {
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
-                    return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('已经使用云邮件')));
                 } else {
                     $mailOptions = array(
                         'to'       => $user['email'],
@@ -64,14 +64,14 @@ class SystemController extends BaseController
                     $mail = MailFactory::create($mailOptions);
                     $mail->send();
 
-                    return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('邮件发送正常')));
                 }
             } catch (\Exception $e) {
-                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：" . $e->getMessage());
-                return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
+                $this->getLogService()->error('system', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送异常')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送服务并没开通！'));
+            return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送服务并没开通！')));
         }
     }
 
@@ -104,7 +104,7 @@ class SystemController extends BaseController
                 }
 
                 try {
-                    $finder->in($this->container->getParameter('kernel.root_dir') . '/../' . $folder);
+                    $finder->in($this->container->getParameter('kernel.root_dir').'/../'.$folder);
 
                     foreach ($finder as $fileInfo) {
                         $relaPath = $fileInfo->getRealPath();
@@ -150,22 +150,22 @@ class SystemController extends BaseController
         $rootDir = $this->get('kernel')->getRootDir();
         $logs    = array(
             'name'  => '/app/logs',
-            'dir'   => $rootDir . '/logs',
-            'title' => '用户在站点进行操作的日志存放目录'
+            'dir'   => $rootDir.'/logs',
+            'title' => $this->getServiceKernel()->trans('用户在站点进行操作的日志存放目录')
         );
 
         $webFileDir = $this->get('kernel')->getContainer()->getParameter('topxia.upload.public_directory');
         $webFiles   = array(
             'name'  => substr($webFileDir, strrpos($webFileDir, '/')),
             'dir'   => $webFileDir,
-            'title' => '用户在站点上传图片的存放目录'
+            'title' => $this->getServiceKernel()->trans('用户在站点上传图片的存放目录')
         );
 
         $materialDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $material    = array(
             'name'  => substr($materialDir, strrpos($materialDir, '/')),
             'dir'   => $materialDir,
-            'title' => '用户教学资料库中资源的所在目录(云文件除外)'
+            'title' => $this->getServiceKernel()->trans('用户教学资料库中资源的所在目录(云文件除外)')
         );
 
         return array_map(function ($array) {
@@ -173,7 +173,7 @@ class SystemController extends BaseController
             $dir   = $array['dir'];
             $total = disk_total_space($dir);
             $free  = disk_free_space($dir);
-            $rate  = (string)number_format($free / $total, 2) * 100 . '%';
+            $rate  = (string) number_format($free / $total, 2) * 100 .'%';
             return array(
                 'name'  => $name,
                 'rate'  => $rate,

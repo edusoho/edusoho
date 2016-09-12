@@ -50,8 +50,8 @@ define(function(require, exports, module) {
             e.stopPropagation();
             var that = this;
             var $btn = $(e.currentTarget);
-            if (!confirm('真的要删除该回复吗？')) {
-                return;
+            if (!confirm(Translator.trans('真的要删除该回复吗？'))) {
+                return ;
             }
             var inSubpost = $btn.parents('.thread-subpost-list').length > 0;
 
@@ -73,9 +73,9 @@ define(function(require, exports, module) {
                 if (response.status == 'ok') {
                     $btn.find(".post-up-num").text(parseInt($btn.find(".post-up-num").text()) + 1);
                 } else if (response.status == 'votedError') {
-                    Notify.danger('您已点过赞了！');
+                    Notify.danger(Translator.trans('您已点过赞了！'));
                 } else {
-                    alert('点赞失败，请重试！');
+                    alert(Translator.trans('点赞失败，请重试！'));
                 }
             }, 'json');
 
@@ -104,7 +104,7 @@ define(function(require, exports, module) {
             var $form = $container.find('.thread-subpost-form');
             if (inSubpost) {
                 $form.removeClass('hide');
-                var text = '回复 @' + $btn.parents('.thread-post').data('authorName') + '： ';
+                var text = Translator.trans('回复')+' @ '+ $btn.parents('.thread-post').data('authorName') + '： ';
                 $form.find('textarea').val(text).trigger('focus');
 
             } else {
@@ -174,7 +174,7 @@ define(function(require, exports, module) {
                         if (data.error) {
                             Notify.danger(data.error.message);
                         } else {
-                            Notify.danger('发表回复失败，请重试');
+                            Notify.danger(Translator.trans('发表回复失败，请重试'));
                         }
                     });
                 }
@@ -240,7 +240,7 @@ define(function(require, exports, module) {
                         if (data.error) {
                             Notify.danger(data.error.message);
                         } else {
-                            Notify.danger('发表回复失败，请重试');
+                            Notify.danger(Translator.trans('发表回复失败，请重试'));
                         }
                     });
 

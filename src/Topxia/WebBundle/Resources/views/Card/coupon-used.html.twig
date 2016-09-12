@@ -14,9 +14,9 @@
   <p class="price">
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'折'|trans}}{% endif %}
   </p>
-  <p>{{'有效期截止：'|trans}}<span>{{ (cardDetail.deadline)|date('Y') }}{{'年'|trans}}{{ (cardDetail.deadline)|date('n') }}{{'月'|trans}}{{ (cardDetail.deadline)|date('d') }}{{'日'|trans}}</span></p>
+  <p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
   {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
-    <p>{{'使用条件：'|trans}}<span>满{{ (cardDetail.fullDiscountPrice) }}可用</span></p>
+    <p>{{'使用条件：'|trans}}<span>{{'满%fullDiscountPrice%'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('可用'|trans)})}}</span></p>
   {% endif %}
   <div class="stamp stamp-used"></div>
 </div>

@@ -16,7 +16,7 @@
       {% if priceType == 'coin' %}
         <span class="price">{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
-        <span class="price">{{ course.price }} {{'元'|trans}}</span>
+        <span class="price">{{'%price%元'|trans({'%price%': course.price})}}</span>
       {% endif %}
     {% endif %}
 
@@ -34,7 +34,7 @@
         {% if (course.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
           {{'限免'|trans}}
         {% else  %}
-          {{ course.discount|round(2, 'common') }} {{'折'|trans}}
+          {{'%discount%折'|trans({'%discount%': course.discount|round(2, 'common')}) }}
         {% endif %}
       </span>
 

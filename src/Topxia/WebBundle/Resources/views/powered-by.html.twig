@@ -4,5 +4,5 @@
   {% endif %}
 {% else %}
   Powered by <a href="http://www.edusoho.com/" target="_blank">EduSoho v{{ constant('\\Topxia\\System::VERSION') }}</a>
-  ©2014-{{ null|date('Y') }} {% if not setting('copyright.thirdCopyright')|default(0) == 2 %}<a class="mlm" href="http://www.howzhi.com/" target="_blank">好知网</a>{% endif %}
+  ©2014-{{ null|date('Y') }} {% if not setting('copyright.thirdCopyright')|default(0) == 2 %}<a class="mlm" href="http://www.howzhi.com/" target="_blank">{{'好知网'|trans}}</a>{% endif %}
 {% endif %}

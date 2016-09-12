@@ -8,9 +8,9 @@
       <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
     </strong>
     <br>
-    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{'分类'|trans}}：{{ category.name|default('--') }}</span>
     {% if classroom.recommended %}
-      <span class="label label-default">荐:{{ classroom.recommendedTime|date('Y-m-d') }} / 序号:{{ classroom.recommendedSeq }}</span>
+      <span class="label label-default">{{'荐'|trans}}:{{ classroom.recommendedTime|date('Y-m-d') }} / {{'序号'|trans}}:{{ classroom.recommendedSeq }}</span>
     {% endif %}
     </td>
     {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
@@ -19,7 +19,7 @@
 
     {% if classroomCoursesNum[classroom.id] > 0 %}
     <strong>  
-      <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">详情</a>
+      <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'详情'|trans}}</a>
     </strong>
     {% endif %}
     </td>
@@ -33,7 +33,7 @@
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
             {% else %}
-                {{ classroom.price }}元
+                {{ classroom.price }}{{'元'|trans}}
             {% endif %}
      </span>
     &nbsp;
@@ -41,9 +41,9 @@
 
     <span style="font-size: 13px;color: #666;">
       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-        原价 {{coinPriceAll[classroom.id|default(0)]}} {{setting('coin.coin_name')}}
+        {{'原价 %coinPriceAll% %coinname%'|trans({'%coinPriceAll%':coinPriceAll[classroom.id|default(0)],'%coinname%':setting('coin.coin_name')})}}
       {% else %}
-        原价 {{priceAll[classroom.id|default(0)]}}元
+        {{'原价 %priceAll%元'|trans({'%priceAll%':priceAll[classroom.id|default(0)]})}}
       {% endif %}
     </span>
 
@@ -52,12 +52,12 @@
 
     <td>
     {% if classroom.status=='published' %}
-    <span style="color: #090;">已发布</span>
+    <span style="color: #090;">{{'已发布'|trans}}</span>
     {% elseif classroom.status=='closed'%}
     
-    <span style="color: #900;">已关闭</span>
+    <span style="color: #900;">{{'已关闭'|trans}}</span>
     {% else %}
-    未发布
+    {{'未发布'|trans}}
     {% endif %}
     </td>
 
@@ -68,28 +68,6 @@
         <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
       {% endif %}
 
- {#<ul class="dropdown-menu">
-       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理{{setting("classroom.name")|default("班级")}}</a></li>
-        
-        {% if classroom.recommended %}
-          <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'classroomList'}) }}" title="取消{{setting("classroom.name")|default("班级")}}推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
-        {% else %}
-          <li><a class="recommend-classroom" href="#modal" data-toggle="modal" data-url="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:'classroomList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐{{setting("classroom.name")|default("班级")}}</a></li>
-        {% endif %}
-          
-       {% if classroom.status=='published'%}
-       <li><a href="javascript:" class="close-classroom" title="关闭{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭{{setting("classroom.name")|default("班级")}}</a></li>
-
-       <li><a href="javascript:" title="发送发布{{setting("classroom.name")|default("班级")}}({{classroom.title}})通知短信" data-url="{{path('sms_prepare',{targetType:'classroom',id:classroom.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
-
-       {% else %}
-       <li><a href="javascript:" class="open-classroom" title="发布{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布{{setting("classroom.name")|default("班级")}}</a></li>
-
-       {% endif %}}
-
-       {% if classroom.status=='draft'%}
-      <li><a href="javascript:" class="delete-classroom" title="删除{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> 删除{{setting("classroom.name")|default("班级")}}</a></li>
-      {% endif %}#}
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_classroom_manage', group:'groupButton', classroom: classroom} %}
   </div>
  </td>

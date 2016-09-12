@@ -9,8 +9,8 @@
       <div class="footer-copyright">
         {% include "TopxiaWebBundle::powered-by.html.twig" %}
         {{ setting('site.analytics')|raw }} 
-        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
-        <div class="mts">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
+        <a class="mlm" href="{{ path('course_archive') }}">{{'课程存档'|trans}}</a>
+        <div class="mts">{% if setting('site.copyright') %}{{'课程内容版权均归'|trans}}<a href="/">{{ setting('site.copyright') }}</a>{{'所有'|trans}}{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
       </div>
 
     </div>

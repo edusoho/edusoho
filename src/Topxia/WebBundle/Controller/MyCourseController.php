@@ -56,7 +56,7 @@ class MyCourseController extends BaseController
             $userIds   = array_merge($userIds, $course['teacherIds']);
             $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60)."小时".($learnTime / 60 % 60)."分钟";
+            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).$this->trans('小时').($learnTime / 60 % 60).$this->trans('分钟');
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 

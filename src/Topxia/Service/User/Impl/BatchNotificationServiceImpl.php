@@ -9,7 +9,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     public function createBatchNotification($fields)
     {
         if (empty($fields['fromId'])) {
-            throw $this->createServiceException("发件人未注册!");
+            throw $this->createServiceException($this->getKernel()->trans('发件人未注册!'));
         }
         if(!isset($fields['targetId'])){
             $fields['targetId'] = 0;
@@ -33,10 +33,10 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     {
         $batchNotification = $this->getBatchNotificationDao()->getBatchNotification($id);
         if(empty($batchNotification)){
-            throw $this->createServiceException("不存在此通知!");
+            throw $this->createServiceException($this->getKernel()->trans('不存在此通知!'));
         }
         if ($batchNotification['published'] == 1) {
-            throw $this->createServiceException("此通知已经发送!");
+            throw $this->createServiceException($this->getKernel()->trans('此通知已经发送!'));
         }
         $batchNotification['published'] = 1;
         $batchNotification['sendedTime'] = time();
@@ -95,7 +95,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     {
         $batchNotification = $this->getBatchNotificationDao()->getBatchNotification($id);
         if (empty($batchNotification)) {
-            throw $this->createServiceException("通知不存在，操作失败。");
+            throw $this->createServiceException($this->getKernel()->trans('通知不存在，操作失败。'));
         }
         if(!empty($batchNotification)){
             $this->getBatchNotificationDao()->deleteBatchNotification($id);

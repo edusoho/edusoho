@@ -13,7 +13,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录!不能加入活动!'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -44,7 +44,7 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('未登录,不能操作!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('未登录,不能操作!'));
         }
 
         $this->getThreadService()->deleteMember($memberId);
@@ -80,20 +80,20 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户还未登录!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户还未登录!'));
         }
 
         $thread = $this->getThreadService()->getThread($threadId);
 
         if (empty($thread)) {
-            return $this->createMessageResponse('warning', '帖子不存在!');
+            return $this->createMessageResponse('warning', $this->getServiceKernel()->trans('帖子不存在!'));
         }
 
         if (!$this->getThreadService()->canAccess('thread.update', $thread)) {
-            throw $this->createAccessDeniedException('无权限操作!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权限操作!'));
         }
 
-        $filename   = $thread['title'].'-成员.xls';
+        $filename   = $this->getServiceKernel()->trans('%threadtitle%-成员.xls', array('%threadtitle%' => $thread['title']));
         $members    = $this->_findMembersByThreadId($threadId);
         $execelInfo = $this->_makeInfo($user);
         $objWriter  = PHPExcelToolkit::export($members, $execelInfo);
@@ -104,15 +104,15 @@ class MemberController extends BaseController
     protected function _makeInfo($user)
     {
         $title = array(
-            'nickname'    => '用户名',
-            'truename'    => '真实姓名',
-            'mobile'      => '手机号码',
-            'createdTime' => '报名时间'
+            'nickname'    => $this->getServiceKernel()->trans('用户名'),
+            'truename'    => $this->getServiceKernel()->trans('真实姓名'),
+            'mobile'      => $this->getServiceKernel()->trans('手机号码'),
+            'createdTime' => $this->getServiceKernel()->trans('报名时间')
         );
         $info              = array();
         $info['title']     = $title;
         $info['creator']   = $user['nickname'];
-        $info['sheetName'] = '成员';
+        $info['sheetName'] = $this->getServiceKernel()->trans('成员');
         return $info;
     }
 

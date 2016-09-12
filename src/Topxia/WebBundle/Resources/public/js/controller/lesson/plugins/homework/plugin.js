@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	var HomeworkPlugin = BasePlugin.extend({
 		code: 'homework',
-		name: '作业',
+		name: Translator.trans('作业'),
 		iconClass: 'glyphicon glyphicon-list-alt',
 		api: {
 			list: '../../lessonplugin/homework/list'

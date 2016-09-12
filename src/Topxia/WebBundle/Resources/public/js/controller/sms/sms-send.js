@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         var url = $('#begin-smsSend').data('url');
         progressBar.on('completed', function() {
             progressBar.deactive();
-            progressBar.text('发送成功！');
+            progressBar.text(Translator.trans('发送成功！'));
             $("#finish-smsSend").show();
         });
 
@@ -47,25 +47,25 @@ define(function(require, exports, module) {
     };
 
     function exec(url, progressBar, startProgress, endProgress) {
-        progressBar.setProgress(startProgress, '正在发送');
+        progressBar.setProgress(startProgress, Translator.trans('正在发送'));
         $.ajax(url, {
             async: true,
             type: 'POST'
         }).done(function(data, textStatus, jqXHR) {
             if (data.status == 'error') {
-                progressBar.error(makeErrorsText(title + '失败：', data.errors));
+                progressBar.error(makeErrorsText(title + Translator.trans('失败：'), data.errors));
             } else if (typeof(data.index) != "undefined") {
                 url = url.replace(/index=\d+/g,'index='+data.index);
                 endProgress = data.progress;
-                progressBar.setProgress(endProgress, data.message+'完成');
+                progressBar.setProgress(endProgress, data.message+Translator.trans('完成'));
                 startProgress = endProgress;
                 exec(url, progressBar, startProgress, endProgress);
             } else if (data.status == 'success') {
             	endProgress = 100;
-                progressBar.setProgress(endProgress, '发送完成');
+                progressBar.setProgress(endProgress, Translator.trans('发送完成'));
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            progressBar.error('发送发生了未知错误。');
+            progressBar.error(Translator.trans('发送发生了未知错误。'));
         });
     }
 

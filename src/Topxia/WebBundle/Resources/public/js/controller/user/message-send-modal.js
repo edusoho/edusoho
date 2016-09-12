@@ -18,10 +18,10 @@ define(function(require, exports, module) {
                 $form.find('button').button('loading').attr('disabled', true);
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('私信发送成功');
+                    Notify.success(Translator.trans('私信发送成功'));
                 }).error(function(){
                     $modal.modal('hide');
-                    Notify.danger('私信发送失败，请重试！');
+                    Notify.danger(Translator.trans('私信发送失败，请重试！'));
                 });
             }
 

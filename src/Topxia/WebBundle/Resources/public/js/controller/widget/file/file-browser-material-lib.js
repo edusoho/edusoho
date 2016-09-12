@@ -49,7 +49,7 @@ define(function (require, exports, module) {
 
         refreshTeacherList: function (self, teachers) {
             if (Object.keys(teachers).length > 0) {
-                var html = "<option value=''>请选择老师</option>";
+                var html="<option value=''>"+Translator.trans('请选择老师')+"</option>";
                 $.each(teachers, function (i, teacher) {
                     html += "<option value='" + teacher.id + "'>" + teacher.nickname + "</option>"
                 });
@@ -89,7 +89,7 @@ define(function (require, exports, module) {
                     html += '<nav class="text-center">';
                     html += '<ul class="pagination">';
                     if (paginator.currentPage != paginator.firstPage) {
-                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.firstPageUrl + '">首页</a></li>'
+                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.firstPageUrl + '">'+Translator.trans('首页')+'</a></li>'
                         html += '<li><a class="es-icon es-icon-chevronleft js-switch-page" data-url="' + paginator.previousPageUrl + '"></a></li>';
                     }
 
@@ -105,7 +105,7 @@ define(function (require, exports, module) {
 
                     if (paginator.currentPage != paginator.lastPage) {
                         html += '<li><a class="es-icon es-icon-chevronright js-switch-page" data-url="' + paginator.nextPageUrl + '"></a></li>';
-                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.lastPageUrl + '">尾页</a></li>';
+                        html += '<li><a href="javascript:;" class="js-switch-page" data-url="' + paginator.lastPageUrl + '">'+Translator.trans('尾页')+'</a></li>';
                     }
                     html += '</ul>';
                     html += '</nav>';
@@ -188,24 +188,24 @@ define(function (require, exports, module) {
         _insertFilter: function () {
             $filterHtml =
                 "<div class='file-browser-filter mvs'> \
-                    <div class='radios'>资料来源： \
-                        <label><input type='radio' name='" + this.element.attr("id") + "-source' value='upload' checked>来自上传</label> \
-        			<label><input type='radio' name='" + this.element.attr("id") + "-source' value='shared'>来自分享</label> \
-              <label><input type='radio' name='" + this.element.attr("id") + "-source' value='public'>公共资料</label> \
-              <label><input type='radio' name='" + this.element.attr("id") + "-source' value='collection'>我的收藏</label> \
+                    <div class='radios'>"+Translator.trans('资料来源')+"： \
+                        <label><input type='radio' name='" + this.element.attr("id") + "-source' value='upload' checked>"+Translator.trans('来自上传')+"</label> \
+        			<label><input type='radio' name='" + this.element.attr("id") + "-source' value='shared'>"+Translator.trans('来自分享')+"</label> \
+              <label><input type='radio' name='" + this.element.attr("id") + "-source' value='public'>"+Translator.trans('公共资料')+"</label> \
+              <label><input type='radio' name='" + this.element.attr("id") + "-source' value='collection'>"+Translator.trans('我的收藏')+"</label> \
           </div> \
 	        	<div class='row'> \
         			<div  class='col-xs-5'> \
 			      	<span class='input-group'> \
-				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder='输入视频标题关键字'  /> \
+				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder=Translator.trans('输入视频标题关键字')  /> \
 				    <span class='input-group-btn'> \
-				      <button type='button' class='btn btn-default js-browser-search' data-loading-text='正在加载，请稍等'>搜索</button> \
+				      <button type='button' class='btn btn-default js-browser-search' data-loading-text='"+Translator.trans('正在加载，请稍等')+"'>"+Translator.trans('搜索')+"</button> \
 				    </span> \
 				  </span> \
         			</div> \
 			      <span class='file-filter-by-owner-container col-xs-5' style='display: none;'> \
 			      	<select name='file-filter-by-owner' class='file-filter-by-owner form-control width-input-large'> \
-				    		<option value=''>请选择老师</option> \
+				    		<option value=''>"+Translator.trans('请选择老师')+"</option> \
 				    </select> \
 			      </span> \
 			     </div> \

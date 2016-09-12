@@ -16,7 +16,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         $request->getSession()->set('_target_path', $request->request->get('_target_path'));
 
         if ($exception->getMessage() == "Bad credentials") {
-            $message = "用户名或密码错误";
+            $message = $this->getServiceKernel()->trans('用户名或密码错误');
         } else {
             goto end;
         }
@@ -45,11 +45,11 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 
             if ($forbidden['user']) {
                 if ($failed['ipFaildCount'] >= $setting['ip_temporary_lock_allowed_times']) {
-                    $message = "您当前IP下帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试。";
+                    $message = $this->getServiceKernel()->trans('您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
                 } elseif ($failed['leftFailedCount']) {
-                    $message = "帐号或密码错误，您还有{$failed['leftFailedCount']}次输入机会";
+                    $message = $this->getServiceKernel()->trans('帐号或密码错误，您还有%failedLeftFailedCount%次输入机会', array('%failedLeftFailedCount%' =>$failed['leftFailedCount'] ));
                 } else {
-                    $message = "帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试，您可以通过找回并重置密码来解除封禁。";
+                    $message = $this->getServiceKernel()->trans('帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
                 }
 
                 $exception = new AuthenticationException($message);
@@ -77,5 +77,9 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

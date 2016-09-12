@@ -21,7 +21,6 @@
       	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
         data-price-type = "{{priceType|default('RMB')}}" data-cash-model='{{setting('coin.cash_model')|default('none')}}'/>
         <input type="hidden" name="targetType" value="{{targetType}}"/>
-        <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
         <input type="hidden" name="targetId" value="{{targetId}}"/>
         <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
         <input type="hidden" name="shouldPayMoney" value=""/>
@@ -54,7 +53,7 @@
           <div class="total-price">
             {{'应付金额：'|trans}}
             {% if priceType|default('RMB') == "Coin" %}
-              <span role="pay-coin">0</span> {{setting("coin.coin_name")}} ÷ {{'汇率'|trans}}({{cashRate|default(1)}}) = <span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb"></span> {{'元'|trans}}
+              <span role="pay-coin">0</span> {{'%coin_name% ÷ 汇率(%cashRate%) = '|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'元'|trans}}</span>
             {% else %}
               <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
             {% endif %}

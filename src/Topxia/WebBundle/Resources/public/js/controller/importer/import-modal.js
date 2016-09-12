@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 
         $.each(datas, function(i, item) {
             steps.push({
-                 title: '已经导入：'+progressNum,
+                 title: Translator.trans('已经导入：')+progressNum,
                  url: importUrl,
                  data:{'data': JSON.stringify(item),'checkType':checkType},
                  progressRange: [i*100/progress.length, (i+1)*100/progress.length]
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
         progressBar.on('completed', function() {
             progressBar.deactive();
-            progressBar.text('导入完成！');
+            progressBar.text(Translator.trans('导入完成！'));
             $("#updating-hint").hide();
             $("#finish-import-btn").show();
         });
@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             type: 'POST'
         }).done(function(data, textStatus, jqXHR) {
             if (data.status == 'error') {
-                progressBar.error(makeErrorsText(title + '失败：', data.errors));
+                progressBar.error(makeErrorsText(title + Translator.trans('失败：'), data.errors));
             } else if (typeof(data.index) != "undefined") {
                 if (url.indexOf('index') < 0) {
                     url = url+'&index=0';
@@ -72,16 +72,16 @@ define(function(require, exports, module) {
                 if (endProgress > 100) {
                     endProgress = 100;
                 }
-                progressBar.setProgress(endProgress, data.message+'完成');
+                progressBar.setProgress(endProgress, data.message+Translator.trans('完成'));
                 startProgress = endProgress;
                 title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
             } else {
-                progressBar.setProgress(endProgress, title + '完成');
+                progressBar.setProgress(endProgress, title + Translator.trans('完成'));
                 $(document).dequeue('update_step_queue');
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            progressBar.error( title +  '时，发生了未知错误。');
+            progressBar.error( Translator.trans('%title%时，发生了未知错误。',{title:title}));
             $(document).clearQueue('update_step_queue');
         });
     }

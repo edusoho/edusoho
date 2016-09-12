@@ -1,13 +1,12 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 abstract class BaseCommand extends ContainerAwareCommand
 {
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
@@ -29,4 +28,12 @@ abstract class BaseCommand extends ContainerAwareCommand
         ));
         $serviceKernel->setCurrentUser($currentUser);
     }
+
+    protected function trans($message, $arguments = array(), $domain = null, $locale = null)
+    {
+        $translator = $this->getContainer()->get('translator');
+
+        return $translator->trans($message, $arguments, $domain, $locale); // works fine! :)
+    }
+
 }

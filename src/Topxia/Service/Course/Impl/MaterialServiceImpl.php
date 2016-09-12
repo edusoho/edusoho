@@ -11,7 +11,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $argument = $material;
         if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
-            throw $this->createServiceException('参数缺失，上传失败！');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，上传失败！'));
         }
 
         $fields = $this->_getMaterialFields($material);
@@ -66,7 +66,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->getMaterial($materialId);
         if (empty($material) || $material['courseId'] != $courseId) {
-            throw $this->createNotFoundException('课程资料不存在，删除失败。');
+            throw $this->createNotFoundException($this->getKernel()->trans('课程资料不存在，删除失败。'));
         }
 
         $this->getMaterialDao()->deleteMaterial($materialId);

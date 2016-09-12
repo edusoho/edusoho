@@ -60,6 +60,10 @@ class AttachmentController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
         $previewType = $request->query->get('type', 'attachment');
         if ($previewType == 'attachment') {
             $attachment = $this->getUploadFileService()->getUseFile($id);
@@ -82,6 +86,10 @@ class AttachmentController extends BaseController
 
     public function downloadAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
         $attachment = $this->getUploadFileService()->getUseFile($id);
         $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
