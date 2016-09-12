@@ -13101,6 +13101,67 @@ textarea {
   display: block;
   margin-left: 70px;
 }
+.show-introhelp {
+  position: relative;
+}
+.show-introhelp .introhelp-icon-help {
+  position: relative;
+  color: #ff8a0c;
+  z-index: 9999999!important;
+}
+.show-introhelp .introhelp-icon-drag {
+  position: relative;
+  color: #fff;
+  z-index: 9999999!important;
+}
+.show-introhelp .popover {
+  display: none;
+  font-size: 12px;
+  color: #313131;
+}
+.show-introhelp .popover .title {
+  color: #919191;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 10px;
+}
+.show-introhelp .popover.bottom {
+  top: 18px;
+  left: -77px;
+}
+.show-introhelp .popover.left {
+  left: -230px;
+  top: 90px;
+}
+.show-introhelp .introhelp-img {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #fff;
+  font-size: 14px;
+}
+.show-introhelp .introhelp-img img {
+  display: block;
+  margin-left: 50px;
+}
+.show-introhelp .close-introhelp {
+  float: right;
+  color: #919191;
+  cursor: pointer;
+}
+.show-introhelp.show .popover {
+  display: block;
+}
+.introhelp-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  background-color: #000;
+}
 .marker-preview {
   height: 100%;
   background-color: #f1f4f6;

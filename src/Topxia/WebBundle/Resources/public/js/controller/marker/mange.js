@@ -78,7 +78,6 @@ define(function(require, exports, module) {
                     var left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
                     $('.scale-white').css('left', left);
                     var times = _self._gettime(left);
-                    console.log(times);
                     messenger.sendToChild({ id: 'viewerIframe' }, 'setCurrentTime', { time: times });
                 }).on('mouseup.playertime', function() {
                     $(document).off('mousemove.playertime');
@@ -90,7 +89,6 @@ define(function(require, exports, module) {
             });
         },
         itemRmove: function(e) {
-            console.log('itemRmove');
             e.stopPropagation();
             $this = $(e.currentTarget);
             var $list = $this.closest('[data-role="scale-blue-list"]'),
@@ -107,7 +105,6 @@ define(function(require, exports, module) {
             }
         },
         itemSqe: function(e) {
-            console.log('itemSqe');
             //阻止默认事件，父层的滑动
             e.stopPropagation();
         },
@@ -116,7 +113,6 @@ define(function(require, exports, module) {
             e.stopPropagation();
         },
         itemDraggable: function(e) {
-            console.log('itemDraggable');
             var _self = this,
                 marker_array = [],
                 $merge_marker = null,
@@ -197,8 +193,6 @@ define(function(require, exports, module) {
             });
         },
         slideScale: function(e) {
-            console.log('slideScale');
-            console.log(this.get('isDraggable'));
             var _self = this,
                 marker_array = [],
                 $merge_marker = null,
@@ -223,7 +217,6 @@ define(function(require, exports, module) {
                     $merge_marker = null;
                     for (i in _self.get('markers_array')) {
                         if (Math.abs(_self.get('markers_array')[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.get('markers_array')[i].id) {
-                            console.log(Math.abs(_self.get('markers_array')[i].time - _move_time));
                             marker_array = [{
                                 id: _self.get('markers_array')[i].id,
                                 time: _self.get('markers_array')[i].time
@@ -241,7 +234,6 @@ define(function(require, exports, module) {
                 $moveitem.removeClass('moveing');
                 $('.marker-manage').removeClass('slideing');
                 if (marker_array.length > 0) {
-                    console.log(marker_array);
                     var $list = $merge_marker.find('[data-role="scale-blue-list"]');
                     $list.append($moveitem.find('[data-role="scale-blue-list"]').children());
                     _self._sortList($list);
@@ -249,7 +241,6 @@ define(function(require, exports, module) {
                     _self._mergeScale($moveitem, $merge_marker, _self.get('markers_array'));
                 } else {
                     //新增
-                    console.log('_updateScale');
                     _self._updateScale($moveitem, _move_time);
                 }
             })
@@ -291,7 +282,6 @@ define(function(require, exports, module) {
                 var _partnum = _self.get("timepartnum");
                 var _parttime = _self.get("_video_time") / _partnum;
                 for (var i = 0; i <= _partnum; i++) {
-                    console.log();
                     var $new_scale_default = $('[data-role="scale-default"]').clone().css('left', _self._getleft(_parttime * i)).removeClass('hidden').removeAttr('data-role');
                     $new_scale_default.find('[data-role="scale-time"]').text(_self._convertTime(Math.round(_parttime * i)));
                     $('[data-role="scale-default"]').before($new_scale_default);
@@ -308,7 +298,6 @@ define(function(require, exports, module) {
             if (initMarkerArry.length > 0) {
                 var $scale_blue = $('[data-role="scale-blue"]');
                 for (var i = 0; i < initMarkerArry.length; i++) {
-                    console.log(initMarkerArry[i].second);
                     $new_scale_blue = $scale_blue.clone().css('left', this._getleft(initMarkerArry[i].second)).removeAttr('data-role').removeClass('hidden').attr('id', initMarkerArry[i].id);
                     $scale_blue_time = $new_scale_blue.find('[data-role="scale-blue-time"]').text(this._convertTime(initMarkerArry[i].second));
                     var questionMarkers = initMarkerArry[i].questionMarkers;
@@ -341,7 +330,6 @@ define(function(require, exports, module) {
                 delay: 500,
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
-                    console.log('onDrop');
                     _super($item, container);
                     _self._maskShow(false);
                     var $scale_blue = $item.closest('.scale-blue');
@@ -362,11 +350,9 @@ define(function(require, exports, module) {
                     $scale_blue.removeClass('moveing');
                 },
                 serialize: function(parent, children, isContainer) {
-                    console.log('serialize');
                     return isContainer ? children : parent.attr('id');
                 },
                 isValidTarget: function($item, container) {
-                    console.log('isValidTarget');
                     _self._maskShow(true);
                     $item.closest('.scale-blue').addClass('moveing');
                     return true;
@@ -422,7 +408,6 @@ define(function(require, exports, module) {
         },
         _addScale: function($marker, time, seq, markers_array) {
             var $marker_item = $marker.find('li' + ':last');
-            console.log($marker_item);
             var markerJson = {
                 "id": $marker.attr('id'),
                 "second": time,
@@ -492,7 +477,6 @@ define(function(require, exports, module) {
         initMarkerArry: initMarkerArry,
         _video_time: mediaLength,
         addScale: function(markerJson, $marker, markers_array) {
-            console.log(markerJson);
             var url = $('.js-pane-question-content').data('queston-marker-add-url');
             var param = {
                 markerId: markerJson.id,
@@ -529,7 +513,6 @@ define(function(require, exports, module) {
                         break;
                     }
                 }
-                console.log(markers_array);
             });
             return markerJson;
         },

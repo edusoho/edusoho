@@ -5,7 +5,7 @@
 {% set bodyClass="marker-manage" %}
 
 {% block body %}
-  <div class="marker-manage-content" id="lesson-dashboard"
+  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
     data-lesson-mediaid="{{ lesson.mediaId }}"
@@ -15,7 +15,20 @@
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
         <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">随堂练习</a></li>
         <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">字幕</a></li>
-        <li class="static" role="presentation"><a><span class="border"><i class="es-icon es-icon-xinxi" id="step-1" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="为保险起见，所有对视频的编辑操作都将实时保存。"></i></span></a></li>
+        <li class="static" role="presentation">
+          <a>
+            <span class="border show-introhelp">
+              <i class="es-icon es-icon-xinxi introhelp-icon-help" id="step-1" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="为保险起见，所有对视频的编辑操作都将实时保存。"></i>
+              <div class="popover bottom" >
+                <div class="arrow"></div>
+                <div class="popover-content clearfix">
+                  <p>为保险起见，所有对视频的编辑操作都将实时保存。</p>
+                  <span class="close-introhelp js-close-introhelp">知道了</span>
+                </div>
+              </div>
+            </span>
+          </a>
+        </li>
       </ul>
       <a href="{{ path('course_lesson_marker_manage_preview', {courseId:course.id,lessonId:lesson.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览弹题'|trans}}</a>
 
@@ -30,4 +43,5 @@
     {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
   </div>
   <div class="modal"></div>
+  <div class="introhelp-overlay js-introhelp-overlay hidden"></div>
 {% endblock %}

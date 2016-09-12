@@ -3,7 +3,7 @@
     <li class=" item-lesson {% if question.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{question.id}}" data-role="scale-blue-item" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">
       <span class="sqe-number"><i class="question-remove es-icon es-icon-icon_close_circle" data-role="question-remove"></i><span data-role="sqe-number">1</span>、</span>
       <span class="title">
-        <i class="icon-drag es-icon es-icon-yidong"></i>
+        <i class="icon-drag es-icon es-icon-yidong {% if loop.index == 1 %}introhelp-icon-drag{% endif %}"></i>
         <span class="color-primary text-xs" data-role="question-type">[{{ dict('questionType')[question.type] }}]</span>
       </span>
       <span class="info text-overflow">{{question.stem|fill_question_stem_text|plain_text() }}</span>
