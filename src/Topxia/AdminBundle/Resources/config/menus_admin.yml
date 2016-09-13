@@ -241,6 +241,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
+                                    class: delete-course
                                     visable: ( course.status in ['closed', 'draft'])
                         admin_course_recommend_list:
                             name: 课程推荐
