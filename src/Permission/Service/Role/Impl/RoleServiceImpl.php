@@ -81,7 +81,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function refreshRoles()
     {
-        $getAllRole = PermissionBuilder::instance()->getOriginPermissionTree();
+        $getAllRole = PermissionBuilder::instance()->getOriginPermissionTree(true);
         $getSuperAdminRoles = $getAllRole->column('code');
         $adminForbidRoles = array('admin_user_avatar', 'admin_user_change_password','admin_my_cloud', 'admin_cloud_video_setting', 'admin_edu_cloud_sms', 'admin_edu_cloud_search_setting', 'admin_setting_cloud_attachment', 'admin_setting_cloud', 'admin_system');
 
