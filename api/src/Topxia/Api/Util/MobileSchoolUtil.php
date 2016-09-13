@@ -13,7 +13,7 @@ class MobileSchoolUtil
         $apps[1] = array(
             'id' => "1",
             'code' => 'global',
-            'name' => $site['name'],
+            'name' => '网校公告',
             'title' => $site['slogan'],
             'about' => $mobile['about'],
             'avatar' => $mobile['logo'],
