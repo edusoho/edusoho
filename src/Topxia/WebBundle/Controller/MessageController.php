@@ -44,9 +44,9 @@ class MessageController extends BaseController
         $nickname = $request->query->get('value');
         $result = $this->getUserService()->isNicknameAvaliable($nickname);
         if ($result) {
-            $response = array('success' => false, 'message' => '该收件人不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该收件人不存在'));
         } else if ($currentUser['nickname'] == $nickname){
-            $response = array('success' => false, 'message' => '不能给自己发私信哦！');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('不能给自己发私信哦！'));
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -58,7 +58,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createNotFoundException('私信会话不存在！');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('私信会话不存在！'));
         }
         $paginator = new Paginator(
             $request,
@@ -105,7 +105,7 @@ class MessageController extends BaseController
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname);
                 if(empty($receiver)) {
-                    throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
+                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
                 return $this->redirect($this->generateUrl('message'));
@@ -128,7 +128,7 @@ class MessageController extends BaseController
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname); 
                 if(empty($receiver)){
-                    throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
+                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             }
@@ -150,7 +150,7 @@ class MessageController extends BaseController
                 $nickname = $message['receiver'];
                 $receiver = $this->getUserService()->getUserByNickname($nickname); 
                 if(empty($receiver)){
-                    throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
+                    throw $this->createNotFoundException($this->getServiceKernel()->trans('抱歉，该收信人尚未注册!'));
                 }
                 $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             }
@@ -166,7 +166,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException('您无权删除此私信！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权删除此私信！'));
         }
 
         $this->getMessageService()->deleteConversation($conversationId);
@@ -178,7 +178,7 @@ class MessageController extends BaseController
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
         if (empty($conversation) || $conversation['toId'] != $user['id']) {
-            throw $this->createAccessDeniedException('您无权删除此私信！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权删除此私信！'));
         }
         
         $this->getMessageService()->deleteConversationMessage($conversationId, $messageId);

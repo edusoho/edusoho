@@ -35,7 +35,7 @@
           
           {% if is_plugin_installed('TeacherAudit') %}   
           <li class="list-group-item {% if side_nav == 'teacheraudit' %}active{% endif %}">
-            <a href="{{ path('teacher_audit_submit') }}"><i class="glyphicon glyphicon-bookmark"></i> 教师资格申请</a>
+            <a href="{{ path('teacher_audit_submit') }}"><i class="glyphicon glyphicon-bookmark"></i> {{'教师资格申请'|trans}}</a>
           </li>
           {% endif %}
           

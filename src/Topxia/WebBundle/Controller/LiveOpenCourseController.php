@@ -24,6 +24,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
         $this->createRefererLog($request, $course);
+
         return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
@@ -161,7 +162,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
             $lesson["isEnd"]                   = intval(time() - $lesson["endTime"]) > 0;
-            $lesson["canRecord"]               = $lesson['replayStatus'] == 'videoGenerated' ? false : $client->isAvailableRecord($lesson['mediaId']);
+            $lesson["canRecord"]               = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
             $lesson['file']                    = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }

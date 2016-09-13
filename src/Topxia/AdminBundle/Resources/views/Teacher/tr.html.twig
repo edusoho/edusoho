@@ -3,15 +3,15 @@
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
-      <label class="label label-danger">禁</label>
+      <label class="label label-danger">{{'禁'|trans}}</label>
     {% endif %}
   </td>
    {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.promoted %}
-      <span class="label label-default">荐:{{ user.promotedTime|date('Y-m-d') }} / 序号:{{ user.promotedSeq }}</span>
+      <span class="label label-default">{{'荐:'|trans}}{{ user.promotedTime|date('Y-m-d') }} / {{'序号:'|trans}}{{ user.promotedSeq }}</span>
     {% else %}
-      <span class="text-muted">否</span>
+      <span class="text-muted">{{'否'|trans}}</span>
     {% endif %}
   </td>
   <td>
@@ -21,17 +21,17 @@
   </td>
   <td>
     <div class="btn-group">
-      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{'查看'|trans}}</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
         {% if not user.promoted %}
-        <li><a class="promote-teacher" href="#modal" data-toggle="modal" data-url="{{ path('admin_teacher_promote', {id:user.id ,type:'teacherList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐老师</a></li>
+        <li><a class="promote-teacher" href="#modal" data-toggle="modal" data-url="{{ path('admin_teacher_promote', {id:user.id ,type:'teacherList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> {{'推荐老师'|trans}}</a></li>
         {% endif %}
         
         {% if user.promoted %}
-          <li><a class="cancel-promote-teacher" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
+          <li><a class="cancel-promote-teacher" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">{{'取消推荐教师'|trans}}</a></li>
         {% endif %}
       </ul>
     </div>

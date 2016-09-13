@@ -22,15 +22,15 @@ class MessageServiceImpl extends BaseService implements MessageService
     public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {   
         if (empty($fromId) || empty($toId)) {
-            throw $this->createServiceException("发件人或收件人未注册!"); 
+            throw $this->createServiceException($this->getKernel()->trans('发件人或收件人未注册!')); 
         }
 
         if($fromId == $toId){
-            throw $this->createServiceException("抱歉,不允许给自己发送私信!"); 
+            throw $this->createServiceException($this->getKernel()->trans('抱歉,不允许给自己发送私信!')); 
         }
 
         if(empty($content)){
-            throw $this->createServiceException("抱歉,不能发送空内容!"); 
+            throw $this->createServiceException($this->getKernel()->trans('抱歉,不能发送空内容!')); 
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
@@ -115,7 +115,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     {   
         $conversation = $this->getConversationDao()->getConversation($conversationId);
         if (empty($conversation)) {
-            throw $this->createServiceException(sprintf("私信会话#%s不存在。", $conversationId));
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('私信会话#%conversationId%不存在。',array('%conversationId%'=>$conversationId))));
         }
         $updatedConversation = $this->getConversationDao()->updateConversation($conversation['id'], array('unreadNum'=>0));
         $this->getRelationDao()->updateRelationIsReadByConversationId($conversationId,array('isRead'=>1));

@@ -11,7 +11,7 @@ class AlipayResponse extends Response
     {
         $error = $this->hasError();
         if ($error) {
-            throw new \RuntimeException(sprintf('支付宝支付校验失败(%s)。', $error));
+            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('支付宝支付校验失败(%error%)。', array('%error%' => $error))));
         }
 
         $params = $this->params;

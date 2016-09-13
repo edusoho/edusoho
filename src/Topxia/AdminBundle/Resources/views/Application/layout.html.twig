@@ -6,7 +6,7 @@
   <div class="col-md-2">
     {% block sidebar %}
       <div class="list-group">
-        <a href="{{ path('admin_task') }}" class="list-group-item {% if menu == 'task' %}active{% endif %}">任务管理<span class="glyphicon glyphicon-chevron-right"></span></a>
+        <a href="{{ path('admin_task') }}" class="list-group-item {% if menu == 'task' %}active{% endif %}">{{'任务管理'|trans}}<span class="glyphicon glyphicon-chevron-right"></span></a>
       </div>
     {% endblock %}
   </div>

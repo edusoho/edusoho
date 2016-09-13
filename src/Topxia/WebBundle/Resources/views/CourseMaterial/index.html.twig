@@ -34,7 +34,7 @@
 		    		<span class="bullet">•</span>
 	    		{% endif %}
 	    		{% if lesson %}
-	    		  <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">课时{{ lesson.number }}</a>
+	    		  <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">{{'课时%number%'|trans({'%number%': lesson.number })}}</a>
 		    		<span class="bullet">•</span>
 	    		{% endif %}
 		    	<span class="text-muted">{{'上传于'|trans}}{{ material.createdTime|smart_time }}</span>

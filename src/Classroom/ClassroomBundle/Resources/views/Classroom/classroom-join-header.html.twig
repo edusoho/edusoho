@@ -8,7 +8,7 @@
       </div>
     {% endif %}
     <ol class="breadcrumb breadcrumb-o">
-      <li><a href="{{ path('homepage') }}">首页</a></li>
+      <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
       {% endfor %}
@@ -30,28 +30,29 @@
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
                 <img src="" alt="">
-                扫二维码继续学习
+                {{'扫二维码继续学习'|trans}}
+                {{'二维码时效为半小时'|trans}}
               </span>
             </span>
           </h2>
           <div class="metas">
             <div class="score">
               {{ web_macro.star(classroom.rating) }}
-              <span>({{ classroom.ratingNum }}评价)</span>
+              <span>({{ classroom.ratingNum }}{{'评价'|trans}})</span>
             </div>
             {% if member.role == 'auditor'%}
               <div class="price">
-                价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                {{'价格：'|trans}} <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                       {% if classroom.price > 0 %}
                      {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
                       {% else %}
-                      免费
+                      {{'免费'|trans}}
                       {% endif %}
                   {% else %}
                     {% if classroom.price > 0 %}
-                      {{ classroom.price }}元
+                      {{ classroom.price }}{{'元'|trans}}
                     {% else %}
-                      免费
+                      {{'免费'|trans}}
                     {% endif %}
                   {% endif %}</span>
               </div>
@@ -59,7 +60,7 @@
           </div>
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
-              承诺服务
+              {{'承诺服务'|trans}}
             </div>
             {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
           </div>
@@ -68,13 +69,13 @@
           <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
             <li>
               <p><i class="es-icon es-icon-person"></i></p>
-              <p>学员({{classroom.studentNum + classroom.auditorNum }})</p>
+              <p>{{'学员'|trans}}({{classroom.studentNum + classroom.auditorNum }})</p>
             </li>
             <li>
               <span class="es-share top">
                 <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
                   <p><i class="es-icon es-icon-share"></i></p>
-                  <p>分享</p>
+                  <p>{{'分享'|trans}}</p>
                 </a>
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
@@ -88,7 +89,7 @@
           </ul>
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
-              您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
+              {{'您现在是'|trans}}<span class="color-warning">{{'旁听生'|trans}}</span>{{'，不能完整学习'|trans}}<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务'|trans}}"></i><br>
               
               {% if  classroom.showable and classroom.status != 'closed' %}
                 <div class="btn-buy">
@@ -100,11 +101,11 @@
           {% endif %}
         </div>
       {% if classroom_permit(classroom.id, 'Manage') %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting hidden-xs hidden-sm" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting hidden-xs hidden-sm" title="{{'%name%管理'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% elseif classroom_permit(classroom.id, 'Handle') %}
-        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="{{'%name%管理'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}

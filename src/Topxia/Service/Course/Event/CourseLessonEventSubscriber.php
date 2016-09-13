@@ -341,7 +341,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson  = $context['lesson'];
 
         if (!empty($lesson) && $lesson['replayStatus'] != 'videoGenerated') {
-            unset($argument['mediaId']);
+            return false;
         }
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');

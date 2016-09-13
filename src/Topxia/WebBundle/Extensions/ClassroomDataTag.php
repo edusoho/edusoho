@@ -24,7 +24,7 @@ class ClassroomDataTag extends BaseDataTag implements DataTag
     protected function checkClassroomId(array $arguments)
     {
         if (empty($arguments['classroomId'])) {
-            throw new \InvalidArgumentException("classroomId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('classroomId参数缺失'));
         }
     }
 

@@ -4,7 +4,7 @@
 {% set modal_class= "modal-lg" %}
 
 {% block title %}
-  {% if lesson %}{{'编辑试卷课时'|trans}}{{ lesson.number }}{% else %}{{'添加试卷课时'|trans}}{% endif %}
+  {% if lesson %}{{'编辑试卷课时%number%'|trans({'%number%': lesson.number })}}{% else %}{{'添加试卷课时'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -35,6 +35,22 @@
       </div>
 
       <div class="form-group">
+        <div class="col-md-2 control-label"><label>{{'考试次数'|trans}}</label></div>
+        <div class="col-md-9 controls radios">
+          {{ radios('doTimes', {0:'不限', 1:'单次'}, lesson.doTimes|default('0')) }}
+        </div>
+      </div>
+
+      <div class="form-group" {% if lesson.doTimes|default('0') %}style="display:none;" {% endif %}>
+        <div class="col-md-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
+        <div class="col-md-9 controls">
+          <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ lesson.redoInterval|default('0') }}"> {{'小时'|trans}}
+          <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'|trans}}"></i>
+          <div class="help-block">{{'0小时，表示无限制。'|trans}}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
         <div class="col-md-9 controls">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
@@ -42,7 +58,7 @@
       </div>
       {#
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">实时考试</label></div>
+        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">{{'实时考试'|trans}}</label></div>
         <div class="col-md-9 controls radios">
           {{ radios('testMode', {'normal':'关闭', 'realTime':'开启'}, lesson.testMode|default('normal')) }}
           <input type="hidden" id="real-time-testpaper" value="{{ lesson.testMode|default('normal') }}">
@@ -51,7 +67,7 @@
 
       <div class="form-group " id="testpaper-start-time-div" style="display: none">
         <div class="col-md-2 control-label">
-          <label>开始时间</label>
+          <label>{{'开始时间'|trans}}</label>
         </div>
         <div class="col-md-9 controls">
           <input id="lesson-testpaper-start-time-field" class="form-control" type="text" name="testStartTime" value="{% if lesson.testStartTime|default(null) %} {{ lesson.testStartTime|date('Y-m-d H:i') }}{% endif %}">
@@ -83,7 +99,7 @@
     <script>app.load('course-manage/lesson-testpaper-modal')</script>
 
   {% else %}
-    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    <div class="empty">{{'尚未创建试卷，请先'|trans}}<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">{{'创建试卷'|trans}}</a>。</div>
   {% endif %}
 
 {% endblock %}

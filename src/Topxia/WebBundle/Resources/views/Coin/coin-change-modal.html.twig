@@ -27,7 +27,7 @@
   <table class="table table-striped">
     <tr>
       <th>{{'消费赠送'|trans}}</th>
-      <th>{{'赠送'|trans}}{{setting('coin.coin_name')}}</th>
+      <th>{{'赠送%coin_name%'|trans({'%coin_name%': setting('coin.coin_name')})}}</th>
     </tr>
     {% for data in data%}
     <tr>

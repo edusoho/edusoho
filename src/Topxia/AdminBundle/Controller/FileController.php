@@ -37,7 +37,7 @@ class FileController extends BaseController
     	return $this->createFormBuilder()
     		->add('group', 'choice', array(
     			'choices' => $groupChoices,
-    			'empty_value' => '--文件组--',
+    			'empty_value' => $this->getServiceKernel()->trans('--文件组--'),
     			'required' => false
 			))
 			->getForm();

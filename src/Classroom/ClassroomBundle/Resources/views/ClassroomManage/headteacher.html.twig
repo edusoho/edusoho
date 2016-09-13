@@ -1,6 +1,6 @@
 {% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
 
-{% block title %}班主任设置 - {{ parent() }}{% endblock %}
+{% block title %}{{'班主任设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'headTeacher' %}
 {% set script_controller = 'classroombundle/controller/classroom/manage/headteacher' %}
@@ -37,24 +37,24 @@
 </style>
        
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">班主任设置</div>
+  <div class="panel-heading">{{'班主任设置'|trans}}</div>
   <div class="panel-body">
 
     <form id="teachers-form" class="form-horizontal" method="post">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="teachers-form-group">
-        <label class="col-md-2 control-label">设置班主任</label>
+        <label class="col-md-2 control-label">{{'设置班主任'|trans}}</label>
         <div class="col-md-8 controls">
           <ul class="list-group teacher-list-group sortable-list" id="teacher-list-group" data-role="list" style="display:none;"></ul>
           <div class="input-group">
             {% set url = path('classroom_headteacher_match', {classroomId:classroom.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
+              <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
             </span>
           </div>
-          <p class="help-block">班主任负责管理整个{{setting("classroom.name","班级")}}，班主任只有一位，并且必须要由老师来担任。</p>
+          <p class="help-block">{{'班主任负责管理整个%name%，班主任只有一位，并且必须要由老师来担任。'|trans({'%name%':setting('classroom.name','班级'|trans)})}}</p>
      
           <script type="text/plain" data-role="model">{{ headTeacher|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">
@@ -72,7 +72,7 @@
 
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
-          <button type="submit" class="btn btn-fat btn-primary">保存</button>
+          <button type="submit" class="btn btn-fat btn-primary">{{'保存'|trans}}</button>
         </div>  
       </div>
 

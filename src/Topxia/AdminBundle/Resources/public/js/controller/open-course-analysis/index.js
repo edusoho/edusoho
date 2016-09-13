@@ -53,7 +53,6 @@ define(function (require, exports, module) {
         var $endTime = $("#endTime");
         addDateRule();
         $startTime.datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 2
@@ -65,7 +64,6 @@ define(function (require, exports, module) {
         $startTime.datetimepicker('setEndDate', $endTime.val());
 
         $endTime.datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 2

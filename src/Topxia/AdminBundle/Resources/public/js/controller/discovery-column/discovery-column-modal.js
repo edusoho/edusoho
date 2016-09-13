@@ -20,15 +20,15 @@ define(function(require, exports, module) {
                     $modal.modal('hide');
                     location.reload();
                     if($form.data('mode') == 'add') {
-                        Notify.success('添加栏目成功！');
+                        Notify.success(Translator.trans('添加栏目成功！'));
                     } else {
-                        Notify.success('更新栏目成功！');
+                        Notify.success(Translator.trans('更新栏目成功！'));
                     }
                 }).fail(function() {
                     if($form.data('mode') == 'add') {
-                        Notify.danger("新增栏目成功失败，请重试！");
+                        Notify.danger(Translator.trans('新增栏目成功失败，请重试！'));
                     }else{
-                        Notify.danger("更新栏目成功失败，请重试！");
+                        Notify.danger(Translator.trans('更新栏目成功失败，请重试！'));
                     }
                 });
 

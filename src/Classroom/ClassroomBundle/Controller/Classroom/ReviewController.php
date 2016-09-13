@@ -17,11 +17,11 @@ class ReviewController extends BaseController
         $user = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->trans('班级');
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
         $conditions = array(
@@ -79,8 +79,9 @@ class ReviewController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        $user                  = $this->getCurrentUser();
-        $fields                = $request->request->all();
+        $user   = $this->getCurrentUser();
+        $fields = $request->request->all();
+
         $fields['userId']      = $user['id'];
         $fields['classroomId'] = $id;
         $this->getClassroomReviewService()->saveReview($fields);

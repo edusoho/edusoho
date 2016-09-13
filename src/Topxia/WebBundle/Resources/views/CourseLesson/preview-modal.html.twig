@@ -37,7 +37,7 @@
           </div>
           <div class="js-buy-text">
             <span class="text-success">
-              您可以免费试看前{{ course.tryLookTime }}分钟，购买后可完整观看。
+              {{'您可以免费试看前%trylookTime%分钟,购买后可完整观看。'|trans({'%trylookTime%': course.tryLookTime })}}
             </span>
           </div>
         </div>
@@ -68,6 +68,7 @@
     <span class="qrcode-popover">
       <img src="" alt="">
       {{'扫二维码继续学习'|trans}}
+      {{'二维码时效为半小时'|trans}}
     </span>
   </span>
   {% if course.buyable %}
@@ -102,7 +103,7 @@
           {% if vipStatus == 'ok' %}
             {{'觉得不错？点击加入此课程'|trans}}
           {% else %}
-            {{'觉得不错？点击购买此课程'|trans}}{{'（'|trans}}{{ course.price }}{{'元'|trans}}）
+            {{'觉得不错？点击购买此课程'|trans}}（{{'%price%元'|trans({'%price%': course.price })}}）
           {% endif %}
         {% else %}
           {{'登录后购买学习完整的课程'|trans}}

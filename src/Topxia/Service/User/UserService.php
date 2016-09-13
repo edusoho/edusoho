@@ -14,6 +14,8 @@ interface UserService
 
     public function getUserByVerifiedMobile($mobile);
 
+    public function getUserCountByMobileNotEmpty();
+
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);
@@ -29,8 +31,8 @@ interface UserService
     public function changeUserOrg($userId, $orgCode);
     /**
      * [batchUpdateOrg 对单个或者多个用户更改组织机构]
-     * @param  [String | Arrary] $userIds [用户Id]
-     * @param  [String] $orgCode [组织机构内部编码]
+     * @param [String  |        Arrary] $userIds [用户Id]
+     * @param [String] $orgCode [组织机构内部编码]
      */
     public function batchUpdateOrg($userIds, $orgCode);
 
@@ -268,6 +270,8 @@ interface UserService
     public function findUserPayAgreementsByUserId($userId);
 
     public function deleteUserPayAgreements($id);
+
+    public function updateUserLocale($id, $locale);
 
     public function changeAvatarFromImgUrl($userId, $imgUrl);
 }
