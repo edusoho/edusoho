@@ -26,11 +26,7 @@
   <div class="form-group">
     
     <select class="form-control" name="roles">
-<<<<<<< HEAD
-      {{ select_options(dict('userRole')|array_merge(allRoles), app.request.query.get('roles'), '--所有角色--') }}
-=======
-      {{ select_options(dict('userRole'), app.request.query.get('roles'), '--所有角色--'|trans) }}
->>>>>>> origin/master
+      {{ select_options(dict('userRole')|array_merge(allRoles), app.request.query.get('roles'), '--所有角色--'|trans) }}
     </select>
   </div>
 
@@ -51,20 +47,10 @@
     <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}">
   </div>
 
-<<<<<<< HEAD
   <button class="btn btn-primary">搜索</button>
 
   {% if has_permission('admin_user_export') and is_plugin_installed('UserImporter') %}
-    <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">导出搜索结果</a>
-=======
-
-  <button class="btn btn-primary">{{'搜索'|trans}}</button>
-
-  {% if is_granted('ROLE_SUPER_ADMIN') %}
-    {% if showUserExport %}
-      <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">{{'导出搜索结果'|trans}}</a>
-    {% endif %}
->>>>>>> origin/master
+    <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">{{'导出搜索结果'|trans}}</a>
   {% endif %}
 
 </form>
