@@ -404,8 +404,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
-        $this->updateCourse($course['id'], array('lessonNum' => ($lesson['number'] - 1)));
-
         $this->getLogService()->info('open_course', 'add_lesson', "添加公开课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("open.course.lesson.create", array('lesson' => $lesson));
 

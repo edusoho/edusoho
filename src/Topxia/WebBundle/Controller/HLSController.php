@@ -100,7 +100,7 @@ class HLSController extends BaseController
         ));
 
         if (empty($playlist['playlist'])) {
-            return $this->createMessageResponse('error', '生成视频播放列表失败！');
+            return $this->createMessageResponse('error', $this->trans('生成视频播放列表失败！'));
         }
 
         return $this->responseEnhanced($playlist['playlist'], array(
@@ -189,7 +189,7 @@ class HLSController extends BaseController
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+            return $this->createMessageResponse('error', $this->trans('生成视频播放地址失败！'));
         }
 
         return $this->responseEnhanced($stream['stream'], array(

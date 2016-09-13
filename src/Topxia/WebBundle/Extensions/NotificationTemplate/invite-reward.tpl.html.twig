@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
     {% set data = notification.content %}
-  恭喜您获得{{data.rewardName}}奖励：{{data.settingName}}元面值抵价优惠券一张，已发至您<a href="{{ path('my_cards', {cardType:'coupon'}) }}">我的卡包</a>中。
+  {{'恭喜您获得%rewardName%奖励：%settingName%元面值抵价优惠券一张，已发至您'|trans({'%rewardName%':data.rewardName,'%settingName%':data.settingName})}}<a href="{{ path('my_cards', {cardType:'coupon'}) }}">{{'我的卡包'|trans}}</a>{{'中。'|trans}}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

@@ -15,12 +15,11 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: ['用户总数'],
+                      labels: [Translator.trans('用户总数')],
                       xLabels:"day"
                     });
           }
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -28,7 +27,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setEndDate', now);
         $('[name=endTime]').datetimepicker('setStartDate', $('#userSumStartDate').attr("value"));
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

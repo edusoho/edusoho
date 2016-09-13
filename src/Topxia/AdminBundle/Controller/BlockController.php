@@ -192,7 +192,7 @@ class BlockController extends BaseController
                 $block = $this->getBlockService()->updateBlock($condation['blockId'], $fields);
             }
 
-            $this->setFlashMessage('success', '保存成功!');
+            $this->setFlashMessage('success', $this->trans('保存成功!'));
         }
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
@@ -289,10 +289,10 @@ class BlockController extends BaseController
         $code                = $request->query->get('value');
         $blockTemplateByCode = $this->getBlockService()->getBlockTemplateByCode($code);
         if (empty($blockTemplateByCode)) {
-            return $this->createJsonResponse(array('success' => true, 'message' => '此编码可以使用'));
+            return $this->createJsonResponse(array('success' => true, 'message' => $this->trans('此编码可以使用')));
         }
 
-        return $this->createJsonResponse(array('success' => false, 'message' => '此编码已存在,不允许使用'));
+        return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('此编码已存在,不允许使用')));
     }
 
     public function checkBlockTemplateCodeForEditAction(Request $request, $id)
@@ -302,7 +302,7 @@ class BlockController extends BaseController
         if (empty($blockTemplateByCode) || $id == $blockTemplateByCode['id']) {
             return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
         } elseif ($id != $blockTemplateByCode['id']) {
-            return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));
+            return $this->createJsonResponse(array('success' => false, 'message' => $this->trans('不允许设置为已存在的其他编码值')));
         }
     }
 
@@ -312,7 +312,7 @@ class BlockController extends BaseController
         if ($request->getMethod() == 'POST') {
             $file = $request->files->get('file');
             if (!FileToolkit::isImageFile($file)) {
-                throw $this->createAccessDeniedException('图片格式不正确！');
+                throw $this->createAccessDeniedException($this->trans('图片格式不正确！'));
             }
 
             $filename = 'block_picture_'.time().'.'.$file->getClientOriginalExtension();
@@ -347,7 +347,7 @@ class BlockController extends BaseController
         $user    = $this->getCurrentUser();
         $block   = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         $this->getBlockService()->recovery($block['blockId'], $history);
-        $this->setFlashMessage('success', '恢复成功!');
+        $this->setFlashMessage('success', $this->trans('恢复成功!'));
 
         return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockTemplateId' => $blockTemplateId)));
     }

@@ -5,13 +5,13 @@ define(function(require, exports, module) {
         var $table = $('#teacher-promote-table');
 
         $table.on('click', '.cancel-promote-teacher', function() {
-            if (!confirm('真的要取消该教师推荐吗？')) {
+            if (!confirm(Translator.trans('真的要取消该教师推荐吗？'))) {
                 return;
             }
 
             var $tr = $(this).parents('tr');
             $.post($(this).data('url'), function() {
-                Notify.success('教师推荐已取消！');
+                Notify.success(Translator.trans('教师推荐已取消！'));
                 $tr.remove();
             });
         });

@@ -20,7 +20,7 @@
       {% set classrooms = data('Classrooms',{count:1}) %}
       {% if classrooms|default(null) %}
         <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-          查看{{ setting('classroom.name')|default('班级') }}
+          {{'查看%name%'|trans({'%name%': classroom.name|default('班级'|trans)}) }}
         </a>
       {% endif %}
     </div>

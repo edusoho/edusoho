@@ -22,7 +22,7 @@ class KeyApplier
         $params = array();
         $site = $this->getSettingService()->get('site');
 
-        $params['siteName'] = empty($site['name']) ? 'EduSoho网络课程' : $site['name'];
+        $params['siteName'] = empty($site['name']) ? $this->getKernel()->trans('EduSoho网络课程') : $site['name'];
         $params['siteUrl'] = 'http://' . $_SERVER['HTTP_HOST'];
         $params['email'] = empty($user['email']) ? '' : $user['email'];
         $params['contact'] = empty($profile['truename']) ? '' : $profile['truename'];
@@ -40,7 +40,7 @@ class KeyApplier
 
         $key = json_decode($response, true);
         if (empty($key)) {
-            return array('error' => '生成Key失败，请检查服务器的网络设置！');
+            return array('error' => $this->getKernel()->trans('生成Key失败，请检查服务器的网络设置！'));
         }
 
         return $key;
@@ -72,6 +72,10 @@ class KeyApplier
 
         return $response;
     }
+    protected function getKernel(){
+    
+        return  ServiceKernel::instance();
+   }
 
     protected function getUserService()
     {

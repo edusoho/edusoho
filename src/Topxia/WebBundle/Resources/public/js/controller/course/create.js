@@ -7,7 +7,7 @@ define(function (require, exports, module) {
             var courseType = $courseType.data('type');
             var title = options.element.val();
             if (courseType === 'liveOpen' && !/^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(title)) {
-                commit(false, "直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符");
+                commit(false, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
             } else {
                 return true;
             }
@@ -35,7 +35,7 @@ define(function (require, exports, module) {
                 element: '[name="title"]',
                 required: true,
                 rule: 'open_live_course_title',
-                display: '标题'
+                display: Translator.trans('标题')
             });
 
             $("#course-create-form .course-select").click(function () {

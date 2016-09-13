@@ -20,10 +20,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('操作成功');
+                    Notify.success(Translator.trans('操作成功'));
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger('操作失败');
+                    Notify.danger(Translator.trans('操作失败'));
                 });
 
             }

@@ -5,7 +5,7 @@
   <div class="modal-content">
     <div class="modal-body">
       <div class="modal-info">
-        您领取了一张{% if cardType is defined and cardType == "coupon" %}优惠券{% endif %}{% if cardType is defined and cardType == "moneyCard" %}学习卡{% endif %}，已添加至“我的卡包“
+        {{'您领取了一张'|trans}}{% if cardType is defined and cardType == "coupon" %}{{'优惠券'|trans}}{% endif %}{% if cardType is defined and cardType == "moneyCard" %}{{'学习卡'|trans}}{% endif %}，{{'已添加至“我的卡包“'|trans}}
       </div>
       {#卡券内容#}
       {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}

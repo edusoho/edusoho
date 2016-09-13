@@ -238,6 +238,8 @@ class CourseLessonController extends BaseController
         $json['testStartTime']          = $lesson['testStartTime'];
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
         $json['replayStatus']           = $lesson['replayStatus'];
+        $json['doTimes']                = isset($lesson['doTimes']) ? $lesson['doTimes'] : 0;
+        $json['redoInterval']           = isset($lesson['redoInterval']) ? $lesson['redoInterval'] : 0;
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
@@ -300,18 +302,18 @@ class CourseLessonController extends BaseController
 
                     if ($watchStatus['status'] == 'error') {
                         $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
-                        $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
+                        $json['mediaError'] = $this->trans('您的观看时长已到').'<strong>'.$wathcLimitTime.'</strong>，'.$this->trans('不能再观看').'。';
                     }
                 }
             } else {
                 $json['mediaUri'] = '';
 
                 if ($lesson['type'] == 'video') {
-                    $json['mediaError'] = '抱歉，视频文件不存在，暂时无法学习。';
+                    $json['mediaError'] = $this->trans('抱歉，视频文件不存在，暂时无法学习。');
                 } elseif ($lesson['type'] == 'audio') {
-                    $json['mediaError'] = '抱歉，音频文件不存在，暂时无法学习。';
+                    $json['mediaError'] = $this->trans('抱歉，音频文件不存在，暂时无法学习。');
                 } elseif ($lesson['type'] == 'ppt') {
-                    $json['mediaError'] = '抱歉，PPT文件不存在，暂时无法学习。';
+                    $json['mediaError'] = $this->trans('抱歉，PPT文件不存在，暂时无法学习。');
                 }
 
                 if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
@@ -408,7 +410,7 @@ class CourseLessonController extends BaseController
     public function mediaDownloadAction(Request $request, $courseId, $lessonId)
     {
         if (!$this->setting('course.student_download_media')) {
-            return $this->createMessageResponse('未开启课时音视频下载。');
+            return $this->createMessageResponse($this->trans('未开启课时音视频下载。'));
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -451,14 +453,14 @@ class CourseLessonController extends BaseController
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                $message = sprintf($this->trans('PPT文档转换失败，请到课程').'<a href="%s" target="_blank">'.$this->trans('文件管理').'</a>'.$this->trans('中，重新转换。'), $url);
 
                 return $this->createJsonResponse(array(
                     'error' => array('code' => 'error', 'message' => $message)
                 ));
             } else {
                 return $this->createJsonResponse(array(
-                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。')
+                    'error' => array('code' => 'processing', 'message' => $this->trans('PPT文档还在转换中，还不能查看，请稍等。'))
                 ));
             }
         }
@@ -496,14 +498,14 @@ class CourseLessonController extends BaseController
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                $message = sprintf($this->trans('文档转换失败，请到课程').'<a href="%s" target="_blank">'.$this->trans('文件管理').'</a>'.$this->trans('中，重新转换。'), $url);
 
                 return $this->createJsonResponse(array(
                     'error' => array('code' => 'error', 'message' => $message)
                 ));
             } else {
                 return $this->createJsonResponse(array(
-                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
+                    'error' => array('code' => 'processing', 'message' => $this->trans('文档还在转换中，还不能查看，请稍等。'))
                 ));
             }
         }
@@ -715,7 +717,7 @@ class CourseLessonController extends BaseController
         $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
         $visableReplays = array();
 
-        foreach ($replaysLesson as $key => $value) {
+        foreach ($replaysLesson as $value) {
             if ($value['hidden'] == 0) {
                 $value['url'] = $this->generateUrl('live_course_lesson_replay_entry', array(
                     'courseId'             => $lesson['courseId'],
@@ -739,7 +741,7 @@ class CourseLessonController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
 
         if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
+            throw $this->createAccessDeniedException($this->trans('试卷只能属于课程'));
         }
 
         $courseId = $targets[$testpaper['target']]['id'];
@@ -747,14 +749,15 @@ class CourseLessonController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            return $message = '试卷所属课程不存在！';
+            return $message = $this->trans('试卷所属课程不存在！');
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $message = '不是试卷所属课程老师或学生';
+            return $message = $this->trans('不是试卷所属课程老师或学生');
         }
 
-        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $lesson          = $this->getCourseService()->getLesson($lessonId);
+        $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper = $this->getTestpaperService()->getTestpaper($testId);
@@ -762,19 +765,36 @@ class CourseLessonController extends BaseController
             $testEndTime = $lesson['testStartTime'] + $testpaper['limitedTime'] * 60;
 
             if ($testEndTime < time()) {
-                return $message = '实时考试已经结束!';
+                return $message = $this->trans('实时考试已经结束!');
             }
 
             if ($status == 'do') {
-                $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
-
                 if ($testpaperResult) {
-                    return $message = '您已经提交试卷，不能继续考试!';
+                    return $message = $this->trans('您已经提交试卷，不能继续考试!');
                 }
             } else {
-                return $message = '实时考试，不能再考一次!';
+                return $message = $this->trans('实时考试，不能再考一次!');
             }
         }
+
+        if ($testpaperResult) {
+            if (isset($lesson['doTimes']) && $lesson['doTimes']) {
+                return $message = '本次考试仅有一次机会，不能再次考试!';
+            } elseif (isset($lesson['redoInterval']) && $lesson['redoInterval'] != 0 && (time() < ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600))) {
+                $leftTime = ($testpaperResult['checkedTime'] + $lesson['redoInterval'] * 3600) - time();
+                $hour     = ceil($leftTime / 3600);
+
+                if ($hour > 0) {
+                    $text = $hour.'小时';
+                } else {
+                    $minute = ceil($leftTime / 60);
+                    $text   = $minute.'分钟';
+                }
+                return '本次考试已设置重考间隔，请在'.$text.'后再来!';
+            }
+        }
+
+        return $message;
     }
 
     protected function getCourseService()

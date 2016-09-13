@@ -1,0 +1,126 @@
+该浏览器不支持云视频播放，请前往: Your browser cannot play the video from our cloud server, please go to
+下载App: Download App
+'文件删除': 'Delete file'
+'是否确认删除资源？': 'Are you sure to delete?'
+'文件若被引用，删除会引起引用课时无法正常使用': 'If files are references in lessons, deleting them will cause those lessons not work.'
+'正在删除...': 'Deleting...'
+确认: OK
+'标题': 'Title'
+'标签': 'Tag'
+'标签来自网校课程标签，由网校管理员统一管理。': 'Tags are from the courses and managed by the site administrator.'
+简介: Overview
+'共享': 'Share'
+'共享到公共资料': 'Share to public'
+'（其他老师可以查看、预览、引用该资料）': ' (Other teachers can visit, preview and reference this material)'
+'仅自己可见': 'Only visible to myself'
+正在保存...: Saving...
+保存: Save
+返回列表: Back to List
+我的分享: My Sharing
+分享资料: Share
+类型：: Type：
+'全部': 'All'
+视频: Video
+flash: Flash
+音频: Audio
+图片: Image
+文档: Doc
+PPT: PPT
+'其它': 'Other'
+教学资料库: Teaching Material
+本地文件暂不支持预览: Local files cannot be previewed
+我的资料: My Material
+'公共资料': 'Public Material'
+收藏夹: Bookmark
+来自分享: Shared by Others
+'输入标题关键字': 'Search by title'
+搜索: Search
+'标签：': 'Tag: '
+筛选：: 'Filter: '
+起始时间: From
+结束时间: To
+'转码状态': 'Status'
+'转码成功': 'Transcoded'
+'转码中': 'Transcoding'
+'转码失败': 'Transcode Failed'
+使用状态: Usage
+未使用: Unused
+已使用: Used
+'上传资料': 'Upload'
+批量管理: Batch Edit
+'添加标签': 'Add Tag'
+'删除': 'Delete'
+'全选': 'All'
+'标签设置': 'Tag Settings'
+'用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理': 'Used to search courses. Managed by site administrator.'
+取消: Cancel
+正在提交: Submitting
+时间: Time
+描述: Description
+分享给%nickname%: Share to %nickname%
+取消与%nickname%的分享: Cancelled sharing to %nickname%
+'无资料分享记录': 'No sharing history'
+首页: First Page
+尾页: Last Page
+昵称: Nickname
+操作: Operation
+将资料分享给%nickname%老师。: Share to teacher %nickname%
+取消分享: Cancel Sharing
+我的分享历史: My Share History
+分享教学资料给: Share to
+'输入用户名': 'Enter user name'
+分享用户: Shared by
+历史记录: History
+分享教学资料: Share Material
+资料预览: Preview
+该文件暂不支持预览: Cannot be previewed
+'关闭': 'Close'
+'资源详情': 'Details'
+基本信息: Basic Info
+封面: Cover Image
+'视频还没有转码完成，请等待转码完成......': 'Transcoding in progress, please wait.'
+'无文件记录': 'No file'
+收藏: Bookmark
+编辑: Edit
+查看: View
+下载: Download
+'取消共享': 'Cancel Sharing'
+'重新转码': 'Re-transcode'
+资源管理: Management
+生成视频播放地址失败！: Failed to generate video play url.
+'您无权访问此页面': 'No permission to access this page.'
+'已将资料分享给你，': 'Shared material to you, '
+点击查看: Click to View
+'已取消分享资料给你，': 'Cancelled sharing to you, '
+'其他': 'Other'
+存储空间使用分布: Disk space usage
+流量使用分布: Network traffic
+'空间/流量详情': 'Storage/Network details'
+'视频详情': 'Video Detials'
+'音频详情': 'Audio Detials'
+'文档详情': 'Doc Details'
+'抱歉，您无权操作此文件': 'Sorry, you are not allowed to operate on this file.'
+'重新转码成功!': 'Re-transcoding successfully.'
+'重新转码失败!': 'Re-transcoding failed.'
+收藏成功: Bookmarked
+取消收藏成功: Cancelled Bookmark
+完成管理: Done
+'请先选择你要删除的资源!': 'Please select material to delete.'
+确定要分享这些资源吗？: Are you sure to share?
+'请先选择你要操作的资源!': 'Please select material to operate.'
+确定要分享这个资源吗？: Are you sure to share?
+确定要取消分享这个资源吗？: Are you sure to cancel sharing?
+取消分享资源成功: Cancelled sharing
+'正在加载，请等待......': 'Loading ...'
+'Opps,出错了......': 'Opps, something went wrong ...'
+'请先选择你要分享的资源!': 'Please select material to share.'
+分享资源成功: Shared successfully
+分享资源失败: Failed to share
+'删除资源成功': 'Material deleted'
+已取消分享！: Cancelled sharing
+'素材分享成功!': 'Shared successfully'
+'素材分享失败!': 'Failed to share'
+要分享的老师: Share to
+'该教师已添加，不能重复添加！': 'The teacher has already been added.'
+'您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。': 'Flash was not installed or the version is too old. Please install flash.'
+'已经到最后一张图片了哦': 'This is the last image.'

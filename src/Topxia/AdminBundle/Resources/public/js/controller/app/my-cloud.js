@@ -22,27 +22,27 @@ define(function(require, exports, module) {
             xkey: 'date',
             units: "GB",
             ykeys: ['spacecount','transfercount'],
-            labels: ['空间使用量','流量使用量']
+            labels: [Translator.trans('空间使用量'),Translator.trans('流量使用量')]
           });
         }
         if(liveData!=""){
           Morris.Bar({
             element: 'live-data-tab',
             data: liveData,
-            units: "人",
+            units: Translator.trans('人'),
             xkey: 'date',
             ykeys: ['count'],
-            labels: ['使用量']
+            labels: [Translator.trans('使用量')]
           });
         }
         if(smsData!=""){
           Morris.Bar({
             element: 'sms-data-tab',
             data: smsData,
-            units: "条",
+            units: Translator.trans('条'),
             xkey: 'date',
             ykeys: ['count'],
-            labels: ['使用量']
+            labels: [Translator.trans('使用量')]
           });
         }
         // if(emailData!=""){

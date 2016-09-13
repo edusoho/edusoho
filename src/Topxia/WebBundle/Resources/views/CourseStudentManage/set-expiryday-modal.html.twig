@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}课程有效期{% endblock %}
+{% block title %}{{'增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'课程有效期'|trans}}{% endblock %}
 {% block body %}
 
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_expiryday', { courseId:course.id, userId:user.id }) }}">
@@ -18,7 +18,7 @@
 
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'用户名'|trans}}</label>
+        <label for="student-nickname">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'用户名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -36,7 +36,7 @@
       </div>
     </div>
   {% else %}
-    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}有效期，请课程发布后再增加。</div>
+    <div class="empty">{{dict_text('courseStatus', course.status)}}{{'课程不能增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'有效期，请课程发布后再增加。'|trans}}</div>
   {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -47,7 +47,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{default.user_name|default('学员'|trans)}}">{{'保存'|trans}}</button>
+    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{ setting('default.user_name')|default('学员'|trans) }}">{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('course-manage/set-expiryday-modal')</script>

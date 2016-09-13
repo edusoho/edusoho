@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ setting('article.name', '资讯频道'|trans) }} - {{ parent() }}{% endblock %}
+{% block title %}{{ article.name|default('资讯频道'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-list-page' %}
 {% set script_controller = 'article/list.js' %}
@@ -17,7 +17,6 @@
   {% include 'TopxiaWebBundle:Article/Part:list-header.html.twig' %}
 
   <div class="article-list-body row">
-
     <!-- list主内容-->
     <div class="col-md-8 article-list-main">
       {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' with {articles:latestArticles} %}

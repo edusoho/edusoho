@@ -213,7 +213,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function createCategory($fields)
     {   
         if (!ArrayToolkit::requireds($fields, array('name'))) {
-            throw $this->createServiceException("缺少必要参数，添加类别失败");
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要参数，添加类别失败'));
         }
 
         $category['userId'] = $this->getCurrentUser()->id;
@@ -229,7 +229,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function updateCategory($id, $fields)
     {   
         if (!ArrayToolkit::requireds($fields, array('name'))) {
-            throw $this->createServiceException("缺少必要参数，更新类别失败");
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要参数，更新类别失败'));
         }
         
         $category['name'] = $fields['name'];

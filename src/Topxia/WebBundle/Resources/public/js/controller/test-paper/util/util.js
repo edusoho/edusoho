@@ -34,8 +34,8 @@ define(function(require, exports, module) {
 				questionTotal = 0;
 			}
 			
-			var html = "试卷总分" + total + "分 " + questionType + questionConut + "题/ "+ questionTotal + "分";
-
+			//var html = Translator.trans('试卷总分%total%分%questionType%%questionCount%题/%questionTotal%分',{total:total,questionType:questionType,questionCount:questionCount ,questionTotal:questionTotal});
+                                         var html = Translator.trans('试卷总分%total%分',{total:total})+Translator.trans('%questionType%%questionCount%题',{questionType:questionType,questionCount:questionCount})+'/'+Translator.trans('%questionTotal%分',{questionTotal:questionTotal});
 			$('.score-text-alert').html(html);
     	},
 
@@ -73,7 +73,7 @@ define(function(require, exports, module) {
 
             var count = $('[name^=scores][type=text]').length;
 
-            var total = {"name":"总计", "score":allScore, "count":count};
+            var total = {"name":Translator.trans('总计'), "score":allScore, "count":count};
 
             allTotal.push(total);
             

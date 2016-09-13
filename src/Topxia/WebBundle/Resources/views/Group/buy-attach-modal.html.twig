@@ -18,7 +18,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 col-md-offset-2 control">
-      <label for="amount" class="control-label"> {{'所需'|trans}}{{setting('coin').coin_name}}:
+      <label for="amount" class="control-label"> {{'所需%name%'|trans({'%name%': setting('coin').coin_name}}:
       </label>
     </div>
     <div class="col-md-3 controls">
@@ -39,7 +39,7 @@
     app.load('group/buy-modal');
   </script>
   {% if not Trade %}
-  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#buy-form">{{'购买'|trans}}</button>
+  <button id="create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="{% if attach.coin > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#buy-form">{{'购买'|trans}}</button>
   {% else %}
     <a id="btn-download" href="{{path('group_attach_download',{fileId:attach.id})}}" class="btn btn-primary pull-right" >{{'立即下载'|trans}}</a>
   {% endif %}

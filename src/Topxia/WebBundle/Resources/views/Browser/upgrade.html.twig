@@ -13,7 +13,7 @@
 <body>
   <div class="container">
     <div class="title">{{ setting('site.name') }}</div>
-    <div class="message">{% trans with { '%name%':site.name } %}您的浏览器版本过低，请升级您的浏览器后，再访问%name%。{% endtrans %}</div>
+    <div class="message">{{'您的浏览器版本过低，请升级您的浏览器后，再访问%name%。'|trans({ '%name%':site.name })}}</div>
     <div class="browsers">
       <div class="head">{{'推荐使用以下浏览器：'|trans}}</div>
       <div>

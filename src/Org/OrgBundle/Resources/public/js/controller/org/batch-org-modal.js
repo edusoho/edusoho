@@ -22,12 +22,12 @@ define(function(require, exports, module) {
 				$.post($form.attr('action'), $form.serialize(), function(result) {
 					console.log(1);
 					$modal.modal('hide');
-					Notify.success('更新组织机构成功');
+					Notify.success(Translator.trans('更新组织机构成功'));
 					setTimeout(function(){
 						window.location.reload();
 					},1000);
 				}).error(function() {
-					Notify.danger('操作失败');
+					Notify.danger(Translator.trans('操作失败'));
 				});
 			}
 		});

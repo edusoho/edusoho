@@ -81,7 +81,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function saveReview($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'), true)) {
-            throw $this->createServiceException('参数不正确，评价失败！');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
@@ -89,13 +89,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $userId = $this->getCurrentUser()->id;
 
         if (empty($course)) {
-            throw $this->createServiceException("课程(#{$fields['courseId']})不存在，评价失败！");
+            throw $this->createServiceException($this->getKernel()->trans('课程(#%fieldsCourseId%)不存在，评价失败！', array('%fieldsCourseId%' => $fields['courseId'])));
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
+            throw $this->createServiceException($this->getKernel()->trans('用户(#%fieldsUserId%)不存在,评价失败!', array('%fieldsUserId%' => $fields['userId'])));
         }
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
@@ -127,7 +127,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException("评价(#{$id})不存在，删除失败！");
+            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
         }
 
         $this->getReviewDao()->deleteReview($id);

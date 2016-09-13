@@ -14,11 +14,6 @@ classroomStatus:
     published: 已发布
     closed: 已关闭
 
-'courseStatus:html':
-    draft: <span class="text-muted">未发布</span>
-    published: <span class="text-success">已发布</span>
-    closed: <span class="text-danger">已关闭</span>
-
 couponType:
     minus: 抵价
     discount: 打折
@@ -36,14 +31,7 @@ fileType:
     ppt: PPT
     flash: Flash
     other: 其他
-
-'fileType:html':
-    video: <span class="glyphicon glyphicon-facetime-video text-success">视频</span>
-    audio: <span class="glyphicon glyphicon-music text-success">音频</span>
-    document: <span class="glyphicon glyphicon-briefcase text-success">文档</span>
-    image: <span class="glyphicon glyphicon-picture text-success">图片</span>
-    other: <span class="glyphicon glyphicon-question-sign text-success">其他</span>
-
+    
 orderStatus:
     created: 未付款
     paid: 已付款
@@ -51,24 +39,11 @@ orderStatus:
     refunded: 已退款
     cancelled: 已关闭
 
-orderStatus:html:
-    created: <span class="label label-danger">未付款</span>
-    paid: <span class="label label-success">已付款</span>
-    refunding: <span class="text-warning">退款中</span>
-    refunded: <span class="text-danger">已退款</span>
-    cancelled: <span class="text-muted">已关闭</span>
-
 refundStatus:
     created: 已申请
     success: 退款成功
     failed: 退款失败
     cancelled: 已取消
-
-refundStatus:html:
-    created: <span class="text-warning">已申请</span>
-    success: <span class="text-success">退款成功</span>
-    failed: <span class="text-danger">退款失败</span>
-    cancelled: <span class="text-muted">已取消</span>
 
 payment:
     none: --
@@ -79,8 +54,7 @@ payment:
     iosiap: 苹果应用内支付
     outside: 站外支付
     coin: 虚拟币
-    llcbpay: 连连－网银支付
-    llquickpay: 连连－快捷支付
+    llpay: 连连支付
    
     
 
@@ -130,20 +104,10 @@ contentStatus:
     unpublished: 未发布
     trash: 回收站
 
-'contentStatus:html':
-    published: <span class="text-success">已发布</span>
-    unpublished: <span class="text-muted">未发布</span>
-    trash: <span class="text-warning">回收站</span>
-
 articleStatus:
     published: 已发布
     unpublished: 未发布
     trash: 回收站
-
-'articleStatus:html':
-    published: <span class="text-success">已发布</span>
-    unpublished: <span class="text-muted">未发布</span>
-    trash: <span class="text-warning">回收站</span>
 
 lessonType:
     video: 视频
@@ -289,10 +253,11 @@ discountStatus:
     running: 进行中
     finished: 已结束
 
-'discountStatus:html':
-    unstart: <span class="text-muted">未开始</span>
-    running: <span class="text-success">进行中</span>
-    finished: <span class="text-muted">已结束</span>
+#to be delete, discount插件正在使用，等插件升级了就删除
+discountStatus:html:
+    unstart: 未开始
+    running: 进行中
+    finished: 已结束
 
 discountAuditStatus:
     passed: 已通过
@@ -362,3 +327,14 @@ searchKeyWord:
 searchBanlog:
     name: 敏感词
     userName: 用户名
+
+courseSerializeMode:
+    none: 非连载课程
+    serialize: 更新中
+    finished: 已完结
+
+refund_reason:
+    select_reason: --请选择退学原因--
+    bad_content: 课程内容质量差
+    bad_teacher_attitude: 老师服务态度不好
+    other: 其他

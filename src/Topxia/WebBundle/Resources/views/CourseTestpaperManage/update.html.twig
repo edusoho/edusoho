@@ -48,7 +48,7 @@
         <div class="col-md-2 control-label"><label for="testpaper-limitedTime-field">{{'及格分数线'|trans}}</label></div>
         <div class="col-md-8 controls">
           <input class="form-control width-input width-input-large" name="passedScore" id="testpaper-passedScore-field" value="{{testpaper.passedScore }}" /> {{'分'|trans}}
-                      <div class="help-block">总分为{{ testpaper.score }}，最大不能超过总分；0表示不设及格分数线。</div>
+                      <div class="help-block">{{'总分为%socre%，最大不能超过总分；0表示不设及格分数线。'|trans({'%score%': testpaper.score}) }}</div>
         </div>
       </div>
       {% endif %}

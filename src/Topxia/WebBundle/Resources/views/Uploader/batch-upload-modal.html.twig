@@ -2,7 +2,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}上传文件{% endblock %}
+{% block title %}{{'上传文件'|trans}}{% endblock %}
   
 {% block body %}
 <style>
@@ -199,38 +199,38 @@
     data-accept="{{ uploader_accept(targetType)|json_encode }}"
     data-process="{{ uploader_process(targetType) }}"
   >
-    <div class="balloon-uploader-heading">上传文件</div>
+    <div class="balloon-uploader-heading">{{'上传文件'|trans}}</div>
     <div class="balloon-uploader-body">
-      <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+      <div class="balloon-nofile">{{'请将文件拖到这里，或点击添加文件按钮'|trans}}</div>
       <div class="balloon-filelist">
         <div class="balloon-filelist-heading">
-          <div class="file-name">文件名</div>
-          <div class="file-size">大小</div>
-          <div class="file-status">状态</div>
+          <div class="file-name">{{'文件名'|trans}}</div>
+          <div class="file-size">{{'大小'|trans}}</div>
+          <div class="file-status">{{'状态'|trans}}</div>
         </div>
         <ul>
         </ul>
       </div>
     </div>
     <div class="balloon-uploader-footer">
-      <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
-      <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>
+      <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> {{'添加文件'|trans}}</div>
+      <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> {{'开始上传'|trans}}</div>
     </div>
   </div>
 
   {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
     <div class="alert alert-info">
       <ul>
-        <li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>
-        <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
-        <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+        <li>{{'资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。'|trans}}</li>
+        <li>{{'视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。'|trans}}</li>
+        <li>{{'支持<strong>断点续传</strong>（仅支持HTML5浏览器）。'|trans}}</li>
       </ul>
     </div>
   {% else %}
     <div class="alert alert-info">
       <ul>
-        <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-        <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+        <li>{{'支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans}}</li>
+        <li>{{'视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。'|trans}}</li>
       </ul>
     </div>
   {% endif %}
@@ -238,6 +238,6 @@
 <script>app.load('uploader/batch-upload-modal')</script>
 {% endblock %}
 {% block footer %}
-    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
 {% endblock %}
 

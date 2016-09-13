@@ -15,11 +15,11 @@
             <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
           </a>
           <div class="mask">
-            <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">立即加入</a>
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{'立即加入'|trans}}</a>
           </div>
         </div>
         <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-        <div class="metas">共{{classroom.courseNum}}门课程</div>
+        <div class="metas">{{'共%courseNum%门课程'|trans({'%classroom.courseNum%':classroom.courseNum})}}</div>
       </div>
     {% endfor %}
     {% if classroomCount >= 15 %}
@@ -27,6 +27,6 @@
     {% endif %}
   </div>
 {% else %}
-  <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}</div>
+  <div class="empty">{{'暂无%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}</div>
 {% endif %}
 {% endblock %}

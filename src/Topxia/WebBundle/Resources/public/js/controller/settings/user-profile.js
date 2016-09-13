@@ -35,7 +35,7 @@ define(function(require, exports, module) {
                 }
                 $('#course-create-btn').button('submiting').addClass('disabled');
                 $.post($('#user-profile-form').attr('action'), $('#user-profile-form').serialize(), function() {
-                    Notify.success('保存成功');
+                    Notify.success(Translator.trans('保存成功'));
                     setTimeout(function() {
                         window.location.reload();
                     }, 1000);
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[id="profile_avatar"]',
             required: true,
-            errormessageRequired: '请上传用户头像'
+            errormessageRequired: Translator.trans('请上传用户头像')
         });
 
         validator.addItem({

@@ -22,7 +22,7 @@ class LiveCourseController extends BaseController
     public function exploreAction(Request $request)
     {
         if (!$this->setting('course.live_course_enabled')) {
-            return $this->createMessageResponse('info', '直播频道已关闭');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播频道已关闭'));
         }
 
         $recenntLessonsCondition = array(
@@ -277,25 +277,25 @@ class LiveCourseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('尚未登入！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('尚未登入！'));
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            throw $this->createAccessDeniedException('课时不存在！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('课时不存在！'));
         }
 
         if (empty($lesson['mediaId'])) {
-            throw $this->createAccessDeniedException('直播教室不存在！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('直播教室不存在！'));
         }
 
         if ($lesson['startTime'] - time() > 7200) {
-            throw $this->createAccessDeniedException('直播还没开始!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('直播还没开始!'));
         }
 
         if ($lesson['endTime'] < time()) {
-            throw $this->createAccessDeniedException('直播已结束!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('直播已结束!'));
         }
 
         $params = array(
@@ -310,7 +310,7 @@ class LiveCourseController extends BaseController
         } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            throw $this->createAccessDeniedException('您不是课程学员，不能参加直播！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
         }
 
         $client = new EdusohoLiveClient();
@@ -331,25 +331,25 @@ class LiveCourseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
-            return $this->createMessageResponse('info', '课时不存在！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课时不存在！'));
         }
 
         if (empty($lesson['mediaId'])) {
-            return $this->createMessageResponse('info', '直播教室不存在！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播教室不存在！'));
         }
 
         if ($lesson['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', '直播还没开始!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播还没开始!'));
         }
 
         if ($lesson['endTime'] < time()) {
-            return $this->createMessageResponse('info', '直播已结束!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播已结束!'));
         }
 
         $params = array();
@@ -366,7 +366,7 @@ class LiveCourseController extends BaseController
         } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
         }
 
         $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
@@ -508,7 +508,7 @@ class LiveCourseController extends BaseController
         foreach ($courseItems as $key => $item) {
             if ($item["itemType"] == "lesson") {
                 $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
-                $item["canRecord"] = $item['replayStatus'] == 'videoGenerated' ? false : $this->_canRecord($item['mediaId']);
+                $item["canRecord"] = !($item['replayStatus'] == 'videoGenerated') && $this->_canRecord($item['mediaId']);
                 $item['file']      = $this->getLiveReplayMedia($item);
                 $courseItems[$key] = $item;
             }

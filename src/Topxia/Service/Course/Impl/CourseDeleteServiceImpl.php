@@ -14,7 +14,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $types  = array('questions', 'testpapers', 'materials', 'chapters', 'drafts', 'lessons', 'lessonLearns', 'lessonReplays', 'lessonViews', 'homeworks', 'exercises', 'favorites', 'notes', 'threads', 'reviews', 'announcements', 'statuses', 'members', 'course');
 
             if (!in_array($type, $types)) {
-                throw $this->createServiceException('未知类型,删除失败');
+                throw $this->createServiceException($this->getKernel()->trans('未知类型,删除失败'));
             }
 
             $method = 'delete'.ucwords($type);
@@ -159,10 +159,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
 
                 $result = $this->getLessonDao()->deleteLesson($lesson['id']);
+                $this->getLessonExtendDao()->deleteLesson($lesson['id']);
                 $count += $result;
             }
-
-            //删除定时任务
 
             $lessonLog = "删除课程《{$course['title']}》(#{$course['id']})的课时";
             $this->getLogService()->info('course', 'delete_lesson', $lessonLog);
@@ -502,6 +501,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getLessonDao()
     {
         return $this->createDao('Course.LessonDao');
+    }
+
+    protected function getLessonExtendDao()
+    {
+        return $this->createDao('Course.LessonExtendDao');
     }
 
     protected function getLessonLearnDao()

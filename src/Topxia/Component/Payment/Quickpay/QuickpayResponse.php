@@ -18,7 +18,7 @@ class QuickpayResponse extends Response
         $result = $this->confirmSellerSendGoods($returnArray['agent_bill_id']);
 
         if (!in_array($result['status'], array('SUCCESS', 'WFPAYMENT', 'CANCEL'))) {
-            throw new \RuntimeException('快捷支付失败');
+            throw new \RuntimeException($this->getServiceKernel()->trans('快捷支付失败'));
         }
 
         $order = $this->getOrder($result["agent_bill_id"]);
