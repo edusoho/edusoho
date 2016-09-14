@@ -2,6 +2,8 @@ admin_org_manage:
     name: 组织机构管理
     parent: admin_system
     group: 2
+    disable: true
+    visable: false
     children:
         admin_org:
             name: 组织机构
