@@ -5,7 +5,7 @@
 {% set dropdownMenusShow = false %}
 
 {% for permission in permissions %}
-    {% if permission.visable|default(false) %}
+    {% if permission.visable is defined  %}
       {% if eval_expression(permission.visable) %}
         {% set dropdownMenusShow = true %}
       {% endif %}
