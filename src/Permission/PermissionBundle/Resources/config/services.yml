@@ -9,6 +9,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    permission.admin_voter:
+        class: Permission\PermissionBundle\Security\AdminVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
     kernel.controller.permission_listener:
         class: Permission\Listener\KernelControllerListener
         arguments:    ['@service_container', '%permission.path_regular_expression%']

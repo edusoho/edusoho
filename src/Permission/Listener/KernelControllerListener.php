@@ -32,6 +32,7 @@ class KernelControllerListener
             ->getPermissions();
 
         $requestPath = $request->getPathInfo();
+
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         foreach ($this->paths as $key => $path) {
             if (preg_match($path, $requestPath)
@@ -39,7 +40,7 @@ class KernelControllerListener
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
 
                 foreach ($permissions as $permission) {
-                    if($this->container->get('permission.twig.permission_extension')->hasPermission($permission)){
+                    if($currentUser->hasPermission($permission)){
                         return;
                     }
                 }

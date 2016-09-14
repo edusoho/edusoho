@@ -225,12 +225,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         }
         $this->data = $user;
 
-        $roles = $this->getRoles();
-        if ($this->isAdmin()) {
-            $roles[]             = 'ROLE_ADMIN';
-            $this->data['roles'] = $roles;
-        }
-
         return $this;
     }
 
