@@ -1,5 +1,6 @@
 parameters:
     routing.loader.yml.class: Permission\Loader\YamlFileLoader
+    permission.path_regular_expression: ['/^\/admin/', '/^\/course\/\d+\/manage/', '/^\/classroom\/\d+\/manage/']
 
 services:
     permission.twig.permission_extension:
