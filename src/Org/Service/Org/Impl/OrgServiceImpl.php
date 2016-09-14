@@ -203,7 +203,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     /**
      * @return OrgDaoImpl
      */
-    protected function getOrgDao()
+    public function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
     }
