@@ -2,12 +2,10 @@
 
 namespace Org\Service\Org\Impl;
 
-use Org\Service\Org\Dao\Impl\OrgDaoImpl;
-use Org\Service\Org\orgName;
-use Org\Service\Org\orgParentId;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Org\Service\Org\Dao\Impl\OrgDaoImpl;
 use Org\Service\Org\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
@@ -50,10 +48,10 @@ class OrgServiceImpl extends BaseService implements OrgService
         $fields = array();
 
         if (empty($parentOrg)) {
-            $fields['orgCode'] = $org['id'] . '.';
+            $fields['orgCode'] = $org['id'].'.';
             $fields['depth']   = 1;
         } else {
-            $fields['orgCode'] = $parentOrg['orgCode'] . $org['id'] . '.';
+            $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
             $fields['depth']   = $parentOrg['depth'] + 1;
         }
 
@@ -76,19 +74,17 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function deleteOrg($id)
     {
-        $org = $this->checkBeforProccess($id);
+        $org  = $this->checkBeforProccess($id);
+        $that = $this;
 
-
-        $this->getOrgDao()->getConnection()->transactional(function () use ($org, $id) {
+        $this->getOrgDao()->getConnection()->transactional(function () use ($org, $id, $that) {
             if ($org['parentId']) {
-                $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
+                $that->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
             }
-            $this->getOrgDao()->delete($id);
+            $that->getOrgDao()->delete($id);
             //删除辖下
-            $this->getOrgDao()->deleteOrgsByPrefixOrgCode($org['orgCode']);
+            $that->getOrgDao()->deleteOrgsByPrefixOrgCode($org['orgCode']);
         });
-
-
     }
 
     public function switchOrg($id)
@@ -201,9 +197,8 @@ class OrgServiceImpl extends BaseService implements OrgService
             $dispay                = OrgBatchUpdateFactory::getDispayModuleName($module);
             $modalesDatas[$dispay] = $this->createService($service)->searchCount($conditions);
         }
-        return array_filter($modalesDatas);;
+        return array_filter($modalesDatas);
     }
-
 
     /**
      * @return OrgDaoImpl
