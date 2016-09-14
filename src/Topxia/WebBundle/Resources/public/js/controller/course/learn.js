@@ -1,8 +1,4 @@
 define(function(require, exports, module) {
-       function tanslate(value, tag)
-    {
-        return '<'+tag+'>'+value+'</'+tag+'>'
-    }
     var Widget = require('widget'),
         Class = require('class'),
         Store = require('store'),
@@ -365,7 +361,7 @@ define(function(require, exports, module) {
                     var courseId = lesson.courseId;
                     var lessonId = lesson.id;
                     //var $liveNotice = "<p>"+Translator.trans('直播将于')+ "<strong>" + liveStartTimeFormat + "</strong>"+Translator.trans('开始，于')+"<strong>" + liveEndTimeFormat + "</strong>"+Translator.trans(' 结束，请在课前10分钟内提早进入。')+"</p>";
-                    var $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime:tanslate(liveStartTimeFormat,'strong'),liveEndTime:tanslate(liveEndTimeFormat,'strong')})+"</p>";
+                    var $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
                     if (iID) {
                         clearInterval(iID);
                     }
@@ -407,7 +403,7 @@ define(function(require, exports, module) {
 
                         if (0 < startLeftSeconds && startLeftSeconds < 7200) {
                            // $liveNotice = "<p>"+Translator.trans('直播将于') +"<strong>" + liveStartTimeFormat + "</strong>"+Translator.trans('开始，于')+" <strong>" + liveEndTimeFormat + "</strong>"+Translator.trans('结束，请在课前10分钟内提早进入。')+"</p>";
-                            $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime:tanslate(liveStartTimeFormat,'strong'),liveEndTime:tanslate(liveEndTimeFormat,'strong')})+"</p>";
+                            $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                             if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
@@ -416,11 +412,9 @@ define(function(require, exports, module) {
                                 $countDown = "<p>"+Translator.trans('还剩') + hours + Translator.trans('小时') + minutes + Translator.trans('分钟') + seconds + Translator.trans('秒')+"&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
                             }
                         };
-
                         if (startLeftSeconds <= 0) {
                             clearInterval(iID);
-                            //$liveNotice = "<p>"+Translator.trans('直播已经开始，直播将于')+" <strong>" + liveEndTimeFormat + "</strong> "+Translator.trans('结束。')+"</p>";
-                            $liveNotice = "<p>"+Translator.trans('直播已经开始，直播将于%liveEndTime%结束。',{liveEndTime:translate(liveEndTimeFormat,'strong')})+"</p>";
+                            $liveNotice = "<p>" + Translator.trans('直播已经开始，直播将于%liveEndTime%结束。', {liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'}) + "</p>";
                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                             if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
@@ -493,8 +487,7 @@ define(function(require, exports, module) {
 
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
-                    //    var $testNotice = "<p>"+Translator.trans('实时考试将于')+" <strong>" + testStartTimeFormat + "</strong> "+Translator.trans('开始，将于')+"<strong>" + testEndTimeFormat + "</strong> "+Translator.trans('结束，请在课前10分钟内提早进入。')+"</p>";
-                        var $testNotice = "<p>"+Translator.trans('实时考试将于%testStartTime%开始，将于%testEndTime%结束，请在课前10分钟内提早进入。',{testStartTime:translate(testStartTimeFormat,'strong'),'testEndTime':translate(testEndTimeFormat,'strong')})+"</p>";
+                        var $testNotice = "<p>" + Translator.trans('实时考试将于%testStartTime%开始，将于%testEndTime%结束，请在课前10分钟内提早进入。',{testStartTime: '<strong>' + testStartTimeFormat + '</strong>','testEndTime': '<strong>' + testEndTimeFormat + '</strong>'}) + "</p>";
                         if (iID) {
                             clearInterval(iID);
                         }

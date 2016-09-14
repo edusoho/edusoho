@@ -24,7 +24,7 @@
       <div class="lookOver-{{postMain.id}}">
 
 
-        <span class="text-muted ">{{'还有%postReplyCount%条回复'|trans({'%postReplyCount%':{{postReplyCount[post.id]-5}}})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'点击查看'|trans}}</a>
+        <span class="text-muted ">{{'还有%postReplyCount%条回复'|trans({'%postReplyCount%':postReplyCount[post.id]-5})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'点击查看'|trans}}</a>
 
       </div>
       {% endif %}

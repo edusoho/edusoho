@@ -107,7 +107,7 @@ define("jquery-plugin/bootstrap-datetimepicker/1.0.1/datetimepicker-debug", [ "$
             }
             if (this.isRTL) {
                 this.picker.addClass("datetimepicker-rtl");
-                this.picker.find(".prev i, .next i").toggleClass("icon-arrow-left icon-arrow-right");
+                this.picker.find(".prev i, .next i").toggleClass("glyphicon-chevron-left glyphicon-chevron-right");
             }
             $(document).on("mousedown", function(e) {
                 // Clicked outside the datetimepicker, hide it
@@ -1340,7 +1340,7 @@ define("jquery-plugin/bootstrap-datetimepicker/1.0.1/datetimepicker-debug", [ "$
                 }
                 return viewMode;
             },
-            headTemplate: "<thead>" + "<tr>" + '<th class="prev"><i class="icon-arrow-left"/></th>' + '<th colspan="5" class="switch"></th>' + '<th class="next"><i class="icon-arrow-right"/></th>' + "</tr>" + "</thead>",
+            headTemplate: "<thead>" + "<tr>" + '<th class="prev"><i class="glyphicon glyphicon-chevron-left"/></th>' + '<th colspan="5" class="switch"></th>' + '<th class="next"><i class="glyphicon glyphicon-chevron-right"/></th>' + "</tr>" + "</thead>",
             contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
             footTemplate: '<tfoot><tr><th colspan="7" class="today"></th></tr></tfoot>'
         };

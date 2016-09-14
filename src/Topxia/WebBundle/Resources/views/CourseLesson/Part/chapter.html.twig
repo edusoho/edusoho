@@ -4,7 +4,7 @@
     {% if setting('course.custom_chapter_enabled')|default(true) %} 
       {{'第%number%'|trans({'%number%': item.number })}} 
       {% if setting('default.part_name') %}
-       }{{ setting('default.part_name')|default('节'|trans) }}
+       {{ setting('default.part_name')|default('节'|trans) }}
       {% else %}
         {{'节'|trans}}
       {% endif %}：

@@ -90,6 +90,10 @@ class OrderController extends BaseController
     {
         $fields = $request->request->all();
 
+        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] < 0) {
+            return $this->createMessageResponse('error', $this->trans('虚拟币填写不正确'));
+        }
+
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] > 0) {
             $scenario = "sms_user_pay";
 
@@ -112,9 +116,9 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', $this->trans('订单中没有购买的内容，不能创建!'));
         }
 
-        $targetType  = $fields["targetType"];
-        $targetId    = $fields["targetId"];
-        $maxRate     = $fields["maxRate"];
+        $targetType = $fields["targetType"];
+        $targetId   = $fields["targetId"];
+
         $priceType   = "RMB";
         $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
@@ -132,8 +136,10 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券')) {
+            if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券'))) {
                 $fields["couponCode"] = "";
+            } else {
+                $fields["couponCode"] = trim($fields["couponCode"]);
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
@@ -153,8 +159,10 @@ class OrderController extends BaseController
             }
 
             //虚拟币抵扣率比较
+            $target = $processor->getTarget($targetId);
 
-            if (isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
+            $maxRate = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate))) {
                 return $this->createMessageResponse('error', $this->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 

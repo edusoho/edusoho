@@ -3,19 +3,6 @@
 {% block title %}{{'分享教学资料'|trans}}{% endblock %}
 {% block body %}
 
-// <script type="text/javascript">
-// $("#target-teachers-input").select2({
-// 	multiple: true,
-// 	data:[
-// 		{% for contact in allTeachers %}
-// 			{% if contact.id != currentUserId %}
-// 		  		{id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
-// 		  	{% endif %}
-// 		{% endfor %}
-// 	  	]
-// });
-// </script>
-
 <form id="share-materials-form" class="form-horizontal" method="post"
 	action="{{ path('material_lib_save_sharing') }}">
 
@@ -35,4 +22,17 @@
 	data-target="#share-materials-form" data-submiting-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
 <button type="button" class="btn btn-link pull-right"
 	data-dismiss="modal">{{'取消'|trans}}</button>
+
+<script type="text/javascript">
+$("#target-teachers-input").select2({
+	multiple: true,
+	data:[
+		{% for contact in allTeachers %}
+			{% if contact.id != currentUserId %}
+		  	{id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
+		  {% endif %}
+		{% endfor %}
+	]
+});
+</script>
 {% endblock %}
