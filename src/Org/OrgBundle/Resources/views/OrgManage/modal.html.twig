@@ -45,12 +45,12 @@
             data-url="{{ path('admin_org_delete', {id:org.id}) }}" tabindex="5"><i
           class="glyphicon glyphicon-trash"></i> 删除
     </button>
+    <span class="pull-left pts plm" style="color: #999;">会同时删除下辖组织机构</span>
   {% endif %}
 
   <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
   <button id="org-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary"
           data-toggle="form-submit" data-target="#org-manage-form" tabindex="4">保存
   </button>
-  <script>app.load('classroombundle/controller/classroom-admin/chooser')</script>
   <script>app.load('orgbundle/controller/orgManage/save-modal')</script>
 {% endblock %}

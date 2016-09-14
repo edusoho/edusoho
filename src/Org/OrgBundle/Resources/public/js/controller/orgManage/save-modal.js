@@ -36,7 +36,7 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '#org-code-field',
             required: true,
-            rule: 'alpha_numeric not_all_digital remote byte_maxlength{max:30}'
+            rule: 'alpha_numeric not_all_digital remote maxlength{max:30}'
         });
 
 
