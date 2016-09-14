@@ -611,6 +611,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $course               = $this->getCourseService()->getCourse($id);
                 $target['title']      = $course['title'];
                 $target['image']      = $this->getFileUrl($course['smallPicture']);
+                $target['convNo']     = empty($course['conversationId']) ? '' : $course['conversationId'];
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 break;
             case 'lesson':
