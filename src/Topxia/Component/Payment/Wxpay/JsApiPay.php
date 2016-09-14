@@ -53,7 +53,7 @@ class JsApiPay
 
     public function getRedirectUri()
     {
-        $url = $this->request->getUri() . '?' . http_build_query($this->request->request->all());
+        $url = $this->request->getUri().'?'.http_build_query($this->request->request->all());
         return urlencode($url);
     }
 
@@ -67,17 +67,22 @@ class JsApiPay
      */
     public function getOpenid()
     {
+        //缓存$openid
 
+        if ($openid = $this->request->getSession()->get('openid')) {
+            return $openid;
+        }
         //通过code获得openid
-        if (!isset($_GET['code'])) {
+        if (empty($this->request->query->get('code'))) {
             //触发微信返回code码
             $url = $this->__createOauthUrlForCode();
             header("Location: $url");
             exit();
         } else {
             //获取code码，以获取openid
-            $code   = $_GET['code'];
+            $code   = $this->request->query->get('code');
             $openid = $this->getOpenidFromMp($code);
+            $this->request->getSession()->set('openid', $openid);
             return $openid;
         }
     }
@@ -123,7 +128,7 @@ class JsApiPay
         $buff = "";
         foreach ($urlObj as $k => $v) {
             if ($k != "sign") {
-                $buff .= $k . "=" . $v . "&";
+                $buff .= $k."=".$v."&";
             }
         }
 
@@ -145,9 +150,9 @@ class JsApiPay
         $urlObj["redirect_uri"]  = $this->getRedirectUri();
         $urlObj["response_type"] = "code";
         $urlObj["scope"]         = "snsapi_base";
-        $urlObj["state"]         = "STATE" . "#wechat_redirect";
+        $urlObj["state"]         = "STATE"."#wechat_redirect";
         $bizString               = $this->toUrlParams($urlObj);
-        return "https://open.weixin.qq.com/connect/oauth2/authorize?" . $bizString;
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
     }
 
     /**
@@ -164,6 +169,6 @@ class JsApiPay
         $urlObj["code"]       = $code;
         $urlObj["grant_type"] = "authorization_code";
         $bizString            = $this->toUrlParams($urlObj);
-        return "https://api.weixin.qq.com/sns/oauth2/access_token?" . $bizString;
+        return "https://api.weixin.qq.com/sns/oauth2/access_token?".$bizString;
     }
 }
