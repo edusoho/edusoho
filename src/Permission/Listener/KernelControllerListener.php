@@ -36,9 +36,13 @@ class KernelControllerListener
         $requestPath = $request->getPathInfo();
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();
+
+
+
         foreach ($this->paths as $key => $path) {
-            if (preg_match($path, $requestPath)
-                && !empty($permissions)
+            $needJudgePermission = preg_match($path, $requestPath) || !empty($permissions);
+
+            if ($needJudgePermission
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
 
                 foreach ($permissions as $permission) {

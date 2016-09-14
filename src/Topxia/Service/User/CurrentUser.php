@@ -250,6 +250,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function hasPermission($code)
     {
         $currentUserPermissions = $this->getPermissions();
+
         if(!empty($currentUserPermissions[$code])){
             return true;
         }

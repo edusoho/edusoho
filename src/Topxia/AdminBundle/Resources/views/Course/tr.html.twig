@@ -64,7 +64,7 @@
       {% if has_permission('admin_course_content_manage') %}
         <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">{{'管理'|trans}}</a>
       {% endif %}
-      
+
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
     </div>
   </td>
