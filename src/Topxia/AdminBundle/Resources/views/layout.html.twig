@@ -93,7 +93,7 @@
           <div class="page-header clearfix">
             <h1 class="pull-left">
               {% block page_title %}
-                {{ currentMenu.fullname|default(currentMenu.name) }}
+                {{ currentMenu.fullname|default(currentMenu.name)|trans }}
               {% endblock %}
             </h1>
             <div class="pull-right">

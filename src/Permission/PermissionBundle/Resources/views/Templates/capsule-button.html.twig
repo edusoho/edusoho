@@ -7,7 +7,7 @@
     {% for m in subTabMenus %}
 		<li {% if m.code == capsule|default(null) %}class="active"{% endif %}>
 			{{ self_macro.menu_link_html(_context, m) }}
-		</li> 
+		</li>
     {% endfor %}
 	</ul>
 {% endif %}
