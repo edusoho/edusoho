@@ -1,5 +1,5 @@
 {% extends 'CustomWebBundle::layout.html.twig' %}
-{% set nextLearnLesson = currentCoursePackage.nextLearnLesson|default() %}
+{% set nextLearnLesson = currentCoursePackage.course.nextLearnLesson|default() %}
 {% set currentCourse = currentCoursePackage.course|default() %}
 {% block stylesheets %}
   {{ parent()}}

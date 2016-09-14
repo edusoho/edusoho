@@ -494,13 +494,19 @@ class CourseController extends CourseBaseController
 
         if ($this->isPluginInstalled('InternalTraining')) {
             $postCoursePackages = $this->getPostCourseService()->findUserPostCoursePackagesWithStudyStatus($user);
+            $postCourseIds = ArrayToolkit::column($postCoursePackages, 'courseId');
             
-            foreach ($postCoursePackages as $key => $postCoursePackage) {
-                if ($postCoursePackage['courseId'] == $course['id']) {
-                    if ($postCoursePackage['course']['studyStatus'] == 'lock') {
-                        return $this->createMessageResponse('info', "前面课程尚未学完,请先学习之前的课程。", null, 3000, $this->generateUrl('homepage'));
-                    }
-                }
+            if (!in_array($course['id'], $postCourseIds) ){
+                return $this->createMessageResponse('info', "该课程不属于您的岗位，不能学习", null, 3000, $this->generateUrl('homepage'));
+            }
+            
+            $currentCoursePackage = $this->getTrainingCourseService()->chooseCurrentCoursePackage($postCoursePackages);
+            
+            if (empty($currentCoursePackage) or $currentCoursePackage['courseId'] != $course['id']) {
+               $indexedPostCoursePackages = ArrayToolkit::index($postCoursePackages, 'courseId');
+               if ($indexedPostCoursePackages[$course['id']]['course']['studyStatus'] != 'finished') {
+                   return $this->createMessageResponse('info', "您还不能学习该课程。", null, 3000, $this->generateUrl('homepage'));
+               }
             }
         }
 
