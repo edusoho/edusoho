@@ -92,6 +92,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->getArticleDao()->searchArticlesCount($conditions);
     }
 
+    public function searchCount($conditions)
+    {
+        return $this->searchArticlesCount($conditions);
+    }
+
     public function createArticle($article)
     {
         if (empty($article)) {
@@ -365,8 +370,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
                 'idNotEqual' => $article['id'],
                 'hasThumb'   => true
             );
-            $count    = $self->searchArticlesCount($conditions);
-            $articles = $self->searchArticles($conditions, 'normal', 0, $count);
+            $count      = $self->searchArticlesCount($conditions);
+            $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
             return ArrayToolkit::index($articles, 'id');
         }, $article['tagIds']);
 

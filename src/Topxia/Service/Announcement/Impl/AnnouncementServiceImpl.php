@@ -26,6 +26,11 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return $this->getAnnouncementDao()->searchAnnouncementsCount($conditions);
     }
 
+    public function searchCount($conditions)
+    {
+        return $this->searchAnnouncementsCount($conditions);
+    }
+
     public function createAnnouncement($announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
@@ -92,6 +97,18 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $this->dispatchEvent('announcement.delete', $announcement);
 
         return true;
+    }
+
+    public function batchUpdateOrg($ids, $orgCode)
+    {
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($ids as $id) {
+            $this->getAnnouncementDao()->updateAnnouncement($id, $fields);
+        }
     }
 
     protected function getAnnouncementDao()
