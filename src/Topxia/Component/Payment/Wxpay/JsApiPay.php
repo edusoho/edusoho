@@ -68,12 +68,13 @@ class JsApiPay
     public function getOpenid()
     {
         //缓存$openid
-
-        if ($openid = $this->request->getSession()->get('openid')) {
+        $openid = $this->request->getSession()->get('openid');
+        if ($openid) {
             return $openid;
         }
         //通过code获得openid
-        if (empty($this->request->query->get('code'))) {
+        $code = $this->request->query->get('code');
+        if (empty($code)) {
             //触发微信返回code码
             $url = $this->__createOauthUrlForCode();
             header("Location: $url");
