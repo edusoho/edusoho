@@ -38,7 +38,7 @@ class AdminVoter implements VoterInterface
 
         $user = $token->getUser();
 
-        if(empty($user) || $user instanceof CurrentUser){
+        if(empty($user) || !$user instanceof CurrentUser){
             return self::ACCESS_DENIED;
         }
 
