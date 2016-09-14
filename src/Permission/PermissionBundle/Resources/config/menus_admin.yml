@@ -20,7 +20,7 @@ admin_roles:
                         id: (role.id)
                 admin_role_delete:
                     name: 删除角色
-                    class: role-delete
+                    class: role-delete js-delete-role
                     group: groupBtn
                     mode: none
                     router_params:
