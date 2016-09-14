@@ -401,7 +401,7 @@ class CourseController extends CourseBaseController
         $user        = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') || $user->hasPermission('admin_course_add')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
             throw $this->createAccessDeniedException();
         }
 
