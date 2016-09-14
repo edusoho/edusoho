@@ -120,7 +120,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             $orgCode = $org['orgCode'];
         }
         
-        return $this->getOrgDao()->findOrgsStartByOrgCode($orgCode);
+        return $this->getOrgDao()->findOrgsByPrefixOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)
