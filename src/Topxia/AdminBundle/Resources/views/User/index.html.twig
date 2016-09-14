@@ -49,8 +49,8 @@
 
   <button class="btn btn-primary">{{'搜索'|trans}}</button>
 
-  {% if has_permission('admin_user_export') and is_plugin_installed('UserImporter') %}
-    <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">导出搜索结果</a>
+  {% if has_permission('admin_user_import') and is_plugin_installed('UserImporter') %}
+    <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">{{'导出搜索结果'|trans}}</a>
   {% endif %}
 
 </form>
