@@ -148,7 +148,7 @@ $api->post('/bind_login', function (Request $request) {
             throw new \RuntimeException("登录失败，请重试！");
         }
 
-        $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id']);
+        $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
         setCurrentUser($user);
         $user = $userUtil->fillUserAttr($user['id'], $oauthUser);
     } else {
