@@ -6,11 +6,11 @@
     <div class="notification-body">
       {% set data = notification.content %}
        {% if data.type == 'changeOk' %}
-          您已成功充值{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}},前往 <a href="{{path('my_coin')}}">我的账户</a> 查看
+          {{'您已成功充值%value%%coin_name%,前往'|trans({'%value%':data.value,'%coin_name%':setting('coin.coin_name')|default('虚拟币'|trans)})}} <a href="{{path('my_coin')}}">{{'我的账户'|trans}}</a> {{'查看'|trans}}
        {% elseif data.type == 'deduct' %}
-          您被扣除{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}},前往 <a href="{{path('my_coin')}}">我的账户</a> 查看
+          {{'您被扣除%value%%coin_name%,前往'|trans({'%value%':data.value,'%coin_name%':setting('coin.coin_name')|default('虚拟币'|trans)})}} <a href="{{path('my_coin')}}">{{'我的账户'|trans}}</a> {{'查看'|trans}}
        {% elseif data.type == 'changing' %}
-          您已成功兑换{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}}">我的账户</a> 查看
+          {{'您已成功兑换%value%%coin_name%,前往'|trans({'%value%':data.value,'%coin_name%':setting('coin.coin_name')|default('虚拟币'|trans)})}} <a href="{{path('my_coin')}}">{{'我的账户'|trans}}</a> {{'查看'|trans}}
        {% endif %}
     </div>
     <div class="notification-footer">

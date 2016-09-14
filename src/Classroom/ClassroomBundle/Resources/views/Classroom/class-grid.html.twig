@@ -7,12 +7,12 @@
       {% set classroomMember = data('ClassroomMember', {classroomId:classroom.id, userId: app.user.id|default(0)}) %}
 
       {% if classroomMember|default(false) %}
-        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">继续学习</a>
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ '继续学习'|trans }}</a>
       {% else %}
-        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">立即加入</a>
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ '立即加入'|trans }}</a>
       {% endif %}
     </div>
   </div>
   <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-  <div class="metas">共有<span>{{classroom.courseNum}}</span>门课程</div>
+  <div class="metas">{{ '共有%courseNum%门课程'|trans({'%courseNum%': '<span>'+classroom.courseNum+'</span>'}) }}</div>
 </div>

@@ -1,7 +1,7 @@
 <div class="col-md-6">
   <div class="panel panel-default">
     <div class="panel-heading" >
-      <h3 class="panel-title">云视频包状态</h3>
+      <h3 class="panel-title">{{'云视频包状态'|trans}}</h3>
     </div>
     <div class="panel-body" style="height: 250px;padding:40px">
       {% set bill = storage.bill|default(null) %}
@@ -9,28 +9,28 @@
       <!--未购买-->
       {% if overview.service.storage.enableBuyVideo|default(0) != 1 %}
         <div class="edu-verticalmiddle">
-          <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_buy',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div> 
+          <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_buy',{type:'video'}) }}" target="_blank">{{'购买'|trans}}</a>{{'云视频包，享受更优惠的视频托管服务'|trans}}</div> 
         </div>
       {% else %}
       <p>
-        <span class="text-muted mrm">存储空间: {{ overview.service.storage.freeSpace }}GB</span>
+        <span class="text-muted mrm">{{'存储空间:'|trans}} {{ overview.service.storage.freeSpace }}GB</span>
         {% if not overview.service.storage.renewVideo.effectiveDate|default(0) %}
-        <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
-        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
+        <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">{{'升级'|trans}}</a>
+        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">{{'续费'|trans}}</a>
         {% else %}
         <span>
-          已续费（将于{{ overview.service.storage.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
+          {{'已续费'|trans}}（{{'将于%effectiveDate%生效'|trans({'%effectiveDate%': overview.service.storage.renewVideo.effectiveDate|date("Y-n-d") })}})
         </span>
         {% endif %}
       </p>
-      <p class="text-muted">流量: {{ overview.service.storage.freeTransfer }}GB</p>
+      <p class="text-muted">{{'流量:'|trans}} {{ overview.service.storage.freeTransfer }}GB</p>
       {% if overview.service.storage.startMonth and overview.service.storage.endMonth %}
-        <p class="text-muted">服务期限: {{ overview.service.storage.startMonth|date('Y.n.d') }} ~ {{ overview.service.storage.endMonth|date('Y.n.d') }}
+        <p class="text-muted">{{'服务期限:'|trans}} {{ overview.service.storage.startMonth|date('Y.n.d') }} ~ {{ overview.service.storage.endMonth|date('Y.n.d') }}
       {% endif %}
       {% if overview.service.storage.remaining > 0 and overview.service.storage.remaining < 30 %}
-        <p class="text-danger text-sm">您的云视频包将于{{ overview.service.storage.remaining }}天后到期，请尽快续费</p>
+        <p class="text-danger text-sm">{{'您的云视频包将于%remaining%天后到期，请尽快续费'|trans({'%remaining%': overview.service.storage.remaining })}}</p>
       {% elseif overview.service.storage.remaining <= 0 %}
-        <p class="text-danger text-sm">您的云视频包已到期，请尽快续费</p>
+        <p class="text-danger text-sm">{{'您的云视频包已到期，请尽快续费'|trans}}</p>
       {% endif %}
 
 

@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}设置用户组{% endblock %}
+{% block title %}{{'设置用户组'|trans}}{% endblock %}
 {% block body %}
 
 <form id="user-roles-form" class="form-horizontal" method="post" action="{{ url('admin_user_roles', {id:user.id}) }}" data-currentuser="{{ app.user.id }}" data-edituser="{{ user.id }}">

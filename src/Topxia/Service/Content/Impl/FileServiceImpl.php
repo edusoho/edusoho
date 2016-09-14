@@ -55,12 +55,12 @@ class FileServiceImpl extends BaseService implements FileService {
 		$errors = FileToolkit::validateFileExtension($file);
 		if ($errors) {
 			@unlink($file->getRealPath());
-			throw $this->createServiceException("该文件格式，不允许上传。");
+			throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
 		}
 		$group = $this->getGroupDao()->findGroupByCode($group);
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			throw $this->createServiceException("用户尚未登录。");
+			throw $this->createServiceException($this->getKernel()->trans('用户尚未登录。'));
 		}
 		$record = array();
 		$record['userId'] = $user['id'];
@@ -89,7 +89,7 @@ class FileServiceImpl extends BaseService implements FileService {
 		$errors = array();
 		$regex = '/\.(' . preg_replace('/ +/', '|', preg_quote($extensions)) . ')$/i';
 		if (!preg_match($regex, $filename)) {
-			$errors[] = "只允许上传以下扩展名的文件：" . $extensions;
+			$errors[] = $this->getKernel()->trans('只允许上传以下扩展名的文件：') . $extensions;
 		}
 		return $errors;
 	}
@@ -99,7 +99,7 @@ class FileServiceImpl extends BaseService implements FileService {
 
 		$info = image_get_info($file->getFileUri());
 		if (!$info || empty($info['extension'])) {
-			$errors[] = "只运行上传JPG、PNG、GIF格式的图片文件。";
+			$errors[] = $this->getKernel()->trans('只运行上传JPG、PNG、GIF格式的图片文件。');
 		}
 
 		return $errors;
@@ -109,10 +109,10 @@ class FileServiceImpl extends BaseService implements FileService {
 		$errors = array();
 
 		if (!$file->getFilename()) {
-			$errors[] = "文件名为空，请给文件取个名吧。";
+			$errors[] = $this->getKernel()->trans('文件名为空，请给文件取个名吧。');
 		}
 		if (strlen($file->getFilename()) > 240) {
-			$errors[] = "文件名超出了240个字符的限制，请重命名后再试。";
+			$errors[] = $this->getKernel()->trans('文件名超出了240个字符的限制，请重命名后再试。');
 		}
 		return $errors;
 	}
@@ -169,7 +169,7 @@ class FileServiceImpl extends BaseService implements FileService {
 		}
 
 		if (!is_writable($directory)) {
-			throw $this->createServiceException("文件上传路径{$directory}不可写，文件上传失败。");
+			throw $this->createServiceException($this->getKernel()->trans('文件上传路径%directory%不可写，文件上传失败。', array('%directory%' =>$directory )));
 		}
 		$directory .= '/' . $parsed['directory'];
 
@@ -186,7 +186,7 @@ class FileServiceImpl extends BaseService implements FileService {
 		$filenameParts = explode('.', $filename);
 		$ext = array_pop($filenameParts);
 		if (empty($ext)) {
-			throw $this->createServiceException('获取文件扩展名失败！');
+			throw $this->createServiceException($this->getKernel()->trans('获取文件扩展名失败！'));
 		}
 
 		$uri = ($group['public'] ? 'public://' : 'private://') . $group['code'] . '/';
@@ -203,7 +203,7 @@ class FileServiceImpl extends BaseService implements FileService {
 		$parsed = array();
 		$parts = explode('://', $uri);
 		if (empty($parts) || count($parts) != 2) {
-			throw $this->createServiceException('解析文件URI({$uri})失败！');
+			throw $this->createServiceException($this->getKernel()->trans('解析文件URI(%uri%)失败！', array('%uri%' =>$uri )));
 		}
 		$parsed['access'] = $parts[0];
 		$parsed['path'] = $parts[1];
@@ -272,12 +272,12 @@ class FileServiceImpl extends BaseService implements FileService {
 
 	public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight) {
 		if (empty($fileId)) {
-			throw $this->createServiceException("参数不正确");
+			throw $this->createServiceException($this->getKernel()->trans('参数不正确'));
 		}
 
 		$file = $this->getFile($fileId);
 		if (empty($file)) {
-			throw $this->createServiceException("文件不存在");
+			throw $this->createServiceException($this->getKernel()->trans('文件不存在'));
 		}
 
 		$parsed = $this->parseFileUri($file["uri"]);

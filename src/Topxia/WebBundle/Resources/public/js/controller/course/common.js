@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         $('.course-exit-btn').on('click', function(){
         	var $btn = $(this);
 
-        	if (!confirm('您真的要退出学习吗？')) {
+        	if (!confirm(Translator.trans('您真的要退出学习吗？'))) {
         		return false;
         	}
 
@@ -42,13 +42,13 @@ define(function(require, exports, module) {
         if (remainTime >=0) {
             var endtime = new Date(new Date().valueOf() + remainTime * 1000);
             $('#discount-endtime-countdown').countdown(endtime, function(event) {
-               var $this = $(this).html(event.strftime('剩余 '
-                 + '<span>%D</span> 天 '
-                 + '<span>%H</span> 时 '
-                 + '<span>%M</span> 分 '
-                 + '<span>%S</span> 秒'));
+               var $this = $(this).html(event.strftime(Translator.trans('剩余 ')
+                 + '<span>%D</span>'+Translator.trans('天 ')
+                 + '<span>%H</span>'+Translator.trans('时 ')
+                 + '<span>%M</span>'+Translator.trans('分 ')
+                 + '<span>%S</span> '+Translator.trans('秒')));
              }).on('finish.countdown', function() {
-                $(this).html('活动时间到，正在刷新网页，请稍等...');
+                $(this).html(Translator.trans('活动时间到，正在刷新网页，请稍等...'));
                 setTimeout(function() {
                     $.post(app.crontab, function(){
                         window.location.reload();

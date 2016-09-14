@@ -16,11 +16,11 @@ define(function(require, exports, module) {
             	}
 				$.post($form.attr('action'), $form.serialize(), function(html) {
 					$modal.modal('hide');
-					Notify.success('保存成功');
+					Notify.success(Translator.trans('保存成功'));
                     // var $tr = $(html);
                     // $('#' + $tr.attr('id')).replaceWith($tr);
 				}).error(function(){
-					Notify.danger('操作失败');
+					Notify.danger(Translator.trans('操作失败'));
 				});
             }
         });
@@ -40,7 +40,6 @@ define(function(require, exports, module) {
         });
 
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

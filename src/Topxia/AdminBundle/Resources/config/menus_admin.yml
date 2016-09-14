@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 一个完整的permission配置如下：
 # admin_user_manage:
 #   name: 用户管理
@@ -12,6 +13,170 @@
 #   data:                   //可选
 #   before:                 //可选
 #   after:                  //可选
+=======
+admin:
+    name: 后台
+    parent: null
+admin_user:
+    name: 用户
+    parent: admin
+admin_course:
+    name: 课程
+    parent: admin
+admin_operation:
+    name: 运营
+    parent: admin
+    router_name: admin_article
+admin_order:
+    name: 订单
+    parent: admin
+    router_name: admin_course_order_manage
+admin_finance:
+    name: 账务
+    parent: admin
+    router_name: admin_bill
+admin_app:
+    name: 教育云
+    parent: admin
+    router_name: admin_my_cloud
+admin_system:
+    name: 系统
+    parent: admin
+    router_name: admin_setting_site
+admin_operation_article:
+    name: 资讯管理
+    parent: admin_operation
+    router_name: admin_article
+admin_operation_group:
+    name: 小组管理
+    parent: admin_operation
+    router_name: admin_groupThread
+admin_operation_invite:
+    name: 邀请管理
+    parent: admin_operation
+    router_name: admin_invite
+admin_operation_mobile_banner_manage:
+    name: 轮播图设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile
+admin_operation_mobile_select_manage:
+    name: 每周精选设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile_select
+admin_discovery_column_index:
+    name: 发现页栏目管理
+    parent: admin_operation_mobile
+admin_discovery_column_create:
+    name: 添加栏目
+    parent: admin_discovery_column_index
+    router_params_context: 1
+    group: 2
+    mode: modal
+admin_operation_block:
+    name: 编辑区管理
+    parent: admin_operation
+    router_name: admin_block
+    router_params: { 'category': 'all'}
+    group: 2
+admin_block_visual_edit:
+    name: 编辑
+    parent: admin_operation_block
+    router_params: {'blockTemplateId': 'block.blockTemplateId'}
+    router_params_context: 1
+
+
+# admin_operation_dictionary:
+#     name: 字典管理
+#     parent: admin_operation
+#     router_name: admin_dictionary
+#     group: 4
+admin_block_visual_edit_history:
+    name: 历史记录
+    parent: admin_operation_block
+    router_params: {'blockTemplateId': 'block.blockTemplateId'}
+    router_params_context: 1
+admin_operation_content:
+    name: 自定义页面管理
+    parent: admin_operation
+    router_name: admin_content
+    router_params: { type: page }
+    group: 2
+admin_operation_mobile:
+    name: 移动端内容管理
+    parent: admin_operation
+    group: 2
+admin_operation_analysis_register:
+    name: 数据统计
+    parent: admin_operation
+    router_params: { tab: trend , analysisDateType:register }
+    after: admin_operation_content
+    group: 3
+admin_operation_article_create:
+    name: 添加资讯
+    parent: admin_operation_article_manage
+    router_name: admin_article_create
+    group: 2
+admin_operation_category_create:
+    name: 新建栏目
+    parent: admin_operation_article_category
+    router_name: admin_article_category_create
+    mode: modal
+    group: 2
+admin_operation_article_manage:
+    name: 资讯管理
+    parent: admin_operation_article
+    router_name: admin_article
+admin_operation_article_category:
+    name: 栏目管理
+    parent: admin_operation_article
+    router_name: admin_article_category
+admin_operation_group_create:
+    name: 创建小组
+    parent: admin_operation_group_thread
+    router_name: group_add
+    group: 2
+    blank: 1
+admin_operation_group_manage:
+    name: 小组管理
+    parent: admin_operation_group
+    router_name: admin_group
+    after: admin_operation_group_thread
+admin_operation_invite_manage:
+    name: 邀请管理
+    parent: admin_operation_invite
+    router_name: admin_invite
+admin_operation_invite_coupon:
+    name: 奖励查询
+    parent: admin_operation_invite
+    router_name: admin_invite_coupon
+admin_operation_group_thread:
+    name: 话题管理
+    parent: admin_operation_group
+    router_name: admin_groupThread
+admin_course_show:
+    name: 课程管理
+    parent: admin_course
+    router_name: admin_course
+admin_course_add:
+    name: 创建课程
+    parent: admin_course_manage
+    router_name: course_create
+    group: 2
+    blank: 1
+admin_live_course:
+    name: 直播管理
+    parent: admin_course
+    router_params: {'status': 'coming'}
+
+admin_open_course_manage:
+    name: 公开课管理
+    parent: admin_course
+    router_name: admin_open_course
+admin_open_course:
+    name: 公开课管理
+    parent: admin_open_course_manage
+    router_name: admin_open_course
+>>>>>>> master
 
 # admin_block_visual_edit_history:
 #     name: 历史记录

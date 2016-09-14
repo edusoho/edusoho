@@ -26,8 +26,7 @@ define(function(require, exports, module) {
         },
         _initTime: function() {
             $("#startDate").datetimepicker({
-                autoclose: true,
-                language: 'zh-CN'
+                autoclose: true
             }).on('changeDate',function(){
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
             });
@@ -35,8 +34,7 @@ define(function(require, exports, module) {
             $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
 
             $("#endDate").datetimepicker({
-                autoclose: true,
-                language: 'zh-CN'
+                autoclose: true
             }).on('changeDate',function(){
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
@@ -49,39 +47,39 @@ define(function(require, exports, module) {
                 this.spacePieChart = new PieChart({
                     element: '#space-pie-chart',
                     data: this.$('#space-pie-chart').data('data'),
-                    title: '存储空间使用分布'
+                    title: Translator.trans('存储空间使用分布')
                 });
 
                 this.flowPieChart = new PieChart({
                     element: '#flow-pie-chart',
                     data: this.$('#flow-pie-chart').data('data'),
-                    title: '流量使用分布'
+                    title: Translator.trans('流量使用分布')
                 });
 
                 this.totalLineChart = new BarChart({
                     element: '#total-line-chart',
-                    title: '空间/流量详情'
+                    title: Translator.trans('空间/流量详情')
                 });
             }
 
             if (id == '#video-chart' && !this.videoLineChart ) {
                 this.videoLineChart = new LineChart({
                     element: '#video-line-chart',
-                    title: '视频详情'
+                    title: Translator.trans('视频详情')
                 });
             }
 
             if (id == '#audio-chart' && !this.audioLineChart) {
                 this.audioLineChart = new LineChart({
                     element: '#audio-line-chart',
-                    title: '音频详情'
+                    title: Translator.trans('音频详情')
                 });
             }
 
             if (id == '#document-chart' && !this.docLineChart) {
                 this.docLineChart = new LineChart({
                     element: '#document-line-chart',
-                    title: '文档详情'
+                    title: Translator.trans('文档详情')
                 });
             }
         }

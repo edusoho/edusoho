@@ -15,14 +15,13 @@ define(function(require, exports, module) {
                       data: data,
                       xkey: 'date',
                       ykeys: ['count'],
-                      labels: ['新增课时数'],
+                      labels: [Translator.trans('新增课时数')],
                       xLabels:"day"
                     });
         }
 
 
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -31,7 +30,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setStartDate', $('#lessonStartDate').attr("value"));
 
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

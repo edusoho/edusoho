@@ -6,7 +6,7 @@
       {% if course %}
         <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
       {% else %}
-        <span class="text-muted text-sm">课程已删除</span>
+        <span class="text-muted text-sm">{{'课程已删除'|trans}}</span>
       {% endif %}
     </div>
   </td>
@@ -17,7 +17,7 @@
     {% if course %}
       {{ course.maxStudentNum }}
     {% else %}
-      <span class="text-muted">课程已删除</div>
+      <span class="text-muted">{{'课程已删除'|trans}}</span>
     {% endif %}
   </td>
   {#

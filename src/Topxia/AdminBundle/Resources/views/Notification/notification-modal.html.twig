@@ -6,7 +6,7 @@
 
 {% set batchnotification = batchnotification|default(null) %}
 
-{% block page_title %}全站站内通知{% endblock %}
+{% block page_title %}{{'全站站内通知'|trans}}{% endblock %}
 
 {% block main %}
 
@@ -29,13 +29,13 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div class="form-group">
-			  	<label for="article-title-field" class="control-label">通知标题</label>
+			  	<label for="article-title-field" class="control-label">{{'通知标题'|trans}}</label>
 			  	<div class="controls">
 			  		<input class="form-control" id="article-title-field" type="text" name="title" value="{{ batchnotification.title|default('') }}">
 			  	</div>
 			</div>
 			<div class="form-group">
-				<label for="richeditor-body-field" class="control-label">正文</label>
+				<label for="richeditor-body-field" class="control-label">{{'正文'|trans}}</label>
 				<div class="controls">
 					<textarea class="form-control" id="richeditor-body-field" rows="16" name="content"
 					  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
@@ -51,9 +51,9 @@
 	<div class="row">
 		<div class="col-md-12">
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
-	    <button id="notification-operate-publish" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在发布...">直接发布</button>
-			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">返回</a>
+	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
+	    <button id="notification-operate-publish" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'正在发布...'|trans}}">{{'直接发布'|trans}}</button>
+			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">{{'返回'|trans}}</a>
 		</div>		
 	</div>
 </form>

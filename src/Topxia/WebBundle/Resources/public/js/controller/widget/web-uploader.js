@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             fileSizeLimit: 2*1024*1024,
             type: '',
             fileInput: '',
-            title: '上传',
+            title: Translator.trans('上传'),
             formData: {},
             accept: {
 	            title: 'Images',
@@ -50,19 +50,19 @@ define(function(require, exports, module) {
 		    });
 
 		    uploader.on( 'uploadError', function( file, response ) {
-		        Notify.danger('上传失败，请重试！');
+		        Notify.danger(Translator.trans('上传失败，请重试！'));
 		    });
 
 		    uploader.on('error', function(type){
 		    	switch(type) {
 			    	case "Q_EXCEED_SIZE_LIMIT":
-			    		Notify.danger('文件过大，请上传较小的文件！');
+			    		Notify.danger(Translator.trans('文件过大，请上传较小的文件！'));
 			    		break;
 		    		case "Q_EXCEED_NUM_LIMIT":
-		    			Notify.danger('添加的文件数量过多！');
+		    			Notify.danger(Translator.trans('添加的文件数量过多！'));
 			    		break;
 			    	case "Q_TYPE_DENIED":
-		    			Notify.danger('文件类型错误！');
+		    			Notify.danger(Translator.trans('文件类型错误！'));
 			    		break;
 		    	}
 		    });

@@ -58,17 +58,17 @@
       {% if member and member.deadline > 0 %}
         {% if member.deadline > 'now'|date('U') %}
           <p class="expiry-date hidden-sm">
-            <span class="mrm">有效期至</span>
-            <span>{{ member.deadline|date('Y年m月d日 H时i分') }}</span>
+            <span class="mrm">{{'有效期至'|trans}}</span>
+            <span>{{ member.deadline|date('Y-m-d H:i') }}</span>
           </p>
         {% else %}
          <div class="alert alert-danger alert-dismissable">
-            您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击
+            {{'您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击'|trans}}
               <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
               {% if course.price>0 %}
-              重新购买
+              {{'重新购买'|trans}}
               {% else %}
-              重新加入
+              {{'重新加入'|trans}}
               {% endif %}
               </a>。
           </div>
@@ -115,7 +115,7 @@
             {{'请重新'|trans}}<a class="btn-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
           {% else %}
             <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
-          {% endif %}{{'！'|trans}}
+          {% endif %}！
         {% elseif userVipStatus == 'member_expired' %}
           {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="btn-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
         {% elseif userVipStatus == 'level_low' %}
@@ -132,16 +132,16 @@
 {% macro student_num(course) %}
   <div class="student-num hidden-xs">
     {% if setting('course.show_student_num_enabled', '1') == 1  %}
-      <i class="es-icon es-icon-people"></i>{{ course.studentNum }}{{'人'|trans}}
+      <i class="es-icon es-icon-people"></i>{{'%studentNum%人'|trans({'%studentNum%': course.studentNum}) }}
       {% if course.maxStudentNum > 0 %}
         {% if course.studentNum >= course.maxStudentNum %}
           <small class="hidden-sm text-sm">({{'名额已满'|trans}})</small>
         {% else %}
-          <small class="hidden-sm text-sm">({{ course.maxStudentNum }}{{'名额'|trans}})</small>
+          <small class="hidden-sm text-sm">({{'%maxStudentNum%名额'|trans({'%maxStudentNum%': course.maxStudentNum}) }})</small>
         {% endif %}
       {% endif %}
     {% else %}
-      <i class="es-icon es-icon-accesstime"></i>{{ course.lessonNum }}{{'课时'|trans}}
+      <i class="es-icon es-icon-accesstime"></i>{{'%lessonNum%课时'|trans({'%lessonNum%': course.lessonNum}) }}
     {% endif %}
   </div>
 {% endmacro %}

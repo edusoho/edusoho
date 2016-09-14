@@ -9,12 +9,12 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
         $response = $this->fetchUrl($url);
 
         if ($response['code'] != 200) {
-            throw $this->createParseException('获取网易公开课视频信息失败！');
+            throw $this->createParseException($this->getServiceKernel()->trans('获取网易公开课视频信息失败！'));
         }
 
         $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'\s*\+\s*\'(.*?)\'\s*\+\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?appsrc\s*:\s*\'(.*?)\'.*?src\s*:\s*\'(.*?)\'/s', $response['content'], $matches);
         if (!$matched) {
-            throw $this->createParseException("解析土豆视频信息失败");
+            throw $this->createParseException($this->getServiceKernel()->trans('解析土豆视频信息失败'));
         }
 
         $item['id'] = $matches[1];

@@ -7,23 +7,23 @@
       {% set data = notification.content %}
        {% if data.type == 'chownout'%}
 
-          您的小组 <a href="{{path('group_show',{id:data.id})}}">{{data.title}}</a> 被管理员转移给了用户 <a href={{path('user_show',{id:data.userId})}}>{{data.userName}}</a>
+          {{'您的小组'|trans}} <a href="{{path('group_show',{id:data.id})}}">{{data.title}}</a> {{'被管理员转移给了用户'|trans}} <a href={{path('user_show',{id:data.userId})}}>{{data.userName}}</a>
 
        {% elseif data.type =='chownin'%}
 
-          您获得了小组 <a href="{{path('group_show',{id:data.id})}}">{{data.title}}</a>的管理权限
+          {{'您获得了小组'|trans}} <a href="{{path('group_show',{id:data.id})}}">{{data.title}}</a>{{'的管理权限'|trans}}
 
         {% elseif data.type == 'remove'%}
 
-          您已经被移除<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>。
+          {{'您已经被移除'|trans}}<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>。
 
         {% elseif data.type == 'setAdmin' %}
 
-          您在<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被组长任命为副组长
+          {{'您在'|trans}}<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被组长任命为副组长'|trans}}
 
         {% elseif data.type == 'removeAdmin'%}
 
-           您在<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被组长取消副组长
+           {{'您在'|trans}}<a href="{{path('group_show',{id:data.id})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被组长取消副组长'|trans}}
            
        {% endif %}
     </div>

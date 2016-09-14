@@ -22,7 +22,6 @@
         // });
 
         $(".date").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -41,13 +40,13 @@
 
         validator.addItem({
             element: '[name="profile[truename]"]',
-            rule: 'chinese minlength{min:2} maxlength{max:12}'
+            rule: 'minlength{min:2} maxlength{max:36}'
         });
 
         validator.addItem({
             element: '[name="profile[title]"]',
             rule: 'chinese_limit{max:24}',
-            display:'头衔'
+            display:Translator.trans('头衔')
         });
 
         validator.addItem({
@@ -58,19 +57,19 @@
         validator.addItem({
             element: '[name="profile[weibo]"]',
             rule: 'url',
-            errormessageUrl: '微博地址不正确，须以http://开头。'
+            errormessageUrl: Translator.trans(Translator.trans('微博地址不正确，须以http://开头。'))
         });
 
         validator.addItem({
             element: '[name="profile[blog]"]',
             rule: 'url',
-            errormessageUrl: '博客地址不正确，须以http://开头。'
+            errormessageUrl: Translator.trans('博客地址不正确，须以http://开头。')
         });
 
         validator.addItem({
             element: '[name="profile[site]"]',
             rule: 'url',
-            errormessageUrl: '个人主页地址不正确，须以http://开头。'
+            errormessageUrl: Translator.trans('个人主页地址不正确，须以http://开头。')
         });
 
         validator.addItem({

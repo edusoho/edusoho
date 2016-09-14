@@ -22,8 +22,8 @@
     sudo brew tap josegonzalez/homebrew-php 
 
 五、安装php 
-    
-    5.1 php55
+
+    5.1 php56
 
     brew install php55 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd
 

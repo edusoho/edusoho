@@ -133,17 +133,17 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，设置帐号失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，设置帐号失败！'));
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户昵称格式不正确，设置帐号失败！'));
         }
 
         $existUser = $this->getUserDao()->findUserByNickname($nickname);
 
         if ($existUser && $existUser['id'] != $userId) {
-            throw $this->createServiceException('昵称已存在！');
+            throw $this->createServiceException($this->getKernel()->trans('昵称已存在！'));
         }
 
         $updatedUser = $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
@@ -188,13 +188,13 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeEmail($userId, $email)
     {
         if (!SimpleValidator::email($email)) {
-            throw $this->createServiceException('Email格式不正确，变更Email失败。');
+            throw $this->createServiceException($this->getKernel()->trans('Email格式不正确，变更Email失败。'));
         }
 
         $user = $this->getUserDao()->findUserByEmail($email);
 
         if ($user && $user['id'] != $userId) {
-            throw $this->createServiceException('Email({$email})已经存在，Email变更失败。');
+            throw $this->createServiceException($this->getKernel()->trans('Email(%email%)已经存在，Email变更失败。', array('%email%' => $email)));
         }
 
         $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
@@ -207,7 +207,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，头像更新失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，头像更新失败！'));
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
@@ -330,7 +330,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user) || empty($password)) {
-            throw $this->createServiceException('参数不正确，更改密码失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更改密码失败。'));
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -344,7 +344,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
-        $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
+        $this->getLogService()->info('user', 'password-changed', $this->getKernel()->trans('用户%email%(ID:%id%)重置密码成功', array('%email%' => $user['email'], '%id%' => $user['id'])));
 
         return true;
     }
@@ -354,7 +354,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user) || empty($newPayPassword)) {
-            throw $this->createServiceException('参数不正确，更改支付密码失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更改支付密码失败。'));
         }
 
         $payPasswordSalt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -366,7 +366,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($userId, $fields);
 
-        $this->getLogService()->info('user', 'pay-password-changed', "用户{$user['email']}(ID:{$user['id']})重置支付密码成功");
+        $this->getLogService()->info('user', 'pay-password-changed', $this->getKernel()->trans('用户%email%(ID:%id%)重置支付密码成功', array('%email%' => $user['email'], '%id%' => $user['id'])));
 
         return true;
     }
@@ -387,7 +387,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user) || empty($mobile)) {
-            throw $this->createServiceException('参数不正确，更改失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更改失败。'));
         }
 
         $fields = array(
@@ -399,6 +399,7 @@ class UserServiceImpl extends BaseService implements UserService
             'mobile' => $mobile
         ));
         $this->dispatchEvent('mobile.change', new ServiceEvent($user));
+
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
@@ -439,7 +440,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('参数不正确，校验密码失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，校验密码失败。'));
         }
 
         return $this->verifyInSaltOut($password, $user['salt'], $user['password']);
@@ -450,7 +451,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('参数不正确，校验密码失败。');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，校验密码失败。'));
         }
 
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
@@ -473,7 +474,7 @@ class UserServiceImpl extends BaseService implements UserService
                     throw $this->createServiceException('emailOrMobile error!');
                 }
             } else {
-                throw $this->createServiceException('参数不正确，邮箱或手机不能为空。');
+                throw $this->createServiceException($this->getKernel()->trans('参数不正确，邮箱或手机不能为空。'));
             }
         } elseif ($mode == 'mobile') {
             if (isset($registration['mobile']) && !empty($registration['mobile'])) {
@@ -484,7 +485,7 @@ class UserServiceImpl extends BaseService implements UserService
                     throw $this->createServiceException('mobile error!');
                 }
             } else {
-                throw $this->createServiceException('参数不正确，手机不能为空。');
+                throw $this->createServiceException($this->getKernel()->trans('参数不正确，手机不能为空。'));
             }
         } else {
             $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
@@ -531,7 +532,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->validateNickname($registration['nickname']);
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw $this->createServiceException('昵称已存在');
+            throw $this->createServiceException($this->getKernel()->trans('昵称已存在'));
         }
 
         if (!SimpleValidator::email($registration['email'])) {
@@ -539,7 +540,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->isEmailAvaliable($registration['email'])) {
-            throw $this->createServiceException('Email已存在');
+            throw $this->createServiceException($this->getKernel()->trans('Email已存在'));
         }
 
         $user = array();
@@ -697,11 +698,11 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，设置帐号失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，设置帐号失败！'));
         }
 
         if ($user['setup']) {
-            throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
+            throw $this->createServiceException($this->getKernel()->trans('该帐号，已经设置过帐号信息，不能再设置！'));
         }
 
         $user = $this->getUserDao()->updateUser($userId, array('setup' => 1));
@@ -713,7 +714,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，更新用户失败。');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，更新用户失败。'));
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -787,19 +788,19 @@ class UserServiceImpl extends BaseService implements UserService
         unset($fields['title']);
 
         if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
-            throw $this->createServiceException('性别不正确，更新用户失败。');
+            throw $this->createServiceException($this->getKernel()->trans('性别不正确，更新用户失败。'));
         }
 
         if (!empty($fields['birthday']) && !SimpleValidator::date($fields['birthday'])) {
-            throw $this->createServiceException('生日不正确，更新用户失败。');
+            throw $this->createServiceException($this->getKernel()->trans('生日不正确，更新用户失败。'));
         }
 
         if (!empty($fields['mobile']) && !SimpleValidator::mobile($fields['mobile'])) {
-            throw $this->createServiceException('手机不正确，更新用户失败。');
+            throw $this->createServiceException($this->getKernel()->trans('手机不正确，更新用户失败。'));
         }
 
         if (!empty($fields['qq']) && !SimpleValidator::qq($fields['qq'])) {
-            throw $this->createServiceException('QQ不正确，更新用户失败。');
+            throw $this->createServiceException($this->getKernel()->trans('QQ不正确，更新用户失败。'));
         }
 
         if (!empty($fields['about'])) {
@@ -836,22 +837,24 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
         $currentUser = $this->getCurrentUser();
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，设置用户角色失败。');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，设置用户角色失败。'));
         }
 
         if (empty($roles)) {
-            throw $this->createServiceException('用户角色不能为空');
+            throw $this->createServiceException($this->getKernel()->trans('用户角色不能为空'));
         }
 
         if (!in_array('ROLE_USER', $roles)) {
-            throw $this->createServiceException('用户角色必须包含ROLE_USER');
+            throw $this->createServiceException($this->getKernel()->trans('用户角色必须包含ROLE_USER'));
         }
 
         $allowedRoles = $currentUser['roles'];
         $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId'=>$currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
+
         if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
             throw $this->createServiceException(sprintf('用户角色不正确(%s)，设置用户角色失败。', implode(",",$notAllowedRoles)));
+
         }
 
         $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
@@ -859,6 +862,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
 
         $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
+
     }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
@@ -912,7 +916,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException('获取用户绑定信息失败，当前用户不存在');
+            throw $this->createServiceException($this->getKernel()->trans('获取用户绑定信息失败，当前用户不存在'));
         }
 
         return $this->getUserBindDao()->findBindsByToId($userId);
@@ -931,11 +935,11 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->getUser($toId);
 
         if (empty($user)) {
-            throw $this->createServiceException('解除第三方绑定失败，该用户不存在');
+            throw $this->createServiceException($this->getKernel()->trans('解除第三方绑定失败，该用户不存在'));
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
+            throw $this->createServiceException($this->getKernel()->trans('%type%类型不正确，解除第三方绑定失败。', array('%type%' => $type)));
         }
 
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
@@ -943,7 +947,7 @@ class UserServiceImpl extends BaseService implements UserService
         if ($bind) {
             $bind        = $this->getUserBindDao()->deleteBind($bind['id']);
             $currentUser = $this->getCurrentUser();
-            $this->getLogService()->info('user', 'unbind', "用户名{$user['nickname']}解绑成功，操作用户为{$currentUser['nickname']}");
+            $this->getLogService()->info('user', 'unbind', $this->getKernel()->trans('用户名%user%解绑成功，操作用户为%currentUser%', array('%user%' => $user['nickname'], '%currentUser%' => $currentUser['nickname'])));
         }
 
         return $bind;
@@ -968,11 +972,11 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->getUser($toId);
 
         if (empty($user)) {
-            throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
+            throw $this->createServiceException($this->getKernel()->trans('获取用户绑定信息失败，该用户不存在'));
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
+            throw $this->createServiceException($this->getKernel()->trans('%type%类型不正确，获取第三方登录信息失败。', array('%type%' => $type)));
         }
 
         if ($type == 'weixinweb' || $type == 'weixinmob') {
@@ -987,11 +991,11 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->getUser($toId);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，第三方绑定失败');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，第三方绑定失败'));
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
+            throw $this->createServiceException($this->getKernel()->trans('%type%类型不正确，第三方绑定失败。', array('%type%' => $type)));
         }
 
         if ($type == 'weixinweb' || $type == 'weixinmob') {
@@ -1021,7 +1025,7 @@ class UserServiceImpl extends BaseService implements UserService
             'loginTime' => time()
         ));
 
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+        $this->getLogService()->info('user', 'login_success', $this->getKernel()->trans('登录成功'));
     }
 
     public function markLoginFailed($userId, $ip)
@@ -1056,9 +1060,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($user) {
-            $log = "用户({$user['nickname']})，".($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
+            $log = $this->getKernel()->trans('用户(%nickname%)，', array('%nickname%' => $user['nickname'])).($user['consecutivePasswordErrorTimes'] ? $this->getKernel()->trans('连续第%ErrorTimes%次登录失败', array('%ErrorTimes%' => $user['consecutivePasswordErrorTimes'])) : $this->getKernel()->trans('登录失败'));
         } else {
-            $log = "用户(IP: $ip)，".($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
+            $log = $this->getKernel()->trans('用户(IP: %ip%)，', array('%ip%' => $ip)).($user['consecutivePasswordErrorTimes'] ? $this->getKernel()->trans('连续第%ErrorTimes%次登录失败', array('%ErrorTimes%' => $user['consecutivePasswordErrorTimes'])) : $this->getKernel()->trans('登录失败'));
         }
 
         $this->getLogService()->info('user', 'login_fail', $log);
@@ -1124,13 +1128,13 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，封禁失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，封禁失败！'));
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
         $this->dispatchEvent("user.lock", new ServiceEvent($user));
 
-        $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
+        $this->getLogService()->info('user', 'lock', $this->getKernel()->trans('封禁用户%nickname%(#%id%)', array('%nickname%' => $user['nickname'], '%id%' => $user['id'])));
 
         return true;
     }
@@ -1140,7 +1144,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，解禁失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，解禁失败！'));
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
@@ -1157,7 +1161,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，推荐失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，推荐失败！'));
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
@@ -1170,12 +1174,12 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，取消推荐失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，取消推荐失败！'));
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedSeq' => 0, 'promotedTime' => 0));
 
-        $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
+        $this->getLogService()->info('user', 'cancel_recommend', $this->getKernel()->trans('取消推荐用户%nickname%(#%id%)', array('%nickname%' => $user['nickname'], '%id' => $user['id'])));
         return $user;
     }
 
@@ -1187,7 +1191,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function waveUserCounter($userId, $name, $number)
     {
         if (!ctype_digit((string) $number)) {
-            throw $this->createServiceException('计数器的数量，必须为数字');
+            throw $this->createServiceException($this->getKernel()->trans('计数器的数量，必须为数字'));
         }
 
         $this->getUserDao()->waveCounterById($userId, $name, $number);
@@ -1264,23 +1268,23 @@ class UserServiceImpl extends BaseService implements UserService
         $toUser   = $this->getUser($toId);
 
         if (empty($fromUser) || empty($toUser)) {
-            throw $this->createServiceException('用户不存在，关注失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，关注失败！'));
         }
 
         if ($fromId == $toId) {
-            throw $this->createServiceException('不能关注自己！');
+            throw $this->createServiceException($this->getKernel()->trans('不能关注自己！'));
         }
 
         $blacklist = $this->getBlacklistService()->getBlacklistByUserIdAndBlackId($toId, $fromId);
 
         if (!empty($blacklist)) {
-            throw $this->createServiceException('关注失败！');
+            throw $this->createServiceException($this->getKernel()->trans('关注失败！'));
         }
 
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
 
         if (!empty($friend)) {
-            throw $this->createServiceException('不允许重复关注!');
+            throw $this->createServiceException($this->getKernel()->trans('不允许重复关注!'));
         }
 
         $isFollowed = $this->isFollowed($toId, $fromId);
@@ -1302,13 +1306,13 @@ class UserServiceImpl extends BaseService implements UserService
         $toUser   = $this->getUser($toId);
 
         if (empty($fromUser) || empty($toUser)) {
-            throw $this->createServiceException('用户不存在，取消关注失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，取消关注失败！'));
         }
 
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
 
         if (empty($friend)) {
-            throw $this->createServiceException('不存在此关注关系，取消关注失败！');
+            throw $this->createServiceException($this->getKernel()->trans('不存在此关注关系，取消关注失败！'));
         }
 
         $result     = $this->getFriendDao()->deleteFriend($friend['id']);
@@ -1357,11 +1361,11 @@ class UserServiceImpl extends BaseService implements UserService
         $toUser   = $this->getUser($toId);
 
         if (empty($fromUser)) {
-            throw $this->createServiceException('用户不存在，检测关注状态失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，检测关注状态失败！'));
         }
 
         if (empty($toUser)) {
-            throw $this->createServiceException('被关注者不存在，检测关注状态失败！');
+            throw $this->createServiceException($this->getKernel()->trans('被关注者不存在，检测关注状态失败！'));
         }
 
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
@@ -1388,7 +1392,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户#{$userId}不存在！");
+            throw $this->createServiceException($this->getKernel()->trans('用户#%id%不存在！', array('%id%' => $userId)));
         }
 
         $faceImgPath = 'userFaceImg'.$userId.time().'.'.$faceImg->getClientOriginalExtension();
@@ -1416,7 +1420,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户#{$userId}不存在！");
+            throw $this->createServiceException($this->getKernel()->trans('用户#%id%不存在！', array('%id%' => $userId)));
         }
 
         $this->getUserDao()->updateUser($user['id'], array(
@@ -1440,7 +1444,7 @@ class UserServiceImpl extends BaseService implements UserService
                 'operatorId' => $currentUser['id'])
         );
 
-        $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !");
+        $this->getLogService()->info('user', 'approved', $this->getKernel()->trans('用户%nickname%实名认证成功，操作人:%currentUser% !', array('%nickname%' => $user['nickname'], '%currentUser%' => $currentUser['nickname'])));
 
         $message = array(
             'note' => $note ? $note : '',
@@ -1454,7 +1458,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户#{$userId}不存在！");
+            throw $this->createServiceException($this->getKernel()->trans('用户#%id%不存在！', array('%id%' => $userId)));
         }
 
         $this->getUserDao()->updateUser($user['id'], array(
@@ -1472,7 +1476,7 @@ class UserServiceImpl extends BaseService implements UserService
                 'operatorId' => $currentUser['id'])
         );
 
-        $this->getLogService()->info('user', 'approval_fail', "用户{$user['nickname']}实名认证失败，操作人:{$currentUser['nickname']} !");
+        $this->getLogService()->info('user', 'approval_fail', $this->getKernel()->trans('用户%nickname%实名认证失败，操作人:%currentUser% !', array('%nickname%' => $user['nickname'], '%currentUser%' => $currentUser['nickname'])));
         $message = array(
             'note' => $note ? $note : '',
             'type' => 'reject');
@@ -1495,7 +1499,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createServiceException('用户不存在，检测关注状态失败！');
+            throw $this->createServiceException($this->getKernel()->trans('用户不存在，检测关注状态失败！'));
         }
 
         return $this->getUserDao()->updateUser($id, array(
@@ -1592,6 +1596,11 @@ class UserServiceImpl extends BaseService implements UserService
         $mobiles = array_merge($verifiedMobiles, $profileMobiles);
         $mobiles = array_filter($mobiles);
         return array_unique($mobiles);
+    }
+
+    public function updateUserLocale($id, $locale)
+    {
+        $this->getUserDao()->updateUser($id, array('locale' => $locale));
     }
 
     public function getUserPayAgreement($id)
