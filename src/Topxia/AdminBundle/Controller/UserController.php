@@ -329,10 +329,6 @@ class UserController extends BaseController
 
     public function avatarAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
