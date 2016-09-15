@@ -45,8 +45,10 @@ class BlockExtension extends \Twig_Extension
 
         if ($cdnUrl) {
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i',$content,$imgs);
-            foreach ($imgs[1] as $img) {
-                $content = str_replace($img, $cdnUrl.$img, $content);
+            if ($imgs) {
+                foreach ($imgs[1] as $img) {
+                    $content = str_replace($img, $cdnUrl.$img, $content);
+                }
             }
         }
 
