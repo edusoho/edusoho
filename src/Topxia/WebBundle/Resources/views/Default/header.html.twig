@@ -20,7 +20,7 @@
     </div>
     <a href="{{ path('homepage') }}" class="navbar-brand">
       {% if setting('site.logo') %}
-       {{ lazy_img(filepath('../' ~ setting('site.logo'),''), '', setting('site.name', 'EDUSOHO'), '') }}
+        <img src="{{ filepath('../' ~ setting('site.logo'),'') }}">
       {% else %}
         {{ setting('site.name', 'EDUSOHO') }}
       {% endif %}
