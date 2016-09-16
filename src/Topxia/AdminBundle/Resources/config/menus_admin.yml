@@ -449,6 +449,10 @@ admin_logs:
     name: 系统日志
     parent: admin_system
     group: 2
+admin_performance:
+    name: 高性能设置
+    parent: admin_system
+    group: 3
 admin_logs_query:
     name: 系统操作日志
     parent: admin_logs

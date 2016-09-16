@@ -678,6 +678,18 @@ class SettingController extends BaseController
         ));
     }
 
+    public function performanceAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->setFlashMessage('success', '设置成功');
+            $this->getSettingService()->set('performance', $data);
+            return $this->redirect($this->generateUrl('admin_performance'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:performance-setting.html.twig');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

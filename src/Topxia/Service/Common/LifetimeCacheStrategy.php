@@ -1,51 +1,28 @@
 <?php
 
-/*
- * This file is part of twig-cache-extension.
- *
- * (c) Alexander <iam.asm89@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Asm89\Twig\CacheExtension\CacheStrategy;
+namespace Topxia\Service\Common;
 
 use Asm89\Twig\CacheExtension\CacheProviderInterface;
 use Asm89\Twig\CacheExtension\CacheStrategyInterface;
 use Asm89\Twig\CacheExtension\Exception\InvalidCacheLifetimeException;
 
-/**
- * Strategy for caching with a pre-defined lifetime.
- *
- * The value passed to the strategy is the lifetime of the cache block in
- * seconds.
- *
- * @author Alexander <iam.asm89@gmail.com>
- */
 class LifetimeCacheStrategy implements CacheStrategyInterface
 {
     private $cache;
 
-    /**
-     * @param CacheProviderInterface $cache
-     */
     public function __construct(CacheProviderInterface $cache)
     {
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchBlock($key)
     {
-        return $this->cache->fetch($key['key']);
+        if ($this->isPageStaticizeEnabled()) {
+            return $this->cache->fetch($key['key']);
+        }
+        return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function generateKey($annotation, $value)
     {
         if (!is_numeric($value)) {
@@ -58,11 +35,16 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function saveBlock($key, $block)
     {
-        return $this->cache->save($key['key'], $block, $key['lifetime']);
+        if ($this->isPageStaticizeEnabled()) {
+            return $this->cache->save($key['key'], $block, $key['lifetime']);
+        }
+    }
+
+    protected function isPageStaticizeEnabled()
+    {
+        $setting = ServiceKernel::instance()->createService('System.SettingService')->get('performance', array());
+        return empty($setting['pageStaticize']) ? 0 : $setting['pageStaticize'];
     }
 }

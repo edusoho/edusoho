@@ -843,6 +843,9 @@ admin_jobs:
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
+admin_performance:
+    pattern:  /setting/performance
+    defaults: { _controller: TopxiaAdminBundle:Setting:performance }
 
 admin_logs_prod:
     pattern:  /setting/logs/prod
