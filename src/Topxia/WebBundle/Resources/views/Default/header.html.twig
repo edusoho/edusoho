@@ -20,7 +20,7 @@
     </div>
     <a href="{{ path('homepage') }}" class="navbar-brand">
       {% if setting('site.logo') %}
-        <img src="{{ asset(setting('site.logo')) }}">
+        <img src="{{ filepath('../' ~ setting('site.logo'),'') }}">
       {% else %}
         {{ setting('site.name', 'EDUSOHO') }}
       {% endif %}

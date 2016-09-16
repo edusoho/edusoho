@@ -22,11 +22,7 @@
                 <div class="media media-group col-md-6 col-sm-4">
                   <div class="media-left">
                     <a href="{{ path('group_show',{id:group.id}) }}">
-                    {% if group.logo %}
-                      <img class="avatar-square-md" src="{{file_path(group.logo)}}" alt="{{ group.title }}">
-                    {% else %}
-                      <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}"  alt="{{ group.title }}">
-                    {% endif %}
+                      {{ lazy_img(filepath(group.logo, 'group.png'), 'avatar-square-md', group.title, 'group.png') }}
                     </a>
                   </div>
                   <div class="media-body">
@@ -63,11 +59,8 @@
               {% for article in featuredArticles %}
                 <li class="{% if loop.index == 2 %}last{% endif %}">
                   <a href="{{ path('article_detail', {id:article.id}) }}">
-                    {% if article.thumb %}
-                      {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
-                    {% else %}
-                      <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}">
-                    {% endif %}
+                    {% set defaultImg = '../../v2/img/article/article_banner_' ~ loop.index ~ '.jpg' %}
+                    {{ lazy_img(filepath(article.thumb,defaultImg), 'img-responsive', article.title, defaultImg) }}
                     <div class="image-overlay"></div>
                     <div class="title">{{ article.title }}</div>
                   </a>

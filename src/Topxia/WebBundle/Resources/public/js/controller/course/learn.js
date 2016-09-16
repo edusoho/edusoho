@@ -194,16 +194,18 @@ define(function(require, exports, module) {
             });
         },
 
-        _afterLoadLesson: function(lessonId) {
+        _afterLoadLesson: function(lesson) {
             if (this._counter && this._counter.timerId) {
                 clearInterval(this._counter.timerId);
             }
 
             var self = this;
-            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
-            this._counter.setTimerId(setInterval(function() {
-                self._counter.execute()
-            }, 1000));
+            if (lesson.type != 'live') {
+                this._counter = new Counter(self, this.get('courseId'), lesson.id, this.get('watchLimit'));
+                this._counter.setTimerId(setInterval(function() {
+                    self._counter.execute()
+                }, 1000));
+            }
         },
 
         _onChangeLessonId: function(id) {
@@ -668,7 +670,7 @@ define(function(require, exports, module) {
 
                 that._toolbar.set('lesson', lesson);
                 that._startLesson();
-                that._afterLoadLesson(id);
+                that._afterLoadLesson(lesson);
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
