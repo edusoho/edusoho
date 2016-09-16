@@ -14,7 +14,7 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
         $matched = preg_match('/getCurrentMovie.*?id\s*:\s*\'(.*?)\'.*?image\s*:\s*\'(.*?)\'\s*\+\s*\'(.*?)\'\s*\+\s*\'(.*?)\'.*?title\s*:\s*\'(.*?)\'.*?appsrc\s*:\s*\'(.*?)\'.*?src\s*:\s*\'(.*?)\'/s', $response['content'], $matches);
         if (!$matched) {
-            throw $this->createParseException($this->getServiceKernel()->trans('解析土豆视频信息失败'));
+            throw $this->createParseException($this->getServiceKernel()->trans('解析网易公开课视频信息失败'));
         }
 
         $item['id'] = $matches[1];

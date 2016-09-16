@@ -36,14 +36,16 @@ class YoukuVideoItemParser extends AbstractItemParser
         if (empty($matched)) {
             throw $this->createParseException($this->getServiceKernel()->trans('解析优酷视频页面信息失败!'));
         }
+        $queryString = substr($matches[1], strpos($matches[1], '?') + 1);
+        $queryString = substr($queryString, 0, strpos($queryString, '#') ? : strlen($queryString));
+        parse_str($queryString, $query);
 
-        parse_str(parse_url($matches[1], PHP_URL_QUERY), $query);
         if (empty($query) || empty($query['title'])) {
             throw $this->createParseException($this->getServiceKernel()->trans('解析优酷视频页面信息失败!!'));
         }
 
-        $item['name'] = iconv('gbk', 'utf-8', $query['title']);
-        $item['summary'] = empty($query['desc']) ? '' : iconv('gbk', 'utf-8', $query['desc']);
+        $item['name'] = $query['title'];
+        $item['summary'] = empty($query['desc']) ? '' : $query['desc'];
         $item['page'] = "http://v.youku.com/v_show/id_{$videoId}.html";
         $item['pictures'] = empty($query['pic']) ? array() : array('url' => $query['pic']);
         $item['files'] = array(
