@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="live-countdown">
-          距离直播还有<span>30</span>分钟
+          距离直播还有<span>{{((liveLesson.startTime-timestamp())/60)|number_format}}</span>分钟
         </div>
         <div class="text-center">
           <a href="{{path('live_course_play', {courseId:liveLesson.courseId, lessonId:liveLesson.id})}}" class="btn btn-warning btn-lg" target="_blank">
