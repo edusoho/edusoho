@@ -35,36 +35,6 @@
 		{% endif %}
     {% endfor %}
 
-    <div class="modal-backdrop fade in"></div>
-    <div class="modal fade in" style="display:block">
-      <div class="modal-dialog modal-live-remind">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <div class="well">
-              <div class="media media-course-module">
-                <div class="media-left">
-                  <a href=""><img src="{{asset('assets/img/default/course-large.png')}}" alt=""></a>
-                </div>
-                <div class="media-body">
-                  <h4>EduSoho网校运营课程</h4>
-                  <p>授课老师: 李老师</p>
-                  <p>直播时间: 18:00～19:00</p>
-                </div>
-              </div>
-            </div>
-            <div class="live-countdown">
-              距离直播还有<span>30</span>分钟
-            </div>
-            <div class="text-center">
-              <a href="" class="btn btn-warning btn-lg">
-                <i class="es-icon es-icon-zhibokecheng2"></i>
-                进入直播教室
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include 'TopxiaWebBundle:Default:live-course-guide.html.twig' %}
 
 {% endblock %}

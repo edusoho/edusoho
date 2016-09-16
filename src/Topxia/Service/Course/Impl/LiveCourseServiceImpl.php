@@ -164,6 +164,26 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $replayList;
     }
 
+    public function findBeginingLiveCourse($afterSecond)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            return array();
+        }
+
+        $lessons = $this->getLessonDao()->findBeginningLiveCoures($afterSecond, 10);
+        foreach ($lessons as $key => $lesson) {
+            $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
+            if (!empty($member)) {
+                $lesson['course']   = $this->getCourseService()->getCourse($lesson['courseId']);
+                $lesson['teachers'] = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                return $lesson;
+            }
+        }
+
+        return array();
+    }
+
     private function _getSpeaker($courseTeachers)
     {
         $speakerId = current($courseTeachers);
@@ -213,7 +233,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $liveLogoUrl;
     }
 
-    protected function getCourseService($courseType)
+    protected function getCourseService($courseType = 'live')
     {
         if ($courseType == 'liveOpen') {
             return $this->createService('OpenCourse.OpenCourseService');
@@ -230,6 +250,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getLessonDao()
+    {
+        return $this->createDao('Course.LessonDao');
     }
 
     protected function getSettingService()

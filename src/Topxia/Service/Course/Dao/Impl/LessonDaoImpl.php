@@ -345,4 +345,18 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
         return $this->getConnection()->fetchAll($sql);
     }
+
+    public function findBeginningLiveCoures($afterSecond, $limit)
+    {
+        $that = $this;
+
+        return $this->fetchCached("afterSecond:{$afterSecond}:limit:{$limit}", $afterSecond, $limit, function ($afterSecond, $limit) use ($that) {
+            $currentTime = time();
+
+            $sql = "SELECT * FROM {$that->table} WHERE (startTime - {$currentTime}) < ? and status='published' AND
+                type = 'live' ORDER BY startTime DESC LIMIT {$limit}";
+
+            return $that->getConnection()->fetchAll($sql, array($afterSecond));
+        });
+    }
 }
