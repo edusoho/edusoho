@@ -17,7 +17,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
     public function fetchBlock($key)
     {
-        if ($this->isPageStaticizeEnabled()) {
+        if ($this->isPageCacheEnabled()) {
             return $this->cache->fetch($key['key']);
         }
         return false;
@@ -37,14 +37,14 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
     public function saveBlock($key, $block)
     {
-        if ($this->isPageStaticizeEnabled()) {
+        if ($this->isPageCacheEnabled()) {
             return $this->cache->save($key['key'], $block, $key['lifetime']);
         }
     }
 
-    protected function isPageStaticizeEnabled()
+    protected function isPageCacheEnabled()
     {
         $setting = ServiceKernel::instance()->createService('System.SettingService')->get('performance', array());
-        return empty($setting['pageStaticize']) ? 0 : $setting['pageStaticize'];
+        return empty($setting['pageCache']) ? 0 : $setting['pageCache'];
     }
 }

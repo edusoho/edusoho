@@ -15,10 +15,10 @@
       </div>
       <div class="controls col-md-8 radios">
         <label>
-          <input type="radio" name="pageStaticize" value="1" {% if setting('performance.pageStaticize',0) == 1 %}checked{% endif %}> 是
+          <input type="radio" name="pageCache" value="1" {% if setting('performance.pageCache',0) == 1 %}checked{% endif %}> 是
         </label>
         <label>
-          <input type="radio" name="pageStaticize" value="0" {% if setting('performance.pageStaticize',0) == 0 %}checked{% endif %}> 否
+          <input type="radio" name="pageCache" value="0" {% if setting('performance.pageCache',0) == 0 %}checked{% endif %}> 否
         </label>
       </div>
     </div>
