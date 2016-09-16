@@ -172,11 +172,15 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         $lessons = $this->getLessonDao()->findBeginningLiveCoures($afterSecond, 10);
+
         foreach ($lessons as $key => $lesson) {
             $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
             if (!empty($member)) {
                 $lesson['course']   = $this->getCourseService()->getCourse($lesson['courseId']);
-                $lesson['teachers'] = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                $teacherMembers     = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                $teacherIds         = ArrayToolkit::column($teacherMembers, 'userId');
+                $lesson['teachers'] = $this->getUserService()->findUsersByIds($teacherIds);
+
                 return $lesson;
             }
         }

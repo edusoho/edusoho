@@ -18,7 +18,8 @@ class BeginningLiveLessonDataTag extends BaseDataTag implements DataTag
 
     public function getData(array $arguments)
     {
-        return $this->getLiveCourseService()->findBeginingLiveCourse($arguments['afterSecond']);
+        $liveLesson = $this->getLiveCourseService()->findBeginingLiveCourse($arguments['afterSecond']);
+        return $liveLesson;
     }
 
     protected function getLiveCourseService()

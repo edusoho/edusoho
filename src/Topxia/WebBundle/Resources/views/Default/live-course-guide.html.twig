@@ -14,8 +14,12 @@
             </div>
             <div class="media-body">
               <h4>{{liveLesson.course.title}}</h4>
-              <p>授课老师: {{liveLesson.teachers[0].name}}</p>
-              <p>直播时间: 18:00～19:00</p>
+              <p>授课老师: 
+                {% for teacher in liveLesson.teachers %}
+                  {{teacher.nickname}} &nbsp;
+                {% endfor %}
+              </p>
+              <p>直播时间: {{liveLesson.startTime|date('H:i')}}～{{liveLesson.endTime|date('H:i')}}</p>
             </div>
           </div>
         </div>
