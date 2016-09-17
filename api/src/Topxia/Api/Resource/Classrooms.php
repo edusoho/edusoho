@@ -9,7 +9,8 @@ class Classrooms extends BaseResource
 {
     public function discoveryColumn(Application $app, Request $request)
     {
-        $result = $request->query->all();
+        $result     = $request->query->all();
+        $conditions = array();
         if ($result['categoryId']) {
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
             $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
