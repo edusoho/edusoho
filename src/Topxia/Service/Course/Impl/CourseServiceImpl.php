@@ -2,7 +2,9 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
@@ -526,7 +528,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             }
 
             );
@@ -596,7 +598,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -663,7 +665,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function publishCourse($id, $source = 'course')
     {
         if ($source == 'course') {
-            $course = $this->tryManageCourse($id);
+            $course = $this->tryManageCourse($id, 'admin_course_publish');
         } elseif ($source == 'classroom') {
             $course = $this->getCourseDao()->getCourse($id);
 
@@ -680,18 +682,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function closeCourse($id, $source = 'course')
     {
         if ($source == 'course') {
-            $user = $this->getCurrentUser();
-
-            $course = $this->getCourse($id);
-
-            if(empty($course)){
-                throw $this->createNotFoundException($this->trans('没有该课程'));
-            }
-
-            if(!$this->hasCourseManagerRole($id, $user['id']) && !$user->hasPermission('admin_course_close')){
-                throw $this->createAccessDeniedException($this->trans('您没有该课程的关闭权限'));
-            }
-
+            $course = $this->tryManageCourse($id, 'admin_course_close');
         } elseif ($source == 'classroom') {
             $course = $this->getCourseDao()->getCourse($id);
 
@@ -1510,7 +1501,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $lesson                = $this->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson) || $lesson['courseId'] != $courseId) {
             throw $this->createNotFoundException();
@@ -1532,7 +1523,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function startLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
@@ -1885,7 +1876,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
+        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -1904,7 +1895,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                     break;
                 case 'chapter':
-                    $item    = $currentChapter    = $items[$itemId];
+                    $item    = $currentChapter = $items[$itemId];
                     $chapter = $this->getChapter($courseId, $item['id']);
 
                     if ($item['type'] == 'unit') {
@@ -2181,7 +2172,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('课程学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
         return $this->getMemberDao()->updateMember($member['id'], $fields);
     }
 
@@ -2257,8 +2248,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'   => 'finished',
             'courseId' => $courseId
         );
-        $count  = $this->getLessonLearnDao()->searchLearnCount($conditions);
-        $fields = array(
+        $count      = $this->getLessonLearnDao()->searchLearnCount($conditions);
+        $fields     = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
@@ -2307,7 +2298,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $fields = array(
+        $fields   = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
@@ -2448,7 +2439,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->updateMember($member['id'], array(
-            'noteNum'            => (int) $number,
+            'noteNum'            => (int)$number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -2457,8 +2448,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
+     * @param int|string  $courseId
+     * @param null|string $otherPermission
+     * @return array
+     * @throws NotFoundException|AccessDeniedException
      */
-    public function tryManageCourse($courseId)
+    public function tryManageCourse($courseId, $otherPermission = null)
     {
         $user = $this->getCurrentUser();
 
@@ -2472,7 +2467,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException();
         }
 
-        if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
+        if (!$this->hasCourseManagerRole($courseId, $user['id']) && !$user->hasPermission($otherPermission)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程的教师或管理员，无权操作！'));
         }
 
@@ -2711,7 +2706,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
-        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
         $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
@@ -2986,7 +2981,7 @@ class CourseSerialize
     {
         if (isset($course['tags'])) {
             if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|'.implode('|', $course['tags']).'|';
+                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
             } else {
                 $course['tags'] = '';
             }
@@ -2994,7 +2989,7 @@ class CourseSerialize
 
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|'.implode('|', $course['goals']).'|';
+                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
             } else {
                 $course['goals'] = '';
             }
@@ -3002,7 +2997,7 @@ class CourseSerialize
 
         if (isset($course['audiences'])) {
             if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
+                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
             } else {
                 $course['audiences'] = '';
             }
@@ -3010,7 +3005,7 @@ class CourseSerialize
 
         if (isset($course['teacherIds'])) {
             if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
+                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
             } else {
                 $course['teacherIds'] = null;
             }
