@@ -109,30 +109,9 @@ Notify.danger(Translator.trans('试卷题目总数量不%foo%能为0。',{foo:12
 同样以上不要随意在里面添加空格，统一使用单引号
 
 ### 四. php翻译修改
->注意：这是非完美方案，理论上国际化只在twig/js中修改。
+PHP中尽量不要做国际化，应该放到twig或js中做，实在不行controller里面做一下；
+抛出的异常文案不要做国际化，参考[exception.md](exception.md)
+格式为$this->getServiceKernel()->trans('翻译%foo%文本', array('%foo%' =>参数))
 
-```php
-$this->setFlashMessage('success', '基础信息保存成功。');
-$this->setFlashMessage('danger', '不能修改已绑定的手机。');
-
-$this->setFlashMessage('success', $this->getServiceKernel()->trans('基础信息保存成功。'));
-$this->setFlashMessage('danger', $this->getServiceKernel()->trans('不能修改已绑定的手机。'));
-
-```
-格式为：$this->getServiceKernel()->trans('翻译文本')
-以下为带参数的：
-```php
-{#/var/www/edusoho/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php#}
-throw new \RuntimeException('主题目录{$themeDir}不存在！');
-
-throw new \RuntimeException($this->getServiceKernel()->trans('主题目录%themeDir%不存在！', array('%themeDir%' =>$themeDir )));
-
-```
-格式为$this->getServiceKernel()->trans('翻译%foo%文本', array('%foo%' =>参数 ))，
-同样以上不要随意在里面添加空格，统一使用单引号
-
-### 思考
-
-* 抛异常时，自定义不同类型的异常，文案在异常类里固定好，调用时只传入参数（预定义常量），如找不到异常、参数异常等，国际化可以在异常base类或listener中做；
 
 **!!重要的事情再说一遍：以后开发过程中要实!时!做国际化**
