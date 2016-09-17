@@ -11,7 +11,7 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     {
         if ($this->isRedisOpened()) {
             $currentTime = time();
-            $start       = $currentTime - 5 * 60;
+            $start       = $currentTime - 15 * 60;
             return $this->getRedis()->zCount("session:online", $start, $currentTime);
         } else {
             return $this->getSessionDao()->getOnlineCount($retentionTime);
@@ -21,7 +21,9 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     public function getloginCount($retentionTime)
     {
         if ($this->isRedisOpened()) {
-            return $this->getRedis()->zSize("session:logined");
+            $currentTime = time();
+            $start       = $currentTime - 15 * 60;
+            return $this->getRedis()->zCount("session:logined", $start, $currentTime);
         } else {
             return $this->getSessionDao()->getLoginCount($retentionTime);
         }
