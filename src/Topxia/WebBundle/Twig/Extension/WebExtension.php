@@ -115,20 +115,20 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('content_img_add_CDN', array($this, 'contentImgAddCDN'))
+            new \Twig_SimpleFunction('add_cdn_to_img_tag', array($this, 'addCdnToImgTag'))
         );
     }
 
-    public function contentImgAddCDN($content)
+    public function addCdnToImgTag($content)
     {
         $cdnUrl = $this->isCDNOpen();
 
         if ($cdnUrl) {
-            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i',$content,$imgs);
+            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
 
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    if (!stripos($img,'http://')) {
+                    if (!stripos($img, 'http://')) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
