@@ -2,11 +2,8 @@
 namespace Permission\Listener;
 
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Topxia\AdminBundle\Controller\BaseController;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\ServiceKernel;
 
 class KernelControllerListener
@@ -37,10 +34,8 @@ class KernelControllerListener
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();
 
-
-
         foreach ($this->paths as $key => $path) {
-            $needJudgePermission = preg_match($path, $requestPath) || !empty($permissions);
+            $needJudgePermission = preg_match($path, $requestPath) && !empty($permissions);
 
             if ($needJudgePermission
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
@@ -55,7 +50,7 @@ class KernelControllerListener
                     return $self->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
                         'type'     => 'info',
                         'message'  => '没有该权限',
-                        'title'    => '没有该权限',
+                        'title'    => '提示',
                         'duration' => 3,
                         'goto'     => null
                     ));
