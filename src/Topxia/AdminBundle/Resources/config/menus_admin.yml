@@ -271,6 +271,7 @@ admin:
                     children:
                         admin_open_course:
                             name: 公开课管理
+                            disable: true
                             router_name: admin_open_course
                 admin_live_course:
                     name: 直播管理
