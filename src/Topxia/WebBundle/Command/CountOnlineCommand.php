@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
