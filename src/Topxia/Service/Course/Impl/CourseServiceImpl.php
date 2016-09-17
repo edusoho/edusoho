@@ -2476,11 +2476,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @param int|string  $courseId
-     * @param null|string $otherPermission
+     * @param null|string $actionPermission
      * @return array
      * @throws NotFoundException|AccessDeniedException
      */
-    public function tryAdminCourse($courseId, $otherPermission = null)
+    public function tryAdminCourse($courseId, $actionPermission = null)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
 
@@ -2494,14 +2494,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
         }
 
-        if (!$this->hasAdminRole() && !$user->hasPermission($otherPermission)) {
+        if (!$this->hasAdminRole() && !$user->hasPermission($actionPermission)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是管理员，无权操作！'));
         }
 
         return CourseSerialize::unserialize($course);
     }
 
-    public function canManageCourse($courseId)
+    public function canManageCourse($courseId, $actionPermission = null)
     {
         $user = $this->getCurrentUser();
 
@@ -2509,7 +2509,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->isAdmin()) {
+        if ($this->hasAdminRole() || $user->hasPermission($actionPermission)) {
             return true;
         }
 
@@ -2532,32 +2532,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
 
-        if (empty($course)) {
-            throw $this->createNotFoundException();
-        }
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您尚未登录用户，请登录后再查看！'));
-        }
-
-        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
-
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-            return array($course, $member);
-        }
-
-        if (empty($member) && $this->isClassroomMember($course, $user['id'])) {
-            if (!$this->isCourseTeacher($course['id'], $user['id']) && !$this->isCourseStudent($course['id'], $user['id'])) {
-                $member = $this->becomeStudentByClassroomJoined($course['id'], $user['id']);
-                return array($course, $member);
-            }
-        }
-
-        if (empty($member) || !in_array($member['role'], array('teacher', 'student'))) {
+        if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能查看课程内容，请先购买课程！'));
         }
+
+        $user   = $this->getCurrentUser();
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 
         return array($course, $member);
     }
@@ -2600,7 +2580,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+        if ($user->hasPermission('admin_course')) {
             return true;
         }
 
