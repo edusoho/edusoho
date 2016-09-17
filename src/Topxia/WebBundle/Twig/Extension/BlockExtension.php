@@ -48,7 +48,9 @@ class BlockExtension extends \Twig_Extension
 
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    if (!strstr($img,'http://')) {
+                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    }
                 }
             }
         }
