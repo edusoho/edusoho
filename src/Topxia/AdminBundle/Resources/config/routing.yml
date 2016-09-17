@@ -417,7 +417,7 @@ admin_course_close:
     pattern: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
-    permissions: [admin_course_manage]
+    permissions: [admin_course_close]
 
 admin_open_course_close:
     pattern: /open/course/{id}/close

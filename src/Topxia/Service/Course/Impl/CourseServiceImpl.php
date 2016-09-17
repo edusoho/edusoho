@@ -680,7 +680,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function closeCourse($id, $source = 'course')
     {
         if ($source == 'course') {
-            $course = $this->tryManageCourse($id);
+            $user = $this->getCurrentUser();
+
+            $course = $this->getCourse($id);
+
+            if(empty($course)){
+                throw $this->createNotFoundException($this->trans('没有该课程'));
+            }
+
+            if(!$this->hasCourseManagerRole($id, $user['id']) && !$user->hasPermission('admin_course_close')){
+                throw $this->createAccessDeniedException($this->trans('您没有该课程的关闭权限'));
+            }
+
         } elseif ($source == 'classroom') {
             $course = $this->getCourseDao()->getCourse($id);
 
