@@ -639,7 +639,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteCourse($id)
     {
-        $course  = $this->tryAdminCourse($id);
+        $course  = $this->tryAdminCourse($id, 'admin_course_delete');
         $lessons = $this->getCourseLessons($course['id']);
 
         // Delete course related data
@@ -2474,7 +2474,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($course);
     }
 
-    public function tryAdminCourse($courseId)
+    /**
+     * @param int|string  $courseId
+     * @param null|string $otherPermission
+     * @return array
+     * @throws NotFoundException|AccessDeniedException
+     */
+    public function tryAdminCourse($courseId, $otherPermission = null)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
 
@@ -2488,7 +2494,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
         }
 
-        if ($this->hasAdminRole()) {
+        if (!$this->hasAdminRole() && !$user->hasPermission($otherPermission)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是管理员，无权操作！'));
         }
 

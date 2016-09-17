@@ -252,6 +252,7 @@ admin:
                                     visable: (course.status != 'published')
                                 admin_course_delete:
                                     name: 删除课程
+                                    class: delete-course
                                     router_params:
                                         courseId: (course.id)
                                         filter: (filter)
