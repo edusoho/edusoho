@@ -97,9 +97,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
         $time = time();
         if ($this->getCurrentUserId() > 0) {
             $this->redis->zAdd($this->prefix.':logined', $time, $sessionId);
+            $this->redis->setTimeout($this->prefix.':logined', $this->ttl);
         }
 
         $this->redis->zAdd($this->prefix.':online', $time, $sessionId);
+        $this->redis->setTimeout($this->prefix.':online', $this->ttl);
         return $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
     }
 

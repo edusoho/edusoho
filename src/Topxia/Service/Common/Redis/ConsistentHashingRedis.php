@@ -90,4 +90,9 @@ class ConsistentHashingRedis
     {
         return $this->lookup($key)->zSize($key);
     }
+
+    public function setTimeout($key, $ttl)
+    {
+        return $this->lookup($key)->setTimeout($key, $ttl);
+    }
 }
