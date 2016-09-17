@@ -27,7 +27,7 @@ class CountOnlineCommand extends BaseCommand
         $minute = $input->getArgument('minute');
 
         $currentTime = time();
-        $start       = $minute * 60;
+        $start       = $currentTime - $minute * 60;
         $value       = $this->convert($type);
         $count       = $this->getServiceKernel()->getRedis()->zCount("session:{$value}", $start, $currentTime);
 
