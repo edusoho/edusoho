@@ -1,7 +1,7 @@
 
 {% set liveLesson = data('BeginningLiveLesson', {afterSecond:1800}) %}
 {% if liveLesson %}
-<div id="liveCourseGuide" data-time='{{((liveLesson.startTime-timestamp())/60)|number_format}}' data-course-id='{{liveLesson.courseId}}' style="display:none">
+<div id="liveCourseGuide" data-time='{{((liveLesson.startTime-timestamp())/60)|number_format}}' data-lesson-id='{{liveLesson.id}}' style="display:none">
   <div id="liveCourseGuideModal" class="modal fade in" role="dialog" >
     <div class="modal-dialog modal-live-remind">
       <div class="modal-content">
