@@ -12,7 +12,7 @@ class CountOnlineCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:count-online')
-            ->addArgument('type', InputArgument::REQUIRED, 'type的值是枚举类型：logined, online')
+            ->addArgument('type', InputArgument::REQUIRED, 'type的值是枚举类型：login, total')
             ->addArgument('minute', InputArgument::REQUIRED, '分钟');
     }
 
@@ -20,17 +20,27 @@ class CountOnlineCommand extends BaseCommand
     {
         $this->initServiceKernel();
         $type = $input->getArgument('type');
-        if (!in_array($type, array('logined', 'online'))) {
-            $output->writeln('type参数不正确，type的值是枚举类型：logined, online');
+        if (!in_array($type, array('login', 'total'))) {
+            $output->writeln('type参数不正确，type的值是枚举类型：login, total');
             return;
         }
         $minute = $input->getArgument('minute');
 
         $currentTime = time();
         $start       = $minute * 60;
-        $count       = $this->getServiceKernel()->getRedis()->zCount("session:{$type}", $start, $currentTime);
+        $value       = $this->convert($type);
+        $count       = $this->getServiceKernel()->getRedis()->zCount("session:{$value}", $start, $currentTime);
 
         $output->write($count);
+    }
+
+    protected function convert($type)
+    {
+        $map = array(
+            'login' => 'logined',
+            'total' => 'online'
+        );
+        return $map[$type];
     }
 
     private function initServiceKernel()
