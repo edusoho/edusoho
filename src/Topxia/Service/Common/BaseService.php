@@ -70,7 +70,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Service\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
      */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
@@ -78,7 +78,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Service\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
@@ -86,7 +86,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Service\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {

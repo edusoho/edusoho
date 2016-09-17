@@ -58,7 +58,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorEmail()
     {
@@ -71,7 +71,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithRegistedNickname()
     {
@@ -91,7 +91,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithRegistedEmail()
     {
@@ -111,7 +111,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorNickname1()
     {
@@ -123,7 +123,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testRegisterWithErrorNickname2()
     {
@@ -408,7 +408,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testChangeNicknameOne()
     {
@@ -417,7 +417,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeNicknameTwo()
     {
@@ -431,7 +431,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeNicknameThree()
     {
@@ -459,7 +459,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithErrorEmailFormat1()
     {
@@ -473,7 +473,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithErrorEmailFormat2()
     {
@@ -487,7 +487,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testChangeEmailWithExistEmail()
     {
@@ -582,7 +582,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePasswordTwice()
     {
@@ -596,7 +596,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePayPasswordOne()
     {
@@ -650,7 +650,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeMobileTwice()
     {
@@ -730,7 +730,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPayPasswordTwice()
     {
@@ -757,7 +757,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testParseRegistrationThird()
     {
@@ -768,7 +768,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationForth()
     {
@@ -788,7 +788,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationSixth()
     {
@@ -799,7 +799,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testParseRegistrationSeventh()
     {
@@ -875,7 +875,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testSetupAccountTwice()
     {
@@ -884,7 +884,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\RuntimeException
      */
     public function testSetupAccountThird()
     {
@@ -898,7 +898,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangePasswordWithEmptyPassword()
     {
@@ -912,24 +912,23 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testChangePasswordWithNotExistUserId()
     {
-        $this->getUserService()->changePassword(999, 'new_password');
+        $this->getUserService()->changePassword(0, 'new_password');
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPasswordTwice()
     {
-        $registeredUser = null;
-        $this->getUserService()->verifyPassword($registeredUser['id'], 'password');
+        $this->getUserService()->verifyPassword(0, 'password');
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testVerifyPasswordWithNotExistUser()
     {
@@ -939,7 +938,7 @@ class UserServiceTest extends BaseTestCase
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->verifyPassword(999, 'password');
+        $this->getUserService()->verifyPassword(0, 'password');
     }
 
     /**
@@ -1040,7 +1039,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFollowTwice()
     {
@@ -1050,7 +1049,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testFollowThird()
     {
@@ -1059,7 +1058,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\RuntimeException
      */
     public function testFollowForth()
     {
@@ -1098,7 +1097,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnFollowTwcie()
     {
@@ -1108,7 +1107,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\RuntimeException
      */
     public function testUnFollowThird()
     {
@@ -1119,18 +1118,18 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnFollowNotExistUser()
     {
         $fromUser = $this->createFromUser();
         $toUser   = $this->createToUser();
-        $this->getUserService()->unFollow($fromUser['id'], 999);
+        $this->getUserService()->unFollow($fromUser['id'], 0);
     }
 
     /**
      *  follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\RuntimeException
      */
     public function testUnFollowWithoutFollowed()
     {
@@ -1154,7 +1153,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowedTwice()
     {
@@ -1165,7 +1164,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowedThird()
     {
@@ -1199,7 +1198,7 @@ class UserServiceTest extends BaseTestCase
 
 // }
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testApplyUserApprovalTwice()
     {
@@ -1216,7 +1215,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testPassApprovalTwice()
     {
@@ -1238,7 +1237,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testRejectApprovalTwice()
     {
@@ -1271,7 +1270,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testRememberLoginSessionIdTwice()
     {
@@ -1315,7 +1314,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowWithNotExistToId()
     {
@@ -1325,7 +1324,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   follow
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testIsFollowWithNotExistFromId()
     {
@@ -1398,7 +1397,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUpdateUserProfileWithNotExistUser()
     {
@@ -1413,7 +1412,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorGender()
     {
@@ -1428,7 +1427,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorBirthday()
     {
@@ -1443,7 +1442,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorMobile()
     {
@@ -1458,7 +1457,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  profile
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUpdateUserProfileWithErrorQQ()
     {
@@ -1499,7 +1498,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\InvalidArgumentException
      */
     public function testChangeUserRolesWithEmptyRoles()
     {
@@ -1514,7 +1513,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      *
      */
     public function testChangeUserRolesWithNotExistUser()
@@ -1530,7 +1529,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  roles
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      *
      */
     public function testChangeUserRolesWithIllegalRoles()
@@ -1702,7 +1701,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *   lock
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testLockUserTwice()
     {
@@ -1712,7 +1711,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  lock
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testLockNotExistUser()
     {
@@ -1738,7 +1737,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnLockUserTwice()
     {
@@ -1761,7 +1760,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testPromoteUserTwice()
     {
@@ -1786,7 +1785,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testCancelPromoteUserTwice()
     {
@@ -1824,7 +1823,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testWaveUserCounterTwice()
     {
@@ -1855,7 +1854,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  lock
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnLockNotExistUser()
     {
@@ -1924,7 +1923,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testBindNotExistUser()
     {
@@ -1933,7 +1932,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
     {
@@ -2034,7 +2033,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testGetUserBindByTypeAndUserIdTwice()
     {
@@ -2044,7 +2043,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testGetUserBindByTypeAndUserIdThird()
     {
@@ -2060,7 +2059,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testGetUserBindWithInvalidateUserId()
     {
@@ -2076,7 +2075,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
     {
@@ -2118,7 +2117,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFindBindsByUserIdTwice()
     {
@@ -2128,7 +2127,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testFindBindsByErrorUserId()
     {
@@ -2166,7 +2165,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnBindUserByTypeAndToIdTwice()
     {
@@ -2177,7 +2176,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUnBindUserByTypeAndToIdThird()
     {
@@ -2262,7 +2261,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
      */
     public function testUnBindUserByTypeAndToIdWithErrorUserId()
     {
@@ -2278,7 +2277,7 @@ class UserServiceTest extends BaseTestCase
 
     /**
      *  bind
-     * @expectedException Topxia\Service\Common\ServiceException
+     * @expectedException Topxia\Common\Exception\UnexpectedValueException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
     {

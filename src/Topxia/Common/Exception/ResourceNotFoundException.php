@@ -7,9 +7,9 @@ class ResourceNotFoundException extends BaseException
 
     private $resourceId;
 
-    public function __construct($resourceType, $resourceId, $code = 0, array $headers = array())
+    public function __construct($resourceType, $resourceId, $message = '', $code = 0, array $headers = array())
     {
-        parent::__construct(404, sprintf('The resource of %s can not be found with ID#%s', $resourceType, $resourceId), null, $headers, $code);
+        parent::__construct(404, array('找不到资源%resourceType%#%resourceId%', array('%resourceType%' => $resourceType, '%resourceId%' => $resourceId), $message), null, $headers, $code);
 
         $this->resourceType = $resourceType;
         $this->resourceId   = $resourceId;

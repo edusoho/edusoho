@@ -8,11 +8,19 @@ abstract class BaseException extends HttpException
 {
     public function __construct($statusCode, $message = null, \Exception $previous = null, array $headers = array(), $code = 0)
     {
-        parent::__construct($statusCode, $this->getServiceKernel()->trans($message), $previous, $headers, $code);
+        if (is_array($message) && count($message) >= 2 && is_array($message[1])) {
+            $messageString = $this->trans($message[0], $message[1]);
+            if (isset($message[2]) && is_string($message[2])) {
+                $messageString = $this->trans($message[2]).':'.$messageString;
+            }
+        } else {
+            $messageString = $this->trans($message);
+        }
+        parent::__construct($statusCode, $messageString, $previous, $headers, $code);
     }
 
-    protected function getServiceKernel()
+    private function trans($text)
     {
-        return ServiceKernel::instance();
+        return ServiceKernel::instance()->trans($text);
     }
 }

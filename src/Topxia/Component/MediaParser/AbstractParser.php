@@ -27,10 +27,4 @@ abstract class AbstractParser
         
         return array('code' => $code , 'content' => $content);
     }
-
-    protected function createParseException($message)
-    {
-        return new ParseException($message);
-    }
-
 }

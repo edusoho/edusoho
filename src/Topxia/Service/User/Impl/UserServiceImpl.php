@@ -12,6 +12,7 @@ use Topxia\Common\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -136,17 +137,17 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw new ResourceNotFoundException('User', $userId);
+            throw new ResourceNotFoundException('User', $userId, '设置帐号失败');
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            throw new InvalidArgumentException('用户昵称格式不正确,设置帐号失败');
+            throw new UnexpectedValueException('用户昵称格式不正确,设置帐号失败');
         }
 
         $existUser = $this->getUserDao()->findUserByNickname($nickname);
 
         if ($existUser && $existUser['id'] != $userId) {
-            throw new RuntimeException('昵称已存在');
+            throw new UnexpectedValueException('昵称已存在');
         }
 
         $updatedUser = $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
@@ -191,13 +192,13 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeEmail($userId, $email)
     {
         if (!SimpleValidator::email($email)) {
-            throw new InvalidArgumentException('Email格式不正确，变更Email失败');
+            throw new UnexpectedValueException('Email格式不正确，变更Email失败');
         }
 
         $user = $this->getUserDao()->findUserByEmail($email);
 
         if ($user && $user['id'] != $userId) {
-            throw new RuntimeException('该Email已经存在，变更Email失败');
+            throw new UnexpectedValueException('该Email已经存在，变更Email失败');
         }
 
         $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
@@ -330,10 +331,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changePassword($id, $password)
     {
+        if (empty($password)) {
+            throw new InvalidArgumentException('参数不正确，更改密码失败');
+        }
+
         $user = $this->getUser($id);
 
-        if (empty($user) || empty($password)) {
-            throw new InvalidArgumentException('参数不正确，更改密码失败');
+        if (empty($user)) {
+            throw new ResourceNotFoundException('User', $id);
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -354,14 +359,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changePayPassword($userId, $newPayPassword)
     {
+        if (empty($newPayPassword)) {
+            throw new InvalidArgumentException('参数不正确，更改支付密码失败');
+        }
+
         $user = $this->getUser($userId);
 
         if (empty($user)) {
-            throw new ResourceNotFoundException('User', $userId);
-        }
-
-        if (empty($newPayPassword)) {
-            throw new InvalidArgumentException('参数不正确，更改支付密码失败');
+            throw new ResourceNotFoundException('User', $userId, '更改支付密码失败');
         }
 
         $payPasswordSalt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -391,10 +396,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeMobile($id, $mobile)
     {
+        if (empty($mobile)) {
+            throw new InvalidArgumentException('参数不正确，更改失败');
+        }
+
         $user = $this->getUser($id);
 
-        if (empty($user) || empty($mobile)) {
-            throw new InvalidArgumentException('参数不正确，更改失败');
+        if (empty($user)) {
+            throw new ResourceNotFoundException('User', $id);
         }
 
         $fields = array(
@@ -478,7 +487,7 @@ class UserServiceImpl extends BaseService implements UserService
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
                     $registration['type']           = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
-                    throw new InvalidArgumentException('手机号或邮箱校验失败');
+                    throw new UnexpectedValueException('手机号或邮箱校验失败');
                 }
             } else {
                 throw new InvalidArgumentException('邮箱或手机不能为空');
@@ -489,7 +498,7 @@ class UserServiceImpl extends BaseService implements UserService
                     $registration['verifiedMobile'] = $registration['mobile'];
                     $registration['type']           = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
-                    throw new InvalidArgumentException('手机号校验失败');
+                    throw new UnexpectedValueException('手机号校验失败');
                 }
             } else {
                 throw new InvalidArgumentException('手机不能为空');
@@ -530,7 +539,7 @@ class UserServiceImpl extends BaseService implements UserService
     protected function validateNickname($nickname)
     {
         if (!SimpleValidator::nickname($nickname)) {
-            throw new InvalidArgumentException('用户名校验失败');
+            throw new UnexpectedValueException('用户名校验失败');
         }
     }
 
@@ -539,15 +548,15 @@ class UserServiceImpl extends BaseService implements UserService
         $this->validateNickname($registration['nickname']);
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw new RuntimeException('昵称已存在');
+            throw new UnexpectedValueException('昵称已存在');
         }
 
         if (!SimpleValidator::email($registration['email'])) {
-            throw new InvalidArgumentException('Email校验失败');
+            throw new UnexpectedValueException('Email校验失败');
         }
 
         if (!$this->isEmailAvaliable($registration['email'])) {
-            throw new RuntimeException('Email已存在');
+            throw new UnexpectedValueException('Email已存在');
         }
 
         $user = array();
@@ -610,15 +619,15 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
-            throw new InvalidArgumentException('手机号校验失败');
+            throw new UnexpectedValueException('手机号校验失败');
         }
 
         if (isset($registration['idcard']) && $registration['idcard'] != "" && !SimpleValidator::idcard($registration['idcard'])) {
-            throw new InvalidArgumentException('身份证校验失败');
+            throw new UnexpectedValueException('身份证校验失败');
         }
 
         if (isset($registration['truename']) && $registration['truename'] != "" && !SimpleValidator::truename($registration['truename'])) {
-            throw new InvalidArgumentException('真实姓名校验失败');
+            throw new UnexpectedValueException('真实姓名校验失败');
         }
 
         $profile             = array();
@@ -721,7 +730,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw new ResourceNotFoundException('User', $userId);
+            throw new ResourceNotFoundException('User', $id);
         }
 
         $fields = ArrayToolkit::filter($fields, array(
@@ -795,19 +804,19 @@ class UserServiceImpl extends BaseService implements UserService
         unset($fields['title']);
 
         if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
-            throw new InvalidArgumentException('性别不正确，更新用户失败');
+            throw new UnexpectedValueException('性别不正确，更新用户失败');
         }
 
         if (!empty($fields['birthday']) && !SimpleValidator::date($fields['birthday'])) {
-            throw new InvalidArgumentException('生日不正确，更新用户失败');
+            throw new UnexpectedValueException('生日不正确，更新用户失败');
         }
 
         if (!empty($fields['mobile']) && !SimpleValidator::mobile($fields['mobile'])) {
-            throw new InvalidArgumentException('手机不正确，更新用户失败');
+            throw new UnexpectedValueException('手机不正确，更新用户失败');
         }
 
         if (!empty($fields['qq']) && !SimpleValidator::qq($fields['qq'])) {
-            throw new InvalidArgumentException('QQ不正确，更新用户失败');
+            throw new UnexpectedValueException('QQ不正确，更新用户失败');
         }
 
         if (!empty($fields['about'])) {
@@ -841,18 +850,18 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeUserRoles($id, array $roles)
     {
-        $user = $this->getUser($id);
-
-        if (empty($user)) {
-            throw new ResourceNotFoundException('User', $id);
-        }
-
         if (empty($roles)) {
             throw new InvalidArgumentException('用户角色不能为空');
         }
 
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            throw new ResourceNotFoundException('User', $id, '设置用户角色失败');
+        }
+
         if (!in_array('ROLE_USER', $roles)) {
-            throw new InvalidArgumentException('用户角色必须包含ROLE_USER');
+            throw new UnexpectedValueException('用户角色必须包含ROLE_USER');
         }
 
         $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
@@ -860,7 +869,7 @@ class UserServiceImpl extends BaseService implements UserService
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
         if (!empty($notAllowedRoles)) {
-            throw new InvalidArgumentException('用户角色不正确，设置用户角色失败。');
+            throw new UnexpectedValueException('用户角色不正确，设置用户角色失败。');
         }
 
         $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
@@ -942,7 +951,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw new InvalidArgumentException('第三方类型不正确，解除绑定失败');
+            throw new UnexpectedValueException('第三方类型不正确，解除绑定失败');
         }
 
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
@@ -979,7 +988,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw new InvalidArgumentException('第三方类型不正确，获取第三方登录信息失败');
+            throw new UnexpectedValueException('第三方类型不正确，获取第三方登录信息失败');
         }
 
         if ($type == 'weixinweb' || $type == 'weixinmob') {
@@ -998,7 +1007,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->typeInOAuthClient($type)) {
-            throw new InvalidArgumentException('第三方类型不正确，绑定失败');
+            throw new UnexpectedValueException('第三方类型不正确，绑定失败');
         }
 
         if ($type == 'weixinweb' || $type == 'weixinmob') {
@@ -1194,7 +1203,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function waveUserCounter($userId, $name, $number)
     {
         if (!ctype_digit((string) $number)) {
-            throw new InvalidArgumentException('计数器的数量，必须为数字');
+            throw new UnexpectedValueException('计数器的数量，必须为数字');
         }
 
         $this->getUserDao()->waveCounterById($userId, $name, $number);
@@ -1279,7 +1288,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($fromId == $toId) {
-            throw new RuntimeException('不能关注自己');
+            throw new InvalidArgumentException('不能关注自己');
         }
 
         $blacklist = $this->getBlacklistService()->getBlacklistByUserIdAndBlackId($toId, $fromId);
