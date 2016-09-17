@@ -69,16 +69,25 @@ abstract class BaseService
         return $purifier->purify($html);
     }
 
+    /**
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
         return new ServiceException($message, $code);
     }
 
+    /**
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
         return new AccessDeniedException($message, null, $code);
     }
 
+    /**
+     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
         return new NotFoundException($message, $code);

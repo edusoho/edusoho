@@ -3,6 +3,7 @@ namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Common\JoinPointToolkit;
 use Topxia\Service\Order\OrderProcessor\OrderProcessor;
+use Topxia\Common\Exception\InvalidArgumentException;
 
 class OrderProcessorFactory
 {
@@ -11,7 +12,7 @@ class OrderProcessorFactory
         $map = JoinPointToolkit::load('order');
 
         if (!array_key_exists($type, $map)) {
-            throw new NotFoundException(self::getKernel()->trans('订单类型不存在：').$type);
+            throw new InvalidArgumentException(sprintf('Unknown order type: %s', $type));
         }
 
         $class = $map[$type]['processor'];

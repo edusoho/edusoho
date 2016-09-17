@@ -1,10 +1,7 @@
 <?php
+namespace Topxia\Common\Exception;
 
-namespace Topxia\Component\MediaParser;
-
-use Topxia\Common\Exception\BaseException;
-
-class ParseException extends BaseException
+class RuntimeException extends BaseException
 {
     public function __construct($message, $code = 0, array $headers = array())
     {

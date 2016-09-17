@@ -21,6 +21,7 @@ class ServiceKernel
     protected $booted;
 
     protected $translator;
+    protected $translatorEnabled;
 
     protected $parameterBag;
 
@@ -153,6 +154,16 @@ class ServiceKernel
         return $this->translator;
     }
 
+    public function setTranslatorEnabled($boolean = true)
+    {
+        $this->translatorEnabled = $boolean;
+    }
+
+    public function getTranslatorEnabled()
+    {
+        return $this->translatorEnabled;
+    }
+
     public function hasParameter($name)
     {
         if (is_null($this->parameterBag)) {
@@ -275,7 +286,10 @@ class ServiceKernel
 
     public function trans($message, $arguments = array(), $domain = null, $locale = null)
     {
-        return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
+        if ($this->getTranslatorEnabled()) {
+            return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
+        }
+        return strtr((string) $message, $arguments);
     }
 
     protected function getClassName($type, $name)
