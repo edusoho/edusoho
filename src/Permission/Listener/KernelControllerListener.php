@@ -46,7 +46,7 @@ class KernelControllerListener
                     }
                 }
                 $self = $this;
-                $event->setController(function () use ($self){
+                $event->setController(function () use ($self, $request){
                     return $self->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
                         'type'     => 'info',
                         'message'  => '没有该权限',
