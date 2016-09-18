@@ -79,6 +79,21 @@ class CacheDaoImpl extends BaseDao implements CacheDao
         }
     }
 
+    public function updateCache($name, $cache)
+    {
+        $redis = $this->getRedis();
+
+        if ($redis) {
+            $key = "{$this->table}:v{$this->getTableVersion()}:name:{$name}";
+            $redis->setex($key, 2 * 60 * 60, $cache);
+            $this->dataCached[$key] = $cache;
+            return $cache;
+        } else {
+            $this->getConnection()->update($this->table, $fields, array('name' => $name));
+            return $this->findCachesByNames(array($name));
+        }
+    }
+
     public function deleteCacheByName($name)
     {
         $redis = $this->getRedis();

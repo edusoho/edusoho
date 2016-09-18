@@ -37,8 +37,6 @@ class CacheServiceImpl extends BaseService implements CacheService
 
     public function set($name, $data, $expiredTime = 0)
     {
-        $this->getCacheDao()->deleteCacheByName($name);
-
         $serialized = is_string($data) ? 0 : 1;
 
         $cache = array(
@@ -49,7 +47,12 @@ class CacheServiceImpl extends BaseService implements CacheService
             'createdTime' => time()
         );
 
-        return $this->getCacheDao()->addCache($cache);
+        $cached = $this->getCacheDao()->findCachesByNames(array($name));
+        if (empty($cached)) {
+            return $this->getCacheDao()->addCache($cache);
+        } else {
+            return $this->getCacheDao()->updateCache($name, $cache);
+        }
     }
 
     public function clear($name = null)
