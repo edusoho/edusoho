@@ -8,7 +8,7 @@
     {% if item.free or member or course.buyable or course.tryLookable %}
       <a 
       {% if member %}
-        {% if item.type == 'live' %}
+        {% if item.type == 'live' and item.endTime > timestamp() %}
           href="{{path('live_course_play', {courseId:item.courseId, lessonId:item.id})}}" 
           target="_blank" 
         {% else %}
