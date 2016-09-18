@@ -9,34 +9,50 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 {
     protected $table = 'upload_files';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'metas2'        => 'json',
         'convertParams' => 'json'
     );
 
     public function getFile($id)
     {
-        $sql  = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $file = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $file ? $this->createSerializer()->unserialize($file, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql  = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $file = $that->getConnection()->fetchAssoc($sql, array($id));
+            return $file ? $that->createSerializer()->unserialize($file, $that->serializeFields) : null;
+        });
     }
 
     public function getFileByHashId($hash)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE hashId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("hashId:{$hash}", $hash, function ($hash) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE hashId = ?";
+            return $that->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
+        });
     }
 
     public function getFileByGlobalId($globalId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE globalId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($globalId)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("globalId:{$globalId}", $globalId, function ($globalId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE globalId = ?";
+            return $that->getConnection()->fetchAssoc($sql, array($globalId)) ?: null;
+        });
     }
 
     public function getFileByConvertHash($hash)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE convertHash = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("convertHash:{$hash}", $hash, function ($hash) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE convertHash = ?";
+            return $that->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
+        });
     }
 
     public function findFilesByIds($ids)
@@ -115,19 +131,23 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function deleteFile($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteByGlobalId($globalId)
     {
-        return $this->getConnection()->delete($this->table, array('globalId' => $globalId));
+        $result = $this->getConnection()->delete($this->table, array('globalId' => $globalId));
+        $this->clearCached();
+        return $result;
     }
 
     public function addFile(array $file)
     {
         $file['createdTime'] = time();
         $affected            = $this->getConnection()->insert($this->table, $file);
-
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Course File disk file error.');
         }
@@ -139,6 +159,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getFile($id);
     }
 
@@ -159,14 +180,22 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function getFileByTargetType($targetType)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($targetType));
+        $that = $this;
+
+        return $this->fetchCached("targetType:{$targetType}", $targetType, function ($targetType) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE targetType = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($targetType));
+        });
     }
 
     public function getHeadLeaderFiles()
     {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = 'headLeader'";
-        return $this->getConnection()->fetchAll($sql, array());
+        $that = $this;
+
+        return $this->fetchCached("targetType:headLeader", function () use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE targetType = 'headLeader'";
+            return $that->getConnection()->fetchAll($sql, array());
+        });
     }
 
     protected function createSearchQueryBuilder($conditions)
