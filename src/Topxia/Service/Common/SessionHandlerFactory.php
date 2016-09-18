@@ -8,9 +8,9 @@ class SessionHandlerFactory
 
     public static function getSessionHandler($container)
     {
-        $redisSetting = self::getSettingService()->get('redis');
+        $redisPath = $container->getParameter('kernel.root_dir').'/data/redis.php';
 
-        if (isset($redisSetting['opened']) && $redisSetting['opened']) {
+        if (file_exists($redisPath)) {
             $redisFactory = $container->get('session.handler.redis.factory');
 
             if ($redisFactory->getRedis()) {
