@@ -74,7 +74,12 @@ define(function(require, exports, module) {
         var query = {};
         query.url = params.url;
         query.title = params.message;
-        query.pic = document.domain + params.picture; 
+        console.log(params.picture != '');
+        console.log(params.picture);
+        if (params.picture != '') {
+            query.pic = document.domain + params.picture; 
+        }
+        
         return 'http://service.weibo.com/share/share.php?' + buildUrlQuery(query);
     }
 
@@ -85,7 +90,10 @@ define(function(require, exports, module) {
         query.title = params.title;
         query.summary = params.summary;
         query.desc = params.message;
-        query.pics = params.picture;
+        if (params.picture != '') {
+            query.pics = params.picture;
+        }
+        
         return 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?' + buildUrlQuery(query);
     }
 
@@ -97,8 +105,10 @@ define(function(require, exports, module) {
         query.title = params.title;
         query.summary = params.summary;
         query.desc = params.message;
-        query.pics = params.picture;
-
+        if (params.picture != '') {
+            query.pics = params.picture;
+        }
+        
         return 'http://connect.qq.com/widget/shareqq/index.html?' + buildUrlQuery(query);
     }
 
