@@ -273,6 +273,12 @@ admin:
                             name: 公开课管理
                             disable: true
                             router_name: admin_open_course
+                        admin_open_course_recommend_list:
+                            name: 公开课推荐
+                            disable: true
+                        admin_opencourse_analysis:
+                            name: 公开课统计
+                            disable: true
                 admin_live_course:
                     name: 直播管理
                     children:

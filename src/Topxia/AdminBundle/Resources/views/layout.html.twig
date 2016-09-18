@@ -117,7 +117,7 @@
 
           {% block content_header %}{% endblock %}
           
-          {% include 'PermissionBundle:Templates:tabs.html.twig' %}
+          {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
 
           {% block capsule %}{% endblock %}
 
