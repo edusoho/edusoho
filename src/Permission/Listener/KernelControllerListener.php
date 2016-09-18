@@ -47,13 +47,7 @@ class KernelControllerListener
                 }
                 $self = $this;
                 $event->setController(function () use ($self, $request){
-                    return $self->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
-                        'type'     => 'info',
-                        'message'  => '没有该权限',
-                        'title'    => '提示',
-                        'duration' => 3,
-                        'goto'     => null
-                    ));
+                    return $self->container->get('templating')->renderResponse('PermissionBundle:Admin:permission-error.html.twig');
                 });
             }
         }
