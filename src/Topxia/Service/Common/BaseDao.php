@@ -203,7 +203,7 @@ abstract class BaseDao
     protected function hasEmptyInCondition($conditions, $fields)
     {
         foreach ($conditions as $key => $condition) {
-            if(in_array($key, $fields) && empty($condition)) {
+            if (in_array($key, $fields) && empty($condition)) {
                 return true;
             }
         }
