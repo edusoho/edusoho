@@ -15,7 +15,7 @@
      {% endif %}
   {% elseif postCoursePackage.course.studyStatus == 'learning' %}
     {% if postCoursePackage.courseId == currentCourse.id %}
-      target="_blank" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}"
+      target="_blank" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{postCoursePackage.course.nextLearnLesson.id|default()}}"
     {% else %}
       title = "请先完成前面课程"
     {% endif %}
