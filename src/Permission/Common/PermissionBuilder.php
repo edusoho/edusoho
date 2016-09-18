@@ -316,6 +316,7 @@ class PermissionBuilder
                 }
             }
             $value['code'] = $key;
+            $value['name'] = ServiceKernel::instance()->trans($value['name']);
             $menus[$key]   = $value;
         }
 
