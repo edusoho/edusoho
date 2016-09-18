@@ -1,11 +1,9 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\MessageService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Util\EdusohoTuiClient;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {   
@@ -154,7 +152,6 @@ class MessageServiceImpl extends BaseService implements MessageService
         $messageSetting = $this->getSettingService()->get('message');
         if (empty($messageSetting)) {
             $messageSetting = array('lastMaxId' => 0);
-            $this->getSettingService()->set('message', $messageSetting);
         }
         // $tuiClient = new EdusohoTuiClient();
         // $messages = $tuiClient->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);

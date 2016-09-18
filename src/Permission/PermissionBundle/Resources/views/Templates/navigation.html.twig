@@ -17,10 +17,10 @@
           {% set tabMenu = first_child_permission(tabMenu) %}
         {% endif %}
         <a
-            title="{{ m.name }}"
+            title="{{ m.name|trans }}"
             href="{{ permission_path(tabMenu) }}"
         >
-          {{ m.name }}
+          {{ m.name|trans }}
         </a>
 
         {# {{ self_macro.menu_link_html(_context, currentMenu) }} #}

@@ -21,7 +21,7 @@
   <title>
 
     {% block title %}
-      {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
+      {{ currentMenu.name|trans }} - {{ menu|parent_permission.name|trans }} - {{ menu|parent_permission.code|parent_permission.name|trans  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
