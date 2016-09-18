@@ -1,3 +1,4 @@
+/* =========================== media =========================== */
 .text-overflow {
   display: block;
   overflow: hidden;
@@ -28,9 +29,7 @@ body {
   border: none;
   height: 54px;
   /* firefox 19+ */
-
   /* ie */
-
 }
 @media screen and (max-width: 767px) {
   .text-controls input {
@@ -62,6 +61,9 @@ body {
 .login-full {
   min-height: 100%;
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
 }
 .login-full .login-section {
   color: #ffffff;
@@ -76,7 +78,7 @@ body {
 }
 .login-full .login-section .login-tip {
   font-size: 52px;
-  margin-top: 40px;
+  margin-top: 120px;
 }
 @media screen and (max-width: 767px) {
   .login-full .login-section .login-tip {
@@ -160,7 +162,7 @@ body {
 }
 .login-full .bottom-brand {
   text-align: center;
-  margin: 0 50px;
+  padding: 50px 50px 10px 50px ;
 }
 .login-full .bottom-brand img {
   display: inline-block;
