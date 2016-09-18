@@ -305,6 +305,11 @@ class PermissionBuilder
         $menus = array();
 
         foreach ($parents as $key => $value) {
+
+            $value['code'] = $key;
+            $value['name'] = ServiceKernel::instance()->trans($value['name']);
+            $menus[$key]   = $value;
+
             if (isset($value['children'])) {
                 $childrenMenu = $value['children'];
 
@@ -315,9 +320,6 @@ class PermissionBuilder
                     $menus                = array_merge($menus, $this->loadPermissionsFromConfig(array($childKey => $childValue)));
                 }
             }
-            $value['code'] = $key;
-            $value['name'] = ServiceKernel::instance()->trans($value['name']);
-            $menus[$key]   = $value;
         }
 
         return $menus;
