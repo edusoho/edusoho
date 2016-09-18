@@ -526,10 +526,6 @@ admin:
                         admin_my_cloud_overview:
                             name: 账户概览
                             disable: true
-                        admin_cloud_bill:
-                            name: 云视频账单
-                            disable: true
-                            router_name: admin_cloud_bill
                 admin_cloud_video_setting:
                     name: 云视频设置
                     router_name: admin_setting_cloud_video
