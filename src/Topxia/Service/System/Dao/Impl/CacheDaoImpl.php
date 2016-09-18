@@ -14,7 +14,7 @@ class CacheDaoImpl extends BaseDao implements CacheDao
         $redis = $this->getRedis();
         if ($redis) {
             $key  = "{$this->table}:v{$this->getTableVersion()}:id:{$id}";
-            $data = $this->dataCached[$key];
+            $data = empty($this->dataCached[$key]) ? '' : $this->dataCached[$key];
             if (empty($data)) {
                 $data                   = $this->getRedis()->get($key);
                 $this->dataCached[$key] = $data;
@@ -49,7 +49,7 @@ class CacheDaoImpl extends BaseDao implements CacheDao
     protected function getCacheByName($name)
     {
         $key  = "{$this->table}:v{$this->getTableVersion()}:name:{$name}";
-        $data = $this->dataCached[$key];
+        $data = empty($this->dataCached[$key]) ? '' : $this->dataCached[$key];
         if (empty($data)) {
             $data                   = $this->getRedis()->get($key);
             $this->dataCached[$key] = $data;
