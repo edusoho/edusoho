@@ -1773,6 +1773,7 @@ admin_edu_cloud_search:
 admin_edu_cloud_attachment:
     pattern: /setting/edu_cloud/attachment
     defaults: { _controller: TopxiaAdminBundle:EduCloud:attachment }
+    permissions: [admin_edu_cloud_attachment]
     
 admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
@@ -1868,7 +1869,9 @@ admin_report_status_email_send:
 admin_cloud_attachment:
     pattern: /cloud_attachment
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:index }
+    permissions: [admin_cloud_attachment_manage]
 
 admin_cloud_attachment_render:
     pattern: /cloud_attachment/render
     defaults: { _controller: TopxiaAdminBundle:CloudAttachment:render }
+    permissions: [admin_cloud_attachment_manage]

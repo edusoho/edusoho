@@ -1,7 +1,8 @@
 
 admin_cloud_file_manage:
-    name: 资源管理
+    name: 云资源
     parent: admin_app
+    after: admin_app_center_show
     children:
         admin_cloud_file:
             name: 云资源

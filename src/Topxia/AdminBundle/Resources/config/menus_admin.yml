@@ -555,7 +555,7 @@ admin:
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     children:
-                        admin_cloud_attachment:
+                        admin_edu_cloud_attachment:
                             name: 云附件设置
                             disable: true
                 admin_app_center_show:
@@ -581,6 +581,12 @@ admin:
                             disable: true
                         admin_app_logs:
                             name: 更新日志
+                            disable: true
+                admin_cloud_attachment_manage:
+                    name: 云附件
+                    children:
+                        admin_cloud_attachment:
+                            name: 云附件
                             disable: true
                 admin_setting_cloud:
                     name: 授权信息
