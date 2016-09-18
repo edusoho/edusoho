@@ -29,13 +29,15 @@
       {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
       {% if code == 'friend-link' %}
          {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
-      {% else %}
+      {% elseif code != 'footer-link'%}
+        {% if code != 'course-grid-with-condition-index'%}
           {% cache 'jianmo/default/' ~ code 600 %}
             {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
           {% endcache %}
+        {% else %}
+          {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
+        {% endif %}
       {% endif %}
     {% endfor %}
-
-    {% include 'TopxiaWebBundle:Default:live-course-guide.html.twig' %}
 
 {% endblock %}
