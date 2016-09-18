@@ -111,7 +111,7 @@ class CoinOrderController extends BaseController
             $conditions['endTime']   = strtotime($conditions['endTime']);
         }
 
-        $status  = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
+        $status  = array('created' => $this->trans('未付款'), 'paid' => $this->trans('已付款'), 'cancelled' => $this->trans('已关闭'));
         $payment = $this->get('topxia.twig.web_extension')->getDict('payment');
         $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
@@ -123,7 +123,15 @@ class CoinOrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+        $str = $this->trans('订单号').','
+        .$this->trans('订单状态').','
+        .$this->trans('订单名称').','
+        .$this->trans('购买者').','
+        .$this->trans('姓名').','
+        .$this->trans('实付价格').','
+        .$this->trans('支付方式').','
+        .$this->trans('创建时间').','
+        .$this->trans('付款时间');
 
         $str .= "\r\n";
 
@@ -131,35 +139,35 @@ class CoinOrderController extends BaseController
 
         foreach ($orders as $key => $orders) {
             $member = "";
-            $member .= $orders['sn'] . ",";
-            $member .= $status[$orders['status']] . ",";
-            $member .= $orders['title'] . ",";
-            $member .= $users[$orders['userId']]['nickname'] . ",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'] . "," : "-" . ",";
-            $member .= $orders['amount'] . ",";
+            $member .= $orders['sn'].",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['title'].",";
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $member .= $orders['amount'].",";
 
             $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
             $member .= $payment[$orderPayment].",";
 
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']) . ",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
 
             if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']) . ",";
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
             } else {
-                $member .= "-" . ",";
+                $member .= "-".",";
             }
 
             $results[] = $member;
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239) . chr(187) . chr(191) . $str;
+        $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf("coin-order-(%s).csv", date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 

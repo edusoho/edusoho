@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\MediaParser\AlbumParser;
 
+use Topxia\Component\MediaParser\ParseException;
+
 class YoukuVideoAlbumParser extends AbstractAlbumParser
 {
 	private $patterns = array(
@@ -11,7 +13,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
 	{
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
-			throw $this->createParseException("获取优酷视频专辑({$url})页面内容失败！");
+			throw new ParseException(array('获取优酷视频专辑(%url%)页面内容失败！', array('%url%' =>$url )));
 		}
 
         $album = array();
@@ -28,7 +30,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match($this->patterns['p1'], $url, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取优酷视频专辑ID失败");
+            throw new ParseException('获取优酷视频专辑ID失败');
         }
         return $matches[1];
     }
@@ -37,7 +39,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match('/\<h1\sclass="title">.*?class="name">(.*?)<\/span>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取优酷视频专辑({$url})标题失败！");
+            throw new ParseException('获取优酷视频专辑标题失败');
         }
         return $matches[1];
     }
@@ -46,7 +48,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match('/视频:\s<span\sclass="num">(\d+)<\/span>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取优酷视频专辑({$url})视频数量失败！");
+            throw new ParseException('获取优酷视频专辑视频数量失败');
         }
         return $matches[1];
     }
@@ -58,12 +60,12 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
             $url = "http://v.youku.com/v_vpvideoplaylistv5?pl=50&f={$album['id']}&pn={$page}";
             $response = $this->fetchUrl($url);
             if ($response['code'] != 200) {
-                throw $this->createParseException("获取优酷视频专辑({$url})视频条目失败！");
+                throw new ParseException('获取优酷视频专辑视频条目失败');
             }
 
             $matched = preg_match_all('/id="item_(.*?)".*?_src="(.*?)".*?class="l_title">(.*?)<\/span>.*?class="l_time">.*?class="num">(.*?)<\/em>/s', $response['content'], $matches, PREG_SET_ORDER);
             if (empty($matched)) {
-                throw $this->createParseException("解析优酷视频专辑({$url})视频条目失败！");
+                throw new ParseException('解析优酷视频专辑视频条目失败');
             }
 
             foreach ($matches as $match) {
@@ -84,5 +86,9 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match('/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s', $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

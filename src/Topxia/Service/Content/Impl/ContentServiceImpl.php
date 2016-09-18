@@ -49,7 +49,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 	public function createContent($content)
 	{
 		if (empty($content['type'])) {
-			throw $this->createServiceException('参数缺失，创建内容失败！');
+			throw $this->createServiceException($this->getKernel()->trans('参数缺失，创建内容失败！'));
 		}
 
 		$type = ContentTypeFactory::create($content['type']);
@@ -58,7 +58,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 		$content['type'] = $type->getAlias();
 
 		if (empty($content['title'])) {
-			throw $this->createServiceException('内容标题不能为空，创建内容失败！');
+			throw $this->createServiceException($this->getKernel()->trans('内容标题不能为空，创建内容失败！'));
 		}
 
 		$content['userId'] = $this->getCurrentUser()->id;
@@ -77,7 +77,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-        $this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
+		$this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
 
 		return $content;
 	}
@@ -86,7 +86,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 	{
 		$content = $this->getContent($id);
 		if (empty($content)) {
-			throw $this->createServiceException('内容不存在，更新失败！');
+			throw $this->createServiceException($this->getKernel()->trans('内容不存在，更新失败！'));
 		}
 
 		$type = ContentTypeFactory::create($content['type']);

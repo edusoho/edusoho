@@ -42,7 +42,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
     {
         if (!ArrayToolkit::requireds($fileInfo, array('filename', 'key', 'size'))) {
-            throw $this->createServiceException('参数缺失，添加用户文件失败!');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，添加用户文件失败!'));
         }
 
         $uploadFile               = array();
@@ -89,7 +89,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function saveConvertResult($file, array $result = array())
     {
         if (empty($result['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException($this->getKernel()->trans('数据中id不能为空'));
         }
 
         if ($result['code'] != 0) {
@@ -555,7 +555,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function finishedUpload($file, $params)
     {
         if (empty($file['globalId'])) {
-            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
+            throw $this->createServiceException($this->getKernel()->trans('文件不存在(global id: #%globalId%)，完成上传失败！', array('%globalId%' => $params['globalId'])));
         }
 
         $params = array(
@@ -635,6 +635,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             foreach ($syncData as $key => $value) {
                 $this->getUploadFileDao()->updateFile($key, array('globalId' => $value));
             }
+            return count($syncData);
         }
 
         return true;

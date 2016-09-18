@@ -21,7 +21,7 @@ class MyTaskController extends BaseController
         }*/
         } else {
             $tasksevents = array(array(
-                'title' => '并没有任务',
+                'title' => $this->getServiceKernel()->trans('并没有任务'),
                 'start' => date("Y-m-d", time()),
                 'end' => date("Y-m-d", time()),
             ));

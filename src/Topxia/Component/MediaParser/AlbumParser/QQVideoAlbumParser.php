@@ -2,6 +2,8 @@
 
 namespace Topxia\Component\MediaParser\AlbumParser;
 
+use Topxia\Component\MediaParser\ParseException;
+
 class QQVideoAlbumParser extends AbstractAlbumParser
 {
 
@@ -9,7 +11,7 @@ class QQVideoAlbumParser extends AbstractAlbumParser
 	{
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
-			throw $this->createParseException("获取QQ视频专辑({$url})页面内容失败！");
+			throw new ParseException(array('获取QQ视频专辑(%url%)页面内容失败！', array('%url%' =>$url )));
 		}
 
 		$list = array();
@@ -23,7 +25,7 @@ class QQVideoAlbumParser extends AbstractAlbumParser
 	{
         $matched = preg_match('/COVER_INFO.*?title\s*:"(.*?)",\s*id\s*:"(.*?)"/s', $content, $matches);
         if (empty($matched)) {
-        	throw $this->createParseException("解析QQ视频专辑基础信息失败！");
+        	throw new ParseException('解析QQ视频专辑基础信息失败！');
         }
 
         return array(
@@ -40,12 +42,12 @@ class QQVideoAlbumParser extends AbstractAlbumParser
         $matched = preg_match('/id="mod_videolist">.*?class="mod_cont">.*?\<ul\>(.*?)\<\/ul\>/s', $content, $matches);
 
     	if (empty($matched)) {
-    		throw $this->createParseException('定位QQ视频专辑页面列表区域失败！');
+    		throw new ParseException('定位QQ视频专辑页面列表区域失败！');
     	}
 
         $matched = preg_match_all('/<li\s*id="li_(.*?)".*?>/s', $matches[1], $matches);
         if (empty($matched)) {
-        	throw $this->createParseException('解析QQ视频专辑列表失败！');
+        	throw new ParseException('解析QQ视频专辑列表失败！');
         }
 
         $items = array();
@@ -63,5 +65,9 @@ class QQVideoAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match('/^http\:\/\/v\.qq\.com\/cover\//s', $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

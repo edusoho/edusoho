@@ -1,9 +1,10 @@
 <?php
 namespace Topxia\Component\MediaParser\Tests;
 
+use Topxia\Service\Common\BaseTestCase;
 use Topxia\Component\MediaParser\ItemParser\QQVideoItemParser;
 
-class QQVideoItemParserTest extends \PHPUnit_Framework_TestCase
+class QQVideoItemParserTest extends BaseTestCase
 {
     public function testParse()
     {

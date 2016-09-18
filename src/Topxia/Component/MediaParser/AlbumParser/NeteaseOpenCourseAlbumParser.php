@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\MediaParser\AlbumParser;
 
+use Topxia\Component\MediaParser\ParseException;
+
 class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 {
 	private $patterns = array(
@@ -11,7 +13,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 	{
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
-            throw $this->createParseException("获取网易公开课专辑({$url})页面内容失败！");
+            throw new ParseException(array('获取网易公开课专辑(%url%)页面内容失败', array('%url%' =>$url )));
         }
 
         $album = array();
@@ -28,7 +30,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
             return array_merge($album, $chineseAlbum);
         }
 
-        throw $this->createParseException("解析网易公开课专辑信息失败！");
+        throw new ParseException('解析网易公开课专辑信息失败');
 	}
 
     private function parseInternationalAlbum($content)
@@ -55,13 +57,13 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 
         $matched = preg_match('/<title>(.*?)<\/title>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("解析网易公开课专辑标题失败！");
+            throw new ParseException('解析网易公开课专辑标题失败');
         }
         $album['title'] = iconv('gb2312', 'utf-8', trim(substr($matches[1], 0, strpos($matches[1], '_'))));
 
         $matched = preg_match( iconv('utf-8', 'gb2312', '/<h2>课程介绍<\/h2>.*?<span\sclass\=\"cdblan\">(.*?)<\/span>/s') , $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("解析网易公开课专辑摘要失败！");
+            throw new ParseException('解析网易公开课专辑摘要失败！');
         }
         $album['summary'] = iconv('gb2312', 'utf-8', trim($matches[1]));
         $album['picture'] = '';
@@ -75,7 +77,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match($this->patterns['p1'], $url, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取网易公开课专辑ID失败");
+            throw new ParseException('获取网易公开课专辑ID失败');
         }
         return $matches[1];
     }
@@ -86,12 +88,12 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 
         $matched = preg_match('/<table.*?id="list2"(.*?)<\/table>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取网易公开课视频条目信息失败");
+            throw new ParseException('获取网易公开课视频条目信息失败');
         }
 
         $matched = preg_match_all('/class="u-ctitle">.*?<a\shref="(.*?)">(.*?)<\/a>/s', $matches[1], $matches, PREG_SET_ORDER);
         if (empty($matched)) {
-            throw $this->createParseException("获取网易公开课视频条目信息失败");
+            throw new ParseException('获取网易公开课视频条目信息失败');
         }
 
         foreach ($matches as $match) {
@@ -111,12 +113,12 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 
         $matched = preg_match('/id="lession-list">(.*?)<\/ul>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取网易公开课视频(中国)条目信息失败");
+            throw new ParseException('获取网易公开课视频(中国)条目信息失败');
         }
 
         $matched = preg_match_all('/<h3>\s*<a\s+href="(.*?)".*?>(.*?)<\/a>/s', $matches[1], $matches, PREG_SET_ORDER);
         if (empty($matched)) {
-            throw $this->createParseException("获取网易公开课视频(中国)条目信息失败!");
+            throw new ParseException('获取网易公开课视频(中国)条目信息失败!');
         }
 
         foreach ($matches as $match) {
@@ -132,7 +134,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 
     public function detect($url)
     {
-        return !! preg_match($this->patterns['p1'], $url);
+        return !!preg_match($this->patterns['p1'], $url);
     }
 
 }

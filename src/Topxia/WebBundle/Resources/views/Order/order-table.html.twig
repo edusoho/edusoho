@@ -4,7 +4,7 @@
       admin:该模式下详情无下拉菜单
       course:该模式下详情无下拉菜单
 #}
-
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% set mode = mode|default(['my']) %}
@@ -12,8 +12,8 @@
     <tr>
       <th>{{'名称'|trans}}</th>
       <th>{{'创建时间'|trans}}</th>
-      <th>状态</th>
-      <th>{{'实付'|trans}}({{'元'|trans}})</th>
+      <th>{{'状态'|trans}}</th>
+      <th>{{'实付(元)'|trans}}</th>
       {% if mode in ['course', 'admin'] %}
         <th>{{'购买者'|trans}}</th>
       {% endif %}
@@ -36,10 +36,10 @@
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
-            <span class="text-muted text-sm">{{'订单号：'|trans}}{{order.sn}}</span>
+            <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
           </td>
           <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
-          <td>{{ dict_text('orderStatus:html', order.status) }}</td>
+          <td>{{ dict_macro.orderStatus(order.status) }}</td>
           <td><span class="money-text">{{order.amount}}</span></td>
           {% if mode in ['admin', 'course'] %}
             <td>

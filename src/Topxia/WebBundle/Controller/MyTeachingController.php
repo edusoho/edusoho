@@ -12,7 +12,7 @@ class MyTeachingController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $conditions = array(
@@ -98,7 +98,7 @@ class MyTeachingController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
@@ -145,7 +145,7 @@ class MyTeachingController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), true);

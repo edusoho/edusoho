@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	var MaterialPlugin = BasePlugin.extend({
 		code: 'material',
-		name: '资料',
+		name: Translator.trans('资料'),
 		iconClass: 'glyphicon glyphicon-download-alt',
 		api: {
 			init: '../../lessonplugin/material/init'

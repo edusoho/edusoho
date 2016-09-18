@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\MediaParser\AlbumParser;
 
+use Topxia\Component\MediaParser\ParseException;
+
 class SinaOpenCourseAlbumParser extends AbstractAlbumParser
 {
 	private $patterns = array(
@@ -11,7 +13,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
 	{
 		$response = $this->fetchUrl($url);
 		if ($response['code'] != 200) {
-            throw $this->createParseException("获取网易公开课专辑({$url})页面内容失败！");
+            throw new ParseException(array('获取新浪公开课专辑(%url%)页面内容失败！', array('%url%' =>$rurl )));
         }
 
         $album = array();
@@ -28,7 +30,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match($this->patterns['p1'], $url, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取优酷视频专辑ID失败");
+            throw new ParseException('获取新浪公开课专辑ID失败');
         }
         return 'course_' . $matches[1];
     }
@@ -37,7 +39,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match('/<h2\sclass="fblue">\s*(.*?)\(\d+\)/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取新浪公开课专辑标题失败");
+            throw new ParseException('获取新浪公开课专辑标题失败');
         }
         return $matches[1];
     }
@@ -46,7 +48,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
     {
         $matched = preg_match('/<p\sclass="txt">(.*?)<\/p>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取新浪公开课专辑摘要失败");
+            throw new ParseException('获取新浪公开课专辑摘要失败');
         }
         return $matches[1];
     }
@@ -57,12 +59,12 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
 
         $matched = preg_match('/<div\sclass="container2">\s*<ul>(.*?)<\/ul>/s', $content, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("获取新浪公开课视频条目信息失败");
+            throw new ParseException('获取新浪公开课视频条目信息失败');
         }
 
         $matched = preg_match_all('/<li>.*?<img.*?alt="(.*?)".*?src="(.*?)"/s', $matches[1], $matches, PREG_SET_ORDER);
         if (empty($matched)) {
-            throw $this->createParseException("获取新浪公开课视频条目信息失败");
+            throw new ParseException('获取新浪公开课视频条目信息失败');
         }
 
         foreach ($matches as $match) {
@@ -81,5 +83,9 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match($this->patterns['p1'], $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

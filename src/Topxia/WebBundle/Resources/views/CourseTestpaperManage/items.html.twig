@@ -89,7 +89,7 @@ tr.placeholder:before {
 
       <div class="form-group">
         <div class="col-md-8 controls">
-          <div class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>这是一份纯客观题的试卷, 达到 <input type="text" name="passedScore" class="form-control width-input width-input-small" value="{{ passedScoreDefault }}" data-score-total="0" />分（含）可以自动审阅通过考试。</div>
+          <div class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>{{'这是一份纯客观题的试卷, 达到'|trans}} <input type="text" name="passedScore" class="form-control width-input width-input-small" value="{{ passedScoreDefault }}" data-score-total="0" />{{'分（含）可以自动审阅通过考试。'|trans}}</div>
         </div>
         <div class="col-md-4 controls">
           <button type="button" class="btn btn-primary pull-right mlm request-save">{{'保存'|trans}}</button>
@@ -122,7 +122,7 @@ tr.placeholder:before {
 
         </div>
         <div class="modal-footer">
-          <button class="btn btn-link" data-dismiss="modal" type="button">关闭</button>
+          <button class="btn btn-link" data-dismiss="modal" type="button">{{'关闭'|trans}}</button>
           <button type="button" class="btn btn-primary confirm-submit" data-saving-text="{{'正在保存'|trans}}...">{{'确定'|trans}}</button>
         </div>
       </div>

@@ -4,7 +4,7 @@
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
-      <label class="label label-danger">禁</label>
+      <label class="label label-danger">{{'禁'|trans}}</label>
     {% endif %}
 
     <br>
@@ -22,9 +22,9 @@
  {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}<span class="text-success">(已绑定)</span>
+      {{ user.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
     {% elseif profile.mobile %}
-      {{ profile.mobile }}<span class="text-danger">(未绑定)</span>
+      {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
     {% else %}
        -- 
     {% endif %}
@@ -40,7 +40,7 @@
     
     <br>
     {% if user.emailVerified %}
-      <label class="label label-success" title="该Email地址已验证">已验证</label>
+      <label class="label label-success" title="{{'该Email地址已验证'|trans}}">{{'已验证'|trans}}</label>
     {% endif %}
   </td>
 
@@ -69,10 +69,59 @@
   </td>
   <td>
     <div class="btn-group">
+<<<<<<< HEAD
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
       
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_user_manage', group:'groupButton', user: user} %}
 
+=======
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{'查看'|trans}}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_edit', {id:user.id}) }}">{{'编辑用户信息'|trans}}</a></li>
+        {% if setting('magic.enable_org','0') %}
+          <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_org_update', {id: user.id}) }}">{{'修改用户组织机构'|trans}}</a></li>
+        {% endif %}
+        {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
+            {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                  <li></li>
+             {% else %}
+                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">{{'设置用户组'|trans}}</a></li>
+            {% endif %}
+       {% else %}
+                   <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">{{'设置用户组'|trans}}</a></li>
+        {% endif %}
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_avatar', {id:user.id}) }}">{{'修改用户头像'|trans}}</a></li>
+
+        <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_change_password', {userId:user.id}) }}">{{'修改密码'|trans}}</a></li>
+
+        {% endif %}
+
+        {% if setting('mailer.enabled') and emailArr[1] != 'edusoho.net' %}
+          <li><a class="send-passwordreset-email" href="javascript:" data-url="{{ path('admin_user_send_passwordreset_email', {id:user.id}) }}">{{'发送密码重置邮件'|trans}}</a></li>
+
+          <li><a class="send-emailverify-email" href="javascript:" data-url="{{ path('admin_user_send_emailverify_email', {id:user.id}) }}">{{'发送Email验证邮件'|trans}}</a></li>
+        {% endif %}
+        {% if user.locked %}
+          <li><a class="unlock-user" href="javascript:" title="{{'解禁用户'|trans}}{{ user.nickname }}" data-url="{{ path('admin_user_unlock', {id:user.id }) }}">{{'解禁用户'|trans}}</a></li>
+        {% else %}
+              {% if 'ROLE_SUPER_ADMIN' not in app.user.roles %}
+                    {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                          <li></li>
+                           {% else %}
+                            <li><a class="lock-user" href="javascript:" title="{{'封禁用户'|trans}}{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">{{'封禁用户'|trans}}</a></li>
+                    {% endif %}
+               {% else %}
+                   <li><a class="lock-user" href="javascript:" title="{{'封禁用户'|trans}}{{ user.nickname }}" data-url="{{ path('admin_user_lock', {id:user.id}) }}">{{'封禁用户'|trans}}</a></li>
+              {% endif %}
+        {% endif %}
+      </ul>
+>>>>>>> develop
     </div>
   </td>
 </tr>

@@ -40,7 +40,7 @@ define(function(require, exports, module) {
 
         $("#batch-update-org").on('click', function(e) {
             if (getCheckstatus(true)) {
-                Notify.warning('请先选择数据');
+                Notify.warning(Translator.trans('请先选择数据'));
                 e.stopImmediatePropagation();
             }
         })

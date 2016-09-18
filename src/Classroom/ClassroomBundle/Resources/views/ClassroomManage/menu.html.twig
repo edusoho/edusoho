@@ -1,13 +1,14 @@
 {% if canManage %}
   <ul class="list-group">
     <li class="list-group-item {% if side_nav == 'main' %}active{% endif %}">
-      <a href="{{ path('classroom_manage', {id:classroom.id}) }}">管理首页</a>
+      <a href="{{ path('classroom_manage', {id:classroom.id}) }}">{{'管理首页'|trans}}</a>
     </li>
   </ul>
   
   <ul class="list-group">
+
     <li class="list-group-heading">
-      {{ setting('classroom.name')|default("班级") ~ '设置' }}
+      {{ setting('classroom.name')|default('班级'|trans) ~ '设置'|trans }}
     </li>
 
     {% set subMenus = sub_permissions('classroom_manage_settings') %}
@@ -19,27 +20,27 @@
 
     {% if is_plugin_installed("ClassroomPlan") %}
       <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-        <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">学习计划</a>
+        <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">{{'学习计划'|trans}}</a>
       </li>
     {% endif %}
   </ul>
 {% endif %}
 
 <ul class="list-group">
+
   <li class="list-group-heading">{{ setting('classroom.name')|default("班级") ~ '管理' }}</li>
 
   {% set subMenus = sub_permissions('classroom_manage_content') %}
   {% for menu in subMenus %}
     <li class="list-group-item {% if side_nav == menu.data.side_nav|default('') %}active{% endif %}">
-      <a href="{{ permission_path(menu) }}">{{menu.name}}</a>
+      <a href="{{ permission_path(menu) }}">{{menu.name|trans}}</a>
     </li>
   {% endfor %}
 
   {% if canHandle %}
-   
     {% if is_plugin_installed('Homework') %}
       <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
-        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">作业批改</a>
+        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">{{'作业批改'|trans}}</a>
       </li>
     {% endif %}
   {% endif %}

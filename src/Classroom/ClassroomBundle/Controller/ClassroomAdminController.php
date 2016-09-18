@@ -65,7 +65,7 @@ class ClassroomAdminController extends BaseController
     public function setAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $this->setFlashMessage('success', "班级设置成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('班级设置成功！'));
 
             $set = $request->request->all();
 
@@ -81,11 +81,11 @@ class ClassroomAdminController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+            return $this->createErrorResponse($request, 'not_login', $this->getServiceKernel()->trans('用户未登录，创建班级失败。'));
         }
 
         if (!$user->isAdmin()) {
-            return $this->createMessageResponse('info', '只允许管理员创建班级!');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('只允许管理员创建班级!'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -94,7 +94,7 @@ class ClassroomAdminController extends BaseController
             $title = trim($myClassroom['title']);
 
             if (empty($title)) {
-                $this->setFlashMessage('danger', "班级名称不能为空！");
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级名称不能为空！'));
 
                 return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
             }
@@ -102,7 +102,7 @@ class ClassroomAdminController extends BaseController
             $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
 
             if (!empty($isClassroomExisted)) {
-                $this->setFlashMessage('danger', "班级名称已被使用，创建班级失败！");
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级名称已被使用，创建班级失败！'));
 
                 return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
             }
@@ -123,7 +123,7 @@ class ClassroomAdminController extends BaseController
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
-            $this->setFlashMessage('success', "恭喜！创建班级成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('恭喜！创建班级成功！'));
 
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }

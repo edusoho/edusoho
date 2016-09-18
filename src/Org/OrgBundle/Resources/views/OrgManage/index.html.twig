@@ -10,19 +10,19 @@
 <ul class="list-table" id="org-table" style="margin-bottom: 0">
    <li class="th">
         <div class="row">
-            <div class="td col-md-3">名称</div>
-            <div class="td col-md-1">编码</div>
-            <div class="td col-md-2">辖下机构数</div>
-            <div class="td col-md-2">创建者</div>
-            <div class="td col-md-2">创建时间</div>
-            <div class="td col-md-2">操作</div>
+            <div class="td col-md-3">{{ '名称'|trans }}</div>
+            <div class="td col-md-2">{{ '编码'|trans }}</div>
+            <div class="td col-md-1">{{ '辖下机构数'|trans }}</div>
+            <div class="td col-md-2">{{ '创建者'|trans }}</div>
+            <div class="td col-md-2">{{ '创建时间'|trans }}</div>
+            <div class="td col-md-2">{{ '操作'|trans }}</div>
         </div>
     </li>
     <li id="category-table-body" data-sort-url="{{ path('admin_org_sort') }}">
       {% if orgs is not empty %}
           {{ _self.showorgTree(orgs, createdUsers,false) }}
       {% else %}
-          <div class="row empty">暂无分类记录</div>
+          <div class="row empty">{{ '暂无分类记录'|trans }}</div>
       {% endif %}
     </li>
 </ul>
@@ -49,10 +49,10 @@
                     <div class="td col-md-2 code"> {{org.createdTime|date('Y-m-d')}}</div>
                     <div class="td col-md-2 operation">
                         <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_org_update', {id:org.id}) }}" data-toggle="modal" data-target="#modal">
-                            <i class="glyphicon glyphicon-edit"></i> 编辑
+                            <i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}
                         </a>
                         {% if org.depth <= 5  %}
-                            <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_org_create', {parentId:org.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
+                            <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_org_create', {parentId:org.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{ '添加'|trans }}</a>
                         {% endif %}
 
                     </div>

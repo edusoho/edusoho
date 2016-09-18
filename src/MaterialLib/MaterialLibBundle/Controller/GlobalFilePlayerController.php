@@ -229,7 +229,7 @@ class GlobalFilePlayerController extends BaseController
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('生成视频播放地址失败！'));
         }
 
         return new Response($stream['stream'], 200, array(

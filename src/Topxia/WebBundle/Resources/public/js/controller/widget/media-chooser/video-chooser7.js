@@ -14,7 +14,7 @@ define(function(require, exports, module) {
     		uploaderSettings: {
                 file_types : "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg",
                 file_size_limit : "2048 MB",
-                file_types_description: "视频文件"
+                file_types_description: Translator.trans('视频文件')
     		},
         },
 
@@ -42,12 +42,12 @@ define(function(require, exports, module) {
                 url = $urlInput.val();
 
             if (url.length == 0 ) {
-                Notify.danger('请输入视频页面地址');
+                Notify.danger(Translator.trans('请输入视频页面地址'));
                 return;
             }
 
             if (!/^[a-zA-z]+:\/\/[^\s]*$/.test(url)) {
-                Notify.danger('请输入正确的视频网址');
+                Notify.danger(Translator.trans('请输入正确的视频网址'));
                 return;
             }
 
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
                 self.trigger('change', media);
                 $urlInput.val('');
             }, 'json').error(function(jqXHR, textStatus, errorThrown) {
-                Notify.danger('读取视频页面信息失败，请检查您的输入的页面地址后重试');
+                Notify.danger(Translator.trans('读取视频页面信息失败，请检查您的输入的页面地址后重试'));
             }).always(function(){
                 $btn.button('reset');
             });

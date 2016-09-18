@@ -20,6 +20,9 @@ class ServiceKernel
     protected $debug;
     protected $booted;
 
+    protected $translator;
+    protected $translatorEnabled;
+
     protected $parameterBag;
 
     protected $currentUser;
@@ -62,7 +65,7 @@ class ServiceKernel
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException('ServiceKernel未实例化');
+            throw new \RuntimeException('The instance of ServiceKernel is not created!');
         }
 
         self::$_instance->boot();
@@ -131,16 +134,40 @@ class ServiceKernel
     public function getParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException('尚未初始化ParameterBag');
+            throw new \RuntimeException('The `ParameterBag` of ServiceKernel is not setted!');
         }
 
         return $this->parameterBag->get($name);
     }
 
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function getTranslator()
+    {
+        if (is_null($this->translator)) {
+            throw new \RuntimeException('The `Translator` of ServiceKernel is not setted!');
+        }
+
+        return $this->translator;
+    }
+
+    public function setTranslatorEnabled($boolean = true)
+    {
+        $this->translatorEnabled = $boolean;
+    }
+
+    public function getTranslatorEnabled()
+    {
+        return $this->translatorEnabled;
+    }
+
     public function hasParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException('尚未初始化ParameterBag');
+            throw new \RuntimeException('The `ParameterBag` of ServiceKernel is not setted!');
         }
 
         return $this->parameterBag->has($name);
@@ -155,7 +182,7 @@ class ServiceKernel
     public function getCurrentUser()
     {
         if (is_null($this->currentUser)) {
-            throw new \RuntimeException('尚未初始化CurrentUser');
+            throw new \RuntimeException('The `CurrentUser` of ServiceKernel is not setted!');
         }
 
         return $this->currentUser;
@@ -183,7 +210,7 @@ class ServiceKernel
     public function getConnection()
     {
         if (is_null($this->connection)) {
-            throw new \RuntimeException('尚未初始化数据库连接');
+            throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
         }
 
         return $this->connection;
@@ -247,6 +274,22 @@ class ServiceKernel
         }
 
         return $this->_moduleConfig[$key];
+    }
+
+    public function transArray($messages, $arguments = array(), $domain = null, $locale = null)
+    {
+        foreach ($messages as &$message) {
+            $message = $this->trans($message, $arguments, $domain, $locale);
+        }
+        return $messages;
+    }
+
+    public function trans($message, $arguments = array(), $domain = null, $locale = null)
+    {
+        if ($this->getTranslatorEnabled()) {
+            return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
+        }
+        return strtr((string) $message, $arguments);
     }
 
     protected function getClassName($type, $name)

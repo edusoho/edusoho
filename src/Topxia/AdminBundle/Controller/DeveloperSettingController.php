@@ -37,11 +37,11 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新开发者设置', $developerSetting);
 
             $this->dealServerConfigFile();
 
-            $this->setFlashMessage('success', '开发者已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('开发者已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:index.html.twig', array(
@@ -89,8 +89,8 @@ class DeveloperSettingController extends BaseController
             }
 
             $this->getSettingService()->set('magic', $setting);
-            $this->getLogService()->info('system', 'update_settings', "更新Magic设置", $setting);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', '更新Magic设置', $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $setting = $this->getSettingService()->get('magic', array());
@@ -119,8 +119,8 @@ class DeveloperSettingController extends BaseController
                 file_exists($redisConfigFile) && unlink($redisConfigFile);
             }
 
-            $this->getLogService()->info('system', 'update_redis', "更新redis设置", $redis);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_redis', '更新redis设置', $redis);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $redis = $this->getSettingService()->get('redis', array());
@@ -142,7 +142,17 @@ class DeveloperSettingController extends BaseController
             'storage'  => 'cloud',
             'globalId' => 0
         );
-        $this->getCloudFileService()->synData($conditions);
+
+        if ($request->getMethod() == 'POST') {
+            $syncCount = $this->getCloudFileService()->synData($conditions);
+            $this->setFlashMessage('success', '同步成功！共同步'.$syncCount.'个文件');
+        }
+
+        $fileCount = $this->getUploadFileService()->searchFileCount($conditions);
+
+        return $this->render('TopxiaAdminBundle:DeveloperSetting:cloud-file-sync.html.twig', array(
+            'fileCount' => $fileCount
+        ));
     }
 
     protected function getSettingService()
@@ -158,5 +168,10 @@ class DeveloperSettingController extends BaseController
     protected function getCloudFileService()
     {
         return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

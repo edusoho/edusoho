@@ -188,6 +188,22 @@ class DefaultController extends BaseController
         );
     }
 
+    public function translateAction(Request $request)
+    {
+        $locale     = $request->query->get('language');
+        $targetPath = $request->query->get('_target_path');
+
+        $request->getSession()->set('_locale', $locale);
+
+        $currentUser = $this->getCurrentUser();
+
+        if ($currentUser->isLogin()) {
+            $this->getUserService()->updateUserLocale($currentUser['id'], $locale);
+        }
+
+        return $this->redirect($targetPath);
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

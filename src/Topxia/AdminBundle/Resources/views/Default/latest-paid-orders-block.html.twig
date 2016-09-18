@@ -2,7 +2,7 @@
 <div class="col-md-12">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			 <h3 class="panel-title">最新购买记录</h3>
+			 <h3 class="panel-title">{{'最新购买记录'|trans}}</h3>
 		</div>
     {% if orders %}
       <table class="table table-condensed table-bordered table-striped table-hover">
@@ -26,7 +26,7 @@
   	            	{{ order.title }}
               	{% endif %}
             	</td>
-              <td class="money-text">{{order.amount}} 元</td>
+              <td class="money-text">{{order.amount}} {{'元'|trans}}</td>
               <td>
               	{{ admin_macro.user_link(users[order.userId]) }}
               </td>
@@ -38,7 +38,7 @@
         </tbody>
       </table>
     {% else %}
-      <div class="empty">暂无最新购买记录</div>
+      <div class="empty">{{'暂无最新购买记录'|trans}}</div>
     {% endif %}
   </div>
 </div>
