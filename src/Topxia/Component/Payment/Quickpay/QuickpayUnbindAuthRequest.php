@@ -23,7 +23,7 @@ class QuickpayUnbindAuthRequest extends Request
         parse_str($redirurl, $ret);
 
         if ($ret['ret_code'] == '0000') {
-            $message = array("success" => true, 'message' => $this->getServiceKernel()->trans('解绑银行卡成功'));
+            $message = array("success" => true, 'message' => '解绑银行卡成功');
             $this->getUserService()->deleteUserPayAgreements($params['authBank']['id']);
         } else {
             $message = array("success" => false, 'message' => $ret['ret_msg']);

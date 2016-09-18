@@ -136,7 +136,7 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券')) {
+            if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券'))) {
                 $fields["couponCode"] = "";
             } else {
                 $fields["couponCode"] = trim($fields["couponCode"]);

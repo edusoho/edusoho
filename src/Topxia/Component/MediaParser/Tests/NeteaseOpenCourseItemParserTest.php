@@ -1,9 +1,10 @@
 <?php
 namespace Topxia\Component\MediaParser\Tests;
 
+use Topxia\Service\Common\BaseTestCase;
 use Topxia\Component\MediaParser\ItemParser\NeteaseOpenCourseItemParser;
 
-class NeteaseOpenCourseItemParserTest extends \PHPUnit_Framework_TestCase
+class NeteaseOpenCourseItemParserTest extends BaseTestCase
 {
     public function testParse()
     {

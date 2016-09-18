@@ -1,9 +1,10 @@
 <?php
 namespace Topxia\Component\MediaParser\Tests;
 
+use Topxia\Service\Common\BaseTestCase;
 use Topxia\Component\MediaParser\ItemParser\YoukuVideoItemParser;
 
-class YoukuVideoItemParserTest extends \PHPUnit_Framework_TestCase
+class YoukuVideoItemParserTest extends BaseTestCase
 {
     public function testParse()
     {
