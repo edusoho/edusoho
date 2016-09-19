@@ -74,10 +74,13 @@ define(function(require, exports, module) {
         var query = {};
         query.url = params.url;
         query.title = params.message;
-        console.log(params.picture != '');
-        console.log(params.picture);
+        
         if (params.picture != '') {
-            query.pic = document.domain + params.picture; 
+            if (params.picture.indexOf('://') != -1){
+                query.pic = params.picture; 
+            } else {
+                query.pic = document.domain + params.picture; 
+            }
         }
         
         return 'http://service.weibo.com/share/share.php?' + buildUrlQuery(query);

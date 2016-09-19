@@ -18,6 +18,7 @@ define(function(require, exports, module) {
 
         attrs: {
             choosed: null,
+            fileSingleSizeLimit:null
         },
 
         events: {
@@ -177,7 +178,8 @@ define(function(require, exports, module) {
                 initUrl: $el.data('initUrl'),
                 finishUrl: $el.data('finishUrl'),
                 uploadAuthUrl: $el.data('uploadAuthUrl'),
-                multi: false
+                multi: false,
+                fileSingleSizeLimit:this.get('fileSingleSizeLimit')
             });
 
             uploader.on('file.uploaded', function(file, data, response){
