@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:EsBar:layout.html.twig' %}
 
 {% block esBarTitle %}
-  {{'我的课程'|trans}}/{{ setting('classroom.name')|default("班级"|trans) }}
+  {{'我的课程/%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)}) }}
 {% endblock %}
 
 {% block esBarBody %}
@@ -10,7 +10,7 @@
       <a href="javascript:;" data-url="{{ path('esbar_my_course') }}" class="btn btn-primary {% if esBarMenu|default('') != 'classroom' %}active{% endif %}"
          id="bar-course-btn">{{'课程'|trans}}</a>
       <a href="javascript:;" data-url="{{ path('esbar_my_classroom' ) }}" class="btn btn-primary {% if esBarMenu|default('') == 'classroom' %}active{% endif %}"
-         id="bar-classroom-btn">{{ setting('classroom.name')|default("班级"|trans) }}</a>
+         id="bar-classroom-btn">{{ setting('classroom.name')|default('班级'|trans) }}</a>
     </div>
   </div>
 

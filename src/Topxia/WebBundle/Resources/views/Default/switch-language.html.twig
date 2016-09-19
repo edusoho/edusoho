@@ -1,0 +1,6 @@
+<li class="hidden-xs">
+    <a href="{{ path('switch_language', {language: 'zh_CN', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">中文</a>
+</li>
+<li class="hidden-xs">
+<a href="{{ path('switch_language', {language: 'en_US', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">English</a>
+</li>

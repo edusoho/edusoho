@@ -1,6 +1,6 @@
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="nickname">用户名</label>
+      <label for="nickname">{{'用户名'|trans}}</label>
     </div>
     <div style="margin-top: 7px;">
     {{ user.nickname }}
@@ -9,7 +9,7 @@
 
    <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="truename">真实姓名</label>
+      <label for="truename">{{'真实姓名'|trans}}</label>
     </div>
     <div style="margin-top: 7px;">
       {{userApprovalInfo.truename}}
@@ -18,7 +18,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="idcard">身份证号码</label>
+      <label for="idcard">{{'身份证号码'|trans}}</label>
     </div>
     <div style="margin-top: 7px;">
       {{userApprovalInfo.idcard}}
@@ -27,7 +27,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="faceImg">身份证正面照</label>
+      <label for="faceImg">{{'身份证正面照'|trans}}</label>
     </div>
     <div>
      <a href="{{ url('show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
@@ -38,7 +38,7 @@
 
     <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="faceImg">身份证反面照</label>
+      <label for="faceImg">{{'身份证反面照'|trans}}</label>
     </div>
     <div>
      <a href="{{url('show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">

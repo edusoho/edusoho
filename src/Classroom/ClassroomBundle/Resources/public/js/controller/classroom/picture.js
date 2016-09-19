@@ -9,11 +9,10 @@
 
         uploader.on('uploadSuccess', function(file, response ) {
             var url = $("#upload-picture-btn").data("gotoUrl");
-            Notify.success('上传成功！', 1);
+            Notify.success(Translator.trans('上传成功！'), 1);
             document.location.href = url;
         });
 
     };
 
 });
-

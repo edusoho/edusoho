@@ -15,7 +15,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function getFullFile($file) {
+    public function getFullFile($file)
+    {
         return $this->getFile($file);
     }
 
@@ -25,7 +26,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException("该文件格式，不允许上传。");
+            throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
         }
 
         $uploadFile = array();
@@ -63,7 +64,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function convertFile($file, $status, $result = null, $callback = null)
     {
-        throw $this->createServiceException('本地文件暂不支持转换');
+        throw $this->createServiceException($this->getKernel()->trans('本地文件暂不支持转换'));
     }
 
     public function updateFile($file, $fields)
@@ -132,7 +133,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException("该文件格式，不允许上传。");
+            throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
         }
 
         $targetPath = $this->getFilePath($targetType, $targetId, 0);
@@ -169,9 +170,9 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         unset($conditions['start']);
         unset($conditions['limit']);
 
-        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime','DESC'), $start, $limit);
+        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), $start, $limit);
 
-        return $file;
+        return $files;
     }
 
     public function synData($conditions)

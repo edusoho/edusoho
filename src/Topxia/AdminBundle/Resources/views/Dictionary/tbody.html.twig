@@ -7,7 +7,7 @@
 		<td></td>
 
 		<td>
-			<a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_dictionary_create',{type:dictionary.type}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
+			<a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_dictionary_create',{type:dictionary.type}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{ '添加'|trans }}</a>
 		</td>
   	</tr>
   	{% for dictionaryItem in dictionaryItems %}
@@ -23,8 +23,8 @@
 	  			{{ dictionaryItem.weight }}
 	  		</td>
 	  		<td>
-	  			<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_dictionary_edit', {id:dictionaryItem.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
-	  			<a href="javascript:;" class="btn btn-default btn-sm delete-btn" data-url="{{ path('admin_dictionary_delete', {id:dictionaryItem.id}) }}" data-toggle="modal" data-target="{{ dictionaryItem.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</a>
+	  			<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_dictionary_edit', {id:dictionaryItem.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</a>
+	  			<a href="javascript:;" class="btn btn-default btn-sm delete-btn" data-url="{{ path('admin_dictionary_delete', {id:dictionaryItem.id}) }}" data-toggle="modal" data-target="{{ dictionaryItem.id }}"><i class="glyphicon glyphicon-trash"></i> {{ '删除'|trans }}</a>
 	  		</td>
 	  	</tr>
 	  	{% endif %}

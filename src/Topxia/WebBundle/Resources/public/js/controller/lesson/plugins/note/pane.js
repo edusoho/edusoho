@@ -39,12 +39,12 @@ define(function(require, exports, module) {
                 pane.set('content', editor.getData());
                 
                 $("#lesson-note-plugin-form").on('submit', function() {
-                    pane.$('[data-role=saved-message]').html('正在保存').show();
+                    pane.$('[data-role=saved-message]').html(Translator.trans('正在保存')).show();
                     editor.updateElement();
                     var content = editor.getData();
                     $.post($(this).attr('action'), $(this).serialize(), function(response) {
                         pane.set('content', content);
-                        pane.$('[data-role=saved-message]').html('已保存');
+                        pane.$('[data-role=saved-message]').html(Translator.trans('已保存'));
                         setTimeout(function(){
                             pane.$('[data-role=saved-message]').hide();
                         }, 3000);

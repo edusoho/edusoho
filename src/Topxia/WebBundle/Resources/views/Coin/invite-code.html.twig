@@ -18,19 +18,15 @@
     {{'给TA分享您的邀请码或者邀请链接'|trans}}
     {% if setting('invite')|default(false) %}
       {% if setting('invite.promoted_user_value')|default(false)  %}
-        {% trans with {'%promoted_user_value%': inviteSetting.promoted_user_value} %}，TA注册后将获得%promoted_user_value%元优惠券{% endtrans %}
+        {{'，TA注册后将获得%promoted_user_value%元优惠券'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
       {% endif %}
 
       {% if setting('invite.promote_user_value')|default(false) %}
         ，
         {% if setting('invite.get_coupon_setting')|default(false) %}
-          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}
-            TA在消费后您将获得%promote_user_value%元优惠券
-          {% endtrans %}
+            {{'TA在消费后您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
         {% else %}
-          {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}   
-            同时您将获得%promote_user_value%元优惠券
-          {% endtrans %}
+            {{'同时您将获得%promote_user_value%元优惠券'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
         {% endif %}
       {% endif %}
     {{'。'|trans}}

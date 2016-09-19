@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 	}
 
 	$('.shortcuts').on('click', '.shortcut-add', function() {
-		Notify.success('已添加当前页面为常用链接！');
+		Notify.success(Translator.trans('已添加当前页面为常用链接！'));
 
 		var title = $(document).attr("title");
 
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 	});
 
 	$('.shortcuts').on('click', '.glyphicon-remove-circle', function() {
-		Notify.success('删除常用链接成功！');
+		Notify.success(Translator.trans('删除常用链接成功！'));
 		$.post($(this).data('url'), function() {
 			window.location.reload();
 		});

@@ -55,7 +55,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
     public function addGroup($user,$group)
     {   
         if (!isset($group['title']) || empty($group['title'])) {
-            throw $this->createServiceException("小组名称不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('小组名称不能为空！'));
         }
         $title=trim($group['title']);
 
@@ -108,12 +108,12 @@ class GroupServiceImpl extends BaseService implements GroupService {
     public function changeGroupImg($id, $field, $data)
     {
         if(!in_array($field, array("logo", "backgroundLogo"))) {
-            throw $this->createServiceException('更新的字段错误！');
+            throw $this->createServiceException($this->getKernel()->trans('更新的字段错误！'));
         }
 
         $group=$this->getGroup($id);
         if (empty($group)) {
-            throw $this->createServiceException('小组不存在，更新失败！');
+            throw $this->createServiceException($this->getKernel()->trans('小组不存在，更新失败！'));
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
@@ -145,11 +145,11 @@ class GroupServiceImpl extends BaseService implements GroupService {
     {
         $group= $this->getGroup($groupId);
         if (empty($group)) {
-            throw $this->createServiceException("小组不存在, 加入小组失败！");
+            throw $this->createServiceException($this->getKernel()->trans('小组不存在, 加入小组失败！'));
         }
 
         if($this->isMember($groupId, $user['id'])){
-            throw $this->createServiceException('您已加入小组！！');
+            throw $this->createServiceException($this->getKernel()->trans('您已加入小组！！'));
         }
 
         $member = array(
@@ -170,13 +170,13 @@ class GroupServiceImpl extends BaseService implements GroupService {
     {
         $group= $this->getGroup($groupId);
         if (empty($group)) {
-            throw $this->createServiceException("小组不存在,退出小组失败！");
+            throw $this->createServiceException($this->getKernel()->trans('小组不存在,退出小组失败！'));
         }
 
         $member=$this->getGroupMemberDao()->getMemberByGroupIdAndUserId($groupId,$user['id']);
 
         if(empty($member)) {
-            throw $this->createServiceException('退出小组失败！');
+            throw $this->createServiceException($this->getKernel()->trans('退出小组失败！'));
         }
 
         $this->getGroupMemberDao()->deleteMember($member['id']);

@@ -12,7 +12,7 @@
 {% endif %}
 <div class="login-full" style=" background-image:url('{{asset('assets/img/common/bg.png')}}')">
   <div class="es-section login-section reset-section">
-    <div class="login-tip">欢迎回来</div>
+    <div class="login-tip">{{'欢迎回来'|trans}}</div>
     <div class="login-sub-tip"></div>
     <div class="login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">

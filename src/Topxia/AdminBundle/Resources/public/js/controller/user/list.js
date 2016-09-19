@@ -10,34 +10,34 @@ define(function(require, exports, module) {
         $table.on('click', '.lock-user, .unlock-user', function() {
             var $trigger = $(this);
 
-            if (!confirm('真的要' + $trigger.attr('title') + '吗？')) {
+            if (!confirm(Translator.trans('真的要%title%吗？',{title:$trigger.attr('title')}))) {
                 return;
             }
 
             $.post($(this).data('url'), function(html) {
-                Notify.success($trigger.attr('title') + '成功！');
+                Notify.success(Translator.trans('%title%成功！',{title:$trigger.attr('title')}));
                 var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function() {
-                Notify.danger($trigger.attr('title') + '失败');
+                Notify.danger(Translator.trans('%title%失败',{title:$trigger.attr('title')}));
             });
         });
 
         $table.on('click', '.send-passwordreset-email', function() {
-            Notify.info('正在发送密码重置验证邮件，请稍等。', 60);
+            Notify.info(Translator.trans('正在发送密码重置验证邮件，请稍等。'), 60);
             $.post($(this).data('url'), function(response) {
-                Notify.success('密码重置验证邮件，发送成功！');
+                Notify.success(Translator.trans('密码重置验证邮件，发送成功！'));
             }).error(function() {
-                Notify.danger('密码重置验证邮件，发送失败');
+                Notify.danger(Translator.trans('密码重置验证邮件，发送失败'));
             });
         });
 
         $table.on('click', '.send-emailverify-email', function() {
-            Notify.info('正在发送Email验证邮件，请稍等。', 60);
+            Notify.info(Translator.trans('正在发送Email验证邮件，请稍等。'), 60);
             $.post($(this).data('url'), function(response) {
-                Notify.success('Email验证邮件，发送成功！');
+                Notify.success(Translator.trans('Email验证邮件，发送成功！'));
             }).error(function() {
-                Notify.danger('Email验证邮件，发送失败');
+                Notify.danger(Translator.trans('Email验证邮件，发送失败'));
             });
         });
 

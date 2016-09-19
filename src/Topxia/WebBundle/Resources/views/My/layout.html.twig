@@ -71,7 +71,7 @@
 
 
           <li class="list-group-item {% if side_nav == 'my-classroom' %} active {% endif %}">
-            <a href="{{path('my_classrooms')}}">我的{{ setting('classroom.name')|default("班级") }}</a>
+            <a href="{{path('my_classrooms')}}">{{'我的%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a>
           </li>
 
 

@@ -2,16 +2,16 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% set modalSize = 'large' %}
 
-{% block title %}订单详情{% endblock %}
+{% block title %}{{'订单详情'|trans}}{% endblock %}
 {% block body %}
     
         {% if orderLogs %}
         <table class="table">
           <thead>
             <tr>
-              <th width="50%">日志信息</th>
-              <th width="25%">操作人</th>
-              <th width="25%">创建时间</th>
+              <th width="50%">{{'日志信息'|trans}}</th>
+              <th width="25%">{{'操作人'|trans}}</th>
+              <th width="25%">{{'创建时间'|trans}}</th>
             </tr>
           </thead>
           <tbody>
@@ -40,14 +40,14 @@
           </tbody>
         </table>
       {% else %}
-      <div class="empty">暂无交易日志!</div>
+      <div class="empty">{{'暂无交易日志!'|trans}}</div>
       {% endif %}
      
 {% endblock %}
 
 {% block footer %}
   <div>
-    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
   </div>
 
 {% endblock %}

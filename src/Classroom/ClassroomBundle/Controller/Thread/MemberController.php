@@ -11,13 +11,13 @@ class MemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录!不能加入活动!'));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('不是本班成员!不能加入活动!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('不是本班成员!不能加入活动!'));
         }
 
         return $this->forward('TopxiaWebBundle:Thread/Member:become', array(

@@ -39,7 +39,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function createOrder($order)
     {
         if (!ArrayToolkit::requireds($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment'))) {
-            throw $this->createServiceException('创建订单失败：缺少参数。');
+            throw $this->createServiceException($this->getKernel()->trans('创建订单失败：缺少参数。'));
         }
         $order = ArrayToolkit::parts($order, array(
             'userId',
@@ -65,13 +65,13 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderUser = $this->getUserService()->getUser($order['userId']);
 
         if (empty($orderUser)) {
-            throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
+            throw $this->createServiceException($this->getKernel()->trans('订单用户(#%id%)不存在，不能创建订单。', array('%id%' => $order['userId'])));
         }
 
         $payment = ExtensionManager::instance()->getDataDict('payment');
         $payment = array_keys($payment);
         if (!in_array($order['payment'], $payment)) {
-            throw $this->createServiceException('创建订单失败：payment取值不正确。');
+            throw $this->createServiceException($this->getKernel()->trans('创建订单失败：payment取值不正确。'));
         }
 
         $order['sn'] = $this->generateOrderSn($order);
@@ -81,7 +81,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $couponInfo = $this->getCouponService()->checkCouponUseable($order['couponCode'], $order['targetType'], $order['targetId'], $order['amount']);
 
             if ($couponInfo['useable'] != 'yes') {
-                throw $this->createServiceException("优惠码不可用");
+                throw $this->createServiceException($this->getKernel()->trans('优惠码不可用'));
             }
         }
 
@@ -98,7 +98,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->addOrder($order);
 
-        $this->_createLog($order['id'], 'created', '创建订单');
+        $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
         $this->getDispatcher()->dispatch('order.service.created', new ServiceEvent($order));
         return $order;
     }
@@ -109,14 +109,14 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order   = $this->getOrderDao()->getOrderBySn($payData['sn']);
 
         if (empty($order)) {
-            throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
+            throw $this->createServiceException($this->getKernel()->trans('订单(%payData%)已被删除，支付失败。', array('%payData%' => $payData['sn'])));
         }
 
         if ($payData['status'] == 'success') {
             // 避免浮点数比较大小可能带来的问题，转成整数再比较。
 
             if (intval($payData['amount'] * 100) !== intval($order['amount'] * 100)) {
-                $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
+                $message = sprintf($this->getKernel()->trans('订单(%sn%)的金额(%amount%)与实际支付的金额(%payData%)不一致，支付失败。', array('%sn%' => $order['sn'], '%amount%' => $order['amount'], '%payData%' => $payData['amount'])));
                 $this->_createLog($order['id'], 'pay_error', $message, $payData);
                 throw $this->createServiceException($message);
             }
@@ -130,10 +130,10 @@ class OrderServiceImpl extends BaseService implements OrderService
                 !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
 
                 $this->getOrderDao()->updateOrder($order['id'], $payFields);
-                $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
+                $this->_createLog($order['id'], 'pay_success', $this->getKernel()->trans('付款成功'), $payData);
                 $success = true;
             } else {
-                $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
+                $this->_createLog($order['id'], 'pay_ignore', $this->getKernel()->trans('订单已处理'), $payData);
             }
         } else {
             $this->_createLog($order['id'], 'pay_unknown', '', $payData);
@@ -153,7 +153,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($orderId);
 
         if (empty($order)) {
-            throw $this->createServiceException("订单不存在，获取订单日志失败！");
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，获取订单日志失败！'));
         }
 
         return $this->getOrderLogDao()->findLogsByOrderId($orderId);
@@ -237,7 +237,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($orderId);
 
         if (empty($order)) {
-            throw $this->createServiceException("订单不存在，获取订单日志失败！");
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，获取订单日志失败！'));
         }
 
         return $this->_createLog($orderId, $type, $message, $data);
@@ -265,11 +265,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException('订单不存在，取消订单失败！');
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消订单失败！'));
         }
 
         if (!in_array($order['status'], array('created'))) {
-            throw $this->createServiceException('当前订单状态不能取消订单！');
+            throw $this->createServiceException($this->getKernel()->trans('当前订单状态不能取消订单！'));
         }
 
         $payment = $this->getSettingService()->get("payment");
@@ -303,7 +303,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $fields = array('data' => $data);
         $order  = $this->updateOrder($id, $fields);
-        $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
+        $this->_createLog($order['id'], 'pay_create', $this->getKernel()->trans('创建交易'), $payData);
     }
 
     public function sumOrderPriceByTarget($targetType, $targetId)
@@ -353,7 +353,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         if ($order['status'] != 'paid') {
-            throw $this->createServiceException("订单#{$order['id']}，不能退款");
+            throw $this->createServiceException($this->getKernel()->trans('订单#%id%，不能退款', array('%id%' => $order['id'])));
         }
 
         // 订单金额为０时，不能退款
@@ -406,9 +406,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         ));
 
         if ($refund['status'] == 'success') {
-            $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
+            $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('订单退款成功(无退款金额)'));
         } else {
-            $this->_createLog($order['id'], 'refund_apply', '订单申请退款'.(is_null($expectedAmount) ? '' : "，期望退款{$expectedAmount}元"));
+            $this->_createLog($order['id'], 'refund_apply', $this->getKernel()->trans('订单申请退款').(is_null($expectedAmount) ? '' : $this->getKernel()->trans("，期望退款%amount%元", array('%amount%' => $expectedAmount))));
         }
 
         return $refund;
@@ -419,27 +419,27 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException("订单(#{$id})不存在，退款确认失败");
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)不存在，退款确认失败', array('%id%' => $id)));
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isAdmin()) {
-            throw $this->createServiceException("订单(#{$id})，你无权进行退款确认操作");
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)，你无权进行退款确认操作', array('%id' => $id)));
         }
 
         if ($order['status'] != 'refunding') {
-            throw $this->createServiceException("当前订单(#{$order['id']})状态下，不能进行确认退款操作");
+            throw $this->createServiceException($this->getKernel()->trans("当前订单(#%id%)状态下，不能进行确认退款操作", array('%id%' => $order['id'])));
         }
 
         $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
 
         if (empty($refund)) {
-            throw $this->createServiceException("当前订单(#{$order['id']})退款记录不存在，不能进行确认退款操作");
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能进行确认退款操作', array('%id%' => $order['id'])));
         }
 
         if ($refund['status'] != 'created') {
-            throw $this->createServiceException("当前订单(#{$order['id']})退款记录状态下，不能进行确认退款操作款");
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录状态下，不能进行确认退款操作款', array('%id%' => $order['id'])));
         }
 
         if ($pass == true) {
@@ -460,7 +460,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'status' => 'refunded'
             ));
 
-            $this->_createLog($order['id'], 'refund_success', "退款申请(ID:{$refund['id']})已审核通过：{$note}");
+            $this->_createLog($order['id'], 'refund_success', $this->getKernel()->trans('退款申请(ID:%id%)已审核通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
         } else {
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'      => 'failed',
@@ -472,10 +472,10 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'status' => 'paid'
             ));
 
-            $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
+            $this->_createLog($order['id'], 'refund_failed', $this->getKernel()->trans('退款申请(ID:%id%)已审核未通过：%note%', array('%id%' => $refund['id'], '%note%' => $note)));
         }
 
-        $this->getLogService()->info('order', 'andit_refund', "审核退款申请#{$refund['id']}");
+        $this->getLogService()->info('order', 'andit_refund', $this->getKernel()->trans("审核退款申请#%id%", array('%id%' => $refund['id'])));
 
         return $pass;
     }
@@ -485,27 +485,27 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException("订单(#{$id})不存在，取消退款失败");
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)不存在，取消退款失败', array('%id%' => $id)));
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createServiceException("用户未登录，订单(#{$id})取消退款失败");
+            throw $this->createServiceException($this->getKernel()->trans('用户未登录，订单(#%id%)取消退款失败', array('%id%' => $id)));
         }
 
         if ($order['userId'] != $user['id'] && !$user->isAdmin()) {
-            throw $this->createServiceException("订单(#{$id})，你无权限取消退款");
+            throw $this->createServiceException($this->getKernel()->trans('订单(#%id%)，你无权限取消退款', array('%id%' => $id)));
         }
 
         if ($order['status'] != 'refunding') {
-            throw $this->createServiceException("当前订单(#{$order['id']})状态下，不能取消退款");
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)状态下，不能取消退款', array('%id%' => $order['id'])));
         }
 
         $refund = $this->getOrderRefundDao()->getRefund($order['refundId']);
 
         if (empty($refund)) {
-            throw $this->createServiceException("当前订单(#{$order['id']})退款记录不存在，不能取消退款");
+            throw $this->createServiceException($this->getKernel()->trans('当前订单(#%id%)退款记录不存在，不能取消退款', array('%id%' => $order['id'])));
         }
 
         $this->getOrderRefundDao()->updateRefund($refund['id'], array(
@@ -517,8 +517,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => 'paid'
         ));
+
         $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
-        $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
+        $this->_createLog($order['id'], 'refund_cancel', $this->getKernel()->trans('取消退款申请(ID:%id%)', array('%id%' => $refund['id'])));
     }
 
     public function searchOrders($conditions, $sort, $start, $limit)
@@ -648,11 +649,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order = $this->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException('更新订单失败：订单不存在。');
+            throw $this->createServiceException($this->getKernel()->trans('更新订单失败：订单不存在。'));
         }
 
         if (empty($cashSn)) {
-            throw $this->createServiceException('更新订单失败：支付流水号不存在。');
+            throw $this->createServiceException($this->getKernel()->trans('更新订单失败：支付流水号不存在。'));
         }
 
         $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));

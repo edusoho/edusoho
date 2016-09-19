@@ -28,10 +28,6 @@ class DefaultController extends BaseController
         }
 
         $currentCoursePackage = $this->getTrainingCourseService()->chooseCurrentCoursePackage($postCoursePackages);
-        
-        if (!empty($currentCoursePackage)) {
-            $currentCoursePackage['nextLearnLesson'] = $this->getCourseService()->getUserNextLearnLesson($currentUser['id'], $currentCoursePackage['course']['id']);
-        }
 
         return $this->render('CustomWebBundle:Default:index.html.twig', array(
             'user' => $currentUser,

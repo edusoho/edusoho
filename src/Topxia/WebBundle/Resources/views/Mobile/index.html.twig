@@ -29,14 +29,14 @@
             {% if not isEsApp %}
               {{mobile.appname|default('阔知学堂'|trans)}}
             {% else %}
-              阔知学堂
+              {{'阔知学堂'|trans}}
             {% endif %}
           </div>
           <div class="subtitle">
             {% if not isEsApp %}
               {{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}
             {% else %}
-               将学校装进口袋，移动学习，随时随地。
+               {{'将学校装进口袋，移动学习，随时随地。'|trans}}
             {% endif %}
           </div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">{{'下载APP'|trans}}<i class="es-icon es-icon-filedownload"></i></a>

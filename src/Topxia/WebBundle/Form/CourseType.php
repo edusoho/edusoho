@@ -13,7 +13,7 @@ class CourseType extends AbstractType
     public function buildForm (FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', 'choice', array(
-            'choices' => array('online' => '在线课程', 'offline' => '线下课程'),
+            'choices' => array('online' => $this->getServiceKernel()->trans('在线课程'), 'offline' => $this->getServiceKernel()->trans('线下课程')),
             'expanded' => true
         ));
         $builder->add('title', 'text');
@@ -39,6 +39,10 @@ class CourseType extends AbstractType
     public function getName ()
     {
         return 'course';
+    }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
 }

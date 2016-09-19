@@ -40,9 +40,9 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 $course                       = $this->getCourseService()->getCourse($courseId);
                 $testpaperResult['paperName'] = StringToolkit::cutter($testpaperResult['paperName'], 20, 15, 4);
                 $course['title']              = StringToolkit::cutter($course['title'], 20, 15, 4);
-                $parameters['lesson_title']   = '《' . $testpaperResult['paperName'] . '》' . '试卷';
-                $parameters['course_title']   = '《' . $course['title'] . '》';
-                $description                  = $parameters['course_title'] . ' ' . $parameters['lesson_title'] . '试卷批阅提醒';
+                $parameters['lesson_title']   = '《'.$testpaperResult['paperName'].'》'.$this->getKernel()->trans('试卷');
+                $parameters['course_title']   = '《'.$course['title'].'》';
+                $description                  = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('试卷批阅提醒');
                 $userId                       = $testpaperResult['userId'];
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
@@ -53,7 +53,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
     {
         $order      = $event->getSubject();
         $targetType = $event->getArgument('targetType');
-        $smsType    = 'sms_' . $targetType . '_buy_notify';
+        $smsType    = 'sms_'.$targetType.'_buy_notify';
 
         if ($this->getSmsService()->isOpen($smsType)) {
             $userId                    = $order['userId'];
@@ -62,12 +62,12 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
 
             if ($targetType == 'coin') {
-                $parameters['totalPrice'] = $order['amount'] . '元';
+                $parameters['totalPrice'] = $order['amount'].$this->getKernel()->trans('元');
             } else {
-                $parameters['totalPrice'] = $order['totalPrice'] . '元';
+                $parameters['totalPrice'] = $order['totalPrice'].$this->getKernel()->trans('元');
             }
 
-            $description = $parameters['order_title'] . '成功回执';
+            $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
 
             $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
         }
@@ -93,7 +93,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 $api    = CloudAPIFactory::create('root');
                 $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\RuntimeException $e) {
-                throw new \RuntimeException("发送失败！");
+                $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
+                throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
             }
         }
     }
@@ -182,7 +183,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name'            => "SmsSendOneDayJob",
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneDayJob',
+                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
                 'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
@@ -194,7 +195,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name'            => "SmsSendOneHourJob",
                 'cycle'           => 'once',
                 'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneHourJob',
+                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
                 'targetType'      => $targetType,
                 'targetId'        => $lesson['id']
             );
@@ -234,5 +235,10 @@ class SmsEventSubscriber implements EventSubscriberInterface
     protected function getCrontabService()
     {
         return ServiceKernel::instance()->createService('Crontab.CrontabService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

@@ -9,6 +9,11 @@ class BaseProcessor
 {
     protected $router = 'homepage';
 
+    public function getTarget($targetId)
+    {
+        return array();
+    }
+
     public function callbackUrl($order, $container)
     {
         $goto = $container->get('router')->generate($this->router, array('id' => $order["targetId"]), true);
@@ -22,7 +27,7 @@ class BaseProcessor
             $isRight = $this->getAuthService()->checkPayPassword($user["id"], $payPassword);
 
             if (!$isRight) {
-                throw new Exception("支付密码不正确，创建订单失败!");
+                throw new Exception($this->getKernel()->trans('支付密码不正确，创建订单失败!'));
             }
         }
 
@@ -30,9 +35,7 @@ class BaseProcessor
 
         if ($priceType == "RMB") {
             $coinPreferentialPrice = $coinPayAmount / $cashRate;
-        } else
-
-        if ($priceType == "Coin") {
+        } elseif ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
 
@@ -41,7 +44,7 @@ class BaseProcessor
 
     protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType, $cashRate)
     {
-        $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, $targetType, $targetId, $amount);
+        $couponResult = $this->getCouponService()->checkCouponUseable(trim($couponCode), $targetType, $targetId, $amount);
         return $couponResult;
     }
 
@@ -84,9 +87,7 @@ class BaseProcessor
                 } else {
                     $coinPayAmount = $totalPrice;
                 }
-            } else
-
-            if ($priceType == "RMB") {
+            } elseif ($priceType == "RMB") {
                 if ($totalPrice * 100 > $accountCash / $cashRate * 100) {
                     $coinPayAmount = $accountCash;
                 } else {
@@ -129,5 +130,10 @@ class BaseProcessor
     protected function getAppService()
     {
         return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

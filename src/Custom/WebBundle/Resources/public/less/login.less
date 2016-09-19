@@ -10,14 +10,18 @@ body {
   text-align: center;
   color: #22b2e9;
 }
-
 .text-controls {
   .box-shadow(0 0 0 6px #22b2e9) ;
   border-radius: 4px;
   border: none;
   input {
     width: 430px;
-    font-size: 20px;
+    @media screen and(max-width: @screen-xs-max){
+      width: 100%;
+      font-size: 14px;
+      height: 34px;
+    }
+    font-size: 18px;
     border: none;
     height: 54px;
     &::-webkit-input-placeholder { .placeholder-style }
@@ -31,26 +35,39 @@ body {
   height: 100%;
 }
 .login-full {
-  height: 100%;
+  min-height: 100%;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   border: none;
   .login-section {
     color: #ffffff;
     margin: 0 auto;
     width: 550px;
+    @media screen and(max-width: @screen-xs-max){
+      width: 100%;
+    }
     text-align: center;
     .login-tip {
       font-size: 52px;  
-      margin-top: 40px;
+      margin-top: 120px;
+      @media screen and(max-width: @screen-xs-max){
+        font-size: 40px;
+      }
     }
     .login-sub-tip {
       font-size: 22px;
+      @media screen and(max-width: @screen-xs-max){
+        font-size: 18px;
+      }
       margin-top: 10px;
     }
     .login-main {
       padding: 20px 45px 20px 45px;
       font-size: 20px;
+      @media screen and(max-width: @screen-xs-max){
+        font-size: 16px;
+      }
       .form-group {
         margin: 0;
         .controls {
@@ -60,6 +77,9 @@ body {
             height: 30px;
             .text-danger {
               font-size: 16px;
+               @media screen and(max-width: @screen-xs-max){
+                font-size: 12px;
+              }
             }
           }
           .remember-me {
@@ -83,6 +103,13 @@ body {
         margin: 30px auto 20px auto;
         width: 220px;
         height: 52px;
+
+         @media screen and(max-width: @screen-xs-max){
+          height: 34px;
+          width: 100%;
+          font-size: 16px;
+          max-width: 180px;
+        }
         text-align: center;
         border: none;
         border-radius: 26px;
@@ -99,6 +126,13 @@ body {
       }
     }
     .forget-psd {
+    }
+  }
+  .bottom-brand {
+    text-align: center;
+    padding: 50px 50px 10px 50px ;
+    img {
+      display: inline-block;
     }
   }
   .reset-section {

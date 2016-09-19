@@ -206,7 +206,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
             } catch (\Exception $e) {
-                return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+                return array('error_db', $this->getKernel()->trans('暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'));
             }
 
             if ($result[0] != 'success') {
@@ -220,7 +220,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
 
             if (!$avaliable) {
-                return array('error_duplicate', '名称已存在!');
+                return array('error_duplicate', $this->getKernel()->trans('名称已存在!'));
             }
         }
 
@@ -232,7 +232,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkEmail($email);
         } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+            return array('error_db', $this->getKernel()->trans('暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'));
         }
 
         if ($result[0] != 'success') {
@@ -242,7 +242,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isEmailAvaliable($email);
 
         if (!$avaliable) {
-            return array('error_duplicate', 'Email已存在!');
+            return array('error_duplicate', $this->getKernel()->trans('Email已存在!'));
         }
 
         return array('success', '');
@@ -253,7 +253,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         try {
             $result = $this->getAuthProvider()->checkMobile($mobile);
         } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+            return array('error_db', $this->getKernel()->trans('暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'));
         }
 
         if ($result[0] != 'success') {
@@ -263,7 +263,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
 
         if (!$avaliable) {
-            return array('error_duplicate', '手机号码已存在!');
+            return array('error_duplicate', $this->getKernel()->trans('手机号码已存在!'));
         }
 
         return array('success', '');
@@ -276,7 +276,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         } elseif (SimpleValidator::mobile($emailOrMobile)) {
             return $this->checkMobile($emailOrMobile);
         } else {
-            return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
+            return array('error_dateInput', $this->getKernel()->trans('电子邮箱或者手机号码格式不正确!'));
         }
     }
 

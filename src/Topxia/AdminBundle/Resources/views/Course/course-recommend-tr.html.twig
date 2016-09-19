@@ -16,7 +16,7 @@
   <td>
     <a href="{{ showUrl }}" target="_blank"><strong>{{ course.title }}</strong></a>
     <br>
-    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
   </td>
   {% if course.type not in ['open','liveOpen'] %}
     {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: course.orgCode}%}
@@ -32,7 +32,7 @@
   <td>
 
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ recommendUrl }}">设置序号</a>
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ recommendUrl }}">{{'设置序号'|trans}}</a>
 
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
@@ -41,7 +41,7 @@
 
         <li>
           <a class="cancel-recommend-course" href="javascript:" data-url="{{ cancelUrl }}">
-          <span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a>
+          <span class="glyphicon glyphicon-hand-right"></span> {{'取消推荐'|trans}}</a>
         </li>
     
       </ul>
