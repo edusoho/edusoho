@@ -224,7 +224,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
     public function getBills()
     {
-        $encodedParams = array();
+        $encodedParams = base64_encode(json_encode(array()));
 
         $sign  = hash_hmac('sha1', $encodedParams, $this->secretKey);
         $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
