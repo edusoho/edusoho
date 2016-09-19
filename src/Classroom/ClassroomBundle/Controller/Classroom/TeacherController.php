@@ -40,7 +40,7 @@ class TeacherController extends BaseController
         $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
-        $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
