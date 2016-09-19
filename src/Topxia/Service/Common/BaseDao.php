@@ -178,19 +178,20 @@ abstract class BaseDao
             return;
         }
 
+        $deleteKeys = array();
         foreach ($keys as $key => $value) {
-            $keys[$key] = $this->getPrefixKey().':'.$value;
+            $deleteKeys[] = $this->getPrefixKey().':'.$value;
         }
 
         $redis = $this->getRedis();
 
         if ($redis) {
-            foreach ($keys as $key) {
+            foreach ($deleteKeys as $key) {
                 $redis->delete($key);
             }
         }
 
-        foreach ($keys as $key) {
+        foreach ($deleteKeys as $key) {
             unset($this->dataCached[$key]);
         }
     }
