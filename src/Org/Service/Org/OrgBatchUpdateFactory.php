@@ -14,7 +14,7 @@ class OrgBatchUpdateFactory {
     }
 
 
-	private static function getModules(){
+	public static function getModules(){
 		return array(
 			'user'=>'User.UserService',
 			'course'=>'Course.CourseService',
@@ -22,6 +22,21 @@ class OrgBatchUpdateFactory {
 			'article'=>'Article.ArticleService'
 		);
 	}
+
+    public static function getDispayModuleName($key)
+    {
+        $modules = array(
+            'user'         => '用户',
+            'course'       => '课程',
+            'classroom'    => '班级',
+            'article'      => '咨询',
+            'announcement' => '网站公告'
+        );
+        if (array_key_exists($key,$modules)) {
+            return $modules[$key];
+        }
+        throw new \Exception("模块不存在,获取数据出错");
+    }
 
     protected function getKernel()
     {
