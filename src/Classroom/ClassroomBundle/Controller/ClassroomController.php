@@ -188,7 +188,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->setting('vip.enabled') && $user['id']) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
@@ -196,7 +196,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -273,7 +273,7 @@ class ClassroomController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($id)) {
@@ -346,7 +346,7 @@ class ClassroomController extends BaseController
         $classroom    = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user         = $this->getCurrentUser();
-        $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
@@ -417,7 +417,7 @@ class ClassroomController extends BaseController
 
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->setting('vip.enabled') && $user['id']) {
             $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
@@ -425,7 +425,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($previewAs) {
             if (!$this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -702,7 +702,7 @@ class ClassroomController extends BaseController
 
         $previewAs = $request->query->get('previewAs');
 
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         $courseSetting = $this->getSettingService()->get('course', array());
