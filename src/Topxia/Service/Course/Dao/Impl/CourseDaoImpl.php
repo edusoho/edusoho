@@ -179,10 +179,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
                 $result = $that->getConnection()->executeQuery($sql, array($diff, $id));
 
-                $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-                $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+                $sql    = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+                $course = $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
 
-                $this->flushCache($course);
+                $that->flushCache($course);
                 return $result;
             });
         } else {
