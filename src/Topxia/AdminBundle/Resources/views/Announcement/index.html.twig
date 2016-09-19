@@ -27,7 +27,8 @@
     <tbody>
     {% if announcements %}
       {% for announcement in announcements %}
-        <tr>
+        <tr announcement-table-tr-{{ announcement.id }}>
+          {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
           <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content }}</td>
           {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
           <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
@@ -52,7 +53,6 @@
               <ul class="dropdown-menu">
                 <li><a href="javascript::" data-url="{{ path('admin_announcement_delete',{id:announcement.id}) }}"
                        class="delete-btn"><span class="glyphicon glyphicon-trash"></span> {{'删除'|trans}}</a></li>
-
               </ul>
             </div>
           </td>
@@ -61,6 +61,7 @@
     {% endif %}
     </tbody>
   </table>
+  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'announcement', formId:'announcement-table'} %}
   {% if not announcements %}
     <div class="empty">{{'暂无公告'|trans}}</div>
   {% endif %}

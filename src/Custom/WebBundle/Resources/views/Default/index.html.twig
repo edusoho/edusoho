@@ -41,7 +41,6 @@
           </a>
         {% elseif currentCourse.studyStatus|default(false) %}
           <button data-toggle="modal" data-target="#modal" data-url="{{ path('internal_training_course_unlock', {courseId:currentCourse.id}) }}" type="button" class="btn btn-primary"><i class="iconfont icon-lock"></i>{{'解锁学习'|trans}}</button>
-        {% else %}
         {% endif %}
 
       </div>

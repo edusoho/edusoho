@@ -43,7 +43,7 @@
                         {% endif %}
                         {{ org.name }}
                     </div>
-                    <div class="td col-md-2 code">{{ org.code }}</div>
+                    <div class="td col-md-2 code" style="padding-left: {{ 24 * (org.depth - 1 ) }}px; overflow: hidden;" title="{{ org.code }}">{{ org.code }}</div>
                     <div class="td col-md-1 code">{{ org.childrenNum }}</div>
                     <div class="td col-md-2 code">{{ user.nickname }}</div>
                     <div class="td col-md-2 code"> {{org.createdTime|date('Y-m-d')}}</div>

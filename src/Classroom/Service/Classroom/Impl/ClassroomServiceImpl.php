@@ -30,6 +30,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $count;
     }
 
+    public function searchCount($conditions)
+    {
+        return $this->searchClassroomsCount($conditions);
+    }
+
     public function findClassroomIdsByCourseId($courseId)
     {
         $results = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
@@ -422,7 +427,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
 
         return $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
     }
@@ -1321,7 +1326,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroomDao()->updateClassroom($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -1467,7 +1472,7 @@ class MemberSerialize
 {
     public static function serialize(array $member)
     {
-        $member['role'] = empty($member['role']) ? '' : '|'.implode('|', $member['role']).'|';
+        $member['role'] = empty($member['role']) ? '' : '|' . implode('|', $member['role']) . '|';
         return $member;
     }
 
