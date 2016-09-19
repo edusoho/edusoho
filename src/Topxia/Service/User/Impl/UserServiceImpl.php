@@ -1,20 +1,21 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Topxia\Common\FileToolkit;
+use Permission\Service\Role\Impl\RoleServiceImpl;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Common\Exception\RuntimeException;
+use Topxia\Common\Exception\UnexpectedValueException;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\User\UserService;
+use Topxia\Common\StringToolkit;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Common\Exception\RuntimeException;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\UnexpectedValueException;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\User\UserService;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -872,7 +873,7 @@ class UserServiceImpl extends BaseService implements UserService
         $allowedRoles    = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
-        if (!empty($notAllowedRoles)) {
+        if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'], true)) {
             throw new UnexpectedValueException('用户角色不正确，设置用户角色失败。');
         }
 
@@ -1355,8 +1356,12 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-            return true;
+        $roles = $this->getRoleService()->findRolesByCodes($user['roles']);
+
+        foreach ($roles as $role) {
+            if (in_array('admin', $role['data'], true)) {
+                return true;
+            }
         }
 
         return false;
@@ -1739,6 +1744,14 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getInviteRecordService()
     {
         return $this->createService('User.InviteRecordService');
+    }
+
+    /**
+     * @return RoleServiceImpl
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Permission:Role.RoleService');
     }
 
     protected function getOrgService()

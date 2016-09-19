@@ -1,8 +1,8 @@
 <?php
 namespace Permission\Service\Role\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Permission\Service\Role\Dao\RoleDao;
+use Topxia\Service\Common\BaseDao;
 
 class RoleDaoImpl extends BaseDao implements RoleDao
 {
@@ -32,7 +32,8 @@ class RoleDaoImpl extends BaseDao implements RoleDao
 
         $marks = str_repeat('?,', count($codes) - 1).'?';
         $sql   = "SELECT * FROM {$this->getTable()} WHERE code IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $codes);
+        $roles = $this->getConnection()->fetchAll($sql, $codes);
+        return $roles ? $this->createSerializer()->unserializes($roles, $this->getSerializeFields()) : array();
     }
 
     public function getRoleByName($name)

@@ -4,6 +4,8 @@ namespace Permission\Service\Role\Impl;
 use Permission\Common\PermissionBuilder;
 use Permission\Service\Role\RoleService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Common\BaseService;
 
 class RoleServiceImpl extends BaseService implements RoleService
@@ -16,11 +18,6 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function getRoleByCode($code)
     {
         return $this->getRoleDao()->getRoleByCode($code);
-    }
-
-    public function findRolesByCodes($codes)
-    {
-        return $this->getRoleDao()->findRolesByCodes($codes);
     }
 
     public function createRole($role)
@@ -65,7 +62,7 @@ class RoleServiceImpl extends BaseService implements RoleService
                 break;
 
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw new InvalidArgumentException('参数sort不正确。');
                 break;
         }
         $roles = $this->getRoleDao()->searchRoles($conditions, $sort, $start, $limit);
@@ -77,6 +74,15 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $conditions = $this->prepareSearchConditions($conditions);
         return $this->getRoleDao()->searchRolesCount($conditions);
+    }
+
+    public function findRolesByCodes(array $codes)
+    {
+        if(empty($codes)){
+            return array();
+        }
+
+        return $this->getRoleDao()->findRolesByCodes($codes);
     }
 
     public function refreshRoles()
@@ -145,7 +151,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->getRoleDao()->getRole($id);
         $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
         if (in_array($role['code'], $notUpdateRoles)) {
-            throw $this->createAccessDeniedException('该权限不能修改！');
+            throw new AccessDeniedException('该权限不能修改！');
         }
         return $role;
     }
