@@ -19,18 +19,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         });
     }
 
-    public function getLessonByCourseIdAndNumber($courseId, $number)
-    {
-        $that = $this;
-
-        return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $that->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
-        }
-
-        );
-    }
-
     public function findCoursesByIds(array $ids)
     {
         if (empty($ids)) {
@@ -46,16 +34,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $that = $this;
 
-        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+        $versionKey = "{$table}:version:parentId:{$parentId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("parentId:{$parentId}:version:v{$version}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
             if (empty($parentId)) {
                 return array();
             }
 
             $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND locked = ?";
             return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
-        }
-
-        );
+        });
     }
 
     public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -141,14 +130,33 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCached();
-        return $this->getCourse($id);
+
+        $course = $this->getCourse($id);
+
+        $this->incrVersions(array(
+            "{$table}:version:parentId:{$course['parentId']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$course['id']}"
+        ));
+
+        return $course;
     }
 
     public function deleteCourse($id)
     {
+        $course = $this->getCourse($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
+
+        $this->incrVersions(array(
+            "{$table}:version:parentId:{$course['parentId']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$course['id']}"
+        ));
+
         return $result;
     }
 
@@ -165,7 +173,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $this->clearCached();
+        $course = $this->getCourse($id);
+
+        $this->incrVersions(array(
+            "{$table}:version:parentId:{$course['parentId']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$course['id']}"
+        ));
+
         return $result;
     }
 

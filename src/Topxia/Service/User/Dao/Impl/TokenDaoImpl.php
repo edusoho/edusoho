@@ -41,15 +41,30 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert token error.');
         }
-        $this->clearCached();
-        return $this->getToken($this->getConnection()->lastInsertId());
+
+        $token = $this->getToken($this->getConnection()->lastInsertId());
+
+        $this->incrVersions(array(
+            "{$table}:version:userId:{$token['userId']}",
+            "{$table}:version:type:{$token['type']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$token['id']}",
+            "token:{$token['token']}"
+        ));
+
+        return $token;
     }
 
     public function findTokensByUserIdAndType($userId, $type)
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
+        $versionKey = "{$table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:v{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? and type = ?";
             return $that->getConnection()->fetchAll($sql, array($userId, $type)) ?: null;
         });
@@ -59,7 +74,10 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     {
         $that = $this;
 
-        return $this->fetchCached("type:{$type}", $type, function ($type) use ($that) {
+        $versionKey = "{$table}:version:type:{$type}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("type:{$type}:version:v{$version}", $type, function ($type) use ($that) {
             $sql   = "SELECT * FROM {$that->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
             $token = $that->getConnection()->fetchAssoc($sql, array($type, time())) ?: null;
             return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
@@ -68,8 +86,19 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 
     public function deleteToken($id)
     {
+        $token  = $this->getToken($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
+
+        $this->incrVersions(array(
+            "{$table}:version:userId:{$token['userId']}",
+            "{$table}:version:type:{$token['type']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$token['id']}",
+            "token:{$token['token']}"
+        ));
+
         return $result;
     }
 
@@ -85,7 +114,19 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     {
         $sql    = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $this->clearCached();
+
+        $token = $this->getToken($id);
+
+        $this->incrVersions(array(
+            "{$table}:version:userId:{$token['userId']}",
+            "{$table}:version:type:{$token['type']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$token['id']}",
+            "token:{$token['token']}"
+        ));
+
         return $result;
     }
 
