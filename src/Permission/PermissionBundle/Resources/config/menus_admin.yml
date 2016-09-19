@@ -1,7 +1,7 @@
 admin_roles:
     name: 角色管理
-    group: 2
     parent: admin_system
+    after: admin_setting_user
     children:
         admin_role_manage:
             name: 角色管理
