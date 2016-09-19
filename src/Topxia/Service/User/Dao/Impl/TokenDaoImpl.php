@@ -43,25 +43,28 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         }
 
         $token = $this->getToken($this->getConnection()->lastInsertId());
+        $this->flushCache($token);
+        return $token;
+    }
 
+    protected function flushCache($token)
+    {
         $this->incrVersions(array(
-            "{$table}:version:userId:{$token['userId']}",
-            "{$table}:version:type:{$token['type']}"
+            "{$this->table}:version:userId:{$token['userId']}",
+            "{$this->table}:version:type:{$token['type']}"
         ));
 
         $this->deleteCache(array(
             "id:{$token['id']}",
             "token:{$token['token']}"
         ));
-
-        return $token;
     }
 
     public function findTokensByUserIdAndType($userId, $type)
     {
         $that = $this;
 
-        $versionKey = "{$table}:version:userId:{$userId}";
+        $versionKey = "{$this->table}:version:userId:{$userId}";
         $version    = $this->getCacheVersion($versionKey);
 
         return $this->fetchCached("userId:{$userId}:version:v{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
@@ -74,7 +77,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
     {
         $that = $this;
 
-        $versionKey = "{$table}:version:type:{$type}";
+        $versionKey = "{$this->table}:version:type:{$type}";
         $version    = $this->getCacheVersion($versionKey);
 
         return $this->fetchCached("type:{$type}:version:v{$version}", $type, function ($type) use ($that) {
@@ -89,16 +92,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         $token  = $this->getToken($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
 
-        $this->incrVersions(array(
-            "{$table}:version:userId:{$token['userId']}",
-            "{$table}:version:type:{$token['type']}"
-        ));
-
-        $this->deleteCache(array(
-            "id:{$token['id']}",
-            "token:{$token['token']}"
-        ));
-
+        $this->flushCache($token);
         return $result;
     }
 
@@ -117,15 +111,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 
         $token = $this->getToken($id);
 
-        $this->incrVersions(array(
-            "{$table}:version:userId:{$token['userId']}",
-            "{$table}:version:type:{$token['type']}"
-        ));
-
-        $this->deleteCache(array(
-            "id:{$token['id']}",
-            "token:{$token['token']}"
-        ));
+        $this->flushCache($token);
 
         return $result;
     }

@@ -34,7 +34,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $that = $this;
 
-        $versionKey = "{$table}:version:parentId:{$parentId}";
+        $versionKey = "{$this->table}:version:parentId:{$parentId}";
         $version    = $this->getCacheVersion($versionKey);
 
         return $this->fetchCached("parentId:{$parentId}:version:v{$version}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
@@ -117,13 +117,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $course['createdTime'] = time();
         $course['updatedTime'] = $course['createdTime'];
         $affected              = $this->getConnection()->insert($this->table, $course);
-        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
         }
 
-        return $this->getCourse($this->getConnection()->lastInsertId());
+        $course = $this->getCourse($this->getConnection()->lastInsertId());
+        $this->flushCache($course);
+        return $course;
     }
 
     public function updateCourse($id, $fields)
@@ -133,13 +134,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         $course = $this->getCourse($id);
 
-        $this->incrVersions(array(
-            "{$table}:version:parentId:{$course['parentId']}"
-        ));
-
-        $this->deleteCache(array(
-            "id:{$course['id']}"
-        ));
+        $this->flushCache($course);
 
         return $course;
     }
@@ -149,15 +144,20 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $course = $this->getCourse($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
 
+        $this->flushCache($course);
+
+        return $result;
+    }
+
+    protected function flushCache($course)
+    {
         $this->incrVersions(array(
-            "{$table}:version:parentId:{$course['parentId']}"
+            "{$this->table}:version:parentId:{$course['parentId']}"
         ));
 
         $this->deleteCache(array(
             "id:{$course['id']}"
         ));
-
-        return $result;
     }
 
     public function waveCourse($id, $field, $diff)
@@ -175,13 +175,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
         $course = $this->getCourse($id);
 
-        $this->incrVersions(array(
-            "{$table}:version:parentId:{$course['parentId']}"
-        ));
-
-        $this->deleteCache(array(
-            "id:{$course['id']}"
-        ));
+        $this->flushCache($course);
 
         return $result;
     }
