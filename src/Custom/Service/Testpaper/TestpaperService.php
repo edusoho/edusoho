@@ -9,4 +9,8 @@ interface TestpaperService
     public function findTestPaperResultsByStatusAndTestIdsAndUserIds($ids, $status, $userIds);
 
     public function findAllTestpapersByTarget($id);
+
+    public function findAllTestpapersByTargets(array $ids);
+
+    public function findTestpapersByIds($ids);
 }
