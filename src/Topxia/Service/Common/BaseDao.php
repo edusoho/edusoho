@@ -33,6 +33,34 @@ abstract class BaseDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
+    protected function waveCache()
+    {
+        $args     = func_get_args();
+        $callback = array_pop($args);
+        $key      = $this->table.':'.array_shift($args);
+        $redis    = $this->getRedis();
+
+        if ($redis) {
+            $currentTime = time();
+            $data        = $redis->get($key);
+
+            if ($data) {
+                if ($currentTime - $data['syncTime'] > 600) {
+                    $args[2] += $data['increment'];
+                    call_user_func_array($callback, $args);
+                    $redis->set($key, array('increment' => 0, 'syncTime' => $currentTime));
+                } else {
+                    $data['increment'] += $args[2];
+                    $redis->set($key, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
+                }
+            } else {
+                $redis->set($key, array('increment' => $args[2], 'syncTime' => $currentTime));
+            }
+        } else {
+            call_user_func_array($callback, $args);
+        }
+    }
+
     public function getTable()
     {
         if ($this->table) {

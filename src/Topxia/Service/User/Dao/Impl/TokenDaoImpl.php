@@ -67,7 +67,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         $versionKey = "{$this->table}:version:userId:{$userId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("userId:{$userId}:version:v{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
+        return $this->fetchCached("userId:{$userId}:version:{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? and type = ?";
             return $that->getConnection()->fetchAll($sql, array($userId, $type)) ?: null;
         });
@@ -80,7 +80,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         $versionKey = "{$this->table}:version:type:{$type}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("type:{$type}:version:v{$version}", $type, function ($type) use ($that) {
+        return $this->fetchCached("type:{$type}:version:{$version}", $type, function ($type) use ($that) {
             $sql   = "SELECT * FROM {$that->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
             $token = $that->getConnection()->fetchAssoc($sql, array($type, time())) ?: null;
             return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;

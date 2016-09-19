@@ -37,7 +37,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $versionKey = "{$this->table}:version:parentId:{$parentId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("parentId:{$parentId}:version:v{$version}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+        return $this->fetchCached("parentId:{$parentId}:version:{$version}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
             if (empty($parentId)) {
                 return array();
             }
@@ -169,18 +169,35 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
 
-        $currentTime = time();
+        if ($field == 'hitNum') {
+            $that = $this;
 
-        $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+            return $this->waveCache("id:{$id}:field:{$field}:diff:{$diff}", $id, $field, $diff, function ($id, $field, $diff) use ($that) {
+                $currentTime = time();
 
-        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+                $sql = "UPDATE {$that->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
-        $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
-        $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+                $result = $that->getConnection()->executeQuery($sql, array($diff, $id));
 
-        $this->flushCache($course);
+                $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+                $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
 
-        return $result;
+                $this->flushCache($course);
+                return $result;
+            });
+        } else {
+            $currentTime = time();
+
+            $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
+            $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+
+            $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+            $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+            $this->flushCache($course);
+            return $result;
+        }
     }
 
     public function clearCourseDiscountPrice($discountId)

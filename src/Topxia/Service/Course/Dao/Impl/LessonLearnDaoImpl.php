@@ -38,7 +38,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $versionKey = "{$this->table}:version:userId:{$userId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
+        return $this->fetchCached("userId:{$userId}:version:{$version}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=?";
             return $that->getConnection()->fetchAll($sql, array($userId, $courseId)) ?: array();
         }
@@ -53,7 +53,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $versionKey = "{$this->table}:version:userId:{$userId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+        return $this->fetchCached("userId:{$userId}:version:{$version}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=? AND status = ?";
             return $that->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ?: array();
         }
@@ -68,7 +68,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $versionKey = "{$this->table}:version:userId:{$userId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+        return $this->fetchCached("userId:{$userId}:version:{$version}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE userId = ? AND courseId = ? AND status = ?";
             return $that->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
         }
@@ -90,7 +90,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $versionKey = "{$this->table}:version:lessonId:{$lessonId}";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("lessonId:{$lessonId}:version:v{$version}:count", $lessonId, function ($lessonId) use ($that) {
+        return $this->fetchCached("lessonId:{$lessonId}:version:{$version}:count", $lessonId, function ($lessonId) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE lessonId = ?";
             return $that->getConnection()->fetchColumn($sql, array($lessonId));
         }
@@ -220,7 +220,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $versionKey = "{$this->table}:version:analysisLessonFinishedDataByTime";
         $version    = $this->getCacheVersion($versionKey);
 
-        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count:version:v{$version}", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
+        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count:version:{$version}", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
             $sql = "SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`finishedTime`>=? AND `finishedTime`<=? AND `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
             return $that->getConnection()->fetchAll($sql, array($startTime, $endTime));
         }
