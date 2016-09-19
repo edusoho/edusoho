@@ -106,7 +106,8 @@ admin:
                         admin_teacher_manage:
                             name: 教师管理
                             router_name: admin_teacher
-                            children: 
+                            disable: true
+                            children:
                                 admin_teacher_promote:
                                     name: 推荐老师
                                     class: promote-teacher
@@ -127,6 +128,7 @@ admin:
                                         id: (user.id)
                         admin_teacher_promote_list:
                             name: 教师推荐
+                            disable: true
                 admin_approval_manage:
                     name: 实名认证管理
                     children:
@@ -134,6 +136,7 @@ admin:
                             name: 实名认证管理
                             router_params:
                                 approvalStatus: approving
+                            disable: true
                             children:
                                 admin_approval_cancel:
                                     name: 撤销
@@ -147,6 +150,7 @@ admin:
                     children:
                         admin_message:
                             name: 私信管理
+                            disable: true
         admin_course:
             name: 课程
             children:
@@ -157,6 +161,13 @@ admin:
                             name: 课程管理
                             router_name: admin_course
                             children:
+                                admin_course_content_manage:
+                                    name: 管理课程
+                                    router_name: course_manage
+                                    group: btn
+                                    router_params:
+                                        id: (course.id)
+                                    blank: true
                                 admin_course_add:
                                     name: 创建课程
                                     router_name: course_create
@@ -241,6 +252,7 @@ admin:
                                     visable: (course.status != 'published')
                                 admin_course_delete:
                                     name: 删除课程
+                                    class: delete-course
                                     router_params:
                                         courseId: (course.id)
                                         filter: (filter)
@@ -253,6 +265,20 @@ admin:
                             name: 课程推荐
                         admin_course_data:
                             name: 课程统计
+                admin_open_course_manage:
+                    name: 公开课管理
+                    router_name: admin_open_course
+                    children:
+                        admin_open_course:
+                            name: 公开课管理
+                            disable: true
+                            router_name: admin_open_course
+                        admin_open_course_recommend_list:
+                            name: 公开课推荐
+                            disable: true
+                        admin_opencourse_analysis:
+                            name: 公开课同级
+                            disable: true
                 admin_live_course:
                     name: 直播管理
                     children:
@@ -261,12 +287,14 @@ admin:
                             router_params:
                                 status: coming
                             router_name: admin_live_course
+                            disable: true
                 admin_course_thread:
                     name: 话题管理
                     children:
                         admin_course_thread_manage:
                             name: 课程话题
                             router_name: admin_thread
+                            disable: true
                 admin_course_question:
                     name: 问答管理
                     children:
@@ -275,12 +303,14 @@ admin:
                             router_name: admin_question
                             router_params:
                                 postStatus: unPosted
+                            disable: true
                 admin_course_note:
                     name: 笔记管理
                     children:
                         admin_course_note_manage:
                             name: 笔记管理
                             router_name: admin_course_note
+                            disable: true
                 admin_course_review:
                     name: 评价管理
                     children:
@@ -288,12 +318,14 @@ admin:
                             name: 课程评价
                             router_name: admin_review
                             group: 1
+                            disable: true
                 admin_course_category:
                     name: 分类管理
                     children:
                         admin_course_category_manage:
                             name: 分类管理
                             router_name: admin_course_category
+                            disable: true
                             children:
                                 admin_category_create:
                                     name: '添加分类'
@@ -308,6 +340,7 @@ admin:
                         admin_course_tag_manage:
                             name: '标签管理'
                             router_name: admin_tag
+                            disable: true
                             children:
                                 admin_course_tag_add:
                                     name: '新增标签'
@@ -322,6 +355,7 @@ admin:
                     children:
                         admin_operation_article_manage:
                             name: 资讯管理
+                            disable: true
                             router_name: admin_article
                             children:
                                 admin_operation_article_create:
@@ -330,6 +364,7 @@ admin:
                                     group: topBtn
                         admin_operation_article_category:
                             name: '栏目管理'
+                            disable: true
                             router_name: admin_article_category
                             children:
                                 admin_operation_category_create:
@@ -342,6 +377,7 @@ admin:
                     children:
                         admin_operation_group_manage:
                             name: 小组管理
+                            disable: true
                             router_name: admin_group
                             children:
                                 admin_operation_group_create:
@@ -351,15 +387,18 @@ admin:
                                     blank: 1
                         admin_operation_group_thread:
                             name: 话题管理
+                            disable: true
                             router_name: admin_groupThread
                 admin_operation_invite:
                     name: 邀请管理
                     children:
                         admin_operation_invite_manage:
                             name: 邀请管理
+                            disable: true
                             router_name: admin_invite
                         admin_operation_invite_coupon:
                             name: 奖励查询
+                            disable: true
                             router_name: admin_invite_coupon
                 admin_announcement:
                     name: '网站公告管理'
@@ -367,6 +406,7 @@ admin:
                     children:
                         admin_announcement_manage:
                             name: '网站公告管理'
+                            disable: true
                             router_name: admin_announcement
                             children:
                                 admin_announcement_create:
@@ -379,6 +419,7 @@ admin:
                     children:
                         admin_batch_notification:
                             name: '全站站内通知'
+                            disable: true
                             children:
                                 admin_batch_notification_create:
                                     name: '创建站内通知'
@@ -389,6 +430,7 @@ admin:
                     children:
                         admin_block:
                             name: 编辑区管理
+                            disable: true
                             router_params:
                                 category: all
                             children:
@@ -402,6 +444,7 @@ admin:
                     children:
                         admin_content:
                             name: 自定义页面管理
+                            disable: true
                             router_params:
                                 type: page
                 admin_operation_mobile:
@@ -410,12 +453,15 @@ admin:
                     children:
                         admin_operation_mobile_banner_manage:
                             name: 轮播图设置
+                            disable: true
                             router_name: admin_operation_mobile
                         admin_operation_mobile_select_manage:
                             name: 每周精选设置
+                            disable: true
                             router_name: admin_operation_mobile_select
                         admin_discovery_column_index:
                             name: '发现页栏目管理'
+                            disable: true
                             children:
                                 admin_discovery_column_create:
                                     name: '添加栏目'
@@ -426,6 +472,7 @@ admin:
                     group: 3
                     children:
                         admin_operation_analysis:
+                            disable: true
                             name: 数据统计
                             router_params:
                                 tab: trend
@@ -440,11 +487,13 @@ admin:
                         admin_course_order:
                             name: 课程订单
                             router_name: admin_course_order_manage
+                            disable: true
                 admin_coin_order_manange:
                     name: 虚拟币订单
                     children:
                         admin_coin_orders:
                             name: 虚拟币订单
+                            disable: true
         admin_finance:
             name: 账务
             children:
@@ -453,19 +502,23 @@ admin:
                     children:
                         admin_bill:
                             name: 现金账单
+                            disable: true
                         admin_coin_records:
                             name: 虚拟币账单
+                            disable: true
                 admin_coin_user:
                     name: 虚拟币管理
                     children:
                         admin_coin_user_records:
                             name: 记录
+                            disable: true
                             router_name: admin_coin_user_records
                 admin_course_refunds:
                     name: 课程退款管理
                     children:
                         admin_course_refunds_manage:
                             name: 课程退款管理
+                            disable: true
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: course
@@ -478,21 +531,21 @@ admin:
                     children:
                         admin_my_cloud_overview:
                             name: 账户概览
-                        admin_cloud_bill:
-                            name: 云视频账单
-                            router_name: admin_cloud_bill
+                            disable: true
                 admin_cloud_video_setting:
                     name: 云视频设置
                     router_name: admin_setting_cloud_video
                     children:
                         admin_setting_cloud_video:
                             name: 云视频设置
+                            disable: true
                 admin_edu_cloud_sms:
                     name: 云短信设置
                     children:
                         admin_edu_cloud_sms_setting:
                             name: 云短信设置
                             router_name: admin_edu_cloud_sms
+                            disable: true
                 # admin_edu_cloud_email:
                 #     name: 云邮件设置
                 #     children:
@@ -504,11 +557,13 @@ admin:
                     children:
                         admin_edu_cloud_search:
                             name: 云搜索
+                            disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     children:
-                        admin_cloud_attachment:
+                        admin_edu_cloud_attachment:
                             name: 云附件设置
+                            disable: true
                 admin_app_center_show:
                     name: ES应用
                     router_name: admin_app_center
@@ -518,23 +573,34 @@ admin:
                         admin_app_center:
                             name: 应用中心
                             router_name: admin_app_center
+                            disable: true
                             router_params:
                                 postStatus: all
                         admin_app_installed:
                             name: 已购项目
+                            disable: true
                             router_params:
                                 postStatus: all
                         admin_app_upgrades:
                             name: 更新
                             class: app-upgrade
+                            disable: true
                         admin_app_logs:
                             name: 更新日志
+                            disable: true
+                admin_cloud_attachment_manage:
+                    name: 云附件
+                    children:
+                        admin_cloud_attachment:
+                            name: 云附件
+                            disable: true
                 admin_setting_cloud:
                     name: 授权信息
                     children:
                         admin_setting_my_cloud:
                             name: 授权信息
                             router_name: admin_setting_cloud
+                            disable: true
         admin_system:
             name: 系统
             router_name: admin_setting_site
@@ -546,83 +612,108 @@ admin:
                         admin_setting_message:
                             name: 基础信息
                             router_name: admin_setting_site
+                            disable: true
                         admin_setting_theme:
                             name: 主题
+                            disable: true
                         admin_setting_mailer:
                             name: 邮件服务器设置
+                            disable: true
                         admin_top_navigation:
                             name: 顶部导航
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: top
                         admin_foot_navigation:
                             name: 底部导航
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: foot
                         admin_friendlyLink_navigation:
                             name: '友情链接'
                             router_name: admin_navigation
+                            disable: true
                             router_params:
                                 type: friendlyLink
                         admin_setting_consult_setting:
                             name: 客服
+                            disable: true
                         admin_setting_es_bar:
                             name: '侧边栏'
+                            disable: true
                         admin_setting_share:
                             name: 分享
+                            disable: true
                 admin_setting_user:
                     name: 用户设置
                     children:
                         admin_user_auth:
                             name: 注册
+                            disable: true
                             router_name: admin_setting_auth
                         admin_setting_login_bind:
                             name: 登录
+                            disable: true
                         admin_setting_user_center:
                             name: 用户中心
+                            disable: true
                         admin_setting_user_fields:
                             name: 用户信息设置
+                            disable: true
                         admin_setting_avatar:
                             name: 默认头像
+                            disable: true
                 admin_setting_course_setting:
                     name: 课程设置
                     children:
                         admin_setting_course:
                             name: 课程
+                            disable: true
                             router_name: admin_setting_course_setting
                         admin_setting_live_course:
                             name: 直播
+                            disable: true
                             router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: 题库
+                            disable: true
                         admin_setting_course_avatar:
                             name: 默认图片
+                            disable: true
                 admin_setting_operation:
                     name: 运营设置
                     children:
                         admin_article_setting:
                             name: 资讯
+                            disable: true
                         admin_group_set:
                             name: 小组
+                            disable: true
                         admin_invite_set:
                             name: '邀请码设置'
+                            disable: true
                 admin_setting_finance:
                     name: 账务设置
                     children:
                         admin_payment:
                             name: 支付
+                            disable: true
                             router_name: admin_setting_payment
                         admin_coin_settings:
                             name: 虚拟币
+                            disable: true
                             router_name: admin_coin_settings
                         admin_setting_refund:
                             name: 退款
+                            disable: true
                 admin_setting_mobile:
                     name: 移动端设置
                     children:
                         admin_setting_mobile_settings:
                             name: 移动端设置
+                            disable: true
                             router_name: admin_setting_mobile
                 admin_optimize:
                     name: 优化和备份
@@ -630,6 +721,7 @@ admin:
                     children:
                         admin_optimize_settings:
                             name: 优化和备份
+                            disable: true
                             router_name: admin_optimize
                 admin_jobs:
                     name: 定时任务
@@ -637,6 +729,7 @@ admin:
                     children:
                         admin_jobs_manage:
                             name: 定时任务
+                            disable: true
                             router_name: admin_jobs
                 admin_setting_ip_blacklist:
                     name: IP黑名单
@@ -644,6 +737,7 @@ admin:
                     children:
                         admin_setting_ip_blacklist_manage:
                             name: IP黑名单
+                            disable: true
                             router_name: admin_setting_ip_blacklist
                 admin_setting_post_num_rules:
                     name: 发帖限制设置
@@ -651,6 +745,7 @@ admin:
                     children:
                         admin_setting_post_num_rules_settings:
                             name: 发帖限制设置
+                            disable: true
                             router_name: admin_setting_post_num_rules
                 admin_report_status:
                     name: 系统自检
@@ -658,6 +753,7 @@ admin:
                     children:
                         admin_report_status_list:
                             name: 系统自检
+                            disable: true
                             router_name: admin_report_status
                 admin_logs:
                     name: 系统日志
@@ -665,12 +761,15 @@ admin:
                     children:
                         admin_logs_query:
                             name: 系统操作日志
+                            disable: true
                             router_name: admin_logs
                         admin_logs_prod:
                             name: 程序运行日志
+                            disable: true
 web:
     name: 资源管理
     parent: null
+    disable: true
     children:
         course_manage:
             name: 课程管理
