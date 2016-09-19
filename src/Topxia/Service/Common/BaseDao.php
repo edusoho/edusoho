@@ -48,13 +48,13 @@ abstract class BaseDao
                 if ($currentTime - $data['syncTime'] > 600) {
                     $args[2] += $data['increment'];
                     call_user_func_array($callback, $args);
-                    $redis->set($key, array('increment' => 0, 'syncTime' => $currentTime));
+                    $redis->setex($key, 20 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
                 } else {
                     $data['increment'] += $args[2];
-                    $redis->set($key, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
+                    $redis->setex($key, 20 * 60 * 60, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
                 }
             } else {
-                $redis->set($key, array('increment' => $args[2], 'syncTime' => $currentTime));
+                $redis->setex($key, 20 * 60 * 60, array('increment' => $args[2], 'syncTime' => $currentTime));
             }
         } else {
             call_user_func_array($callback, $args);
