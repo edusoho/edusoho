@@ -109,7 +109,8 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         $sql    = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
 
-        $token = $this->getToken($id);
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
 
         $this->flushCache($token);
 

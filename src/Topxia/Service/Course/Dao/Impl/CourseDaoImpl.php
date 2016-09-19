@@ -132,7 +132,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
-        $course = $this->getCourse($id);
+        $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
 
         $this->flushCache($course);
 
@@ -173,7 +174,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $course = $this->getCourse($id);
+
+        $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
 
         $this->flushCache($course);
 
