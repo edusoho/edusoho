@@ -16,9 +16,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        );
+        });
     }
 
     public function getLearnByUserIdAndLessonId($userId, $lessonId)
@@ -37,7 +35,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=?";
             return $that->getConnection()->fetchAll($sql, array($userId, $courseId)) ?: array();
         }
@@ -49,7 +50,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=? AND status = ?";
             return $that->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ?: array();
         }
@@ -61,7 +65,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:v{$version}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE userId = ? AND courseId = ? AND status = ?";
             return $that->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
         }
@@ -80,7 +87,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $that = $this;
 
-        return $this->fetchCached("lessonId:{$lessonId}:count", $lessonId, function ($lessonId) use ($that) {
+        $versionKey = "{$this->table}:version:lessonId:{$lessonId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("lessonId:{$lessonId}:version:v{$version}:count", $lessonId, function ($lessonId) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE lessonId = ?";
             return $that->getConnection()->fetchColumn($sql, array($lessonId));
         }
@@ -104,14 +114,35 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             throw $this->createDaoException('Insert learn error.');
         }
 
-        return $this->getLearn($this->getConnection()->lastInsertId());
+        $learn = $this->getLearn($this->getConnection()->lastInsertId());
+        $this->flushCache($learn);
+
+        return $learn;
+    }
+
+    protected function flushCache($learn)
+    {
+        $this->incrVersions(array(
+            "{$this->table}:version:userId:{$learn['userId']}",
+            "{$this->table}:version:lessonId:{$learn['lessonId']}",
+            "{$this->table}:version:analysisLessonFinishedDataByTime"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$learn['id']}",
+            "userId:{$learn['userId']}:lessonId:{$learn['lessonId']}"
+        ));
     }
 
     public function updateLearn($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCached();
-        return $this->getLearn($id);
+
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $learn = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $this->flushCache($learn);
+
+        return $learn;
     }
 
     public function deleteLearnsByLessonId($lessonId)
@@ -125,7 +156,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     public function searchLearnCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -133,7 +164,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     public function searchLearnTime($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(learnTime)');
+            ->select('sum(learnTime)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -141,7 +172,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     public function searchWatchTime($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(watchTime)');
+            ->select('sum(watchTime)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -150,10 +181,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -161,23 +192,23 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         if (isset($conditions['targetType'])) {
             $builder = $this->createDynamicQueryBuilder($conditions)
-                            ->from($this->table, $this->table)
-                            ->andWhere("status = :status")
-                            ->andWhere("finishedTime >= :startTime")
-                            ->andWhere("finishedTime <= :endTime");
+                ->from($this->table, $this->table)
+                ->andWhere("status = :status")
+                ->andWhere("finishedTime >= :startTime")
+                ->andWhere("finishedTime <= :endTime");
         } else {
             $builder = $this->createDynamicQueryBuilder($conditions)
-                            ->from($this->table, $this->table)
-                            ->andWhere("status = :status")
-                            ->andWhere("userId = :userId")
-                            ->andWhere("lessonId = :lessonId")
-                            ->andWhere("courseId = :courseId")
-                            ->andWhere("finishedTime >= :startTime")
-                            ->andWhere("finishedTime <= :endTime");
+                ->from($this->table, $this->table)
+                ->andWhere("status = :status")
+                ->andWhere("userId = :userId")
+                ->andWhere("lessonId = :lessonId")
+                ->andWhere("courseId = :courseId")
+                ->andWhere("finishedTime >= :startTime")
+                ->andWhere("finishedTime <= :endTime");
         }
 
         $builder->andWhere("courseId IN (:courseIds)")
-                ->andWhere('lessonId IN (:lessonIds)');
+            ->andWhere('lessonId IN (:lessonIds)');
 
         return $builder;
     }
@@ -186,7 +217,10 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
     {
         $that = $this;
 
-        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
+        $versionKey = "{$this->table}:version:analysisLessonFinishedDataByTime";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count:version:v{$version}", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
             $sql = "SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`finishedTime`>=? AND `finishedTime`<=? AND `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
             return $that->getConnection()->fetchAll($sql, array($startTime, $endTime));
         }
@@ -196,8 +230,9 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
     public function deleteLearn($id)
     {
+        $learn  = $this->getLearn($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
+        $this->flushCache($learn);
         return $result;
     }
 }
