@@ -8,7 +8,7 @@ abstract class CourseBaseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在'));
         }
 
         $previewAs = $request->query->get('previewAs');
@@ -28,11 +28,11 @@ abstract class CourseBaseController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $response = $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            $response = $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
-            $response = $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            $response = $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%courseTitle%》的学员，请先购买或加入学习。', array('%courseTitle%' => $course['title'])), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         return array($course, $member, $response);

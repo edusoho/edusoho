@@ -48,7 +48,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
             $account = $this->getAccountDao()->getAccountByUserId($userId, true);
             if (empty($account)) {
-                throw $this->createServiceException("Account #{$userId} is not exist.");
+                throw $this->createServiceException($this->getKernel()->trans('Account #%userId% is not exist.',array('%userId%' => $userId)));
             }
 
             $inflow = array();
@@ -57,7 +57,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
                 'sn'=>$this->makeSn(),
                 'type'=>'inflow',
                 'amount'=>$coinAmount,
-                'name'=>"兑换".$coinAmount.$coinSetting['coin_name'],
+                'name'=>$this->getKernel()->trans('兑换').$coinAmount.$coinSetting['coin_name'],
                 'category'=>"exchange",
                 'orderSn'=>'E'.$this->makeSn(),
                 'createdTime'=>time(),
@@ -101,11 +101,11 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
     {   
         if(!is_numeric($value))
         {
-            throw $this->createServiceException('充值金额必须为整数!');
+            throw $this->createServiceException($this->getKernel()->trans('充值金额必须为整数!'));
             
         }
         $coinSetting=$this->getSettingService()->get('coin',array());
-        $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:"虚拟币";
+        $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:$this->getKernel()->trans('虚拟币');
 
         $account=$this->getAccount($id);
         $message = array(
@@ -120,11 +120,11 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
     {   
         if(!is_numeric($value))
         {
-            throw $this->createServiceException('充值金额必须为整数!');
+            throw $this->createServiceException($this->getKernel()->trans('充值金额必须为整数!'));
         }
         
         $coinSetting=$this->getSettingService()->get('coin',array());
-        $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:"虚拟币";
+        $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:$this->getKernel()->trans('虚拟币');
         $account=$this->getAccountDao()->getAccount($id);
 
         

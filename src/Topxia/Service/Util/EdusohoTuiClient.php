@@ -4,8 +4,9 @@ namespace Topxia\Service\Util;
 
 use \RuntimeException;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Common\BaseService;
 
-class EdusohoTuiClient
+class EdusohoTuiClient extends BaseService
 {
     public function getToken()
     {
@@ -51,7 +52,7 @@ class EdusohoTuiClient
     {
         $result = CloudAPIFactory::create('tui')->post('/tui/message/bulletin/send',array(
             'esBulletinId' => $announcement['id'],
-            'title' => '网校公告',
+            'title' => $this->getKernel()->trans('网校公告'),
             'content' => $announcement['content']
         ));
         return $result;

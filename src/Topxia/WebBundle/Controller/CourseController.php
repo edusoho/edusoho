@@ -266,7 +266,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -289,7 +289,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -343,7 +343,7 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -438,11 +438,11 @@ class CourseController extends CourseBaseController
         $user                  = $this->getCurrentUser();
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException('您不是课程的学员。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
 
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
 
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
@@ -475,21 +475,21 @@ class CourseController extends CourseBaseController
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
 
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         $course = $this->getCourseService()->getCourse($id);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
         if ($course['approval'] == 1 && ($user['approvalStatus'] != 'approved')) {
-            return $this->createMessageResponse('info', "该课程需要通过实名认证，你还没有通过实名认证。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该课程需要通过实名认证，你还没有通过实名认证。'), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         if (!$this->getCourseService()->canTakeCourse($id)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您还不是课程《%courseTitle%》的学员，请先购买或加入学习。', array('%courseTitle%' => $course['title'])), null, 3000, $this->generateUrl('course_show', array('id' => $id)));
         }
 
         if ($this->isPluginInstalled('InternalTraining')) {
@@ -523,7 +523,7 @@ class CourseController extends CourseBaseController
                 }
             }
         } catch (Exception $e) {
-            throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('抱歉，未发布课程不能学习！'));
         }
 
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
@@ -892,13 +892,13 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException('订单不存在!');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));

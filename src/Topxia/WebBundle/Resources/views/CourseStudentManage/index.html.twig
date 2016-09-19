@@ -21,7 +21,6 @@
           {% endif %}
 
           <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</button>
-        
       {% endif %}
     {% endif %}
   </div>
@@ -29,12 +28,12 @@
   <div class="panel-body">
     <ul class="nav nav-tabs mbl">
       <li class="{% if submenu|default() == 'student' %}active{% endif %}">
-        <a href="{{ path('course_manage_students',{id:course.id})}}">正式学员
+        <a href="{{ path('course_manage_students',{id:course.id})}}">{{'正式学员'|trans}}
         </a>
       </li>
 
       <li class="{% if submenu|default() == 'record' %}active{% endif %}">
-        <a href="{{ path('course_manage_record',{id:course.id})}}">退出记录
+        <a href="{{ path('course_manage_record',{id:course.id})}}">{{'退出记录'|trans}}
         </a>
       </li>
     </ul>

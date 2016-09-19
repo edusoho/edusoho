@@ -23,6 +23,6 @@
   {% endif %}
   >
   {% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} 
-    {{ menu.name }}
+    {{ menu.name|trans }}
   </a>
 {% endmacro %}

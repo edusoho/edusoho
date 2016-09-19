@@ -16,7 +16,7 @@ class CardController extends BaseController
         $cardType = $request->query->get('cardType');
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
         }
 
         if ($cardType == 'moneyCard') {

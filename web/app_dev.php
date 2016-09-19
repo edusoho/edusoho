@@ -50,6 +50,7 @@ $serviceKernel->setEnvVariable(array(
     'basePath'      => $request->getBasePath(),
     'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
 ));
+$serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
@@ -63,6 +64,7 @@ $currentUser->fromArray(array(
     'roles'     => array()
 ));
 $serviceKernel->setCurrentUser($currentUser);
+
 // END: init service kernel
 
 // NOTICE: 防止请求捕捉失败而做异常处理

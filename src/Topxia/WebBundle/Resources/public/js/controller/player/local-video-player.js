@@ -32,7 +32,7 @@ define(function(require, exports, module) {
 
 			player.on('error', function(error){
 			    that.set("hasPlayerError", true);
-			    var message = '您的浏览器不能播放当前视频。';
+			    var message = Translator.trans('您的浏览器不能播放当前视频。');
 			    Notify.danger(message, 60);
 			});
 

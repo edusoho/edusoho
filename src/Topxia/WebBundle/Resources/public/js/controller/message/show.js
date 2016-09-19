@@ -8,12 +8,12 @@ define(function(require, exports, module) {
             $("#course-reply-btn").addClass("disabled");
             $("#course-reply-btn").attr("disabled",true);
             if($("#message_reply_content").val().length >= 500){
-                Notify.danger("不好意思，私信内容长度不能超过500!");
+                Notify.danger(Translator.trans('不好意思，私信内容长度不能超过500!'));
                 return false;
             }
 
             if($.trim($("#message_reply_content").val()).length == 0){
-                Notify.danger("不好意思，私信内容不允许为空!");
+                Notify.danger(Translator.trans('不好意思，私信内容不允许为空!'));
                 return false;
             }
 
@@ -29,11 +29,11 @@ define(function(require, exports, module) {
         $('.message-list').on('click', '.delete-message', function(e){
 
             if( $(".message-list").find(".message-me").length  == 1){
-                if (!confirm('本条信息为最后一条，真的要删除该私信吗？')) {
+                if (!confirm(Translator.trans('本条信息为最后一条，真的要删除该私信吗？'))) {
                     return false;
                 }
             } else {
-                if (!confirm('真的要删除该私信吗？')) {
+                if (!confirm(Translator.trans('真的要删除该私信吗？'))) {
                     return false;
                 }
             }

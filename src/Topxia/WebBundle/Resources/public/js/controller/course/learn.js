@@ -292,7 +292,7 @@ define(function(require, exports, module) {
                         var lessonVideoDiv = $('#lesson-video-content');
 
                         if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                            Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                            Notify.warning(Translator.trans('视频文件正在转换中，稍后完成后即可查看'));
                             return;
                         }
 
@@ -360,7 +360,8 @@ define(function(require, exports, module) {
 
                     var courseId = lesson.courseId;
                     var lessonId = lesson.id;
-                    var $liveNotice = "<p>直播将于 <strong>" + liveStartTimeFormat + "</strong> 开始，于 <strong>" + liveEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                    //var $liveNotice = "<p>"+Translator.trans('直播将于')+ "<strong>" + liveStartTimeFormat + "</strong>"+Translator.trans('开始，于')+"<strong>" + liveEndTimeFormat + "</strong>"+Translator.trans(' 结束，请在课前10分钟内提早进入。')+"</p>";
+                    var $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
                     if (iID) {
                         clearInterval(iID);
                     }
@@ -377,23 +378,23 @@ define(function(require, exports, module) {
                         modulo = modulo % (60 * 60);
                         var minutes = Math.floor(modulo / 60);
                         var seconds = modulo % 60;
-                        var $replayGuid = "老师们：";
+                        var $replayGuid = Translator.trans('老师们：');
                         $replayGuid += "<br>";
 
                         if (lesson.liveProvider == 1) {
-                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
-                            $replayGuid += "<span style='color:red'>录制面板</span>";
-                            $replayGuid += "”，录制完成后点击“";
-                            $replayGuid += "<span style='color:red'>暂停</span>”";
-                            $replayGuid += "结束录播，录播结束后在“";
-                            $replayGuid += "<span style='color:red'>录播管理</span>";
-                            $replayGuid += "”界面生成回放。";
+                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;"+Translator.trans('录制直播课程时，需在直播课程间点击');
+                            $replayGuid += "<span style='color:red'>"+Translator.trans('录制面板')+"</span>";
+                            $replayGuid += Translator.trans('，录制完成后点击');
+                            $replayGuid += "<span style='color:red'>"+Translator.trans('暂停')+"</span>";
+                            $replayGuid += Translator.trans('结束录播，录播结束后在');
+                            $replayGuid += "<span style='color:red'>"+Translator.trans('录播管理')+"</span>";
+                            $replayGuid += Translator.trans('界面生成回放。');
                             $replayGuid += "<br>";
                         } else {
                             $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                            $replayGuid += "直播平台“<span style='color:red'>下课后</span>”且“<span style='color:red'>直播时间</span>”结束后，在课时管理的“";
-                            $replayGuid += "<span style='color:red'>录播管理</span>";
-                            $replayGuid += "”点击生成回放。";
+                            $replayGuid += Translator.trans('直播平台')+"<span style='color:red'>"+Translator.trans('下课后')+"</span>"+Translator.trans('且')+"<span style='color:red'>"+Translator.trans('直播时间')+"</span>"+Translator.trans('结束后，在课时管理的');
+                            $replayGuid += "<span style='color:red'>"+Translator.trans('录播管理')+"</span>";
+                            $replayGuid += Translator.trans('点击生成回放。');
                             $replayGuid += "<br>";
                         }
 
@@ -401,31 +402,31 @@ define(function(require, exports, module) {
 
 
                         if (0 < startLeftSeconds && startLeftSeconds < 7200) {
-                            $liveNotice = "<p>直播将于 <strong>" + liveStartTimeFormat + "</strong> 开始，于 <strong>" + liveEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                           // $liveNotice = "<p>"+Translator.trans('直播将于') +"<strong>" + liveStartTimeFormat + "</strong>"+Translator.trans('开始，于')+" <strong>" + liveEndTimeFormat + "</strong>"+Translator.trans('结束，请在课前10分钟内提早进入。')+"</p>";
+                            $liveNotice = "<p>"+Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。',{liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>',liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'})+"</p>";
                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                             if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
-                                $countDown += "<p>还剩" + hours + "小时" + minutes + "分钟" + seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                $countDown += "<p>"+Translator.trans('还剩') + hours + Translator.trans('小时') + minutes + Translator.trans('分钟') + seconds + Translator.trans('秒')+"&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
                             } else {
-                                $countDown = "<p>还剩" + hours + "小时" + minutes + "分钟" + seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                $countDown = "<p>"+Translator.trans('还剩') + hours + Translator.trans('小时') + minutes + Translator.trans('分钟') + seconds + Translator.trans('秒')+"&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
                             }
                         };
-
                         if (startLeftSeconds <= 0) {
                             clearInterval(iID);
-                            $liveNotice = "<p>直播已经开始，直播将于 <strong>" + liveEndTimeFormat + "</strong> 结束。</p>";
+                            $liveNotice = "<p>" + Translator.trans('直播已经开始，直播将于%liveEndTime%结束。', {liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>'}) + "</p>";
                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                             if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
-                                $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
                             } else {
-                                $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>"+Translator.trans('进入直播教室')+"</a><br><br></p>";
                             }
                         };
 
                         if (endLeftSeconds <= 0) {
 
-                            $liveNotice = "<p>直播已经结束</p>";
+                            $liveNotice = "<p>"+Translator.trans('直播已经结束')+"</p>";
                             $countDown = "";
 
                             if (lesson.replayStatus == 'videoGenerated') {
@@ -471,8 +472,8 @@ define(function(require, exports, module) {
 
                 } else if (lesson.type == 'testpaper') {
                     var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
-                    var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
-                    var html = '<span class="text-info">正在载入，请稍等...</span>';
+                    var html = '<span class="text-info">'+Translator.trans('请点击「开始考试」按钮，在新开窗口中完成考试。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('开始考试')+'</a></span>';
+                    var html = '<span class="text-info">'+Translator.trans('正在载入，请稍等...')+'</span>';
                     $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                     $("#lesson-testpaper-content").show();
 
@@ -486,7 +487,7 @@ define(function(require, exports, module) {
 
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
-                        var $testNotice = "<p>实时考试将于 <strong>" + testStartTimeFormat + "</strong> 开始，将于<strong>" + testEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                        var $testNotice = "<p>" + Translator.trans('实时考试将于%testStartTime%开始，将于%testEndTime%结束，请在课前10分钟内提早进入。',{testStartTime: '<strong>' + testStartTimeFormat + '</strong>','testEndTime': '<strong>' + testEndTimeFormat + '</strong>'}) + "</p>";
                         if (iID) {
                             clearInterval(iID);
                         }
@@ -509,16 +510,16 @@ define(function(require, exports, module) {
                             var limitedSeconds = (testEndLeftSeconds % 60)
 
                             if (0 < testStartLeftSeconds) {
-                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">' + days + '天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + days + '</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + hours + '</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + minutes + '</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + seconds + '</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
+                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>'+Translator.trans('欢迎参加考试，本考试离开考还有')+'<span class="gray-darker plm">' + days + Translator.trans('天')+'</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + days + '</span>'+Translator.trans('天')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + hours + '</span>'+Translator.trans('时')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + minutes + '</span>'+Translator.trans('分')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + seconds + '</span>'+Translator.trans('秒')+'</p>   <p class="text-center color-gray">'+Translator.trans('考试开始后，请点击')+'<a class="mlm mrm btn btn-sm btn-default" disabled>'+Translator.trans('开始考试')+'</a>'+Translator.trans('进入')+'</p>';
                             };
 
                             if (0 < testStartRightSeconds) {
-                                $testNotice = '<p class="text-center mtm mbm"><i class="color-warning mrm es-icon es-icon-info" ></i>考试剩余时间</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedHouse + '</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedMinutes + '</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedSeconds + '</span>秒</p>   <p class="text-center color-gray">请点击<a href="' + url + '" class="mlm mrm btn btn-sm  btn-primary" >开始考试</a>进入</p>';
+                                $testNotice = '<p class="text-center mtm mbm"><i class="color-warning mrm es-icon es-icon-info" ></i>'+Translator.trans('考试剩余时间')+'</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>'+Translator.trans('天')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedHouse + '</span>'+Translator.trans('时')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedMinutes + '</span>'+Translator.trans('分')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedSeconds + '</span>'+Translator.trans('秒')+'</p>   <p class="text-center color-gray">'+Translator.trans('请点击')+'<a href="' + url + '" class="mlm mrm btn btn-sm  btn-primary" >'+Translator.trans('开始考试')+'</a>'+Translator.trans('进入')+'</p>';
                             };
 
                             if (testEndLeftSeconds <= 0) {
                                 clearInterval(iID);
-                                $testNotice = '<p class="text-center mtl mbl color-gray"><i class="color-gray mrm es-icon es-icon-info"></i>考试已经结束</p><p class="text-center color-gray mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>秒</p>';
+                                $testNotice = '<p class="text-center mtl mbl color-gray"><i class="color-gray mrm es-icon es-icon-info"></i>'+Translator.trans('考试已经结束')+'</p><p class="text-center color-gray mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>'+Translator.trans('天')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>'+Translator.trans('时')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>'+Translator.trans('分')+'<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>'+Translator.trans('秒')+'</p>';
 
                             };
 
@@ -544,19 +545,19 @@ define(function(require, exports, module) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
                             } else {
                                 if (result.status == 'nodo') {
-                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
+                                    html = Translator.trans('欢迎参加考试，请点击「开始考试」按钮。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('开始考试')+'</a>';
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
                                     
-                                    html = '试卷已批阅，成绩：' + result.score + '／' + result.totalScore; 
+                                    html = Translator.trans('试卷已批阅，成绩') + '：' + result.score + '／' + result.totalScore; 
                                     if (result.passedStatus == 'unpassed') {
-                                        html += '<span class="text-danger mls mrs">未通过</span>';
+                                        html += '<span class="text-danger mls mrs">' + Translator.trans('未通过') + '</span>';
                                     } else {
-                                        html += '<span class="text-success mls mrs">已通过</span>';
+                                        html += '<span class="text-success mls mrs">' + Translator.trans('已通过') + '</span>';
                                     }
 
-                                    html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">查看结果</a>';
+                                    html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
                                     if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
@@ -586,10 +587,10 @@ define(function(require, exports, module) {
                                             if (second <= 9) second = '0' + second;
                                             
                                             if (diffTime <= 0) {
-                                                countDownHtml = html + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
+                                                countDownHtml = html + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">' + Translator.trans('再做一次') + '</a>';
                                             } else {
-                                                countDownHtml = html + '<a href="javascript:;" class="btn btn-default btn-sm mrs" disabled="disabled">再做一次</a>';
-                                                countDownHtml += '<span class="text-warning">重考倒计时:'+ day +'天' + hour + '小时' + minute + '分钟' + second + '秒</span>';
+                                                countDownHtml = html + '<a href="javascript:;" class="btn btn-default btn-sm mrs" disabled="disabled">' + Translator.trans('再做一次') + '</a>';
+                                                countDownHtml += '<span class="text-warning">' + Translator.trans('重考倒计时') + ':'+ day + Translator.trans('天') + hour + Translator.trans('小时') + minute + Translator.trans('分钟') + second + Translator.trans('秒') + '</span>';
                                             }
                                             
                                             $("#lesson-testpaper-content").find('.lesson-content-text-body').html(countDownHtml);
@@ -601,13 +602,13 @@ define(function(require, exports, module) {
 
                                         iID = setInterval(generateTestHtml, 1000);
                                     } else if (lesson.doTimes == 0 && lesson.redoInterval == 0) {
-                                        html += '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>';
+                                        html += '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">' + Translator.trans('再做一次') + '</a>';
                                     }
 
                                 } else if (result.status == 'doing' || result.status == 'paused') {
-                                    html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
+                                    html = Translator.trans('试卷未完全做完。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('继续考试')+'</a>';
                                 } else if (result.status == 'reviewing') {
-                                    html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
+                                    html = Translator.trans('试卷正在批阅。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('查看试卷')+'</a>'
                                 }
                             }
 
@@ -626,7 +627,7 @@ define(function(require, exports, module) {
                             return;
                         }
 
-                        var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
+                        var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">'+Translator.trans('已经到最后一张图片了哦')+'<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
                         $("#lesson-ppt-content").html(html).show();
 
                         var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
@@ -687,11 +688,11 @@ define(function(require, exports, module) {
 
                     if (!swfobject.hasFlashPlayerVersion('11')) {
                         var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
-                        html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-                        html += '<span aria-hidden="true">×</span>';
-                        html += '</button>';
-                        html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>';
-                        html += '</div>';
+                            html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                            html += '<span aria-hidden="true">×</span>';
+                            html += '</button>';
+                            html += Translator.trans('您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。') + '<a target="_blank" href="http://www.adobe.com/go/getflashplayer">' + Translator.trans('点击安装') + '</a>';
+                            html += '</div>';
                         $("#lesson-swf-content").html(html);
                         $("#lesson-swf-content").show();
                     } else {
@@ -795,18 +796,18 @@ define(function(require, exports, module) {
         },
 
         _getCountDown: function(days, hours, minutes, seconds) {
-            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
+            $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + days + "</strong>"+Translator.trans('天')+"<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
 
             if (days == 0) {
-                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + hours + "</strong>"+Translator.trans('小时')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
             };
 
             if (hours == 0 && days != 0) {
-                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + days + "</strong>"+Translator.trans('天')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
             };
 
             if (hours == 0 && days == 0) {
-                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                $countDown = Translator.trans('还剩: ')+"<strong class='text-info'>" + minutes + "</strong>"+Translator.trans('分钟')+"<strong class='text-info'>" + seconds + "</strong>"+Translator.trans('秒')+"<br><br>";
             };
 
             return $countDown;          

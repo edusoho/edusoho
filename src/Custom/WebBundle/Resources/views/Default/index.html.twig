@@ -12,11 +12,11 @@
         <div class="header-title hidden-xs" >{% set postGroup = data('PostGroup', {id:primaryPost.groupId}) %}{{ postGroup.name|default() }}/{{ primaryPost.name|default() }}</div>
       {% endif %}
       <div class="header-content clearfix">
-        <div class="item header-task"> 当前任务：<span>
+        <div class="item header-task"> {{'当前任务'|trans}}：<span>
           {% if currentCourse %}
             {{ currentCourse.title|default() }}
           {% else %}
-            当前没有学习任务
+            {{'当前没有学习任务'|trans}}
           {% endif %}
         </span></div>
 
@@ -36,12 +36,11 @@
         {% endif %}
 
         {% if currentCourse.studyStatus|default() == 'learning' %}
-          <a class="pull-left btn btn-primary" target="_blank" role="button" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}">
-            <i class="iconfont icon-unlock1"></i>继续学习
+          <a class="btn btn-primary" target="_blank" role="button" href="{{ path('course_learn', {id:currentCourse.id}) }}#lesson/{{nextLearnLesson.id|default()}}">
+            <i class="iconfont icon-unlock1"></i>{{'继续学习'|trans}}
           </a>
         {% elseif currentCourse.studyStatus|default(false) %}
-          <button data-toggle="modal" data-target="#modal" data-url="{{ path('internal_training_course_unlock', {courseId:currentCourse.id}) }}" type="button" class="pull-left btn btn-primary"><i class="iconfont icon-lock"></i>解锁学习</button>
-        {% else %}
+          <button data-toggle="modal" data-target="#modal" data-url="{{ path('internal_training_course_unlock', {courseId:currentCourse.id}) }}" type="button" class="btn btn-primary"><i class="iconfont icon-lock"></i>{{'解锁学习'|trans}}</button>
         {% endif %}
 
       </div>
@@ -50,7 +49,7 @@
   <div class="container content-section">
     {% if not postCoursePackages %}
       <div class="panel-group" id="accordion" role="tablist">
-        <h1 align="center" style="line-height: 400px;font-size: 50px">当前没有课程需要学习</h1>
+        <h1 align="center" style="line-height: 400px;font-size: 50px">{{'当前没有课程需要学习'|trans}}</h1>
       </div>
     {% else %}
       <div class="panel-group" id="accordion" role="tablist">
@@ -86,7 +85,7 @@
                               {% if postCourseCategory.categoryId %}
                                 {% set category = data('Category', {categoryId:postCourseCategory.categoryId}) %}{{category.name}}
                               {% else %}
-                                默认分类
+                                {{'默认分类'|trans}}
                               {% endif %}
                             </div>
                         </div>
