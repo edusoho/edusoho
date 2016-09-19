@@ -185,7 +185,9 @@ abstract class BaseDao
         $redis = $this->getRedis();
 
         if ($redis) {
-            $redis->delete($keys);
+            foreach ($keys as $key) {
+                $redis->delete($key);
+            }
         }
 
         foreach ($keys as $key) {
