@@ -240,7 +240,7 @@ class PermissionBuilder
         }
 
         $environment = ServiceKernel::instance()->getEnvironment();
-        $cacheFile   = "../app/cache/" . $environment . "/menus_" . $this->position . ".php";
+        $cacheFile   = "../app/cache/" . $environment . "/menus_cache_" . $this->position . ".php";
         if ($environment != "dev" && file_exists($cacheFile)) {
             $this->cached['getOriginPermissions'] = include $cacheFile;
             return $this->cached['getOriginPermissions'];
