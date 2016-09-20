@@ -8,7 +8,8 @@ define(function(require, exports, module) {
             element: $el,
             initUrl: $el.data('initUrl'),
             finishUrl: $el.data('finishUrl'),
-            uploadAuthUrl: $el.data('uploadAuthUrl')
+            uploadAuthUrl: $el.data('uploadAuthUrl'),
+            fileSingleSizeLimit: 1024 * 1024 * 1024 * 2   //2G
         });
 
         esuploader.on('preupload', function(file){

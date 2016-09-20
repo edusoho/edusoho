@@ -161,8 +161,9 @@ class OrderController extends BaseController
             //虚拟币抵扣率比较
             $target = $processor->getTarget($targetId);
 
-            $maxRate = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate))) {
+            $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
+            $priceCoin = $priceType == 'RMB' ? $totalPrice * $cashRate : $totalPrice;
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', $this->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 
