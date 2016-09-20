@@ -68,7 +68,7 @@ define(function(require, exports, module) {
         });
     }
 
-    function noticeModal() {
+    /*function noticeModal() {
         var noticeUrl = $('#admin-notice').val();
         $.post(noticeUrl, function(data){
             if (data['result']) {
@@ -79,6 +79,6 @@ define(function(require, exports, module) {
                 });
             }
         })
-    }
+    }*/
 
 });
