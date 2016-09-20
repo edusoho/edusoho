@@ -32,10 +32,10 @@ class QQVideoItemParserTest extends BaseTestCase
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
 
-        $video = $this->createParser()->parse('http://v.qq.com/x/cover/xrrzykd6tc27yjm/n0021xgipkj.html');
+        $video = $this->createParser()->parse('http://v.qq.com/x/cover/32kshc0e1wcifxj/n0329caqnyf.html');
         $this->assertEquals('video', $video['type']);
         $this->assertEquals('qqvideo', $video['source']);
-        $this->assertEquals('qqvideo:n0021xgipkj', $video['uuid']);
+        $this->assertEquals('qqvideo:n0329caqnyf', $video['uuid']);
         $this->assertArrayHasKey('name', $video);
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
