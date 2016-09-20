@@ -218,7 +218,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('只有未发布班级可以删除，操作失败。'));
         }
 
-        $this->tryManageClassroom($id);
+        $this->tryManageClassroom($id, 'admin_classroom_delete');
 
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->deleteClassroom($id);
@@ -292,14 +292,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function publishClassroom($id)
     {
-        $this->tryManageClassroom($id);
+        $this->tryManageClassroom($id, 'admin_classroom_open');
 
         $this->updateClassroom($id, array("status" => "published"));
     }
 
     public function closeClassroom($id)
     {
-        $this->tryManageClassroom($id);
+        $this->tryManageClassroom($id, 'admin_classroom_close');
 
         $this->updateClassroom($id, array("status" => "closed"));
     }
@@ -1007,9 +1007,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    public function tryManageClassroom($id)
+    public function tryManageClassroom($id, $actionPermission=null)
     {
-        if (!$this->canManageClassroom($id)) {
+        if (!$this->canManageClassroom($id, $actionPermission)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
         }
     }

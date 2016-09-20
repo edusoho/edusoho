@@ -2,6 +2,7 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\NotFoundException;
@@ -2531,6 +2532,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function tryTakeCourse($courseId)
     {
         $course = $this->getCourse($courseId);
+
+        if(empty($course)){
+            throw new ResourceNotFoundException('course', $courseId);
+        }
 
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能查看课程内容，请先购买课程！'));
