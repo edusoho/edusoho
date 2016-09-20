@@ -6,13 +6,18 @@
 
 {% block main %}
 
+<style>
+    .col-md-1{
+        padding: 0px;
+    }
+</style>
 
 <ul class="list-table" id="org-table" style="margin-bottom: 0">
    <li class="th">
         <div class="row">
             <div class="td col-md-3">{{ '名称'|trans }}</div>
-            <div class="td col-md-1">{{ '编码'|trans }}</div>
-            <div class="td col-md-2">{{ '辖下机构数'|trans }}</div>
+            <div class="td col-md-2">{{ '编码'|trans }}</div>
+            <div class="td col-md-1">{{ '辖下机构数'|trans }}</div>
             <div class="td col-md-2">{{ '创建者'|trans }}</div>
             <div class="td col-md-2">{{ '创建时间'|trans }}</div>
             <div class="td col-md-2">{{ '操作'|trans }}</div>
