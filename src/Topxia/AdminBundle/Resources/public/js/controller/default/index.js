@@ -11,7 +11,7 @@ define(function(require, exports, module) {
                 Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
-        noticeModal();
+        //noticeModal();
         step1();
     };
 
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
         });
     }
 
-    /*function noticeModal() {
+    function noticeModal() {
         var noticeUrl = $('#admin-notice').val();
         $.post(noticeUrl, function(data){
             if (data['result']) {
@@ -79,6 +79,6 @@ define(function(require, exports, module) {
                 });
             }
         })
-    }*/
+    }
 
 });
