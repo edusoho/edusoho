@@ -44,7 +44,7 @@
     <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
       <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{'学员管理'|trans}}</a>
     </li>
-  {% endfor %}
+  {% endif %}
 
   {% if canHandle %}
     <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
