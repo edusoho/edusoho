@@ -277,7 +277,7 @@ admin:
                             name: 公开课推荐
                             disable: true
                         admin_opencourse_analysis:
-                            name: 公开课同级
+                            name: 公开课统计
                             disable: true
                 admin_live_course:
                     name: 直播管理
