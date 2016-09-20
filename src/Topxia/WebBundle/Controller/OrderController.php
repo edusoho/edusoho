@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
@@ -162,8 +163,9 @@ class OrderController extends BaseController
             $target = $processor->getTarget($targetId);
 
             $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
-            $priceCoin = $priceType == 'RMB' ? $totalPrice * $cashRate : $totalPrice;
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($priceCoin * $maxRate))) {
+            $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
+
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', $this->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 
