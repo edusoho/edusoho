@@ -146,20 +146,15 @@ class Tree
 
         while (!empty($buildingArray)) {
             $buildingCount = count($buildingArray);
-            foreach ($buildingArray as $value) {
+            foreach ($buildingArray as $index => $value) {
                 if (isset($map[$value[$parentKey]])) {
-                    $tree = new Tree($value);
-                    $map[$value[$key]] = $tree;
                     $parent = $map[$value[$parentKey]];
+                    $tree = new Tree($value, $parent);
                     $parent->addChild($tree);
-                    $tree->setParent($parent);
+                    $map[$value[$key]] = $tree;
+                    unset($buildingArray[$index]);
                 }
             }
-
-            $completedArrayKeys = array_keys($map);
-            $buildingArray = array_filter($buildingArray, function ($array) use ($key, $completedArrayKeys) {
-                return !in_array($array[$key], $completedArrayKeys, true);
-            });
 
             //一次构建树后剩下元素不变。 说明这些元素的父节点不存在树的节点里，是构建不出的树的
             if($buildingCount === count($buildingArray)){
