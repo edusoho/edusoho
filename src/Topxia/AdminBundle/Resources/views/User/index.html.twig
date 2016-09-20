@@ -8,13 +8,6 @@
 
   {{ web_macro.flash_messages() }}
 
-  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    <div class="mbm">
-      {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
-      <select class="form-control" name="datePicker" id="datePicker">
-        {{ select_options({longinDate:'登录时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
-      </select>
-
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
 
