@@ -4,6 +4,7 @@ namespace Permission\Common;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\PluginVersionToolkit;
 use Topxia\Common\Tree;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -198,6 +199,10 @@ class PermissionBuilder
 
         foreach ($apps as $app) {
             if ($app['type'] != 'plugin') {
+                continue;
+            }
+
+            if(!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
                 continue;
             }
 
