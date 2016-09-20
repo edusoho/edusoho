@@ -6,6 +6,7 @@ use Permission\Service\Role\RoleService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Service\Common\BaseService;
 
 class RoleServiceImpl extends BaseService implements RoleService
@@ -26,6 +27,11 @@ class RoleServiceImpl extends BaseService implements RoleService
         $user                  = $this->getCurrentUser();
         $role['createdUserId'] = $user['id'];
         $role                  = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
+
+        if(!ArrayToolkit::requireds($role, array('name', 'code'))){
+            throw new UnexpectedValueException('缺乏必要字段');
+        }
+
         $this->getLogService()->info('role', 'create_role', '新增权限用户组"' . $role['name'] . '"', $role);
         return $this->getRoleDao()->createRole($role);
     }
