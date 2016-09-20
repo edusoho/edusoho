@@ -40,6 +40,11 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $this->checkChangeRole($id);
         $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
+
+        if(isset($fields['code'])){
+            unset($fields['code']);
+        }
+
         $fields['updatedTime'] = time();
         $role                  = $this->getRoleDao()->updateRole($id, $fields);
         $this->getLogService()->info('role', 'update_role', '更新权限用户组"' . $role['name'] . '"', $role);
