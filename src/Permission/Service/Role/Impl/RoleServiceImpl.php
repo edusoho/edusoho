@@ -116,10 +116,10 @@ class RoleServiceImpl extends BaseService implements RoleService
         $getTeacherRoles = $getTeacherRoles->column('code');
 
         $roles = array(
-            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles,
-            'ROLE_ADMIN'       => array_diff($getSuperAdminRoles, $getAdminForbidRoles),
+            'ROLE_USER'        => array(),
             'ROLE_TEACHER'     => $getTeacherRoles,
-            'ROLE_USER'        => array()
+            'ROLE_ADMIN'       => array_diff($getSuperAdminRoles, $getAdminForbidRoles),
+            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles
         );
 
         foreach ($roles as $key => $value) {
