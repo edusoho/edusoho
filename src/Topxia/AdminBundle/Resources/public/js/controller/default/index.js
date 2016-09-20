@@ -11,7 +11,7 @@ define(function(require, exports, module) {
                 Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
-        noticeModal();
+        //noticeModal();
         step1();
     };
 
