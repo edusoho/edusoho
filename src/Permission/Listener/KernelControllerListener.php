@@ -1,7 +1,6 @@
 <?php
 namespace Permission\Listener;
 
-use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -33,7 +32,13 @@ class KernelControllerListener
 
             if ($needJudgePermission
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-                $permissions = $this->getPermissionsByRoute($route);
+                $route = $this->container
+                    ->get('router')
+                    ->getMatcher()
+                    ->match($request->getPathInfo());
+
+                $permissions = $route['_permission'];
+
                 if (empty($permissions)) {
                     return;
                 }
@@ -50,49 +55,5 @@ class KernelControllerListener
                 });
             }
         }
-    }
-
-    private function getPermissionsByRoute($_route)
-    {
-        $kernel = $this->container->get('kernel');
-
-        if($kernel->isDebug()){
-            $permissions = $this->_getPermissions($_route);
-        }else{
-            $permissions = $this->_getPermissionsByCache($_route);
-        }
-
-        return $permissions;
-    }
-
-    private function _getPermissionsByCache($_route)
-    {
-        $kernel = $this->container->get('kernel');
-        $cacheFile = $kernel->getCacheDir() . '/route_permissions_meta.php';
-        if(file_exists($cacheFile)){
-            $permissions = include $cacheFile;
-        }else{
-            $finder = new Finder();
-            $finder->in($kernel->getCacheDir() . '/route_permissions');
-            $permissions = array();
-
-            foreach ($finder as $file){
-                $permissions = array_merge($permissions, include $file->getRealPath());
-            }
-
-            $cache = "<?php \nreturn " . var_export($permissions, true) . ';';
-            file_put_contents($cacheFile, $cache);
-        }
-
-        return isset($permissions[$_route]) ? $permissions[$_route] : array();
-    }
-
-    /**
-     * @param $_route
-     * @return array
-     */
-    private function _getPermissions($_route)
-    {
-        return $this->container->get('router')->getRouteCollection()->get($_route)->getPermissions();
     }
 }
