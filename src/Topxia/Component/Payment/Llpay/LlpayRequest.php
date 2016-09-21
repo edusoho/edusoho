@@ -63,7 +63,7 @@ class LlpayRequest extends Request
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
         $user = $this->geUserService()->getUser($params['userId']);
-        $converted['risk_item']  = json_encode(array('frms_ware_category'=>1008,'user_info_mercht_userno'=>$identify."_".$params['userId'],'user_info_dt_register'=>date('YmdHis', $user['createdTime'])));
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$identify."_".$params['userId'],'user_info_dt_register'=>date('YmdHis', $user['createdTime'])));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
