@@ -32,11 +32,12 @@ class KernelControllerListener
 
             if ($needJudgePermission
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-                $permissions = $this->container
+                $route = $this->container
                     ->get('router')
-                    ->getRouteCollection()
-                    ->get($route)
-                    ->getPermissions();
+                    ->getMatcher()
+                    ->match($request->getPathInfo());
+
+                $permissions = $route['_permission'];
 
                 if (empty($permissions)) {
                     return;

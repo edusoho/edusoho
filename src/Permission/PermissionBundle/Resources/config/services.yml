@@ -1,6 +1,7 @@
 parameters:
     routing.loader.yml.class: Permission\Loader\YamlFileLoader
     permission.path_regular_expression: ['/^\/admin/', '/^\/course\/\d+\/manage/', '/^\/classroom\/\d+\/manage/']
+    router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
 
 services:
     permission.twig.permission_extension:
@@ -26,3 +27,10 @@ services:
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    routing.loader.yml:
+        class: '%routing.loader.yml.class%'
+        public: true
+        arguments: ['@file_locator']
+        tags:
+            - {name: routing.loader}
