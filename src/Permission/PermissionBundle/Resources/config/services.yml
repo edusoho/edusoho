@@ -1,8 +1,13 @@
 parameters:
-    routing.loader.yml.class: Permission\Loader\YamlFileLoader
     permission.path_regular_expression: ['/^\/admin/', '/^\/course\/\d+\/manage/', '/^\/classroom\/\d+\/manage/']
 
 services:
+    routing.loader.yml:
+        class: Permission\Loader\YamlFileLoader
+        arguments: ['@file_locator', '@service_container']
+        tags:
+            - { name: routing.loader }
+
     permission.twig.permission_extension:
         class: Permission\PermissionBundle\TwigExtension\PermissionExtension
         arguments:    ['@service_container']

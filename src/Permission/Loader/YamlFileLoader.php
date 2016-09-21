@@ -11,7 +11,9 @@
 
 namespace Permission\Loader;
 
-use Permission\Loader\Route;
+
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;
@@ -31,6 +33,14 @@ class YamlFileLoader extends FileLoader
         'resource', 'type', 'prefix', 'pattern', 'path', 'host', 'schemes', 'methods', 'defaults', 'requirements', 'options', 'permissions'
     );
     private $yamlParser;
+
+    private $container;
+
+    public function __construct(FileLocatorInterface $locator ,ContainerInterface $container)
+    {
+        parent::__construct($locator);
+        $this->container = $container;
+    }
 
     /**
      * Loads a Yaml file.
@@ -74,6 +84,7 @@ class YamlFileLoader extends FileLoader
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
+        $routePermissions = array();
         foreach ($config as $name => $config) {
             if (isset($config['pattern'])) {
                 if (isset($config['path'])) {
@@ -90,10 +101,34 @@ class YamlFileLoader extends FileLoader
                 $this->parseImport($collection, $config, $path, $file);
             } else {
                 $this->parseRoute($collection, $name, $config, $path);
+                $routePermissions[$name] = $collection->get($name)->getPermissions();
             }
         }
 
+        $this->_buildPermissionsCache($routePermissions, $path);
+
         return $collection;
+    }
+
+    private function _buildPermissionsCache($routePermissions, $path)
+    {
+        $kernel = $this->container->get('kernel');
+
+        if(!$kernel->isDebug()){
+
+            $cacheDir = $cacheFile = $kernel->getCacheDir() . '/route_permissions';
+
+            if(!is_dir($cacheDir)){
+                mkdir($cacheDir);
+            }
+
+            $cacheFile = $cacheDir . '/' . md5($path) .  '.php';
+
+            if(!file_exists($cacheFile)){
+                $cache = "<?php \nreturn " . var_export($routePermissions, true) . ';';
+                file_put_contents($cacheFile, $cache);
+            }
+        }
     }
 
     /**
