@@ -9,13 +9,20 @@ class Classrooms extends BaseResource
 {
     public function discoveryColumn(Application $app, Request $request)
     {
-        $result = $request->query->all();
+        $defaultQuery = array(
+            'orderType' => '',
+            'showCount' => '',
+        );
+
+        $result = array_merge($defaultQuery, $request->query->all());
+
+        $conditions = array();
+
         if($result['categoryId']) {
             
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
             $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         }
-        unset($conditions['categoryId']);
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'studentNum';
@@ -38,7 +45,6 @@ class Classrooms extends BaseResource
 
         foreach ($classrooms as $key => $value) {
             $classrooms[$key]['createdTime'] = strval(strtotime($value['createdTime']));
-            $classrooms[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
         }
 
         return $this->wrap($classrooms, $total);
