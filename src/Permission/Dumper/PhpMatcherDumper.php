@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Matcher\Dumper\DumperPrefixCollection;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use \Symfony\Component\Routing\Matcher\Dumper\MatcherDumper;
+
 /**
  * PhpMatcherDumper creates a PHP class able to match URLs for a given set of routes.
  *
@@ -203,6 +204,7 @@ EOF;
         $matches          = false;
         $hostMatches      = false;
         $methods          = array();
+        $permission       = array();
 
         if ($req = $route->getRequirement('_method')) {
             $methods = explode('|', strtoupper($req));
@@ -302,6 +304,11 @@ EOF;
 EOF;
         }
 
+        if (method_exists($route, 'getPermissions') && $route->getPermissions()) {
+            $permission = $route->getPermissions();
+        }
+
+
         // optimize parameters array
         if ($matches || $hostMatches) {
             $vars = array();
@@ -313,13 +320,11 @@ EOF;
             }
             $vars[] = "array('_route' => '$name')";
 
-            $code .= sprintf("            return \$this->mergeDefaults(array_replace(%s), %s);\n", implode(', ', $vars), str_replace("\n", '', var_export($route->getDefaults(), true)));
-        } elseif ($route->getDefaults() && method_exists($route, 'getPermissions') && $route->getPermissions()) {
-            $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => $route->getPermissions())), true)));
+            $code .= sprintf("            return \$this->mergeDefaults(array_replace(%s), %s);\n", implode(', ', $vars), str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_permission' => $permission)), true)));
         } elseif ($route->getDefaults()) {
-            $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => '')), true)));
+            $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => $permission)), true)));
         } else {
-            $code .= sprintf("            return array('_route' => '%s');\n", $name);
+            $code .= sprintf("            return array('_route' => '%s','_permission' => '%s');\n", $name, var_export($permission));
         }
         $code .= "        }\n";
 
@@ -384,4 +389,5 @@ EOF;
         return $tree;
     }
 }
+
 
