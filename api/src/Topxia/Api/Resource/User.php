@@ -12,7 +12,7 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'email', 'nickname', 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about', 'createdTime', 'updatedTime'
+        'id', 'email', 'nickname', 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'createdTime', 'updatedTime'
     );
 
     private $_publicProfileFields = array(
@@ -21,7 +21,7 @@ class User extends BaseResource
 
     private $_privateFields = array(
         'id', 'nickname', 'title', 'tags', 'type', 'roles',
-        'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+        'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar',
         'email', 'emailVerified', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
         'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
         'createdIp', 'createdTime', 'updatedTime'
