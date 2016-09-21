@@ -12,7 +12,7 @@ class PluginVersionToolkit
             'UserImporter' => '2.1.5',
             'MoneyCard'    => '2.0.4',
             'Discount'     => '1.1.7',
-            'Coupon'       => '1.2.4',
+            'Coupon'       => '2.1.4',
             'ChargeCoin'   => '1.2.5'
         );
 
