@@ -31,13 +31,14 @@ class KernelControllerListener
             $needJudgePermission = preg_match($path, $requestPath);
 
             if ($needJudgePermission
-                && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+                && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])
+            ) {
                 $route = $this->container
                     ->get('router')
                     ->getMatcher()
                     ->match($request->getPathInfo());
 
-                $permissions = $route['_permission'];
+                $permissions = empty($route['_permission']) ? array() : $route['_permission'];
 
                 if (empty($permissions)) {
                     return;
