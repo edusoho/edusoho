@@ -23,6 +23,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets(array($target));
     }
 
+    public function findAllTestpapersByTargets(array $ids)
+    {
+        $targets = array();
+
+        foreach ($ids as $id) {
+            $targets[] = 'course-'.$id;
+        }
+
+        return $this->getTestpaperDao()->findTestpaperByTargets($targets);
+    }
+
+    public function findTestpapersByIds($ids)
+    {
+        $testpapers = $this->getTestpaperDao()->findTestpapersByIds($ids);
+        return ArrayToolkit::index($testpapers, 'id');
+    }
+
     protected function getTestpaperResultDao()
     {
         return $this->createDao('Custom:Testpaper.TestpaperResultDao');
