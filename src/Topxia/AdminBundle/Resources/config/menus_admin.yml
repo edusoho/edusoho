@@ -14,18 +14,6 @@
 #   after:                  //可选 菜单出现位置在同级的某个菜单之后
 #   disable:                //角色管理分配权限默认开启不用选中
 
-#admin_block_visual_edit:
-#    name: 编辑
-#    parent: admin_operation_block
-#    router_params: {'blockTemplateId': 'block.blockTemplateId'}
-#    router_params_context: 1
-#
-#admin_block_visual_edit_history:
-#    name: 历史记录
-#    parent: admin_operation_block
-#    router_params: {'blockTemplateId': 'block.blockTemplateId'}
-#    router_params_context: 1
-# 合并master出现的 暂时不清楚是干嘛的
 admin:
     name: 后台管理员
     parent: null
