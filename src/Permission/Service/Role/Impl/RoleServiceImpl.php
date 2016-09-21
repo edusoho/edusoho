@@ -150,7 +150,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         $userRole['data']          = $role;
         $userRole['createdTime']   = time();
-        $userRole['createdUserId'] = 1;
+        $userRole['createdUserId'] = $this->getCurrentUser()->getId();
         $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"' . $userRole['name'] . '"', $userRole);
         return $this->getRoleDao()->createRole($userRole);
     }
