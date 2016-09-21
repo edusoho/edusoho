@@ -1,10 +1,10 @@
 <?php
 namespace Permission\Listener;
 
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class KernelControllerListener
 {
@@ -24,29 +24,32 @@ class KernelControllerListener
 
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
-        $permissions = $this->container
-            ->get('router')
-            ->getRouteCollection()
-            ->get($route)
-            ->getPermissions();
-
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
         $requestPath = $request->getPathInfo();
 
-        $currentUser = ServiceKernel::instance()->getCurrentUser();
-
         foreach ($this->paths as $key => $path) {
-            $needJudgePermission = preg_match($path, $requestPath) && !empty($permissions);
+            $needJudgePermission = preg_match($path, $requestPath);
 
             if ($needJudgePermission
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+                $permissions = $this->container
+                    ->get('router')
+                    ->getRouteCollection()
+                    ->get($route)
+                    ->getPermissions();
+
+                if (empty($permissions)) {
+                    return;
+                }
 
                 foreach ($permissions as $permission) {
-                    if($currentUser->hasPermission($permission)){
+                    if ($currentUser->hasPermission($permission)) {
                         return;
                     }
                 }
+
                 $self = $this;
-                $event->setController(function () use ($self, $request){
+                $event->setController(function () use ($self, $request) {
                     return $self->container->get('templating')->renderResponse('PermissionBundle:Admin:permission-error.html.twig');
                 });
             }
