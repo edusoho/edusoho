@@ -324,7 +324,7 @@ EOF;
         } elseif ($route->getDefaults()) {
             $code .= sprintf("            return %s;\n", str_replace("\n", '', var_export(array_replace($route->getDefaults(), array('_route' => $name), array('_permission' => $permission)), true)));
         } else {
-            $code .= sprintf("            return array('_route' => '%s','_permission' => '%s');\n", $name, var_export($permission));
+            $code .= sprintf("            return array('_route' => '%s','_permission' => '%s');\n", $name, var_export($permission, true));
         }
         $code .= "        }\n";
 
