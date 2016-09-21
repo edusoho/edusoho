@@ -34,7 +34,13 @@ class Courses extends BaseResource
 
     public function discoveryColumn(Application $app, Request $request)
     {
-        $result                   = $request->query->all();
+        $defaultQuery = array(
+            'orderType' => '',
+            'type'      => '',
+            'showCount' => ''
+        );
+
+        $result                   = array_merge($defaultQuery, $request->query->all());
         $conditions['categoryId'] = $result['categoryId'];
 
         if ($result['orderType'] == 'hot') {
