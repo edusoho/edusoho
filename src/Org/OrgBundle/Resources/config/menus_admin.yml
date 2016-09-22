@@ -18,7 +18,6 @@ admin_user_org_update:
     router_params:
         id: (user.id)
     disable: false
-    visable: true
 
 # admin_move_course_to_org:
 #     name: 推送课程

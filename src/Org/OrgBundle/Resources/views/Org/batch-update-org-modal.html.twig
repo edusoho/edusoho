@@ -22,6 +22,7 @@
 {% endblock %}
 
 {% block footer %}
+  <span class="js-user-help  pull-left text-muted hidden">你不能更改自己的所属组织机构，你的账号已取消勾选</span>
   <button id="batch-setting-org-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit" class="btn btn-primary pull-right"
           data-toggle="form-submit" data-target="#batch-setting-org-form">{{ '提交'|trans }}
   </button>
