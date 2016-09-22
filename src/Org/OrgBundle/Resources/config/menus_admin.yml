@@ -1,9 +1,29 @@
-#admin_operation_org_manage:
-#   name: 组织机构管理
-#   parent: admin_operation
-#   router_name: admin_org
-#admin_org_create:
-#   name: 添加组织机构
-#   parent: admin_operation_org_manage
-#   mode: modal
-#   group: 2
+admin_org_manage:
+    name: 组织机构管理
+    parent: admin_system
+    group: 2
+    disable: true
+    visable: false
+    children:
+        admin_org:
+            name: 组织机构
+            disable: true
+
+admin_user_org_update:
+    name: '修改用户组织机构'
+    parent: admin_user_manage
+    mode: modal
+    group: groupButton
+    router_params:
+        id: (user.id)
+    disable: true
+    visable: false
+
+# admin_move_course_to_org:
+#     name: 推送课程
+#     parent: admin_course_manage
+#     router_params:
+#         courseId: (course.id)
+#     group: groupButton
+#     icon: 'glyphicon glyphicon-send'
+#     mode: modal

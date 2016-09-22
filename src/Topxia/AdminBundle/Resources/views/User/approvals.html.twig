@@ -63,15 +63,7 @@
               <div class="btn-group">
                 <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}"
                    class="btn btn-default btn-sm">{{ '查看'|trans }}</a>
-
-                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </a>
-
-                <ul class="dropdown-menu">
-                  <li><a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class="btn cancel-approval">{{ '撤销'|trans }}</a>
-                  </li>
-                </ul>
+                {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_approval_approvals', group:'groupButton', user: user} %}
               </div>
             {% elseif approvalStatus == 'approving' %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}"

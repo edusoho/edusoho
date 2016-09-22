@@ -200,12 +200,10 @@ class ThemeController extends BaseController
     {
         $currentTheme = $this->setting('theme', array('uri' => 'default'));
 
-        if (!empty($currentTheme)) {
-            if ($currentTheme['code'] == 'graceful') {
-                $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
-            } else {
-                $template = 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig';
-            }
+        if ($currentTheme['uri'] == 'graceful') {
+            $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
+        } else {
+            $template = 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig';
         }
 
         return $template;

@@ -66,7 +66,8 @@ $resources = array(
     'OpenCourse',
     'OpenCourses',
     'OpenCourse/Lesson',
-    'OpenCourse/Lessons'
+    'OpenCourse/Lessons',
+    'IM/MeLogout'
 );
 
 foreach ($resources as $res) {

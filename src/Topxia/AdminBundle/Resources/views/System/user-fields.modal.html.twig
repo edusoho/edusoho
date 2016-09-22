@@ -21,8 +21,8 @@
               <div class="col-md-6 controls">
                   <select class="form-control" name="field_type" id="field_type">
                     <option value="" num="">{{'请选择'|trans}}</option>
-                    <option value ="varchar" num="{{'还可以添加%varcharCount%个字段'|trans({'%varchar%': 10-varcharCount})}}" {% if varcharCount==10 %}disabled="disabled"{% endif %}>{{'文本'|trans}}{% if varcharCount==10 %}({{'已满10个'|trans}}){% endif %}</option>
-                    <option value ="text" num="{{'还可以添加%textCount%option value'|trans({'%textCount%': 10-textCount})}}" {% if textCount==10 %}disabled="disabled"{% endif %}>{{'多行文本'|trans}}{% if textCount==10 %}({{'已满10个'|trans}}){% endif %}</option>
+                    <option value ="varchar" num="{{'还可以添加%varcharCount%个字段'|trans({'%varcharCount%': 10-varcharCount})}}" {% if varcharCount==10 %}disabled="disabled"{% endif %}>{{'文本'|trans}}{% if varcharCount==10 %}({{'已满10个'|trans}}){% endif %}</option>
+                    <option value ="text" num="{{'还可以添加%textCount%个字段'|trans({'%textCount%': 10-textCount})}}" {% if textCount==10 %}disabled="disabled"{% endif %}>{{'多行文本'|trans}}{% if textCount==10 %}({{'已满10个'|trans}}){% endif %}</option>
                     <option value="int" num="{{'还可以添加%intCount%个字段,最大值为9位整数'|trans({'%intCount%': 5-intCount})}}" {% if intCount==5 %}disabled="disabled"{% endif %}>{{'整数'|trans}}{% if intCount==5 %}({{'已满5个'|trans}}){% endif %}</option>
                     <option value="float" num="{{'还可以添加%floatCount%个字段,保留到两位小数'|trans({'%floatCount%': 5-floatCount})}}" {% if floatCount==5 %}disabled="disabled"{% endif %}>{{'小数'|trans}}{% if floatCount==5 %}({{'已满5个'|trans}}){% endif %}</option>
                     <option value="date" num="还可以添加{{5-dateCount}}个字段" {% if dateCount==5 %}disabled="disabled"{% endif %}>{{'日期'|trans}}{% if dateCount==5 %}({{'已满5个'|trans}}){% endif %}</option>

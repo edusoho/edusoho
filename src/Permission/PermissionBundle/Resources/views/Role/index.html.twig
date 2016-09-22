@@ -1,0 +1,69 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_role_manage' %}
+
+{% set script_controller = 'permissionbundle/controller/role/index' %}
+{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER'] %}
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <select id="keywordType" class="form-control" name="keywordType">
+          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编码'} %}
+          {{ select_options(options, app.request.get('keywordType')) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+  </div>
+
+  <button class="btn btn-primary">搜索</button>
+
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="25%">角色名称</th>
+      <th width="25%">编码</th>
+      <th width="20%">创建时间</th>
+      <th width="20%">创建者</th>
+      <th>操作</th>
+    </tr>   
+    {% for role in roles %}
+      <tr>
+        <td>
+          {{ role.name }}
+        <td>
+          {{ role.code }}
+        </td>
+        <td>
+          {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
+        <td>
+          {{ users[role.createdUserId].nickname }}
+        </td>
+        <td>
+          <div class="btn-group">
+            <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+            {% if role.code not in notUpdateRoles %}
+              {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_role_manage', group:'groupBtn', role: role} %}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">暂无角色</tr>
+    {% endfor %}
+  </table>
+
+  <div class="alert alert-info" role="alert">
+    <p>1、初始化的4个角色，无法编辑和删除</p>
+    <p>2、角色创建成功后编码不可修改</p>
+  </div>
+
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

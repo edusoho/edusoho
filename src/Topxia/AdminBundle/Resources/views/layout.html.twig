@@ -2,14 +2,10 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% import _self as self_macro %}
 
-<!DOCTYPE html>
 {% set menu = menu|default(null) %}
-{% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
-{% set menu_current = menu_breadcrumb|last %}
-{% set menu_nav = menu_breadcrumb[0]|default(null) %}
-{% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
-{% set menu_main = menu_breadcrumb[2]|default(null) %}
-{% set menu_hiddens = setting('menu_hiddens', []) %}
+{% set currentMenu = permission(menu) %}
+
+<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -23,14 +19,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
+
     {% block title %}
-      {% for m in menu_breadcrumb|reverse %}
-        {% if loop.index == menu_breadcrumb|length %}
-          {{ m.name|trans }}
-        {% else %}
-          {{ m.name|trans }} -
-        {% endif %}
-      {% endfor %}
+      {{ currentMenu.name|trans }} - {{ menu|parent_permission.name|trans }} - {{ menu|parent_permission.code|parent_permission.name|trans  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -66,31 +57,7 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'管理后台'|trans}}</a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-           {% for m in menu_children('admin', 'admin', 1) %}
-            {% if m.code == "admin_app" %}
-               {% if not is_granted('ROLE_SUPER_ADMIN') %}
-                {% set parameter = {'postStatus':'all'} %}
-                {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
-               {% endif %}
-            {% endif %}
-
-            {% if m.code == "admin_system" %}
-              {% if is_granted('ROLE_SUPER_ADMIN') %}
-              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-              {{ self_macro.menu_link_html(_context, m) }}
-              </li>
-              {% endif %}
-            {% else %}    
-              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
-                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
-                  {{ self_macro.menu_link_html(_context, m) }}
-                </li>
-              {% endif %}
-            {% endif %}
-
-          {% endfor %}
-        </ul>
+        {% include 'PermissionBundle:Templates:navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
@@ -102,11 +69,11 @@
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'回首页'|trans}}</a></li>
 
           <li class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
-                <ul class="dropdown-menu main-list">
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
-                </ul>
-              </li>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
+            <ul class="dropdown-menu main-list">
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+            </ul>
+          </li>
         </ul>
 
       </div><!--/.navbar-collapse -->
@@ -115,83 +82,52 @@
   
   <div class="container">
     <div class="row">
+      {% set notifies = plugin_update_notify() %}
+      {% if not notifies is empty %}
+        <div style="margin: 0 15px">
+          <div class="alert alert-danger">
+            【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！ <a href="{{ path('admin_app_upgrades') }}">请立即升级！</a>
+          </div>
+        </div>
+      {% endif %}
       {% block content %}
-
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
-
-              <div class="list-group">
-                {% for m in groupedMenus %}
-                {% set array = {'0':'admin_my_cloud','1':'admin_cloud_video_setting','2':'admin_setting_cloud','3':'admin_edu_cloud_sms','4':'admin_edu_cloud_search','5':'admin_edu_cloud_attachment'} %}
-                 {% if m.code not in  array or is_granted('ROLE_SUPER_ADMIN') %}
-                            
-                  {% if not menu_hiddens[m.code]|default(false)  %}
-                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
-                  {% endif %}
-                      
-                  {% endif %}
-
-                {% endfor %}
-              </div>
-            {% endfor %}
+            {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
           {% endblock %}
         </div>
 
         <div class="col-md-10">
-        {% if menu_nav.code != 'admin_app' %}
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name)|trans }}{% endblock %}</h1>
+
+            <h1 class="pull-left">
+              {% block page_title %}
+                {{ currentMenu.fullname|default(currentMenu.name) }}
+              {% endblock %}
+            </h1>
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in menu_children('admin', menu_current.code, 2) %}
-                  {% if not menu_hiddens[m.code]|default(false) %}
+
+                {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                  {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
                     {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                  {% endif %}
-                {% endfor %}
+                  {% endfor %}
+                {% else %}
+                  {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% endfor %}
+                {% endif %}
               {% endblock %}
 
             </div>
           </div>
-          {% endif %}
-
-          {% set menu_breadcrumb_length = menu_breadcrumb|length %}
-
-          {% if menu_breadcrumb_length >= 3 %}
-            {% set tabMenus = menu_children('admin', menu_breadcrumb[1].code|default(null), 1) %}
-          {% endif %}
-
-          {% if menu_breadcrumb_length >= 4 %}
-            {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
-          {% endif %}
 
           {% block content_header %}{% endblock %}
           
-          {% if tabMenus|default(null) and menu_current.group == 1 %}
-            <ul class="nav nav-tabs mbm">
-              {% for m in tabMenus %}
-                <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                  {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+          {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
 
-          {% if subTabMenus|default(null) and menu_current.group == 1 %}
-            <ul class="nav nav-pills mbl small">
-              {% for m in subTabMenus %}
-                <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
-                  {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ self_macro.menu_link_html(_context, m) }}
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+          {% block capsule %}{% endblock %}
 
           {% block main %}{% endblock %}
         </div>
@@ -223,11 +159,11 @@
     class="{{ class }}"
   {% endif %}
   {% if menu.mode|default(null) == 'modal' %}
-    data-url="{{ menu_path(menu) }}"
+    data-url="{{ permission_path(menu) }}"
     data-toggle="modal"
     data-target="#modal"
   {% else %}
-    href="{{ menu_path(menu) }}"
+    href="{{ permission_path(menu) }}"
   {% endif %}
   {% if menu.blank|default(false) %}
     target="blank"
