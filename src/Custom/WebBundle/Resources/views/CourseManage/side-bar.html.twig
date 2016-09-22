@@ -1,0 +1,60 @@
+{% set groups = sub_permissions(parentCode) %}
+
+{% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
+    <ul class="list-group">
+      <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
+        <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
+      </li>
+    </ul>
+{% else %}
+  {% for group in groups %}
+    <ul class="list-group">
+      <li class="list-group-heading">{{group.name|trans}}</li>
+      
+      {% set courseManageMenus = sub_permissions(group.code) %}
+
+      {% for courseManageMenu in courseManageMenus %}
+        {% if courseManageMenu.code == 'live_course_manage_replay' %}
+          {% if course.type == 'live' %}
+            <li class="list-group-item {% if side_nav == courseManageMenu.data.side_nav|default('') %}active{% endif %}">
+              <a href="
+                  {% if course.locked|default(0) == 1 and not courseManageMenu.data.side_nav == 'students' %}
+                    {{ path('course_manage_course_sync', {id:course.id, type: courseManageMenu.data.side_nav|default('')}) }}
+                  {% else %}
+                    {{ permission_path(courseManageMenu) }}
+                  {% endif %}
+              ">
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{courseManageMenu.name|trans}}
+              </a>
+            </li>
+          {% endif %}
+        {% else %}
+          <li class="list-group-item {% if side_nav == courseManageMenu.data.side_nav|default('') %}active{% endif %}">
+            <a href="
+                {% if course.locked|default(0) == 1 and not courseManageMenu.data.side_nav == 'students' %}
+                  {{ path('course_manage_course_sync', {id:course.id, type: courseManageMenu.data.side_nav|default('')}) }}
+                {% else %}
+                  {{ permission_path(courseManageMenu) }}
+                {% endif %}
+            ">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{courseManageMenu.name|trans}}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if group.code == 'course_manage_questions' %}
+        <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
+          <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
+        </li>
+
+        {% if is_plugin_installed('Homework') %}
+          <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
+            <a href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>
+          </li>
+        {% endif %}
+      {% endif %}
+
+    </ul>
+  {% endfor %}
+{% endif %}
