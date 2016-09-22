@@ -69,23 +69,8 @@ class MyTeachingController extends BaseMyTeachingController
         }
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->getServiceKernel()->createService('Custom:Testpaper.TestpaperService');
-    }
-
     protected function getOrgService()
     {
         return $this->getServiceKernel()->createService('Org:Org.OrgService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('Custom:User.UserService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Custom:Course.CourseService');
     }
 }
