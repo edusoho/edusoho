@@ -1,15 +1,16 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Impl;
 
-use Topxia\System;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\Util\MySQLDumper;
-use Topxia\Service\Common\BaseService;
+use Permission\Service\Role\Impl\RoleServiceImpl;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\Client\EduSohoAppClient;
 use Topxia\Service\CloudPlatform\Dao\Impl\CloudAppDaoImpl;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Util\MySQLDumper;
+use Topxia\Service\Util\PluginUtil;
+use Topxia\System;
 
 class AppServiceImpl extends BaseService implements AppService
 {
@@ -279,7 +280,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         try {
             $package = $this->getCenterPackageInfo($packageId);
-            $errors  = $this->checkPluginDepend($package);
+            // $errors  = $this->checkPluginDepend($package);
 
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
                 $errors[] = $this->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION));
@@ -511,6 +512,14 @@ class AppServiceImpl extends BaseService implements AppService
             goto last;
         }
 
+        try {
+            $this->_refreshDefaultRoles();
+        } catch (\Exception $e) {
+            $errors[] = $this->getKernel()->trans('刷新默认角色权限失败! ');
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+            goto last;
+        }
+
         if (empty($errors)) {
             $this->updateAppForPackageUpdate($package, $packageDir);
             $this->createPackageUpdateLog($package, 'SUCCESS');
@@ -520,6 +529,11 @@ class AppServiceImpl extends BaseService implements AppService
         last:
         $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('执行升级'), $package, $errors);
         return empty($info) ? $errors : $info;
+    }
+
+    protected function _refreshDefaultRoles()
+    {
+        $this->getRoleService()->refreshRoles();
     }
 
     protected function deleteCache($tryCount = 0)
@@ -582,6 +596,7 @@ class AppServiceImpl extends BaseService implements AppService
         $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
+        $this->_refreshDefaultRoles();
     }
 
     public function updateAppVersion($id, $version)
@@ -829,5 +844,13 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    /**
+     * @return RoleServiceImpl
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Permission:Role.RoleService');
     }
 }

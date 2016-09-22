@@ -60,16 +60,6 @@ class GenerateCourseCommand extends BaseCommand
         $output->writeln('<info>初始化课程数据完毕</info>');
     }
 
-    private function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $user = $this->getUserService()->getUser(1);
-        $serviceKernel->setCurrentUser($user);
-    }
-
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

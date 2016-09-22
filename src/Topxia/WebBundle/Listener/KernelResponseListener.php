@@ -21,6 +21,7 @@ class KernelResponseListener
 
         $request      = $event->getRequest();
         $currentUser  = $this->getUserService()->getCurrentUser();
+        
         $user_agent   = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
 

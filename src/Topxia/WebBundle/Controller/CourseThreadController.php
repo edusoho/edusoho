@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseThreadController extends CourseBaseController
 {
@@ -61,7 +61,7 @@ class CourseThreadController extends CourseBaseController
     {
         list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
 
-        if ($response) {
+        if (!empty($response)) {
             return $response;
         }
 
@@ -111,7 +111,7 @@ class CourseThreadController extends CourseBaseController
 
         $this->getThreadService()->hitThread($courseId, $threadId);
 
-        $isManager = $this->getCourseService()->canManageCourse($course['id']);
+        $isManager = $this->getCourseService()->canManageCourse($course['id'], 'admin_course_thread');
 
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
@@ -154,7 +154,7 @@ class CourseThreadController extends CourseBaseController
         ));
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
             $formData = $request->request->all();
             if ($form->isValid()) {
                 try {
@@ -199,14 +199,14 @@ class CourseThreadController extends CourseBaseController
         if ($user->isLogin() && $user->id == $thread['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
         }
 
         $form = $this->createThreadForm($thread);
 
         if ($request->getMethod() == 'POST') {
             try {
-                $form->bind($request);
+                $form->submit($request);
                 $formData = $request->request->all();
 
                 if ($form->isValid()) {
@@ -381,7 +381,7 @@ class CourseThreadController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
             $userId = $currentUser->id;
 
             if ($form->isValid()) {
@@ -498,7 +498,7 @@ class CourseThreadController extends CourseBaseController
         if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
         }
 
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
@@ -507,7 +507,7 @@ class CourseThreadController extends CourseBaseController
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $form->bind($request);
+            $form->submit($request);
 
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());

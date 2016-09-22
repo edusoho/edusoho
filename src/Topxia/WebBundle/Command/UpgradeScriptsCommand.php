@@ -2,8 +2,6 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,13 +36,15 @@ class UpgradeScriptsCommand extends BaseCommand
 
         $this->removeCache();
         $output->writeln("<info>删除缓存</info>");
+
+        $this->updateApp($code, $version);
+        $output->writeln("<info>元数据更新</info>");
     }
 
     protected function executeScript($code, $version, $index = 0)
     {
         $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../scripts/upgrade-{$version}.php";
         if (!file_exists($scriptFile)) {
-            var_dump($scriptFile);
             return;
         }
 
@@ -83,21 +83,6 @@ class UpgradeScriptsCommand extends BaseCommand
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
         return $this->getAppDao()->updateApp($app['id'], $newApp);
-    }
-
-    private function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('prod', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
     }
 
     protected function getAppDao()
