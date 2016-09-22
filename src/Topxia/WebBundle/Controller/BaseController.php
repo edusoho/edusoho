@@ -10,7 +10,6 @@ use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\Impl\UserServiceImpl;
 
 abstract class BaseController extends Controller
 {
@@ -260,9 +259,6 @@ abstract class BaseController extends Controller
         return $this->getServiceKernel()->createService($service);
     }
 
-    /**
-     * @return UserServiceImpl
-     */
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
