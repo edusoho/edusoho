@@ -19,9 +19,9 @@ class MeLogout extends BaseResource
         $message = array(
             'mute' => 1
         );
-        
+
         //@todo leaf
-        return CloudAPIFactory::create('root')->post('/im/me/clients/' + $clientId, $message);
+        return CloudAPIFactory::create('root')->post('/im/me/clients/' . $clientId, $message);
     }
 
     public function filter($res)
