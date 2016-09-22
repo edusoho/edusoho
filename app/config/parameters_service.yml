@@ -3,3 +3,6 @@ parameters:
     template_overwrite_map:
         TopxiaWebBundle : CustomWebBundle
         OrgBundle : CustomAdminBundle
+
+    topxia_daos:
+        'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
