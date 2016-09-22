@@ -128,7 +128,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = $this->_prepareCourseConditions($conditions);
         return $this->getCourseDao()->searchCourseCount($conditions);
     }
-
+    
+    public function searchCount($conditions)
+    {
+        return $this->searchCourseCount($conditions);
+    }
+    
     public function findRandomCourses($conditions, $num)
     {
         $count = $this->searchCourseCount($conditions);
