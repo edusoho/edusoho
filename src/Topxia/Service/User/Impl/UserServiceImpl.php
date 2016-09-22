@@ -103,7 +103,12 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return $this->getUserDao()->searchUserCount($conditions);
     }
-
+		
+    public function searchCount(array $conditions)
+    {
+        return $this->searchUserCount($conditions);
+    }
+    
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
     {
         $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
