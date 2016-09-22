@@ -14,6 +14,7 @@ admin_user_org_update:
     parent: admin_user_manage
     mode: modal
     group: groupButton
+    visable: ( app.user.id != user.id )
     router_params:
         id: (user.id)
     disable: true
