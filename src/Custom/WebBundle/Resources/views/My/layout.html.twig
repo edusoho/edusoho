@@ -25,9 +25,10 @@
       {% if app.user.isTeacher() %}
         {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
           <ul class="list-group">
-            <li class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}">
-              <a href="{{path('course_manage_list_teacher_test_reviewing') }}">{{'试卷批阅'|trans}}
-              </a>
+            <li class="list-group-heading">{{'我的教学'|trans}}</li>
+            <li class="list-group-item
+             {% if side_nav == 'my-teaching-courses' %} active {% endif %}">
+              <a href="{{path('my_teaching_courses')}}">{{'在教课程'|trans}}</a>
             </li>
           </ul>
         {% else %}

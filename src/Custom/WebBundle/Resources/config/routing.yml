@@ -6,6 +6,10 @@ login:
     path:     /login
     defaults: { _controller: CustomWebBundle:Login:index }
 
+my_teaching_courses:
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: CustomWebBundle:MyTeaching:orgCourses, filter:'normal' }
+
 course_manage_test_check:
     pattern: /course/check/{id}/{status}/list
     defaults: { _controller: CustomWebBundle:Testpaper:teacherCheckInCourse }
