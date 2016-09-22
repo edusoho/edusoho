@@ -93,12 +93,10 @@
                           <div class="row">
                               <div class="item-container ">
                                 <ul class="list-group list-group-course clearfix">
-                                  {% set index = 1 %}
                                   {% for postCoursePackage in postCoursePackages %}
                                     {% if postCoursePackage.postId == post.id %}
                                       {% if postCoursePackage.course.categoryId == postCourseCategory.categoryId %}
-                                          {% include 'CustomWebBundle:Default:list-group-item-li.html.twig' %}
-                                        {% set index = index + 1 %}
+                                        {% include 'CustomWebBundle:Default:list-group-item-li.html.twig' %}
                                       {% endif %}
                                     {% endif %}
                                   {% endfor %}
