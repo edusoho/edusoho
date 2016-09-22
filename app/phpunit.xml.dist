@@ -30,6 +30,7 @@
             <directory>../plugins/InternalTraining/Service/</directory>
             <exclude>
                 <directory>../plugins/InternalTraining/Service/*/Tests</directory>
+                <file>../plugins/InternalTraining/Service/**/module_config.php</file>
             </exclude>
 
         </whitelist>
