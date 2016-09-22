@@ -224,7 +224,7 @@ class UserController extends BaseController
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
-                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -282,15 +282,16 @@ class UserController extends BaseController
             if (!empty($roles)) {
                 $roleSet          = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
                 $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
+                $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
+
                 $message          = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $this->getRoleNames($roles, $rolesByIndexCode)
+                    'role'     => implode(',', $roleNames)
                 );
 
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
-
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
                 'user'    => $user,
@@ -305,39 +306,29 @@ class UserController extends BaseController
 
     protected function getRoleNames($roles, $roleSet)
     {
-        $roleName = '';
-        $roles    = array_unique($roles);
+        $roleNames = array();
+        $roles     = array_unique($roles);
 
         $userRoleDict  = new UserRoleDict();
         $userRoleDict  = $userRoleDict->getDict();
         $roleDictCodes = array_keys($userRoleDict);
 
-        $i = 0;
         foreach ($roles as $key => $role) {
             if (in_array($role, $roleDictCodes)) {
-                $roleName = $roleName . $userRoleDict[$role];
+                $roleNames[] = $userRoleDict[$role];
             } elseif ($role == 'ROLE_BACKEND') {
                 continue;
             } else {
-                $role     = $roleSet[$role];
-                $roleName = $roleName . $role['name'];
-            }
-
-            $i++;
-
-            if ($i < count($roles) - 1) {
-                $roleName = $roleName . '，';
+                $role        = $roleSet[$role];
+                $roleNames[] = $role['name'];
             }
         }
-        return $roleName;
+
+        return $roleNames;
     }
 
     public function avatarAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
@@ -385,10 +376,6 @@ class UserController extends BaseController
 
     public function avatarCropAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         if ($request->getMethod() == 'POST') {

@@ -22,7 +22,7 @@ class AppPackageUpdateController extends BaseController
 
         if (empty($settings['cloud_key_applied']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $errors = array(
-                sprintf('您尚未申请云平台授权码，<a href="%s">请先申请授权码</a>，或者刷新页面。', $this->generateUrl('admin_setting_cloud_key_update'))
+                sprintf($this->trans('您尚未申请云平台授权码，').'<a href="%s">'.$this->trans('请先申请授权码').'</a>'.'。', $this->generateUrl('admin_setting_cloud_key_update'))
             );
         } else {
             $errors = $this->getAppService()->checkEnvironmentForPackageUpdate($id);
@@ -78,7 +78,7 @@ class AppPackageUpdateController extends BaseController
     {
         try {
             if (empty($code)) {
-                $errors[] = '参数缺失,更新应用包失败';
+                $errors[] = $this->getServiceKernel()->trans('参数缺失,更新应用包失败');
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',
@@ -103,7 +103,7 @@ class AppPackageUpdateController extends BaseController
             }
 
             if (empty($apps[$code]['package']['id']) || empty($apps[$code]['package']['toVersion'])) {
-                $errors[] = '获取当前最新应用包信息失败';
+                $errors[] = $this->getServiceKernel()->trans('获取当前最新应用包信息失败');
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',

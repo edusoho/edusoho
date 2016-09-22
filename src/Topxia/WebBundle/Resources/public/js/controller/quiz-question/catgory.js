@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 		})
 
 		$('body').on('click','.delete-category', function() {
-            if (!confirm('真的要删除该分类吗？')) {
+            if (!confirm(Translator.trans('真的要删除该分类吗？'))) {
                 return ;
             }
 

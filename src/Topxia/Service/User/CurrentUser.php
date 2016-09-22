@@ -1,9 +1,11 @@
 <?php
 namespace Topxia\Service\User;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
 {
@@ -120,6 +122,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return true;
     }
 
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
     public function isEqualTo(UserInterface $user)
     {
         if ($this->email !== $user->getUsername()) {
@@ -148,7 +155,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (!empty($permissions) && in_array('admin', array_keys($permissions))) {
             return true;
         }
-
         return false;
     }
 
@@ -157,7 +163,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-
         return false;
     }
 
@@ -221,13 +226,44 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         }
         $this->data = $user;
 
-        $roles = $this->getRoles();
-        if ($this->isAdmin()) {
-            $roles[]             = 'ROLE_ADMIN';
-            $this->data['roles'] = $roles;
+        return $this;
+    }
+
+    public function initPermissions()
+    {
+        if (empty($this->id)) {
+            return $this;
         }
 
-        return $this;
+        $roles = $this->getRoles();
+        $permissionBuilder = PermissionBuilder::instance();
+        $originPermissions = $permissionBuilder->getOriginPermissions();
+
+        if (in_array('ROLE_SUPER_ADMIN', $roles)) {
+            $permissions = $originPermissions;
+        }else{
+            $roleService = ServiceKernel::instance()->createService('Permission:Role.RoleService');
+
+            $permissionCode = array();
+            foreach ($roles as $code) {
+                $role = $roleService->getRoleByCode($code);
+
+                if (empty($role['data'])) {
+                    $role['data'] = array();
+                }
+
+                $permissionCode = array_merge($permissionCode, $role['data']);
+            }
+
+            $permissions = array();
+            foreach ($originPermissions as $key => $value) {
+                if (in_array($key, $permissionCode)) {
+                    $permissions[$key] = $value;
+                }
+            }
+        }
+
+        return $this->setPermissions($permissions);
     }
 
     public function toArray()
@@ -238,10 +274,53 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
+        return $this;
     }
 
     public function getPermissions()
     {
         return $this->permissions;
+    }
+
+    /**
+     * @param string  $code  权限编码
+     * @return bool
+     */
+    public function hasPermission($code)
+    {
+        $currentUserPermissions = $this->getPermissions();
+
+        if(!empty($currentUserPermissions[$code])){
+            return true;
+        }
+
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree(true);
+        $codeTree = $tree->find(function ($tree) use ($code){
+            return $tree->data['code'] === $code;
+        });
+
+        if(empty($codeTree)){
+            return false;
+        }
+
+        $disableTree = $codeTree->findToParent(function ($parent){
+            return isset($parent->data['disable']) && (bool)$parent->data['disable'];
+        });
+
+        if(is_null($disableTree)){
+            return false;
+        }
+
+        $parent = $disableTree->getParent();
+
+        if(is_null($parent)){
+            return false;
+        }
+
+        if(empty($parent->data['parent'])){
+            return true;
+        }else{
+            return !empty($currentUserPermissions[$parent->data['code']]);
+        }
     }
 }

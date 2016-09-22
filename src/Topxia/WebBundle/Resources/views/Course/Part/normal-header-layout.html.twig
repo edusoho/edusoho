@@ -6,7 +6,7 @@
     <div class="es-section clearfix">
       {% block content %}{% endblock %}
 
-      {% if member.role|default('') == 'teacher' or has_permission('course_manage') %}
+      {% if member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
         <a href="{{ path('course_manage', {id:course.id}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="{{'课程管理'|trans}}">
           <i class="es-icon es-icon-setting"></i>
         </a>
@@ -24,7 +24,7 @@
             </a>
           {% endif %}
         {% elseif member["joinedType"] == 'groupSell'%}
-          <a class="btn btn-default setting hidden-xs hidden-sm" href="javascript:;" data-toggle="tooltip" data-placement="top" title="组合购买课程不能退出">
+          <a class="btn btn-default setting hidden-xs hidden-sm" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{'组合购买课程不能退出'|trans}}">
             <i class="hz-icon icon-exit"></i>
           </a>
         {% endif %}

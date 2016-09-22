@@ -1,16 +1,14 @@
 <?php
 
-
 namespace Topxia\Service\Importer;
 
-
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomMemberImporter extends Importer
 {
-    protected $necessaryFields  = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+    protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
     protected $objWorksheet;
     protected $rowTotal         = 0;
     protected $colTotal         = 0;
@@ -60,7 +58,7 @@ class ClassroomMemberImporter extends Importer
 
                 $order = $this->getOrderService()->createOrder(array(
                     'userId'     => $user['id'],
-                    'title'      => "购买班级《{$targetObject['title']}》(管理员添加)",
+                    'title'      => $this->getServiceKernel()->trans('购买班级《%title%》(管理员添加)', array('%title%' => $targetObject['title'])),
                     'targetType' => 'classroom',
                     'targetId'   => $targetObject['id'],
                     'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
@@ -77,7 +75,7 @@ class ClassroomMemberImporter extends Importer
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'note'    => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark']
+                    'note'    => empty($orderData['remark']) ? $this->getServiceKernel()->trans('通过批量导入添加') : $orderData['remark']
                 );
 
                 if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -164,13 +162,13 @@ class ClassroomMemberImporter extends Importer
         $repeatArray   = array();
 
         if (!empty($repeatRow)) {
-            $repeatRowInfo .= "字段对应用户数据重复</br>";
+            $repeatRowInfo .= $this->getServiceKernel()->trans('字段对应用户数据重复').'</br>';
 
             foreach ($repeatRow as $row) {
-                $repeatRowInfo .= "重复行：</br>";
+                $repeatRowInfo .= $this->getServiceKernel()->trans('重复行：').'</br>';
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= "第" . $value . "行 ";
+                    $repeatRowInfo .= $this->getServiceKernel()->trans('第%value%行 ', array('%value%' => $value));
                 }
 
                 $repeatRowInfo .= "</br>";
@@ -193,7 +191,7 @@ class ClassroomMemberImporter extends Importer
         for ($row = 3; $row <= $this->rowTotal; $row++) {
             for ($col = 0; $col < $this->colTotal; $col++) {
                 $infoData          = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $columnsData[$col] = $infoData . "";
+                $columnsData[$col] = $infoData."";
             }
 
             foreach ($fieldSort as $sort) {
@@ -204,11 +202,11 @@ class ClassroomMemberImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = "第" . $row . "行为空行，已跳过";
+                $checkInfo[] = $this->getServiceKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
                 continue;
             }
 
-            $info = $this->validExcelFieldValue($userData, $row, $fieldCol);
+            $info                            = $this->validExcelFieldValue($userData, $row, $fieldCol);
             empty($info) ? '' : $errorInfo[] = $info;
 
             $userCount = $userCount + 1;
@@ -243,21 +241,21 @@ class ClassroomMemberImporter extends Importer
     protected function validateExcelFile($file)
     {
         if (!is_object($file)) {
-            return $this->createDangerResponse('请选择上传的文件');
+            return $this->createDangerResponse($this->getServiceKernel()->trans('请选择上传的文件'));
         }
 
         if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
-            return $this->createDangerResponse('Excel格式不正确！');
+            return $this->createDangerResponse($this->getServiceKernel()->trans('Excel格式不正确！'));
         }
 
         $this->excelAnalyse($file);
 
         if ($this->rowTotal > 1000) {
-            return $this->createDangerResponse('Excel超过1000行数据!');
+            return $this->createDangerResponse($this->getServiceKernel()->trans('Excel超过1000行数据!'));
         }
 
         if (!$this->checkNecessaryFields($this->excelFields)) {
-            return $this->createDangerResponse('缺少必要的字段');
+            return $this->createDangerResponse($this->getServiceKernel()->trans('缺少必要的字段'));
         }
     }
 
@@ -286,7 +284,7 @@ class ClassroomMemberImporter extends Importer
         }
 
         if (!$user) {
-            $errorInfo = "第 " . $row . "行的信息有误，用户数据不存在，请检查。";
+            $errorInfo = $this->getServiceKernel()->trans('第 %row%行的信息有误，用户数据不存在，请检查。', array('%row%' => $row));
         }
         return $errorInfo;
     }
@@ -294,7 +292,7 @@ class ClassroomMemberImporter extends Importer
     protected function checkRepeatData()
     {
         $errorInfo   = array();
-        $checkFields = array_keys($this->necessaryFields);
+        $checkFields = array_keys($this->getNecessaryFields());
         $fieldSort   = $this->getFieldSort();
 
         foreach ($checkFields as $checkField) {
@@ -309,7 +307,7 @@ class ClassroomMemberImporter extends Importer
             for ($row = 3; $row <= $this->rowTotal; $row++) {
                 $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
 
-                $nicknameData[] = $nickNameColData . "";
+                $nicknameData[] = $nickNameColData."";
             }
 
             $info = $this->arrayRepeat($nicknameData, $nickNameCol);
@@ -328,12 +326,12 @@ class ClassroomMemberImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= '第' . ($nickNameCol + 1) . "列重复:<br>";
+                $repeatRow .= $this->getServiceKernel()->trans('第%col%列重复:', array('%col%' => ($nickNameCol + 1))).'<br>';
 
                 for ($i = 1; $i <= $value; $i++) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= "第" . $row . "行" . "    " . $key . "<br>";
+                    $repeatRow .= $this->getServiceKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
 
                     unset($array[$row - 3]);
                 }
@@ -345,7 +343,7 @@ class ClassroomMemberImporter extends Importer
     protected function getFieldSort()
     {
         $fieldSort       = array();
-        $necessaryFields = $this->necessaryFields;
+        $necessaryFields = $this->getNecessaryFields();
         $excelFields     = $this->excelFields;
 
         foreach ($excelFields as $key => $value) {
@@ -372,7 +370,7 @@ class ClassroomMemberImporter extends Importer
         $excelFields        = array();
 
         for ($col = 0; $col < $highestColumnIndex; $col++) {
-            $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+            $fieldTitle                                  = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
             empty($fieldTitle) ? '' : $excelFields[$col] = $this->trim($fieldTitle);
         }
 
@@ -412,6 +410,12 @@ class ClassroomMemberImporter extends Importer
         }
 
         $this->getClassroomService()->tryManageClassroom($classroomId);
+    }
+
+    public function getNecessaryFields()
+    {
+        $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+        return $this->getServiceKernel()->transArray($necessaryFields);
     }
 
     protected function getUserService()

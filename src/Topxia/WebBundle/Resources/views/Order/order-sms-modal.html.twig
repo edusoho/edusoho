@@ -10,7 +10,7 @@
       <div class = "form-group">
         <div class = "controls row" >
           <div class = "col-md-5 col-md-offset-2" >
-            <label class="control-label">{{'已绑定手机号码'|trans}} {{ blur_phone_number(verifiedMobile) }}</label>
+            <label class="control-label">{{'已绑定手机号码%blur_phone_number%'|trans({'%blur_phone_number%':blur_phone_number(verifiedMobile)})}} </label>
           </div>
           <div class = "col-md-3" >
             <a class="text-sm text-muted" href="{{path('settings_bind_mobile')}}" target="_blank">{{'修改手机号码'|trans}}</a>

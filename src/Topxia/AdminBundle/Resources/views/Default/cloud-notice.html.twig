@@ -8,21 +8,21 @@
   <div class="row form-group">
     <div class="help-block">
       <p style = "text-align: left;font-size:18px">
-        &nbsp;&nbsp;欢迎使用，试用将于 
+        &nbsp;&nbsp;{{'欢迎使用，试用将于'|trans}} 
         <span style="color:#fed032;"> 
           {% if trialTime.endTime is defined %}
-            {{trialTime.endTime|date("Y年m月d日")}} 
+            {{trialTime.endTime|date("Y-m-d")}} 
           {% else %} 
-            未知时间
+            {{'未知时间'|trans}}
           {% endif %}
         </span> 
-        到期,剩余 
+        {{'到期,剩余'|trans}} 
         <span style="color:#fed032;">
-          {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}未知{% endif %}
-        </span> 天。
+          {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}{{'未知'|trans}}{% endif %}
+        </span> {{'天。'|trans}}
       </p>
       <p style = "text-align: left;font-size:18px">
-        &nbsp; 您可以联系销售人员购买授权版本，或者延长试用期限。电话：0571-86819929 或 
+        &nbsp; {{'您可以联系销售人员购买授权版本，或者延长试用期限。'|trans}}{{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
         <span>
           <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
         </span>
@@ -37,7 +37,7 @@
   {% if notices|default(false) %}
     <div class="col-md-12">
       <div class="main-system-alert">
-        <h2> 站长公告</h2>
+        <h2> {{'站长公告'|trans}}</h2>
           <ul class="alert-list">
           {% for notice in notices %}
             <li class="glyphicon glyphicon-bell" style="color:#fed032;font-size:16px;"><a href="{{notice.detailUrl}}" style="margin-left:22px;" target="_blank">{{notice.content}}<span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span></a></li>

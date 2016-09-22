@@ -37,10 +37,10 @@ class AnnouncementDataTag extends BaseDataTag implements DataTag
     protected function checkCount(array $arguments)
     {
         if (empty($arguments['count'])) {
-            throw new \InvalidArgumentException("count参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('count参数缺失'));
         }
         if ($arguments['count'] > 100) {
-            throw new \InvalidArgumentException("count参数超出最大取值范围");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('count参数超出最大取值范围'));
         }
     }
 }

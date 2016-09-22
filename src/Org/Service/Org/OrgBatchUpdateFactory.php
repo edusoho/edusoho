@@ -1,6 +1,9 @@
 <?php
 namespace Org\Service\Org;
 
+use Topxia\Common\Exception\InvalidArgumentException;
+
+
 class OrgBatchUpdateFactory
 {
 
@@ -8,7 +11,7 @@ class OrgBatchUpdateFactory
     {
         $modules = self::getModules();
         if (!array_key_exists($module, $modules)) {
-            throw new \InvalidArgumentException("模块{$module}不存在,更新组织机构失败");
+            throw new InvalidArgumentException(array('模块%module%不存在,更新组织机构失败', array('%module%' => $module)));
         }
         return $modules[$module];
     }
@@ -36,9 +39,14 @@ class OrgBatchUpdateFactory
             'article'      => '咨询',
             'announcement' => '网站公告'
         );
-        if (array_key_exists($key,$modules)) {
+        if (array_key_exists($key, $modules)) {
             return $modules[$key];
         }
-        throw new \Exception("模块不存在,获取数据出错");
+        throw new InvalidArgumentException('模块不存在,获取数据出错');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

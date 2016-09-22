@@ -57,13 +57,13 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 
-    public function searchThreads($conditions, $orderBys,$start,$limit)
+    public function searchThreads($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
@@ -75,7 +75,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function searchThreadCount($conditions)
     {
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -83,7 +83,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function searchThreadCountInCourseIds($conditions)
     {
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -92,9 +92,9 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
@@ -121,20 +121,21 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('lessonId = :lessonId')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('type = :type')
-                        ->andWhere('isStick = :isStick')
-                        ->andWhere('isElite = :isElite')
-                        ->andWhere('postNum = :postNum')
-                        ->andWhere('postNum > :postNumLargerThan')
-                        ->andWhere('title LIKE :title')
-                        ->andWhere('content LIKE :content')
-                        ->andWhere('courseId IN (:courseIds)')
-                        ->andWhere('private = :private');
+            ->from($this->table, $this->table)
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
+            ->andWhere('userId = :userId')
+            ->andWhere('type = :type')
+            ->andWhere('type IN (:types)')
+            ->andWhere('isStick = :isStick')
+            ->andWhere('isElite = :isElite')
+            ->andWhere('postNum = :postNum')
+            ->andWhere('postNum > :postNumLargerThan')
+            ->andWhere('title LIKE :title')
+            ->andWhere('content LIKE :content')
+            ->andWhere('courseId IN (:courseIds)')
+            ->andWhere('private = :private');
 
         return $builder;
     }
@@ -171,7 +172,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $fields = array('postNum', 'hitNum', 'followNum');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%s字段不允许增减，只有%s才被允许增减'), $field, implode(',', $fields)));
         }
 
         $currentTime = time();

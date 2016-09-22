@@ -15,7 +15,7 @@ seajs.config({
         "jquery.jcrop-css": "jquery-plugin/jcrop/0.9.12/jcrop.css",
         "jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
         "jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",
-        'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+        'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.1/datetimepicker",
         "jquery.countdown": "jquery.countdown/2.0.4/index",
         "jquery.colorbox": "jquery.colorbox/1.6.0/index",
         "plupload": "jquery-plugin/plupload-queue/2.0.0/plupload",
@@ -79,6 +79,7 @@ seajs.config({
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
+        'z_tree_exhide': 'jquery-plugin/zTree/3.5.21/js/jquery.ztree.exhide.js',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
         'jquery.treegrid': 'jquery-plugin/treegrid/0.3.0/jquery.treegrid',
@@ -94,7 +95,7 @@ seajs.config({
 
     // 变量配置
     vars: {
-        'locale': 'zh-cn'
+        'locale': app.lang
     },
 
     charset: 'utf-8',

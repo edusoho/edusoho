@@ -10,6 +10,8 @@
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+{# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
+<html lang="{{ app.request.getLocale() }}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -19,7 +21,7 @@
   <title>
 
     {% block title %}
-      {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
+      {{ currentMenu.name|trans }} - {{ menu|parent_permission.name|trans }} - {{ menu|parent_permission.code|parent_permission.name|trans  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -52,26 +54,26 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
+        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'管理后台'|trans}}</a>
       </div>
       <div class="navbar-collapse collapse">
         {% include 'PermissionBundle:Templates:navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
-            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'常用'|trans}}</a>
             <ul class="dropdown-menu shortcuts">
               {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
             </ul>
           </li>
-          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
+          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'回首页'|trans}}</a></li>
 
           <li class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
-                <ul class="dropdown-menu main-list">
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
-                </ul>
-              </li>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
+            <ul class="dropdown-menu main-list">
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+            </ul>
+          </li>
         </ul>
 
       </div><!--/.navbar-collapse -->
@@ -80,6 +82,14 @@
   
   <div class="container">
     <div class="row">
+      {% set notifies = plugin_update_notify() %}
+      {% if not notifies is empty %}
+        <div style="margin: 0 15px">
+          <div class="alert alert-danger">
+            【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！ <a href="{{ path('admin_app_upgrades') }}">请立即升级！</a>
+          </div>
+        </div>
+      {% endif %}
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
@@ -89,6 +99,7 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
+
             <h1 class="pull-left">
               {% block page_title %}
                 {{ currentMenu.fullname|default(currentMenu.name) }}
@@ -114,7 +125,7 @@
 
           {% block content_header %}{% endblock %}
           
-          {% include 'PermissionBundle:Templates:tabs.html.twig' %}
+          {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
 
           {% block capsule %}{% endblock %}
 
@@ -135,7 +146,7 @@
     <div class="fixed-bar">
       <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
         <i class="es-icon es-icon-help"></i>
-        <span>产品<br/>反馈</span>
+        <span>{{'产品'|trans}}<br/>{{'反馈'|trans}}</span>
       </a>
     </div>
   {% endif %}
@@ -157,5 +168,5 @@
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
-  >{{ menu.name }}</a>
+  >{{ menu.name|trans }}</a>
 {% endmacro %}

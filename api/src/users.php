@@ -4,6 +4,10 @@ use Topxia\Api\Util\UserUtil;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\RuntimeException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\InvalidArgumentException;
 
 $api = $app['controllers_factory'];
 
@@ -68,11 +72,12 @@ $api->post('/login', function (Request $request) {
     $user = ServiceKernel::instance()->createService('User.UserService')->getUserByLoginField($fields['nickname']);
 
     if (empty($user)) {
-        throw new \Exception('user not found');
+        throw new ResourceNotFoundException('User', $fields['nickname']);
     }
 
     if (!ServiceKernel::instance()->createService('User.UserService')->verifyPassword($user['id'], $fields['password'])) {
-        throw new \Exception('password error');
+
+        throw new RuntimeException('password error');
     }
 
     $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id']);
@@ -119,7 +124,7 @@ $api->post('/bind_login', function (Request $request) {
     $avatar = $request->request->get('avatar', '');
 
     if (empty($type)) {
-        throw new \Exception('type parameter error');
+        throw new InvalidArgumentException('type parameter error');
     }
 
     $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByTypeAndFromId($type, $id);
@@ -134,18 +139,18 @@ $api->post('/bind_login', function (Request $request) {
         $token = array('userId' => $id);
 
         if (empty($oauthUser['id'])) {
-            throw new \RuntimeException("获取用户信息失败，请重试。");
+            throw new InvalidArgumentException("获取用户信息失败，请重试。");
         }
 
         if (!ServiceKernel::instance()->createService('User.AuthService')->isRegisterEnabled()) {
-            throw new \RuntimeException("注册功能未开启，请联系管理员！");
+            throw new RuntimeException("注册功能未开启，请联系管理员！");
         }
 
         $userUtil = new UserUtil();
         $user = $userUtil->generateUser($type, $token, $oauthUser, $setData = array());
 
         if (empty($user)) {
-            throw new \RuntimeException("登录失败，请重试！");
+            throw new RuntimeException("登录失败，请重试！");
         }
 
         $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id']);

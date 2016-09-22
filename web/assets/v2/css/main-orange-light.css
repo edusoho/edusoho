@@ -3357,7 +3357,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3377,7 +3377,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -6287,8 +6287,6 @@ textarea {
 }
 .form-control {
   color: #616161;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   border-color: #e1e1e1;
 }
 .form-control.form-control-lg {
@@ -10912,7 +10910,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -13640,6 +13638,15 @@ textarea {
 }
 .open-course-header {
   margin-bottom: 15px;
+  position: relative;
+}
+.open-course-header .black-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #000;
 }
 .open-course-header > .row {
   margin: 0;
@@ -14033,6 +14040,7 @@ textarea {
   height: 100%;
   background: #000;
   background-color: rgba(0, 0, 0, 0.9);
+  z-index: 999;
 }
 .open-course-views .mask .mask-content {
   position: absolute;

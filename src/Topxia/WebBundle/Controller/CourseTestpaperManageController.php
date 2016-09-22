@@ -137,13 +137,13 @@ class CourseTestpaperManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException('试卷不存在');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
         }
 
         if ($request->getMethod() == 'POST') {
             $data      = $request->request->all();
             $testpaper = $this->getTestpaperService()->updateTestpaper($id, $data);
-            $this->setFlashMessage('success', '试卷信息保存成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷信息保存成功！'));
             return $this->redirect($this->generateUrl('course_manage_testpaper', array('courseId' => $course['id'])));
         }
 
@@ -232,18 +232,18 @@ class CourseTestpaperManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException('试卷不存在');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
         }
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
 
             if (empty($data['questionId']) || empty($data['scores'])) {
-                return $this->createMessageResponse('error', '试卷题目不能为空！');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目不能为空！'));
             }
 
             if (count($data['questionId']) != count($data['scores'])) {
-                return $this->createMessageResponse('error', '试卷题目数据不正确');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目数据不正确'));
             }
 
             $data['questionId'] = array_values($data['questionId']);
@@ -261,7 +261,7 @@ class CourseTestpaperManageController extends BaseController
                 $this->getTestpaperService()->updateTestpaper($testpaperId, array('passedScore' => $data['passedScore']));
             }
 
-            $this->setFlashMessage('success', '试卷题目保存成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷题目保存成功！'));
             return $this->redirect($this->generateUrl('course_manage_testpaper', array('courseId' => $courseId)));
         }
 
@@ -273,7 +273,6 @@ class CourseTestpaperManageController extends BaseController
         $subItems   = array();
         $hasEssay   = false;
         $scoreTotal = 0;
-
 
         foreach ($items as $key => $item) {
             if ($item['questionType'] == 'essay') {
@@ -310,7 +309,7 @@ class CourseTestpaperManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException('试卷不存在');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -479,7 +478,7 @@ class CourseTestpaperManageController extends BaseController
         $ranges  = array();
 
         if ($includeCourse == true) {
-            $ranges["course-{$course['id']}"] = '本课程';
+            $ranges["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
         }
 
         foreach ($lessons as $lesson) {
@@ -487,7 +486,8 @@ class CourseTestpaperManageController extends BaseController
                 continue;
             }
 
-            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}： {$lesson['title']}";
+            $ranges["course-{$lesson['courseId']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时%lessonnumber%： %lessontitle%',
+                array('%lessonnumber%' => $lesson['number'], '%lessontitle%' => $lesson['title']));
         }
 
         return $ranges;

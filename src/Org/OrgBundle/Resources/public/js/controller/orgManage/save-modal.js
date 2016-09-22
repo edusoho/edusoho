@@ -18,10 +18,10 @@ define(function (require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function (html) {
                     $modal.modal('hide');
-                    Notify.success('保存组织机构成功！');
+                    Notify.success(Translator.trans('保存组织机构成功！'));
                     window.location.reload();
                 }).fail(function () {
-                    Notify.danger("添加组织机构失败，请重试！");
+                    Notify.danger(Translator.trans('添加组织机构失败，请重试！'));
                 });
 
             }
@@ -44,18 +44,19 @@ define(function (require, exports, module) {
         Validator.addRule("alpha_numeric", /^[a-zA-Z0-9]+$/i, "{{display}}必须是英文字母、数字组成");
 
         $modal.find('.delete-org').on('click', function () {
-            if (confirm('真的要删除该组织机构及其辖下组织机构吗？')) {
+            if (confirm(Translator.trans('真的要删除该组织机构及其辖下组织机构吗？'))) {
                 $.post($(this).data('url'), function (response) {
                     if (response && response.status == 'error') {
-                        var msg = "该织机构下含有数据 ";
+                        var msg = Translator.trans("该织机构下含有数据 ");
                         $.each(response.data, function ($key) {
-                            msg += $key + ' : ' + response.data[$key] + "条\t";
+                            msg += $key + ' : ' + response.data[$key] + Translator.trans('条') +"\t";
                         });
-                        msg += "请先转移到其他组织机构在进行删除!";
+                        msg += Translator.trans('请先转移到其他组织机构在进行删除!');
                         Notify.danger(msg, 8);
                         return false;
                     }
-                    Notify.success("组织机构已删除");
+                    Notify.success(Translator.trans('组织机构已删除'));
+
 
                     $modal.modal('hide');
                     window.location.reload();

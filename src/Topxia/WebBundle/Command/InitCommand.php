@@ -1,15 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
 
 class InitCommand extends BaseCommand
 {
@@ -24,7 +24,7 @@ class InitCommand extends BaseCommand
 
         $this->installAssets($output);
         $this->initServiceKernel();
-
+        $this->initRoles($output);
         $user = $this->initAdminUser($output);
 
         $this->initSiteSetting($output);
@@ -44,6 +44,7 @@ class InitCommand extends BaseCommand
         $this->initBlock($output);
         $this->initCrontabJob($output);
         $this->initFolders();
+
 
         $output->writeln('<info>初始化系统完毕</info>');
     }
@@ -151,7 +152,6 @@ class InitCommand extends BaseCommand
             'email'     => 'test@edusoho.com',
             'nickname'  => '测试管理员',
             'password'  => 'kaifazhe',
-            'roles'     => array(),
             'createdIp' => '127.0.0.1'
         );
         $output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
@@ -164,7 +164,9 @@ class InitCommand extends BaseCommand
 
         $currentUser       = new CurrentUser();
         $user['currentIp'] = '127.0.0.1';
+        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
         $currentUser->fromArray($user);
+        ServiceKernel::instance()->setCurrentUser($currentUser);
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
         $this->getContainer()->get('security.context')->setToken($token);
 
@@ -253,7 +255,6 @@ EOD;
         $settingService = $this->getSettingService();
 
         $defaultSetting                 = array();
-        $defaultSetting['user_name']    = '学员';
         $defaultSetting['chapter_name'] = '章';
         $defaultSetting['part_name']    = '节';
 
@@ -534,6 +535,13 @@ EOD;
         $output->writeln(' ...<info>成功</info>');
     }
 
+    protected function initRoles($output)
+    {
+        $output->write('  初始化角色');
+        $this->getRoleService()->refreshRoles();
+        $output->writeln(' ...<info>成功</info>');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -562,5 +570,10 @@ EOD;
     protected function getCrontabService()
     {
         return $this->getServiceKernel()->createService('Crontab.CrontabService');
+    }
+
+    protected function getRoleService()
+    {
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 }

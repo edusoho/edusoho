@@ -5,6 +5,7 @@ admin_operation_keyword:
     children:
         admin_keyword:
             name: 敏感词列表
+            disable: true
             children:
                 admin_keyword_create:
                     name: 添加敏感词
@@ -12,6 +13,7 @@ admin_operation_keyword:
                     group: topBtn
         admin_keyword_banlogs:
             name: 屏蔽记录
+            disable: true
 
 
 

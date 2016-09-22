@@ -6,10 +6,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class TargetHelper
 {
-
     protected $container;
 
-    public function __construct ($container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
@@ -46,8 +45,8 @@ class TargetHelper
 
         $datas = array();
         foreach ($groupedTargets as $type => $ids) {
-            $finderClass = __NAMESPACE__ . '\\' . ucfirst($type) . 'TargetFinder';
-            $finder = new $finderClass($this->container);
+            $finderClass  = __NAMESPACE__.'\\'.ucfirst($type).'TargetFinder';
+            $finder       = new $finderClass($this->container);
             $datas[$type] = $finder->find($ids);
         }
 
@@ -60,26 +59,25 @@ class TargetHelper
 
         foreach ($targets as $target) {
             $explodedTarget = explode('/', $target);
-            $lastTarget = end($explodedTarget);
+            $lastTarget     = end($explodedTarget);
 
             if (strpos($lastTarget, '-') === false) {
                 $parsedTargets[$target] = array('type' => 'unknow', 'id' => 0);
             } else {
-                list($type, $id) = explode('-', $lastTarget);
-                $parsedTargets[$target] =  array('type' => $type, 'id' => $id);
+                list($type, $id)        = explode('-', $lastTarget);
+                $parsedTargets[$target] = array('type' => $type, 'id' => $id);
             }
         }
 
         return $parsedTargets;
     }
-
 }
 
 abstract class AbstractTargetFinder
 {
     protected $container;
 
-    public function __construct ($container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
@@ -95,12 +93,12 @@ class CourseTargetFinder extends AbstractTargetFinder
         $targets = array();
         foreach ($courses as $id => $course) {
             $targets[$id] = array(
-                'type' => 'course',
-                'id' => $id,
+                'type'        => 'course',
+                'id'          => $id,
                 'simple_name' => $course['title'],
-                'name' => $course['title'],
-                'full_name' => $course['title'],
-                'url' => $this->container->get('router')->generate('course_show', array('id' => $id))
+                'name'        => $course['title'],
+                'full_name'   => $course['title'],
+                'url'         => $this->container->get('router')->generate('course_show', array('id' => $id))
             );
         }
 
@@ -117,12 +115,12 @@ class LessonTargetFinder extends AbstractTargetFinder
         $targets = array();
         foreach ($lessons as $id => $lesson) {
             $targets[$id] = array(
-                'type' => 'lesson',
-                'id' => $id,
-                'simple_name' => "课时{$lesson['number']}",
-                'name' => $lesson['title'],
-                'full_name' => "课时{$lesson['number']}：{$lesson['title']}",
-                'url' => $this->container->get('router')->generate('course_learn', array('id' => $lesson['courseId'])) . '#lesson/' . $id,
+                'type'        => 'lesson',
+                'id'          => $id,
+                'simple_name' => ServiceKernel::instance()->trans('课时%lessonNumber%', array('%lessonNumber%' => $lesson['number'])),
+                'name'        => $lesson['title'],
+                'full_name'   => ServiceKernel::instance()->trans('课时%lessonNumber%：%lessonTitle%', array('%lessonNumber%' => $lesson['number'], '%lessonTitle%' => $lesson['title'])),
+                'url'         => $this->container->get('router')->generate('course_learn', array('id' => $lesson['courseId'])).'#lesson/'.$id
             );
         }
         return $targets;
@@ -138,12 +136,12 @@ class TestpaperTargetFinder extends AbstractTargetFinder
         $targets = array();
         foreach ($testpapers as $id => $testpaper) {
             $targets[$id] = array(
-                'type' => 'testpaper',
-                'id' => $id,
+                'type'        => 'testpaper',
+                'id'          => $id,
                 'simple_name' => $testpaper['name'],
-                'name' => $testpaper['name'],
-                'full_name' => $testpaper['name'],
-                'url' => '',
+                'name'        => $testpaper['name'],
+                'full_name'   => $testpaper['name'],
+                'url'         => ''
             );
         }
         return $targets;

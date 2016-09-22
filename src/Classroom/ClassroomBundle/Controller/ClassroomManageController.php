@@ -78,7 +78,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+            return $this->createErrorResponse($request, 'not_login', $this->getServiceKernel()->trans('用户未登录，创建班级失败。'));
         }
 
         $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
@@ -318,15 +318,16 @@ class ClassroomManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
-                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
+                throw $this->createNotFoundException($this->getServiceKernel()->trans('用户%nickname%不存在', array('%nickname%' => $data['nickname'])));
             }
 
             if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
-                throw $this->createNotFoundException("用户已经是学员，不能添加！");
+                throw $this->createNotFoundException($this->getServiceKernel()->trans('用户已经是学员，不能添加！'));
             }
 
             $classroomSetting = $this->getSettingService()->get('classroom');
-            $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+
+            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
 
             if (empty($data['price'])) {
                 $data['price'] = 0;
@@ -334,7 +335,7 @@ class ClassroomManageController extends BaseController
 
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
-                'title'      => "购买".$classroomName."《{$classroom['title']}》(管理员添加)",
+                'title'      => $this->getServiceKernel()->trans('购买%classroomName%《%title%》(管理员添加)', array('%classroomName%' => $classroomName, '%title%' => $classroom['title'])),
                 'targetType' => 'classroom',
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
@@ -366,7 +367,7 @@ class ClassroomManageController extends BaseController
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
-            $this->getLogService()->info('classroom', 'add_student', "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+            $this->getLogService()->info('classroom', 'add_student', $this->getServiceKernel()->trans('班级《%title%》(#%classroomId%)，添加学员%nickname%(#%userId%)，备注：%remark%', array('%title%' => $classroom['title'], '%classroomId%' => $classroom['id'], '%nickname%' => $user['nickname'], '%userId%' => $user['id'], '%remark%' => $data['remark'])));
 
             return $this->createStudentTrResponse($classroom, $member);
         }
@@ -384,12 +385,12 @@ class ClassroomManageController extends BaseController
         $user    = $this->getUserService()->getUserByLoginField($keyWord);
 
         if (!$user) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本班级的学员了'));
             } else {
                 $response = array('success' => true, 'message' => '');
             }
@@ -401,7 +402,7 @@ class ClassroomManageController extends BaseController
     public function exportCsvAction(Request $request, $id, $role)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
+        $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
@@ -415,7 +416,7 @@ class ClassroomManageController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        $fields['weibo'] = "微博";
+        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
@@ -439,7 +440,7 @@ class ClassroomManageController extends BaseController
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student);
         }
 
-        $str = "用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
+        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
@@ -503,7 +504,7 @@ class ClassroomManageController extends BaseController
             $data['service'] = empty($data['service']) ? null : $data['service'];
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $data);
-            $this->setFlashMessage('success', "保存成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
         return $this->render('ClassroomBundle:ClassroomManage:services.html.twig', array(
@@ -537,7 +538,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', "保存成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
         $teacherIds = $this->getClassroomService()->findTeachers($id);
@@ -574,7 +575,7 @@ class ClassroomManageController extends BaseController
             $headTeacherId = empty($data['ids']) ? 0 : $data['ids'][0];
             $this->getClassroomService()->addHeadTeacher($id, $headTeacherId);
 
-            $this->setFlashMessage('success', "保存成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
         $classroom      = $this->getClassroomService()->getClassroom($id);
@@ -611,7 +612,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', "保存成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
         }
 
         $assistantIds     = $this->getClassroomService()->findAssistants($id);
@@ -644,7 +645,7 @@ class ClassroomManageController extends BaseController
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
-            $this->setFlashMessage('success', "基本信息设置成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('基本信息设置成功！'));
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
@@ -670,7 +671,7 @@ class ClassroomManageController extends BaseController
                 $class['vipLevelId'] = 0;
             }
 
-            $this->setFlashMessage('success', "设置成功！");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置成功！'));
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
         }
@@ -751,7 +752,7 @@ class ClassroomManageController extends BaseController
 
             $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
 
-            $this->setFlashMessage('success', "课程修改成功");
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程修改成功'));
 
             return $this->redirect($this->generateUrl('classroom_manage_courses', array(
                 'id' => $id
@@ -794,7 +795,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->addCoursesToClassroom($id, $ids);
-        $this->setFlashMessage('success', "课程添加成功");
+        $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程添加成功'));
 
         return new Response('success');
     }
@@ -854,7 +855,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($classroom['status'] != 'published') {
-            throw $this->createNotFoundException("未发布班级不能导入学员!");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('未发布班级不能导入学员!'));
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
@@ -931,7 +932,7 @@ class ClassroomManageController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (empty($currentUser)) {
-            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+            throw $this->createServiceException($this->getServiceKernel()->trans('用户不存在或者尚未登录，请先登录'));
         }
 
         $courses                = $this->getClassroomService()->findCoursesByClassroomId($id);

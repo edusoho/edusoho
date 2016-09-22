@@ -3,15 +3,15 @@
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
-      <label class="label label-danger">禁</label>
+      <label class="label label-danger">{{'禁'|trans}}</label>
     {% endif %}
   </td>
    {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
     {% if user.promoted %}
-      <span class="label label-default">荐:{{ user.promotedTime|date('Y-m-d') }} / 序号:{{ user.promotedSeq }}</span>
+      <span class="label label-default">{{'荐:'|trans}}{{ user.promotedTime|date('Y-m-d') }} / {{'序号:'|trans}}{{ user.promotedSeq }}</span>
     {% else %}
-      <span class="text-muted">否</span>
+      <span class="text-muted">{{'否'|trans}}</span>
     {% endif %}
   </td>
   <td>
@@ -22,7 +22,6 @@
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
-
       {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_teacher_manage', group:'groupButton', user: user} %}
     </div>
   </td>

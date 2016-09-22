@@ -45,14 +45,6 @@ class TreeTest extends BaseTestCase
         }, 0));
     }
 
-    public function testTreeToArray()
-    {
-        $tree = Tree::buildWithArray($this->getTestArray());
-        $expect = $this->getTestArray();
-        array_unshift($expect, array('id' => 0));
-        $this->assertArrayEquals($tree->toArray(), $expect);
-    }
-
     public function testTreeFind()
     {
         $tree = Tree::buildWithArray($this->getTestArray());

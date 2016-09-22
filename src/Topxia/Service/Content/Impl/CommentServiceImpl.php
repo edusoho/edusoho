@@ -39,15 +39,15 @@ class CommentServiceImpl extends BaseService implements CommentService
 		$comment = $this->getComment($id);
 
 		if (empty($comment)) {
-			throw $this->createNotFoundException('评论不存在');
+			throw $this->createNotFoundException($this->getKernel()->trans('评论不存在'));
 		}
 
 		if (empty($user)) {
-			throw $this->createAccessDeniedException('无权限删除评论！');
+			throw $this->createAccessDeniedException($this->getKernel()->trans('无权限删除评论！'));
 		}
 
 		if ($comment['userId'] != $user['id'] && ! $this->getContainer()->get('security.context')->isGranted('ROLE_ADMIN')) {
-			throw $this->createAccessDeniedException('无权限删除评论！');
+			throw $this->createAccessDeniedException($this->getKernel()->trans('无权限删除评论！'));
 		}
 
 		return $this->getCommentDao()->deleteComment($id);
@@ -69,7 +69,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 	{
 		$objectTypes = array('course');
 		if(!in_array($objectType, $objectTypes)){
-			throw $this->createServiceException('不存在当前这种评论对象');
+			throw $this->createServiceException($this->getKernel()->trans('不存在当前这种评论对象'));
 		}
 	}
 	
@@ -80,7 +80,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 			case self::COMMENT_OBJECTTYPE_COURSE:
 				$foundCourse = $this->getCourseService()->getCourse($comment['objectId']);
 				if(empty($foundCourse)){
-					throw $this->createServiceException('评论课程失败，该课程不存在');
+					throw $this->createServiceException($this->getKernel()->trans('评论课程失败，该课程不存在'));
 				}
 				break;
 			

@@ -3,7 +3,7 @@
 {% block title %}{{'提示'|trans}}{% endblock %}
 
 {% block body %}
-  <h4>您尚未成为{{ targetObject.title|default('课程') }}学员，请先成为{{ targetObject.title|default('课程') }}学员。</h4>
+    <h4>{{'您尚未成为%courseTitle%学员,请先成为%courseTitle%学员'|trans({'%courseTitle%': targetObject.title|default('课程'|trans) })}}</h4>
 {% endblock %}
 
 {% block footer %}

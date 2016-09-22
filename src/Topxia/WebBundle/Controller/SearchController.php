@@ -16,9 +16,9 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
 
-        if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
+        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
             return $this->redirect($this->generateUrl('cloud_search', array(
                 'q' => $keywords
             )));
@@ -71,7 +71,7 @@ class SearchController extends BaseController
             $count
             , 12
         );
-        $courses   = $this->getCourseService()->searchCourses(
+        $courses = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',
             $paginator->getOffsetCount(),
@@ -92,7 +92,6 @@ class SearchController extends BaseController
 
     public function cloudSearchAction(Request $request)
     {
-
         $pageSize = 10;
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
@@ -104,7 +103,7 @@ class SearchController extends BaseController
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,
                 'type'         => $type,
-                'errorMessage' => '在上方搜索框输入关键词进行搜索.'
+                'errorMessage' => $this->getServiceKernel()->trans('在上方搜索框输入关键词进行搜索.')
             ));
         }
         $conditions = array(
@@ -128,7 +127,7 @@ class SearchController extends BaseController
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,
                 'type'         => $type,
-                'errorMessage' => '搜索失败，请稍候再试.'
+                'errorMessage' => $this->getServiceKernel()->trans('搜索失败，请稍候再试.')
             ));
         }
 
@@ -139,7 +138,7 @@ class SearchController extends BaseController
             'type'      => $type,
             'resultSet' => $resultSet,
             'counts'    => $counts,
-            'paginator' => $paginator,
+            'paginator' => $paginator
         ));
     }
 

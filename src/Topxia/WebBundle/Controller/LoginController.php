@@ -12,7 +12,7 @@ class LoginController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你已经登录了'), null, 3000, $this->generateUrl('homepage'));
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -46,9 +46,9 @@ class LoginController extends BaseController
         $user  = $this->getUserService()->getUserByEmail($email);
 
         if ($user) {
-            $response = array('success' => true, 'message' => '该Email地址可以登录');
+            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('该Email地址可以登录'));
         } else {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该Email地址尚未注册'));
         }
 
         return $this->createJsonResponse($response);

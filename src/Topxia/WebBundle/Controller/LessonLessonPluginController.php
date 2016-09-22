@@ -42,7 +42,7 @@ class LessonLessonPluginController extends BaseController
             'items' => $items,
             'learnStatuses' => $learnStatuses,
             'currentTime' => time(),
-            'weeks' => array("日","一","二","三","四","五","六"),
+            'weeks' => array($this->getServiceKernel()->trans('日'),$this->getServiceKernel()->trans('一'),$this->getServiceKernel()->trans('二'),$this->getServiceKernel()->trans('三'),$this->getServiceKernel()->trans('四'),$this->getServiceKernel()->trans('五'),$this->getServiceKernel()->trans('六')),
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'member' => $member,

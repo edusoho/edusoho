@@ -22,6 +22,11 @@
 	<link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
 
+{% set locale = app.request.getLocale() %}
+{% if locale != 'zh_CN' %}
+<link href="{{ asset('assets/v2/css/i18n/' ~ locale ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
 {% if navigationcolor != 'default' %}
 	<link href="{{ asset('assets/v2/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}

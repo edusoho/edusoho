@@ -1,8 +1,8 @@
 <?php
 namespace Permission\Service\Role\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
 use Permission\Service\Role\Dao\RoleDao;
+use Topxia\Service\Common\BaseDao;
 
 class RoleDaoImpl extends BaseDao implements RoleDao
 {
@@ -12,16 +12,22 @@ class RoleDaoImpl extends BaseDao implements RoleDao
     );
     public function getRole($id)
     {
-        $sql  = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $role = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $role ? $this->createSerializer()->unserialize($role, $this->getSerializeFields()) : null;
+        $self = $this;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($self) {
+            $sql  = "SELECT * FROM {$self->getTable()} WHERE id = ? LIMIT 1";
+            $role = $self->getConnection()->fetchAssoc($sql, array($id));
+            return $role ? $self->createSerializer()->unserialize($role, $self->getSerializeFields()) : null;
+        });
     }
 
     public function getRoleByCode($code)
     {
-        $sql  = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
-        $role = $this->getConnection()->fetchAssoc($sql, array($code));
-        return $role ? $this->createSerializer()->unserialize($role, $this->getSerializeFields()) : null;
+        $self = $this;
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($self) {
+            $sql  = "SELECT * FROM {$self->getTable()} WHERE code = ? LIMIT 1";
+            $role = $self->getConnection()->fetchAssoc($sql, array($code));
+            return $role ? $self->createSerializer()->unserialize($role, $self->getSerializeFields()) : null;
+        });
     }
 
     public function findRolesByCodes($codes)
@@ -32,7 +38,8 @@ class RoleDaoImpl extends BaseDao implements RoleDao
 
         $marks = str_repeat('?,', count($codes) - 1).'?';
         $sql   = "SELECT * FROM {$this->getTable()} WHERE code IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $codes);
+        $roles = $this->getConnection()->fetchAll($sql, $codes);
+        return $roles ? $this->createSerializer()->unserializes($roles, $this->getSerializeFields()) : array();
     }
 
     public function getRoleByName($name)
@@ -52,6 +59,7 @@ class RoleDaoImpl extends BaseDao implements RoleDao
             throw $this->createDaoException('Insert role error.');
         }
 
+        $this->clearCached();
         return $this->getRole($this->getConnection()->lastInsertId());
     }
 
@@ -59,12 +67,14 @@ class RoleDaoImpl extends BaseDao implements RoleDao
     {
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getRole($id);
     }
 
     public function deleteRole($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
         return $result;
     }
 
@@ -104,7 +114,7 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         return $this->createDao('System.RoleDao');
     }
 
-    protected function getSerializeFields()
+    public function getSerializeFields()
     {
         return $this->serializeFields;
     }
