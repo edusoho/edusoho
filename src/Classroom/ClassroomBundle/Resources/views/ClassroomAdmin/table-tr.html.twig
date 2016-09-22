@@ -64,35 +64,11 @@
     <td>
 
   <div class="btn-group">
-
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-      {{'编辑'|trans}}
-      <span class="caret"></span>
-    </button>
-
- <ul class="dropdown-menu">
-       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> {{'管理%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
-        
-        {% if classroom.recommended %}
-          <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'classroomList'}) }}" title="{{'取消%name%推荐'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}"><span class="glyphicon glyphicon-hand-right"></span> {{'取消推荐'|trans}}</a></li>
-        {% else %}
-          <li><a class="recommend-classroom" href="#modal" data-toggle="modal" data-url="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:'classroomList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> {{'推荐%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
-        {% endif %}
-         
-       {% if classroom.status=='published'%}
-       <li><a href="javascript:" class="close-classroom" title="{{'关闭%name%(%title%)'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%title%':classroom.title})}}" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> {{'关闭%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
-
-       <li><a href="javascript:" title="{{'发送发布%name%(%title%)通知短信'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%title%':classroom.title})}}" data-url="{{path('sms_prepare',{targetType:'classroom',id:classroom.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> {{'发送发布通知短信'|trans}}</a></li>
-
-       {% else %}
-       <li><a href="javascript:" class="open-classroom" title="{{'发布%name%(%title%)'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%title%':classroom.title})}}" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>{{'发布%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
-
-       {% endif %}
-
-       {% if classroom.status=='draft'%}
-      <li><a href="javascript:" class="delete-classroom" title="{{'删除%name%(%title%)'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%title%':classroom.title})}}" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> {{'删除%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</a></li>
+      {% if has_permission('admin_classroom_content_manage') %}
+        <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">管理</a>
       {% endif %}
-     </ul>
+
+      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_classroom_manage', group:'groupButton', classroom: classroom} %}
   </div>
  </td>
 </tr>

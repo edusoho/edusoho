@@ -142,7 +142,17 @@ class DeveloperSettingController extends BaseController
             'storage'  => 'cloud',
             'globalId' => 0
         );
-        $this->getCloudFileService()->synData($conditions);
+
+        if ($request->getMethod() == 'POST') {
+            $syncCount = $this->getCloudFileService()->synData($conditions);
+            $this->setFlashMessage('success', '同步成功！共同步'.$syncCount.'个文件');
+        }
+
+        $fileCount = $this->getUploadFileService()->searchFileCount($conditions);
+
+        return $this->render('TopxiaAdminBundle:DeveloperSetting:cloud-file-sync.html.twig', array(
+            'fileCount' => $fileCount
+        ));
     }
 
     protected function getSettingService()
@@ -158,5 +168,10 @@ class DeveloperSettingController extends BaseController
     protected function getCloudFileService()
     {
         return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\Service\Common;
 
-use \Exception;
-
-class ServiceException extends Exception
+/**
+ * @deprecated the ServiceException is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+ */
+class ServiceException extends \RuntimeException
 {
-
 }

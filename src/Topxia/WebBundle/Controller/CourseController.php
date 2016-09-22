@@ -398,10 +398,10 @@ class CourseController extends CourseBaseController
 
     public function createAction(Request $request)
     {
-        $user        = $this->getUserService()->getCurrentUser();
+        $user        = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
             throw $this->createAccessDeniedException();
         }
 

@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseController extends BaseController
 {
@@ -158,8 +158,8 @@ class CourseController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        if (!$currentUser->isSuperAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是超级管理员！'));
+        if (!$currentUser->hasPermission('admin_course_delete')) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您没有删除课程的权限！'));
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -418,7 +418,7 @@ class CourseController extends BaseController
 
     public function lessonDataAction($id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id, 'admin_course_data');
 
         $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
 

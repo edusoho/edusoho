@@ -1810,10 +1810,6 @@ class OrderServiceTest extends BaseTestCase
 
     public function testAuditRefundOrder()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $payment = array(
             'enabled'          => 1,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
@@ -1837,9 +1833,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $user          = $this->createNormalUser();
-        $normalUser    = new CurrentUser();
-        $normalUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($normalUser);
+
         $order1 = array(
             'userId'     => $user['id'],
             'title'      => 'buy course 1',
@@ -1856,7 +1850,6 @@ class OrderServiceTest extends BaseTestCase
             'paidTime' => time()
         ));
 
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getOrderService()->applyRefundOrder($payOrder[1]['id'], 10);
         $result = $this->getOrderService()->auditRefundOrder($payOrder[1]['id'], 'true');
         $this->assertEquals('true', $result);
@@ -2015,10 +2008,6 @@ class OrderServiceTest extends BaseTestCase
 
     public function testCancelRefundOrder()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $payment = array(
             'enabled'          => 1,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
@@ -2042,9 +2031,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $user          = $this->createNormalUser();
-        $normalUser    = new CurrentUser();
-        $normalUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($normalUser);
+
         $order1 = array(
             'userId'     => $user['id'],
             'title'      => 'buy course 1',
@@ -2060,7 +2047,7 @@ class OrderServiceTest extends BaseTestCase
             'amount'   => $order1['amount'],
             'paidTime' => time()
         ));
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $this->getOrderService()->applyRefundOrder($payOrder[1]['id'], 10);
         $this->getOrderService()->cancelRefundOrder($payOrder[1]['id'], 'true');
     }
@@ -2396,10 +2383,6 @@ class OrderServiceTest extends BaseTestCase
 
     public function testAnalysisExitCourseDataByTimeAndStatus()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $payment = array(
             'enabled'          => 1,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
@@ -2427,9 +2410,6 @@ class OrderServiceTest extends BaseTestCase
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user          = $this->createNormalUser();
-        $normalUser    = new CurrentUser();
-        $normalUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($normalUser);
         $order1 = array(
             'userId'     => $user['id'],
             'title'      => 'buy course 1',
@@ -2461,7 +2441,6 @@ class OrderServiceTest extends BaseTestCase
             'paidTime' => time()
         ));
 
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getOrderService()->applyRefundOrder($payOrder[1]['id'], 10);
         $this->getOrderService()->applyRefundOrder($payOrder2[1]['id'], 10);
         $result    = $this->getOrderService()->auditRefundOrder($payOrder[1]['id'], 'true');

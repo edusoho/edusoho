@@ -3,8 +3,8 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\NoteService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Course\NoteService;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
@@ -120,7 +120,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $currentUser = $this->getCurrentUser();
-        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'])) {
+        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'], 'admin_course_note')) {
             throw $this->createServiceException($this->getKernel()->trans('你没有权限删除笔记(#%id%)', array('%id%' => $id)));
         }
 

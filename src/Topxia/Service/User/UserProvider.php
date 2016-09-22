@@ -26,10 +26,7 @@ class UserProvider implements UserProviderInterface
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
-        $permissions       = $this->loadPermissions($user);
-
-        $currentUser->setPermissions($permissions);
-        $currentUser->fromArray($user);
+        $currentUser->fromArray($user)->initPermissions();
 
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;
@@ -47,39 +44,6 @@ class UserProvider implements UserProviderInterface
     public function supportsClass($class)
     {
         return $class === 'Topxia\Service\User\CurrentUser';
-    }
-
-    protected function loadPermissions($user)
-    {
-        if (empty($user['id'])) {
-            return $user;
-        }
-
-        $permissionBuilder = PermissionBuilder::instance();
-        $originPermissions = $permissionBuilder->getOriginPermissions();
-        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            return $originPermissions;
-        }
-
-        $permissionCode = array();
-        foreach ($user['roles'] as $code) {
-            $role = $this->getRoleService()->getRoleByCode($code);
-
-            if (empty($role['data'])) {
-                $role['data'] = array();
-            }
-
-            $permissionCode = array_merge($permissionCode, $role['data']);
-        }
-
-        $permissions = array();
-        foreach ($originPermissions as $key => $value) {
-            if (in_array($key, $permissionCode)) {
-                $permissions[$key] = $value;
-            }
-        }
-
-        return $permissions;
     }
 
     protected function getRoleService()

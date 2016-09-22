@@ -7,7 +7,7 @@ interface RoleService
 
     public function getRoleByCode($code);
 
-    public function findRolesByCodes($codes);
+    public function findRolesByCodes(array $codes);
 
     public function createRole($role);
 
@@ -18,4 +18,6 @@ interface RoleService
     public function searchRoles($conditions, $sort, $start, $limit);
 
     public function searchRolesCount($conditions);
+
+    public function refreshRoles();
 }

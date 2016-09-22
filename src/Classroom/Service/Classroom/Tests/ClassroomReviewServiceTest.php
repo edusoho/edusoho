@@ -9,10 +9,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
 {
     public function testGetReview()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
         $classroom = array(
             'title' => 'test'
         );
@@ -32,11 +29,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSearchReviews()
     {
-        $user        = $this->createUser();
+        $user        = $this->getCurrentUser();
         $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -67,11 +62,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSearchReviewCount()
     {
-        $user        = $this->createUser();
+        $user        = $this->getCurrentUser();
         $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -101,11 +94,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testGetUserClassroomReviewWithExistId()
     {
-        $user        = $this->createUser();
+        $user        = $this->getCurrentUser();
         $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -137,11 +128,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testGetUserClassroomReviewWithNotExistId()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->createUser();
+        $user        = $this->getCurrentUser();
         $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -172,11 +161,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testSaveReviewWithoutUserId()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->createUser();
-        $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -202,11 +187,9 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testSaveReviewWithNotExistClassroom()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->createUser();
+
         $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );
@@ -225,11 +208,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testSaveReviewWithNotExistUser()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->createUser();
-        $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user        = $this->getCurrentUser();
+
         $classroom = array(
             'title' => 'test'
         );
@@ -247,11 +227,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSaveReviewWithExistReview()
     {
-        $user        = $this->createUser();
-        $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user        = $this->getCurrentUser();
+
         $classroom = array(
             'title' => 'test'
         );
@@ -274,11 +251,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testDeleteReviewWithExistReview()
     {
-        $user        = $this->createUser();
-        $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user        = $this->getCurrentUser();
+
         $classroom = array(
             'title' => 'test'
         );
@@ -300,11 +274,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testDeleteReviewWithNotExistReview()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->createUser();
-        $user1       = $this->createStudentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $classroom = array(
             'title' => 'test'
         );

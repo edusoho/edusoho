@@ -3,7 +3,7 @@
 namespace Topxia\Service\Importer;
 
 use Topxia\Common\JoinPointToolkit;
-use Topxia\Service\Common\NotFoundException;
+use Topxia\Common\Exception\InvalidArgumentException;
 
 class ImporterFactory
 {
@@ -19,15 +19,10 @@ class ImporterFactory
         $map = JoinPointToolkit::load('importer');
 
         if (!array_key_exists($importerType, $map)) {
-            throw new NotFoundException(self::getKernel()->trans('UNKNOWN IMPORTER TYPE: %importerType%', array('%importerType%' => $importerType)));
+            throw new InvalidArgumentException(sprintf('Unknown importer type: %s', $importerType));
         }
 
         $class = $map[$importerType];
         return new $class();
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }
