@@ -41,33 +41,9 @@ class BlockExtension extends \Twig_Extension
             $content = BlockToolkit::render($block, $this->container);
         }
 
-        $cdnUrl = $this->isCDNOpen();
-
-        if ($cdnUrl) {
-            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i',$content,$imgs);
-
-            if ($imgs) {
-                foreach ($imgs[1] as $img) {
-                    if (!strstr($img,'http://')) {
-                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
-                    }
-                }
-            }
-        }
+        $content = $this->container->get('topxia.twig.web_extension')->cdnConvert($content);
 
         return $content;
-    }
-
-    private function isCDNOpen()
-    {
-        $cdn    = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
-
-        if ($cdnUrl) {
-            return $cdnUrl;
-        }
-
-        return false;
     }
 
     public function getName()
