@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;

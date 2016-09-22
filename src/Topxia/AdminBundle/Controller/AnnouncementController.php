@@ -6,7 +6,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Announcement\Impl\AnnouncementServiceImpl;
 
 class AnnouncementController extends BaseController
 {
@@ -82,9 +81,6 @@ class AnnouncementController extends BaseController
         return new Response('true');
     }
 
-    /**
-     * @return AnnouncementServiceImpl
-     */
     protected function getAnnouncementService()
     {
         return $this->getServiceKernel()->createService('Announcement.AnnouncementService');

@@ -21,7 +21,7 @@
   <title>
 
     {% block title %}
-      {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
+      {{ currentMenu.name|trans }} - {{ menu|parent_permission.name|trans }} - {{ menu|parent_permission.code|parent_permission.name|trans  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -69,11 +69,11 @@
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'回首页'|trans}}</a></li>
 
           <li class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
-                <ul class="dropdown-menu main-list">
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
-                </ul>
-              </li>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
+            <ul class="dropdown-menu main-list">
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+            </ul>
+          </li>
         </ul>
 
       </div><!--/.navbar-collapse -->
@@ -82,6 +82,14 @@
   
   <div class="container">
     <div class="row">
+      {% set notifies = plugin_update_notify() %}
+      {% if not notifies is empty %}
+        <div style="margin: 0 15px">
+          <div class="alert alert-danger">
+            【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！ <a href="{{ path('admin_app_upgrades') }}">请立即升级！</a>
+          </div>
+        </div>
+      {% endif %}
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
@@ -91,9 +99,10 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
+
             <h1 class="pull-left">
               {% block page_title %}
-                {{ currentMenu.fullname|default(currentMenu.name)|trans }}
+                {{ currentMenu.fullname|default(currentMenu.name) }}
               {% endblock %}
             </h1>
             <div class="pull-right">
@@ -116,7 +125,7 @@
 
           {% block content_header %}{% endblock %}
           
-          {% include 'PermissionBundle:Templates:tabs.html.twig' %}
+          {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
 
           {% block capsule %}{% endblock %}
 

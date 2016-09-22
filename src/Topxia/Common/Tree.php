@@ -94,12 +94,6 @@ class Tree
         }
 
         return $ret;
-
-        /*return $this->reduce(function ($ret, $tree){
-            $array = $tree->data;
-            $array['children'] = array()
-            return $ret;
-        });*/
     }
 
     /**
@@ -122,14 +116,23 @@ class Tree
         return $ret;
     }
 
+    public function findToParent(\Closure $closure)
+    {
+        $parent = $this;
+        $ret = array();
+        while (!is_null($parent)){
+            if($closure($parent)){
+                $ret[] = $parent;
+            }
+
+            $parent = $parent->getParent();
+        }
+
+        return array_pop($ret);
+    }
+
     public static function buildWithArray(array $input, $rootId = 0, $key = 'id', $parentKey = 'parentId')
     {
-        /* 过滤掉构建不出树的元素
-         * $ids = ArrayToolkit::column($input, $key);
-        $input = array_filter($input, function ($array) use ($parentKey, $ids){
-            return in_array($array[$parentKey], $ids, true);
-        });*/
-
         $root = new self(array(
             $key => $rootId
         ));
@@ -142,19 +145,21 @@ class Tree
         $buildingArray = $input;
 
         while (!empty($buildingArray)) {
-            foreach ($buildingArray as $value) {
+            $buildingCount = count($buildingArray);
+            foreach ($buildingArray as $index => $value) {
                 if (isset($map[$value[$parentKey]])) {
-                    $tree = new Tree($value);
-                    $map[$value[$key]] = $tree;
                     $parent = $map[$value[$parentKey]];
+                    $tree = new Tree($value, $parent);
                     $parent->addChild($tree);
-                    $tree->setParent($parent);
+                    $map[$value[$key]] = $tree;
+                    unset($buildingArray[$index]);
                 }
             }
 
-            $buildingArray = array_filter($buildingArray, function ($array) use ($map, $key, $parentKey) {
-                return !in_array($array[$key], array_keys($map), true);
-            });
+            //一次构建树后剩下元素不变。 说明这些元素的父节点不存在树的节点里，是构建不出的树的
+            if($buildingCount === count($buildingArray)){
+                break;
+            }
         }
 
         return $root;

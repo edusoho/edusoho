@@ -1,7 +1,3 @@
-parameters:
-    permission.path_regular_expression: ['/^\/admin/', '/^\/course\/\d+\/manage/', '/^\/classroom\/\d+\/manage/']
-
-
 services:
     topxia.user_provider:
         class: Topxia\Service\User\UserProvider

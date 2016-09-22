@@ -254,7 +254,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
-            $this->getCourseService()->tryManageCourse($thread['courseId']);
+            $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
         }
 
         $fields = ArrayToolkit::parts($fields, array('title', 'content'));
@@ -279,7 +279,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException(sprintf($this->getKernel()->trans('话题(ID: %s)不存在。'), $threadId));
         }
 
-        if (!$this->getCourseService()->canManageCourse($thread['courseId'])) {
+        if (!$this->getCourseService()->canManageCourse($thread['courseId'], 'admin_course_thread')) {
             throw $this->createServiceException($this->getKernel()->trans('您无权限删除该话题'));
         }
 
@@ -292,7 +292,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function stickThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
@@ -305,7 +305,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function unstickThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
@@ -318,7 +318,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function eliteThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
@@ -333,7 +333,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function uneliteThread($courseId, $threadId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $thread = $this->getThread($courseId, $threadId);
 
@@ -455,7 +455,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $user = $this->getCurrentUser();
-        ($user->isLogin() && $user->id == $post['userId']) || $this->getCourseService()->tryManageCourse($courseId);
+        ($user->isLogin() && $user->id == $post['userId']) || $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $fields = ArrayToolkit::parts($fields, array('content'));
 
@@ -472,7 +472,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deletePost($courseId, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
 
         $post = $this->getThreadPostDao()->getPost($id);
 

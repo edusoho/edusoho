@@ -10,12 +10,9 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 {
     public function testPreCheckWithBecomedStudent()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course 1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -27,10 +24,10 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->getClassroomService()->addCoursesToClassroom($addClassroom['id'], array($createCourse['id']));
         $updateClassroom = $this->getClassroomService()->publishClassroom($addClassroom['id']);
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $normalUser = $this->createNormalUser();
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
         $this->getClassroomService()->becomeStudent($addClassroom['id'], $normalUser['id']);
         $processor = OrderProcessorFactory::create('classroom');
         $result    = $processor->preCheck($addClassroom['id'], $normalUser['id']);
@@ -39,12 +36,9 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     public function testPreCheckWithUnableClassroom()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course 1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -57,23 +51,20 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->getClassroomService()->publishClassroom($addClassroom['id']);
         $unBuyableClassroom = $this->getClassroomService()->updateClassroom($addClassroom['id'], array('buyable' => 0));
         $normalUser         = $this->createNormalUser();
-        $currentUser        = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor = OrderProcessorFactory::create('classroom');
-        $result    = $processor->preCheck($addClassroom['id'], $normalUser['id']);
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
+        $processor          = OrderProcessorFactory::create('classroom');
+        $result             = $processor->preCheck($addClassroom['id'], $normalUser['id']);
         $this->assertEquals('该班级不可购买，如有需要，请联系客服', $result['error']);
 
     }
 
     public function testPreCheckWithUnpublishedClassroom()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course 1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -84,23 +75,20 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $addClassroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->addCoursesToClassroom($addClassroom['id'], array($createCourse['id']));
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor = OrderProcessorFactory::create('classroom');
-        $result    = $processor->preCheck($addClassroom['id'], $normalUser['id']);
+        $normalUser = $this->createNormalUser();
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
+        $processor  = OrderProcessorFactory::create('classroom');
+        $result     = $processor->preCheck($addClassroom['id'], $normalUser['id']);
         $this->assertEquals('不能加入未发布班级!', $result['error']);
     }
 
     public function testPreCheckSuccess()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course 1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -112,28 +100,25 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->getClassroomService()->addCoursesToClassroom($addClassroom['id'], array($createCourse['id']));
         $updateClassroom = $this->getClassroomService()->publishClassroom($addClassroom['id']);
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor = OrderProcessorFactory::create('classroom');
-        $result    = $processor->preCheck($addClassroom['id'], $normalUser['id']);
+        $normalUser = $this->createNormalUser();
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
+        $processor  = OrderProcessorFactory::create('classroom');
+        $result     = $processor->preCheck($addClassroom['id'], $normalUser['id']);
         $this->assertEquals(array(), $result);
     }
 
     public function testGetOrderInfoWithoutCoinEnable()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->setCoursePrice($createCourse['id'], 'default', 100.00);
-        $classroom = array(
+        $classroom    = array(
             'title'       => "testClassroom",
             'createdTime' => time()
         );
@@ -141,12 +126,12 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->getClassroomService()->addCoursesToClassroom($addClassroom['id'], array($createCourse['id']));
         $updateClassroom = $this->getClassroomService()->publishClassroom($addClassroom['id']);
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor = OrderProcessorFactory::create('classroom');
-        $result    = $processor->getOrderInfo($addClassroom['id'], array());
+        $normalUser = $this->createNormalUser();
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
+        $processor  = OrderProcessorFactory::create('classroom');
+        $result     = $processor->getOrderInfo($addClassroom['id'], array());
         $this->assertEquals($result['totalPrice'], 0);
     }
 
@@ -166,17 +151,14 @@ class ClassroomOrderProcessorTest extends BaseTestCase
             'coin_content'        => ''
         );
         $this->getSettingService()->set('coin', $setting);
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user = $this->getCurrentUser();
 
-        $course = array(
+        $course       = array(
             'title' => 'course1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->setCoursePrice($createCourse['id'], 'default', 100.00);
-        $classroom = array(
+        $classroom    = array(
             'title'       => "testClassroom",
             'createdTime' => time()
         );
@@ -184,29 +166,24 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->getClassroomService()->addCoursesToClassroom($addClassroom['id'], array($createCourse['id']));
         $updateClassroom = $this->getClassroomService()->publishClassroom($addClassroom['id']);
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor = OrderProcessorFactory::create('classroom');
-        $result    = $processor->getOrderInfo($addClassroom['id'], array());
+        $normalUser = $this->createNormalUser();
+        $current = new CurrentUser();
+        $current->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($current);
+        $processor  = OrderProcessorFactory::create('classroom');
+        $result     = $processor->getOrderInfo($addClassroom['id'], array());
         $this->assertEquals($result['totalPrice'], 0);
 
     }
 
     public function testShouldPayAmount()
     {
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $course = array(
+        $course       = array(
             'title' => 'course1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->setCoursePrice($createCourse['id'], 'default', 100.00);
-        $classroom = array(
+        $classroom    = array(
             'title'       => "testClassroom",
             'createdTime' => time()
         );
@@ -217,9 +194,9 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
         $normalUser  = $this->createNormalUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
+        $currentUser->fromArray($normalUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $processor                                = OrderProcessorFactory::create('classroom');
+        $processor = OrderProcessorFactory::create('classroom');
         list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($addClassroom['id'], 'RMB', 1, 0, array('targetType' => 'classroom', 'totalPrice' => '10'));
         $this->assertEquals($amount, 10);
         $this->assertEquals($totalPrice, 10);
@@ -227,7 +204,7 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     public function testGetNote()
     {
-        $course = array(
+        $course       = array(
             'title' => 'onlinetestcourse1',
             'about' => '测试'
         );
@@ -252,7 +229,7 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     public function testGetTitle()
     {
-        $course = array(
+        $course       = array(
             'title' => 'onlinetestcourse1',
             'about' => '测试'
         );
@@ -277,14 +254,11 @@ class ClassroomOrderProcessorTest extends BaseTestCase
     public function testCreateOrder()
     {
         $info        = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00', 'note' => '11', 'coupon' => '123', 'couponDiscount' => '0.0');
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $processor = OrderProcessorFactory::create('classroom');
         $order     = $processor->createOrder($info, array('targetId' => $classroom['id'], 'targetType' => 'classroom'));
@@ -294,14 +268,10 @@ class ClassroomOrderProcessorTest extends BaseTestCase
     public function testDoPaySuccess()
     {
         $info        = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00', 'note' => '11', 'coupon' => '123', 'couponDiscount' => '0.0');
-        $user        = $this->createUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $processor = OrderProcessorFactory::create('classroom');
         $order     = $processor->createOrder($info, array('targetId' => $classroom['id'], 'targetType' => 'classroom'));

@@ -101,9 +101,8 @@
           {% endif %}
         </div>
 
-      {% if classroom_permit(classroom.id, 'Manage') and has_permission('classroom_manage_content') %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting hidden-xs hidden-sm" title="{{ setting('classroom.name')|default("班级") }}管理">
-
+      {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting hidden-xs hidden-sm" title="{{'%name%管理'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% elseif classroom_permit(classroom.id, 'Handle') %}

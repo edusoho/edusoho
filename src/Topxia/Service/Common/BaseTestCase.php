@@ -117,6 +117,8 @@ class BaseTestCase extends WebTestCase
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
+        static::$serviceKernel->createService('Permission:Role.RoleService')->refreshRoles();
+        static::$serviceKernel->getCurrentUser()->initPermissions();
     }
 
     /**

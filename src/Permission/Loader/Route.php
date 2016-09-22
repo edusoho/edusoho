@@ -10,22 +10,8 @@ class Route extends BaseRoute
 
     public function __construct($path, array $defaults = array(), array $requirements = array(), array $options = array(), $host = '', $schemes = array(), $methods = array(), $permissions = array())
     {
-        $this->setPath($path);
-        $this->setDefaults($defaults);
-        $this->setRequirements($requirements);
-        $this->setOptions($options);
-        $this->setHost($host);
-        // The conditions make sure that an initial empty $schemes/$methods does not override the corresponding requirement.
-        // They can be removed when the BC layer is removed.
+        parent::__construct($path, $defaults, $requirements, $options, $host, $schemes, $methods);
         $this->setPermissions($permissions);
-
-        if ($schemes) {
-            $this->setSchemes($schemes);
-        }
-
-        if ($methods) {
-            $this->setMethods($methods);
-        }
     }
 
     public function serialize()

@@ -6,6 +6,8 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
+use Topxia\Common\PluginVersionToolkit;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
@@ -117,8 +119,26 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
-            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig'))
+            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
+            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify'))
         );
+    }
+
+    public function pluginUpdateNotify()
+    {
+        $count = $this->getAppService()->findAppCount();
+        $apps  = $this->getAppService()->findApps(0, $count);
+
+        $notifies = array_reduce($apps, function ($notifies, $app){
+
+            if($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
+                $notifies[] = $app['name'];
+            }
+
+            return $notifies;
+        }, array());
+
+        return implode('、',$notifies);
     }
 
     public function getAdminRoles()
@@ -1342,6 +1362,14 @@ class WebExtension extends \Twig_Extension
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    /**
+     * @return AppServiceImpl
+     */
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     public function getPurifyAndTrimHtml($html)

@@ -48,7 +48,7 @@ class UserController extends BaseController
                 0,
                 $profilesCount
             );
-            $userIds       = ArrayToolkit::column($userProfiles, 'id');
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
@@ -107,31 +107,31 @@ class UserController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
-        $email = $request->query->get('value');
-        $email = str_replace('!', '.', $email);
+        $email                  = $request->query->get('value');
+        $email                  = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile = $request->query->get('value');
-        $mobile = str_replace('!', '.', $mobile);
+        $mobile                 = $request->query->get('value');
+        $mobile                 = str_replace('!', '.', $mobile);
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
         return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname = $request->query->get('value');
+        $nickname               = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
         return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile = $request->query->get('value');
-        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile          = $request->query->get('value');
+        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
@@ -282,15 +282,16 @@ class UserController extends BaseController
             if (!empty($roles)) {
                 $roleSet          = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
                 $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
+                $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
+
                 $message          = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $this->getRoleNames($roles, $rolesByIndexCode)
+                    'role'     => implode(',', $roleNames)
                 );
 
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
-
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
                 'user'    => $user,
@@ -305,39 +306,29 @@ class UserController extends BaseController
 
     protected function getRoleNames($roles, $roleSet)
     {
-        $roleName = '';
-        $roles    = array_unique($roles);
+        $roleNames = array();
+        $roles     = array_unique($roles);
 
         $userRoleDict  = new UserRoleDict();
         $userRoleDict  = $userRoleDict->getDict();
         $roleDictCodes = array_keys($userRoleDict);
 
-        $i = 0;
         foreach ($roles as $key => $role) {
             if (in_array($role, $roleDictCodes)) {
-                $roleName = $roleName . $userRoleDict[$role];
+                $roleNames[] = $userRoleDict[$role];
             } elseif ($role == 'ROLE_BACKEND') {
                 continue;
             } else {
-                $role     = $roleSet[$role];
-                $roleName = $roleName . $role['name'];
-            }
-
-            $i++;
-
-            if ($i < count($roles) - 1) {
-                $roleName = $roleName . '，';
+                $role        = $roleSet[$role];
+                $roleNames[] = $role['name'];
             }
         }
-        return $roleName;
+
+        return $roleNames;
     }
 
     public function avatarAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
@@ -385,10 +376,6 @@ class UserController extends BaseController
 
     public function avatarCropAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         if ($request->getMethod() == 'POST') {
@@ -398,7 +385,7 @@ class UserController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
@@ -454,7 +441,7 @@ class UserController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
             throw $e;
         }
 
@@ -490,7 +477,7 @@ class UserController extends BaseController
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
             throw $e;
         }
 

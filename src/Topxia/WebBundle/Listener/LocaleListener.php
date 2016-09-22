@@ -1,5 +1,4 @@
 <?php
-// src/AppBundle/EventListener/LocaleListener.php
 namespace Topxia\WebBundle\Listener;
 
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -12,6 +11,9 @@ class LocaleListener implements EventSubscriberInterface
 
     public function __construct($defaultLocale)
     {
+        if ($defaultLocale == 'en') {
+            $defaultLocale = 'en_US'; //兼容原来的配置
+        }
         $this->defaultLocale = $defaultLocale;
     }
 

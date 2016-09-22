@@ -94,6 +94,8 @@ class RoleController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
+        $role = $this->getRoleService()->getRole($id);
+
         $this->getRoleService()->deleteRole($id);
         return $this->createJsonResponse(array('result' => true));
     }
@@ -131,7 +133,7 @@ class RoleController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '角色名称已存在');
+            $response = array('success' => false, 'message' => '权限名称已存在');
         }
 
         return $this->createJsonResponse($response);
@@ -147,7 +149,7 @@ class RoleController extends BaseController
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '编码已存在');
+            $response = array('success' => false, 'message' => 'code已存在');
         }
 
         return $this->createJsonResponse($response);

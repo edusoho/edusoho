@@ -2,9 +2,12 @@ admin_org_manage:
     name: 组织机构管理
     parent: admin_system
     group: 2
+    disable: false
+    visable: true
     children:
         admin_org:
             name: 组织机构
+            disable: true
 
 admin_user_org_update:
     name: '修改用户组织机构'
@@ -14,6 +17,8 @@ admin_user_org_update:
     visable: ( app.user.id != user.id )
     router_params:
         id: (user.id)
+    disable: false
+    visable: true
 
 # admin_move_course_to_org:
 #     name: 推送课程
