@@ -17,7 +17,7 @@
   {% set inputClass = inputClass|default('') %} 
 
   {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
-  {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
+  {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : app.user.orgCode }) %}
   
     <div class="form-group {% if modal == 'list' %}controls{% endif %}">
       {% if modal != 'list' %}
