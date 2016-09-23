@@ -51,9 +51,9 @@
               <tr>
                 <td>
                   {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
-                    <a class="pull-left mrm" href="javascript:;">
+                    <div class="pull-left mrm">
                       <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
-                    </a>
+                    </div>
                   {% else %}
                     <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
                       <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
@@ -61,7 +61,11 @@
                   {% endif %}
 
                   <div class="mlm">
-                    <a {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}href="javascript:;"{% else %}href="{{ path('course_show', {id:course.id}) }}"{% endif %}>{{ course.title }}</a>
+                    {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
+                      {{ course.title }}
+                    {% else %}
+                      <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+                    {% endif %}
                     {% if course.type == 'live' %}
                       <span class="label label-success live-label">{{'直播'|trans}}</span>
                     {% endif  %}

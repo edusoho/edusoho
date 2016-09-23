@@ -6,7 +6,7 @@
   <td>{{ course.id }}</td>
   <td>
     {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
-       <a href="javascript:;" target="_blank"><strong>{{ course.title }}</strong></a>
+       <strong>{{ course.title }}</strong>
     {% else %}
        <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     {% endif %}
