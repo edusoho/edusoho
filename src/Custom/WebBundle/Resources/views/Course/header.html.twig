@@ -1,14 +1,22 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
  {{ load_script('course-manage/header') }}
 <div class="es-section course-manage-header clearfix">
-  <a href="{{ path('course_show', {id:course.id}) }}">
-    <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
-  </a>
+  {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
+    <a href="javascript:;">
+      <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
+    </a>
+  {% else %}
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
+    </a>
+  {% endif %}
+
+
   <h1 class="title">
     {% if course.type != 'normal' %}
       [{{ dict('courseType')[course.type] }}]
     {% endif %}
-    <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+    <a class="link-dark" {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}href="javascript:;"{% else %}href="{{ path('course_show', {id:course.id}) }}"{% endif %}>{{ course.title }}</a>
     {% if course.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}
