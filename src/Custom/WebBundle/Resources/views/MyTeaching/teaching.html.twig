@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}{{'在教课程'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'中心课程'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-courses' %}
 
@@ -16,7 +16,7 @@
         <a id="create-course" href="{{ path('course_create') }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'创建课程'|trans}}</a>
       </span>
     {% endif %}
-    {{'在教课程'|trans}}
+    {{'中心课程'|trans}}
   </div>
 
   <div class="panel-body">
