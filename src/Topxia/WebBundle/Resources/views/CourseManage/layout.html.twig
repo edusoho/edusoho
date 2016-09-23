@@ -55,12 +55,12 @@
             </a>
           </li>
           {% if course.type == 'live' %}
-          <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
-            <a href="{% if course.locked|default(0) == 1 %}
+            <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
+              <a href="{% if course.locked|default(0) == 1 %}
             {{ path('course_manage_course_sync', {id:course.id,type:'replay'}) }}{% else %}
             {{ path('live_course_manage_replay', {id:course.id}) }}
             {% endif %}"><span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'录播管理'|trans}}</a>
-          </li>
+            </li>
           {% endif %}
           <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
             <a href="{% if course.locked|default(0) == 1 %}
@@ -114,8 +114,8 @@
               {{ path('course_manage_course_sync', {id:course.id,type:'question_plumber'}) }}{% else %}
               {{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}
               {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目导入/导出'|trans}}
-            </a>
+                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目导入/导出'|trans}}
+              </a>
             </li>
           {% endif %}
 
@@ -149,9 +149,9 @@
           </li>
 
           {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
-          <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
-            <a href="{{path('course_manage_order',{id:course.id})}}"><span></span>{{'课程订单查询'|trans}}</a>
-          </li>
+            <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
+              <a href="{{path('course_manage_order',{id:course.id})}}"><span></span>{{'课程订单查询'|trans}}</a>
+            </li>
           {% endif %}
         </ul>
       </div>

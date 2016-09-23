@@ -1,0 +1,27 @@
+admin_roles:
+    name: 角色管理
+    parent: admin_system
+    after: admin_setting_user
+    children:
+        admin_role_manage:
+            name: 角色管理
+            disable: true
+            router_name: admin_roles
+            children:
+                admin_role_create:
+                    name: 新增角色
+                    mode: modal
+                    group: topBtn
+                admin_role_edit:
+                    name: 编辑角色
+                    mode: modal
+                    group: groupBtn
+                    router_params:
+                        id: (role.id)
+                admin_role_delete:
+                    name: 删除角色
+                    class: role-delete js-delete-role
+                    group: groupBtn
+                    mode: none
+                    router_params:
+                        id: (role.id)

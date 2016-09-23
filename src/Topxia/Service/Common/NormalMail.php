@@ -51,7 +51,7 @@ class NormalMail extends Mail
             return $empty;
         }
 
-        $method = 'on_' . $this->template;
+        $method = 'on_'.$this->template;
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method));
         } else {
@@ -70,7 +70,7 @@ class NormalMail extends Mail
     private function on_email_system_self_test()
     {
         return array(
-            'title' => $this->getKernel()->trans('【%sitename%】系统自检邮件', array('%siteName%' => $this->params['sitename'])),
+            'title' => $this->getKernel()->trans('【%sitename%】系统自检邮件', array('%sitename%' => $this->params['sitename'])),
             'body'  => $this->getKernel()->trans('系统邮件发送检测测试，请不要回复此邮件！')
         );
     }

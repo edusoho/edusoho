@@ -349,7 +349,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword','materiallib','org');
+        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword','materiallib','org', 'permission');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {

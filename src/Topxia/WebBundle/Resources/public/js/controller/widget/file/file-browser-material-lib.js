@@ -197,7 +197,7 @@ define(function (require, exports, module) {
 	        	<div class='row'> \
         			<div  class='col-xs-5'> \
 			      	<span class='input-group'> \
-				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder=Translator.trans('输入视频标题关键字')  /> \
+				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder='" + Translator.trans('输入视频标题关键字') + "'/> \
 				    <span class='input-group-btn'> \
 				      <button type='button' class='btn btn-default js-browser-search' data-loading-text='"+Translator.trans('正在加载，请稍等')+"'>"+Translator.trans('搜索')+"</button> \
 				    </span> \

@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 7.1.5
+        assets_version: 7.2.0
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -187,12 +187,6 @@ services:
 
     topxia.twig.data_extension:
         class: Topxia\WebBundle\Twig\Extension\DataExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.menu_extension:
-        class: Topxia\WebBundle\Twig\Extension\MenuExtension
-        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 

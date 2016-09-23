@@ -543,9 +543,11 @@ define(function(require, exports, module) {
                         $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
                             if (result.error) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
+                                $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                             } else {
                                 if (result.status == 'nodo') {
                                     html = Translator.trans('欢迎参加考试，请点击「开始考试」按钮。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('开始考试')+'</a>';
+                                    $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
@@ -603,16 +605,17 @@ define(function(require, exports, module) {
                                         iID = setInterval(generateTestHtml, 1000);
                                     } else if (lesson.doTimes == 0 && lesson.redoInterval == 0) {
                                         html += '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">' + Translator.trans('再做一次') + '</a>';
+                                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                                     }
 
                                 } else if (result.status == 'doing' || result.status == 'paused') {
                                     html = Translator.trans('试卷未完全做完。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('继续考试')+'</a>';
+                                    $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                                 } else if (result.status == 'reviewing') {
-                                    html = Translator.trans('试卷正在批阅。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('查看试卷')+'</a>'
+                                    html = Translator.trans('试卷正在批阅。')+'<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">'+Translator.trans('查看试卷')+'</a>';
+                                    $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                                 }
                             }
-
-                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
 
                         }, 'json');
 

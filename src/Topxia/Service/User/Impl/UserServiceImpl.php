@@ -1,20 +1,21 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Topxia\Common\FileToolkit;
+use Permission\Service\Role\Impl\RoleServiceImpl;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Topxia\Common\Exception\InvalidArgumentException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Common\Exception\RuntimeException;
+use Topxia\Common\Exception\UnexpectedValueException;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\User\UserService;
+use Topxia\Common\StringToolkit;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Common\Exception\RuntimeException;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Common\Exception\InvalidArgumentException;
-use Topxia\Common\Exception\UnexpectedValueException;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\User\UserService;
 
 class UserServiceImpl extends BaseService implements UserService
 {
@@ -245,7 +246,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
-        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
+        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $userId . '_' . time() . '.jpg';
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
 
         $file = new File($filePath);
@@ -256,7 +257,7 @@ class UserServiceImpl extends BaseService implements UserService
             'medium' => array("120", "120"),
             'small'  => array("48", "48")
         );
-        $options = array_merge($options, array(
+        $options   = array_merge($options, array(
             'x'      => "0",
             'y'      => "0",
             'x2'     => "200",
@@ -434,11 +435,11 @@ class UserServiceImpl extends BaseService implements UserService
         for ($questionNum = 1; $questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2); $questionNum++) {
             $fields = array('userId' => $userId);
 
-            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
+            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion' . $questionNum];
             $fields['securityAnswerSalt']   = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $fields['securityAnswer']       =
-            $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
-            $fields['createdTime'] = time();
+                $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer' . $questionNum], $fields['securityAnswerSalt']);
+            $fields['createdTime']          = time();
 
             $userSecureQuestionDao->addOneUserSecureQuestion($fields);
         }
@@ -644,14 +645,14 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['gender']   = empty($registration['gender']) ? 'secret' : $registration['gender'];
 
         for ($i = 1; $i <= 5; $i++) {
-            $profile['intField'.$i]   = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
-            $profile['dateField'.$i]  = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
-            $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
+            $profile['intField' . $i]   = empty($registration['intField' . $i]) ? null : $registration['intField' . $i];
+            $profile['dateField' . $i]  = empty($registration['dateField' . $i]) ? null : $registration['dateField' . $i];
+            $profile['floatField' . $i] = empty($registration['floatField' . $i]) ? null : $registration['floatField' . $i];
         }
 
         for ($i = 1; $i <= 10; $i++) {
-            $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? "" : $registration['varcharField'.$i];
-            $profile['textField'.$i]    = empty($registration['textField'.$i]) ? "" : $registration['textField'.$i];
+            $profile['varcharField' . $i] = empty($registration['varcharField' . $i]) ? "" : $registration['varcharField' . $i];
+            $profile['textField' . $i]    = empty($registration['textField' . $i]) ? "" : $registration['textField' . $i];
         }
 
         $this->getProfileDao()->addProfile($profile);
@@ -668,7 +669,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateNickname($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; $i++) {
-            $registration['nickname'] = 'user'.substr($this->getRandomChar(), 0, 6);
+            $registration['nickname'] = 'user' . substr($this->getRandomChar(), 0, 6);
 
             if ($this->isNicknameAvaliable($registration['nickname'])) {
                 break;
@@ -681,7 +682,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateEmail($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; $i++) {
-            $registration['email'] = 'user_'.substr($this->getRandomChar(), 0, 9).'@edusoho.net';
+            $registration['email'] = 'user_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
 
             if ($this->isEmailAvaliable($registration['email'])) {
                 break;
@@ -854,6 +855,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw new InvalidArgumentException('用户角色不能为空');
         }
 
+        if (empty($roles)) {
+            throw new InvalidArgumentException('用户角色不能为空');
+        }
+
         $user = $this->getUser($id);
 
         if (empty($user)) {
@@ -863,28 +868,29 @@ class UserServiceImpl extends BaseService implements UserService
         if (!in_array('ROLE_USER', $roles)) {
             throw new UnexpectedValueException('用户角色必须包含ROLE_USER');
         }
-
-        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-
+        $currentUser     = $this->getCurrentUser();
+        $allowedRoles    = $currentUser['roles'];
+        $allowedRoles    = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
-        if (!empty($notAllowedRoles)) {
+        if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'], true)) {
             throw new UnexpectedValueException('用户角色不正确，设置用户角色失败。');
         }
 
-        $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
+        $user = $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
 
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+        $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
     }
 
     public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
     {
         $token                = array();
         $token['type']        = $type;
-        $token['userId']      = $userId ? (int) $userId : 0;
+        $token['userId']      = $userId ? (int)$userId : 0;
         $token['token']       = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data']        = serialize($data);
-        $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+        $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token                = $this->getUserTokenDao()->addToken($token);
         return $token['token'];
@@ -1072,9 +1078,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($user) {
-            $log = sprintf('用户(%s)，', $user['nickname']).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(%s)，', $user['nickname']) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         } else {
-            $log = sprintf('用户(IP: %s)，', $ip).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(IP: %s)，', $ip) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         }
 
         $this->getLogService()->info('user', 'login_fail', $log);
@@ -1202,7 +1208,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function waveUserCounter($userId, $name, $number)
     {
-        if (!ctype_digit((string) $number)) {
+        if (!ctype_digit((string)$number)) {
             throw new UnexpectedValueException('计数器的数量，必须为数字');
         }
 
@@ -1350,8 +1356,12 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $this->getUser($userId);
 
-        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-            return true;
+        $roles = $this->getRoleService()->findRolesByCodes($user['roles']);
+
+        foreach ($roles as $role) {
+            if (in_array('admin', $role['data'], true)) {
+                return true;
+            }
         }
 
         return false;
@@ -1397,8 +1407,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw new ResourceNotFoundException('User', $userId);
         }
 
-        $faceImgPath = 'userFaceImg'.$userId.time().'.'.$faceImg->getClientOriginalExtension();
-        $backImgPath = 'userbackImg'.$userId.time().'.'.$backImg->getClientOriginalExtension();
+        $faceImgPath = 'userFaceImg' . $userId . time() . '.' . $faceImg->getClientOriginalExtension();
+        $backImgPath = 'userbackImg' . $userId . time() . '.' . $backImg->getClientOriginalExtension();
         $faceImg     = $faceImg->move($directory, $faceImgPath);
         $backImg     = $backImg->move($directory, $backImgPath);
 
@@ -1433,8 +1443,8 @@ class UserServiceImpl extends BaseService implements UserService
         $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
 
         $this->getProfileDao()->updateProfile($userId, array(
-            'truename' => $lastestApproval['truename'],
-            'idcard'   => $lastestApproval['idcard'])
+                'truename' => $lastestApproval['truename'],
+                'idcard'   => $lastestApproval['idcard'])
         );
 
         $currentUser = $this->getCurrentUser();
@@ -1736,6 +1746,14 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createService('User.InviteRecordService');
     }
 
+    /**
+     * @return RoleServiceImpl
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Permission:Role.RoleService');
+    }
+
     protected function getOrgService()
     {
         return $this->createService('Org:Org.OrgService');
@@ -1745,8 +1763,9 @@ class UserServiceImpl extends BaseService implements UserService
 class UserSerialize
 {
     public static function
-    serialize(array $user) {
-        $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
+    serialize(array $user)
+    {
+        $user['roles'] = empty($user['roles']) ? '' : '|' . implode('|', $user['roles']) . '|';
         return $user;
     }
 

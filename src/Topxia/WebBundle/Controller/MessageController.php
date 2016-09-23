@@ -12,8 +12,7 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        $this->getMessageService()->pullMessagesFromApi();
+        $user      = $this->getCurrentUser();
         $paginator = new Paginator(
             $request,
             $this->getMessageService()->getUserConversationCount($user->id),
