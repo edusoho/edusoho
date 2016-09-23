@@ -11,7 +11,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function addCard($card)
     {
         if (!ArrayToolkit::requireds($card, array('cardType', 'cardId', 'deadline', 'userId'))) {
-            throw $this->createServiceException('缺少必要字段，新创建卡失败！');
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，新创建卡失败！'));
         }
 
         $card['createdTime'] = time();
@@ -53,7 +53,7 @@ class CardServiceImpl extends BaseService implements CardService
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
         if (empty($cardType)) {
-            throw $this->createServiceException('缺少必要字段，请明确卡的类型');
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，请明确卡的类型'));
         }
 
         return $this->getCardDao()->findCardsByUserIdAndCardType($userId, $cardType);

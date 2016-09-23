@@ -48,7 +48,7 @@ class UpgradeScriptCommand extends BaseCommand
 
         if (method_exists($upgrade, 'update')) {
             $info = $upgrade->update($index);
-            var_dump($info);
+
             if (isset($info) && !empty($info['index'])) {
                 $this->executeScript($code, $version, $info['index']);
             }
@@ -79,21 +79,6 @@ class UpgradeScriptCommand extends BaseCommand
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
         return $this->getAppDao()->updateApp($app['id'], $newApp);
-    }
-
-    private function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('prod', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
     }
 
     protected function getAppDao()

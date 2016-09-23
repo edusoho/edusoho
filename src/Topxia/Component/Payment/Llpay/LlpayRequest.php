@@ -62,7 +62,8 @@ class LlpayRequest extends Request
         $converted['userreq_ip'] = str_replace(".", "_", $this->getClientIp());
         $converted['bank_code']  = '';
         $converted['pay_type']   = '2';
-        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$identify."_".$params['userId']));
+        $user = $this->geUserService()->getUser($params['userId']);
+        $converted['risk_item']  = json_encode(array('frms_ware_category'=>3001,'user_info_mercht_userno'=>$identify."_".$params['userId'],'user_info_dt_register'=>date('YmdHis', $user['createdTime'])));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
@@ -103,6 +104,11 @@ class LlpayRequest extends Request
         $identify = substr(md5(uniqid()), 0, 12);
         $this->getSettingService()->set('llpay_identify', $identify);
         return $identify;
+    }
+
+    protected function geUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 
     private function getSettingService()

@@ -51,8 +51,8 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
         $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
@@ -91,8 +91,8 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('移动客户端设置已保存！'));
         }
 
         $courseIds = explode(",", $mobile['courseIds']);
@@ -115,7 +115,7 @@ class MobileController extends BaseController
     {
         $file = $request->files->get($type);
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
@@ -156,7 +156,7 @@ class MobileController extends BaseController
         $targetVersion = $request->request->get('targetVersion');
 
         if (empty($currentVersion) || empty($targetVersion)) {
-            throw new \RuntimeException("参数不正确");
+            throw new \RuntimeException($this->getServiceKernel()->trans('参数不正确'));
         }
 
         $api = CloudAPIFactory::create('root');

@@ -10,6 +10,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Topxia\Service\User\Impl\UserServiceImpl;
 
 abstract class BaseController extends Controller
 {
@@ -20,6 +21,7 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
+
     protected function getCurrentUser()
     {
         return $this->getUserService()->getCurrentUser();
@@ -32,7 +34,7 @@ abstract class BaseController extends Controller
 
     public function getUser()
     {
-        throw new \RuntimeException('获得当前登录用户的API变更为：getCurrentUser()。');
+        throw new \RuntimeException($this->getServiceKernel()->trans('获得当前登录用户的API变更为：getCurrentUser()。'));
     }
 
     /**
@@ -48,7 +50,7 @@ abstract class BaseController extends Controller
     protected function createMessageResponse($type, $message, $title = '', $duration = 0, $goto = null)
     {
         if (!in_array($type, array('info', 'warning', 'error'))) {
-            throw new \RuntimeException('type不正确');
+            throw new \RuntimeException($this->getServiceKernel()->trans('type不正确'));
         }
 
         return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
@@ -86,7 +88,7 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
-        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', '登录成功');
+        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
 
         $loginBind = $this->setting('login_bind', array());
 
@@ -176,7 +178,7 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    protected function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = null)
     {
         if ($message) {
             return new AccessDeniedException($message);
@@ -258,6 +260,9 @@ abstract class BaseController extends Controller
         return $this->getServiceKernel()->createService($service);
     }
 
+    /**
+     * @return UserServiceImpl
+     */
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
@@ -283,5 +288,10 @@ abstract class BaseController extends Controller
             }
         }
         return $conditions;
+    }
+
+    protected function trans($text)
+    {
+        return $this->getServiceKernel()->trans($text);
     }
 }

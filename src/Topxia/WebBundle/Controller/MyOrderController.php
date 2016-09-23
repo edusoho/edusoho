@@ -87,7 +87,7 @@ class MyOrderController extends BaseController
         $currentUser = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if ($currentUser['id'] != $order['userId'] ){
-            throw new \RuntimeException("普通用户不能查看别人的订单");
+            throw new \RuntimeException($this->getServiceKernel()->trans('普通用户不能查看别人的订单'));
         }
         $user = $this->getUserService()->getUser($order['userId']);
 
@@ -140,7 +140,7 @@ class MyOrderController extends BaseController
     public function cancelAction(Request $request, $id)
     {
 
-        $order = $this->getOrderService()->cancelOrder($id, '取消订单');
+        $order = $this->getOrderService()->cancelOrder($id, $this->getServiceKernel()->trans('取消订单'));
 
         return $this->createJsonResponse(true);
     }

@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 
     var AudioChooser = BaseChooser.extend({
     	attrs: {
-
     	},
         
         setup: function() {

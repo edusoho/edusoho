@@ -95,9 +95,9 @@
             {% endif %}
             {% if alipay|default('') or cbpay|default('') %}
               {% if is_micro_messenger() %}
-                <p class="color-danger">您正在使用微信浏览，暂不支持其他支付方式</p>
+                <p class="color-danger">{{'您正在使用微信浏览，暂不支持其他支付方式'|trans}}</p>
               {% else %}
-                <p class="color-danger">若需使用网银支付，请使用IE浏览器</p>
+                <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
               {% endif %}
             {% endif %}
           </div>

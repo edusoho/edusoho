@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
+            new Permission\PermissionBundle\PermissionBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),
@@ -37,7 +38,8 @@ class AppKernel extends Kernel
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
             new Org\OrgBundle\OrgBundle(),
-            new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
+            new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';

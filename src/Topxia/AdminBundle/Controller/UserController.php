@@ -38,7 +38,7 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
-//根据mobile查询user_profile获得userIds
+        //根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
@@ -82,13 +82,27 @@ class UserController extends BaseController
         $userIds  = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
+        $allRoles = $this->getAllRoles();
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users'          => $users,
+            'allRoles'       => $allRoles,
             'userCount'      => $userCount,
             'paginator'      => $paginator,
             'profiles'       => $profiles,
             'showUserExport' => $showUserExport
         ));
+    }
+
+    protected function getAllRoles()
+    {
+        $roles = $this->getRoleService()->searchRoles(array(), 'created', 0, PHP_INT_MAX);
+
+        $roleDicts = array();
+        foreach ($roles as $key => $role) {
+            $roleDicts[$role['code']] = $role['name'];
+        }
+        return $roleDicts;
     }
 
     public function emailCheckAction(Request $request)
@@ -176,8 +190,8 @@ class UserController extends BaseController
         $userData['createdIp'] = $clientIp;
         $userData['type']      = $formData['type'];
 
-        if(isset($formData['orgCode'])){
-            $userData['orgCode']  = $formData['orgCode'];
+        if (isset($formData['orgCode'])) {
+            $userData['orgCode'] = $formData['orgCode'];
         }
 
         return $userData;
@@ -210,7 +224,7 @@ class UserController extends BaseController
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
-                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -257,12 +271,6 @@ class UserController extends BaseController
 
     public function rolesAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
-            && false === $this->get('security.context')->isGranted('ROLE_ADMIN')
-        ) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user        = $this->getUserService()->getUser($id);
         $currentUser = $this->getCurrentUser();
 
@@ -271,33 +279,19 @@ class UserController extends BaseController
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
-            $dataDict     = new UserRoleDict();
-            $roleDict     = $dataDict->getDict();
-            $role         = "";
-            $roleCount    = count($roles);
-            $deletedRoles = array_diff($user['roles'], $roles);
-            $addedRoles   = array_diff($roles, $user['roles']);
+            if (!empty($roles)) {
+                $roleSet          = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+                $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
+                $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
 
-            if (!empty($deletedRoles) || !empty($addedRoles)) {
-                for ($i = 0; $i < $roleCount; $i++) {
-                    $role .= $roleDict[$roles[$i]];
-
-                    if ($i < $roleCount - 1) {
-                        $role .= "、";
-                    }
-                }
-
-                $message = array(
+                $message          = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $role);
+                    'role'     => implode(',', $roleNames)
+                );
+
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
-
-            if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
-                $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
-            }
-
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
                 'user'    => $user,
@@ -305,19 +299,36 @@ class UserController extends BaseController
             ));
         }
 
-        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
-            'user'    => $user,
-            'default' => $default
+            'user' => $user
         ));
+    }
+
+    protected function getRoleNames($roles, $roleSet)
+    {
+        $roleNames = array();
+        $roles     = array_unique($roles);
+
+        $userRoleDict  = new UserRoleDict();
+        $userRoleDict  = $userRoleDict->getDict();
+        $roleDictCodes = array_keys($userRoleDict);
+
+        foreach ($roles as $key => $role) {
+            if (in_array($role, $roleDictCodes)) {
+                $roleNames[] = $userRoleDict[$role];
+            } elseif ($role == 'ROLE_BACKEND') {
+                continue;
+            } else {
+                $role        = $roleSet[$role];
+                $roleNames[] = $role['name'];
+            }
+        }
+
+        return $roleNames;
     }
 
     public function avatarAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
@@ -365,10 +376,6 @@ class UserController extends BaseController
 
     public function avatarCropAction(Request $request, $id)
     {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
         $user = $this->getUserService()->getUser($id);
 
         if ($request->getMethod() == 'POST') {
@@ -418,19 +425,19 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $site   = $this->setting('site', array());
+        $site  = $this->setting('site', array());
         try {
             $mailOptions = array(
-                'to'     => $user['email'],
+                'to'       => $user['email'],
                 'template' => 'email_reset_password',
-                'params' => array(
-                    'nickname' => $user['nickname'],
+                'params'   => array(
+                    'nickname'  => $user['nickname'],
                     'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                    'sitename' => $site['name'],
-                    'siteurl' => $site['url']
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url']
                 )
             );
-            $mail = MailFactory::create($mailOptions);
+            $mail        = MailFactory::create($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
@@ -452,18 +459,18 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site      = $this->getSettingService()->get('site', array());
-        $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
 
         try {
-            $mailOptions  = array(
-                'to'        => $user['email'],
-                'template'  => 'email_registration',
-                'params' => array(
-                    'sitename' => $site['name'],
-                    'siteurl' => $site['url'],
+            $mailOptions = array(
+                'to'       => $user['email'],
+                'template' => 'email_registration',
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'siteurl'   => $site['url'],
                     'verifyurl' => $verifyurl,
                     'nickname'  => $user['nickname']
-                ),
+                )
             );
 
             $mail = MailFactory::create($mailOptions);
@@ -481,10 +488,6 @@ class UserController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $user        = $this->getUserService()->getUser($userId);
-
-        if (!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            throw $this->createAccessDeniedException();
-        }
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -507,6 +510,11 @@ class UserController extends BaseController
                 $this->getTokenService()->destoryToken($token['token']);
             }
         }
+    }
+
+    protected function getRoleService()
+    {
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 
     protected function getNotificationService()

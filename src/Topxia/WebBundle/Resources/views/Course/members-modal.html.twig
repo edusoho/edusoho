@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}{{'课程'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{% endblock %}
+{% block title %}{{'课程'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
 
@@ -27,7 +27,7 @@
           <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
         {% endif %}
         {% if canManage %}
-          <div class="progress" title="已学{{ progress.number }}课时">
+          <div class="progress" title="{{'已学%number%课时'|trans({'%trans%': progress.number})}}">
             <div class="progress-bar" style="width: {{ progress.percent }}">
             </div>
           </div>

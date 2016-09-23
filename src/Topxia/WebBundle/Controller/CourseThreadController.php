@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseThreadController extends CourseBaseController
 {
@@ -61,7 +61,7 @@ class CourseThreadController extends CourseBaseController
     {
         list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
 
-        if ($response) {
+        if (!empty($response)) {
             return $response;
         }
 
@@ -69,7 +69,7 @@ class CourseThreadController extends CourseBaseController
             $classroom        = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -84,7 +84,7 @@ class CourseThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
 
         if (empty($thread)) {
-            throw $this->createNotFoundException("话题不存在，或已删除。");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('话题不存在，或已删除。'));
         }
 
         $paginator = new Paginator(
@@ -111,7 +111,7 @@ class CourseThreadController extends CourseBaseController
 
         $this->getThreadService()->hitThread($courseId, $threadId);
 
-        $isManager = $this->getCourseService()->canManageCourse($course['id']);
+        $isManager = $this->getCourseService()->canManageCourse($course['id'], 'admin_course_thread');
 
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
@@ -154,7 +154,7 @@ class CourseThreadController extends CourseBaseController
         ));
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
             $formData = $request->request->all();
             if ($form->isValid()) {
                 try {
@@ -167,7 +167,7 @@ class CourseThreadController extends CourseBaseController
                         'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                    return $this->createMessageResponse('error', $e->getMessage(), $this->getServiceKernel()->trans('错误提示'), 1, $request->getPathInfo());
                 }
             }
         }
@@ -199,14 +199,14 @@ class CourseThreadController extends CourseBaseController
         if ($user->isLogin() && $user->id == $thread['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
         }
 
         $form = $this->createThreadForm($thread);
 
         if ($request->getMethod() == 'POST') {
             try {
-                $form->bind($request);
+                $form->submit($request);
                 $formData = $request->request->all();
 
                 if ($form->isValid()) {
@@ -233,7 +233,7 @@ class CourseThreadController extends CourseBaseController
                     )));
                 }
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
+                return $this->createMessageResponse('error', $e->getMessage(), $this->getServiceKernel()->trans('错误提示'), 1, $request->getPathInfo());
             }
         }
 
@@ -369,7 +369,7 @@ class CourseThreadController extends CourseBaseController
             $classroom        = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -381,7 +381,7 @@ class CourseThreadController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            $form->submit($request);
             $userId = $currentUser->id;
 
             if ($form->isValid()) {
@@ -498,7 +498,7 @@ class CourseThreadController extends CourseBaseController
         if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
-            $course = $this->getCourseService()->tryManageCourse($courseId);
+            $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
         }
 
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
@@ -507,7 +507,7 @@ class CourseThreadController extends CourseBaseController
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $form->bind($request);
+            $form->submit($request);
 
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());

@@ -2,7 +2,7 @@
 
 {% set script_controller = 'course/questions' %}
 
-{% set menu = 'admin_course_question' %}
+{% set menu = 'admin_course_question_manage' %}
 
 {% block main %}
 
@@ -14,22 +14,22 @@
 
       <div class="form-group">
         <select class="form-control" name="keywordType">
-          {{ select_options({title:'标题', content: '内容', courseId:'课程编号', courseTitle:'课程名' }, app.request.get('keywordType')) }}
+          {{ select_options({title:'标题'|trans, content: '内容'|trans, courseId:'课程编号'|trans, courseTitle:'课程名'|trans }, app.request.get('keywordType')) }}
         </select>
       </div>
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="关键词" name="keyword" value="{{ app.request.get('keyword') }}">
+        <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
       </div>
       
       <span class="divider"></span>
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="作者" name="author" value="{{ app.request.get('author') }}">
+        <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
       </div>
 
 
-      <button class="btn btn-primary" type="submit">搜索</button>
+      <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
     </form>
   </div>
 
@@ -38,15 +38,15 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="50%">问答</th>
+          <th width="50%">{{'问答'|trans}}</th>
           {% if type == 'unPosted' %}
-            <th width="10%">查看</th>
+            <th width="10%">{{'查看'|trans}}</th>
           {% elseif type == 'all' %}
-            <th width="10%">回复/查看</th>
+            <th width="10%">{{'回复/查看'|trans}}</th>
           {% endif %}
-          <th width="10%">作者</th>
-          <th width="10%">创建时间</th>
-          <th width="15%">操作</th>
+          <th width="10%">{{'作者'|trans}}</th>
+          <th width="10%">{{'创建时间'|trans}}</th>
+          <th width="15%">{{'操作'|trans}}</th>
         </tr>
       </thead>
       <tbody class="tbody">
@@ -61,8 +61,8 @@
               <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title }}</strong></a>
 
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
-                <div class="long-text">{{ question.content|raw }} <span class="trigger">(收起)</span></div>
+                <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
+                <div class="long-text">{{ question.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
               </div>
               
               <div class="text-sm mts">
@@ -70,7 +70,7 @@
                   <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
                   {% if lesson %}
                     <span class="text-muted mhs">&raquo;</span>
-                    <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">课时{{lesson.number}}：{{ lesson.title }}</a>
+                    <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">{{'课时'|trans}}{{lesson.number}}：{{ lesson.title }}</a>
                   {% endif %}
                 {% endif %}
               </div>
@@ -95,14 +95,14 @@
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">暂无问答记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'暂无问答记录'|trans}}</div></td></tr>
         {% endfor %}
       </tbody>
     </table>
 
     <div class="mbm">
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="问答" data-url="{{ path('admin_thread_batch_delete') }}">删除</button>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'问答'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'删除'|trans}}</button>
     </div>
   </div>
     

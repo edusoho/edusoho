@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             if ($(this).prop('checked') === false) {
                 $(this).prop('checked', true);
                 var user_name = $('#change-user-roles-btn').data('user') ;
-                Notify.info('用户必须拥有'+user_name+'角色');
+                Notify.info(Translator.trans('用户必须拥有%user%角色',{user:user_name}));
             }
         });
 
@@ -31,12 +31,12 @@ define(function(require, exports, module) {
 
             if ($.inArray('ROLE_USER', roles) < 0) {
             	   var user_name = $('#change-user-roles-btn').data('user') ;
-                Notify.danger('用户必须拥有'+user_name+'角色');
+                Notify.danger(Translator.trans('用户必须拥有%user%角色',{user:user_name}));
                 return false;
             }
 
             if (isTeacher && $.inArray('ROLE_TEACHER', roles) < 0) {
-                if (!confirm('取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？')) {
+                if (!confirm(Translator.trans('取消该用户的教师角色，同时将收回该用户所有教授的课程的教师权限。您真的要这么做吗？'))) {
                     return false;
                 }
             }
@@ -46,15 +46,24 @@ define(function(require, exports, module) {
             $.post($form.attr('action'), $form.serialize(), function(html) {
 
                 $modal.modal('hide');
-                Notify.success('用户组保存成功');
+                Notify.success(Translator.trans('用户组保存成功'));
                 var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function(){
-                Notify.danger('操作失败');
+                Notify.danger(Translator.trans('操作失败'));
             });
 
             return false;
         });
+        /*var $checkbox = $('#new-checkboxs');
+        $('#old-checkboxs').change(function(){
+            if ($('#admin').prop('checked') === true) {
+                $checkbox.show();
+            } else {
+                $('#new-checkboxs').find('[type=checkbox]:checked').attr('checked', false);
+                $checkbox.hide();
+            }
+        });*/
 
 	};
 

@@ -4,8 +4,8 @@
 			<span class="{{ isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.usedTime|default(0) == 0 %}{{ limitTime }}{% else %}{{ limitTime - paperResult.usedTime }}{% endif %}">00:00</span>
 			{% if target.testMode|default('normal') != 'realTime' %}
 			<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
-			<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>暂停</button>
-		    {% endif %}
+			<button id="pause" class="btn btn-sm btn-default pull-right"{% if id > 0 %} data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}"{% endif %}>{{'暂停'|trans}}</button>
+		  {% endif %}
 		{% else %}
 		  <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">{{'时间不限'|trans}}</small></span>
 			<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>

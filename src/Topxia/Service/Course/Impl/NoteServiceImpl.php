@@ -3,8 +3,8 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Course\NoteService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Course\NoteService;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
@@ -43,7 +43,7 @@ class NoteServiceImpl extends BaseService implements NoteService
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseTitle'))) {
-                throw $this->createServiceException('keywordType参数不正确');
+                throw $this->createServiceException($this->getKernel()->trans('keywordType参数不正确'));
             }
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
         }
@@ -70,14 +70,14 @@ class NoteServiceImpl extends BaseService implements NoteService
     public function saveNote(array $note)
     {
         if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
-            throw $this->createServiceException('缺少必要的字段，保存笔记失败');
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要的字段，保存笔记失败'));
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($note['courseId']);
         $user                  = $this->getCurrentUser();
 
         if (!$this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId'])) {
-            throw $this->createServiceException('课时不存在，保存笔记失败');
+            throw $this->createServiceException($this->getKernel()->trans('课时不存在，保存笔记失败'));
         }
 
         $note = ArrayToolkit::filter($note, array(
@@ -116,12 +116,12 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $note = $this->getNote($id);
         if (empty($note)) {
-            throw $this->createServiceException("笔记(#{$id})不存在，删除失败");
+            throw $this->createServiceException($this->getKernel()->trans('笔记(#%id%)不存在，删除失败', array('%id%' => $id)));
         }
 
         $currentUser = $this->getCurrentUser();
-        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'])) {
-            throw $this->createServiceException("你没有权限删除笔记(#{$id})");
+        if (($note['userId'] != $currentUser['id']) && !$this->getCourseService()->canManageCourse($note['courseId'], 'admin_course_note')) {
+            throw $this->createServiceException($this->getKernel()->trans('你没有权限删除笔记(#%id%)', array('%id%' => $id)));
         }
 
         $this->getNoteDao()->deleteNote($id);
@@ -154,17 +154,17 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $user = $this->getCurrentUser();
         if (empty($user)) {
-            throw $this->createNotFoundException("用户还未登录,不能点赞。");
+            throw $this->createNotFoundException($this->getKernel()->trans('用户还未登录,不能点赞。'));
         }
 
         $note = $this->getNote($noteId);
         if (empty($note)) {
-            throw $this->createNotFoundException("笔记不存在，或已删除。");
+            throw $this->createNotFoundException($this->getKernel()->trans('笔记不存在，或已删除。'));
         }
 
         $like = $this->getNoteLikeByNoteIdAndUserId($noteId, $user['id']);
         if (!empty($like)) {
-            throw $this->createAccessDeniedException('不可重复对一条笔记点赞！');
+            throw $this->createAccessDeniedException($this->getKernel()->trans('不可重复对一条笔记点赞！'));
         }
 
         $noteLike = array(
@@ -182,12 +182,12 @@ class NoteServiceImpl extends BaseService implements NoteService
     {
         $user = $this->getCurrentUser();
         if (empty($user)) {
-            throw $this->createNotFoundException("用户还未登录,不能点赞。");
+            throw $this->createNotFoundException($this->getKernel()->trans('用户还未登录,不能点赞。'));
         }
 
         $note = $this->getNote($noteId);
         if (empty($note)) {
-            throw $this->createNotFoundException("笔记不存在，或已删除。");
+            throw $this->createNotFoundException($this->getKernel()->trans('笔记不存在，或已删除。'));
         }
 
         $this->getNoteLikeDao()->deleteNoteLikeByNoteIdAndUserId($noteId, $user['id']);

@@ -23,10 +23,19 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.teacher.update'  => 'onCourseTeacherUpdate',
             'course.price.update'    => 'onCoursePriceUpdate',
             'course.picture.update'  => 'onCoursePictureUpdate',
+            'user.role.change'       => 'onRoleChange',
             'announcement.create'    => 'onAnnouncementCreate',
             'announcement.update'    => 'onAnnouncementUpdate',
             'announcement.delete'    => 'onAnnouncementDelete'
         );
+    }
+
+    public function onRoleChange(ServiceEvent $event)
+    {
+        $user = $event->getSubject();
+        if (!in_array('ROLE_TEACHER', $user['roles'])) {
+            $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
+        }
     }
 
     public function onCourseJoin(ServiceEvent $event)

@@ -6,6 +6,8 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
+use Topxia\Common\PluginVersionToolkit;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
@@ -54,7 +56,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
-            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn'))
+            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
+            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale'))
         );
     }
 
@@ -80,6 +83,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
             new \Twig_SimpleFunction('dict', array($this, 'getDict')),
+            // dict_text 已经废弃，不要再使用,请使用macro方式
             new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
@@ -111,11 +115,35 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
+            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
-            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig'))
+            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
+            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify'))
         );
+    }
+
+    public function pluginUpdateNotify()
+    {
+        $count = $this->getAppService()->findAppCount();
+        $apps  = $this->getAppService()->findApps(0, $count);
+
+        $notifies = array_reduce($apps, function ($notifies, $app){
+
+            if($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
+                $notifies[] = $app['name'];
+            }
+
+            return $notifies;
+        }, array());
+
+        return implode('、',$notifies);
+    }
+
+    public function getAdminRoles()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function weixinConfig()
@@ -214,6 +242,14 @@ class WebExtension extends \Twig_Extension
     public function isMicroMessenger()
     {
         return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
+    }
+
+    public function renameLocale($locale)
+    {
+        $locale = strtolower($locale);
+        $locale = str_replace('_', '-', $locale);
+
+        return $locale == 'zh-cn' ? '' : '-'.$locale;
     }
 
     public function getFingerprint()
@@ -414,6 +450,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'classroom';
         $names[] = 'materiallib';
         $names[] = 'sensitiveword';
+        $names[] = 'permission';
         $names[] = 'org';
 
         $paths = array(
@@ -474,7 +511,7 @@ class WebExtension extends \Twig_Extension
             $location = ConvertIpToolkit::convertIp($ip);
 
             if ($location === 'INNA') {
-                return '未知区域';
+                return $this->getServiceKernel()->trans('未知区域');
             }
 
             return $location;
@@ -501,27 +538,27 @@ class WebExtension extends \Twig_Extension
         $diff = time() - $time;
 
         if ($diff < 0) {
-            return '未来';
+            return $this->getServiceKernel()->trans('未来');
         }
 
         if ($diff == 0) {
-            return '刚刚';
+            return $this->getServiceKernel()->trans('刚刚');
         }
 
         if ($diff < 60) {
-            return $diff.'秒前';
+            return $diff.$this->getServiceKernel()->trans('秒前');
         }
 
         if ($diff < 3600) {
-            return round($diff / 60).'分钟前';
+            return round($diff / 60).$this->getServiceKernel()->trans('分钟前');
         }
 
         if ($diff < 86400) {
-            return round($diff / 3600).'小时前';
+            return round($diff / 3600).$this->getServiceKernel()->trans('小时前');
         }
 
         if ($diff < 2592000) {
-            return round($diff / 86400).'天前';
+            return round($diff / 86400).$this->getServiceKernel()->trans('天前');
         }
 
         if ($diff < 31536000) {
@@ -537,18 +574,18 @@ class WebExtension extends \Twig_Extension
         $remain     = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
-            return $remainTime['second'] = '0分钟';
+            return $remainTime['second'] = $this->getServiceKernel()->trans('0分钟');
         }
 
         if ($remain <= 3600 && empty($timeType)) {
-            return $remainTime['minutes'] = round($remain / 60).'分钟';
+            return $remainTime['minutes'] = round($remain / 60).$this->getServiceKernel()->trans('分钟');
         }
 
         if ($remain < 86400 && empty($timeType)) {
-            return $remainTime['hours'] = round($remain / 3600).'小时';
+            return $remainTime['hours'] = round($remain / 3600).$this->getServiceKernel()->trans('小时');
         }
 
-        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).'天';
+        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).$this->getServiceKernel()->trans('天');
 
         if (!empty($timeType)) {
             return $remainTime[$timeType];
@@ -594,15 +631,15 @@ class WebExtension extends \Twig_Extension
         $seconds = $value - $minutes * 60;
 
         if ($minutes === 0) {
-            return $seconds.'秒';
+            return $seconds.$this->getServiceKernel()->trans('秒');
         }
 
-        return "{$minutes}分钟{$seconds}秒";
+        return $this->getServiceKernel()->trans('%minutes%分钟%seconds%秒', array('%minutes%' => $minutes, '%seconds%' => $seconds));
     }
 
     public function timeRangeFilter($start, $end)
     {
-        $range = date('Y年n月d日 H:i', $start).' - ';
+        $range = date('Y-n-d H:i', $start).' - ';
 
         if ($this->container->get('topxia.timemachine')->inSameDay($start, $end)) {
             $range .= date('H:i', $end);
@@ -662,7 +699,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'p':
-                    $text .= $this->mb_trim($names['province'], '省');
+                    $text .= $this->mb_trim($names['province'], $this->getServiceKernel()->trans('省'));
                     break;
 
                 case 'C':
@@ -670,7 +707,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'c':
-                    $text .= $this->mb_trim($names['city'], '市');
+                    $text .= $this->mb_trim($names['city'], $this->getServiceKernel()->trans('市'));
                     break;
 
                 case 'D':
@@ -1257,7 +1294,9 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return ExtensionManager::instance()->getDataDict($type);
+        $dict = ExtensionManager::instance()->getDataDict($type);
+
+        return ServiceKernel::instance()->transArray($dict);
     }
 
     public function getDictText($type, $key)
@@ -1318,6 +1357,19 @@ class WebExtension extends \Twig_Extension
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
         return ($head.'************'.$tail);
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    /**
+     * @return AppServiceImpl
+     */
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     public function getPurifyAndTrimHtml($html)

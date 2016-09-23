@@ -2,8 +2,9 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class FinanceSettingController extends BaseController
 {
@@ -12,7 +13,7 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled'          => 0,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'disabled_message' => $this->trans('尚未开启支付模块，无法购买课程。'),
             'bank_gateway'     => 'none',
             'alipay_enabled'   => 0,
             'alipay_key'       => '',
@@ -47,8 +48,8 @@ class FinanceSettingController extends BaseController
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
-            $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
-            $this->setFlashMessage('success', '支付方式设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
+            $this->setFlashMessage('success', $this->trans('支付方式设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
@@ -58,7 +59,6 @@ class FinanceSettingController extends BaseController
 
     public function isClosePayment($payment)
     {
-
         $payments = ArrayToolkit::parts($payment, array('alipay_enabled', 'wxpay_enabled', 'heepay_enabled', 'quickpay_enabled', 'llpay_enabled'));
         $sum      = 0;
         foreach ($payments as $value) {
@@ -87,8 +87,8 @@ class FinanceSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
-            $this->getLogService()->info('system', 'update_settings', "更新退款设置", $refundSetting);
-            $this->setFlashMessage('success', '退款设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', '更新退款设置', $refundSetting);
+            $this->setFlashMessage('success', $this->trans('退款设置已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(

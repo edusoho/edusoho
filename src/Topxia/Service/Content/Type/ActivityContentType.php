@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Service\Content\Type;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class ActivityContentType extends ContentType
 {
 	public function getBasicFields()
@@ -24,7 +26,12 @@ class ActivityContentType extends ContentType
 
 	public function getName()
 	{
-		return '活动';
+		return $this->getKernel()->trans('活动');
 	}
+
+	protected function getKernel()
+	{
+    return  ServiceKernel::instance();
+  }
 
 }

@@ -15,7 +15,7 @@
         <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
           <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
             <small class="text-muted">
-              共{{ total[type].number }}题，共{{ total[type].score }}分{% if total[type].missScore > 0 %}，漏选得{{ total[type].missScore }}分{% endif %}
+              {{'共%total.number%题，共%total.score%分'|trans({'%total.number%': total[type].number,'%total.score%': total[type].score})}}{% if total[type].missScore > 0 %}{{'，漏选得%total.missScore%分'|trans({'%total.missScore%': total[type].missScore})}}{% endif %}
             </small>
           </div>
           <div class="panel-body">

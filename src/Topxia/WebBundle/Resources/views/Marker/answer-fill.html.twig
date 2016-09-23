@@ -1,0 +1,30 @@
+<div class="question"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">
+		{{'填空题'|trans}}<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
+	</div>
+	<div class="question-body clearfix">
+	  <div class="gray-darker mbl">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+	  </div>
+		{% if answer|default(null) %}
+		{% set fileItemResultAnswer = answer[0] %}
+		{% endif %}
+		<div class="homework-question-fill question-fill-inputs">
+		{% for index,value in selfAnswer %}
+		  	<div class="fill-answer {% if selfAnswer[index] in answer[index] %}correct{% else %}error{% endif %}">
+		    {{selfAnswer[index]}}<span class="type">{% if selfAnswer[index] in answer[index] %}{{'正确'|trans}}{% else %}{{'错误'|trans}}{% endif %}</span>
+		   	</div>
+		{% endfor %}
+		  <p class="answer-title mtl">{{'正确答案'|trans}}</p>
+		  <div class="fill-answer">
+		  {% for index,value in answer %}
+		    <p>{{'填空(%index%):正确答案'|trans({'%index%':index+1})}}<strong class="text-success">{% for i,answerValue in value %} {% if i %}{{'或'|trans}}{% endif %} {{answerValue}}{% endfor %}</strong></p>
+		  {% endfor %}
+		  </div>
+		</div>
+	</div>
+	<div class="question-footer clearfix">
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
+		<button id="continue" class="btn btn-primary btn-lg pull-right">{% if compelete %}{{'完成'|trans}}{% else %}{{'下一题'|trans}} {% endif %}</button>
+	</div>
+</div>

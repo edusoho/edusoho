@@ -34,7 +34,8 @@
       "select2.png",
       "select2x2.png",
       "select2-spinner.gif",
-      "i18n/zh-cn.js"
+      "i18n/zh-CN.js",
+      "i18n/en-US.js"
     ]
   }
 }

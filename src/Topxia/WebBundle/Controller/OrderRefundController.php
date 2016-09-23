@@ -11,7 +11,7 @@ class OrderRefundController extends BaseController
         $targetType = $request->query->get("targetType");
 
         if (!in_array($targetType, array("course", "classroom"))) {
-            throw $this->createAccessDeniedException('参数不对。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('参数不对。'));
         }
 
         $processor = OrderRefundProcessorFactory::create($targetType);
@@ -21,7 +21,7 @@ class OrderRefundController extends BaseController
         $member = $processor->getTargetMember($id, $user["id"]);
 
         if (empty($member) || empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是学员或尚未购买，不能退学。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是学员或尚未购买，不能退学。'));
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
@@ -31,7 +31,7 @@ class OrderRefundController extends BaseController
         }
 
         if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException('组合购买课程不能退出。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('组合购买课程不能退出。'));
         }
 
         if ('POST' == $request->getMethod()) {
@@ -60,7 +60,7 @@ class OrderRefundController extends BaseController
         $targetType = $request->query->get("targetType");
 
         if (!in_array($targetType, array("course", "classroom"))) {
-            throw $this->createAccessDeniedException('参数不对。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('参数不对。'));
         }
 
         $processor = OrderRefundProcessorFactory::create($targetType);
@@ -80,7 +80,7 @@ class OrderRefundController extends BaseController
         $member = $processor->getTargetMember($target['id'], $user['id']);
 
         if (empty($member) || empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是学员或尚未购买，不能取消退款。');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是学员或尚未购买，不能取消退款。'));
         }
 
         $processor->cancelRefundOrder($member['orderId']);

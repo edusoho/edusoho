@@ -26,18 +26,23 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return $this->getAnnouncementDao()->searchAnnouncementsCount($conditions);
     }
 
+    public function searchCount($conditions)
+    {
+        return $this->searchAnnouncementsCount($conditions);
+    }
+
     public function createAnnouncement($announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException("公告内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('公告内容不能为空！'));
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException("发布时间不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('发布时间不能为空！'));
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException("结束时间不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('结束时间不能为空！'));
         }
 
         if (isset($announcement['notify'])) {
@@ -57,15 +62,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function updateAnnouncement($id, $announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException("公告内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('公告内容不能为空！'));
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException("发布时间不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('发布时间不能为空！'));
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException("结束时间不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('结束时间不能为空！'));
         }
         $announcement                = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
@@ -81,7 +86,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $announcement = $this->getAnnouncement($id);
         if (empty($announcement)) {
-            $this->createNotFoundException("公告#{$id}不存在。");
+            $this->createNotFoundException($this->getKernel()->trans('公告#%id%不存在。', array('%id%' => $id)));
         }
 
         $this->getAnnouncementDao()->deleteAnnouncement($id);
@@ -92,6 +97,18 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $this->dispatchEvent('announcement.delete', $announcement);
 
         return true;
+    }
+
+    public function batchUpdateOrg($ids, $orgCode)
+    {
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($ids as $id) {
+            $this->getAnnouncementDao()->updateAnnouncement($id, $fields);
+        }
     }
 
     protected function getAnnouncementDao()

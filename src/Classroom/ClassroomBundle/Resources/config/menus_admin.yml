@@ -2,44 +2,117 @@ admin_classroom:
     name: 班级管理
     parent: admin_course
     before: admin_course_thread
-admin_classroom_manage:
-    name: 班级管理
-    parent: admin_classroom
-    router_name: admin_classroom
-admin_classroom_recommend:
-    name: 班级推荐
-    parent: admin_classroom
-    router_name: admin_classroom_recommend_list
-admin_classroom_create:
-    name: 创建班级
-    parent: admin_classroom_manage
-    group: 2
-    blank: true
-admin_classroom_thread_manage:
-    name: 班级话题
-    parent: admin_course_thread
-    router_name: admin_classroom_thread
-admin_classroom_order:
-    name: 班级订单
-    parent: admin_order
-    after: admin_course_order
+    children:
+        admin_classroom_manage:
+            name: 班级管理
+            router_name: admin_classroom
+            children:
+                admin_classroom_content_manage:
+                    name: 管理班级
+                    router_name: classroom_manage
+                    group: btn
+                    router_params:
+                        id: (classroom.id)
+                    blank: true
+                admin_classroom_create:
+                    name: 创建班级
+                    group: topBtn
+                    blank: true
+                admin_classroom_cancel_recommend:
+                    name: 取消推荐
+                    mode: none
+                    class: cancel-recommend-classroom
+                    icon: 'glyphicon glyphicon-hand-right'
+                    group: groupButton
+                    router_params:
+                        id: (classroom.id)
+                        ref: classroomList
+                    visable: ( classroom.recommended )
+                admin_classroom_set_recommend:
+                    name: 推荐班级
+                    mode: modal
+                    icon: 'glyphicon glyphicon-hand-up'
+                    group: groupButton
+                    router_params:
+                        id: (classroom.id)
+                        ref: classroomList
+                    visable: ( not classroom.recommended )
+                admin_classroom_close:
+                    name: 关闭班级
+                    mode: none
+                    class: close-classroom
+                    icon: 'glyphicon glyphicon-off'
+                    group: groupButton
+                    router_params:
+                        id: (classroom.id)
+                    visable: ( classroom.status == 'published' )
+                admin_sms_prepare:
+                    name: 发送发布通知短信
+                    router_name: sms_prepare
+                    mode: modal
+                    icon: 'glyphicon glyphicon-envelope'
+                    group: groupButton
+                    router_params:
+                        id: (classroom.id)
+                        targetType: classroom
+                    visable: ( classroom.status == 'published' )
+                admin_classroom_open:
+                    name: 发布班级
+                    mode: none
+                    icon: 'glyphicon glyphicon-ok'
+                    group: groupButton
+                    class: open-classroom
+                    router_params:
+                        id: (classroom.id)
+                    visable: ( classroom.status != 'published' )
+                admin_classroom_delete:
+                    name: 删除班级
+                    mode: none
+                    icon: 'glyphicon glyphicon-remove'
+                    class: delete-classroom
+                    group: groupButton
+                    router_params:
+                        id: (classroom.id)
+                    visable: ( classroom.status=='draft' )    
+        admin_classroom_recommend:
+            name: 班级推荐
+            router_name: admin_classroom_recommend_list
 admin_classroom_refunds:
     name: 班级退款管理
     parent: admin_finance
     router_name: admin_order_refunds
-    router_params: {targetType:classroom, status:created}
+    router_params:
+        targetType: classroom
+        status: created
     after: admin_course_refunds
-admin_classroom_refunds_manage:
-    name: 管理
-    parent: admin_classroom_refunds
-    router_name: admin_order_refunds
-    router_params: {targetType:classroom, status:created}
+    children:
+        admin_classroom_refunds_manage:
+            name: 班级退款管理
+            disable: true
+            router_name: admin_order_refunds
+            router_params:
+                targetType: classroom
+                status: created
+admin_classroom_order_manage:
+    name: 班级订单
+    parent: admin_order
+    after: admin_course_order
+    children:
+        admin_classroom_order:
+            name: 班级订单
+            disable: true
 admin_classroom_setting:
     name: 班级
+    disable: true
     parent: admin_setting_course_setting
     after: admin_setting_live_course
 admin_classroom_review_tab:
     name: 班级评价
-    parent: admin_course_review
     router_name: admin_classroom_review
-    group: 1
+    parent: admin_course_review
+    disable: true
+admin_classroom_thread_manage:
+    name: 班级话题
+    parent: admin_course_thread
+    router_name: admin_classroom_thread
+    disable: true

@@ -15,11 +15,11 @@ define(function(require, exports, module) {
                 var $btn = this.$('[type=submit]').button('loading');
                 
                 $.post($form.attr('action'), $form.serialize(), function() {
-                    Notify.success('设置帐号成功，正在跳转');
+                    Notify.success(Translator.trans('设置帐号成功，正在跳转'));
                     window.location.href = $btn.data('goto');
                 }).error(function(){
                     $btn.button('reset');
-                    Notify.danger('设置帐号失败，请重试');
+                    Notify.danger(Translator.trans('设置帐号失败，请重试'));
                 });
             }
 

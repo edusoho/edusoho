@@ -96,7 +96,7 @@ class BaseTestCase extends WebTestCase
             'id'        => 0,
             'nickname'  => '游客',
             'currentIp' => '127.0.0.1',
-            'roles'     => array(),
+            'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
             'org'       => array('id' => 1)
         ));
         static::$serviceKernel->setCurrentUser($currentUser);
@@ -117,6 +117,8 @@ class BaseTestCase extends WebTestCase
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
+        static::$serviceKernel->createService('Permission:Role.RoleService')->refreshRoles();
+        static::$serviceKernel->getCurrentUser()->initPermissions();
     }
 
     /**

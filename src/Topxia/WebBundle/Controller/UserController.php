@@ -51,7 +51,7 @@ class UserController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，请先登录！'));
         } else {
             return $this->redirect($this->generateUrl('user_show', array('id' => $user['id'])));
         }
@@ -393,11 +393,11 @@ class UserController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
-            $response = array('success' => false, 'message' => '请先登入');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请先登入'));
         }
 
         if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
-            $response = array('success' => false, 'message' => '输入的密码不正确');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('输入的密码不正确'));
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -444,7 +444,7 @@ class UserController extends BaseController
         }
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '请先登录！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('请先登录！'));
         }
 
         $goto = $this->getTargetPath($request);

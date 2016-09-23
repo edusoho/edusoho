@@ -11,6 +11,10 @@ class QiQiuYunV1LessonResponse implements SpecialResponse
             return $data;
         }
         
+        if (!isset($data['resources'])) {
+            return $data;
+        }
+
         $resources = array();
         foreach ($data['resources'] as $lesson) {
             $resources[] = array(
@@ -30,7 +34,6 @@ class QiQiuYunV1LessonResponse implements SpecialResponse
                 'updatedTime' => $lesson['updatedTime'],
             );
         }
-
         $data['resources'] = $resources;
 
         return $data;

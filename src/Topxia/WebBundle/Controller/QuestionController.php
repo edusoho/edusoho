@@ -17,19 +17,19 @@ class QuestionController extends BaseController
         }
 
         if ($file['targetType'] != 'question') {
-            throw $this->createNotFoundException('targetType类型不正确');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('targetType类型不正确'));
         }
 
         if ($file['storage'] != 'cloud') {
-            throw $this->createNotFoundException('storage类型不正确');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('storage类型不正确'));
         }
 
         if ($file['convertStatus'] == 'waiting') {
-            return $this->createJsonResponse(array('status' => 'waiting', 'message' => '音频正在转码中，请稍后再访问.'));
+            return $this->createJsonResponse(array('status' => 'waiting', 'message' => $this->getServiceKernel()->trans('音频正在转码中，请稍后再访问.')));
         }
 
         if ($file['convertStatus'] == 'error') {
-            return $this->createJsonResponse(array('status' => 'waiting', 'message' => '音频转码失败，请重新上传此音频.'));
+            return $this->createJsonResponse(array('status' => 'waiting', 'message' => $this->getServiceKernel()->trans('音频转码失败，请重新上传此音频.')));
         }
 
         $factory = new CloudClientFactory();

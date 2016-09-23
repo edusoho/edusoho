@@ -9,24 +9,29 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "course_show";
 
+    public function getTarget($targetId)
+    {
+        return $this->getCourseService()->getCourse($targetId);
+    }
+
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
-            return array('error' => '已经是课程的学员了!');
+            return array('error' => $this->getKernel()->trans('已经是课程的学员了!'));
         }
 
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (!$course['buyable']) {
-            return array('error' => '该课程不可购买，如有需要，请联系客服');
+            return array('error' => $this->getKernel()->trans('该课程不可购买，如有需要，请联系客服'));
         }
 
         if ($course['status'] != 'published') {
-            return array('error' => '不能加入未发布课程!');
+            return array('error' => $this->getKernel()->trans('不能加入未发布课程!'));
         }
 
         if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
-            return array('error' => '名额已满，不能加入!');
+            return array('error' => $this->getKernel()->trans('名额已满，不能加入!'));
         }
 
         return array();
@@ -37,7 +42,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (empty($course)) {
-            throw new Exception("找不到要购买课程!");
+            throw new Exception($this->getKernel()->trans('找不到要购买课程!'));
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
@@ -78,7 +83,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if (!isset($maxCoin)) {
             $maxCoin = $coinPayAmount;
         }
-        
+
         return array(
             'course'         => empty($course) ? null : $course,
             'users'          => empty($users) ? null : $users,
@@ -284,5 +289,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getPayCenterService()
     {
         return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

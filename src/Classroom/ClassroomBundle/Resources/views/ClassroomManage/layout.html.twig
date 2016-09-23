@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ setting('classroom.name')|default("班级") }}管理 - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('classroom.name')|default("班级"|trans) }}{{'管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
   {% include ('ClassroomBundle:ClassroomManage:header.html.twig') %}
@@ -10,7 +10,7 @@
       {% block side %}
         {% set side_nav = side_nav|default(null) %}
         <div class="sidenav">
-          {{ render(controller('ClassroomBundle:ClassroomManage:menu',{classroom:classroom,sideNav:side_nav})) }}
+          {{ render(controller('ClassroomBundle:ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
         </div>
       {% endblock %}
     </div>
