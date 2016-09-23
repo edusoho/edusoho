@@ -33,66 +33,66 @@
         {% else %}
         <th>{{'试卷待批阅量'|trans}}</th>
         {% endif %}
-        <th>{{'状态'|trans}}</th>
         <th width="20%">{{'操作'|trans}}</th>
       </tr>
       </thead>
       <tbody>
         {% for course in courses %}
-          <tr>
-            <td>
+          {% if course.status == 'published' %}
+            <tr>
+              <td>
 
-              <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
-                <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
-              </a>
+                <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
+                  <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
+                </a>
 
-              <div class="mlm">
-                <a href="javascript:;">{{ course.title }}</a>
-                {% if course.type == 'live' %}
-                  <span class="label label-success live-label">{{'直播'|trans}}</span>
-                {% endif  %}
+                <div class="mlm">
+                  <a href="javascript:;">{{ course.title }}</a>
+                  {% if course.type == 'live' %}
+                    <span class="label label-success live-label">{{'直播'|trans}}</span>
+                  {% endif  %}
 
-                {% if filter == 'classroom' %}
-                  {% set classroom = classrooms[course.id]|default(null) %}
-                  {% if not classroom %}
-                    <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                  {% if filter == 'classroom' %}
+                    {% set classroom = classrooms[course.id]|default(null) %}
+                    {% if not classroom %}
+                      <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                    {% endif %}
                   {% endif %}
-                {% endif %}
-              </div>
+                </div>
 
-            </td>
-            {% if filter == 'classroom' %}
-            <td>
-              {% set classroom = classrooms[course.id]|default(null) %}
-              {% if classroom %}
-                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+              </td>
+              {% if filter == 'classroom' %}
+              <td>
+                {% set classroom = classrooms[course.id]|default(null) %}
+                {% if classroom %}
+                  <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+                {% endif %}
+              </td>
+              {% else %}
+              <td>{{ course.reviewingCount|default(0) }}</td>
               {% endif %}
-            </td>
-            {% else %}
-            <td>{{ course.reviewingCount|default(0) }}</td>
-            {% endif %}
 
-            <td> {{ dict_macro.courseStatus( course.status) }}</td>
-            <td>
-              <div class="btn-group">
-                {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
-                  <a class="btn btn-default btn-sm" {% if course.isTeacher == false %} disabled="disabled" href="javascript:;"{% else %}href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"{% endif %} >{{'试卷批阅'|trans}}</a>
-                {% else %}
-                  <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+              <td>
+                <div class="btn-group">
+                  {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
+                    <a class="btn btn-default btn-sm" {% if course.isTeacher == false %} disabled="disabled" href="javascript:;"{% else %}href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"{% endif %} >{{'试卷批阅'|trans}}</a>
+                  {% else %}
+                    <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
 
-                  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
-                    <li><a href="{{ path('course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
-                    <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
-                  </ul>
-                {% endif %}
-              </div>
+                    <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                      <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
+                      <li><a href="{{ path('course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
+                      <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
+                    </ul>
+                  {% endif %}
+                </div>
 
-            </td>
-          </tr>
+              </td>
+            </tr>
+          {% endif %}
         {% else %}
           <tr><td colspan="20">{{'暂无在教的课程'|trans}}</td></tr>
         {% endfor %}
