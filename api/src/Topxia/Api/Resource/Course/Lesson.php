@@ -17,7 +17,7 @@ class Lesson extends BaseResource
         }
 
         //直播回放
-        if ($lesson['type'] == 'live') {
+        if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
             $lesson['type'] = 'video';
         }
 
