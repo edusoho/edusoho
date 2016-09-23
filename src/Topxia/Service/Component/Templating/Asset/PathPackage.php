@@ -40,7 +40,7 @@ class PathPackage extends Package
         parent::__construct($version, $format);
 
         if (!$basePath) {
-            $this->basePath = $cdnUrl . '/';
+            $this->basePath = '/';
         } else {
             if ('/' != $basePath[0]) {
                 $basePath = '/'.$basePath;
@@ -48,6 +48,8 @@ class PathPackage extends Package
 
             $this->basePath = rtrim($basePath, '/').'/';
         }
+
+        $this->basePath = $cdnUrl . $this->basePath;
     }
 
     public function getUrl($path)
