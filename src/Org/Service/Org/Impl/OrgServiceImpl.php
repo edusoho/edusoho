@@ -5,7 +5,10 @@ namespace Org\Service\Org\Impl;
 use Org\Service\Org\OrgService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Org\Service\Org\Dao\Impl\OrgDaoImpl;
 use Org\Service\Org\OrgBatchUpdateFactory;
+
+ use Topxia\Common\Exception\InvalidArgumentException;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -73,15 +76,17 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function deleteOrg($id)
     {
-        $org = $this->checkBeforProccess($id);
+        $org  = $this->checkBeforProccess($id);
+        $that = $this;
 
-        if ($org['parentId']) {
-            $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
-        }
-
-        $this->getOrgDao()->delete($id);
-        //删除辖下
-        $this->getOrgDao()->deleteOrgsByOrgCode($org['orgCode']);
+        $this->getOrgDao()->getConnection()->transactional(function () use ($org, $id, $that) {
+            if ($org['parentId']) {
+                $that->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
+            }
+            $that->getOrgDao()->delete($id);
+            //删除辖下
+            $that->getOrgDao()->deleteOrgsByPrefixOrgCode($org['orgCode']);
+        });
     }
 
     public function switchOrg($id)
@@ -109,17 +114,16 @@ class OrgServiceImpl extends BaseService implements OrgService
         return $this->getOrgDao()->findOrgsByIds($ids);
     }
 
-    // TODO: org
-    public function findOrgsStartByOrgCode($orgCode = null)
+    public function findOrgsByPrefixOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
-        if ($orgCode == null){
-            $user = $this->getCurrentUser();
-            $org = $this->getOrg($user['orgId']);
+        if (empty($orgCode)) {
+            $user    = $this->getCurrentUser();
+            $org     = $this->getOrg($user['orgId']);
             $orgCode = $org['orgCode'];
         }
-        
-        return $this->getOrgDao()->findOrgsStartByOrgCode($orgCode);
+
+        return $this->getOrgDao()->findOrgsByPrefixOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)
@@ -128,9 +132,8 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         if (empty($org)) {
             return true;
-        } else {
-            return ($org['code'] === $exclude) ? true : false;
         }
+        return ($org['code'] === $exclude) ? true : false;
     }
 
     private function checkBeforProccess($id)
@@ -179,7 +182,32 @@ class OrgServiceImpl extends BaseService implements OrgService
         $this->getModuleService($module)->batchUpdateOrg(explode(',', $ids), $orgCode);
     }
 
-    protected function getOrgDao()
+    public function isNameAvaliable($name, $parentId, $exclude)
+    {
+        $org = $this->getOrgDao()->findOrgByNameAndParentId($name, $parentId);
+        if (empty($org)) {
+            return true;
+        }
+        return $org['id'] == $exclude ? true : false;
+    }
+
+    public function findRelatedModuleDatas($orgId)
+    {
+        $org          = $this->getOrg($orgId);
+        $modules      = OrgBatchUpdateFactory::getModules();
+        $modalesDatas = array();
+        $conditions   = array('likeOrgCode' => $org['orgCode']);
+        foreach ($modules as $module => $service) {
+            $dispay                = OrgBatchUpdateFactory::getDispayModuleName($module);
+            $modalesDatas[$dispay] = $this->createService($service)->searchCount($conditions);
+        }
+        return array_filter($modalesDatas);
+    }
+
+    /**
+     * @return OrgDaoImpl
+     */
+    public function getOrgDao()
     {
         return $this->createDao('Org:Org.OrgDao');
     }

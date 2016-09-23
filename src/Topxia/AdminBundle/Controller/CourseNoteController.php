@@ -2,9 +2,10 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
+use Topxia\Service\Course\Impl\NoteServiceImpl;
 
 class CourseNoteController extends BaseController
 {
@@ -64,11 +65,17 @@ class CourseNoteController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    /**
+     * @return NoteServiceImpl
+     */
     protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
     	return $this->getServiceKernel()->createService('Course.CourseService');

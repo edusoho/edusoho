@@ -1,8 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,20 +33,5 @@ class GenerateUsersCommand extends BaseCommand
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    private function initServiceKernel()
-    {
-        $serviceKernel = ServiceKernel::create('dev', false);
-        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 1,
-            'nickname'  => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
     }
 }

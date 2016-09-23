@@ -17,13 +17,13 @@ class OAuthClientFactory
     public static function create($type, array $config)
     {
     	if (!array_key_exists('key', $config) || !array_key_exists('secret', $config)) {
-    		throw new InvalidArgumentException(self::getServiceKernel()->trans('参数$config中，必需包含key, secret两个为key的值'));
+    		throw new InvalidArgumentException('参数中必需包含key, secret两个为key的值');
     	}
 
         $clients = self::clients();
 
         if (!array_key_exists($type, $clients)) {
-            throw new InvalidArgumentException(self::getServiceKernel()->trans('参数%type%不正确', array('%type%' =>$type )));
+            throw new InvalidArgumentException(array('参数不正确%type%', array('%type%' =>$type )));
         }
 
         $class = $clients[$type]['class'];
@@ -35,8 +35,8 @@ class OAuthClientFactory
     {
         $clients = array(
             'weibo' => array(
-                'name' => self::getServiceKernel()->trans('微博帐号'),
-                'admin_name' => self::getServiceKernel()->trans('微博登录接口'),
+                'name' => '微博帐号',
+                'admin_name' => '微博登录接口',
                 'class' => 'Topxia\Component\OAuthClient\WeiboOAuthClient',
                 'icon_class' => 'weibo',
                 'icon_img' => '',
@@ -46,8 +46,8 @@ class OAuthClientFactory
                 'apply_url' => 'http://open.weibo.com/authentication/'
             ),
             'qq' => array(
-                'name' => self::getServiceKernel()->trans('QQ帐号'),
-                'admin_name' => self::getServiceKernel()->trans('QQ登录接口'),
+                'name' => 'QQ帐号',
+                'admin_name' => 'QQ登录接口',
                 'class' => 'Topxia\Component\OAuthClient\QqOAuthClient',
                 'icon_class' => 'qq',
                 'icon_img' => '',
@@ -58,8 +58,8 @@ class OAuthClientFactory
 
             ),
             'renren' => array(
-                'name' => self::getServiceKernel()->trans('人人帐号'),
-                'admin_name' => self::getServiceKernel()->trans('人人登录接口'),
+                'name' => '人人帐号',
+                'admin_name' => '人人登录接口',
                 'class' => 'Topxia\Component\OAuthClient\RenrenOAuthClient',
                 'icon_class' => 'renren',
                 'icon_img' => '',
@@ -69,8 +69,8 @@ class OAuthClientFactory
                 'apply_url' => 'http://dev.renren.com/website'
             ),
             'weixinweb' => array(
-                'name' => self::getServiceKernel()->trans('微信网页登录接口'),
-                'admin_name' => self::getServiceKernel()->trans('微信网页登录接口'),
+                'name' => '微信网页登录接口',
+                'admin_name' => '微信网页登录接口',
                 'class' => 'Topxia\Component\OAuthClient\WeixinwebOAuthClient',
                 'icon_class' => 'weixin',
                 'icon_img' => '',
@@ -80,8 +80,8 @@ class OAuthClientFactory
                 'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN'
             ),
             'weixinmob' => array(
-                'name' => self::getServiceKernel()->trans('微信内分享登录接口'),
-                'admin_name' => self::getServiceKernel()->trans('微信内分享登录接口'),
+                'name' => '微信内分享登录接口',
+                'admin_name' => '微信内分享登录接口',
                 'class' => 'Topxia\Component\OAuthClient\WeixinmobOAuthClient',
                 'icon_class' => '',
                 'icon_img' => '',

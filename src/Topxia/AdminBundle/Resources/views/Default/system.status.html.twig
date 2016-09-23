@@ -130,7 +130,7 @@
     </td>
   </tr>
 
-  {% if mobileCustomization.status == 'ok' %}
+  {% if mobileCustomization.status|default(null) == 'ok' %}
   <tr>
     <td>{{ '移动端定制'|trans }}</td>
     <td>

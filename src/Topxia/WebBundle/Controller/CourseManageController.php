@@ -17,7 +17,27 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_course_sync', array('id' => $id, 'type' => 'base')));
         }
 
-        return $this->forward('TopxiaWebBundle:CourseManage:base', array('id' => $id));
+        $courseManagePermission = $this->getPermissionExtension()->getPermissionByCode('course_manage');
+        $menu            = $this->getPermissionExtension()->getFirstChild($courseManagePermission);
+
+        $firstChild = $this->getPermissionExtension()->getFirstChild($menu);
+
+        if(!empty($firstChild)){
+            $menu = $firstChild;
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:index.html.twig', array(
+            'menu'   => $menu,
+            'course' => $course
+        ));
+    }
+
+    public function infoAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage:layout.html.twig', array(
+            'course' => $course
+        ));
     }
 
     public function baseAction(Request $request, $id)
@@ -629,6 +649,11 @@ class CourseManageController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getPermissionExtension()
+    {
+        return $this->container->get('permission.twig.permission_extension');
     }
 
     protected function getTagService()
