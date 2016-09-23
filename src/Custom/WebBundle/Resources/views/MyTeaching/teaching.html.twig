@@ -90,8 +90,6 @@
                     <td>{{ course.price }}</td>
                   {% endif %}
                 {% endif %}
-
-                <td> {{ dict_macro.courseStatus( course.status) }}</td>
                 <td>
                   <div class="btn-group">
                     {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}

@@ -98,7 +98,7 @@ class CourseController extends BaseCourseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
+        return $this->render('CustomAdminBundle:Course:index.html.twig', array(
             'conditions'     => $conditions,
             'courses'        => $courses,
             'users'          => $users,
