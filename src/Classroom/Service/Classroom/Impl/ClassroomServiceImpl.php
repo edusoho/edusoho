@@ -177,6 +177,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $fields    = $this->fillOrgId($fields);
+        $fields['updatedTime'] = time();
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
         return $classroom;
     }
