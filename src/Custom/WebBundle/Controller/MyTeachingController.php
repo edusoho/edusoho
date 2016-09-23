@@ -43,6 +43,18 @@ class MyTeachingController extends BaseMyTeachingController
                 $paginator->getPerPageCount()
             );
 
+            foreach ($courses as &$course) {
+                $course['isTeacher'] = $this->getCourseService()->isCourseTeacher($course['id'], $user['id']);;
+
+                $users = $this->getUserService()->findUsersByOrgCode($user['orgCode']);
+                $userIds = ArrayToolkit::column($users, 'id');
+                $testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($course['id']);
+                $testpaperIds = ArrayToolkit::column($testpapers, 'id');
+
+                $reviewingCount = $this->getTestpaperService()->findTestPaperResultCountByStatusAndTestIdsAndUserIds($testpaperIds, 'reviewing', $userIds);
+                $course['reviewingCount'] = $reviewingCount;
+            }
+
             $classrooms = array();
 
             if ($filter == 'classroom') {
@@ -69,8 +81,18 @@ class MyTeachingController extends BaseMyTeachingController
         }
     }
 
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('Custom:User.UserService');
+    }
+
     protected function getOrgService()
     {
         return $this->getServiceKernel()->createService('Org:Org.OrgService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Testpaper.TestpaperService');
     }
 }

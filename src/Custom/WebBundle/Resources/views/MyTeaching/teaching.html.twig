@@ -31,8 +31,7 @@
         {% if filter == 'classroom' %}
         <th >{{'所属%name%'|trans({'%name%':setting("classroom.name")|default('班级'|trans)})}}</th>
         {% else %}
-        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'数'|trans}}</th>
-        <th>{{'价格(元)'|trans}}</th>
+        <th>{{'试卷待批阅量'|trans}}</th>
         {% endif %}
         <th>{{'状态'|trans}}</th>
         <th width="20%">{{'操作'|trans}}</th>
@@ -48,8 +47,7 @@
               </a>
 
               <div class="mlm">
-                <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-
+                <a href="javascript:;">{{ course.title }}</a>
                 {% if course.type == 'live' %}
                   <span class="label label-success live-label">{{'直播'|trans}}</span>
                 {% endif  %}
@@ -71,15 +69,14 @@
               {% endif %}
             </td>
             {% else %}
-            <td>{{ course.studentNum }}</td>
-            <td>{{ course.price }}</td>
+            <td>{{ course.reviewingCount|default(0) }}</td>
             {% endif %}
 
             <td> {{ dict_macro.courseStatus( course.status) }}</td>
             <td>
               <div class="btn-group">
                 {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
-                  <a class="btn btn-default btn-sm" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">{{'试卷批阅'|trans}}</a>
+                  <a class="btn btn-default btn-sm" {% if course.isTeacher == false %} disabled="disabled" href="javascript:;"{% else %}href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"{% endif %} >{{'试卷批阅'|trans}}</a>
                 {% else %}
                   <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
 
