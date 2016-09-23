@@ -10,6 +10,7 @@
       <label class="col-md-2 control-label" for="org-name-field">{{ '名称'|trans }}</label>
       <div class="col-md-8 controls">
         <input class="form-control" id="org-name-field" type="text" name="name" value="{{ org.name|default('') }}"
+               data-url="{{ path('admin_org_checkname',{parentId: org.parentId|default(0),exclude:org.id|default(null)}) }}"
                tabindex="1">
       </div>
     </div>
@@ -34,7 +35,6 @@
     <input type="hidden" name="parentId" value="{{ org.parentId|default(0) }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  </div>
 {% endblock %}
 {% block footer %}
   {% if org.id|default(null) %}
