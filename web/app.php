@@ -11,7 +11,7 @@ if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/.
     $currentTime = time();
     if ($currentTime <= (int) $time) {
         header('Content-Type: text/html; charset=utf-8');
-        echo file_get_contents(__DIR__.'/upgrade-info.html');
+        echo file_get_contents(__DIR__.'/../app/Resources/TwigBundle/views/Exception/upgrade-info.html');
         exit();
     }
 }
