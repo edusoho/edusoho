@@ -35,7 +35,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum', 'updatedTime'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
@@ -101,7 +101,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('orgCode = :orgCode')
-            ->andWhere('orgCode LIKE :likeOrgCode');
+            ->andWhere('orgCode LIKE :likeOrgCode')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }
