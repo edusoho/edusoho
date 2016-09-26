@@ -1,25 +1,24 @@
 <?php
 
-if (!file_exists(__DIR__ . '/../app/data/install.lock')) {
+if (!file_exists(__DIR__.'/../app/data/install.lock')) {
     header("Location: install/install.php");
     exit();
 }
 
-if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__ . '/../app/data/upgrade.lock')) {
-
-    $time        = file_get_contents(__DIR__ . '/../app/data/upgrade.lock');
+if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
+    $time = file_get_contents(__DIR__.'/../app/data/upgrade.lock');
     date_default_timezone_set('Asia/Shanghai');
     $currentTime = time();
-    if ($currentTime <= (int)$time) {
+    if ($currentTime <= (int) $time) {
         header('Content-Type: text/html; charset=utf-8');
-        echo "站点升级中，请稍后访问";
+        echo file_get_contents(__DIR__.'/upgrade-info.html');
         exit();
     }
 }
 
 if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app.php/api') === 0)) {
     define('API_ENV', 'prod');
-    include __DIR__ . '/../api/index.php';
+    include __DIR__.'/../api/index.php';
     exit();
 }
 
@@ -29,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 fix_gpc_magic();
 
-$loader = require_once __DIR__ . '/../app/bootstrap.php.cache';
+$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Use APC for autoloading to improve performance.
 
@@ -41,7 +40,7 @@ $loader = new ApcClassLoader('sf2', $loader);
 $loader->register(true);
  */
 
-require_once __DIR__ . '/../app/AppKernel.php';
+require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';
 
 $kernel = new AppKernel('prod', false);
@@ -58,11 +57,11 @@ $serviceKernel->setEnvVariable(array(
     'host'          => $request->getHttpHost(),
     'schemeAndHost' => $request->getSchemeAndHttpHost(),
     'basePath'      => $request->getBasePath(),
-    'baseUrl'       => $request->getSchemeAndHttpHost() . $request->getBasePath()
+    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
 ));
 $serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-$serviceKernel->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+$serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
 
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
 $serviceKernel->getConnection()->exec('SET NAMES UTF8');
@@ -83,7 +82,7 @@ $serviceKernel->setCurrentUser($currentUser);
 try {
     $response = $kernel->handle($request);
 } catch (\RuntimeException $e) {
-    echo "Error!  " . $e->getMessage();
+    echo "Error!  ".$e->getMessage();
     die();
 }
 
