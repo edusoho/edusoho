@@ -131,7 +131,7 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
-        $imUsedTotal = $api->get('/im/app/receive_count');
+        $imUsedTotal = $api->get('/im/me/receive_count');
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -771,9 +771,9 @@ class EduCloudController extends BaseController
 
             if ($status == 1) {
                 //去云平台判断im账号是否存在
-                $imAccount = $api->get('/im/account');
+                $imAccount = $api->get('/im/me/account');
                 if (isset($imAccount['error'])) {
-                    $imAccount = $api->post('/im/account');
+                    $imAccount = $api->post('/im/accounts');
                 }
                 $imStatus = 'enable';
             } else {
@@ -781,7 +781,7 @@ class EduCloudController extends BaseController
             }
 
             //更改云IM账号状态
-            $api->post("/im/account_status/{$imStatus}");
+            $result = $api->post("/im/me/account", array('status' => $imStatus));
 
             $appImSetting['enabled'] = $status;
             $this->getSettingService()->set('app_im', $appImSetting);
@@ -1089,14 +1089,14 @@ class EduCloudController extends BaseController
         $startTime = strtotime(date('Y-m-d', strtotime('-6 days', $endTime)).'00:00:00');
 
         try {
-            $imUsedInfo = $api->get('/im/app/receive_count_period', array(
+            $imUsedInfo = $api->get('/im/me/receive_count_period', array(
                 'startTime' => $startTime, 'endTime' => $endTime));
         } catch (\RuntimeException $e) {
             $imUsedInfo = array();
         }
 
         $chartInfo = array();
-        foreach ($imUsedInfo as $key => $value) {
+        foreach ($imUsedInfo as $value) {
             $chartInfo[] = array('date' => $value['sendTime'], 'count' => $value['nums']);
         }
 
