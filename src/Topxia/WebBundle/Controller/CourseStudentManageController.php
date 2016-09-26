@@ -73,9 +73,9 @@ class CourseStudentManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition['targetId'] = $id;
+        $condition['targetId']   = $id;
         $condition['targetType'] = 'course';
-        $condition['status'] = 'success';
+        $condition['status']     = 'success';
 
         $paginator = new Paginator(
             $request,
@@ -84,7 +84,7 @@ class CourseStudentManageController extends BaseController
         );
 
         $refunds = $this->getOrderService()->searchRefunds(
-            $condition, 
+            $condition,
             'createdTime',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -95,11 +95,12 @@ class CourseStudentManageController extends BaseController
 
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
+
         return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
-            'course'                     => $course,
-            'refunds'                   => $refunds,
-            'paginator'                  => $paginator,
-            'role'                       => ''
+            'course'    => $course,
+            'refunds'   => $refunds,
+            'paginator' => $paginator,
+            'role'      => 'student'
         ));
     }
 
@@ -144,18 +145,18 @@ class CourseStudentManageController extends BaseController
 
         $condition = array(
             'targetType' => 'course',
-            'targetId' => $courseId,
-            'userId' => $userId,
-            'status' => 'paid'
-            );
-        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+            'targetId'   => $courseId,
+            'userId'     => $userId,
+            'status'     => 'paid'
+        );
+        $orders    = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
             $order = $value;
         }
         $reason = array(
             'type' => 'other',
             'note' => '手动移除'
-            );
+        );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
         $this->getCourseService()->removeStudent($courseId, $userId);
@@ -220,7 +221,7 @@ class CourseStudentManageController extends BaseController
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
-            $str .= ",".$value;
+            $str .= "," . $value;
         }
 
         $str .= "\r\n";
@@ -229,28 +230,28 @@ class CourseStudentManageController extends BaseController
 
         foreach ($courseMembers as $courseMember) {
             $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'].",";
-            $member .= $users[$courseMember['userId']]['email'].",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
-            $member .= $progresses[$courseMember['userId']]['percent'].",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['nickname'] . ",";
+            $member .= $users[$courseMember['userId']]['email'] . ",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']) . ",";
+            $member .= $progresses[$courseMember['userId']]['percent'] . ",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] . "," : "-" . ",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']] . ",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] . "," : "-" . ",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] . "," : "-" . ",";
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key] . "," : "-" . ",";
             }
 
             $students[] = $member;
         };
 
         $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
@@ -258,7 +259,7 @@ class CourseStudentManageController extends BaseController
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
@@ -447,14 +448,14 @@ class CourseStudentManageController extends BaseController
             return $userIds;
         }
     }
-    
+
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return array(
             'percent' => $percent,
