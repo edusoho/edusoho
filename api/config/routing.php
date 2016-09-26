@@ -41,7 +41,6 @@ $app->get(_u('/article_categories'), 'res.ArticleCategories:get');
 $app->get(_u('/open_courses'), 'res.OpenCourses:get');
 $app->get(_u('/open_course_lessons'), 'res.OpenCourse/Lessons:get');
 
-
 $app->post(_u('/lessons/{id}/live_tickets'), 'res.LessonLiveTickets:post');
 $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get');
 $app->get(_u('/lessons/{id}/replay'), 'res.LessonReplay:get');
@@ -101,9 +100,6 @@ $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 $app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
 
 $app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
-
-$app->get(_u('/im/my_conversations'), 'res.IM/MyConversations:get');
-$app->post(_u('/im/my_conversations/{no}'), 'res.IM/MyConversation:post');
 
 $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');

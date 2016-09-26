@@ -2,14 +2,12 @@
 
 namespace Topxia\Service\IM\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\IM\ConversationService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 
 class ConversationServiceImpl extends BaseService implements ConversationService
 {
-
     public function getConversationByMemberIds(array $memberIds)
     {
         sort($memberIds);
@@ -25,44 +23,10 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             throw $this->createServiceException("Only support memberIds's count >= 2");
         }
 
-        $conversation['memberHash'] = $this->buildMemberHash($conversation['memberIds']);
+        $conversation['memberHash']  = $this->buildMemberHash($conversation['memberIds']);
         $conversation['createdTime'] = time();
 
         return $this->getConversationDao()->addConversation($conversation);
-    }
-
-
-
-    public function addMyConversation($myConversation)
-    {
-        $myConversation = $this->filterMyConversationFields($myConversation);
-        $myConversation['createdTime'] = time();
-        $myConversation['updatedTime'] = time();
-        return $this->getMyConversationDao()->addMyConversation($myConversation);
-    }
-
-    public function updateMyConversationByNo($no, $fields)
-    {
-        return $this->getMyConversationDao()->updateMyConversationByNo($no, $fields);
-    }
-
-    public function listMyConversationsByUserId($userId, $start = 0, $limit = 1000)
-    {
-        $conditions = array(
-            'userId' => $userId
-        );
-
-        $orderBy = array(
-            'updatedTime',
-            'DESC'
-        );
-        
-        return $this->getMyConversationDao()->searchMyConversations(
-            $conditions,
-            $orderBy,
-            $start,
-            $limit
-        );
     }
 
     protected function filterConversationFields(array $fields)
@@ -97,7 +61,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             'createdTime',
             'updatedTime'
         ));
-        
+
         if (empty($fields['no'])) {
             throw $this->createServiceException('field `no` can not be empty');
         }
