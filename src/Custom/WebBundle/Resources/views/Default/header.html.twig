@@ -13,6 +13,20 @@
     <nav class="collapse navbar-collapse">
       <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
         <ul class="nav user-nav">
+          <li class="back-home translator" style="margin-top: 20px">
+            <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown">
+              {% if app.request.session('local') == 'en_US' %}
+                {{'英文'|trans}}
+              {% else %}
+                {{'中文'|trans}}
+              {% endif %}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li class="chinese"><a href="switch/language?language=zh_CN&_target_path=%2F">{{'中文'|trans}}</a></li>
+              <li class="english"><a href="switch/language?language=en_US&_target_path=%2F">{{'英文'|trans}}</a></li>
+            </ul>
+          </li>
           <li class="back-home"><a href="{{ path('homepage') }}"> <i class="iconfont icon-shouye"></i> </a></li>
           {% if app.user %}
           <li class="user-avatar-li nav-hover">
