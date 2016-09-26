@@ -7,7 +7,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class DefaultController extends BaseController
 {
-	public function indexAction()
+	public function indexAction(Request $request)
 	{
         $currentUser = $this->getCurrentUser();
 
@@ -37,7 +37,8 @@ class DefaultController extends BaseController
             'postCourseCategorys' => $postCourseCategorys,
             'currentCoursePackage' => $currentCoursePackage,
             'passRate' => $passRate,
-            'passPercentage' => $passPercentage
+            'passPercentage' => $passPercentage,
+            'local' => $request->getLocale()
         ));
 	}
 
