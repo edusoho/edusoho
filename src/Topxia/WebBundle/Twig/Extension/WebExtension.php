@@ -798,7 +798,7 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
-    private function parseUri($uri, $absolute = false, $package = 'default')
+    private function parseUri($uri, $absolute = false, $package = 'content')
     {
         if (strpos($uri, "http://") !== false) {
             return $uri;
@@ -893,17 +893,17 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
-    public function getFurl($path, $defaultKey = false, $package = 'default')
+    public function getFurl($path, $defaultKey = false, $package = 'content')
     {
         return $this->getPublicFilePath($path, $defaultKey, true, $package);
     }
 
-    public function getFpath($path, $defaultKey = false, $package = 'default')
+    public function getFpath($path, $defaultKey = false, $package = 'content')
     {
         return $this->getPublicFilePath($path, $defaultKey, false, $package);
     }
 
-    private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'default')
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'content')
     {
         $assets = $this->container->get('templating.helper.assets');
 
@@ -926,10 +926,10 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($path, $absolute, $package);
     }
 
-    private function addHost($path, $absolute, $package = 'default')
+    private function addHost($path, $absolute, $package = 'content')
     {
         $cdn = new Cdn();
-        $cdnUrl = $cdn->getCdnUrl('content');
+        $cdnUrl = $cdn->getCdnUrl($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.'/'.$path;
