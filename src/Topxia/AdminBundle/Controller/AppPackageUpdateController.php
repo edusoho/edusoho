@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 
 class AppPackageUpdateController extends BaseController
 {
@@ -136,6 +137,9 @@ class AppPackageUpdateController extends BaseController
         return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
     }
 
+    /**
+     * @return AppServiceImpl
+     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
