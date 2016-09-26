@@ -182,7 +182,9 @@ class BlockController extends BaseController
             $fields                = array(
                 'data'            => $block['data'],
                 'content'         => $html,
+                'userId'          => $user['id'],
                 'blockTemplateId' => $condation['blockTemplateId'],
+                'orgId'           => $user['orgId'],
                 'code'            => $condation['code'],
                 'mode'            => $condation['mode']
             );

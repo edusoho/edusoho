@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\Proxy\ProxyManager;
-use Topxia\Service\Common\Redis\RedisFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Finder\Finder;
+use Topxia\Service\Common\Redis\RedisFactory;
+use Topxia\Service\User\CurrentUser;
 
 class ServiceKernel
 {
@@ -21,6 +21,7 @@ class ServiceKernel
     protected $booted;
 
     protected $translator;
+    protected $translatorEnabled;
 
     protected $parameterBag;
 
@@ -64,7 +65,7 @@ class ServiceKernel
     public static function instance()
     {
         if (empty(self::$_instance)) {
-            throw new \RuntimeException('ServiceKernel未实例化');
+            throw new \RuntimeException('The instance of ServiceKernel is not created!');
         }
 
         self::$_instance->boot();
@@ -133,7 +134,7 @@ class ServiceKernel
     public function getParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException($this->trans('尚未初始化ParameterBag'));
+            throw new \RuntimeException('The `ParameterBag` of ServiceKernel is not setted!');
         }
 
         return $this->parameterBag->get($name);
@@ -147,16 +148,26 @@ class ServiceKernel
     public function getTranslator()
     {
         if (is_null($this->translator)) {
-            throw new \RuntimeException($this->trans('尚未初始化Translator'));
+            throw new \RuntimeException('The `Translator` of ServiceKernel is not setted!');
         }
 
         return $this->translator;
     }
 
+    public function setTranslatorEnabled($boolean = true)
+    {
+        $this->translatorEnabled = $boolean;
+    }
+
+    public function getTranslatorEnabled()
+    {
+        return $this->translatorEnabled;
+    }
+
     public function hasParameter($name)
     {
         if (is_null($this->parameterBag)) {
-            throw new \RuntimeException($this->trans('尚未初始化ParameterBag'));
+            throw new \RuntimeException('The `ParameterBag` of ServiceKernel is not setted!');
         }
 
         return $this->parameterBag->has($name);
@@ -168,10 +179,13 @@ class ServiceKernel
         return $this;
     }
 
+    /**
+     * @return CurrentUser
+     */
     public function getCurrentUser()
     {
         if (is_null($this->currentUser)) {
-            throw new \RuntimeException($this->trans('尚未初始化CurrentUser'));
+            throw new \RuntimeException('The `CurrentUser` of ServiceKernel is not setted!');
         }
 
         return $this->currentUser;
@@ -199,7 +213,7 @@ class ServiceKernel
     public function getConnection()
     {
         if (is_null($this->connection)) {
-            throw new \RuntimeException($this->trans('尚未初始化数据库连接'));
+            throw new \RuntimeException('The database connection of ServiceKernel is not setted!');
         }
 
         return $this->connection;
@@ -211,13 +225,11 @@ class ServiceKernel
         return $this;
     }
 
-    //思考:createService的逻辑是否应该放到ProxyManager里？单一职责还是最少知道原则？
     public function createService($name)
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
-
-            $this->pool[$name] = ProxyManager::create($class);
+            $this->pool[$name] = new  $class();
         }
 
         return $this->pool[$name];
@@ -227,7 +239,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
-            $dao   = ProxyManager::create($class);
+            $dao   =new $class();
             $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;
@@ -265,14 +277,6 @@ class ServiceKernel
         return $this->_moduleConfig[$key];
     }
 
-    /**
-     * 翻译数组文本
-     * @param  [type] $message        要翻译的数组文本
-     * @param  array  $arguments      占位符
-     * @param  [type] $domain         [description]
-     * @param  [type] $locale         [description]
-     * @return [type] [description]
-     */
     public function transArray($messages, $arguments = array(), $domain = null, $locale = null)
     {
         foreach ($messages as &$message) {
@@ -281,17 +285,12 @@ class ServiceKernel
         return $messages;
     }
 
-    /**
-     * 翻译文本
-     * @param  [type] $message        要翻译的文本
-     * @param  array  $arguments      占位符
-     * @param  [type] $domain         [description]
-     * @param  [type] $locale         [description]
-     * @return [type] [description]
-     */
     public function trans($message, $arguments = array(), $domain = null, $locale = null)
     {
-        return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
+        if ($this->getTranslatorEnabled()) {
+            return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
+        }
+        return strtr((string) $message, $arguments);
     }
 
     protected function getClassName($type, $name)

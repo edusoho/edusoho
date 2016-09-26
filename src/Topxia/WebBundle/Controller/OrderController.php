@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
@@ -136,7 +137,7 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券')) {
+            if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券'))) {
                 $fields["couponCode"] = "";
             } else {
                 $fields["couponCode"] = trim($fields["couponCode"]);
@@ -161,8 +162,10 @@ class OrderController extends BaseController
             //虚拟币抵扣率比较
             $target = $processor->getTarget($targetId);
 
-            $maxRate = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate))) {
+            $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
+            $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
+
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', $this->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 

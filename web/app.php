@@ -48,6 +48,7 @@ $serviceKernel->setEnvVariable(array(
     'basePath'      => $request->getBasePath(),
     'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
 ));
+$serviceKernel->setTranslatorEnabled(true);
 $serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');

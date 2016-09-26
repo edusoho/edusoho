@@ -145,7 +145,6 @@ class Logger
             return $module;
         }
         return $module;
-        //  throw new NotFoundException("模块名不存在,请检查是否拼写错误");
     }
 
     /**

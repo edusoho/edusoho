@@ -311,26 +311,31 @@ define(function(require, exports, module) {
         
         var videoChooser = new VideoChooser({
             element: '#video-chooser',
-            choosed: choosedMedia
+            choosed: choosedMedia,
+            fileSingleSizeLimit:1024 * 1024 * 1024 * 2 //2G
         });
 
         var audioChooser = new AudioChooser({
             element: '#audio-chooser',
-            choosed: choosedMedia
+            choosed: choosedMedia,
+            fileSingleSizeLimit:1024 * 1024 * 500 //500M
         });
 
         var pptChooser = new PPTChooser({
             element: '#ppt-chooser',
-            choosed: choosedMedia
+            choosed: choosedMedia,
+            fileSingleSizeLimit:1024 * 1024 * 100  //100M
         });
 
         var documentChooser = new DocumentChooser({
             element: '#document-chooser',
-            choosed: choosedMedia
+            choosed: choosedMedia,
+            fileSingleSizeLimit:1024 * 1024 * 100  //100M
         });
         var flashChooser = new FlashChooser({
             element: '#flash-chooser',
-            choosed: choosedMedia
+            choosed: choosedMedia,
+            fileSingleSizeLimit:1024 * 1024 * 100  //100M
         });
 
         var fillTitle = function(name) {

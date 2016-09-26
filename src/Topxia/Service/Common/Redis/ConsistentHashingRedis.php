@@ -21,7 +21,7 @@ class ConsistentHashingRedis
             try {
                 $key   = $value['host'].':'.$value['port'];
                 $redis = new Redis();
-                $redis->pconnect($value['host'], $value['port'], $config['timeout'], $config['reserved'], $config['retry_interval']);
+                $redis->pconnect($value['host'], $value['port'], $value['timeout'], $value['reserved'], $value['retry_interval']);
                 $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
                 $this->reidsPool[$key] = $redis;
                 $redisServers[]        = $key;

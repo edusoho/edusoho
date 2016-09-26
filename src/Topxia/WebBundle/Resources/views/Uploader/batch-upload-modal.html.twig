@@ -221,16 +221,16 @@
   {% if setting('storage.upload_mode', 'local') == 'cloud'  %}
     <div class="alert alert-info">
       <ul>
-        <li>{{'资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。'|trans}}</li>
-        <li>{{'视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。'|trans}}</li>
-        <li>{{'支持<strong>断点续传</strong>（仅支持HTML5浏览器）。'|trans}}</li>
+        <li>{{'资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。'|trans|raw}}</li>
+        <li>{{'视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。'|trans|raw}}</li>
+        <li>{{'支持<strong>断点续传</strong>（仅支持HTML5浏览器）。'|trans|raw}}</li>
       </ul>
     </div>
   {% else %}
     <div class="alert alert-info">
       <ul>
-        <li>{{'支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans}}</li>
-        <li>{{'视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。'|trans}}</li>
+        <li>{{'支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>2.0GB</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans|raw}}</li>
+        <li>{{'视频将上传到<strong>网站服务器</strong>，如需使用云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。'|trans|raw}}</li>
       </ul>
     </div>
   {% endif %}
