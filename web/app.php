@@ -6,7 +6,9 @@ if (!file_exists(__DIR__ . '/../app/data/install.lock')) {
 }
 
 if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__ . '/../app/data/upgrade.lock')) {
+
     $time        = file_get_contents(__DIR__ . '/../app/data/upgrade.lock');
+    date_default_timezone_set('Asia/Shanghai');
     $currentTime = time();
     if ($currentTime <= (int)$time) {
         header('Content-Type: text/html; charset=utf-8');
