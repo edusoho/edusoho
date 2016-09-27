@@ -34,10 +34,10 @@ class AppKernel extends Kernel
             new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Classroom\ClassroomBundle\ClassroomBundle(),
-            new Org\OrgBundle\OrgBundle(),
+            new Permission\PermissionBundle\PermissionBundle(),
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
-            new Permission\PermissionBundle\PermissionBundle(),
+            new Org\OrgBundle\OrgBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
