@@ -60,9 +60,6 @@
           data-check-download-extract-url="/app_dev.php{{ path('admin_app_package_update_check_download_and_extract', {id:package.id}) }}"
           data-download-extract-url="/app_dev.php{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
           data-begin-upgrade-url="/app_dev.php{{ path('admin_app_package_update_begin_upgrade', {id:package.id, type:app.request.get('type')}) }}"
-      {% if app.request.get('type') == 'upgrade' %}
-        data-check-newest-url="/app_dev.php{{ path('admin_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
-      {% endif %}
   >{{ '开始'|trans }}{{ updateName }}</button>
 
   <strong class="text text-danger" id="updating-hint" style="display:none;">{{ '正在安装，请不要关闭当前窗口...'|trans }}</strong>
