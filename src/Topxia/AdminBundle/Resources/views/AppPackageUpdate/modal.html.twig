@@ -52,16 +52,16 @@
 
 {% block footer %}
   <button id="begin-update" type="button" class="btn btn-primary pull-right"
-          data-check-environment-url="{{ path('admin_app_package_update_check_environment', {id:package.id}) }}"
-          data-check-depends-url="{{ path('admin_app_package_update_check_depends', {id:package.id}) }}"
-          data-check-last-error-url="{{ path('admin_app_package_update_check_last_error', {id:package.id}) }}"
-          data-backup-file-url="{{ path('admin_app_package_update_backup_file', {id:package.id}) }}"
-          data-backup-db-url="{{ path('admin_app_package_update_backup_db', {id:package.id}) }}"
-          data-check-download-extract-url="{{ path('admin_app_package_update_check_download_and_extract', {id:package.id}) }}"
-          data-download-extract-url="{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
-          data-begin-upgrade-url="{{ path('admin_app_package_update_begin_upgrade', {id:package.id, type:app.request.get('type')}) }}"
+          data-check-environment-url="/app_dev.php{{ path('admin_app_package_update_check_environment', {id:package.id}) }}"
+          data-check-depends-url="/app_dev.php{{ path('admin_app_package_update_check_depends', {id:package.id}) }}"
+          data-check-last-error-url="/app_dev.php{{ path('admin_app_package_update_check_last_error', {id:package.id}) }}"
+          data-backup-file-url="/app_dev.php{{ path('admin_app_package_update_backup_file', {id:package.id}) }}"
+          data-backup-db-url="/app_dev.php{{ path('admin_app_package_update_backup_db', {id:package.id}) }}"
+          data-check-download-extract-url="/app_dev.php{{ path('admin_app_package_update_check_download_and_extract', {id:package.id}) }}"
+          data-download-extract-url="/app_dev.php{{ path('admin_app_package_update_download_and_extract', {id:package.id}) }}"
+          data-begin-upgrade-url="/app_dev.php{{ path('admin_app_package_update_begin_upgrade', {id:package.id, type:app.request.get('type')}) }}"
       {% if app.request.get('type') == 'upgrade' %}
-        data-check-newest-url="{{ path('admin_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
+        data-check-newest-url="/app_dev.php{{ path('admin_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
       {% endif %}
   >{{ '开始'|trans }}{{ updateName }}</button>
 
