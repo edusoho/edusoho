@@ -65,15 +65,15 @@ define(function(require, exports, module) {
                 $('#content').find('ul').eq(index).show().siblings().hide();
             });
         },
-        isEsVideo: function(){
-            return typeof($('#lesson-preview-player').html)== 'undefined'
+        isEsVedio:function(){
+            if($('#lesson-preview-player').html() == ""){
+                $('.embed-responsive-16by9').addClass('masks')
+            }
+            
         },
         removeMask:function(){
-            if(main.isEsVideo){
-                $('.black-mask').remove();
-            }
+            setTimeout(main.isEsVedio,1500);
         }
-
     }
     exports.run = function() {
         main.init();
