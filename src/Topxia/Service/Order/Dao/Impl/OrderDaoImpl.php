@@ -68,6 +68,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function addOrder($order)
     {
+        $order['createdTime'] = time();
+        $order['updatedTime'] = $order['createdTime'];        
         $order    = $this->createSerializer()->serialize($order, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $order);
 

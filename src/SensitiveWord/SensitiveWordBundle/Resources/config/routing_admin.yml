@@ -10,10 +10,12 @@ admin_keyword_delete:
     pattern:  /keyword/{id}/delete
     defaults: { _controller: SensitiveWordBundle:Sensitive:delete }
     methods:  [POST]
+    permissions: [admin_keyword]
 
 admin_keyword_change:
     pattern:  /keyword/{id}/change
     defaults: { _controller: SensitiveWordBundle:Sensitive:change }
+    permissions: [admin_keyword]
 
 admin_keyword_banlogs:
     pattern:  /keyword/banlogs

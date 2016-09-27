@@ -1,10 +1,11 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Proxy\ProxyManager;
 use Topxia\Service\Common\Redis\RedisFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Topxia\Service\User\CurrentUser;
 
 class ServiceKernel
 {
@@ -179,6 +180,9 @@ class ServiceKernel
         return $this;
     }
 
+    /**
+     * @return CurrentUser
+     */
     public function getCurrentUser()
     {
         if (is_null($this->currentUser)) {

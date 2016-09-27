@@ -1,12 +1,12 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends BaseController
 {

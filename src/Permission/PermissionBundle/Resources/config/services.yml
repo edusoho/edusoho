@@ -1,0 +1,36 @@
+parameters:
+    routing.loader.yml.class: Permission\Loader\YamlFileLoader
+    permission.path_regular_expression: ['/^\/admin/']
+    router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
+
+services:
+    permission.twig.permission_extension:
+        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    permission.admin_voter:
+        class: Permission\PermissionBundle\Security\AdminVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    kernel.controller.permission_listener:
+        class: Permission\Listener\KernelControllerListener
+        arguments:    ['@service_container', '%permission.path_regular_expression%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
+
+    kernel.response.permission_listener:
+        class: Permission\Listener\KernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    routing.loader.yml:
+        class: '%routing.loader.yml.class%'
+        public: true
+        arguments: ['@file_locator']
+        tags:
+            - {name: routing.loader}
