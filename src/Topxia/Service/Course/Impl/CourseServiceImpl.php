@@ -729,7 +729,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'userId'      => $user['id'],
             'createdTime' => time()
         ));
-        $this->dispatchEvent('product.collection', new ServiceEvent($course));
 
         return true;
     }

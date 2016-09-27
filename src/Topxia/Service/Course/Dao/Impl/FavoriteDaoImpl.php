@@ -79,6 +79,7 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
             ->from($this->table, 'course_favorite')
             ->andWhere('courseId = :courseId')
             ->andWhere('userId = :userId')
+            ->andWhere('createdTime >= :createdTime_GE')
             ->andWhere('type = :type');
         return $builder;
     }
