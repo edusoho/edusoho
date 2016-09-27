@@ -5,7 +5,7 @@ if (!file_exists(__DIR__.'/../app/data/install.lock')) {
     exit();
 }
 
-if (((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) || (strpos($_SERVER['REQUEST_URI'], '/app.php/admin') !== 0)) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
+if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
     $time = file_get_contents(__DIR__.'/../app/data/upgrade.lock');
     date_default_timezone_set('Asia/Shanghai');
     $currentTime = time();
