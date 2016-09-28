@@ -13,7 +13,7 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->getTable()} where id=? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         }
 
@@ -25,7 +25,7 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         $that = $this;
 
         return $this->fetchCached("convNo:{$convNo}:userId:{$userId}", $convNo, $userId, function ($convNo, $userId) use ($that) {
-            $sql = "SELECT * FROM {$this->getTable()} where convNo=? AND userId=? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} where convNo=? AND userId=? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($convNo, $userId)) ?: null;
         }
 
@@ -37,7 +37,7 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         $that = $this;
 
         return $this->fetchCached("convNo:{$convNo}", $convNo, function ($convNo) use ($that) {
-            $sql = "SELECT * FROM {$this->getTable()} where convNo = ?";
+            $sql = "SELECT * FROM {$that->getTable()} where convNo = ?";
             return $that->getConnection()->fetchAll($sql, array($convNo));
         }
 

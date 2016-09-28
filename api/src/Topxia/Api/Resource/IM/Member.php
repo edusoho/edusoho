@@ -13,8 +13,6 @@ class Member extends BaseResource
         $requiredFields = array('targetId', 'targetType');
         $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $user = $this->getCurrentUser();
-
         if ($fields['targetType'] == 'course') {
             return $this->entryCourseConversation($fields['targetId']);
         } elseif ($fields['targetType'] == 'classroom') {
@@ -29,6 +27,7 @@ class Member extends BaseResource
 
     protected function entryCourseConversation($courseId)
     {
+        $user   = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
         if (!$course) {
             $res = $this->error('700001', '课程不存在');
@@ -72,6 +71,7 @@ class Member extends BaseResource
 
     protected function entryClassroomConversation($classroomId)
     {
+        $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if (!$classroom) {
             $res = $this->error('700011', '班级不存在');

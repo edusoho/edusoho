@@ -22,4 +22,6 @@ interface ConversationService
 
     public function createCloudConversation($title, $userId, $nickname);
 
+    public function isImMemberFull($convNo);
+
 }
