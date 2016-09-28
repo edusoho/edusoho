@@ -13,25 +13,6 @@
 <div class="login-full" style=" background-image:url('{{asset('assets/img/common/bg.png')}}')">
   <div class="es-section login-section reset-section">
     <div class="login-tip">{{'欢迎回来'|trans}}</div>
-    <div class="dropdown">              
-      {% if local|default() %}
-          <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-            {% if local == 'en_US' %}
-              {{'英文'|trans}}
-            {% else %}
-              {{'中文'|trans}}
-            {% endif %}
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            {% if local == 'en_US' %}
-              <li class="chinese"><a style="color: #616161;" href="switch/language?language=zh_CN&_target_path=%2F">{{'中文'}}</a></li>
-            {% else %}
-              <li class="english"><a style="color: #616161;" href="switch/language?language=en_US&_target_path=%2F">{{'English'}}</a></li>
-            {% endif %}
-          </ul>
-      {% endif %}
-    </div>
     <div class="login-sub-tip"></div>
     <div class="login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">

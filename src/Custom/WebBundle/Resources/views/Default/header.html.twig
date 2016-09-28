@@ -13,7 +13,7 @@
     <nav class="collapse navbar-collapse">
       <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
         <ul class="nav user-nav">
-          {% if local|default() %}
+          {% if 'ROLE_SUPER_ADMIN' in app.user.roles and local|default() %}
             <li class="back-home translator" style="margin-top: 20px">
               <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
                 {% if local == 'en_US' %}

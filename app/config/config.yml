@@ -17,7 +17,7 @@ framework:
     templating:
         engines: ['twig']
         assets_version: 7.2.0
-    default_locale:  "%locale%"
+    default_locale:  "%default_locale%"
     trusted_proxies: ~
     session:
         handler_id:     session.handler.factory
