@@ -111,7 +111,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         if ($result) {
             $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
-            $offlineCount = enmpty($result['offline']) ? 0 : count($result['offline']);
+            $offlineCount = empty($result['offline']) ? 0 : count($result['offline']);
 
             if (($onlineCount + $offlineCount) >= 5) {
                 return true;
