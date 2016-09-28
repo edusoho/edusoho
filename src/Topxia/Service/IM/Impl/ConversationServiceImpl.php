@@ -105,6 +105,22 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $result['no'];
     }
 
+    public function isImMemberFull($convNo)
+    {
+        $result = CloudAPIFactory::create('root')->get("im/conversations/{convNo}/members");
+
+        if ($result) {
+            $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
+            $offlineCount = enmpty($result['offline']) ? 0 : count($result['offline']);
+
+            if (($onlineCount + $offlineCount) >= 5) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function courseSync()
     {
         $unsyncCourses = $this->getCourseService()->findUnsyncConvParentIdCourses();
