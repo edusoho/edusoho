@@ -738,7 +738,7 @@ class EduCloudController extends BaseController
     {
         $appImSetting = $this->getSettingService()->get('app_im', array());
         if (!$appImSetting) {
-            $appImSetting = array('enabled' => 0);
+            $appImSetting = array('enabled' => 0, 'convNo' => '');
             $this->getSettingService()->set('app_im', $appImSetting);
         }
 

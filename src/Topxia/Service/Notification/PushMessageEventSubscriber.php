@@ -354,6 +354,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
         $article['app']       = $articleApp;
 
+        $imSetting         = $this->getSettingService()->get('app_im', array());
+        $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
         $this->pushCloud('article.create', $this->convertArticle($article));
     }
 
