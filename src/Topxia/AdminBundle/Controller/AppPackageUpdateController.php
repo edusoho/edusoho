@@ -72,6 +72,15 @@ class AppPackageUpdateController extends BaseController
     {
         $index  = $request->query->get('index', 0);
         $errors = $this->getAppService()->beginPackageUpdate($id, $request->query->get('type'), $index);
+        if (empty($errors)) {
+            echo json_encode(array('status' => 'ok'));
+            exit;
+        }
+
+        if (isset($errors['index'])) {
+            echo json_encode($errors);
+            exit;
+        }
         return $this->createResponseWithErrors($errors);
     }
 
