@@ -74,7 +74,7 @@ class MeCourses extends BaseResource
         $courses = array();
         foreach ($res as $key => $one) {
             $course = $this->callFilter($name, $one);
-            if (!isset($course['conversationId']) || empty($course['conversationId'])) {
+            if (!isset($course['convNo']) || empty($course['convNo'])) {
                 continue;
             }
             $courses[] = $course;

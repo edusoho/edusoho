@@ -20,4 +20,6 @@ interface ConversationService
 
     public function addConversationMember($convNo, $userId, $nickname);
 
+    public function createCloudConversation($title, $userId, $nickname);
+
 }

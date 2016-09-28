@@ -4,7 +4,6 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class Classroom extends BaseResource
 {
@@ -31,13 +30,13 @@ class Classroom extends BaseResource
     {
         $simple = array();
 
-        $simple['id'] = $res['id'];
-        $simple['picture'] = $res['middlePicture'];
-        $simple['title'] = $res['title'];
-        $simple['about'] = $res['about'];
-        $simple['headTeacherId'] = $res['headTeacherId'];
-        $simple['teacherIds'] = $res['teacherIds'];
-        $simple['conversationNo'] = $res['conversationId'];
+        $simple['id']             = $res['id'];
+        $simple['picture']        = $res['middlePicture'];
+        $simple['title']          = $res['title'];
+        $simple['about']          = $res['about'];
+        $simple['headTeacherId']  = $res['headTeacherId'];
+        $simple['teacherIds']     = $res['teacherIds'];
+        $simple['conversationNo'] = $res['convNo'];
 
         return $simple;
     }

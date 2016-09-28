@@ -49,7 +49,6 @@ $app->get(_u('/courses/{courseId}/members'), 'res.Course/Members:get');
 $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
 $app->get(_u('/course/{courseId}/status'), 'res.Status:get');
 $app->get(_u('/course_members'), 'res.CourseMembers:get');
-$app->post(_u('/course/{courseId}/im_members'), 'res.IM/CourseMember:post');
 
 $app->get(_u('/courses/{courseId}/notes/{noteId}'), 'res.Course/Note:get');
 $app->get(_u('/courses/{courseId}/notes'), 'res.Course/Notes:get');
@@ -69,7 +68,6 @@ $app->get(_u('/classrooms/{classroomId}/status'), 'res.ClassroomStatuses:get');
 $app->get(_u('/classrooms/{classroomId}/members'), 'res.Classroom/Members:get');
 $app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.Classroom/Member:get');
 $app->get(_u('/classroom_members'), 'res.ClassroomMembers:get');
-$app->post(_u('/classroom/{classroomId}/im_members'), 'res.IM/ClassroomMember:post');
 
 $app->get(_u('/exercise/{id}'), 'res.Exercise:get');
 $app->get(_u('/exercise/{id}/result'), 'res.Exercise:result');
@@ -100,8 +98,8 @@ $app->post(_u('/thread/create'), 'res.Thread:create');
 $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 
 $app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
-
 $app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
+$app->post(_u('/im/members'), 'res.IM/Member:post');
 
 $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');

@@ -84,7 +84,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return false;
     }
 
-    protected function createConversation($title, $userId, $nickname)
+    public function createCloudConversation($title, $userId, $nickname)
     {
         $message = array(
             'name'    => $title,
@@ -118,7 +118,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($unsyncCourses as $course) {
-            $convNo = $this->createConversation($course['title'], $course['userId'], $users[$course['userId']]['nickname']);
+            $convNo = $this->createCloudConversation($course['title'], $course['userId'], $users[$course['userId']]['nickname']);
             if (!empty($convNo)) {
                 $this->getCourseService()->updateCourse($course['id'], array('convNo' => $convNo));
                 $count++;
@@ -140,7 +140,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         foreach ($unsyncClassrooms as $classroom) {
-            $convNo = $this->createConversation($classroom['title'], $user['id'], $user['nickname']);
+            $convNo = $this->createCloudConversation($classroom['title'], $user['id'], $user['nickname']);
             if (!empty($convNo)) {
                 $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $convNo));
                 $count++;

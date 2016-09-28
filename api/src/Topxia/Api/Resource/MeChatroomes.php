@@ -3,8 +3,8 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MeChatroomes extends BaseResource
 {
@@ -13,18 +13,19 @@ class MeChatroomes extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $user = $this->getCurrentUser();
+        $user               = $this->getCurrentUser();
         $classRoomChatrooms = $this->getClassRoomChatrooms($user['id']);
-        $courseChatrooms = $this->getCourseChatrooms($user['id']);
+        $courseChatrooms    = $this->getCourseChatrooms($user['id']);
 
         $chatrooms = array_merge($classRoomChatrooms, $courseChatrooms);
         return $this->wrap($this->filter($chatrooms), count($chatrooms));
     }
 
-    private function getClassRoomChatrooms($userId) {
+    private function getClassRoomChatrooms($userId)
+    {
         $conditions = array('userId' => $userId);
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
+        $total      = $this->getClassroomService()->searchMemberCount($conditions);
+        $members    = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
@@ -32,42 +33,43 @@ class MeChatroomes extends BaseResource
 
         $chatrooms = array();
         foreach ($classrooms as $classroom) {
-            if (!isset($classroom['conversationId']) || empty($classroom['conversationId'])) {
+            if (!isset($classroom['convNo']) || empty($classroom['convNo'])) {
                 continue;
             }
             $chatrooms[] = array(
-                'type' => 'classroom',
-                'id' => $classroom['id'],
-                'title' => $classroom['title'],
-                'conversationId' => $classroom['conversationId'],
-                'picture' => $this->getFileUrl($classroom['smallPicture']),
+                'type'           => 'classroom',
+                'id'             => $classroom['id'],
+                'title'          => $classroom['title'],
+                'conversationId' => $classroom['convNo'],
+                'picture'        => $this->getFileUrl($classroom['smallPicture'])
             );
         }
 
         return $chatrooms;
     }
 
-    private function getCourseChatrooms($userId) {
+    private function getCourseChatrooms($userId)
+    {
         $conditions = array('userId' => $userId);
-        $total = $this->getCourseService()->searchMemberCount($conditions);
-        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
+        $total      = $this->getCourseService()->searchMemberCount($conditions);
+        $members    = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
         $chatrooms = array();
         foreach ($courses as $course) {
-            if (!isset($course['conversationId']) || empty($course['conversationId'])) {
+            if (!isset($course['convNo']) || empty($course['convNo'])) {
                 continue;
             }
             if ($course['parentId'] != 0) {
                 continue;
             }
             $chatrooms[] = array(
-                'type' => 'course',
-                'id' => $course['id'],
-                'title' => $course['title'],
-                'conversationId' => $course['conversationId'],
-                'picture' => $this->getFileUrl($course['smallPicture']),
+                'type'           => 'course',
+                'id'             => $course['id'],
+                'title'          => $course['title'],
+                'conversationId' => $course['convNo'],
+                'picture'        => $this->getFileUrl($course['smallPicture'])
             );
         }
 
