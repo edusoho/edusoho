@@ -30,4 +30,3 @@ admin_role_check_code:
     pattern:  /role/checkCode
     defaults: { _controller: PermissionBundle:Role:checkCode }
     permissions: [admin_role_manage]
-

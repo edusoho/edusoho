@@ -580,10 +580,11 @@ class AppServiceImpl extends BaseService implements AppService
         sleep($tryCount * 2);
 
         try {
-            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir') . '/cache';
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
-
+            clearstatcache(true);
+            sleep(3);
             //注解需要该目录存在
             if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
                 $filesystem->mkdir($cachePath . '/annotations/topxia');
