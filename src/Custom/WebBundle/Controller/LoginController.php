@@ -13,7 +13,7 @@ class LoginController extends BaseLoginController
         $user = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你已经登录了'), null, 3000, $this->generateUrl('homepage'));
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -30,7 +30,8 @@ class LoginController extends BaseLoginController
         return $this->render('CustomWebBundle:Login:index.html.twig', array(
             'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
-            '_target_path'  => $this->getTargetPath($request)
+            '_target_path'  => $this->getTargetPath($request),
+            'local' => $request->getLocale()
         ));
     }
 }
