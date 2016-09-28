@@ -11,6 +11,9 @@ class TestpaperController extends BaseTestpaperController
     public function teacherCheckInCourseAction(Request $request, $id, $status)
     {
         $user = $this->getCurrentUser();
+        if (in_array('ROLE_CENTER_ADMIN', $user->getRoles())) {
+            $this->addTeacherRoleForCenterAdmin($user , $id);
+        }
         $users = $this->getUserService()->findUsersByOrgCode($user['orgCode']);
         $userIds = ArrayToolkit::column($users, 'id');
 
@@ -60,5 +63,21 @@ class TestpaperController extends BaseTestpaperController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('Custom:User.UserService');
+    }
+    
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    
+    private function addTeacherRoleForCenterAdmin($user , $courseId)
+    {
+        if (! $this->getCourseService()->hasTeacherRole($courseId, $user['id'])) {
+            $courseTeachers = $this->getCourseService()->findCourseTeachers($courseId);
+            $teacherIds = ArrayToolkit::column($courseTeachers, 'userId');
+            $teacherIds[] = $user['id'];
+            $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+            $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+        }
     }
 }

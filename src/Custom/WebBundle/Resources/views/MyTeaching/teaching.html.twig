@@ -97,7 +97,7 @@
                 <td>
                   <div class="btn-group">
                     {% if 'ROLE_CENTER_ADMIN' in app.user.roles %}
-                      <a class="btn btn-default btn-sm" {% if course.isTeacher == false %} disabled="disabled" href="javascript:;"{% else %}href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"{% endif %} >{{'试卷批阅'|trans}}</a>
+                      <a class="btn btn-default btn-sm" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}" >{{'试卷批阅'|trans}}</a>
                     {% else %}
                       <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
 
