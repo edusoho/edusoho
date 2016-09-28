@@ -107,7 +107,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function isImMemberFull($convNo)
     {
-        $result = CloudAPIFactory::create('root')->get("im/conversations/{convNo}/members");
+        $result = CloudAPIFactory::create('root')->get("/im/conversations/{$convNo}/members");
 
         if ($result) {
             $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
