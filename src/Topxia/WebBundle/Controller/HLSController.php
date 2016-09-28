@@ -200,14 +200,18 @@ class HLSController extends BaseController
     {
         $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
         $token          = $this->getTokenService()->verifyToken('hls.clef', $token);
-
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        if (!$inWhiteList && !empty($token['userId'])) {
-            if (!($this->getCurrentUser()->isLogin()
-                && $this->getCurrentUser()->getId() == $token['userId'])) {
+        $enablePlayRate = $this->setting('storage.enable_playback_rates');
+
+        if (!($inWhiteList || $enablePlayRate)) { //倍速播放先放行
+            if (!$this->getCurrentUser()->isLogin()) {
+                return $this->makeFakeTokenString();
+            }
+                
+            if (!isset($token['userId']) || $this->getCurrentUser()->getId() != $token['userId']) {
                 return $this->makeFakeTokenString();
             }
         }
