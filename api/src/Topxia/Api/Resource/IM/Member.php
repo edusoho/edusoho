@@ -108,6 +108,8 @@ class Member extends BaseResource
                 $res = $this->error('700006', '学员进入会话失败');
             }
         }
+
+        return $res;
     }
 
     protected function createCourseConversation($course)
