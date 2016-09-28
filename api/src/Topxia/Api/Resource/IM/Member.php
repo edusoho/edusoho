@@ -49,7 +49,7 @@ class Member extends BaseResource
         $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
         if (!$conversationMember) {
-            if ($this->getConversationService()->isImMemberFull()) {
+            if ($this->getConversationService()->isImMemberFull($convNo)) {
                 return $this->error('700008', '会话人数已满');
             }
 
@@ -100,7 +100,7 @@ class Member extends BaseResource
         $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
         if (!$conversationMember) {
-            if ($this->getConversationService()->isImMemberFull()) {
+            if ($this->getConversationService()->isImMemberFull($convNo)) {
                 return $this->error('700008', '会话人数已满');
             }
 

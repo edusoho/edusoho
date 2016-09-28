@@ -21,7 +21,7 @@ class MemberSync extends BaseResource
         $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($imSetting['convNo'], $user['id']);
 
         if (!empty($imSetting['convNo']) && !$conversationMember) {
-            if ($this->getConversationService()->isImMemberFull()) {
+            if ($this->getConversationService()->isImMemberFull($imSetting['convNo'])) {
                 return $this->error('700008', '会话人数已满');
             }
 
