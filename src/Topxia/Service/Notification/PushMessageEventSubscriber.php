@@ -4,7 +4,6 @@ namespace Topxia\Service\Notification;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface
@@ -32,7 +31,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.lesson.update'      => 'onCourseLessonUpdate',
             'course.lesson.delete'      => 'onCourseLessonDelete',
 
-            'classroom.create'          => 'onClassroomCreate',
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
 
@@ -148,30 +146,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $course = $event->getSubject();
 
-        if ($event->getName() == 'course.create') {
-            //创建课程IM会话
-            $currentUser = ServiceKernel::instance()->getCurrentUser();
-            $message     = array(
-                'name'    => $course['title'],
-                'clients' => array(
-                    array(
-                        'clientId'   => $currentUser['id'],
-                        'clientName' => $currentUser['nickname']
-                    )
-                )
-            );
-
-            $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-
-            if (isset($result['network']) && $result['network'] == 'off') {
-                return;
-            }
-
-            if (!empty($result['no'])) {
-                $course = $this->getCourseService()->updateCourse($course['id'], array('convNo' => $result['no']));
-            }
-        }
-
         $this->pushCloud('course.create', $this->convertCourse($course));
     }
 
@@ -284,29 +258,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         $this->pushCloud('lesson.delete', $lesson);
-    }
-
-    /**
-     * Classroom相关
-     */
-    public function onClassroomCreate(ServiceEvent $event)
-    {
-        $classroom = $event->getSubject();
-
-        $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $message     = array(
-            'name'    => $classroom['title'],
-            'clients' => array(array('clientId' => $currentUser['id'], 'clientName' => $currentUser['nickname']))
-        );
-
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-        if (isset($result['network']) && $result['network'] == 'off') {
-            return;
-        }
-
-        if (!empty($result['no'])) {
-            $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $result['no']));
-        }
     }
 
     public function onClassroomJoin(ServiceEvent $event)

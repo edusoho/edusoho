@@ -14,12 +14,15 @@ class CourseMember extends BaseResource
         $user   = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        if (!$courseMember) {
+            return array();
+        }
+
         $convNo = $this->createConversation($course);
         if (empty($convNo)) {
             return array();
         }
-
-        $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
         $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 

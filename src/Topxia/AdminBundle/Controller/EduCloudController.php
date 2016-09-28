@@ -790,8 +790,6 @@ class EduCloudController extends BaseController
                         $appImSetting['convNo'] = $convNo;
                     }
                 }
-
-                $this->getConversationService()->conversationSync();
             }
 
             $this->getSettingService()->set('app_im', $appImSetting);

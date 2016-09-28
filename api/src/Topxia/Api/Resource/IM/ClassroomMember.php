@@ -14,16 +14,19 @@ class ClassroomMember extends BaseResource
         $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
+        $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
+        if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
+            return array();
+        }
+
         $convNo = $this->createConversation($classroom, $user['id'], $user['nickname']);
         if (empty($convNo)) {
             return array();
         }
 
-        $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
-
         $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
-        if ($classroomMember && !$conversationMember) {
+        if (!$conversationMember) {
             $res = $this->getConversationService()->addConversationMember($convNo, $user['id'], $user['nickname']);
             if ($res) {
                 $member = array(
