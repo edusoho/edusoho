@@ -781,6 +781,19 @@ class EduCloudController extends BaseController
             $api->post("/im/me/account", array('status' => $imStatus));
 
             $appImSetting['enabled'] = $status;
+
+            //创建全站会话
+            if ($status) {
+                if (!isset($appImSetting['convNo'])) {
+                    $convNo = $this->createGlobalImConversation();
+                    if (!empty($convNo)) {
+                        $appImSetting['convNo'] = $convNo;
+                    }
+                }
+
+                $this->getConversationService()->conversationSync();
+            }
+
             $this->getSettingService()->set('app_im', $appImSetting);
 
             return $this->createJsonResponse(true);
@@ -1100,6 +1113,28 @@ class EduCloudController extends BaseController
         return $chartInfo;
     }
 
+    protected function createGlobalImConversation()
+    {
+        $user    = $this->getCurrentUser();
+        $message = array(
+            'name'    => '站点会话',
+            'clients' => array(
+                array(
+                    'clientId'   => $user['id'],
+                    'clientName' => $user['nickname']
+                )
+            )
+        );
+
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+
+        if (isset($result['error'])) {
+            return '';
+        }
+
+        return $result['no'];
+    }
+
     protected function getSearchService()
     {
         return $this->getServiceKernel()->createService('Search.SearchService');
@@ -1128,5 +1163,10 @@ class EduCloudController extends BaseController
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

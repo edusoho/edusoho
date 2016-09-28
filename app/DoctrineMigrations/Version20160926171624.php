@@ -17,6 +17,12 @@ class Version20160926171624 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("drop table im_my_conversation");
+
+        $this->addSql("ALTER TABLE course CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '课程聊天室ID';");
+        $this->addSql("UPDATE course SET `convNo` = '' WHERE `convNo` = '0';");
+
+        $this->addSql("ALTER TABLE classroom CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '班级聊天室ID';");
+        $this->addSql("UPDATE classroom SET `convNo` = '' WHERE `convNo` = '0';");
     }
 
     /**

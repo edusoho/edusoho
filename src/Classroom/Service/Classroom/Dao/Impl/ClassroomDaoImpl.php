@@ -100,6 +100,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('convNo = :convNo')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
 
@@ -155,7 +156,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $fields = array('hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'noteNum');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减',array('%field%'=>$field,'%fields%'=>implode(',', $fields)))));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减', array('%field%' => $field, '%fields%' => implode(',', $fields)))));
         }
 
         $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
@@ -180,9 +181,5 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function getSerializeFields()
     {
         return $this->serializeFields;
-    }
-     protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

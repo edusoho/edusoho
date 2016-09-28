@@ -36,14 +36,16 @@
         {% else %}
           {% if not setting('app_im.enabled') %}
             <div class="col-md-2 control-cloud">
-              <a class="btn btn-primary mhs app-im-open" href="{{ path('admin_app_im_update') }}" data-status="1">{{'开启即时聊天'|trans}}</a>
+              {#<a class="btn btn-primary mhs app-im-open" href="{{ path('admin_app_im_update') }}" data-status="1" data-loading="">{{'开启即时聊天'|trans}}</a>#}
+              <button class="btn btn-primary mhs app-im-open" type="submit" data-loading-text="{{'正在启动...'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="1">{{'开启即时聊天'|trans}}</button>
             </div>
           {% else %}
             <div class="col-md-2 control-cloud success">
               <span class="text-success">{{'已开启'|trans}}</span>
             </div>
             <div class="controls col-md-8 cloud-warning">
-              <a class="btn btn-default btn-sm mhs app-im-close" href="{{ path('admin_app_im_update') }}" data-status="0">{{'关闭'|trans}}</a>
+              {#<a class="btn btn-default btn-sm mhs app-im-close" href="{{ path('admin_app_im_update') }}" data-status="0">{{'关闭'|trans}}</a>#}
+              <button class="btn btn-primary mhs app-im-close" type="submit" data-loading-text="{{'正在关闭...'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="0">{{'关闭'|trans}}</button>
             </div>
           {% endif %}
         {% endif %}

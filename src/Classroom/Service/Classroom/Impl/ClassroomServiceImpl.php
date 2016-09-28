@@ -2,10 +2,10 @@
 
 namespace Classroom\Service\Classroom\Impl;
 
-use Classroom\Service\Classroom\ClassroomService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Classroom\Service\Classroom\ClassroomService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -170,7 +170,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId', 'orgCode', 'orgId'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'convNo', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
@@ -422,7 +422,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
 
         return $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
     }
@@ -972,8 +972,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     /**
-     * @param $id
-     * @param $classroomPermission
+     * @param  $id
+     * @param  $classroomPermission
      * @return bool
      */
     public function canManageClassroom($id, $classroomPermission = null)
@@ -1007,7 +1007,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    public function tryManageClassroom($id, $actionPermission=null)
+    public function tryManageClassroom($id, $actionPermission = null)
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
             throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
@@ -1328,7 +1328,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroomDao()->updateClassroom($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int)$number,
+            'recommendedSeq'  => (int) $number,
             'recommendedTime' => time()
         ));
 
@@ -1474,7 +1474,7 @@ class MemberSerialize
 {
     public static function serialize(array $member)
     {
-        $member['role'] = empty($member['role']) ? '' : '|' . implode('|', $member['role']) . '|';
+        $member['role'] = empty($member['role']) ? '' : '|'.implode('|', $member['role']).'|';
         return $member;
     }
 

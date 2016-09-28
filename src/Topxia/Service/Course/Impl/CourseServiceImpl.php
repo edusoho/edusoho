@@ -2,13 +2,13 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\Common\NotFoundException;
+use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -498,31 +498,31 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'          => '',
-            'subtitle'       => '',
-            'about'          => '',
-            'expiryDay'      => 0,
-            'serializeMode'  => 'none',
-            'categoryId'     => 0,
-            'vipLevelId'     => 0,
-            'goals'          => array(),
-            'audiences'      => array(),
-            'tags'           => '',
-            'startTime'      => 0,
-            'endTime'        => 0,
-            'locationId'     => 0,
-            'address'        => '',
-            'maxStudentNum'  => 0,
-            'watchLimit'     => 0,
-            'approval'       => 0,
-            'maxRate'        => 0,
-            'locked'         => 0,
-            'tryLookable'    => 0,
-            'tryLookTime'    => 0,
-            'buyable'        => 0,
-            'conversationId' => '',
-            'orgCode'        => '',
-            'orgId'          => ''
+            'title'         => '',
+            'subtitle'      => '',
+            'about'         => '',
+            'expiryDay'     => 0,
+            'serializeMode' => 'none',
+            'categoryId'    => 0,
+            'vipLevelId'    => 0,
+            'goals'         => array(),
+            'audiences'     => array(),
+            'tags'          => '',
+            'startTime'     => 0,
+            'endTime'       => 0,
+            'locationId'    => 0,
+            'address'       => '',
+            'maxStudentNum' => 0,
+            'watchLimit'    => 0,
+            'approval'      => 0,
+            'maxRate'       => 0,
+            'locked'        => 0,
+            'tryLookable'   => 0,
+            'tryLookTime'   => 0,
+            'buyable'       => 0,
+            'convNo'        => '',
+            'orgCode'       => '',
+            'orgId'         => ''
         ));
 
         if (!empty($fields['tags'])) {
@@ -972,6 +972,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getCourseDao()->clearCourseDiscountPrice($discountId);
+    }
+
+    public function findUnsyncConvParentIdCourses()
+    {
+        return $this->getCourseDao()->findUnsyncConvParentIdCourses();
     }
 
     /**
@@ -1877,7 +1882,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
+        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -1896,7 +1901,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                     break;
                 case 'chapter':
-                    $item    = $currentChapter = $items[$itemId];
+                    $item    = $currentChapter    = $items[$itemId];
                     $chapter = $this->getChapter($courseId, $item['id']);
 
                     if ($item['type'] == 'unit') {
@@ -2249,8 +2254,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'   => 'finished',
             'courseId' => $courseId
         );
-        $count      = $this->getLessonLearnDao()->searchLearnCount($conditions);
-        $fields     = array(
+        $count  = $this->getLessonLearnDao()->searchLearnCount($conditions);
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
@@ -2299,7 +2304,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $fields   = array(
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
@@ -2449,10 +2454,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
-     * @param int|string  $courseId
-     * @param null|string $otherPermission
-     * @return array
+     * @param  int|string                                $courseId
+     * @param  null|string                               $otherPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      */
     public function tryManageCourse($courseId, $otherPermission = null)
     {
@@ -2476,10 +2481,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int|string  $courseId
-     * @param null|string $actionPermission
-     * @return array
+     * @param  int|string                                $courseId
+     * @param  null|string                               $actionPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      */
     public function tryAdminCourse($courseId, $actionPermission = null)
     {
@@ -2533,7 +2538,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
 
-        if(empty($course)){
+        if (empty($course)) {
             throw new ResourceNotFoundException('course', $courseId);
         }
 
@@ -2697,7 +2702,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
-        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson                = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
         $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);

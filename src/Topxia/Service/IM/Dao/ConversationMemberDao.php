@@ -1,12 +1,10 @@
 <?php
 
-namespace Topxia\Service\IM;
+namespace Topxia\Service\IM\Dao;
 
-interface ConversationService
+interface ConversationMemberDao
 {
-    public function getConversationByMemberIds(array $userIds);
-
-    public function addConversation($conversation);
+    public function getMember($id);
 
     public function getMemberByConvNoAndUserId($convNo, $userId);
 
@@ -17,7 +15,4 @@ interface ConversationService
     public function deleteMember($id);
 
     public function deleteMemberByConvNoAndUserId($convNo, $userId);
-
-    public function addConversationMember($convNo, $userId, $nickname);
-
 }

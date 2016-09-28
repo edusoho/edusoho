@@ -89,6 +89,8 @@ interface CourseService
 
     public function revertCoursesPriceWithDiscount($discountId);
 
+    public function findUnsyncConvParentIdCourses();
+
     /**
      * 删除课程
      */

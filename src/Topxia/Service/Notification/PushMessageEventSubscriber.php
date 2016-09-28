@@ -36,7 +36,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
 
-            'article.create'      => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
+            'article.create'            => 'onArticleCreate', //资讯在创建的时候状态就是已发布的
             'article.publish'           => 'onArticleCreate',
             'article.update'            => 'onArticleUpdate',
             'article.trash'             => 'onArticleDelete',
@@ -44,17 +44,17 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'article.delete'            => 'onArticleDelete',
 
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
-            'thread.create'        => 'onThreadCreate',
-            'thread.update'        => 'onThreadUpdate',
-            'thread.delete'        => 'onThreadDelete',
-            'course.thread.create' => 'onThreadCreate',
-            'course.thread.update' => 'onThreadUpdate',
-            'course.thread.delete' => 'onThreadDelete',
-            'group.thread.create'  => 'onThreadCreate',
-            'group.thread.open'    => 'onThreadCreate',
-            'group.thread.update'  => 'onThreadUpdate',
-            'group.thread.delete'  => 'onThreadDelete',
-            'group.thread.close'   => 'onThreadDelete',
+            'thread.create'             => 'onThreadCreate',
+            'thread.update'             => 'onThreadUpdate',
+            'thread.delete'             => 'onThreadDelete',
+            'course.thread.create'      => 'onThreadCreate',
+            'course.thread.update'      => 'onThreadUpdate',
+            'course.thread.delete'      => 'onThreadDelete',
+            'group.thread.create'       => 'onThreadCreate',
+            'group.thread.open'         => 'onThreadCreate',
+            'group.thread.update'       => 'onThreadUpdate',
+            'group.thread.delete'       => 'onThreadDelete',
+            'group.thread.close'        => 'onThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
@@ -64,22 +64,22 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'group.thread.post.create'  => 'onThreadPostCreate',
             'group.thread.post.delete'  => 'onThreadPostDelete',
 
-            'announcement.create' => 'onAnnouncementCreate',
+            'announcement.create'       => 'onAnnouncementCreate',
 
-            'testpaper.reviewed' => 'onTestPaperReviewed',
+            'testpaper.reviewed'        => 'onTestPaperReviewed',
 
-            'homework.check' => 'onHomeworkCheck',
+            'homework.check'            => 'onHomeworkCheck',
 
             'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
 
-            'user.service.follow' => 'onUserFollow'
+            'user.service.follow'       => 'onUserFollow'
         );
     }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        return $this->getCloudDataService()->push('school.' . $eventName, $data, time(), $level);
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
     /**
@@ -100,7 +100,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
     }
 
-    public function onUserFollow(ServiceEvent $event) {
+    public function onUserFollow(ServiceEvent $event)
+    {
         $friend = $event->getSubject();
         $result = $this->pushCloud('user.service.follow', $friend);
     }
@@ -167,7 +168,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             }
 
             if (!empty($result['no'])) {
-                $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+                $course = $this->getCourseService()->updateCourse($course['id'], array('convNo' => $result['no']));
             }
         }
 
@@ -304,7 +305,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
 
         if (!empty($result['no'])) {
-            $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
+            $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $result['no']));
         }
     }
 
@@ -611,7 +612,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $course               = $this->getCourseService()->getCourse($id);
                 $target['title']      = $course['title'];
                 $target['image']      = $this->getFileUrl($course['smallPicture']);
-                $target['convNo']     = empty($course['conversationId']) ? '' : $course['conversationId'];
+                $target['convNo']     = empty($course['convNo']) ? '' : $course['convNo'];
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 break;
             case 'lesson':
@@ -710,7 +711,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'jobClass'        => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
                 'targetType'      => 'liveOpenLesson',
                 'targetId'        => $lesson['id'],
-                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
+                'nextExcutedTime' => $lesson['startTime'] - 60 * 60
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
