@@ -64,6 +64,8 @@ class Member extends BaseResource
             } else {
                 $res = $this->error('700006', '学员进入会话失败');
             }
+        } else {
+            $res = array('convNo' => $convNo);
         }
 
         return $res;
@@ -107,6 +109,8 @@ class Member extends BaseResource
             } else {
                 $res = $this->error('700006', '学员进入会话失败');
             }
+        } else {
+            $res = array('convNo' => $convNo);
         }
 
         return $res;
