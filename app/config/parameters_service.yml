@@ -6,3 +6,9 @@ parameters:
 
     topxia_daos:
         'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
+        'Testpaper.TestpaperResultDao' : 'Custom\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl'
+        'User.UserDao' : 'Custom\Service\User\Dao\Impl\UserDaoImpl'
+        
+    topxia_services:
+        'Testpaper.TestpaperService' : 'Custom\Service\Testpaper\Impl\TestpaperServiceImpl'
+        'User.UserService' : 'Custom\Service\User\Impl\UserServiceImpl'

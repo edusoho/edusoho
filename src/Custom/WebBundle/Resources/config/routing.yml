@@ -13,3 +13,11 @@ my_teaching_courses:
 course_manage_test_check:
     pattern: /course/check/{id}/{status}/list
     defaults: { _controller: CustomWebBundle:Testpaper:teacherCheckInCourse }
+
+course_manage_finish_test:
+    pattern: /test/{id}/finish
+    defaults: { _controller: CustomWebBundle:Testpaper:finishTest }
+
+course_manage_test_teacher_check:
+    pattern: /test/{id}/teacher/check
+    defaults: { _controller: CustomWebBundle:Testpaper:teacherCheck }

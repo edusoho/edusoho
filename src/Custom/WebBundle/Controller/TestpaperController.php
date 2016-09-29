@@ -54,20 +54,88 @@ class TestpaperController extends BaseTestpaperController
             'isTeacher'    => $this->getCourseService()->hasTeacherRole($id, $user['id']) || $user->isSuperAdmin()
         ));
     }
-
-    protected function getTestpaperService()
+    
+    public function finishTestAction(Request $request, $id)
     {
-        return $this->getServiceKernel()->createService('Custom:Testpaper.TestpaperService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('Custom:User.UserService');
+        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+    
+        if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+            return $this->createJsonResponse(true);
+        }
+    
+        if ($request->getMethod() == 'POST') {
+            $data     = $request->request->all();
+            $answers  = array_key_exists('data', $data) ? $data['data'] : array();
+            $usedTime = $data['usedTime'];
+            $user     = $this->getCurrentUser();
+    
+            //提交变化的答案
+            $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+    
+            //完成试卷，计算得分
+            $testResults = $this->getTestpaperService()->makeTestpaperResultFinish($id);
+    
+            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+    
+            $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+            //试卷信息记录
+            $this->getTestpaperService()->finishTest($id, $user['id'], $usedTime);
+    
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+    
+            if ($this->getTestpaperService()->isExistsEssay($testResults)) {
+                $user = $this->getCurrentUser();
+    
+                $message = array(
+                    'id'       => $testpaperResult['id'],
+                    'name'     => $testpaperResult['paperName'],
+                    'userId'   => $user['id'],
+                    'userName' => $user['nickname'],
+                    'type'     => 'perusal'
+                );
+                
+                $admins = $this->getUserService()->findCenterOrSuperAdminUsersByOrgId($user['orgId']);
+                foreach ($admins as $admin) {
+                    $this->getNotificationService()->notify($admin['id'], 'test-paper', $message);
+                }
+                
+            }
+    
+            // @todo refactor. , wellming
+            $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
+    
+            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
+                $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
+    
+                if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
+                    $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
+                    $this->getCourseService()->finishLearnLesson($lesson['courseId'], $lesson['id']);
+                }
+            }
+    
+            return $this->createJsonResponse(true);
+        }
     }
     
-    protected function getCourseService()
+    public function teacherCheckAction(Request $request, $id)
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        $user = $this->getCurrentUser();
+        if (in_array('ROLE_CENTER_ADMIN', $user->getRoles())) {
+            $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+            $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+            
+            if (!$testpaper) {
+                throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            }
+            
+            $target = explode('-', $testpaper['target']);
+            
+            if ($target[0] == 'course') {
+                $courseIds = explode('/', $target[1]);
+                $this->addTeacherRoleForCenterAdmin($user , $courseIds[0]);
+            }
+        }
+        return parent::teacherCheckAction($request, $id);
     }
     
     private function addTeacherRoleForCenterAdmin($user , $courseId)
