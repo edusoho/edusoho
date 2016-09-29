@@ -28,7 +28,7 @@
         {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
           {% set countTime = (paperResult.checkedTime + target.redoInterval * 3600)|date('Y-m-d H:i:s') %}
           <div class="alert alert-danger">
-            {{ '您未通过考试，%countTime%后可重考，请复习'|trans({'%countTime%': '<span class="text-success">' + countTime + ' </span>'}) }}
+            {{ '您未通过考试，%countTime%后可重考，请复习'|trans({'%countTime%': '<span class="text-success">' ~ countTime ~ ' </span>'})|raw }}
           </div>
         {% else %}
           <div class="alert alert-danger">
