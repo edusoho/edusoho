@@ -40,7 +40,7 @@ class MeChatroomes extends BaseResource
                 'type'           => 'classroom',
                 'id'             => $classroom['id'],
                 'title'          => $classroom['title'],
-                'conversationId' => $classroom['convNo'],
+                'convNo' => $classroom['convNo'],
                 'picture'        => $this->getFileUrl($classroom['smallPicture'])
             );
         }
@@ -68,7 +68,7 @@ class MeChatroomes extends BaseResource
                 'type'           => 'course',
                 'id'             => $course['id'],
                 'title'          => $course['title'],
-                'conversationId' => $course['convNo'],
+                'convNo' => $course['convNo'],
                 'picture'        => $this->getFileUrl($course['smallPicture'])
             );
         }
