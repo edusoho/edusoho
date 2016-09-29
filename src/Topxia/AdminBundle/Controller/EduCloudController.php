@@ -765,6 +765,7 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $appImSetting = $this->getSettingService()->get('app_im', array());
+            $user         = $this->getCurrentUser();
 
             //去云平台判断im账号是否存在
             $api       = CloudAPIFactory::create('root');
@@ -785,9 +786,9 @@ class EduCloudController extends BaseController
             //创建全站会话
             if ($status) {
                 if (empty($appImSetting['convNo'])) {
-                    $convNo = $this->createGlobalImConversation();
-                    if (!empty($convNo)) {
-                        $appImSetting['convNo'] = $convNo;
+                    $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
+                    if ($conversation) {
+                        $appImSetting['convNo'] = $conversation['no'];
                     }
                 }
             }

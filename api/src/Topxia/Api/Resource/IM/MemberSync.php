@@ -15,33 +15,36 @@ class MemberSync extends BaseResource
         $res       = $this->error('700007', '全站会话未创建');
 
         if (!isset($imSetting['enabled']) || !$imSetting['enabled']) {
-            $res = $this->error('700008', '网站会话未启用');
+            return $this->error('700008', '网站会话未启用');
         }
 
-        $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($imSetting['convNo'], $user['id']);
+        $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType(0, 'global');
 
-        if (!empty($imSetting['convNo']) && !$conversationMember) {
+        if ($conversation) {
             if ($this->getConversationService()->isImMemberFull($imSetting['convNo'])) {
                 return $this->error('700008', '会话人数已满');
             }
 
-            $res = $this->getConversationService()->addConversationMember($imSetting['convNo'], $user['id'], $user['nickname']);
+            $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($conversation['no'], $user['id']);
 
-            if ($res) {
-                $member = array(
-                    'convNo'     => $imSetting['convNo'],
-                    'targetId'   => 0,
-                    'targetType' => 'global',
-                    'userId'     => $user['id']
-                );
+            if (!$conversationMember) {
+                $res = $this->getConversationService()->addConversationMember($imSetting['convNo'], array($user));
 
-                $conversationMember = $this->getConversationService()->addMember($member);
-                $res                = array('convNo' => $imSetting['convNo']);
-            } else {
-                $res = $this->error('700006', '学员进入会话失败');
+                if ($res) {
+                    $member = array(
+                        'convNo'     => $conversation['no'],
+                        'targetId'   => 0,
+                        'targetType' => 'global',
+                        'userId'     => $user['id']
+                    );
+
+                    $this->getConversationService()->addMember($member);
+                } else {
+                    return $this->error('700006', '学员进入会话失败');
+                }
             }
-        } elseif ($conversationMember) {
-            $res = array('convNo' => $conversationMember['convNo']);
+
+            $res = array('convNo' => $conversation['no']);
         }
 
         return $res;

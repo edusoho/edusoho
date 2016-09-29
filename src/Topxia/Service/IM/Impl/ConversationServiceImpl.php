@@ -42,7 +42,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $lockName = "im_{$conversation['targetType']}{$conversation['targetId']}";
         if ($targetType == 'global') {
-            $lockName = "im_{$conversation['targetType']}{$conversation['memberIds']}";
+            $lockName = "im_{$conversation['targetType']}0";
         }
 
         $lockResult = $this->getLock()->get($lockName, 50);
@@ -88,7 +88,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             'clients' => $clients
         );
 
-        $result = $this->imApi->post('/im/me/conversation', $message);
+        $result = $this->createImApi()->post('/im/me/conversation', $message);
 
         if (isset($result['error'])) {
             throw $this->createServiceException($result['error'], $result['code']);
@@ -171,7 +171,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
-        $res = $this->imApi->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
+        $res = $this->createImApi()->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
 
         if (isset($res['success'])) {
             return true;
