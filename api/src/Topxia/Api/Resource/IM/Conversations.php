@@ -59,14 +59,6 @@ class Conversations extends BaseResource
                 'no' => $conversationNo,
                 'memberIds' => $memberIds,
             ));
-
-            //创建用户各自的会话
-            foreach ($users as $user) {
-                $this->getConversationService()->addMyConversation(array(
-                    'no' => $conversationNo,
-                    'userId' => $user['id'],
-                ));
-            }
             
         }
 

@@ -16,6 +16,75 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->getConversationByMemberHash($memberHash);
     }
 
+    public function createConversation($title, $targetType, $targetId, $members)
+    {
+        $conversation = array();
+        $conversation['title'] = $title;
+        $conversation['targetType'] = $targetType;
+        $conversation['targetId'] = empty($targetId) ? 0 : intval($targetId);
+
+        $memberIds = ArrayToolkit::column($members, 'id');
+        if ($targetType == 'private') {
+            $conversation['title'] = join($memberIds, ',') . '的用户私聊';
+            $conversation['memberIds'] = $memberIds;
+            $conversation['memberHash'] = $this->buildMemberHash($memberIds);
+        } else {
+            $conversation['memberIds'] = array();
+            $conversation['memberHash'] = '';
+        }
+
+        $clients = array();
+        foreach ($members as $member) {
+            $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
+        }
+
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', array(
+            'name' => $title,
+            'clients' => $clients,
+        ));
+
+        if (isset($result['error'])) {
+            throw $this->createServiceException($result['error'], $result['code']);
+        }
+
+        $conversation['no'] = $result['no'];
+
+        $conversation = $this->getConversationDao()->addConversation($conversation);
+
+        if ($targetType != 'private') {
+            foreach ($members as $member) {
+                $this->getConversationMemberDao()->addMember(array(
+                    'convNo' => $conversation['no'],
+                    'targetType' => $conversation['targetType'],
+                    'targetId' => $conversation['targetId'],
+                ));
+            }
+        }
+
+        return $conversation;
+    }
+
+    public function createCloudConversation($title, $userId, $nickname)
+    {
+        $message = array(
+            'name'    => $title,
+            'clients' => array(
+                array(
+                    'clientId'   => $userId,
+                    'clientName' => $nickname
+                )
+            )
+        );
+
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+
+        if (isset($result['error'])) {
+            return '';
+        }
+
+        return $result['no'];
+    }
+
     public function addConversation($conversation)
     {
         $conversation = $this->filterConversationFields($conversation);
@@ -82,27 +151,6 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         return false;
-    }
-
-    public function createCloudConversation($title, $userId, $nickname)
-    {
-        $message = array(
-            'name'    => $title,
-            'clients' => array(
-                array(
-                    'clientId'   => $userId,
-                    'clientName' => $nickname
-                )
-            )
-        );
-
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-
-        if (isset($result['error'])) {
-            return '';
-        }
-
-        return $result['no'];
     }
 
     public function isImMemberFull($convNo)
@@ -233,5 +281,21 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function createImApi()
+    {
+        if (!$this->imApi) {
+            $this->imApi = CloudAPIFactory::create('root');
+        }
+        return $this->imApi;
+    }
+
+    /**
+     * 仅给单元测试mock用。
+     */
+    public function setImApi($imApi)
+    {
+        $this->imApi = $imApi;
     }
 }
