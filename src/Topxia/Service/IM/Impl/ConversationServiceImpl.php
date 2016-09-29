@@ -9,6 +9,8 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class ConversationServiceImpl extends BaseService implements ConversationService
 {
+    private $imApi;
+
     public function getConversationByMemberIds(array $memberIds)
     {
         sort($memberIds);
@@ -18,18 +20,18 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function createConversation($title, $targetType, $targetId, $members)
     {
-        $conversation = array();
-        $conversation['title'] = $title;
+        $conversation               = array();
+        $conversation['title']      = $title;
         $conversation['targetType'] = $targetType;
-        $conversation['targetId'] = empty($targetId) ? 0 : intval($targetId);
+        $conversation['targetId']   = empty($targetId) ? 0 : intval($targetId);
 
         $memberIds = ArrayToolkit::column($members, 'id');
         if ($targetType == 'private') {
-            $conversation['title'] = join($memberIds, ',') . '的用户私聊';
-            $conversation['memberIds'] = $memberIds;
+            $conversation['title']      = join($memberIds, ',').'的用户私聊';
+            $conversation['memberIds']  = $memberIds;
             $conversation['memberHash'] = $this->buildMemberHash($memberIds);
         } else {
-            $conversation['memberIds'] = array();
+            $conversation['memberIds']  = array();
             $conversation['memberHash'] = '';
         }
 
@@ -38,25 +40,26 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', array(
-            'name' => $title,
-            'clients' => $clients,
+        $result = $this->createImApi()->post('/im/me/conversation', array(
+            'name'    => $title,
+            'clients' => $clients
         ));
 
         if (isset($result['error'])) {
             throw $this->createServiceException($result['error'], $result['code']);
         }
 
-        $conversation['no'] = $result['no'];
+        $conversation['no']          = $result['no'];
+        $conversation['createdTime'] = time();
 
         $conversation = $this->getConversationDao()->addConversation($conversation);
 
         if ($targetType != 'private') {
             foreach ($members as $member) {
                 $this->getConversationMemberDao()->addMember(array(
-                    'convNo' => $conversation['no'],
+                    'convNo'     => $conversation['no'],
                     'targetType' => $conversation['targetType'],
-                    'targetId' => $conversation['targetId'],
+                    'targetId'   => $conversation['targetId']
                 ));
             }
         }
