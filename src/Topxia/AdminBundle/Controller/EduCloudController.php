@@ -784,7 +784,7 @@ class EduCloudController extends BaseController
 
             //创建全站会话
             if ($status) {
-                if (!isset($appImSetting['convNo'])) {
+                if (empty($appImSetting['convNo'])) {
                     $convNo = $this->createGlobalImConversation();
                     if (!empty($convNo)) {
                         $appImSetting['convNo'] = $convNo;

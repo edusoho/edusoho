@@ -16,33 +16,25 @@ class Version20160926171624 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        if ($this->isTableExist('im_my_conversation')) {
-            $this->addSql("drop table im_my_conversation");
-        }
+        $this->addSql("drop table im_my_conversation");
 
-        if ($this->isFieldExist('course', 'conversationId')) {
-            $this->addSql("ALTER TABLE course CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '课程会话ID';");
-            $this->addSql("UPDATE course SET `convNo` = '' WHERE `convNo` = '0';");
-        }
+        $this->addSql("ALTER TABLE course CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '课程会话ID';");
+        $this->addSql("UPDATE course SET `convNo` = '' WHERE `convNo` = '0';");
 
-        if ($this->isFieldExist('classroom', 'conversationId')) {
-            $this->addSql("ALTER TABLE classroom CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '班级会话ID';");
-            $this->addSql("UPDATE classroom SET `convNo` = '' WHERE `convNo` = '0';");
-        }
+        $this->addSql("ALTER TABLE classroom CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '班级会话ID';");
+        $this->addSql("UPDATE classroom SET `convNo` = '' WHERE `convNo` = '0';");
 
-        if (!$this->isTableExist('im_member')) {
-            $this->addSql("
-                CREATE TABLE `im_member` (
-                  `id` int(10) NOT NULL AUTO_INCREMENT,
-                  `convNo` varchar(32) NOT NULL COMMENT '会话ID',
-                  `targetId` int(10) NOT NULL,
-                  `targetType` varchar(15) NOT NULL,
-                  `userId` int(10) NOT NULL DEFAULT '0',
-                  `createdTime` int(10) DEFAULT '0',
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '会话用户表';
-            ");
-        }
+        $this->addSql("
+            CREATE TABLE `im_member` (
+              `id` int(10) NOT NULL AUTO_INCREMENT,
+              `convNo` varchar(32) NOT NULL COMMENT '会话ID',
+              `targetId` int(10) NOT NULL,
+              `targetType` varchar(15) NOT NULL,
+              `userId` int(10) NOT NULL DEFAULT '0',
+              `createdTime` int(10) DEFAULT '0',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '会话用户表';
+        ");
 
         //后台IM设置权限
         $sql    = "select * from role where code='ROLE_SUPER_ADMIN';";
@@ -59,19 +51,5 @@ class Version20160926171624 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-    }
-
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql    = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->connection->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql    = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->connection->fetchAssoc($sql);
-        return empty($result) ? false : true;
     }
 }
