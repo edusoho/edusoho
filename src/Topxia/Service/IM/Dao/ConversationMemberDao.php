@@ -15,4 +15,8 @@ interface ConversationMemberDao
     public function deleteMember($id);
 
     public function deleteMemberByConvNoAndUserId($convNo, $userId);
+
+    public function searchImMembers($conditions, $orderBy, $start, $limit);
+
+    public function searchImMemberCount($conditions);
 }

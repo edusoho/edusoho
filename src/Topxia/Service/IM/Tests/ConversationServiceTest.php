@@ -2,6 +2,7 @@
 namespace Topxia\Service\File\Tests;
 
 use Mockery;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -38,6 +39,19 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals('3b5db36d838e8252db2ebc170693db66', $conversation['no']);
         $this->assertEquals('course', $conversation['targetType']);
         $this->assertEquals('2', $conversation['targetId']);
+
+        $api        = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($api);
+        $mockObject->shouldReceive('post')->times(1)->andReturn(array('no' => '3b5db36d838e8252db2ebc170693db66'));
+        $this->getConversationService()->setImApi($mockObject);
+
+        $conversation1 = $this->getConversationService()->createConversation('testIm', 'private', '0', $members);
+        $title         = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
+
+        $this->assertEquals('3b5db36d838e8252db2ebc170693db66', $conversation1['no']);
+        $this->assertEquals('private', $conversation1['targetType']);
+        $this->assertEquals('0', $conversation1['targetId']);
+        $this->assertEquals($title, $conversation1['title']);
     }
 
     /*public function testGetMemberByConvNoAndUserId()

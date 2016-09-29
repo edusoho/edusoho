@@ -18,6 +18,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->getConversationByMemberHash($memberHash);
     }
 
+    public function getConversationByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->getConversationDao()->getConversationByTargetIdAndTargetType($targetId, $targetType);
+    }
+
     public function createConversation($title, $targetType, $targetId, $members)
     {
         $conversation               = array();
@@ -27,17 +32,12 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $memberIds = ArrayToolkit::column($members, 'id');
         if ($targetType == 'private') {
-            $conversation['title']      = join($memberIds, ',').'的用户私聊';
+            $conversation['title']      = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
             $conversation['memberIds']  = $memberIds;
             $conversation['memberHash'] = $this->buildMemberHash($memberIds);
         } else {
             $conversation['memberIds']  = array();
             $conversation['memberHash'] = '';
-        }
-
-        $clients = array();
-        foreach ($members as $member) {
-            $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
         $lockName = "im_{$conversation['targetType']}{$conversation['targetId']}";
@@ -47,19 +47,12 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $lockResult = $this->getLock()->get($lockName, 50);
         if (!$lockResult) {
-            throw $this->createServiceException($this->trans('创建会话失败'));
+            throw $this->createServiceException($this->trans('创建会话失败'), '700004');
         }
 
-        $result = $this->createImApi()->post('/im/me/conversation', array(
-            'name'    => $title,
-            'clients' => $clients
-        ));
+        $convNo = $this->createCloudConversation($conversation['title'], $members);
 
-        if (isset($result['error'])) {
-            throw $this->createServiceException($result['error'], $result['code']);
-        }
-
-        $conversation['no']          = $result['no'];
+        $conversation['no']          = $convNo;
         $conversation['createdTime'] = time();
 
         $conversation = $this->getConversationDao()->addConversation($conversation);
@@ -68,7 +61,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         if ($targetType != 'private') {
             foreach ($members as $member) {
-                $this->getConversationMemberDao()->addMember(array(
+                $this->addMember(array(
                     'convNo'     => $conversation['no'],
                     'targetType' => $conversation['targetType'],
                     'targetId'   => $conversation['targetId']
@@ -79,22 +72,26 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $conversation;
     }
 
-    public function createCloudConversation($title, $userId, $nickname)
+    public function createCloudConversation($title, $members)
     {
+        if (!$members) {
+            throw $this->createServiceException($this->trans('会话用户不存在'), '700009');
+        }
+
+        $clients = array();
+        foreach ($members as $member) {
+            $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
+        }
+
         $message = array(
             'name'    => $title,
-            'clients' => array(
-                array(
-                    'clientId'   => $userId,
-                    'clientName' => $nickname
-                )
-            )
+            'clients' => $clients
         );
 
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+        $result = $this->imApi->post('/im/me/conversation', $message);
 
         if (isset($result['error'])) {
-            return '';
+            throw $this->createServiceException($result['error'], $result['code']);
         }
 
         return $result['no'];
@@ -112,6 +109,16 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $conversation['createdTime'] = time();
 
         return $this->getConversationDao()->addConversation($conversation);
+    }
+
+    public function searchConversations($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getConversationDao()->searchConversations($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchConversationCount($conditions)
+    {
+        return $this->getConversationDao()->searchConversationCount($conditions);
     }
 
     public function conversationSync()
@@ -153,13 +160,18 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationMemberDao()->deleteMemberByConvNoAndUserId($convNo, $userId);
     }
 
-    public function addConversationMember($convNo, $userId, $nickname)
+    public function addConversationMember($convNo, $members)
     {
-        $clients = array(
-            array('clientId' => $userId, 'clientName' => $nickname)
-        );
+        if (!$members) {
+            return false;
+        }
 
-        $res = CloudAPIFactory::create('root')->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
+        $clients = array();
+        foreach ($member as $member) {
+            $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
+        }
+
+        $res = $this->imApi->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
 
         if (isset($res['success'])) {
             return true;
@@ -184,6 +196,16 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return false;
     }
 
+    public function searchImMembers($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getConversationMemberDao()->searchImMembers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchImMemberCount($conditions)
+    {
+        return $this->getConversationMemberDao()->searchImMemberCount($conditions);
+    }
+
     public function courseSync()
     {
         $unsyncCourses = $this->getCourseService()->findUnsyncConvParentIdCourses();
@@ -195,9 +217,10 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $userIds = ArrayToolkit::column($unsyncCourses, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::parts($users, array('id', 'nickname'));
 
         foreach ($unsyncCourses as $course) {
-            $convNo = $this->createCloudConversation($course['title'], $course['userId'], $users[$course['userId']]['nickname']);
+            $convNo = $this->createCloudConversation($course['title'], $users);
             if (!empty($convNo)) {
                 $this->getCourseService()->updateCourse($course['id'], array('convNo' => $convNo));
                 $count++;
@@ -219,7 +242,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         foreach ($unsyncClassrooms as $classroom) {
-            $convNo = $this->createCloudConversation($classroom['title'], $user['id'], $user['nickname']);
+            $users = array(
+                array('id' => $user['id'], 'nickname' => $user['nickname'])
+            );
+
+            $convNo = $this->createCloudConversation($classroom['title'], $users);
             if (!empty($convNo)) {
                 $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $convNo));
                 $count++;

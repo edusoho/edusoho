@@ -8,6 +8,16 @@ interface ConversationService
 
     public function addConversation($conversation);
 
+    public function getConversationByTargetIdAndTargetType($targetId, $targetType);
+
+    public function searchConversations($conditions, $orderBy, $start, $limit);
+
+    public function searchConversationCount($conditions);
+
+    /*
+     * im_member
+     */
+
     public function getMemberByConvNoAndUserId($convNo, $userId);
 
     public function findMembersByConvNo($convNo);
@@ -18,10 +28,14 @@ interface ConversationService
 
     public function deleteMemberByConvNoAndUserId($convNo, $userId);
 
-    public function addConversationMember($convNo, $userId, $nickname);
+    public function addConversationMember($convNo, $members);
 
-    public function createCloudConversation($title, $userId, $nickname);
+    public function createCloudConversation($title, $members);
 
     public function isImMemberFull($convNo);
+
+    public function searchImMembers($conditions, $orderBy, $start, $limit);
+
+    public function searchImMemberCount($conditions);
 
 }
