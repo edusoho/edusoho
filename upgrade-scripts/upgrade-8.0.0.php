@@ -17,7 +17,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir        = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir') . "../web/install");
+            $dir        = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -42,11 +42,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $payment = $this->getSettingService()->get('payment', array());
         if (!isset($payment['wxpay_appid'])) {
-            $payment['wxpay_appid']   =  $payment['wxpay_key']; //绑定支付的APPID
-            $payment['wxpay_key']     = $payment['wxpay_secret']; // 商户支付密钥
-            $payment['wxpay_secret']  = '';  //APPSECRET：公众帐号secert
-            $this->getSettingService()->set('developer', $payment);
-
+            $payment['wxpay_appid']  = $payment['wxpay_key']; //绑定支付的APPID
+            $payment['wxpay_key']    = $payment['wxpay_secret']; // 商户支付密钥
+            $payment['wxpay_secret'] = ''; //APPSECRET：公众帐号secert
+            $this->getSettingService()->set('payment', $payment);
         }
     }
 
