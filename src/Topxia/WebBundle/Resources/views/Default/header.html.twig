@@ -34,9 +34,7 @@
       <ul class="nav user-nav">
         {% if app.user %}
         <li class="user-avatar-li nav-hover">
-          <a href="javascript:;" class="dropdown-toggle">
-            <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
-          </a>
+          {{ web_macro.user_avatar_link(app.user, 'small', ['null_link']) }}
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'个人主页'|trans}}</a></li>
