@@ -16,6 +16,11 @@ class Lesson extends BaseResource
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
+        //直播回放
+        if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'videoGenerated') {
+            $lesson['type'] = 'video';
+        }
+
         $courseSetting         = $this->getSettingService()->get('course');
         $allowAnonymousPreview = isset($courseSetting['allowAnonymousPreview']) ? $courseSetting['allowAnonymousPreview'] : 0;
 

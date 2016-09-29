@@ -104,6 +104,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
+    public function searchCount(array $conditions)
+    {
+        return $this->searchUserCount($conditions);
+    }
+
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
     {
         $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
@@ -246,7 +251,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
-        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $userId . '_' . time() . '.jpg';
+        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
 
         $file = new File($filePath);
@@ -435,10 +440,9 @@ class UserServiceImpl extends BaseService implements UserService
         for ($questionNum = 1; $questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2); $questionNum++) {
             $fields = array('userId' => $userId);
 
-            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion' . $questionNum];
+            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
             $fields['securityAnswerSalt']   = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $fields['securityAnswer']       =
-                $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer' . $questionNum], $fields['securityAnswerSalt']);
+            $fields['securityAnswer']       = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
             $fields['createdTime']          = time();
 
             $userSecureQuestionDao->addOneUserSecureQuestion($fields);
@@ -883,13 +887,14 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
     }
 
-    public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
+    public function makeToken($type, $userId = null, $expiredTime = null, $data = null, $args=array())
     {
         $token                = array();
         $token['type']        = $type;
         $token['userId']      = $userId ? (int)$userId : 0;
         $token['token']       = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data']        = serialize($data);
+        $token['times']         = empty($args['times']) ? 0 : intval($args['times']);
         $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token                = $this->getUserTokenDao()->addToken($token);
