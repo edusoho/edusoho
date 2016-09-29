@@ -225,7 +225,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('userId IN ( :userIds)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime >= :createdTime_GE')
-            ->andWhere('createdTime < :startTimeLessThan');
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('updatedTime >= :updatedTime_GE');
 
         return $builder;
     }

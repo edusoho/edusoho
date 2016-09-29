@@ -48,6 +48,8 @@ interface OrderService
 
     public function searchRefundCount($conditions);
 
+    public function findRefundByOrderId($orderId);
+
     /**
      * 申请退款
      * $expectedAmount, 0代表无需退款，NULL代表退款额度未知

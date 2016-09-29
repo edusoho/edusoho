@@ -663,6 +663,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
+    public function findRefundByOrderId($orderId)
+    {
+        return $this->getOrderRefundDao()->findRefundByOrderId($orderId);
+    }
+
     protected function getLogService()
     {
         return $this->createService('System.LogService');

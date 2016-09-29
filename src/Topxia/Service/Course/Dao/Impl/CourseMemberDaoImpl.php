@@ -418,7 +418,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('userId IN (:userIds)')
             ->andWhere('learnedNum >= :learnedNumGreaterThan')
             ->andWhere('learnedNum < :learnedNumLessThan')
-            ->andWhere('classroomId = :classroomId');
+            ->andWhere('classroomId = :classroomId')
+            ->andWhere('updatedTime >= :updatedTime_GE');
         return $builder;
     }
 }
