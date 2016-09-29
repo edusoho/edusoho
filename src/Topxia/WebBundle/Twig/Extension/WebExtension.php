@@ -819,7 +819,7 @@ class WebExtension extends \Twig_Extension
         }
 
         $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
-        $url = ltrim($url, ' /');
+        //$url = ltrim($url, ' /');
         //$url = $assets->getUrl($url);
 
         return $this->addHost($url, $absolute, $package);
