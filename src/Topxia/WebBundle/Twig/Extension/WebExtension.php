@@ -817,10 +817,7 @@ class WebExtension extends \Twig_Extension
         } else {
             $url = $uri;
         }
-
         $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
-        //$url = ltrim($url, ' /');
-        //$url = $assets->getUrl($url);
 
         return $this->addHost($url, $absolute, $package);
     }
@@ -918,8 +915,7 @@ class WebExtension extends \Twig_Extension
                 $path = $defaultSetting[$defaultKey];
                 return $this->parseUri($path, $absolute, $package);
             } else {
-                //$path = $assets->getUrl('assets/img/default/'.$defaultKey);
-                return $this->addHost('assets/img/default/'.$defaultKey, $absolute, $package);
+                return $this->addHost('/assets/img/default/'.$defaultKey, $absolute, $package);
             }
         }
 
