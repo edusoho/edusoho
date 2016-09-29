@@ -51,7 +51,7 @@ define(function (require, exports, module) {
                         $.each(response.data, function ($key) {
                             msg += $key + ' : ' + response.data[$key] + Translator.trans('条') +"\t";
                         });
-                        msg += Translator.trans('请先转移到其他组织机构在进行删除!');
+                        msg += Translator.trans('请先转移到其他组织机构再进行删除!');
                         Notify.danger(msg, 8);
                         return false;
                     }
