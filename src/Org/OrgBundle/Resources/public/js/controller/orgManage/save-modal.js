@@ -40,7 +40,7 @@ define(function (require, exports, module) {
         });
 
 
-        Validator.addRule("chinese_english", /^([\u4E00-\uFA29]|[a-zA-Z])*$/i, "{{display}}必须是中文字、英文字母组成");
+        Validator.addRule("chinese_english", /^([\u4E00-\uFA29]|[a-zA-Z ])*$/i, "{{display}}必须是中文字、英文字母组成");
         Validator.addRule("alpha_numeric", /^[a-zA-Z0-9]+$/i, "{{display}}必须是英文字母、数字组成");
 
         $modal.find('.delete-org').on('click', function () {
