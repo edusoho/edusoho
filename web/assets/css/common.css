@@ -1913,6 +1913,7 @@ tr.placeholder:before {
   line-height: 45px;
   height: 45px;
   word-break: break-all;
+  overflow: hidden;
 }
 .list-table-tree-icon {
   display: inline-block;

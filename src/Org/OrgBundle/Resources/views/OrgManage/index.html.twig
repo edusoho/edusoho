@@ -38,7 +38,7 @@
             style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
           <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
             <div class="td col-md-3 name sort-handle"
-                 style="padding-left: {{ 24 * (org.depth - 1 ) }}px; overflow: hidden" title="{{ org.name }}">
+                 style="padding-left: {{ 24 * (org.depth - 1 ) }}px;" title="{{ org.name }}">
               {% if isParent %}
                 <i class="list-table-tree-icon glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
               {% else %}
