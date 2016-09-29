@@ -23,7 +23,10 @@ class ConversationServiceTest extends BaseTestCase
 
     public function testCreateConversation()
     {
-        $members = array(array('id' => 1, 'nickname' => 'username1'), array('id' => 2, 'nickname' => 'username2'));
+        $members = array(
+            array('id' => 1, 'nickname' => 'username1'),
+            array('id' => 2, 'nickname' => 'username2')
+        );
 
         $api        = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);

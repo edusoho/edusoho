@@ -40,15 +40,6 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
     public function addConversation($conversation)
     {
         $conversation = $this->createSerializer()->serialize($conversation, $this->serializeFields);
-        $lockName     = $conversation['targetType'].$conversation['targetId'];
-        if ($conversation['targetType'] == 'global') {
-            $lockName = $conversation['targetType'].$conversation['memberIds'];
-        }
-
-        $res = $this->getConnection()->exec("SELECT GET_LOCK('im_'".$lockName.", 10)");
-        if (!$res) {
-            throw $this->createDaoException('Insert Conversation error.');
-        }
 
         $affected = $this->getConnection()->insert($this->table, $conversation);
         $this->clearCached();
@@ -56,8 +47,6 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Conversation error.');
         }
-
-        $this->getConnection()->exec("SELECT RELEASE_LOCK('im_'".$lockName.", 10)");
 
         return $this->getConversation($this->getConnection()->lastInsertId());
     }

@@ -40,6 +40,16 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
+        $lockName = "im_{$conversation['targetType']}{$conversation['targetId']}";
+        if ($targetType == 'global') {
+            $lockName = "im_{$conversation['targetType']}{$conversation['memberIds']}";
+        }
+
+        $lockResult = $this->getLock()->get($lockName, 50);
+        if (!$lockResult) {
+            throw $this->createServiceException($this->trans('创建会话失败'));
+        }
+
         $result = $this->createImApi()->post('/im/me/conversation', array(
             'name'    => $title,
             'clients' => $clients
@@ -53,6 +63,8 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $conversation['createdTime'] = time();
 
         $conversation = $this->getConversationDao()->addConversation($conversation);
+
+        $this->getLock()->release($lockName);
 
         if ($targetType != 'private') {
             foreach ($members as $member) {
