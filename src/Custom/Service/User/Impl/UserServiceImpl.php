@@ -2,19 +2,17 @@
 
 namespace Custom\Service\User\Impl;
 
-use Topxia\Common\ArrayToolkit;
-use Custom\Service\User\UserService;
 use Topxia\Service\User\Impl\UserServiceImpl as BaseUserServiceImpl;
 
-class UserServiceImpl extends BaseUserServiceImpl implements UserService
+class UserServiceImpl extends BaseUserServiceImpl
 {
     public function findUsersByOrgCode($orgCode)
     {
         return $this->getUserDao()->findUsersByOrgCode($orgCode);
     }
-
-    public function getUserDao()
+    
+    public function findCenterOrSuperAdminUsersByOrgId($orgId)
     {
-        return $this->createDao('Custom:User.UserDao');
+        return $this->getUserDao()->findCenterAdminUsersByOrgId($orgId);
     }
 }

@@ -2,13 +2,10 @@
 
 namespace Custom\Service\Testpaper\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
-use Custom\Service\Testpaper\Dao\TestpaperResultDao;
+use Topxia\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl as BaseDao;
 
-class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
+class TestpaperResultDaoImpl extends BaseDao
 {
-    protected $table = 'testpaper_result';
-
     public function findTestPaperResultCountByStatusAndTestIdsAndUserIds($ids, $status, $userIds)
     {
         if (empty($ids)) {
