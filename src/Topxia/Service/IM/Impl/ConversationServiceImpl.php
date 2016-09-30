@@ -64,7 +64,8 @@ class ConversationServiceImpl extends BaseService implements ConversationService
                 $this->addMember(array(
                     'convNo'     => $conversation['no'],
                     'targetType' => $conversation['targetType'],
-                    'targetId'   => $conversation['targetId']
+                    'targetId'   => $conversation['targetId'],
+                    'userId'     => $member['id']
                 ));
             }
         }
