@@ -157,7 +157,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         $clients = array();
-        foreach ($member as $member) {
+        foreach ($members as $member) {
             $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
@@ -170,15 +170,15 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return false;
     }
 
-    public function isImMemberFull($convNo)
+    public function isImMemberFull($convNo, $limit)
     {
-        $result = CloudAPIFactory::create('root')->get("/im/conversations/{$convNo}/members");
+        $result = $this->imApi->get("/im/conversations/{$convNo}/members");
 
         if ($result) {
             $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
             $offlineCount = empty($result['offline']) ? 0 : count($result['offline']);
 
-            if (($onlineCount + $offlineCount) >= 5) {
+            if (($onlineCount + $offlineCount) >= $limit) {
                 return true;
             }
         }
@@ -198,7 +198,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     protected function filterConversationFields(array $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('no', 'memberIds'));
+        $fields = ArrayToolkit::parts($fields, array('no', 'memberIds', 'targetId', 'targetType', 'title'));
 
         if (empty($fields['no'])) {
             throw $this->createServiceException('field `no` can not be empty');

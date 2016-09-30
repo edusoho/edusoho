@@ -34,7 +34,7 @@ class ConversationServiceTest extends BaseTestCase
         $conversation2 = $this->getConversationService()->createConversation('conversation2', 'classroom', 1, $members);
 
         $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType(1, 'course');
-        var_dump($conversation);exit;
+
         $this->assertEquals('conversation1', $conversation['title']);
         $this->assertEquals('course', $conversation['targetType']);
         $this->assertEquals(1, $conversation['targetId']);
@@ -83,52 +83,274 @@ class ConversationServiceTest extends BaseTestCase
         $convNo2 = $this->getConversationService()->createCloudConversation('conversation2', array());
     }
 
-    /*public function testAddConversation()
+    public function testAddConversation()
     {
-    $conversation = array('3b5db36d838e8252db2ebc170693db66', array())
-    $this->getConversationService()->addConversation($conversation);
-    }*/
+        $createConversation1 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'title'      => 'conversation1',
+            'memberIds'  => array()
+        );
 
-    /*public function testGetMemberByConvNoAndUserId()
+        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+
+        $this->assertEquals($createConversation1['title'], $conversation1['title']);
+        $this->assertEquals(implode('|', $createConversation1['memberIds']), implode('|', $conversation1['memberIds']));
+
+        $createConversation2 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'private',
+            'title'      => 'conversation1',
+            'memberIds'  => array('1', '2')
+        );
+
+        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+        $this->assertEquals($createConversation2['title'], $conversation2['title']);
+        $this->assertEquals(implode('|', $createConversation2['memberIds']), implode('|', $conversation2['memberIds']));
+    }
+
+    public function testSearchConversations()
     {
-    $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $userId);
+        $createConversation1 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'title'      => 'conversation1',
+            'memberIds'  => array()
+        );
+        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+
+        $createConversation2 = array(
+            'no'         => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'classroom',
+            'title'      => 'conversation2',
+            'memberIds'  => array()
+        );
+        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+
+        $conversations = $this->getConversationService()->searchConversations(array('targetTypes' => array('course')), array('createdTime', 'DESC'), 0, 1);
+
+        $this->assertCount(1, $conversations);
+        $this->assertEquals($createConversation1['targetType'], $conversations[0]['targetType']);
+        $this->assertEquals($createConversation1['title'], $conversations[0]['title']);
+        $this->assertEquals($createConversation1['no'], $conversations[0]['no']);
+    }
+
+    public function testSearchConversationCount()
+    {
+        $createConversation1 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'title'      => 'conversation1',
+            'memberIds'  => array()
+        );
+        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+
+        $createConversation2 = array(
+            'no'         => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'classroom',
+            'title'      => 'conversation2',
+            'memberIds'  => array()
+        );
+        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+
+        $count = $this->getConversationService()->searchConversationCount(array('targetTypes' => array('classroom')));
+
+        $this->assertEquals(1, $count);
+    }
+
+    public function testGetMember()
+    {
+        $createMember = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member = $this->getConversationService()->addMember($createMember);
+
+        $member = $this->getConversationService()->getMember($member['id']);
+
+        $this->assertEquals($createMember['convNo'], $member['convNo']);
+        $this->assertEquals($createMember['targetType'], $member['targetType']);
+    }
+
+    public function testGetMemberByConvNoAndUserId()
+    {
+        $createMember1 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $createMember2 = array(
+            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member2 = $this->getConversationService()->addMember($createMember2);
+
+        $member = $this->getConversationService()->getMemberByConvNoAndUserId('3b5db36d838e8252db2ebc170693db66', 1);
+
+        $this->assertEquals($member1['userId'], $member['userId']);
+        $this->assertEquals($member1['convNo'], $member['convNo']);
     }
 
     public function testFindMembersByConvNo()
     {
-    $this->getConversationService()->findMembersByConvNo($convNo);
+        $createMember1 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $createMember2 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 2
+        );
+        $member2 = $this->getConversationService()->addMember($createMember2);
+
+        $members = $this->getConversationService()->findMembersByConvNo('3b5db36d838e8252db2ebc170693db66');
+
+        $this->assertCount(2, $members);
     }
 
     public function testAddMember()
     {
-    $this->getConversationService()->addMember($member);
+        $createMember = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+
+        $member = $this->getConversationService()->addMember($createMember);
+
+        $this->assertEquals($createMember['convNo'], $member['convNo']);
+        $this->assertEquals($createMember['targetType'], $member['targetType']);
     }
 
     public function testDeleteMember()
     {
-    $this->getConversationService()->deleteMember($id);
+        $createMember = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+
+        $member = $this->getConversationService()->addMember($createMember);
+        $this->getConversationService()->deleteMember($member['id']);
+
+        $member = $this->getConversationService()->getMember($member['id']);
+
+        $this->assertNull($member);
     }
 
     public function testDeleteMemberByConvNoAndUserId()
     {
-    $this->getConversationService()->deleteMemberByConvNoAndUserId($convNo, $userId);
+        $createMember = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+
+        $member = $this->getConversationService()->addMember($createMember);
+        $this->getConversationService()->deleteMemberByConvNoAndUserId('3b5db36d838e8252db2ebc170693db66', 1);
+
+        $member = $this->getConversationService()->getMember($member['id']);
+        $this->assertNull($member);
     }
 
     public function testAddConversationMember()
     {
-    $this->getConversationService()->addConversationMember($convNo, $userId, $nickname);
-    }
+        $api        = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($api);
+        $mockObject->shouldReceive('post')->times(1)->andReturn(array('success' => true));
+        $this->getConversationService()->setImApi($mockObject);
 
-    public function testCreateCloudConversation()
-    {
-    $this->getConversationService()->createCloudConversation();
+        $members = array(
+            array('id' => 1, 'nickname' => 'nickname1'),
+            array('id' => 2, 'nickname' => 'nickname2')
+        );
+        $result = $this->getConversationService()->addConversationMember('3b5db36d838e8252db2ebc170693db66', $members);
+
+        $this->assertTrue($result);
     }
 
     public function testIsImMemberFull()
     {
+        $api        = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($api);
+        $mockObject->shouldReceive('get')->times(1)->andReturn(array('offline' => array(array('id' => 1)), 'online' => array(array('id' => 2))));
+        $this->getConversationService()->setImApi($mockObject);
 
-    $this->getConversationService()->isImMemberFull($convNo);
-    }*/
+        $result = $this->getConversationService()->isImMemberFull('3b5db36d838e8252db2ebc170693db66', 2);
+
+        $this->assertTrue($result);
+    }
+
+    public function testSearchImMembers()
+    {
+        $createMember1 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $createMember2 = array(
+            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'classroom',
+            'userId'     => 1
+        );
+
+        $member2 = $this->getConversationService()->addMember($createMember2);
+
+        $members = $this->getConversationService()->searchImMembers(array('targetTypes' => array('classroom'), 'userId' => 1), array('createdTime', 'DESC'), 0, 1);
+        $this->assertEquals($createMember2['targetType'], $members[0]['targetType']);
+    }
+
+    public function testSearchImMemberCount()
+    {
+        $createMember1 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $createMember2 = array(
+            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'classroom',
+            'userId'     => 1
+        );
+        $member2 = $this->getConversationService()->addMember($createMember2);
+
+        $count = $this->getConversationService()->searchImMemberCount(array('targetTypes' => array('classroom'), 'userId' => 1));
+
+        $this->assertEquals(1, $count);
+    }
+
     protected function createApiMock()
     {
         $api        = CloudAPIFactory::create('root');

@@ -32,7 +32,7 @@ interface ConversationService
 
     public function createCloudConversation($title, $members);
 
-    public function isImMemberFull($convNo);
+    public function isImMemberFull($convNo, $limit);
 
     public function searchImMembers($conditions, $orderBy, $start, $limit);
 
