@@ -19,8 +19,7 @@ class CdnSettingController extends BaseController
             'enabled' => '',
             'defaultUrl' => '',
             'userUrl'  => '',
-            'contentUrl' => '',
-            'frontUrl'  => ''
+            'contentUrl' => ''
         );
 
         $cdn = array_merge($default, $cdn);

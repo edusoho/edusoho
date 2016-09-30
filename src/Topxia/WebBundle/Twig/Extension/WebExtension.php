@@ -55,7 +55,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('array_merge', array($this, 'arrayMerge')),
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
-            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn'))
+            new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
+            new \Twig_SimpleFilter('cdn', array($this, 'cdn'))
         );
     }
 
@@ -115,15 +116,14 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
-            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('cdn_convert', array($this, 'cdnConvert'))
+            new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig'))
         );
     }
 
-    public function cdnConvert($content)
+    public function cdn($content)
     {
         $cdn = new Cdn();
-        $cdnUrl = $cdn->getCdnUrl('content');
+        $cdnUrl = $cdn->getUrl('content');
 
         if ($cdnUrl) {
             $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
@@ -925,7 +925,7 @@ class WebExtension extends \Twig_Extension
     private function addHost($path, $absolute, $package = 'content')
     {
         $cdn = new Cdn();
-        $cdnUrl = $cdn->getCdnUrl($package);
+        $cdnUrl = $cdn->getUrl($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.'/'.$path;

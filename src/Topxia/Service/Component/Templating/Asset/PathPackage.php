@@ -35,7 +35,7 @@ class PathPackage extends Package
     {
     	$basePath = $request->getBasePath();
     	$cdn = new Cdn();
-        $cdnUrl = $cdn->getCdnUrl('front');
+        $cdnUrl = $cdn->getUrl();
 
         parent::__construct($version, $format);
 

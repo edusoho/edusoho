@@ -41,7 +41,7 @@ class BlockExtension extends \Twig_Extension
             $content = BlockToolkit::render($block, $this->container);
         }
 
-        $content = $this->container->get('topxia.twig.web_extension')->cdnConvert($content);
+        $content = $this->container->get('topxia.twig.web_extension')->cdn($content);
 
         return $content;
     }
