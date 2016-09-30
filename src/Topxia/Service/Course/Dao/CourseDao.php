@@ -16,8 +16,6 @@ interface CourseDao
 
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
-    public function findUnsyncConvParentIdCourses();
-
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
     public function searchCourseCount($conditions);

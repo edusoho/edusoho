@@ -520,7 +520,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable'   => 0,
             'tryLookTime'   => 0,
             'buyable'       => 0,
-            'convNo'        => '',
             'orgCode'       => '',
             'orgId'         => ''
         ));
@@ -972,11 +971,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getCourseDao()->clearCourseDiscountPrice($discountId);
-    }
-
-    public function findUnsyncConvParentIdCourses()
-    {
-        return $this->getCourseDao()->findUnsyncConvParentIdCourses();
     }
 
     /**

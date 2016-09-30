@@ -19,6 +19,9 @@ class Version20160929105655 extends AbstractMigration
         $this->addSql("ALTER TABLE `im_conversation` ADD `targetType` VARCHAR(16) NOT NULL DEFAULT '' AFTER `no`");
         $this->addSql("ALTER TABLE `im_conversation` ADD `targetId` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `targetType`");
         $this->addSql("ALTER TABLE `im_conversation` ADD `title` VARCHAR(255) NOT NULL DEFAULT ''");
+
+        $this->addSql("alter table `course` drop column convNo");
+        $this->addSql("alter table `classroom` drop column convNo");
     }
 
     /**

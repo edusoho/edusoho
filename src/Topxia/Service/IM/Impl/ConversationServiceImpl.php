@@ -121,14 +121,6 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->searchConversationCount($conditions);
     }
 
-    public function conversationSync()
-    {
-        $courseSyncCount    = $this->courseSync();
-        $classroomSyncCount = $this->classroomSync();
-
-        return ($courseSyncCount + $classroomSyncCount);
-    }
-
     public function getMember($id)
     {
         return $this->getConversationMemberDao()->getMember($id);
@@ -204,56 +196,6 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     public function searchImMemberCount($conditions)
     {
         return $this->getConversationMemberDao()->searchImMemberCount($conditions);
-    }
-
-    public function courseSync()
-    {
-        $unsyncCourses = $this->getCourseService()->findUnsyncConvParentIdCourses();
-
-        $count = 0;
-        if (!$unsyncCourses) {
-            return $count;
-        }
-
-        $userIds = ArrayToolkit::column($unsyncCourses, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
-        $users   = ArrayToolkit::parts($users, array('id', 'nickname'));
-
-        foreach ($unsyncCourses as $course) {
-            $convNo = $this->createCloudConversation($course['title'], $users);
-            if (!empty($convNo)) {
-                $this->getCourseService()->updateCourse($course['id'], array('convNo' => $convNo));
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    protected function classroomSync()
-    {
-        $user  = $this->getCurrentUser();
-        $count = 0;
-
-        $unsyncClassrooms = $this->getClassroomService()->searchClassrooms(array('convNo' => ''), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
-
-        if (!$unsyncClassrooms) {
-            return $count;
-        }
-
-        foreach ($unsyncClassrooms as $classroom) {
-            $users = array(
-                array('id' => $user['id'], 'nickname' => $user['nickname'])
-            );
-
-            $convNo = $this->createCloudConversation($classroom['title'], $users);
-            if (!empty($convNo)) {
-                $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $convNo));
-                $count++;
-            }
-        }
-
-        return $count;
     }
 
     protected function filterConversationFields(array $fields)

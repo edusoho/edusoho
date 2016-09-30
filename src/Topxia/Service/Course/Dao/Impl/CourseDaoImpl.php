@@ -102,12 +102,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
-    public function findUnsyncConvParentIdCourses()
-    {
-        $sql = "SELECT id,title,userId FROM {$this->getTable()} WHERE parentId = 0 AND convNo = ''";
-        return $this->getConnection()->fetchAll($sql);
-    }
-
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -261,7 +255,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('id IN ( :courseIds )')
             ->andWhere('locked = :locked')
-            ->andWhere('convNo = :convNo')
             ->andWhere('lessonNum > :lessonNumGT')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
