@@ -30,14 +30,14 @@ class Member extends BaseResource
 
     protected function entryCourseConversation($courseId, $convNo)
     {
-        $user         = $this->getCurrentUser();
-        $course       = $this->getCourseService()->getCourse($courseId);
-        $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $user   = $this->getCurrentUser();
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if ($convNo) {
             $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
             if (!$conversationMember) {
+                $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
                 if (!$courseMember) {
                     return $this->error('700003', '学员未加入课程');
                 }
@@ -51,6 +51,7 @@ class Member extends BaseResource
 
             $res = array('convNo' => $convNo);
         } else {
+            $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
             if (!$courseMember) {
                 return $this->error('700003', '学员未加入课程');
             }
@@ -68,12 +69,11 @@ class Member extends BaseResource
         $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
-
         if ($convNo) {
             $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
             if (!$conversationMember) {
+                $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
                 if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
                     return $this->error('700013', '学员未加入班级');
                 }
@@ -87,6 +87,7 @@ class Member extends BaseResource
 
             $res = array('convNo' => $convNo);
         } else {
+            $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
             if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
                 return $this->error('700013', '学员未加入班级');
             }
