@@ -36,45 +36,34 @@ class Member extends BaseResource
 
     protected function entryCourseConversation($courseId, $convNo)
     {
-        $user   = $this->getCurrentUser();
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if (!$course) {
-            return $this->error('700001', '课程不存在');
-        }
-        if ($course && $course['status'] != 'published') {
-            return $this->error('700002', '课程未发布');
-        }
-
+        $user         = $this->getCurrentUser();
+        $course       = $this->getCourseService()->getCourse($courseId);
         $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
-        if (!$courseMember) {
-            return $this->error('700003', '学员未加入课程');
-        }
 
         if ($convNo) {
             $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
             if (!$conversationMember) {
-                $res = $this->getConversationService()->addConversationMember($convNo, array($user));
-
-                if ($res) {
-                    $member = array(
-                        'convNo'     => $convNo,
-                        'targetId'   => $course['id'],
-                        'targetType' => 'course',
-                        'userId'     => $user['id']
-                    );
-
-                    $this->getConversationService()->addMember($member);
-                } else {
-                    return $this->error('700006', '学员进入会话失败');
+                if (!$courseMember) {
+                    return $this->error('700003', '学员未加入课程');
                 }
+
+                if ($this->getConversationService()->isImMemberFull($convNo)) {
+                    return $this->error('700008', '会话人数已满');
+                }
+
+                return $this->joinCoversationMember($convNo, $course['id'], 'course', $user);
             }
 
             $res = array('convNo' => $convNo);
         } else {
+            if (!$courseMember) {
+                return $this->error('700003', '学员未加入课程');
+            }
+
             $conversation = $this->getConversationService()->createConversation($course['title'], 'course', $course['id'], array($user));
-            $res          = array('convNo' => $conversation['no']);
+
+            $res = array('convNo' => $conversation['no']);
         }
 
         return $res;
@@ -84,39 +73,30 @@ class Member extends BaseResource
     {
         $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        if (!$classroom) {
-            return $this->error('700011', '班级不存在');
-        }
-
-        if ($classroom['status'] != 'published') {
-            return $this->error('700012', '班级未发布');
-        }
 
         $classroomMember = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
-        if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
-            return $this->error('700013', '学员未加入班级');
-        }
 
         if ($convNo) {
             $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($convNo, $user['id']);
 
             if (!$conversationMember) {
-                $res = $this->getConversationService()->addConversationMember($convNo, $user['id'], $user['nickname']);
-                if ($res) {
-                    $member = array(
-                        'convNo'     => $convNo,
-                        'targetId'   => $classroom['id'],
-                        'targetType' => 'classroom',
-                        'userId'     => $user['id']
-                    );
-                    $this->getConversationService()->addMember($member);
-                } else {
-                    return $this->error('700006', '学员进入会话失败');
+                if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
+                    return $this->error('700013', '学员未加入班级');
                 }
+
+                if ($this->getConversationService()->isImMemberFull($convNo)) {
+                    return $this->error('700008', '会话人数已满');
+                }
+
+                return $this->joinCoversationMember($convNo, $classroom['id'], 'classroom', $user);
             }
 
             $res = array('convNo' => $convNo);
         } else {
+            if (!$classroomMember || in_array('auditor', $classroomMember['role'])) {
+                return $this->error('700013', '学员未加入班级');
+            }
+
             $conversation = $this->getConversationService()->createConversation($course['title'], 'course', $course['id'], array($user));
             $res          = array('convNo' => $conversation['no']);
         }
@@ -124,46 +104,23 @@ class Member extends BaseResource
         return $res;
     }
 
-    protected function createCourseConversation($course)
+    protected function joinCoversationMember($convNo, $targetId, $targetType, $user)
     {
-        if (empty($course)) {
-            return '';
+        $res = $this->getConversationService()->addConversationMember($convNo, $user['id'], $user['nickname']);
+
+        if ($res) {
+            $member = array(
+                'convNo'     => $convNo,
+                'targetId'   => $targetId,
+                'targetType' => $targetType,
+                'userId'     => $user['id']
+            );
+            $this->getConversationService()->addMember($member);
+
+            return array('convNo' => $convNo);
+        } else {
+            return $this->error('700006', '学员进入会话失败');
         }
-
-        $user = $this->getCurrentUser();
-
-        if (empty($course['convNo'])) {
-            $convNo = $this->getConversationService()->createCloudConversation($course['title'], $user['id'], $user['nickname']);
-
-            if (!empty($convNo)) {
-                $this->getCourseService()->updateCourse($course['id'], array('convNo' => $convNo));
-            }
-
-            return $convNo;
-        }
-
-        return $course['convNo'];
-    }
-
-    protected function createClassroomConversation($classroom)
-    {
-        if (empty($classroom)) {
-            return '';
-        }
-
-        $user = $this->getCurrentUser();
-
-        if (empty($classroom['convNo'])) {
-            $convNo = $this->getConversationService()->createCloudConversation($classroomId['title'], $user['id'], $user['nickname']);
-
-            if (!empty($convNo)) {
-                $this->getClassroomService()->updateClassroom($classroom['id'], array('convNo' => $convNo));
-            }
-
-            return $convNo;
-        }
-
-        return $classroom['convNo'];
     }
 
     protected function getCourseService()
