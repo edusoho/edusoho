@@ -15,12 +15,6 @@ class Member extends BaseResource
 
         $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType($fields['targetId'], $fields['targetType']);
 
-        if ($conversation) {
-            if ($this->getConversationService()->isImMemberFull($convNo)) {
-                return $this->error('700008', '会话人数已满');
-            }
-        }
-
         $convNo = $conversation ? $conversation['no'] : '';
         if ($fields['targetType'] == 'course') {
             return $this->entryCourseConversation($fields['targetId'], $convNo);

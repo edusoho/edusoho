@@ -32,12 +32,10 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $memberIds = ArrayToolkit::column($members, 'id');
         if ($targetType == 'private') {
-            $conversation['title']      = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
-            $conversation['memberIds']  = $memberIds;
-            $conversation['memberHash'] = $this->buildMemberHash($memberIds);
+            $conversation['title']     = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
+            $conversation['memberIds'] = $memberIds;
         } else {
-            $conversation['memberIds']  = array();
-            $conversation['memberHash'] = '';
+            $conversation['memberIds'] = array();
         }
 
         $lockName = "im_{$conversation['targetType']}{$conversation['targetId']}";
@@ -52,10 +50,9 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
         $convNo = $this->createCloudConversation($conversation['title'], $members);
 
-        $conversation['no']          = $convNo;
-        $conversation['createdTime'] = time();
+        $conversation['no'] = $convNo;
 
-        $conversation = $this->getConversationDao()->addConversation($conversation);
+        $conversation = $this->addConversation($conversation);
 
         $this->getLock()->release($lockName);
 
@@ -102,11 +99,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     {
         $conversation = $this->filterConversationFields($conversation);
 
-        if (count($conversation['memberIds']) < 2) {
-            throw $this->createServiceException("Only support memberIds's count >= 2");
+        $conversation['memberHash'] = $this->buildMemberHash($conversation['memberIds']);
+        if (empty($conversation['memberIds'])) {
+            $conversation['memberHash'] = '';
         }
 
-        $conversation['memberHash']  = $this->buildMemberHash($conversation['memberIds']);
         $conversation['createdTime'] = time();
 
         return $this->getConversationDao()->addConversation($conversation);
@@ -210,9 +207,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         if (!is_array($fields['memberIds'])) {
             throw $this->createServiceException('field `memberIds` must be array');
         }
-        if (empty($fields['memberIds'])) {
-            throw $this->createServiceException('field `memberIds` can not be empty');
-        }
+
         sort($fields['memberIds']);
 
         return $fields;
