@@ -26,6 +26,7 @@ class UploadFileController extends BaseController
         }
 
         $currentUser = new CurrentUser();
+        $this->getServiceKernel()->getCurrentUser()->setPermissions(null);
         $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
 
         $targetType = $request->query->get('targetType');
