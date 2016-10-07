@@ -572,6 +572,14 @@ course_review_list:
     pattern:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
 
+course_review_post:
+    pattern:  /course/{id}/review/{reviewId}/post
+    defaults: { _controller: TopxiaWebBundle:CourseReview:post }
+
+course_review_delete:
+    pattern:  /course/review/{reviewId}/delete
+    defaults: { _controller: TopxiaWebBundle:CourseReview:delete }
+
 course_members:
    pattern: /course/{id}/members
    defaults: { _controller: TopxiaWebBundle:Course:members }

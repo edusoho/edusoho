@@ -8,6 +8,8 @@
 
 {% block course_main %}
 
+	{% set goto = path('course_review_list',{id:course.id}) %}
+	
   {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
 
 {% endblock %}

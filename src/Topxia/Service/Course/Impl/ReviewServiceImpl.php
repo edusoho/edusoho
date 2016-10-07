@@ -49,7 +49,15 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         $conditions = $this->prepareReviewSearchConditions($conditions);
-        return $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
+        $reviews    = $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
+
+        if ($reviews) {
+            foreach ($reviews as $key => $review) {
+                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), 'latest', 0, 5);
+            }
+        }
+
+        return $reviews;
     }
 
     public function searchReviewsCount($conditions)
@@ -100,20 +108,23 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
 
-        if (empty($review)) {
+        $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
+        if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->addReview(array(
                 'userId'      => $fields['userId'],
                 'courseId'    => $fields['courseId'],
                 'rating'      => $fields['rating'],
                 'private'     => $course['status'] == 'published' ? 0 : 1,
+                'parentId'    => $fields['parentId'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'createdTime' => time()
             ));
             $this->dispatchEvent('courseReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getReviewDao()->updateReview($review['id'], array(
-                'rating'  => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $fields['content']
+                'rating'      => $fields['rating'],
+                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'updatedTime' => time()
             ));
         }
 

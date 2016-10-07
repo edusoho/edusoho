@@ -108,11 +108,7 @@ define(function(require, exports, module) {
                 $form.find('textarea').val(text).trigger('focus');
 
             } else {
-                if ($container.hasClass('hide')) {
-                    $container.removeClass('hide');
-                } else {
-                    $container.addClass('hide');
-                }
+                $container.toggleClass('hide');
             }
             this._initSubpostForm($form);
         },

@@ -17,17 +17,23 @@ class CourseReviewController extends CourseBaseController
             $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服',array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服', array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
             }
         }
+
+        $conditions = array(
+            'courseId' => $id,
+            'parentId' => 0
+        );
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getReviewService()->getCourseReviewCount($id)
+            $this->getReviewService()->searchReviewsCount($conditions)
             , 10
         );
 
-        $reviews = $this->getReviewService()->findCourseReviews(
-            $id,
+        $reviews = $this->getReviewService()->searchReviews(
+            $conditions,
+            'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -57,6 +63,32 @@ class CourseReviewController extends CourseBaseController
         $fields['courseId'] = $id;
         $this->getReviewService()->saveReview($fields);
 
+        return $this->createJsonResponse(true);
+    }
+
+    public function postAction(Request $request, $id, $reviewId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $user = $this->getCurrentUser();
+
+        $fields             = $request->request->all();
+        $fields['userId']   = $user['id'];
+        $fields['courseId'] = $course['id'];
+        $fields['rating']   = 1;
+        $fields['parentId'] = $reviewId;
+
+        $post = $this->getReviewService()->saveReview($fields);
+
+        return $this->render("TopxiaWebBundle:Review/Widget:subpost-item.html.twig", array(
+            'post'   => $post,
+            'author' => $this->getCurrentUser()
+        ));
+    }
+
+    public function deleteAction(Request $request, $reviewId)
+    {
+        $this->getReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
     }
 

@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
+    var ThreadShowWidget = require('../thread/thread-show.js');
 
     exports.run = function() {
 
@@ -98,7 +99,9 @@ define(function(require, exports, module) {
             $review.find('.show-full-btn').show();
         });
   
-
+        var threadShowWidget = new ThreadShowWidget({
+            element: '.js-reviews',
+        });
       
 
     };

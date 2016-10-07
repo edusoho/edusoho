@@ -24,14 +24,17 @@
   </form>
 {% endif %}
 
+{% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+
 {% for review in reviews if users[review.userId]|default(false) %}
   {% set user = users[review.userId] %}
+
   <div class="js-reviews">
     <div class="media media-evaluate">
       <div class="media-left">
         {{ web_macro.user_avatar(user, '', 'avatar-sm') }}
       </div>
-      <div class="media-body">
+      <div class="media-body thread-post">
         <div class="title">{{ web_macro.user_link(user) }} {{ review.createdTime|date('Y-m-d') }}</div>
         <div class="score">
           {{ web_macro.star(review.rating) }}
@@ -44,6 +47,49 @@
           <a href="javascript:;" class="show-full-btn">[{{'展开全文'|trans}}]</a>
           <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'收起全文'|trans}}]</a>
         </div>
+        {% if canAccess %}
+          <a href="javascript:;" class="js-reply interaction text-muted pull-right">回复</a>
+        {% endif %}
+
+        {% set goto = goto|default(path('homepage')) %}
+        {% if targetType|default('course') == 'classroom' %}
+          {% set postReplyUrl = path('classroom_review_post',{id:review.classroomId,reviewId:review.id}) %}
+        {% else %}
+          {% set postReplyUrl = path('course_review_post',{id:review.courseId,reviewId:review.id}) %}
+        {% endif %}
+
+        <div class="thread-subpost-container subcomments clearfix {% if review.subPosts|default(null) is empty %}hide{% endif %}">
+          <div class="thread-subpost-content">
+            {% include 'TopxiaWebBundle:Review/Widget:subposts.html.twig' with {posts:review.subPosts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
+          </div>
+          
+          {% if canAccess %}
+            <div class="thread-subpost-morebar clearfix {% if review.subPosts|default(null) is empty %}hide{% endif %}">
+              <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'我也说一句'|trans}}</button>
+            </div>
+          {% endif %}
+          
+          
+
+          {% if app.user %}
+            <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if review.subPosts %}hide{% endif %}">
+              <div class="form-group">
+                <div class="controls">
+                  <textarea class="form-control" name="content" data-display="{{'内容'|trans}}"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <button type="submit" data-loading-text="{{'正在发表'|trans}}" class="btn btn-primary btn-sm pull-right">{{'发表'|trans}}</button>
+              </div>
+            </form>
+          {% else %}
+            <div class="empty">
+              {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
+            </div>
+          {% endif %}
+
+        </div
       </div>
     </div>
   </div>
