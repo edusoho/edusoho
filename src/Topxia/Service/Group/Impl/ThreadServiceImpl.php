@@ -436,7 +436,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'threadNum', -1);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'threadNum', -1);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'threadNum', -1);
         $this->dispatchEvent('group.thread.delete', $thread);
         $this->getLogService()->info('group', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
@@ -463,7 +463,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -1);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'postNum', -1);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -1);
 
         $this->waveThread($threadId, 'postNum', -1);
 
@@ -477,7 +477,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -$postCount);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'postNum', -$postCount);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -$postCount);
 
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
     }

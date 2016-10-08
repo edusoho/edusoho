@@ -27,6 +27,46 @@ class PermissionBuilder
         return self::$builder;
     }
 
+    /**
+     * @param array $roles 角色
+     * @return array $permissions[]
+     */
+    public function getPermissionsByRoles(array $roles)
+    {
+        if (empty($roles)) {
+            return array();
+        }
+
+        $permissionBuilder = PermissionBuilder::instance();
+        $originPermissions = $permissionBuilder->getOriginPermissions();
+
+        if (in_array('ROLE_SUPER_ADMIN', $roles)) {
+            $permissions = $originPermissions;
+        }else{
+            $roleService = ServiceKernel::instance()->createService('Permission:Role.RoleService');
+
+            $permissionCode = array();
+            foreach ($roles as $code) {
+                $role = $roleService->getRoleByCode($code);
+
+                if (empty($role['data'])) {
+                    $role['data'] = array();
+                }
+
+                $permissionCode = array_merge($permissionCode, $role['data']);
+            }
+
+            $permissions = array();
+            foreach ($originPermissions as $key => $value) {
+                if (in_array($key, $permissionCode)) {
+                    $permissions[$key] = $value;
+                }
+            }
+        }
+
+        return $permissions;
+    }
+
     public function getSubPermissions($code, $group)
     {
         if (isset($this->cached['getSubPermissions'][$code][$group])) {

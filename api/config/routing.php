@@ -28,7 +28,7 @@ $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
 $app->get(_u('/lessons'), 'res.Course/Lessons:get');
 $app->get(_u('/course/{courseId}/lessons'), 'res.Course/LessonsToBeDelete:get'); //todo delete
-$app->get(_u('/lessons/{id}'), 'res.Course/Lesson:get');
+$app->get(_u('/lessons/{id}'), 'res.Course/Lesson:get')->bind('get_lesson');
 $app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/chaos_threads'), 'res.ChaosThreads:get');
 $app->post(_u('/chaos_threads'), 'res.ChaosThreads:post');

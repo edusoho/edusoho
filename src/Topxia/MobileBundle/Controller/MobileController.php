@@ -4,13 +4,14 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\User\Impl\TokenServiceImpl;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
 class MobileController extends BaseController
 {
-    const TOKEN_TYPE = 'mobile_login';
+    const TOKEN_TYPE    = 'mobile_login';
     const MOBILE_MODULE = "mobile";
 
     protected $result = array();
@@ -19,34 +20,34 @@ class MobileController extends BaseController
     {
         $result = array(
             'mobileVersion' => 1,
-            'url' => $request->getSchemeAndHttpHost()
-            );
+            'url'           => $request->getSchemeAndHttpHost()
+        );
 
         return $this->createJson($request, $result);
     }
 
     public function mobileSchoolLoginAction(Request $request)
     {
-        if ($request->getMethod() == "POST"){
+        if ($request->getMethod() == "POST") {
             $parames = $request->request->all();
         } else {
             $parames = $request->query->all();
         }
 
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "school_login", "网校登录",  $parames);
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "school_login", "网校登录", $parames);
 
         return $this->createJson($request, null);
     }
 
     public function mobileDeviceRegistAction(Request $request)
     {
-        $result = false;
-        $parames = array();
-        $parames["imei"] = $this->getPostParam($request, "imei",  "");
-        $parames["platform"] = $this->getPostParam($request, "platform",  "");
-        $parames["version"] = $this->getPostParam($request, "version",  "");
-        $parames["screenresolution"] = $this->getPostParam($request, "screenresolution",  "");
-        $parames["kernel"] = $this->getPostParam($request, "kernel",  "");
+        $result                      = false;
+        $parames                     = array();
+        $parames["imei"]             = $this->getPostParam($request, "imei", "");
+        $parames["platform"]         = $this->getPostParam($request, "platform", "");
+        $parames["version"]          = $this->getPostParam($request, "version", "");
+        $parames["screenresolution"] = $this->getPostParam($request, "screenresolution", "");
+        $parames["kernel"]           = $this->getPostParam($request, "kernel", "");
 
         if (empty($parames["imei"]) || empty($parames["platform"])) {
             return $this->createErrorResponse($request, "info_error", "串号或平台版本不能为空!");
@@ -54,8 +55,8 @@ class MobileController extends BaseController
         if ($this->getMobileDeviceService()->addMobileDevice($parames)) {
             $result = true;
         }
-        
-        $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端",  $parames);
+
+        $this->getLogService()->info(MobileController::MOBILE_MODULE, "regist_device", "注册客户端", $parames);
         return $this->createJson($request, $result);
     }
 
@@ -64,7 +65,7 @@ class MobileController extends BaseController
         $result = $request->request->get($name);
         return $result ? $result : $default;
     }
-    
+
     public function notifyMobileVersionAction(Request $request)
     {
         return new JsonResponse("success");
@@ -102,7 +103,7 @@ class MobileController extends BaseController
 
     private function setCurrentUser($userId, $request)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user        = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
         if ($user) {
             $user['currentIp'] = $request->getClientIp();
@@ -125,14 +126,22 @@ class MobileController extends BaseController
 
     protected function createToken($user, $request)
     {
-        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
+        $tokenFields = array(
+            'userId'   => $user['id'],
+            'duration' => 3600 * 24 * 30,
+            'times'    => 1
+        );
+
+        $token = $this->getTokenService()->makeToken(self::TOKEN_TYPE, $tokenFields);
+
         if ($token) {
             $this->setCurrentUser($user['id'], $request);
         }
-        return $token;
+
+        return $token['token'];
     }
 
-    public function simpleUser($user) 
+    public function simpleUser($user)
     {
         if (empty($user)) {
             return null;
@@ -149,11 +158,11 @@ class MobileController extends BaseController
 
         $simplifyUsers = array();
         foreach ($users as $key => $user) {
-            $simplifyUsers[$key] = array (
-                'id' => $user['id'],
+            $simplifyUsers[$key] = array(
+                'id'       => $user['id'],
                 'nickname' => $user['nickname'],
-                'title' => $user['title'],
-                'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'title'    => $user['title'],
+                'avatar'   => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
 
@@ -170,10 +179,10 @@ class MobileController extends BaseController
         }
 
         $userIds = ArrayToolkit::column($reviews, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         $self = $this;
-        return array_map(function($review) use ($self, $users) {
+        return array_map(function ($review) use ($self, $users) {
             $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
             unset($review['userId']);
 
@@ -206,4 +215,11 @@ class MobileController extends BaseController
         return $this->getServiceKernel()->createService('Util.MobileDeviceService');
     }
 
+    /**
+     * @return TokenServiceImpl
+     */
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
 }

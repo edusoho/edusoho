@@ -270,7 +270,7 @@
             {% if field.type=="date"%}
             {{ profile[field.fieldName]|date("Y-m-d") }}
             {% else %}
-            {{ profile[field.fieldName] }}
+            {{ profile[field.fieldName]|space2nbsp|raw|nl2br }}
             {% endif %}
           {% else %}
             {{'暂无'|trans}}

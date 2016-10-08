@@ -527,7 +527,7 @@ class CourseController extends MobileController
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }
 
-    private function getTokenService()
+    protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
