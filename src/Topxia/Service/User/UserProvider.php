@@ -27,6 +27,7 @@ class UserProvider implements UserProviderInterface
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;

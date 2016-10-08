@@ -5,7 +5,6 @@ use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess, \Serializable
 {
@@ -236,8 +235,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
             $user['orgCode'] = $this->rootOrgCode;
         }
         $this->data = $user;
-
-        $this->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($this->getRoles()));
 
         return $this;
     }
