@@ -4,6 +4,8 @@ namespace Topxia\Service\IM\Dao;
 
 interface ConversationDao
 {
+    public function getConversation($id);
+
     public function getConversationByMemberIds(array $MemberIds);
 
     public function getConversationByMemberHash($memberHash);
@@ -15,4 +17,6 @@ interface ConversationDao
     public function searchConversations($conditions, $orderBy, $start, $limit);
 
     public function searchConversationCount($conditions);
+
+    public function deleteConversationByTargetIdAndTargetType($targetId, $targetType);
 }

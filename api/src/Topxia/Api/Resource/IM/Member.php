@@ -46,7 +46,7 @@ class Member extends BaseResource
                     return $this->error('700008', '会话人数已满');
                 }
 
-                return $this->joinCoversationMember($convNo, $course['id'], 'course', $user);
+                return $this->joinCoversationMember($convNo, $course['id'], 'course', $course['title'], $user);
             }
 
             $res = array('convNo' => $convNo);
@@ -82,7 +82,7 @@ class Member extends BaseResource
                     return $this->error('700008', '会话人数已满');
                 }
 
-                return $this->joinCoversationMember($convNo, $classroom['id'], 'classroom', $user);
+                return $this->joinCoversationMember($convNo, $classroom['id'], 'classroom', $classroom['title'], $user);
             }
 
             $res = array('convNo' => $convNo);
@@ -92,24 +92,26 @@ class Member extends BaseResource
                 return $this->error('700013', '学员未加入班级');
             }
 
-            $conversation = $this->getConversationService()->createConversation($course['title'], 'course', $course['id'], array($user));
+            $conversation = $this->getConversationService()->createConversation($classroom['title'], 'classroom', $classroom['id'], array($user));
             $res          = array('convNo' => $conversation['no']);
         }
 
         return $res;
     }
 
-    protected function joinCoversationMember($convNo, $targetId, $targetType, $user)
+    protected function joinCoversationMember($convNo, $targetId, $targetType, $title, $user)
     {
         $res = $this->getConversationService()->addConversationMember($convNo, $user['id'], $user['nickname']);
 
         if ($res) {
             $member = array(
                 'convNo'     => $convNo,
+                'title'      => $title,
                 'targetId'   => $targetId,
                 'targetType' => $targetType,
                 'userId'     => $user['id']
             );
+
             $this->getConversationService()->addMember($member);
 
             return array('convNo' => $convNo);

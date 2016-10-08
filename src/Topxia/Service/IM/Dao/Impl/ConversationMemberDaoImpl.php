@@ -70,6 +70,13 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         return $result;
     }
 
+    public function deleteMembersByTargetIdAndTargetType($targetId, $targetType)
+    {
+        $result = $this->getConnection()->delete($this->table, array('targetId' => $targetId, 'targetType' => $targetType));
+        $this->clearCached();
+        return $result;
+    }
+
     public function searchImMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -97,6 +104,9 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
 
             ->from($this->table, $this->table)
             ->andWhere('targetType IN (:targetTypes)')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN (:targetIds)')
             ->andWhere('userId = :userId')
             ->andWhere('convNo = :convNo');
 

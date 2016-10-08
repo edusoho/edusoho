@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource\IM;
 
 use Silex\Application;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,6 +30,9 @@ class MemberSync extends BaseResource
 
             $res = array('convNo' => $conversation['no']);
         }
+
+        $this->courseConversationMemberSync();
+        $this->classroomConversationMemberSync();
 
         return $res;
     }
@@ -57,6 +61,86 @@ class MemberSync extends BaseResource
         }
     }
 
+    protected function courseConversationMemberSync()
+    {
+        $user = $this->getCurrentUser();
+
+        $memberCourses = $this->getCourseService()->searchMembers(
+            array('userId' => $user['id'], 'joinedType' => 'course'),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$memberCourses) {
+            return false;
+        }
+
+        $memberCourses = ArrayToolkit::index($memberCourses, 'courseId');
+
+        $memberConversations = $this->getConversationService()->searchImMembers(
+            array(
+                'userId'     => $user['id'],
+                'targetType' => 'course'
+            ),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$memberConversations) {
+            return false;
+        }
+
+        foreach ($memberConversations as $conversation) {
+            if (isset($memberCourses[$conversation['targetId']])) {
+                continue;
+            } else {
+                $this->getConversationService()->deleteMember($conversation['id']);
+            }
+        }
+
+        return true;
+    }
+
+    protected function classroomConversationMemberSync()
+    {
+        $user = $this->getCurrentUser();
+
+        $memberClassrooms = $this->getClassroomService()->searchMembers(
+            array('userId' => $user['id']),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$memberClassrooms) {
+            return false;
+        }
+
+        $memberClassrooms = ArrayToolkit::index($memberClassrooms, 'classroomId');
+
+        $memberConversations = $this->getConversationService()->searchImMembers(
+            array(
+                'userId'     => $user['id'],
+                'targetType' => 'classroom'
+            ),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        if (!$memberConversations) {
+            return false;
+        }
+
+        foreach ($memberConversations as $conversation) {
+            if (isset($memberClassrooms[$conversation['targetId']])) {
+                continue;
+            } else {
+                $this->getConversationService()->deleteMember($conversation['id']);
+            }
+        }
+
+        return true;
+    }
+
     protected function getConversationService()
     {
         return $this->getServiceKernel()->createService('IM.ConversationService');
@@ -65,5 +149,15 @@ class MemberSync extends BaseResource
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

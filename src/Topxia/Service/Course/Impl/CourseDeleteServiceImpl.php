@@ -11,7 +11,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         try {
             $this->getCourseDao()->getConnection()->beginTransaction();
             $course = $this->getCourseService()->getCourse($courseId);
-            $types  = array('questions', 'testpapers', 'materials', 'chapters', 'drafts', 'lessons', 'lessonLearns', 'lessonReplays', 'lessonViews', 'homeworks', 'exercises', 'favorites', 'notes', 'threads', 'reviews', 'announcements', 'statuses', 'members', 'course');
+            $types  = array('questions', 'testpapers', 'materials', 'chapters', 'drafts', 'lessons', 'lessonLearns', 'lessonReplays', 'lessonViews', 'homeworks', 'exercises', 'favorites', 'notes', 'threads', 'reviews', 'announcements', 'statuses', 'members', 'conversation', 'course');
 
             if (!in_array($type, $types)) {
                 throw $this->createServiceException($this->getKernel()->trans('未知类型,删除失败'));
@@ -453,6 +453,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
     }
 
+    protected function deleteConversation($course)
+    {
+        $this->getConversationService()->deleteConversationByTargetIdAndTargetType($course['id'], 'course');
+        $this->getConversationService()->deleteMembersByTargetIdAndTargetType($course['id'], 'course');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
@@ -486,6 +492,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getMaterialService()
     {
         return $this->createService('Course.MaterialService');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->createService('IM.ConversationService');
     }
 
     protected function getCourseChapterDao()

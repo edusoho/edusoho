@@ -11,6 +11,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 {
     private $imApi;
 
+    public function getConversation($id)
+    {
+        return $this->getConversationDao()->getConversation($id);
+    }
+
     public function getConversationByMemberIds(array $memberIds)
     {
         sort($memberIds);
@@ -119,6 +124,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->searchConversationCount($conditions);
     }
 
+    public function deleteConversationByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->getConversationDao()->deleteConversationByTargetIdAndTargetType($targetId, $targetType);
+    }
+
     public function getMember($id)
     {
         return $this->getConversationMemberDao()->getMember($id);
@@ -148,6 +158,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     public function deleteMemberByConvNoAndUserId($convNo, $userId)
     {
         return $this->getConversationMemberDao()->deleteMemberByConvNoAndUserId($convNo, $userId);
+    }
+
+    public function deleteMembersByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->getConversationMemberDao()->deleteMembersByTargetIdAndTargetType($targetId, $targetType);
     }
 
     public function addConversationMember($convNo, $members)

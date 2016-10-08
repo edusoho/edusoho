@@ -14,14 +14,14 @@ class MeChatroomes extends BaseResource
         $limit = $request->query->get('limit', 10);
 
         $user               = $this->getCurrentUser();
-        $classRoomChatrooms = $this->getClassRoomChatrooms($user['id']);
-        $courseChatrooms    = $this->getCourseChatrooms($user['id']);
+        $classRoomChatrooms = $this->getClassRoomChatrooms($user['id'], $start, $limit);
+        $courseChatrooms    = $this->getCourseChatrooms($user['id'], $start, $limit);
 
         $chatrooms = array_merge($classRoomChatrooms, $courseChatrooms);
         return $this->wrap($this->filter($chatrooms), count($chatrooms));
     }
 
-    private function getClassRoomChatrooms($userId)
+    private function getClassRoomChatrooms($userId, $start, $limit)
     {
         $conditions = array('userId' => $userId);
         $total      = $this->getClassroomService()->searchMemberCount($conditions);
@@ -31,8 +31,21 @@ class MeChatroomes extends BaseResource
 
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
+        $conditions = array(
+            'targetIds'  => $classroomIds,
+            'targetType' => 'classroom',
+            'userId'     => $userId
+        );
+        $conversations = $this->getConversationService()->searchConversations($conditions, array('createdTime', 'DESC'), $start, $limit);
+
         $chatrooms = array();
-        foreach ($classrooms as $classroom) {
+        foreach ($conversations as $conversation) {
+            if (!isset($classrooms[$conversation['targetId']])) {
+                continue;
+            }
+
+            $classroom = $classrooms[$conversation['targetId']];
+
             $chatrooms[] = array(
                 'type'    => 'classroom',
                 'id'      => $classroom['id'],
@@ -44,19 +57,35 @@ class MeChatroomes extends BaseResource
         return $chatrooms;
     }
 
-    private function getCourseChatrooms($userId)
+    private function getCourseChatrooms($userId, $start, $limit)
     {
         $conditions = array('userId' => $userId);
         $total      = $this->getCourseService()->searchMemberCount($conditions);
         $members    = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses   = $this->getCourseService()->searchCourses(
+            array('courseIds' => $courseIds, 'parentId' => 0),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $conditions = array(
+            'targetIds'  => ArrayToolkit::column($courses, 'id'),
+            'targetType' => 'course',
+            'userId'     => $userId
+        );
+        $conversations = $this->getConversationService()->searchConversations($conditions, array('createdTime', 'DESC'), $start, $limit);
+
         $chatrooms = array();
-        foreach ($courses as $course) {
-            if ($course['parentId'] != 0) {
+        foreach ($conversations as $conversation) {
+            if (!isset($courses[$conversation['targetId']])) {
                 continue;
             }
+
+            $course = $courses[$conversation['targetId']];
+
             $chatrooms[] = array(
                 'type'    => 'course',
                 'id'      => $course['id'],
@@ -81,5 +110,10 @@ class MeChatroomes extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

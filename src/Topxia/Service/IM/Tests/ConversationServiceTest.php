@@ -164,6 +164,33 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testDeleteConversationByTargetIdAndTargetType()
+    {
+        $createConversation1 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'title'      => 'conversation1',
+            'memberIds'  => array()
+        );
+        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+
+        $createConversation2 = array(
+            'no'         => '8fdb36d838e8252db2ebc170693db89',
+            'targetId'   => 1,
+            'targetType' => 'classroom',
+            'title'      => 'conversation2',
+            'memberIds'  => array()
+        );
+        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+
+        $this->getConversationService()->deleteConversationByTargetIdAndTargetType(1, 'course');
+
+        $conversation = $this->getConversationService()->getConversation($conversation1['id']);
+
+        $this->assertNull($conversation);
+    }
+
     public function testGetMember()
     {
         $createMember = array(
@@ -273,6 +300,30 @@ class ConversationServiceTest extends BaseTestCase
 
         $member = $this->getConversationService()->getMember($member['id']);
         $this->assertNull($member);
+    }
+
+    public function testDeleteMembersByTargetIdAndTargetType()
+    {
+        $createMember1 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $createMember2 = array(
+            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 2
+        );
+        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->deleteMembersByTargetIdAndTargetType('1', 'course');
+
+        $memberCount = $this->getConversationService()->SearchImMemberCount(array('targetId' => 1, 'targetType' => 'course'));
+
+        $this->assertEquals(0, $memberCount);
     }
 
     public function testAddConversationMember()

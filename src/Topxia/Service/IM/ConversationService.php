@@ -4,6 +4,8 @@ namespace Topxia\Service\IM;
 
 interface ConversationService
 {
+    public function getConversation($id);
+
     public function getConversationByMemberIds(array $userIds);
 
     public function addConversation($conversation);
@@ -13,6 +15,8 @@ interface ConversationService
     public function searchConversations($conditions, $orderBy, $start, $limit);
 
     public function searchConversationCount($conditions);
+
+    public function deleteConversationByTargetIdAndTargetType($targetId, $targetType);
 
     /*
      * im_member
@@ -27,6 +31,8 @@ interface ConversationService
     public function deleteMember($id);
 
     public function deleteMemberByConvNoAndUserId($convNo, $userId);
+
+    public function deleteMembersByTargetIdAndTargetType($targetId, $targetType);
 
     public function addConversationMember($convNo, $members);
 

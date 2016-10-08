@@ -58,6 +58,11 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
         return $this->getConversation($this->getConnection()->lastInsertId());
     }
 
+    public function deleteConversationByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->getConnection()->delete($this->table, array('targetId' => $targetId, 'targetType' => $targetType));
+    }
+
     public function searchConversations($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -85,6 +90,7 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
 
             ->from($this->table, $this->table)
             ->andWhere('targetType IN (:targetTypes)')
+            ->andWhere('targetId IN (:targetIds)')
             ->andWhere('convNo = :convNo');
 
         return $builder;

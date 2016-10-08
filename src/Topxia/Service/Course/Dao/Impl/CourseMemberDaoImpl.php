@@ -410,6 +410,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
             ->andWhere('isLearned = :isLearned')
+            ->andWhere('joinedType = :joinedType')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
