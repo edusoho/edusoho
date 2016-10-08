@@ -32,20 +32,19 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild'))
-            
+
         );
     }
 
-    public function getFirstChild($menu) 
+    public function getFirstChild($menu)
     {
-
         $menus = $this->getSubPermissions($menu['code']);
 
-        if(empty($menus)){
+        if (empty($menus)) {
             $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
-            if(empty($permissions)){
+            if (empty($permissions)) {
                 return array();
-            }else{
+            } else {
                 $menus = $permissions;
             }
         }
@@ -59,13 +58,12 @@ class PermissionExtension extends \Twig_Extension
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if(strpos($value, "(") === 0) {
-                $value = $this->evalExpression($env, $context['_context'], $value);
+            if (strpos($value, "(") === 0) {
+                $value        = $this->evalExpression($env, $context['_context'], $value);
                 $params[$key] = $value;
             } else {
                 $params[$key] = "{$value}";
             }
-
         }
         // return $menu;
         return $this->container->get('router')->generate($route, $params);
@@ -74,17 +72,19 @@ class PermissionExtension extends \Twig_Extension
     public function evalExpression($twig, $context, $code)
     {
         $code = trim($code);
-        if(strpos($code, "(") === 0) {
-            $code = substr($code, 1, strlen($code)-2);
+        if (strpos($code, "(") === 0) {
+            $code = substr($code, 1, strlen($code) - 2);
         } else {
             $code = "'{$code}'";
         }
 
         $loader = new \Twig_Loader_Array(array(
-            'expression.twig' => '{{'.$code.'}}',
+            'expression.twig' => '{{'.$code.'}}'
         ));
 
-        $twig = new \Twig_Environment($loader);
+        $loader = new \Twig_Loader_Chain(array($loader, $twig->getLoader()));
+
+        $twig->setLoader($loader);
 
         return $twig->render('expression.twig', $context);
     }
@@ -100,12 +100,12 @@ class PermissionExtension extends \Twig_Extension
         return $currentUser->hasPermission($code);
     }
 
-    public function getSubPermissions($code, $group=null)
+    public function getSubPermissions($code, $group = null)
     {
         $permission = $this->getPermissionByCode($code);
-        if(isset($permission['disable']) && $permission['disable']){
+        if (isset($permission['disable']) && $permission['disable']) {
             return $this->createPermissionBuilder()->getOriginSubPermissions($code, $group);
-        }else{
+        } else {
             return $this->createPermissionBuilder()->getSubPermissions($code, $group);
         }
     }
@@ -119,9 +119,9 @@ class PermissionExtension extends \Twig_Extension
     {
         $permission = $this->createPermissionBuilder()->getOriginPermissionByCode($code);
 
-        if(isset($permission['disable']) && $permission['disable']){
+        if (isset($permission['disable']) && $permission['disable']) {
             $parent = $this->createPermissionBuilder()->getOriginPermissionByCode($permission['parent']);
-        }else{
+        } else {
             $parent = $this->createPermissionBuilder()->getParentPermissionByCode($code);
         }
 

@@ -17,9 +17,9 @@ class OrgController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isSuperAdmin()) {
-            $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+            $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
         } else {
-            $orgs = $this->getOrgService()->findOrgsStartByOrgCode($user['orgCode']);
+            $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode($user['orgCode']);
         }
 
         return $this->createJsonResponse($orgs);
