@@ -11,7 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
-use Topxia\Service\Common\Cdn;
+use Topxia\WebBundle\Util\CdnUrl;
 
 class WebExtension extends \Twig_Extension
 {
@@ -122,8 +122,8 @@ class WebExtension extends \Twig_Extension
 
     public function cdn($content)
     {
-        $cdn = new Cdn();
-        $cdnUrl = $cdn->getUrl('content');
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get('content');
 
         if ($cdnUrl) {
             $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
@@ -924,8 +924,8 @@ class WebExtension extends \Twig_Extension
 
     private function addHost($path, $absolute, $package = 'content')
     {
-        $cdn = new Cdn();
-        $cdnUrl = $cdn->getUrl($package);
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.'/'.$path;
