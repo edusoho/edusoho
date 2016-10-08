@@ -10,7 +10,7 @@
   "spm": {
     "alias": {
       "$": "$",
-      "underscore": "gallery/underscore/1.4.4/underscore"
+      "underscore": "underscore"
     },
     "output": ["backbone.js"]
   }

@@ -1,7 +1,7 @@
-define("gallery/backbone/1.0.0/backbone-debug", [ "gallery/underscore/1.4.4/underscore", "$" ], function(require, exports) {
+define("gallery/backbone/1.0.0/backbone-debug", [ "underscore", "$" ], function(require, exports) {
     var previousUnderscore = this._;
     var previousJQuery = this.jQuery;
-    this._ = require("gallery/underscore/1.4.4/underscore");
+    this._ = require("underscore");
     this.jQuery = require("$");
     //     Backbone.js 1.0.0
     //     (c) 2010-2013 Jeremy Ashkenas, DocumentCloud Inc.
@@ -34,7 +34,7 @@ define("gallery/backbone/1.0.0/backbone-debug", [ "gallery/underscore/1.4.4/unde
         Backbone.VERSION = "1.0.0";
         // Require Underscore, if we're on the server, and it's not already present.
         var _ = root._;
-        if (!_ && typeof require !== "undefined") _ = require("gallery/underscore/1.4.4/underscore");
+        if (!_ && typeof require !== "undefined") _ = require("underscore");
         // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
         // the `$` variable.
         Backbone.$ = root.jQuery || root.Zepto || root.ender || root.$;
