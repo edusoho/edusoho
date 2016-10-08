@@ -58,18 +58,14 @@ class MeChatroomes extends BaseResource
         $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
         $chatrooms = array();
         foreach ($courses as $course) {
-            if (!isset($course['conversationId']) || empty($course['conversationId'])) {
-                continue;
-            }
             if ($course['parentId'] != 0) {
                 continue;
             }
             $chatrooms[] = array(
-                'type'           => 'course',
-                'id'             => $course['id'],
-                'title'          => $course['title'],
-                'conversationId' => $course['conversationId'],
-                'picture'        => $this->getFileUrl($course['smallPicture'])
+                'type'    => 'course',
+                'id'      => $course['id'],
+                'title'   => $course['title'],
+                'picture' => $this->getFileUrl($course['smallPicture'])
             );
         }
 
