@@ -5,7 +5,6 @@ use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess, \Serializable
 {
@@ -238,43 +237,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         $this->data = $user;
 
         return $this;
-    }
-
-    public function initPermissions()
-    {
-        if (empty($this->id)) {
-            return $this;
-        }
-
-        $roles = $this->getRoles();
-        $permissionBuilder = PermissionBuilder::instance();
-        $originPermissions = $permissionBuilder->getOriginPermissions();
-
-        if (in_array('ROLE_SUPER_ADMIN', $roles)) {
-            $permissions = $originPermissions;
-        }else{
-            $roleService = ServiceKernel::instance()->createService('Permission:Role.RoleService');
-
-            $permissionCode = array();
-            foreach ($roles as $code) {
-                $role = $roleService->getRoleByCode($code);
-
-                if (empty($role['data'])) {
-                    $role['data'] = array();
-                }
-
-                $permissionCode = array_merge($permissionCode, $role['data']);
-            }
-
-            $permissions = array();
-            foreach ($originPermissions as $key => $value) {
-                if (in_array($key, $permissionCode)) {
-                    $permissions[$key] = $value;
-                }
-            }
-        }
-
-        return $this->setPermissions($permissions);
     }
 
     public function toArray()
