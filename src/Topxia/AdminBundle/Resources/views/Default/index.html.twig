@@ -2,7 +2,7 @@
 {% block title %}{{ '管理后台'|trans }}{% endblock %}
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
-{% block content %}
+{% block container %}
 
   {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
   <div class="page-header">
@@ -10,20 +10,16 @@
   </div>
   {% if is_granted('ROLE_BACKEND') %}
 
+    <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide"
+         data-url="{{ path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    </div>
+
+    {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+      {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
+    {% endif %}
+
     <div class="row">
-      <div class="col-md-12">
-        <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide"
-             data-url="{{ path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        </div>
-      </div>
-
-      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
-        <div class="col-md-12">
-          {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
-        </div>
-      {% endif %}
-
 
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -45,16 +41,17 @@
           </div>
         </div>
       </div>
-      {#     <div class="col-md-6">
-             <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">{{ 'EduSoho官方消息'|copyright_less }}</h3>
-              </div>
-              <div id="edusoho-open-message" >
-                <div class="empty">正在载入数据，请稍等。</div>
-              </div>
-            </div>
-          </div> #}
+      {# <div class="col-md-6">
+         <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">{{ 'EduSoho官方消息'|copyright_less }}</h3>
+          </div>
+          <div id="edusoho-open-message" >
+            <div class="empty">正在载入数据，请稍等。</div>
+          </div>
+        </div>
+      </div> #}
+
       {% if setting('copyright.thirdCopyright')|default(null) != 1 %}
         <div class="col-md-6">
           <div class="panel panel-default">
@@ -68,6 +65,7 @@
           </div>
         </div>
       {% endif %}
+
       <div id="popular-courses-panel" class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -83,24 +81,14 @@
       </div>
     </div>
 
-    <div class="row">
-      {{ render(controller('TopxiaAdminBundle:Default:userCoinsRecordsBlock')) }}
-    </div>
+    {{ render(controller('TopxiaAdminBundle:Default:userCoinsRecordsBlock')) }}
 
-    <div class="row">
-      {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
-    </div>
+    {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
 
-    <div class="row">
-      {{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
-    </div>
+    {{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
 
   {% else %}
-    <div class="row">
-      <div class="col-md-12">
-        <h4>{{ '欢迎来到%name%管理后台'|trans({'%name%': setting('site.name') }) }}</h4>
-      </div>
-    </div>
+    <h4>{{ '欢迎来到%name%管理后台'|trans({'%name%': setting('site.name') }) }}</h4>
   {% endif %}
 
   <input type="hidden" id="admin-notice" value="{{ path('admin_notice_modal') }}"/>
