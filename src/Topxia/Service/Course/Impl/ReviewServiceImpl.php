@@ -42,18 +42,14 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function searchReviews($conditions, $sort, $start, $limit)
     {
-        if ($sort == 'latest') {
-            $orderBy = array('createdTime', 'DESC');
-        } else {
-            $orderBy = array('rating', 'DESC');
-        }
+        $orderBy = $this->checkOrderBy($sort);
 
         $conditions = $this->prepareReviewSearchConditions($conditions);
         $reviews    = $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
 
         if ($reviews) {
             foreach ($reviews as $key => $review) {
-                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), 'latest', 0, 5);
+                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), array('createdTime', 'ASC'), 0, 5);
             }
         }
 
@@ -146,6 +142,19 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $this->calculateCourseRating($review['courseId']);
 
         $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
+    }
+
+    protected function checkOrderBy($sort)
+    {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'latest') {
+            $orderBy = array('createdTime', 'DESC');
+        } else {
+            $orderBy = array('rating', 'DESC');
+        }
+
+        return $orderBy;
     }
 
     protected function calculateCourseRating($courseId)

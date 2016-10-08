@@ -107,8 +107,9 @@ class ReviewController extends BaseController
         $post = $this->getClassroomReviewService()->saveReview($fields);
 
         return $this->render("TopxiaWebBundle:Review/Widget:subpost-item.html.twig", array(
-            'post'   => $post,
-            'author' => $this->getCurrentUser()
+            'post'      => $post,
+            'author'    => $this->getCurrentUser(),
+            'canAccess' => true
         ));
     }
 

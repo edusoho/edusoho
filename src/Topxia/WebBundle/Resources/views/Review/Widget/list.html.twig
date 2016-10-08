@@ -35,7 +35,7 @@
         {{ web_macro.user_avatar(user, '', 'avatar-sm') }}
       </div>
       <div class="media-body thread-post">
-        <div class="title">{{ web_macro.user_link(user) }} {{ review.createdTime|date('Y-m-d') }}</div>
+        <div class="title">{{ web_macro.user_link(user) }} {{ review.createdTime|date('Y-m-d') }} {% if review.updatedTime %}{{'追评'|trans}}{% endif %}</div>
         <div class="score">
           {{ web_macro.star(review.rating) }}
         </div>

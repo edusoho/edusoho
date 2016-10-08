@@ -12,7 +12,7 @@
     {% endif %}
 
     <div class="metas">
-      {% if canAccess%}
+      {% if canAccess|default(false) %}
         <div class="thread-post-manage-dropdown dropdown pull-right">
           <a href="javascript:;" class="dropdown-toggle text-muted" data-toggle="dropdown"><span class="glyphicon glyphicon-collapse-down"></span></a>
           <ul class="dropdown-menu">

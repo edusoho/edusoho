@@ -22,7 +22,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         if ($reviews) {
             foreach ($reviews as $key => $review) {
-                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), array('createdTime', 'DESC'), 0, 5);
+                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), array('createdTime', 'ASC'), 0, 5);
             }
         }
 
