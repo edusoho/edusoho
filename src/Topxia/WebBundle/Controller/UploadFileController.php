@@ -69,9 +69,9 @@ class UploadFileController extends BaseController
         if (preg_match("/Safari/i", $request->headers->get('User-Agent')) && !preg_match("/Chrome/i", $request->headers->get('User-Agent'))) {
             $response->headers->set("Content-Disposition", "attachment; filename*=UTF-8''".$file['filename']);
         } else {
+            $file['filename'] = urlencode($file['filename']);
             $response->headers->set('Content-Disposition', 'attachment; filename='.$file['filename']);
         }
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
 
