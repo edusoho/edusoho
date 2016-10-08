@@ -31,7 +31,7 @@ class PermissionBuilder
      * @param array $roles 角色
      * @return array $permissions[]
      */
-    public static function getPermissionsByRoles(array $roles)
+    public function getPermissionsByRoles(array $roles)
     {
         if (empty($roles)) {
             return array();
