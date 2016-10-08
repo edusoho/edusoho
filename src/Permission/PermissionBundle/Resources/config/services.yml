@@ -1,5 +1,4 @@
 parameters:
-    routing.loader.yml.class: Permission\Loader\YamlFileLoader
     permission.path_regular_expression: ['/^\/admin/']
     router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
 
@@ -22,15 +21,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
 
-    kernel.response.permission_listener:
-        class: Permission\Listener\KernelResponseListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+#    kernel.response.permission_listener:
+#        class: Permission\Listener\KernelResponseListener
+#        arguments:    ['@service_container']
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     routing.loader.yml:
-        class: '%routing.loader.yml.class%'
-        public: true
+        class: Permission\Loader\YamlFileLoader
         arguments: ['@file_locator']
         tags:
             - {name: routing.loader}

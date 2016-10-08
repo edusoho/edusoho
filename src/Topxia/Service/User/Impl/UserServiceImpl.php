@@ -900,13 +900,14 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
     }
 
-    public function makeToken($type, $userId = null, $expiredTime = null, $data = null)
+    public function makeToken($type, $userId = null, $expiredTime = null, $data = null, $args=array())
     {
         $token                = array();
         $token['type']        = $type;
         $token['userId']      = $userId ? (int)$userId : 0;
         $token['token']       = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data']        = serialize($data);
+        $token['times']         = empty($args['times']) ? 0 : intval($args['times']);
         $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token                = $this->getUserTokenDao()->addToken($token);
