@@ -621,8 +621,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
         }
-
-        $oldToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $this->getParam('token', ''));
+        $oldToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $this->controller->getToken($this->request));
         if (empty($oldToken) || $oldToken['type'] != MobileBaseController::TOKEN_TYPE) {
             $user = null;
         } else {
