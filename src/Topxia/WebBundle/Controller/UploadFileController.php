@@ -66,8 +66,8 @@ class UploadFileController extends BaseController
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        $file['filename'] = urlencode($file['filename']);
-        $response->headers->set("Content-Disposition", "attachment; filename=".$file['filename']."; filename*=UTF-8''".$file['filename']);
+        $fileName = urlencode(str_replace(' ', '', $file['filename']));
+        $response->headers->set("Content-Disposition", "attachment; filename=".$fileName."; filename*=UTF-8''".$fileName);
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
 
