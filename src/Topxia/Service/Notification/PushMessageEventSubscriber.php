@@ -589,6 +589,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $target['title'] = ServiceKernel::instance()->trans('网校公告');
                 $target['id']    = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
+                $setting = $this->getSettingService()->get('app_im', array());
+                $target['convNo'] = empty($setting['convNo']) ? '' : $setting['convNo'];
                 break;
             default:
                 # code...
