@@ -6,6 +6,8 @@ interface ConversationService
 {
     public function getConversation($id);
 
+    public function getConversationByConvNo($convNo);
+
     public function getConversationByMemberIds(array $userIds);
 
     public function addConversation($conversation);
@@ -26,6 +28,8 @@ interface ConversationService
 
     public function findMembersByConvNo($convNo);
 
+    public function findMembersByUserIdAndTargetType($userId, $targetType);
+
     public function addMember($member);
 
     public function deleteMember($id);
@@ -33,6 +37,8 @@ interface ConversationService
     public function deleteMemberByConvNoAndUserId($convNo, $userId);
 
     public function deleteMembersByTargetIdAndTargetType($targetId, $targetType);
+
+    public function joinConversation($convNo, $userId);
 
     public function addConversationMember($convNo, $members);
 

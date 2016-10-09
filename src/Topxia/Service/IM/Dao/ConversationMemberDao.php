@@ -10,6 +10,8 @@ interface ConversationMemberDao
 
     public function findMembersByConvNo($convNo);
 
+    public function findMembersByUserIdAndTargetType($userId, $targetType);
+
     public function addMember($member);
 
     public function deleteMember($id);

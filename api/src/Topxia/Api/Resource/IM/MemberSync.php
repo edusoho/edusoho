@@ -3,7 +3,6 @@
 namespace Topxia\Api\Resource\IM;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,60 +30,33 @@ class MemberSync extends BaseResource
 
     protected function joinGlobalConversation($user)
     {
-        $user = $this->getCurrentUser();
-
         $conv = $this->getConversationService()->getConversationByTarget(0, 'global');
         if (!$conv) {
-            return $this->error('700007', '全站会话未创建');;
+            return $this->error('700007', '全站会话未创建');
         }
 
         $convMember = $this->getConversationService()->getMemberByConvNoAndUserId($conv['no'], $user['id']);
         if ($convMember) {
-            return array('convNo' => $conv['no']);
+            return array('convNo' => $convMember['convNo']);
         }
 
-        //joinConversation($convNo, $userId);
-        $added = $this->getConversationService()->addConversationMember($convNo, array($user));
-        if (!$added) {
-            return $this->error('700006', '学员进入会话失败');
+        try {
+            $convMember = $this->getConversationService()->joinConversation($conv['no'], $user['id']);
+            return array('convNo' => $convMember['convNo']);
+        } catch (\Exception $e) {
+            return $this->error($e->getCode(), $e->getMessage());
         }
-
-        $member = array(
-            'convNo'     => $convNo,
-            'targetId'   => $targetId,
-            'targetType' => $targetType,
-            'userId'     => $user['id']
-        );
-        $this->getConversationService()->addMember($member);
-
-        return array('convNo' => $convNo);
     }
 
     protected function syncCourseConversationMembers($user)
     {
-        $user = $this->getCurrentUser();
-
-        // findMembersByUserIdAndTargetType($userId, $targetType);
-        $convMembers = $this->getConversationService()->searchMembers(
-            array(
-                'userId'     => $user['id'],
-                'targetType' => 'course'
-            ),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
+        $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'course');
 
         if (!$convMembers) {
             return false;
         }
 
-        // findUserJoinedCourseIds($userId, $joinedType = 'course');
-        $courseMembers = $this->getCourseService()->searchMembers(
-            array('userId' => $user['id'], 'joinedType' => 'course'),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
-        $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
+        $courseIds = $this->getCourseService()->findUserJoinedCourseIds($user['id'], $joinedType = 'course');
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $courseIds)) {
@@ -97,30 +69,17 @@ class MemberSync extends BaseResource
 
     protected function syncClassroomConversationMember($user)
     {
-        $conversationMembers = $this->getConversationService()->searchMembers(
-            array(
-                'userId'     => $user['id'],
-                'targetType' => 'classroom'
-            ),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
+        $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType($user['id'], 'classroom');
 
-        if (!$conversationMembers) {
+        if (!$convMembers) {
             return false;
         }
 
-        $classroomMembers = $this->getClassroomService()->searchMembers(
-            array('userId' => $user['id']),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
+        $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
 
-        $classroomIds = ArrayToolkit::index($classroomMembers, 'classroomId');
-
-        foreach ($conversationMembers as $conversationMember) {
-            if (!in_array($conversationMember['targetId'], $classroomIds)) {
-                $this->getConversationService()->deleteMember($conversation['id']);
+        foreach ($convMembers as $convMember) {
+            if (!in_array($convMember['targetId'], $classroomIds)) {
+                $this->getConversationService()->deleteMember($convMember['id']);
             }
         }
 

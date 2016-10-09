@@ -16,6 +16,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->getConversation($id);
     }
 
+    public function getConversationByConvNo($convNo)
+    {
+        return $this->getConversationDao()->getConversationByConvNo($convNo);
+    }
+
     public function getConversationByMemberIds(array $memberIds)
     {
         sort($memberIds);
@@ -144,6 +149,11 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationMemberDao()->findMembersByConvNo($convNo);
     }
 
+    public function findMembersByUserIdAndTargetType($userId, $targetType)
+    {
+        return $this->getConversationMemberDao()->findMembersByUserIdAndTargetType($userId, $targetType);
+    }
+
     public function addMember($member)
     {
         $member['createdTime'] = time();
@@ -163,6 +173,31 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     public function deleteMembersByTargetIdAndTargetType($targetId, $targetType)
     {
         return $this->getConversationMemberDao()->deleteMembersByTargetIdAndTargetType($targetId, $targetType);
+    }
+
+    public function joinConversation($convNo, $userId)
+    {
+        $conv = $this->getConversationByConvNo($convNo);
+
+        if (!$conv) {
+            throw $this->createServiceException($this->trans('会话未创建'), '700007');
+        }
+
+        $user = $this->getUserService()->getUser($userId);
+
+        $added = $this->addConversationMember($conv['no'], array(array('id' => $user['id'], 'nickname' => $user['nickname'])));
+        if (!$added) {
+            throw $this->createServiceException($this->trans('学员进入会话失败'), '700006');
+        }
+
+        $member = array(
+            'convNo'     => $conv['no'],
+            'targetId'   => $conv['targetId'],
+            'targetType' => $conv['targetType'],
+            'userId'     => $user['id']
+        );
+
+        return $this->addMember($member);
     }
 
     public function addConversationMember($convNo, $members)

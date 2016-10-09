@@ -533,7 +533,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int)$item['id'];
+                $item = (int) $item['id'];
             }
 
             );
@@ -603,7 +603,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int)$number,
+            'recommendedSeq'  => (int) $number,
             'recommendedTime' => time()
         ));
 
@@ -1506,7 +1506,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $lesson = $this->getCourseLesson($courseId, $lessonId);
+        $lesson                = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson) || $lesson['courseId'] != $courseId) {
             throw $this->createNotFoundException();
@@ -1528,7 +1528,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function startLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
@@ -2177,7 +2177,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('课程学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
         return $this->getMemberDao()->updateMember($member['id'], $fields);
     }
 
@@ -2194,6 +2194,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function deleteMemberByCourseId($courseId)
     {
         return $this->getMemberDao()->deleteMembersByCourseId($courseId);
+    }
+
+    public function findUserJoinedCourseIds($userId, $joinedType = 'course')
+    {
+        return $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
     }
 
     public function becomeStudent($courseId, $userId, $info = array())
@@ -2444,7 +2449,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->updateMember($member['id'], array(
-            'noteNum'            => (int)$number,
+            'noteNum'            => (int) $number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -2976,7 +2981,7 @@ class CourseSerialize
     {
         if (isset($course['tags'])) {
             if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
+                $course['tags'] = '|'.implode('|', $course['tags']).'|';
             } else {
                 $course['tags'] = '';
             }
@@ -2984,7 +2989,7 @@ class CourseSerialize
 
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
+                $course['goals'] = '|'.implode('|', $course['goals']).'|';
             } else {
                 $course['goals'] = '';
             }
@@ -2992,7 +2997,7 @@ class CourseSerialize
 
         if (isset($course['audiences'])) {
             if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
+                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
             } else {
                 $course['audiences'] = '';
             }
@@ -3000,7 +3005,7 @@ class CourseSerialize
 
         if (isset($course['teacherIds'])) {
             if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
             } else {
                 $course['teacherIds'] = null;
             }

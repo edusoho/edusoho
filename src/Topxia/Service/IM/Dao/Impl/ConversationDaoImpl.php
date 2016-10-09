@@ -23,6 +23,13 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
         return $conversation ? $this->createSerializer()->unserialize($conversation, $this->serializeFields) : null;
     }
 
+    public function getConversationByConvNo($convNo)
+    {
+        $sql          = "SELECT * FROM {$this->getTable()} where no = ? LIMIT 1";
+        $conversation = $this->getConnection()->fetchAssoc($sql, array($convNo));
+        return $conversation ? $this->createSerializer()->unserialize($conversation, $this->serializeFields) : null;
+    }
+
     public function getConversationByTargetIdAndTargetType($targetId, $targetType)
     {
         $sql          = "SELECT * FROM {$this->getTable()} WHERE targetId = ? AND targetType = ? LIMIT 1";

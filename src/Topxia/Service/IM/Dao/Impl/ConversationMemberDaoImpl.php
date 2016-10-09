@@ -44,6 +44,18 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         );
     }
 
+    public function findMembersByUserIdAndTargetType($userId, $targetType)
+    {
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:targetType:{$targetType}", $userId, $targetType, function ($userId, $targetType) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} where userId = ? AND targetType= ? ";
+            return $that->getConnection()->fetchAll($sql, array($userId, $targetType));
+        }
+
+        );
+    }
+
     public function addMember($member)
     {
         $affected = $this->getConnection()->insert($this->table, $member);

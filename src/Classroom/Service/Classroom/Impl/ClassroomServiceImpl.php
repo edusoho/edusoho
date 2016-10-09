@@ -1387,6 +1387,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $members;
     }
 
+    public function findUserJoinedClassroomIds($userId)
+    {
+        return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
+    }
+
     private function updateStudentNumAndAuditorNum($classroomId)
     {
         $fields = array(

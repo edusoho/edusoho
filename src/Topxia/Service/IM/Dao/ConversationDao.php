@@ -6,6 +6,8 @@ interface ConversationDao
 {
     public function getConversation($id);
 
+    public function getConversationByConvNo($convNo);
+
     public function getConversationByMemberIds(array $MemberIds);
 
     public function getConversationByMemberHash($memberHash);
