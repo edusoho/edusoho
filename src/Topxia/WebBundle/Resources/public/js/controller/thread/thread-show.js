@@ -110,6 +110,13 @@ define(function(require, exports, module) {
             } else {
                 $container.toggleClass('hide');
             }
+            
+            if ($btn.html() == Translator.trans('回复')) {
+                $btn.html(Translator.trans('收起'));
+            } else {
+                $btn.html(Translator.trans('回复'));
+            }
+            
             this._initSubpostForm($form);
         },
 

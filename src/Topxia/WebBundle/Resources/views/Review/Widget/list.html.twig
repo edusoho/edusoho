@@ -40,17 +40,21 @@
           {{ web_macro.star(review.rating) }}
         </div>
         <div class="content">
-            <div class="short-content">{{ review.content|sub_text(100) }}</div>
-            <div class="full-content" style="display:none;">{{ review.content|nl2br }}</div>
+          <div class="short-content">{{ review.content|sub_text(100) }}
+            {% if review.updatedTime %}<span>({{'追评'|trans}})</span>{% endif %}
+          </div>
+          <div class="full-content" style="display:none;">{{ review.content|nl2br }}
+            {% if review.updatedTime %}<span>({{'追评'|trans}})</span>{% endif %}
+          </div>
         </div>
-        <div class="actions">
-          <a href="javascript:;" class="show-full-btn">[{{'展开全文'|trans}}]</a>
+        <div class="actions clearfix">
+          <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'展开全文'|trans}}]</a>
           <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'收起全文'|trans}}]</a>
+          {% if canAccess %}
+            <a href="javascript:;" class="js-reply pull-right">{% if review.subPosts|default(null) is empty %}{{'回复'|trans}}{% else %}{{'收起'|trans}}{% endif %}</a>
+          {% endif %}
         </div>
-        {% if canAccess %}
-          <a href="javascript:;" class="js-reply interaction text-muted pull-right">回复</a>
-        {% endif %}
-
+        
         {% set goto = goto|default(path('homepage')) %}
         {% if targetType|default('course') == 'classroom' %}
           {% set postReplyUrl = path('classroom_review_post',{id:review.classroomId,reviewId:review.id}) %}
@@ -68,8 +72,6 @@
               <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'我也说一句'|trans}}</button>
             </div>
           {% endif %}
-          
-          
 
           {% if app.user %}
             <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if review.subPosts %}hide{% endif %}">
@@ -88,8 +90,8 @@
               {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
             </div>
           {% endif %}
+        </div>
 
-        </div
       </div>
     </div>
   </div>

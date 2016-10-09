@@ -76,10 +76,17 @@ define(function(require, exports, module) {
         }
         
         var $reviews = $('.js-reviews');
-        var $fullLength = $reviews.find('.full-content').text().length;
+        /*var $fullLength = $reviews.find('.full-content').text().length;
         if( $fullLength<100){
             $reviews.find('.actions').remove();
-        }
+        }*/
+
+        $('.js-reviews').hover(function(){
+            var $fullLength = $(this).find('.full-content').text().length;
+            if( $fullLength > 100){
+                $(this).find('.show-full-btn').show();
+            }
+        })
 
         $reviews.on('click', '.show-full-btn', function(){
             var $review = $(this).parents('.media');
