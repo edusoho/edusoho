@@ -33,9 +33,6 @@ class MeChatroomes extends BaseResource
 
         $chatrooms = array();
         foreach ($classrooms as $classroom) {
-            if (!isset($classroom['conversationId']) || empty($classroom['conversationId'])) {
-                continue;
-            }
             $chatrooms[] = array(
                 'type'           => 'classroom',
                 'id'             => $classroom['id'],
