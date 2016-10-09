@@ -321,7 +321,7 @@ class ConversationServiceTest extends BaseTestCase
         $member2 = $this->getConversationService()->addMember($createMember2);
         $this->getConversationService()->deleteMembersByTargetIdAndTargetType('1', 'course');
 
-        $memberCount = $this->getConversationService()->SearchImMemberCount(array('targetId' => 1, 'targetType' => 'course'));
+        $memberCount = $this->getConversationService()->searchMemberCount(array('targetId' => 1, 'targetType' => 'course'));
 
         $this->assertEquals(0, $memberCount);
     }
@@ -354,7 +354,7 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    public function testSearchImMembers()
+    public function testsearchMembers()
     {
         $createMember1 = array(
             'convNo'     => '3b5db36d838e8252db2ebc170693db66',
@@ -374,11 +374,11 @@ class ConversationServiceTest extends BaseTestCase
 
         $member2 = $this->getConversationService()->addMember($createMember2);
 
-        $members = $this->getConversationService()->searchImMembers(array('targetTypes' => array('classroom'), 'userId' => 1), array('createdTime', 'DESC'), 0, 1);
+        $members = $this->getConversationService()->searchMembers(array('targetTypes' => array('classroom'), 'userId' => 1), array('createdTime', 'DESC'), 0, 1);
         $this->assertEquals($createMember2['targetType'], $members[0]['targetType']);
     }
 
-    public function testSearchImMemberCount()
+    public function testsearchMemberCount()
     {
         $createMember1 = array(
             'convNo'     => '3b5db36d838e8252db2ebc170693db66',
@@ -397,7 +397,7 @@ class ConversationServiceTest extends BaseTestCase
         );
         $member2 = $this->getConversationService()->addMember($createMember2);
 
-        $count = $this->getConversationService()->searchImMemberCount(array('targetTypes' => array('classroom'), 'userId' => 1));
+        $count = $this->getConversationService()->searchMemberCount(array('targetTypes' => array('classroom'), 'userId' => 1));
 
         $this->assertEquals(1, $count);
     }

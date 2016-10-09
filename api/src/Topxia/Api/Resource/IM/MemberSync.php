@@ -31,8 +31,8 @@ class MemberSync extends BaseResource
             $res = array('convNo' => $conversation['no']);
         }
 
-        $this->courseConversationMemberSync();
-        $this->classroomConversationMemberSync();
+        $this->syncCourseConversationMembers();
+        $this->syncClassroomConversationMember();
 
         return $res;
     }
@@ -61,23 +61,19 @@ class MemberSync extends BaseResource
         }
     }
 
-    protected function courseConversationMemberSync()
+    protected function syncCourseConversationMembers()
     {
         $user = $this->getCurrentUser();
 
-        $memberCourses = $this->getCourseService()->searchMembers(
+        $courseMembers = $this->getCourseService()->searchMembers(
             array('userId' => $user['id'], 'joinedType' => 'course'),
             array('createdTime', 'DESC'),
             0, PHP_INT_MAX
         );
 
-        if (!$memberCourses) {
-            return false;
-        }
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
 
-        $memberCourses = ArrayToolkit::index($memberCourses, 'courseId');
-
-        $memberConversations = $this->getConversationService()->searchImMembers(
+        $memberConversations = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
                 'targetType' => 'course'
@@ -91,7 +87,7 @@ class MemberSync extends BaseResource
         }
 
         foreach ($memberConversations as $conversation) {
-            if (isset($memberCourses[$conversation['targetId']])) {
+            if (isset($courseMembers[$conversation['targetId']])) {
                 continue;
             } else {
                 $this->getConversationService()->deleteMember($conversation['id']);
@@ -101,7 +97,7 @@ class MemberSync extends BaseResource
         return true;
     }
 
-    protected function classroomConversationMemberSync()
+    protected function syncClassroomConversationMember()
     {
         $user = $this->getCurrentUser();
 
@@ -117,7 +113,7 @@ class MemberSync extends BaseResource
 
         $memberClassrooms = ArrayToolkit::index($memberClassrooms, 'classroomId');
 
-        $memberConversations = $this->getConversationService()->searchImMembers(
+        $memberConversations = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
                 'targetType' => 'classroom'

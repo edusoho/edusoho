@@ -77,7 +77,7 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         return $result;
     }
 
-    public function searchImMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
@@ -91,7 +91,7 @@ class ConversationMemberDaoImpl extends BaseDao implements ConversationMemberDao
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchImMemberCount($conditions)
+    public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');

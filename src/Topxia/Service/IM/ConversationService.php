@@ -40,8 +40,8 @@ interface ConversationService
 
     public function isImMemberFull($convNo, $limit);
 
-    public function searchImMembers($conditions, $orderBy, $start, $limit);
+    public function searchMembers($conditions, $orderBy, $start, $limit);
 
-    public function searchImMemberCount($conditions);
+    public function searchMemberCount($conditions);
 
 }

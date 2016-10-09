@@ -201,14 +201,14 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return false;
     }
 
-    public function searchImMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-        return $this->getConversationMemberDao()->searchImMembers($conditions, $orderBy, $start, $limit);
+        return $this->getConversationMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchImMemberCount($conditions)
+    public function searchMemberCount($conditions)
     {
-        return $this->getConversationMemberDao()->searchImMemberCount($conditions);
+        return $this->getConversationMemberDao()->searchMemberCount($conditions);
     }
 
     protected function filterConversationFields(array $fields)
