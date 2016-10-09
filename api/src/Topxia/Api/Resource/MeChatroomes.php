@@ -34,11 +34,10 @@ class MeChatroomes extends BaseResource
         $chatrooms = array();
         foreach ($classrooms as $classroom) {
             $chatrooms[] = array(
-                'type'           => 'classroom',
-                'id'             => $classroom['id'],
-                'title'          => $classroom['title'],
-                'conversationId' => $classroom['conversationId'],
-                'picture'        => $this->getFileUrl($classroom['smallPicture'])
+                'type'    => 'classroom',
+                'id'      => $classroom['id'],
+                'title'   => $classroom['title'],
+                'picture' => $this->getFileUrl($classroom['smallPicture'])
             );
         }
 
