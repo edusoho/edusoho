@@ -1104,6 +1104,10 @@ class EduCloudController extends BaseController
             $imUsedInfo = array();
         }
 
+        if (isset($imUsedInfo['error'])) {
+            $imUsedInfo = array();
+        }
+
         $chartInfo = array();
         foreach ($imUsedInfo as $value) {
             $chartInfo[] = array('date' => $value['sendTime'], 'count' => $value['nums']);

@@ -22,7 +22,7 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals($added, $getted);
     }
 
-    public function testGetConversationByTargetIdAndTargetType()
+    public function testGetConversationByTarget()
     {
         $members = array(
             array('id' => 1, 'nickname' => 'nickname1')
@@ -33,7 +33,7 @@ class ConversationServiceTest extends BaseTestCase
         $conversation1 = $this->getConversationService()->createConversation('conversation1', 'course', 1, $members);
         $conversation2 = $this->getConversationService()->createConversation('conversation2', 'classroom', 1, $members);
 
-        $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType(1, 'course');
+        $conversation = $this->getConversationService()->getConversationByTarget(1, 'course');
 
         $this->assertEquals('conversation1', $conversation['title']);
         $this->assertEquals('course', $conversation['targetType']);

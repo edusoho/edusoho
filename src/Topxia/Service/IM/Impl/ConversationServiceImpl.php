@@ -23,7 +23,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->getConversationByMemberHash($memberHash);
     }
 
-    public function getConversationByTargetIdAndTargetType($targetId, $targetType)
+    public function getConversationByTarget($targetId, $targetType)
     {
         return $this->getConversationDao()->getConversationByTargetIdAndTargetType($targetId, $targetType);
     }

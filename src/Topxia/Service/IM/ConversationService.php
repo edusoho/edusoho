@@ -10,7 +10,7 @@ interface ConversationService
 
     public function addConversation($conversation);
 
-    public function getConversationByTargetIdAndTargetType($targetId, $targetType);
+    public function getConversationByTarget($targetId, $targetType);
 
     public function searchConversations($conditions, $orderBy, $start, $limit);
 

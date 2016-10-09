@@ -19,7 +19,7 @@ class MemberSync extends BaseResource
             return $this->error('700008', '网站会话未启用');
         }
 
-        $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType(0, 'global');
+        $conversation = $this->getConversationService()->getConversationByTarget(0, 'global');
 
         if ($conversation) {
             $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($conversation['no'], $user['id']);

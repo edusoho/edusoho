@@ -13,7 +13,7 @@ class Member extends BaseResource
         $requiredFields = array('targetId', 'targetType');
         $fields         = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $conversation = $this->getConversationService()->getConversationByTargetIdAndTargetType($fields['targetId'], $fields['targetType']);
+        $conversation = $this->getConversationService()->getConversationByTarget($fields['targetId'], $fields['targetType']);
 
         $convNo = $conversation ? $conversation['no'] : '';
         if ($fields['targetType'] == 'course') {
