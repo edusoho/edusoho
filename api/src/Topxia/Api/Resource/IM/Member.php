@@ -46,7 +46,7 @@ class Member extends BaseResource
                     return $this->error('700008', '会话人数已满');
                 }
 
-                return $this->joinCoversationMember($convNo, $course['id'], 'course', $course['title'], $user);
+                return $this->joinCoversationMember($convNo, $course['id'], 'course', $user);
             }
 
             $res = array('convNo' => $convNo);
@@ -82,7 +82,7 @@ class Member extends BaseResource
                     return $this->error('700008', '会话人数已满');
                 }
 
-                return $this->joinCoversationMember($convNo, $classroom['id'], 'classroom', $classroom['title'], $user);
+                return $this->joinCoversationMember($convNo, $classroom['id'], 'classroom', $user);
             }
 
             $res = array('convNo' => $convNo);
@@ -99,14 +99,13 @@ class Member extends BaseResource
         return $res;
     }
 
-    protected function joinCoversationMember($convNo, $targetId, $targetType, $title, $user)
+    protected function joinCoversationMember($convNo, $targetId, $targetType, $user)
     {
         $res = $this->getConversationService()->addConversationMember($convNo, array($user));
 
         if ($res) {
             $member = array(
                 'convNo'     => $convNo,
-                'title'      => $title,
                 'targetId'   => $targetId,
                 'targetType' => $targetType,
                 'userId'     => $user['id']

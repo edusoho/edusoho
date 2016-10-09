@@ -187,7 +187,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function isImMemberFull($convNo, $limit)
     {
-        $result = $this->imApi->get("/im/conversations/{$convNo}/members");
+        $result = $this->createImApi()->get("/im/conversations/{$convNo}/members");
 
         if ($result) {
             $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
