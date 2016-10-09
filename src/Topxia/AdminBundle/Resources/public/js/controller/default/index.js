@@ -12,27 +12,25 @@ define(function(require, exports, module) {
             });
         });
         //noticeModal();
-        // step1();
         getData();
 
     };
 
+
     var getData = function() {
-        
-        popularCoursesInit()
-        .then(operationData())
-        .then(systemStatusData())
-        .then(onlineNum())
-        .then(loginNum())
+        initData()
+        .then(operationData)
+        .then(systemStatusData)
+        .then(onlineNum)
+        .then(loginNum)
     }
 
-    var popularCoursesInit = function() {
+
+    var initData = function() {
         var $popularCoursesType = $("#popular-courses-type");
-        var ajax = $.get($popularCoursesType.data('url'), {dateType: $popularCoursesType.val()}, function(html) {
+        return $.get($popularCoursesType.data('url'), {dateType: $popularCoursesType.val()}, function(html) {
             $('#popular-courses-table').html(html);
         });
-
-        return ajax;
     }
 
     var popularCoursesData = function () {
@@ -44,13 +42,13 @@ define(function(require, exports, module) {
     }
 
     var operationData = function() {
-        $.post($('#operation-analysis-title').data('url'),function(html){
+        return $.post($('#operation-analysis-title').data('url'),function(html){
             $('#operation-analysis-table').html(html);
         });
     }
 
     var systemStatusData = function() {
-        $.post($('#system-status-title').data('url'),function(html){
+        return $.post($('#system-status-title').data('url'),function(html){
             $('#system-status').html(html);
 
             $('.mobile-customization-upgrade-btn').click(function() {
@@ -73,13 +71,13 @@ define(function(require, exports, module) {
     }
 
     var onlineNum = function() {
-        $.post($('#onlineNum').data('url'),function(res){
+        return $.post($('#onlineNum').data('url'),function(res){
             $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
         });
     }
 
     var loginNum = function() {
-        $.post($('#loginNum').data('url'),function(res){
+        return $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
         });
     }
@@ -87,7 +85,7 @@ define(function(require, exports, module) {
 
     function noticeModal() {
         var noticeUrl = $('#admin-notice').val();
-        $.post(noticeUrl, function(data){
+        return $.post(noticeUrl, function(data){
             if (data['result']) {
                 $('.modal').html(data['html']);
                 $('.modal').modal({
