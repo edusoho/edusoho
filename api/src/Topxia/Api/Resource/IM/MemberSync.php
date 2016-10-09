@@ -98,19 +98,7 @@ class MemberSync extends BaseResource
     {
         $user = $this->getCurrentUser();
 
-        $memberClassrooms = $this->getClassroomService()->searchMembers(
-            array('userId' => $user['id']),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
-
-        if (!$memberClassrooms) {
-            return false;
-        }
-
-        $memberClassrooms = ArrayToolkit::index($memberClassrooms, 'classroomId');
-
-        $memberConversations = $this->getConversationService()->searchMembers(
+        $conversationMembers = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
                 'targetType' => 'classroom'
@@ -119,14 +107,20 @@ class MemberSync extends BaseResource
             0, PHP_INT_MAX
         );
 
-        if (!$memberConversations) {
+        if (!$conversationMembers) {
             return false;
         }
 
-        foreach ($memberConversations as $conversation) {
-            if (isset($memberClassrooms[$conversation['targetId']])) {
-                continue;
-            } else {
+        $classroomMembers = $this->getClassroomService()->searchMembers(
+            array('userId' => $user['id']),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+
+        $classroomIds = ArrayToolkit::index($classroomMembers, 'classroomId');
+
+        foreach ($conversationMembers as $conversationMember) {
+            if (!in_array($conversationMember['targetId'], $classroomIds)) {
                 $this->getConversationService()->deleteMember($conversation['id']);
             }
         }
