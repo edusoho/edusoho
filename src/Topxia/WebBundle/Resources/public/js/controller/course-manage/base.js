@@ -145,8 +145,16 @@ define(function (require, exports, module) {
 
         $("[name='expiryMode']").change(function () {
             validator.removeItem('[name=expiryDay]');
-            $("[name='expiryDay']").data($(this).val(), $("[name='expiryDay']").val());
-            $("[name='expiryDay']").val('')
+
+            var expiryDay = $("[name='expiryDay']").val();
+            if(expiryDay){
+                if( expiryDay.match("-")){
+                    $("[name='expiryDay']").data('date', $("[name='expiryDay']").val());
+                }else{
+                    $("[name='expiryDay']").data('days', $("[name='expiryDay']").val());
+                }
+                $("[name='expiryDay']").val('')
+            }
 
             if ($(this).val() == 'none') {
                 $('.expiry-day-js').addClass('hidden');
@@ -159,10 +167,10 @@ define(function (require, exports, module) {
 
         });
         function toggleUnit(type) {
+            if (!$("[name='expiryDay']").val()) {
+                $("[name='expiryDay']").val($("[name='expiryDay']").data(type));
+            }
             if (type == 'days') {
-                if (!$("[name='expiryDay']").val()) {
-                    $("[name='expiryDay']").val($("[name='expiryDay']").data('date'));
-                }
                 $('[name=expiryDay]').datetimepicker('remove');
                 $(".expiry-day-js .controls > span").removeClass('hidden');
                 validator.addItem({
@@ -172,9 +180,6 @@ define(function (require, exports, module) {
                     display: '有效期'
                 });
             } else {
-                if (!$("[name='expiryDay']").val()) {
-                    $("[name='expiryDay']").val($("[name='expiryDay']").data('days'));
-                }
                 $(".expiry-day-js .controls > span").addClass('hidden');
                 validator.addItem({
                     element: '[name=expiryDay]',
