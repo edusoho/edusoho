@@ -65,15 +65,7 @@ class MemberSync extends BaseResource
     {
         $user = $this->getCurrentUser();
 
-        $courseMembers = $this->getCourseService()->searchMembers(
-            array('userId' => $user['id'], 'joinedType' => 'course'),
-            array('createdTime', 'DESC'),
-            0, PHP_INT_MAX
-        );
-
-        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
-
-        $memberConversations = $this->getConversationService()->searchMembers(
+        $convMembers = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
                 'targetType' => 'course'
@@ -82,15 +74,20 @@ class MemberSync extends BaseResource
             0, PHP_INT_MAX
         );
 
-        if (!$memberConversations) {
+        if (!$convMembers) {
             return false;
         }
 
-        foreach ($memberConversations as $conversation) {
-            if (isset($courseMembers[$conversation['targetId']])) {
-                continue;
-            } else {
-                $this->getConversationService()->deleteMember($conversation['id']);
+        $courseMembers = $this->getCourseService()->searchMembers(
+            array('userId' => $user['id'], 'joinedType' => 'course'),
+            array('createdTime', 'DESC'),
+            0, PHP_INT_MAX
+        );
+        $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
+
+        foreach ($convMembers as $convMember) {
+            if (!in_array($convMember['targetId'], $courseIds)) {
+                $this->getConversationService()->deleteMember($convMember['id']);
             }
         }
 
