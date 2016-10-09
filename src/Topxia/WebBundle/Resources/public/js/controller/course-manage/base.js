@@ -126,31 +126,16 @@ define(function (require, exports, module) {
             });
         }
 
-        Validator.addRule('live_date_check',
-            function () {
-                var thisTime = $('[name=expiryDay]').val();
-                thisTime = thisTime.replace(/-/g, "/");
-                thisTime = Date.parse(thisTime) / 1000;
-                var nowTime = Date.parse(new Date()) / 1000;
-
-                if (nowTime <= thisTime) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }, "有效期不能选择当天"
-        );
-
-        toggleUnit($("[name=expiryMode]:checked").val());
+        toggleExpiryValue($("[name=expiryMode]:checked").val());
 
         $("[name='expiryMode']").change(function () {
             validator.removeItem('[name=expiryDay]');
 
             var expiryDay = $("[name='expiryDay']").val();
-            if(expiryDay){
-                if( expiryDay.match("-")){
+            if (expiryDay) {
+                if (expiryDay.match("-")) {
                     $("[name='expiryDay']").data('date', $("[name='expiryDay']").val());
-                }else{
+                } else {
                     $("[name='expiryDay']").data('days', $("[name='expiryDay']").val());
                 }
                 $("[name='expiryDay']").val('')
@@ -162,40 +147,38 @@ define(function (require, exports, module) {
                 $('.expiry-day-js').removeClass('hidden');
                 var $esBlock = $('.expiry-day-js > .controls > .help-block');
                 $esBlock.text($esBlock.data($(this).val()));
-                toggleUnit($(this).val());
+                toggleExpiryValue($(this).val());
             }
 
         });
-        function toggleUnit(type) {
+        function toggleExpiryValue(expiryMode) {
             if (!$("[name='expiryDay']").val()) {
-                $("[name='expiryDay']").val($("[name='expiryDay']").data(type));
+                $("[name='expiryDay']").val($("[name='expiryDay']").data(expiryMode));
             }
-            if (type == 'days') {
-                $('[name=expiryDay]').datetimepicker('remove');
-                $(".expiry-day-js .controls > span").removeClass('hidden');
-                validator.addItem({
-                    element: '[name=expiryDay]',
-                    rule: 'positive_integer maxlength{max:10}',
-                    required: true,
-                    display: '有效期'
-                });
-            } else {
-                $(".expiry-day-js .controls > span").addClass('hidden');
-                validator.addItem({
-                    element: '[name=expiryDay]',
-                    rule: 'live_date_check',
-                    required: true,
-                    display: '有效期'
-                });
-                $("#course_expiryDay").datetimepicker({
-                    language: 'zh-CN',
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    minView: 'month'
-                });
-                var now = new Date;
-
-                $("#course_expiryDay").datetimepicker('setStartDate', now);
+            switch (expiryMode) {
+                case 'days':
+                    $('[name=expiryDay]').datetimepicker('remove');
+                    $(".expiry-day-js .controls > span").removeClass('hidden');
+                    validator.addItem({
+                        element: '[name=expiryDay]',
+                        rule: 'positive_integer maxlength{max:10}',
+                        required: true,
+                        display: '有效期'
+                    });
+                    break;
+                case 'date':
+                    $(".expiry-day-js .controls > span").addClass('hidden');
+                    $("#course_expiryDay").datetimepicker({
+                        language: 'zh-CN',
+                        autoclose: true,
+                        format: 'yyyy-mm-dd',
+                        minView: 'month'
+                    });
+                    var tomorrow =  new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+                    $("#course_expiryDay").datetimepicker('setStartDate', tomorrow);
+                    break;
+                default:
+                    break;
             }
         }
 
