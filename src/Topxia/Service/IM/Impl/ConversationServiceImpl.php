@@ -180,7 +180,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $conv = $this->getConversationByConvNo($convNo);
 
         if (!$conv) {
-            throw $this->createServiceException($this->trans('会话未创建'), '700007');
+            throw $this->createServiceException($this->trans('会话不存在'), '700007');
         }
 
         $user = $this->getUserService()->getUser($userId);
@@ -200,6 +200,30 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->addMember($member);
     }
 
+    public function quitConversation($convNo, $userId)
+    {
+        $conv = $this->getConversationByConvNo($convNo);
+
+        if (!$conv) {
+            throw $this->createServiceException($this->trans('会话不存在'), '700007');
+        }
+
+        $convMember = $this->getMemberByConvNoAndUserId($convNo, $userId);
+        if (!$convMember) {
+            throw $this->createServiceException($this->trans('会话成员不存在'), '700011');
+        }
+
+        $removed = $this->removeConversationMember($convNo, $userId);
+
+        if (!$removed) {
+            throw $this->createServiceException($this->trans('学员退出会话失败'), '700010');
+        }
+
+        $this->deleteMember($convMember['id']);
+
+        return true;
+    }
+
     public function addConversationMember($convNo, $members)
     {
         if (empty($members)) {
@@ -212,6 +236,17 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         }
 
         $res = $this->createImApi()->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
+
+        if (isset($res['success'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function removeConversationMember($convNo, $userId)
+    {
+        $res = $this->createImApi()->delete("/im/conversations/{$convNo}/members/{$userId}");
 
         if (isset($res['success'])) {
             return true;

@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource\IM;
 
 use Silex\Application;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -57,10 +58,11 @@ class MemberSync extends BaseResource
         }
 
         $courseIds = $this->getCourseService()->findUserJoinedCourseIds($user['id'], $joinedType = 'course');
+        $courseIds = ArrayToolkit::column($courseIds, 'courseId');
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $courseIds)) {
-                $this->getConversationService()->deleteMember($convMember['id']);
+                $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
 
@@ -76,10 +78,11 @@ class MemberSync extends BaseResource
         }
 
         $classroomIds = $this->getClassroomService()->findUserJoinedClassroomIds($user['id']);
+        $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
 
         foreach ($convMembers as $convMember) {
             if (!in_array($convMember['targetId'], $classroomIds)) {
-                $this->getConversationService()->deleteMember($convMember['id']);
+                $this->getConversationService()->quitConversation($convMember['convNo'], $convMember['userId']);
             }
         }
 

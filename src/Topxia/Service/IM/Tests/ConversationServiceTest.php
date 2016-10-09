@@ -389,6 +389,37 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals(1, $convMember['userId']);
     }
 
+    public function testQuitConversation()
+    {
+        $createConversation1 = array(
+            'no'         => '3b5db36d838e8252db2ebc170693db66',
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'title'      => 'conversation1',
+            'memberIds'  => array()
+        );
+        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+
+        $createMember1 = array(
+            'convNo'     => $conversation1['no'],
+            'targetId'   => 1,
+            'targetType' => 'course',
+            'userId'     => 1
+        );
+        $member1 = $this->getConversationService()->addMember($createMember1);
+
+        $api        = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($api);
+        $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
+        $this->getConversationService()->setImApi($mockObject);
+
+        $this->getConversationService()->quitConversation($conversation1['no'], 1);
+
+        $convMember = $this->getConversationService()->getMember($member1['id']);
+
+        $this->assertNull($convMember);
+    }
+
     public function testAddConversationMember()
     {
         $api        = CloudAPIFactory::create('root');
@@ -401,6 +432,18 @@ class ConversationServiceTest extends BaseTestCase
             array('id' => 2, 'nickname' => 'nickname2')
         );
         $result = $this->getConversationService()->addConversationMember('3b5db36d838e8252db2ebc170693db66', $members);
+
+        $this->assertTrue($result);
+    }
+
+    public function testRemoveConversationMember()
+    {
+        $api        = CloudAPIFactory::create('root');
+        $mockObject = Mockery::mock($api);
+        $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
+        $this->getConversationService()->setImApi($mockObject);
+
+        $result = $this->getConversationService()->removeConversationMember('3b5db36d838e8252db2ebc170693db66', 1);
 
         $this->assertTrue($result);
     }

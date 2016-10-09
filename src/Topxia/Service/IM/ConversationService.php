@@ -40,7 +40,11 @@ interface ConversationService
 
     public function joinConversation($convNo, $userId);
 
+    public function quitConversation($convNo, $userId);
+
     public function addConversationMember($convNo, $members);
+
+    public function removeConversationMember($convNo, $userId);
 
     public function createCloudConversation($title, $members);
 

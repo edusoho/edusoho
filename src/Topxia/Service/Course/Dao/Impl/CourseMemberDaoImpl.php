@@ -265,7 +265,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         return $this->fetchCached("userId:{$userId}:joinedType:{$joinedType}", $userId, $joinedType, function ($userId, $joinedType) use ($that) {
             $sql = "SELECT courseId FROM {$that->getTable()} WHERE  userId = ? AND joinedType = ?";
-            return $that->getConnection()->fetchColumn($sql, array($userId, $joinedType));
+            return $that->getConnection()->fetchAll($sql, array($userId, $joinedType));
         }
 
         );
