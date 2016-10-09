@@ -167,7 +167,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function addConversationMember($convNo, $members)
     {
-        if (!$members) {
+        if (empty($members)) {
             return false;
         }
 

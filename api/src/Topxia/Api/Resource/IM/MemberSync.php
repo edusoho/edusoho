@@ -44,7 +44,7 @@ class MemberSync extends BaseResource
 
     protected function joinCoversationMember($convNo, $targetId, $targetType, $user)
     {
-        $res = $this->getConversationService()->addConversationMember($convNo, $user['id'], $user['nickname']);
+        $res = $this->getConversationService()->addConversationMember($convNo, array($user));
 
         if ($res) {
             $member = array(
