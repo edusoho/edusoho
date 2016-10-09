@@ -469,7 +469,7 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if ($material['source'] == 'opencourselesson') {
-            return $this->createMessageResponse('error', $this->trans('无权下载改资料'));
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
