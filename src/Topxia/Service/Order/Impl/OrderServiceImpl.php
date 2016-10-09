@@ -525,13 +525,18 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         $orderBy = array();
 
-        if ($sort == 'early') {
-            $orderBy = array('createdTime', 'ASC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime', 'ASC');
+            } else {
+                $orderBy = array('createdTime', 'DESC');
+            }
+        }else{
+            $orderBy = $sort;
         }
-
+       
         $conditions = $this->_prepareSearchConditions($conditions);
+
         $orders     = $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
