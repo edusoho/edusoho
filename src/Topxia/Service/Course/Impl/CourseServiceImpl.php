@@ -2237,8 +2237,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
+        //按照课程有效期模式计算学员有效期
         if ($course['expiryDay'] > 0) {
-            $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+            if ($course['expiryMode'] == 'days') {
+                $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+            }
+            if ($course['expiryMode'] == 'date') {
+                $deadline = $course['expiryDay'];
+            }
         } else {
             $deadline = 0;
         }
