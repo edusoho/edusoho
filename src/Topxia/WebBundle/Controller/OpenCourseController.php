@@ -468,7 +468,7 @@ class OpenCourseController extends BaseOpenCourseController
             throw $this->createNotFoundException();
         }
 
-        if ($material['source'] == 'opencourselesson') {
+        if ($material['source'] == 'opencourselesson' || !$material['lessonId']) {
             return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
