@@ -11,30 +11,17 @@ class MemberSync extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
-        $imSetting = $this->getSettingservice()->get('app_im', array());
-        $user      = $this->getCurrentUser();
-        $res       = $this->error('700007', '全站会话未创建');
-
-        if (empty($imSetting['enabled'])) {
+        $setting = $this->getSettingservice()->get('app_im', array());
+        if (empty($setting['enabled'])) {
             return $this->error('700008', '网站会话未启用');
         }
 
-        $conversation = $this->getConversationService()->getConversationByTarget(0, 'global');
+        $user = $this->getCurrentUser();
 
-        if ($conversation) {
-            $conversationMember = $this->getConversationService()->getMemberByConvNoAndUserId($conversation['no'], $user['id']);
+        $this->syncCourseConversationMembers($user);
+        $this->syncClassroomConversationMember($user);
 
-            if (!$conversationMember) {
-                return $this->joinCoversationMember($conversation['no'], 0, 'global', $user);
-            }
-
-            $res = array('convNo' => $conversation['no']);
-        }
-
-        $this->syncCourseConversationMembers();
-        $this->syncClassroomConversationMember();
-
-        return $res;
+        return $this->joinGlobalConversation($user);
     }
 
     public function filter($res)
@@ -42,29 +29,42 @@ class MemberSync extends BaseResource
         return $res;
     }
 
-    protected function joinCoversationMember($convNo, $targetId, $targetType, $user)
-    {
-        $res = $this->getConversationService()->addConversationMember($convNo, array($user));
-
-        if ($res) {
-            $member = array(
-                'convNo'     => $convNo,
-                'targetId'   => $targetId,
-                'targetType' => $targetType,
-                'userId'     => $user['id']
-            );
-            $this->getConversationService()->addMember($member);
-
-            return array('convNo' => $convNo);
-        } else {
-            return $this->error('700006', '学员进入会话失败');
-        }
-    }
-
-    protected function syncCourseConversationMembers()
+    protected function joinGlobalConversation($user)
     {
         $user = $this->getCurrentUser();
 
+        $conv = $this->getConversationService()->getConversationByTarget(0, 'global');
+        if (!$conv) {
+            return $this->error('700007', '全站会话未创建');;
+        }
+
+        $convMember = $this->getConversationService()->getMemberByConvNoAndUserId($conv['no'], $user['id']);
+        if ($convMember) {
+            return array('convNo' => $conv['no']);
+        }
+
+        //joinConversation($convNo, $userId);
+        $added = $this->getConversationService()->addConversationMember($convNo, array($user));
+        if (!$added) {
+            return $this->error('700006', '学员进入会话失败');
+        }
+
+        $member = array(
+            'convNo'     => $convNo,
+            'targetId'   => $targetId,
+            'targetType' => $targetType,
+            'userId'     => $user['id']
+        );
+        $this->getConversationService()->addMember($member);
+
+        return array('convNo' => $convNo);
+    }
+
+    protected function syncCourseConversationMembers($user)
+    {
+        $user = $this->getCurrentUser();
+
+        // findMembersByUserIdAndTargetType($userId, $targetType);
         $convMembers = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
@@ -78,6 +78,7 @@ class MemberSync extends BaseResource
             return false;
         }
 
+        // findUserJoinedCourseIds($userId, $joinedType = 'course');
         $courseMembers = $this->getCourseService()->searchMembers(
             array('userId' => $user['id'], 'joinedType' => 'course'),
             array('createdTime', 'DESC'),
@@ -94,10 +95,8 @@ class MemberSync extends BaseResource
         return true;
     }
 
-    protected function syncClassroomConversationMember()
+    protected function syncClassroomConversationMember($user)
     {
-        $user = $this->getCurrentUser();
-
         $conversationMembers = $this->getConversationService()->searchMembers(
             array(
                 'userId'     => $user['id'],
