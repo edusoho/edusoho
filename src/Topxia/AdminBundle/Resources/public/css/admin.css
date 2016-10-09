@@ -1,8 +1,6 @@
 html {
-
   overflow-y : scroll;
 }
-
 
 .init-state {color:gray !important;}
 .doing-state {color:#0066FF !important;}
@@ -21,8 +19,6 @@ input.LargeInput {width: 600px;}
 .ui-state-highlight a {
   color: #363636;
 }
-
-
 
 .dialog {
   text-align:left;
@@ -199,7 +195,58 @@ input.LargeInput {width: 600px;}
   }
 }
 
-.main-system-alert {
+/*首页*/
+.link-primary {
+  color: #333;
+}
+.link-primary:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.text-middle {
+  vertical-align: middle;
+}
+
+.admin-notice-list {
+  padding-left: 0;
+}
+.admin-notice-list li {
+  position: relative;
+  padding-left: 20px;
+}
+.admin-notice-list li:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '●';
+  color: #e1e1e1;
+}
+
+.table-noborder>thead>tr>th {
+  border-bottom: 0;
+}
+.table-noborder>tbody>tr>td {
+  border-top: 0;
+}
+.table-overflow {
+  table-layout: fixed;
+}
+.table-overflow td{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-count {
+ height: 10px;
+ background: #428bca;
+ border-radius: 2px;
+ float: right;
+}  
+
+
+/*.main-system-alert {
   margin-bottom: 40px;
   padding: 14px 10px 0 14px;
   border: 1px solid #d0ffe6;
@@ -237,7 +284,7 @@ input.LargeInput {width: 600px;}
   margin-left: 22px;
   font-weight: normal;
   font-size: 14px;
-}
+}*/
 
 .remove {
     visibility: hidden;

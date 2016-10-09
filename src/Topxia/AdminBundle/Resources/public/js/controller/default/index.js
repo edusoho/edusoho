@@ -6,32 +6,50 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $('.tbody').on('click', 'button.remind-teachers', function() {
+        $('.tbody').on('click', 'js-remind-teachers', function() {
             $.post($(this).data('url'), function(response) {
                 Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
         //noticeModal();
-        step1();
+        // step1();
+        getData();
+
     };
 
-    function step1() {
+    var getData = function() {
+        
+        popularCoursesInit()
+        .then(operationData())
+        .then(systemStatusData())
+        .then(onlineNum())
+        .then(loginNum())
+    }
+
+    var popularCoursesInit = function() {
+        var $popularCoursesType = $("#popular-courses-type");
+        var ajax = $.get($popularCoursesType.data('url'), {dateType: $popularCoursesType.val()}, function(html) {
+            $('#popular-courses-table').html(html);
+        });
+
+        return ajax;
+    }
+
+    var popularCoursesData = function () {
         $("#popular-courses-type").on('change', function() {
             $.get($(this).data('url'), {dateType: this.value}, function(html) {
                 $('#popular-courses-table').html(html);
-                step2();
             });
-        }).trigger('change');
-    }
-
-    function step2() {
-        $.post($('#operation-analysis-title').data('url'),function(html){
-            $('#operation-analysis-table').html(html);
-            step3();
         });
     }
 
-    function step3() {
+    var operationData = function() {
+        $.post($('#operation-analysis-title').data('url'),function(html){
+            $('#operation-analysis-table').html(html);
+        });
+    }
+
+    var systemStatusData = function() {
         $.post($('#system-status-title').data('url'),function(html){
             $('#system-status').html(html);
 
@@ -51,22 +69,21 @@ define(function(require, exports, module) {
                 });
             })
 
-            step4();
         });
     }
 
-    function step4() {
+    var onlineNum = function() {
         $.post($('#onlineNum').data('url'),function(res){
             $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
-            step5();
         });
     }
 
-    function step5() {
+    var loginNum = function() {
         $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
         });
     }
+
 
     function noticeModal() {
         var noticeUrl = $('#admin-notice').val();

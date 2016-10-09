@@ -84,8 +84,8 @@
     
     {% set notifies = plugin_update_notify() %}
     {% if not notifies is empty %}
-      <div class="alert alert-danger">
-        【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！ <a href="{{ path('admin_app_upgrades') }}">请立即升级！</a>
+      <div class="alert alert-warning">
+        【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！请立即升级！ <a href="{{ path('admin_app_upgrades') }}">查看详情</a>
       </div>
     {% endif %}
 
@@ -136,7 +136,7 @@
         {% endblock %}
       </div>
     {% endblock %}
-    
+
   </div>
 
   {% block footer %}

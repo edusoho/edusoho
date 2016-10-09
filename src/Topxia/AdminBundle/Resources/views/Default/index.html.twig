@@ -5,21 +5,35 @@
 {% block container %}
 
   {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
-  <div class="page-header">
-    <h1>{{ '管理中心'|trans }}  </h1>
-  </div>
+  
   {% if is_granted('ROLE_BACKEND') %}
 
+    {# 起什么作用 #}
     <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide"
          data-url="{{ path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
     </div>
 
-    {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
-      {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
-    {% endif %}
 
     <div class="row">
+
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+        {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
+      {% endif %}
+
+      {% if setting('copyright.thirdCopyright')|default(null) != 1 %}
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title" id="system-status-title"
+                  data-url="{{ path('admin_system_status') }}">{{ '系统状态'|trans }}</h3>
+            </div>
+            <div id="system-status">
+              <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -52,20 +66,6 @@
         </div>
       </div> #}
 
-      {% if setting('copyright.thirdCopyright')|default(null) != 1 %}
-        <div class="col-md-6">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title" id="system-status-title"
-                  data-url="{{ path('admin_system_status') }}">{{ '系统状态'|trans }}</h3>
-            </div>
-            <div id="system-status">
-              <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-            </div>
-          </div>
-        </div>
-      {% endif %}
-
       <div id="popular-courses-panel" class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -81,9 +81,115 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-4">
+        {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <a href="" class="pull-right">更多</a>
+            <h3 class="panel-title">
+              最新评价
+            </h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-condensed table-noborder table-overflow">
+              <thead>
+                <tr>
+                  <th width="60%">评价内容</th>
+                  <th width="20%">评分</th>
+                  <th width="20%">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
+                  </td>
+                  <td>5</td>
+                  <td>
+                    <a href="" class="btn btn-default btn-xs">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                  </td>
+                  <td>5</td>
+                  <td>
+                    <a href="" class="btn btn-default btn-xs">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                  </td>
+                  <td>5</td>
+                  <td>
+                    <a href="" class="btn btn-default btn-xs">查看</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                  </td>
+                  <td>5</td>
+                  <td>
+                    <a href="" class="btn btn-default btn-xs">查看</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <a href="" class="pull-right">更多</a>
+            <h3 class="panel-title">
+              热门搜索<small>最近7天</small>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-condensed table-noborder table-overflow">
+              <thead>
+                <tr>
+                  <th width="60%">关键词</th>
+                  <th width="30%">搜索次数</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">Edusoho安装教程</a>
+                  </td>
+                  <td>
+                    <div class="search-count js-search-count" data-count="10"></div>
+                  </td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a class="link-primary" href="">Edusoho安装教程</a>
+                  </td>
+                  <td class="text-middle">
+                    <div class="search-count js-search-count" data-count="20"></div>
+                  </td>
+                  <td>20</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {{ render(controller('TopxiaAdminBundle:Default:userCoinsRecordsBlock')) }}
 
-    {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+    
 
     {{ render(controller('TopxiaAdminBundle:Default:latestPaidOrdersBlock')) }}
 
