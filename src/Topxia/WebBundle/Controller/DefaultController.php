@@ -152,9 +152,8 @@ class DefaultController extends BaseController
             $config = $config['confirmConfig']['blocks']['left'];
 
             foreach ($config as $template) {
-                if ($template['code'] == 'course-grid-with-condition-index' && $courseType == 'course') {
-                    $config = $template;
-                } elseif ($template['code'] == 'open-course' && $courseType == 'open-course') {
+                if (($template['code'] == 'course-grid-with-condition-index' && $courseType == 'course')
+                    || ($template['code'] == 'open-course' && $courseType == 'open-course')) {
                     $config = $template;
                 }
             }

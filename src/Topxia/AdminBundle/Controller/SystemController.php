@@ -114,6 +114,7 @@ class SystemController extends BaseController
                         }
                     }
                 } catch (\Exception $e) {
+                    $errorPaths[] = $e->getMessage();
                 }
             }
         }

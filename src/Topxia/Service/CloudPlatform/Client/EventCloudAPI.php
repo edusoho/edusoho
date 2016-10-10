@@ -3,13 +3,13 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 class EventCloudAPI extends AbstractCloudAPI
 {
-    public function push($name, array $body = array(), $timestamp)
+    public function push($name, array $body = array(), $timestamp = 0)
     {
         $event = array(
             'name'      => $name,
             'body'      => $body,
             'timestamp' => $timestamp,
-            'nonce' => substr(md5(uniqid('', true)), -16),
+            'nonce'     => substr(md5(uniqid('', true)), -16)
         );
 
         $event['user']      = $this->accessKey;
@@ -111,9 +111,8 @@ class EventCloudAPI extends AbstractCloudAPI
         $text = "{$event['user']}:{$event['name']}:{$event['timestamp']}:{$event['nonce']}";
         if (!empty($event['body'])) {
             ksort($event['body']);
-            $text .= ':'. http_build_query($event['body']);
+            $text .= ':'.http_build_query($event['body']);
         }
         return hash_hmac('sha1', $text, $this->secretKey);
     }
-
 }

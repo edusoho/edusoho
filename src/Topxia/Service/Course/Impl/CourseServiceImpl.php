@@ -2,13 +2,13 @@
 namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Service\Common\AccessDeniedException;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\Common\NotFoundException;
+use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -534,7 +534,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int)$item['id'];
+                $item = (int) $item['id'];
             }
 
             );
@@ -604,7 +604,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int)$number,
+            'recommendedSeq'  => (int) $number,
             'recommendedTime' => time()
         ));
 
@@ -884,13 +884,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        if ($currency == 'coin') {
-            $fields['originPrice'] = $price;
-            $fields['price']       = $price * ($discount / 10);
-        } else {
-            $fields['originPrice'] = $price;
-            $fields['price']       = $price * ($discount / 10);
-        }
+        $fields['originPrice'] = $price;
+        $fields['price']       = $price * ($discount / 10);
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
@@ -922,15 +917,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             foreach ($courses as $course) {
                 $fields = array();
 
-                if ($currency == 'coin') {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
-                    );
-                } else {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
-                    );
-                }
+                $fields = array(
+                    'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
+                );
 
                 $fields['discountId'] = $discount['id'];
                 $fields['discount']   = $discount['globalDiscount'];
@@ -950,15 +939,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 $course = $courses[$item['targetId']];
 
-                if ($currency == 'coin') {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $item['discount'] / 10
-                    );
-                } else {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $item['discount'] / 10
-                    );
-                }
+                $fields = array(
+                    'price' => $course['originPrice'] * $item['discount'] / 10
+                );
 
                 $fields['discountId'] = $discount['id'];
                 $fields['discount']   = $item['discount'];
@@ -1507,7 +1490,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $lesson = $this->getCourseLesson($courseId, $lessonId);
+        $lesson                = $this->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson) || $lesson['courseId'] != $courseId) {
             throw $this->createNotFoundException();
@@ -1529,7 +1512,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function startLearnLesson($courseId, $lessonId)
     {
         list($course, $member) = $this->tryTakeCourse($courseId);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
@@ -1882,7 +1865,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
+        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -1901,7 +1884,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                     break;
                 case 'chapter':
-                    $item    = $currentChapter = $items[$itemId];
+                    $item    = $currentChapter    = $items[$itemId];
                     $chapter = $this->getChapter($courseId, $item['id']);
 
                     if ($item['type'] == 'unit') {
@@ -2178,7 +2161,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('课程学员不存在，备注失败!'));
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
         return $this->getMemberDao()->updateMember($member['id'], $fields);
     }
 
@@ -2254,8 +2237,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'   => 'finished',
             'courseId' => $courseId
         );
-        $count      = $this->getLessonLearnDao()->searchLearnCount($conditions);
-        $fields     = array(
+        $count  = $this->getLessonLearnDao()->searchLearnCount($conditions);
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($order) ? 0 : $order['id'],
@@ -2304,7 +2287,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $fields   = array(
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
@@ -2445,7 +2428,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getMemberDao()->updateMember($member['id'], array(
-            'noteNum'            => (int)$number,
+            'noteNum'            => (int) $number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -2454,10 +2437,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
-     * @param int|string  $courseId
-     * @param null|string $otherPermission
-     * @return array
+     * @param  int|string                                $courseId
+     * @param  null|string                               $otherPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      */
     public function tryManageCourse($courseId, $otherPermission = null)
     {
@@ -2481,10 +2464,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int|string  $courseId
-     * @param null|string $actionPermission
-     * @return array
+     * @param  int|string                                $courseId
+     * @param  null|string                               $actionPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      */
     public function tryAdminCourse($courseId, $actionPermission = null)
     {
@@ -2538,7 +2521,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
 
-        if(empty($course)){
+        if (empty($course)) {
             throw new ResourceNotFoundException('course', $courseId);
         }
 
@@ -2702,7 +2685,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId)
     {
-        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson                = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
 
         $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
@@ -2977,7 +2960,7 @@ class CourseSerialize
     {
         if (isset($course['tags'])) {
             if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
+                $course['tags'] = '|'.implode('|', $course['tags']).'|';
             } else {
                 $course['tags'] = '';
             }
@@ -2985,7 +2968,7 @@ class CourseSerialize
 
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
+                $course['goals'] = '|'.implode('|', $course['goals']).'|';
             } else {
                 $course['goals'] = '';
             }
@@ -2993,7 +2976,7 @@ class CourseSerialize
 
         if (isset($course['audiences'])) {
             if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
+                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
             } else {
                 $course['audiences'] = '';
             }
@@ -3001,7 +2984,7 @@ class CourseSerialize
 
         if (isset($course['teacherIds'])) {
             if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
             } else {
                 $course['teacherIds'] = null;
             }
