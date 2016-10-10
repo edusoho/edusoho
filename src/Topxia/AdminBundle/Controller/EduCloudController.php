@@ -11,6 +11,7 @@ use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -131,7 +132,7 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
-        $imUsedTotal = $api->get('/im/me/receive_count');
+        $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -768,18 +769,18 @@ class EduCloudController extends BaseController
             $user         = $this->getCurrentUser();
 
             //去云平台判断im账号是否存在
-            $api       = CloudAPIFactory::create('root');
-            $imAccount = $api->get('/im/me/account');
+            $api = IMAPIFactory::create();
+            $imAccount = $api->get('/me/account');
 
             if (isset($imAccount['error'])) {
-                $imAccount = $api->post('/im/accounts');
+                $imAccount = $api->post('/accounts');
             }
 
             $status   = $request->request->get('status', 0);
             $imStatus = $status ? 'enable' : 'disable';
 
             //更改云IM账号状态
-            $api->post("/im/me/account", array('status' => $imStatus));
+            $api->post("/me/account", array('status' => $imStatus));
 
             $appImSetting['enabled'] = $status;
 
@@ -1093,12 +1094,12 @@ class EduCloudController extends BaseController
 
     protected function getImUsedInfo()
     {
-        $api       = CloudAPIFactory::create('root');
+        $api       = IMAPIFactory::create();
         $endTime   = strtotime(date('Y-m-d', strtotime('-1 day')).' 23:59:59');
         $startTime = strtotime(date('Y-m-d', strtotime('-6 days', $endTime)).'00:00:00');
 
         try {
-            $imUsedInfo = $api->get('/im/me/receive_count_period', array(
+            $imUsedInfo = $api->get('/me/receive_count_period', array(
                 'startTime' => $startTime, 'endTime' => $endTime));
         } catch (\RuntimeException $e) {
             $imUsedInfo = array();
@@ -1129,7 +1130,7 @@ class EduCloudController extends BaseController
             )
         );
 
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+        $result = IMAPIFactory::create()->post('/me/conversation', $message);
 
         if (isset($result['error'])) {
             return '';

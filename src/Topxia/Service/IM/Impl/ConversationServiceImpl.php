@@ -5,7 +5,7 @@ namespace Topxia\Service\IM\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\IM\ConversationService;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 
 class ConversationServiceImpl extends BaseService implements ConversationService
 {
@@ -96,7 +96,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             'clients' => $clients
         );
 
-        $result = $this->createImApi()->post('/im/me/conversation', $message);
+        $result = $this->createImApi()->post('/me/conversation', $message);
 
         if (isset($result['error'])) {
             throw $this->createServiceException($result['error'], $result['code']);
@@ -235,7 +235,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
             $clients[] = array('clientId' => $member['id'], 'clientName' => $member['nickname']);
         }
 
-        $res = $this->createImApi()->post("/im/conversations/{$convNo}/members", array('clients' => $clients));
+        $res = $this->createImApi()->post("/conversations/{$convNo}/members", array('clients' => $clients));
 
         if (isset($res['success'])) {
             return true;
@@ -246,7 +246,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function removeConversationMember($convNo, $userId)
     {
-        $res = $this->createImApi()->delete("/im/conversations/{$convNo}/members/{$userId}");
+        $res = $this->createImApi()->delete("/conversations/{$convNo}/members/{$userId}");
 
         if (isset($res['success'])) {
             return true;
@@ -257,7 +257,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
 
     public function isImMemberFull($convNo, $limit)
     {
-        $result = $this->createImApi()->get("/im/conversations/{$convNo}/members");
+        $result = $this->createImApi()->get("/conversations/{$convNo}/members");
 
         if ($result) {
             $onlineCount  = empty($result['online']) ? 0 : count($result['online']);
@@ -351,7 +351,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     protected function createImApi()
     {
         if (!$this->imApi) {
-            $this->imApi = CloudAPIFactory::create('root');
+            $this->imApi = IMAPIFactory::create();
         }
         return $this->imApi;
     }

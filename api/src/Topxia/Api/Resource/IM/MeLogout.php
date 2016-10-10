@@ -5,7 +5,7 @@ namespace Topxia\Api\Resource\IM;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 
 class MeLogout extends BaseResource
 {
@@ -20,8 +20,7 @@ class MeLogout extends BaseResource
             'mute' => 1
         );
 
-        //@todo leaf
-        return CloudAPIFactory::create('root')->post('/im/me/clients/' . $clientId, $message);
+        return IMAPIFactory::create()->post('/me/clients/' . $clientId, $message);
     }
 
     public function filter($res)
