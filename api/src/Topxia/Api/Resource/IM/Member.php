@@ -45,7 +45,7 @@ class Member extends BaseResource
                 return $this->error('700003', '学员未加入课程');
             }
 
-            if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
+            if ($this->getConversationService()->isImMemberFull($convNo, 5)) {
                 return $this->error('700008', '会话人数已满');
             }
 
@@ -86,7 +86,7 @@ class Member extends BaseResource
                 return $this->error('700013', '学员未加入班级');
             }
 
-            if ($this->getConversationService()->isImMemberFull($convNo, 500)) {
+            if ($this->getConversationService()->isImMemberFull($convNo, 5)) {
                 return $this->error('700008', '会话人数已满');
             }
 
