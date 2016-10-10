@@ -7,21 +7,27 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $('.tbody').on('click', 'js-remind-teachers', function() {
-            $.post($(this).data('url'), function(response) {
-                Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
-            });
-        });
-        //noticeModal();
+        init();
+
+        //ajax 获取数据
         getData();
-        popularCoursesChange();
-        searchCount();
-        usersStatistic($("#user-statistic"));
-        studyCountStatistic($("#study-count-statistic"));
-        payOrderStatistic($("#pay-order-statistic"));
-        studyLessonCountStatistic($("#study-lesson-count-statistic"))
+
+        //事件
+        popularCoursesEvent();
+        remindTeachersEvent();
+
+        //图表
+        usersStatistic();
+        studyCountStatistic();
+        payOrderStatistic();
+        studyLessonCountStatistic()
 
     };
+
+    var init = function() {
+       searchCount(); 
+       //noticeModal();
+    }
 
     var searchCount = function() {
         var totalWidth = $(".js-search-count").parent().width();
@@ -38,7 +44,6 @@ define(function(require, exports, module) {
         })
     }
 
-
     var getData = function() {
         // systemStatusData()
         // .then(popularCoursesData)
@@ -52,15 +57,6 @@ define(function(require, exports, module) {
         var $this = $("#popular-courses-type");
         return $.get($this.data('url'), {dateType: $this.val()}, function(html) {
             $('#popular-courses-table').html(html);
-        });
-    }
-
-    var popularCoursesChange = function () {
-        $("#popular-courses-type").on('change', function() {
-            // $.get($(this).data('url'), {dateType: this.value}, function(html) {
-            //     $('#popular-courses-table').html(html);
-            // });
-            popularCoursesData();
         });
     }
 
@@ -105,8 +101,8 @@ define(function(require, exports, module) {
         });
     }
 
-    var usersStatistic =  function($el) {
-        this.element = $el;
+    var usersStatistic =  function() {
+        this.element = $("#user-statistic");
         var chart = echarts.init(this.element.get(0));
 
         var option = {
@@ -159,10 +155,9 @@ define(function(require, exports, module) {
         chart.setOption(option);
     }
 
-    var studyCountStatistic = function($el) {
-        this.element = $el;
+    var studyCountStatistic = function() {
+        this.element = $("#study-count-statistic");
         var chart = echarts.init(this.element.get(0));
-
         var option = {
             tooltip: {
                 trigger: 'axis'
@@ -213,8 +208,8 @@ define(function(require, exports, module) {
         chart.setOption(option);
     }
 
-    var payOrderStatistic = function($el) {
-        this.element = $el;
+    var payOrderStatistic = function() {
+        this.element = $("#pay-order-statistic");
         var chart = echarts.init(this.element.get(0));
 
         var option = {
@@ -251,10 +246,11 @@ define(function(require, exports, module) {
 
     }
 
-    var studyLessonCountStatistic = function($el) {
-        this.element = $el;
+    var studyLessonCountStatistic = function() {
+        this.element = $("#study-lesson-count-statistic");
         var chart = echarts.init(this.element.get(0));
         var option = {
+            color: ['#428bca'],
             tooltip : {
                 trigger: 'axis',
                 axisPointer : {            
@@ -289,9 +285,9 @@ define(function(require, exports, module) {
 
             series : [
                 {
-                    name:'课时学习数',
+                    name:'学习课时数',
                     type:'bar',
-                    barWidth: '60%',
+                    // barWidth: '20',
                     data:[10, 52, 200, 334, 390, 330, 220]
                 }
             ]
@@ -299,6 +295,19 @@ define(function(require, exports, module) {
         chart.setOption(option);
     }
 
+    var popularCoursesEvent = function () {
+        $("#popular-courses-type").on('change', function() {
+            popularCoursesData();
+        });
+    }
+
+    var remindTeachersEvent = function() {
+        $('.tbody').on('click', 'js-remind-teachers', function() {
+            $.post($(this).data('url'), function(response) {
+                Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
+            });
+        });
+    }
 
     function noticeModal() {
         var noticeUrl = $('#admin-notice').val();
