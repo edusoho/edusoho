@@ -10,6 +10,8 @@ class PermissionExtension extends \Twig_Extension
 
     protected $builder = null;
 
+    protected $loader = null;
+
     public function __construct($container)
     {
         $this->container = $container;
@@ -77,6 +79,16 @@ class PermissionExtension extends \Twig_Extension
         } else {
             $code = "'{$code}'";
         }
+
+        /*if (empty($this->loader)) {
+            $this->loader = new \Twig_Loader_Array(array(
+                'expression.twig' => '{{'.$code.'}}'
+            ));
+
+            $this->loader = new \Twig_Loader_Chain(array($this->loader, $twig->getLoader()));
+
+            $twig->setLoader($this->loader);
+        }*/
 
         $loader = new \Twig_Loader_Array(array(
             'expression.twig' => '{{'.$code.'}}'

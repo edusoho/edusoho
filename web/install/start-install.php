@@ -192,6 +192,7 @@ function install_step3($init_data = 0)
                 $init->initSetting($admin);
                 $init->initCrontabJob();
                 $init->initOrg();
+                $init->initRole();
             } else {
                 $init->deleteKey();
                 $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
@@ -427,7 +428,7 @@ class SystemInit
     public function initAdmin($user)
     {
         $user['emailVerified'] = 1;
-        $user                  = $user                  = $this->getUserService()->register($user);
+        $user                  = $user = $this->getUserService()->register($user);
         $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
         $user['currentIp']     = '127.0.0.1';
 
@@ -886,6 +887,12 @@ EOD;
     public function initLockFile()
     {
         file_put_contents(__DIR__.'/../../app/data/install.lock', '');
+
+    }
+
+    public function initRole()
+    {
+        $this->getRoleService()->refreshRoles();
     }
 
     private function getCrontabService()
@@ -936,6 +943,11 @@ EOD;
     protected function getOrgService()
     {
         return ServiceKernel::instance()->createService('Org:Org.OrgService');
+    }
+
+    protected function getRoleService()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
     }
 
     protected function postRequest($url, $params)

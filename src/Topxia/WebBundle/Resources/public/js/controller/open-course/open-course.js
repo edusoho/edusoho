@@ -7,6 +7,7 @@ define(function(require, exports, module) {
             main.onClickThumb();
             main.onClickfavorite();
             main.onClickHeader();
+            main.removeMask();
         },
         onClickThumb: function() {
             $('.js-like-num').on('click', function() {
@@ -63,8 +64,16 @@ define(function(require, exports, module) {
                 $this.addClass('active').siblings().removeClass('active');
                 $('#content').find('ul').eq(index).show().siblings().hide();
             });
+        },
+        isEsVedio:function(){
+            if($('#lesson-preview-player').html() == ""){
+                $('.embed-responsive-16by9').addClass('masks')
+            }
+            
+        },
+        removeMask:function(){
+            setTimeout(main.isEsVedio,1500);
         }
-
     }
     exports.run = function() {
         main.init();
