@@ -1,5 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-<div class="panel panel-default">
+<div class="panel panel-default panel-420">
 	<div class="panel-heading">
    	<a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
          	>{{'更多'|trans}}</a>
@@ -7,7 +7,7 @@
 	</div>
   <div class="panel-body">
   	{% if questions %}
-      <table class="table table-condensed table-noborder table-overflow">
+      <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
         <thead>
           <tr>
             <th width="60%">{{'问题'|trans}}</th>
@@ -30,7 +30,7 @@
                 <span class="text-muted text-sm">•</span>
                 <span class="text-muted text-sm">{{'发表于'|trans}}{{question.createdTime |date('Y-n-d H:i') }}</span>#}
   	          </td>
-              <td>
+              <td class="pull-right prl">
                 10{# 换成真实数据 #}
               </td>
   	          {#<td>
