@@ -42,7 +42,7 @@ class JsonHmacSpecification implements Specification
 
     public function signature($config, $url, $body, $deadline, $once)
     {
-        $data = implode("\n", [$url, $deadline, $once, $body]);
+        $data = implode("\n", array($url, $deadline, $once, $body));
         $signature = hash_hmac($this->algo, $data, $config['secretKey'], true);
         $signature = str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
         return $signature;
