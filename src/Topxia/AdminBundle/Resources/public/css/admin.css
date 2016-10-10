@@ -226,6 +226,7 @@ input.LargeInput {width: 600px;}
 .admin-notice-list li {
   position: relative;
   padding-left: 20px;
+  margin-bottom: 5px;
 }
 .admin-notice-list li:before {
   position: absolute;
@@ -282,28 +283,28 @@ input.LargeInput {width: 600px;}
   margin-bottom: 0;
 }
 
-.subfield-list li {
+.subfield-list > li {
   float: left;
   margin: 20px auto;
   padding: 0 5px;
   text-align: center;
 }
 
-.subfield-list li + li {
+.subfield-list > li + li {
   border-left: 1px solid #eee;
 }
 
-.subfield-list li h3 {
+.subfield-list > li h3 {
   font-size: 14px;
   color: #666;
   margin-top: 0;
 }
 
-.subfield-list li .info {
+.subfield-list > li .info {
   /*font-size: 18px;*/
 }
 
-.subfield-list li .number {
+.subfield-list > li .number {
   font-size: 22px;
   margin-bottom: 10px;
   display: block;
@@ -313,32 +314,80 @@ input.LargeInput {width: 600px;}
   margin-bottom: 0;
 }
 
-.subfield-list.four-subfield li {
+.subfield-list.four-subfield > li {
   width: 25%;
 }
 
-.subfield-list.eight-subfield li {
+.subfield-list.eight-subfield > li {
   width: 12.5%;
 }
 
-.status-cord-warp {
+.status-card-warp {
   position: relative;
-
 }
 
-.status-cord-warp:hover .cord {
+.status-card-warp:hover .status-card {
   display: block;
 }
 
-.status-cord-warp .cord {
+.status-card-warp .status-card {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 110%;
   left: -50px;
   width: 170px;
   height: 180px;
-  background: red;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #f1f1f1;
+  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
 }
+
+.status-card-warp .open-serve-list {
+  padding-left: 0;
+}
+
+.status-card-warp .open-serve-list li {
+  display: block;
+  padding: 7px;
+}
+
+.status-card-warp .open-serve-list li + li {
+  border-top: 1px solid #f1f1f1;
+}
+
+.status-card-warp .open-serve-list .key {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.status-card-warp .open-serve-list .value {
+  display: inline-block;
+}
+
+.status-card-warp .open-serve-list .value.value-danger {
+  color: #dd4646;
+  text-decoration: underline;
+}
+
+.status-card-warp .open-serve-list .value .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.status-card-warp .open-serve-list .value.value-success .dot {
+  background:  #4bc37b;
+}
+
+.status-card-warp .open-serve-list .value.value-danger .dot {
+  background: #dd4646;
+}
+
+
 
 
 /*.main-system-alert {

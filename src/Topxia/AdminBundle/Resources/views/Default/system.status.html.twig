@@ -1,4 +1,63 @@
-<table class="table table-condensed table-bordered table-striped table-hover">
+<ul class="subfield-list four-subfield clearfix">
+  <li>
+    <h3>系统版本</h3>
+    <div class="info">
+      <span class="glyphicon glyphicon-ok-sign text-success"></span>
+      <span class="text-lg">7.1.1</span>
+    </div>
+  </li>
+  <li>
+    <h3>网校应用</h3>
+    <div class="info">
+      <span class="glyphicon glyphicon-info-sign text-danger"></span>
+      <a class="text-lg link-underline text-danger" href="">2个未更新</a>
+    </div>
+  </li>
+  <li>
+    <h3>教育云服务</h3>
+    <div class="info">
+      <span class="glyphicon glyphicon-info-sign text-danger"></span>
+      <span class="status-card-warp">
+        <a class="text-lg link-underline text-danger" href="">
+          2个未开启
+        </a>
+        <div class="status-card">
+          <ul class="open-serve-list">
+            <li>
+              <span class="key">云视频</span>
+              <span class="value value-success"><i class="dot"></i>已开启</span>
+            </li>
+            <li>
+              <span class="key">云文档</span>
+              <span class="value value-success"><i class="dot"></i>已开启</span>
+            </li>
+            <li>
+              <span class="key">云直播</span>
+              <span class="value value-success"><i class="dot"></i>已开启</span>
+            </li>
+            <li>
+              <span class="key">云短信</span>
+              <a href="" class="value value-danger"><i class="dot"></i>未开启</a>
+            </li>
+            <li>
+              <span class="key">云搜索</span>
+              <a href="" class="value value-danger"><i class="dot"></i>未开启</a>
+            </li>
+          </ul>
+        </div>
+      </span>
+    </div>
+  </li>
+  <li>
+    <h3>移动客户端</h3>
+    <div class="info">
+      <span class="glyphicon glyphicon-ok-sign text-success"></span>
+      <span class="text-lg">已开启</span>
+    </div>
+  </li>
+</ul>
+
+{#<table class="table table-condensed table-bordered table-striped table-hover">
   {% set status = 0 %}
   {% if error != "error" %}
     {% if mainAppUpgrade %}
@@ -161,4 +220,4 @@
     </td>
     {% endif %}
 
-</table>
+</table>#}

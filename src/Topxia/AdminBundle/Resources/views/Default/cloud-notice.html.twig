@@ -7,7 +7,7 @@
   <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
   <div class="col-md-12">
     <div class="alert alert-warning">
-      <p style = "text-align: left;font-size:18px">
+      <p>
         &nbsp;&nbsp;{{'欢迎使用，试用将于'|trans}} 
         <span style="color:#fed032;"> 
           {% if trialTime.endTime is defined %}
@@ -21,7 +21,7 @@
           {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}{{'未知'|trans}}{% endif %}
         </span> {{'天。'|trans}}
       </p>
-      <p style = "text-align: left;font-size:18px">
+      <p>
         &nbsp; {{'您可以联系销售人员购买授权版本，或者延长试用期限。'|trans}}{{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
         <span>
           <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
@@ -54,43 +54,3 @@
     </div>
   {% endif %}
 {% endif %}
-
-{# 待删<div class="col-md-12">
-<div class="alert alert-warning">
-    <p>
-      {{'欢迎使用，试用将于'|trans}} 
-      <span style="color:#fed032;"> 
-        {% if trialTime.endTime is defined %}
-          {{trialTime.endTime|date("Y-m-d")}} 
-        {% else %} 
-          {{'未知时间'|trans}}
-        {% endif %}
-      </span> 
-      {{'到期,剩余'|trans}} 
-      <span style="color:#fed032;">
-        {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}{{'未知'|trans}}{% endif %}
-      </span> {{'天。'|trans}}
-    </p>
-    <p>
-      {{'您可以联系销售人员购买授权版本，或者延长试用期限。'|trans}}{{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
-      <span>
-        <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
-      </span>
-    </p>
-</div>
-</div>
-<div class="col-md-6">
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">{{'站长公告'|trans}}</h3>
-  </div>
-  <div class="panel-body">
-    <ul class="admin-notice-list">
-      <li><a  class="link-primary" href="" target="_blank">中文</a><span class="pull-right">123:12:12</span></li>
-      <li><a  class="link-primary" href="" target="_blank">中文</a><span class="pull-right">123:12:12</span></li>
-    </ul>
-  </div>
-</div>
-
-</div> #}

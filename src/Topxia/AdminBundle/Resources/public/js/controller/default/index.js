@@ -45,20 +45,13 @@ define(function(require, exports, module) {
     }
 
     var getData = function() {
-        // systemStatusData()
-        // .then(popularCoursesData)
-        popularCoursesData()
+        systemStatusData()
         .then(operationData)
-        .then(onlineNum)
-        .then(loginNum)
+        .then(onlineNumData)
+        .then(loginNumData)
+        .then(popularCoursesData)
     }
 
-    var popularCoursesData = function() {
-        var $this = $("#popular-courses-type");
-        return $.get($this.data('url'), {dateType: $this.val()}, function(html) {
-            $('#popular-courses-table').html(html);
-        });
-    }
 
     var operationData = function() {
         return $.post($('#operation-analysis-title').data('url'),function(html){
@@ -89,15 +82,22 @@ define(function(require, exports, module) {
         });
     }
 
-    var onlineNum = function() {
+    var onlineNumData = function() {
         return $.post($('#onlineNum').data('url'),function(res){
             $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
         });
     }
 
-    var loginNum = function() {
+    var loginNumData = function() {
         return $.post($('#loginNum').data('url'),function(res){
             $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
+        });
+    }
+
+    var popularCoursesData = function() {
+        var $this = $("#popular-courses-type");
+        return $.get($this.data('url'), {dateType: $this.val()}, function(html) {
+            $('#popular-courses-table').html(html);
         });
     }
 
