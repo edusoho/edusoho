@@ -703,6 +703,14 @@ admin:
                             name: 移动端设置
                             disable: true
                             router_name: admin_setting_mobile
+                admin_setting_mobile_iap_product:
+                    name: IOS内购商品设置
+                    disable: true
+                    visable: (setting('magic.enable_mobile_iap', '0'))
+                    children:
+                        admin_setting_mobile_iap_product_list:
+                            name: IOS内购商品设置
+                            router_name: admin_setting_mobile_iap_product
                 admin_optimize:
                     name: 优化和备份
                     group: 2

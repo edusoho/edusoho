@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
@@ -207,6 +208,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $coin;
     }
 
+    //amount改为有方法体内自己计算，不信任URL传参
     private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)
     {
         if ($isSandbox) {
@@ -235,29 +237,51 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('error', "充值失败！".$errno);
         }
 
-        $data = json_decode($response);
-
-        if (!is_object($data)) {
+        $data = json_decode($response, true);
+        if (empty($data)) {
             return $this->createErrorResponse('error', "充值验证失败");
         }
 
-        if ($data->status == 21007) { //sandbox receipt 
+        if ($data['status'] == 21007) { //sandbox receipt 
             return $this->requestReceiptData($userId, $amount, $receipt, true);
         }
 
-        if (!isset($data->status) || $data->status != 0) {
-            return $this->createErrorResponse('error', "充值失败！状态码 :".$data->status);
+        if (!isset($data['status']) || $data['status'] != 0) {
+            return $this->createErrorResponse('error', "充值失败！状态码 :".$data['status']);
         }
 
-        if ($data->status == 0) {
-            return array(
-                "status" => $this->buyCoinByIAP($userId, $amount, "none")
-            );
+        if ($data['status'] == 0) {
+            if (isset($data['receipt']) && is_array($data['receipt']) && ArrayToolkit::requireds($data['receipt'], array('unique_identifier', 'quantity', 'product_id'))) {
+
+                $uniqueIdentifier = $data['receipt']['unique_identifier'];
+                $quantity = $data['receipt']['quantity'];
+                $productId = $data['receipt']['product_id'];
+
+                try {
+                    $amount = $this->calculateBoughtAmount($productId, $quantity);
+                } catch (\Exception $e) {
+                    return $this->createErrorResponse('error', $e->getMessage());
+                }
+
+                return array(
+                    "status" => $this->buyCoinByIAP($userId, $amount, "none", $uniqueIdentifier) //???app是的判断依据是什么
+                );
+            }
+            
         }
 
         return array(
             'status' => false
         );
+    }
+
+    private function calculateBoughtAmount($productId, $quantity)
+    {
+        $registeredProducts = $this->getSettingService()->get('mobile_iap_product', array());
+        if (empty($registeredProducts[$productId])) {
+            throw new \RuntimeException("该商品信息未与苹果服务器同步，充值失败");
+        }
+        return $registeredProducts[$productId]['price'] * $quantity;
     }
 
     private function coinPayNotify($payType, $amount, $sn, $status)
@@ -284,11 +308,16 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return false;
     }
 
-    private function buyCoinByIAP($userId, $amount, $payment)
+    private function buyCoinByIAP($userId, $amount, $payment, $token)
     {
         $formData['payment'] = $payment;
         $formData['userId']  = $userId;
         $formData['amount']  = $amount;
+        $formData['token']  = $token;
+
+        if ($this->getCashOrdersService()->getOrderByToken($token)) {
+            return $this->createErrorResponse('error', "订单重复，充值无效！"); 
+        }
 
         $order = $this->getCashOrdersService()->addOrder($formData);
 
