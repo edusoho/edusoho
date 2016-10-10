@@ -73,12 +73,19 @@ class MeCourses extends BaseResource
     {
         $courses = array();
         foreach ($res as $key => $one) {
-            $course = $this->callFilter($name, $one);
+            $course           = $this->callFilter($name, $one);
+            $courseConv       = $this->getConversationService()->getConversationByTarget($course['id'], 'course');
+            $course['convNo'] = $courseConv ? $courseConv['no'] : '';
 
             $courses[] = $course;
         }
 
         return $courses;
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 
     protected function getCourseService()
