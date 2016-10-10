@@ -27,15 +27,25 @@ admin_operation_analysis:
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
     permissions: [admin]
 
-admin_online_count:
-    pattern: /online/count
-    defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+admin_user_week_statistic:
+    pattern: /user/statistic/week
+    defaults: { _controller: TopxiaAdminBundle:Default:userWeekStatistic }
     permissions: [admin]
 
-admin_login_count:
-    pattern: /login/count
-    defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
+admin_user_month_statistic:
+    pattern: /user/statistic/month
+    defaults: { _controller: TopxiaAdminBundle:Default:userMonthStatistic }
     permissions: [admin]
+
+# admin_online_count:
+#     pattern: /online/count
+#     defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
+#     permissions: [admin]
+
+# admin_login_count:
+#     pattern: /login/count
+#     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
+#     permissions: [admin]
 
 admin_dashboard:
     pattern:  /dashboard

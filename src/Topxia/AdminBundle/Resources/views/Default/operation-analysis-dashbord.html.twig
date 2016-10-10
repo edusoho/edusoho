@@ -1,5 +1,63 @@
+<ul class="subfield-list eight-subfield clearfix">
+  <li>
+    <h3>{{ '登录用户'|trans }}</h3>
+    <a href="" class="number">
+      {{loginCount}}
+    </a>
+    <p>{{ '在线总数'|trans }}: {{onlineCount}}</p>
+  </li>
+  <li>
+    <h3>{{ '今日新增注册'|trans }}</h3>
+    <a href="" class="number">
+      {{todayRegisterNum}}
+    </a>
+    <p>{{ '注册总数'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '今日课程新增学员'|trans }}</h3>
+    <a href="" class="number">
+      23546
+    </a>
+    <p>{{ '总课程学习人次'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '今日班级新增学员'|trans }}</h3>
+    <a href="" class="number">
+      23546
+    </a>
+    <p>{{ '总班级学习人次'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '今日新增会员'|trans }}</h3>
+    <a href="" class="number">
+      23546
+    </a>
+    <p>{{ '总会员数'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '今日回答未回复'|trans }}</h3>
+    <a href="" class="number">
+      11/12
+    </a>
+    <p>{{ '总问答数'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '已发布课程'|trans }}</h3>
+    <a href="" class="number">
+      23546
+    </a>
+    <p>{{ '总课程数'|trans }}: 10000</p>
+  </li>
+  <li>
+    <h3>{{ '已发布班级'|trans }}</h3>
+    <a href="" class="number">
+      23546
+    </a>
+    <p>{{ '总班级数'|trans }}: 10000</p>
+  </li>
+</ul>
 
-<table class="table table-condensed table-bordered table-striped table-hover">
+{#<table class="table table-condensed table-bordered table-striped table-hover">
         <thead>
           <tr>
             <th width="35%"></th>
@@ -170,13 +228,13 @@
 				<td><a href="{{path('admin_operation_analysis_user_sum',{tab:"trend",analysisDateType:'userSum'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_user_sum',{tab:"detail",analysisDateType:'userSum'})}}">{{'详情'|trans}}</a></td>
 				{% endif %}
 			</tr>
-{# 			<tr>
+				<tr>
 				<td>退出学习数</td>
 				<td>{{todayExitLessonNum}}</td>
 				<td>{{yesterdayExitLessonNum}}</td>
 				<td><a href="{{path('admin_operation_analysis_lesson_exit',{tab:"trend",analysisDateType:'exitLesson'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_exit',{tab:"detail",analysisDateType:'exitLesson'})}}">详情</a></td>
-			</tr> #}
+			</tr>
 
 
         </tbody>
-</table>
+</table>#}

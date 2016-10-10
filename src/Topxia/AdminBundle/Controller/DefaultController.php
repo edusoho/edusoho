@@ -357,6 +357,10 @@ class DefaultController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage');
 
+        $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
+
+        $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
+
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $factory        = new CloudClientFactory();
             $client         = $factory->createClient($storageSetting);
@@ -366,6 +370,9 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
+            'onlineCount'                  => $onlineCount,
+            'loginCount'                   => $loginCount,
+
             'todayUserSum'                 => $todayUserSum,
             'yesterdayUserSum'             => $yesterdayUserSum,
             'todayCourseSum'               => $todayCourseSum,
@@ -415,17 +422,31 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function onlineCountAction(Request $request)
-    {
-        $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
-        return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+    public function userWeekStatisticAction(Request $request) {
+        return $this->createJsonResponse(array(
+            'time'    => '7',
+            'message' => 'ok'
+        ));
     }
 
-    public function loginCountAction(Request $request)
-    {
-        $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
-        return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
+    public function userMonthStatisticAction(Request $request) {
+        return $this->createJsonResponse(array(
+            'time'    => '30',
+            'message' => 'ok'
+        ));
     }
+
+    // public function onlineCountAction(Request $request)
+    // {
+    //     $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
+    //     return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
+    // }
+
+    // public function loginCountAction(Request $request)
+    // {
+    //     $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
+    //     return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
+    // }
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {

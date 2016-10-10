@@ -7,27 +7,23 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        init();
+        searchCount();
 
         //ajax 获取数据
         getData();
 
         //事件
+        getDataSwitchEvent();
+
         popularCoursesEvent();
         remindTeachersEvent();
 
         //图表
-        usersStatistic();
         studyCountStatistic();
         payOrderStatistic();
         studyLessonCountStatistic()
 
     };
-
-    var init = function() {
-       searchCount(); 
-       //noticeModal();
-    }
 
     var searchCount = function() {
         var totalWidth = $(".js-search-count").parent().width();
@@ -47,21 +43,26 @@ define(function(require, exports, module) {
     var getData = function() {
         systemStatusData()
         .then(operationData)
-        .then(onlineNumData)
-        .then(loginNumData)
         .then(popularCoursesData)
+        .then(usersStatistic)
+    }
+
+    var getDataSwitchEvent = function() {
+        DataSwitchEvent(usersStatistic);
     }
 
 
     var operationData = function() {
-        return $.post($('#operation-analysis-title').data('url'),function(html){
-            $('#operation-analysis-table').html(html);
+        var $this = $('#operation-analysis-table');
+        return $.post($this.data('url'),function(html){
+            $this.html(html);
         });
     }
 
     var systemStatusData = function() {
-        return $.post($('#system-status-title').data('url'),function(html){
-            $('#system-status').html(html);
+        var $this = $('#system-status');
+        return $.post($this.data('url'),function(html){
+            $this.html(html);
 
             $('.mobile-customization-upgrade-btn').click(function() {
                 var $btn = $(this).button('loading');
@@ -79,18 +80,6 @@ define(function(require, exports, module) {
                 });
             })
 
-        });
-    }
-
-    var onlineNumData = function() {
-        return $.post($('#onlineNum').data('url'),function(res){
-            $('#onlineNum').html(Translator.trans('当前在线：%res%人',{res:res.onlineCount}));
-        });
-    }
-
-    var loginNumData = function() {
-        return $.post($('#loginNum').data('url'),function(res){
-            $('#loginNum').html(Translator.trans('登录人数：%res%人',{res:res.loginCount}));
         });
     }
 
@@ -152,7 +141,15 @@ define(function(require, exports, module) {
                 }
             ]
         };
-        chart.setOption(option);
+
+        chart.showLoading();
+
+        return $.get(this.element.data('url'),function(data){
+            // console.log('data',data);
+            
+            chart.hideLoading();
+            chart.setOption(option);
+        })
     }
 
     var studyCountStatistic = function() {
@@ -294,6 +291,23 @@ define(function(require, exports, module) {
         };
         chart.setOption(option);
     }
+
+    var DataSwitchEvent = function(callback) {
+        $('.js-data-switch-button').on('click',function(){
+            var $this = $(this);
+            if(! $this.hasClass('btn-primary')) {
+                $this.removeClass('btn-default').addClass('btn-primary')
+                    .siblings().removeClass('btn-primary').addClass('btn-default');
+
+                $this.parent().siblings('.js-data-switch-time').text($this.data('time'));
+
+                $this.parents('.panel').find('.js-statistic-areas').data('url',$this.data('url'));
+
+                callback();
+            }
+        })
+    }
+
 
     var popularCoursesEvent = function () {
         $("#popular-courses-type").on('change', function() {

@@ -24,10 +24,9 @@
         <div class="col-md-6">
           <div class="panel panel-default panel-150">
             <div class="panel-heading">
-              <h3 class="panel-title" id="system-status-title"
-                  data-url="{{ path('admin_system_status') }}">{{ '系统状态'|trans }}</h3>
+              <h3 class="panel-title">{{ '系统状态'|trans }}</h3>
             </div>
-            <div class="panel-body" id="system-status">
+            <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
               <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
             </div>
           </div>
@@ -43,73 +42,12 @@
           </span>
           （<span id="loginNum" data-url="{{ path('admin_login_count') }}">{{ '正在载入登录人数...'|trans }}</span>）
         </span>#}
-        <h3 class="panel-title" id="operation-analysis-title"
-            data-url="{{ path('admin_operation_analysis') }}"> {{ '网站概览'|trans }}
+        <h3 class="panel-title"> 
+          {{ '网站概览'|trans }}
         </h3>
       </div>
-      <div class="panel-body">
-        <ul class="subfield-list eight-subfield clearfix">
-          <li>
-            <h3>{{ '登录用户'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '在线总数'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '今日新增注册'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '注册总数'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '今日课程新增学员'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '总课程学习人次'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '今日班级新增学员'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '总班级学习人次'|trans }}：10000</p>
-          </li>
-
-          <li>
-            <h3>{{ '今日新增会员'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '总会员数'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '今日回答未回复'|trans }}</h3>
-            <a href="" class="number">
-              11/12
-            </a>
-            <p>{{ '总问答数'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '已发布课程'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '总课程数'|trans }}：10000</p>
-          </li>
-          <li>
-            <h3>{{ '已发布班级'|trans }}</h3>
-            <a href="" class="number">
-              23546
-            </a>
-            <p>{{ '总班级数'|trans }}：10000</p>
-          </li>
-        </ul>
-        {#<div id="operation-analysis-table">
-          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-        </div>#}
+      <div class="panel-body" id="operation-analysis-table" data-url="{{ path('admin_operation_analysis') }}">
+        <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
       </div>
     </div>
 
@@ -142,15 +80,15 @@
     <div class="panel panel-default panel-380">
       <div class="panel-heading">
         <div class="pull-right">
-          <span class="mrl text-sm">2016/09/01~2016/09/07 </span> 
+          <span class="mrl text-sm js-data-switch-time">2016/09/01~2016/09/07</span> 
           <div class="btn-group btn-group-xs">
-            <button type="button" class="btn btn-primary">最近7天</button>
-            <button type="button" class="btn btn-default">最近30天</button>
+            <button type="button" class="btn btn-primary js-data-switch-button" data-time="2016/09/01~2016/09/07" data-url="{{path('admin_user_week_statistic')}}">最近7天</button>
+            <button type="button" class="btn btn-default js-data-switch-button" data-time="2016/09/01~2016/09/30" data-url="{{path('admin_user_month_statistic')}}">最近30天</button>
           </div>
         </div>
         <h3 class="panel-title">{{ '用户统计'|trans }}</h3>
       </div>
-      <div class="panel-body" id="user-statistic" style="height:320px;">
+      <div class="panel-body js-statistic-areas" id="user-statistic" style="height:320px;" data-url="{{path('admin_user_week_statistic')}}">
         
       </div>
     </div>
