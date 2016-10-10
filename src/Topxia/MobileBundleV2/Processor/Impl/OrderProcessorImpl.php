@@ -253,18 +253,22 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         if ($data['status'] == 0) {
             if (isset($data['receipt']) && is_array($data['receipt']) && ArrayToolkit::requireds($data['receipt'], array('unique_identifier', 'quantity', 'product_id'))) {
 
-                $uniqueIdentifier = $data['receipt']['unique_identifier'];
+                $token = 'iap-'.$data['receipt']['unique_identifier'];
                 $quantity = $data['receipt']['quantity'];
                 $productId = $data['receipt']['product_id'];
 
                 try {
-                    $amount = $this->calculateBoughtAmount($productId, $quantity);
+                    $calculatedAmount = $this->calculateBoughtAmount($productId, $quantity);
                 } catch (\Exception $e) {
                     return $this->createErrorResponse('error', $e->getMessage());
                 }
 
+                if ($calculatedAmount != $amount) {
+                    return $this->createErrorResponse('error', '金额校验错误，充值失败');
+                }
+
                 return array(
-                    "status" => $this->buyCoinByIAP($userId, $amount, "none", $uniqueIdentifier) //???app是的判断依据是什么
+                    "status" => $this->buyCoinByIAP($userId, $calculatedAmount, "none", $token) //???app是的判断依据是什么
                 );
             }
             
