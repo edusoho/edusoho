@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Service\User\Impl\TokenServiceImpl;
 
 class BaseProcessor {
 
@@ -173,6 +174,9 @@ class BaseProcessor {
         return $this->controller->getService('User.NotificationService');
     }
 
+    /**
+     * @return TokenServiceImpl
+     */
     protected function getTokenService()
     {
         return $this->controller->getService('User.TokenService');

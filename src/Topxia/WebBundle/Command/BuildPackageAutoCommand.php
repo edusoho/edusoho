@@ -64,6 +64,10 @@ class BuildPackageAutoCommand extends BaseCommand
             $line = fgets($file);
             $op   = $line[0];
 
+            if (empty($line)) {
+                continue;
+            }
+
             if (!in_array($line[0], array('M', 'A', 'D'))) {
                 echo "无法处理该文件：{$line}";
                 continue;
@@ -268,14 +272,13 @@ class BuildPackageAutoCommand extends BaseCommand
         if (!$this->filesystem->exists($RootPath.'build')) {
             $this->filesystem->mkdir($RootPath.'build');
         }
-        $prefix = 'release';
 
-        $gitRelease   = exec("git branch |grep v{$version}");
-        $gitToRelease = exec("git branch |grep release/{$toVersion}");
-        if (empty($gitRelease)) {
+        $gitTag   = exec("git tag |grep v{$version}");
+        $gitRelease = exec("git branch |grep release/{$toVersion}");
+        if (empty($gitTag)) {
             echo "标签 v{$version} 不存在, 无法生成差异文件\n";
         }
-        if (empty($gitToRelease)) {
+        if (empty($gitRelease)) {
             echo "分支 release/{$toVersion} 不存在, 无法生成差异文件\n";exit;
         }
         $this->output->writeln("<info>  使用 git  diff --name-status  v{$version} release{$toVersion} > build/diff-{$toVersion} 生成差异文件：build/diff-{$toVersion}</info>");

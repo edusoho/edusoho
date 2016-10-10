@@ -16,9 +16,7 @@ class UploaderExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-
-        );
+        return array();
     }
 
     public function getFunctions()
@@ -59,9 +57,13 @@ class UploaderExtension extends \Twig_Extension
             'materiallib'    => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'attachment'     => array('video', 'audio', 'ppt', 'document', 'zip')
         );
-        $availableAccepts = array(
+        $availableAccepts  = array(
             'video'          => array(
                 'extensions' => array('mp4', 'avi', 'flv', 'f4v', 'mpg', 'wmv', 'mov', 'vob', 'rmvb', 'mkv', 'm4v'),
+                'mimeTypes'  => array('video/*')
+            ),
+            'local_video'    => array(
+                'extensions' => array('mp4'),
                 'mimeTypes'  => array('video/*')
             ),
             'audio'          => array(
