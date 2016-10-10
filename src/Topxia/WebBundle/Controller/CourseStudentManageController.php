@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\User\Impl\NotificationServiceImpl;
 
 class CourseStudentManageController extends BaseController
 {
@@ -499,6 +500,9 @@ class CourseStudentManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return NotificationServiceImpl
+     */
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');

@@ -461,7 +461,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createServiceException($this->getKernel()->trans('课程不存在，更新失败！'));
         }
-
         $fields = $this->_filterCourseFields($fields);
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -502,10 +501,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function _filterCourseFields($fields)
     {
+        if ($fields['expiryMode'] == 'date') {
+            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+        }
+
+
         $fields = ArrayToolkit::filter($fields, array(
             'title'          => '',
             'subtitle'       => '',
             'about'          => '',
+            'expiryMode'     => 'none',
             'expiryDay'      => 0,
             'serializeMode'  => 'none',
             'categoryId'     => 0,
@@ -530,14 +535,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             'orgId'          => ''
         ));
 
+
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int)$item['id'];
-            }
-
-            );
+            });
         }
 
         return $fields;
@@ -2233,8 +2237,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
+        //按照课程有效期模式计算学员有效期
         if ($course['expiryDay'] > 0) {
-            $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+            if ($course['expiryMode'] == 'days') {
+                $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+            }
+            if ($course['expiryMode'] == 'date') {
+                $deadline = $course['expiryDay'];
+            }
         } else {
             $deadline = 0;
         }
@@ -2454,7 +2464,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
-     * @param int|string  $courseId
+     * @param int|string $courseId
      * @param null|string $otherPermission
      * @return array
      * @throws NotFoundException|AccessDeniedException
@@ -2481,7 +2491,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int|string  $courseId
+     * @param int|string $courseId
      * @param null|string $actionPermission
      * @return array
      * @throws NotFoundException|AccessDeniedException
@@ -2538,7 +2548,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourse($courseId);
 
-        if(empty($course)){
+        if (empty($course)) {
             throw new ResourceNotFoundException('course', $courseId);
         }
 
@@ -2557,13 +2567,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course) || empty($member)) {
             throw $this->createServiceException($this->getKernel()->trans('course, member参数不能为空'));
         }
-
-        /*
-        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
-        if ($course['expiryDay'] == 0) {
-        return true;
-        }
-         */
 
         if ($member['deadline'] == 0) {
             return true;
@@ -2977,7 +2980,7 @@ class CourseSerialize
     {
         if (isset($course['tags'])) {
             if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
+                $course['tags'] = '|'.implode('|', $course['tags']).'|';
             } else {
                 $course['tags'] = '';
             }
@@ -2985,7 +2988,7 @@ class CourseSerialize
 
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
+                $course['goals'] = '|'.implode('|', $course['goals']).'|';
             } else {
                 $course['goals'] = '';
             }
@@ -2993,7 +2996,7 @@ class CourseSerialize
 
         if (isset($course['audiences'])) {
             if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
+                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
             } else {
                 $course['audiences'] = '';
             }
@@ -3001,7 +3004,7 @@ class CourseSerialize
 
         if (isset($course['teacherIds'])) {
             if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
             } else {
                 $course['teacherIds'] = null;
             }
