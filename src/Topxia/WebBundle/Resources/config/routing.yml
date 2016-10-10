@@ -2198,6 +2198,15 @@ open_course_manage_files:
     pattern:  /open/course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:index }
 
+open_course_manage_file_show:
+    pattern:  /open/course/{id}/manage/file/{fileId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:show }
+
+open_course_manage_file_convert:
+    pattern:  /open/course/{id}/manage/file/{fileId}/convert
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:convert }
+    methods: [POST]
+
 open_course_manage_files_batch_upload:
     pattern:  /open/course/{id}/manage/files/batch/upload/{targetType}
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:batchUploadCourseFiles }
