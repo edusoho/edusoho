@@ -10,8 +10,8 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\CloudPlatform\IMAPIFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -769,7 +769,7 @@ class EduCloudController extends BaseController
             $user         = $this->getCurrentUser();
 
             //去云平台判断im账号是否存在
-            $api = IMAPIFactory::create();
+            $api       = IMAPIFactory::create();
             $imAccount = $api->get('/me/account');
 
             if (isset($imAccount['error'])) {

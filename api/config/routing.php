@@ -101,6 +101,7 @@ $app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
 $app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
 $app->post(_u('/im/members'), 'res.IM/Member:post');
 $app->post(_u('/im/sync'), 'res.IM/MemberSync:post');
+$app->post(_u('/im/me/push'), 'res.IM/MePush:post');
 
 $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
@@ -115,4 +116,3 @@ $app->get(_u('/classrooms/{classRoomId}/threads'), 'res.ClassRoomThreads:get');
 $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
 $app->get(_u('/setting/{settingName}'), 'res.Setting:get');
-$app->get(_u('/im/me/logout'), 'res.IM/MeLogout:get');

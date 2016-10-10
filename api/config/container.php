@@ -65,7 +65,7 @@ $resources = array(
     'OpenCourses',
     'OpenCourse/Lesson',
     'OpenCourse/Lessons',
-    'IM/MeLogout',
+    'IM/MePush',
     'IM/Member',
     'IM/MemberSync'
 );
