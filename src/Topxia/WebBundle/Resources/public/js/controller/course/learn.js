@@ -562,12 +562,12 @@ define(function(require, exports, module) {
                                     html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
+                                    if (iID) {
+                                        clearInterval(iID);
+                                    }
+                                    
                                     if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
                                         
-                                        if (iID) {
-                                            clearInterval(iID);
-                                        }
-
                                         function generateTestHtml() {
                                             var now = parseInt(new Date().getTime()/1000),
                                                 day=0,
