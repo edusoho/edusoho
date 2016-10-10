@@ -18,4 +18,5 @@ return array(
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src', $vendorDir . '/endroid/qrcode/tests'),
     'Endroid\\Bundle\\QrCodeBundle\\'         => array($vendorDir . '/endroid/qrcode-bundle/src'),
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
+    'Codeages\\RestApiClient\\' => array($vendorDir . '/codeages/rest-api-client/src'),
 );
