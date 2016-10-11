@@ -20,9 +20,6 @@ class MarkerController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        // var_dump('test');
-        // var_dump($lesson);
-        // var_dump($course);
         return $this->render('TopxiaWebBundle:Marker:preview.html.twig', array(
             'course' => $course,
             'lesson' => $lesson
