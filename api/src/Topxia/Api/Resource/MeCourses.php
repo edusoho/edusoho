@@ -76,6 +76,9 @@ class MeCourses extends BaseResource
             $course           = $this->callFilter($name, $one);
             $courseConv       = $this->getConversationService()->getConversationByTarget($course['id'], 'course');
             $course['convNo'] = $courseConv ? $courseConv['no'] : '';
+            if ($course['parentId'] > 0) {
+                continue;
+            }
 
             $courses[] = $course;
         }
