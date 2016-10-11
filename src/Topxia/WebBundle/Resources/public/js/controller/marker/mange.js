@@ -482,7 +482,6 @@ define(function (require, exports, module) {
         async: false,
         success: function (data) {
             initMarkerArry = data.markersMeta;
-            console.log(initMarkerArry);
             mediaLength = data.videoTime;
         }
     });
@@ -537,8 +536,12 @@ define(function (require, exports, module) {
                 id: markerJson.id,
                 second: markerJson.second
             };
-            $.post(url, param, function (data) {
-            });
+            if(markerJson.second){
+                $.post(url, param, function (data) {
+                });
+            }else{
+                console.log('do not need upgrade scale...');
+            }
             return markerJson;
         },
         deleteScale: function (markerJson, $marker, $marker_question, marker_questions_num, markers_array) {
