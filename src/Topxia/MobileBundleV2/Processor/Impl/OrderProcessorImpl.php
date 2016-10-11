@@ -260,9 +260,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 try {
                     $calculatedAmount = $this->calculateBoughtAmount($productId, $quantity);
 
-                    if ($calculatedAmount != $amount) {
-                        throw new \RuntimeException("金额校验错误，充值失败");
-                    }
+                    // if ($calculatedAmount != $amount) {
+                    //     throw new \RuntimeException("金额校验错误，充值失败");
+                    // }
 
                     $status = $this->buyCoinByIAP($userId, $calculatedAmount, "none", $token);
 
