@@ -251,11 +251,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if ($data['status'] == 0) {
-            if (isset($data['receipt']) && is_array($data['receipt']) && ArrayToolkit::requireds($data['receipt'], array('unique_identifier', 'quantity', 'product_id'))) {
+            if (isset($data['receipt']) && !empty($data['receipt']['in_app']) && ArrayToolkit::requireds($data['receipt']['in_app'][0], array('transaction_id', 'quantity', 'product_id'))) {
 
-                $token = 'iap-'.$data['receipt']['unique_identifier'];
-                $quantity = $data['receipt']['quantity'];
-                $productId = $data['receipt']['product_id'];
+                $token = 'iap-'.$data['receipt']['in_app'][0]['transaction_id'];
+                $quantity = $data['receipt']['in_app'][0]['quantity'];
+                $productId = $data['receipt']['in_app'][0]['product_id'];
 
                 try {
                     $calculatedAmount = $this->calculateBoughtAmount($productId, $quantity);
