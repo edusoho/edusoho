@@ -210,7 +210,7 @@ class QuestionMarkerController extends BaseController
         $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            5
+            7
         );
 
         $paginator->setPageRange(4);
