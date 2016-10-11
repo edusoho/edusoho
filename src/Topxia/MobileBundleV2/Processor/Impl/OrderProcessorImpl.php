@@ -259,16 +259,19 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
                 try {
                     $calculatedAmount = $this->calculateBoughtAmount($productId, $quantity);
+
+                    if ($calculatedAmount != $amount) {
+                        throw new \RuntimeException("金额校验错误，充值失败");
+                    }
+
+                    $status = $this->buyCoinByIAP($userId, $calculatedAmount, "none", $token);
+
                 } catch (\Exception $e) {
                     return $this->createErrorResponse('error', $e->getMessage());
                 }
 
-                if ($calculatedAmount != $amount) {
-                    return $this->createErrorResponse('error', '金额校验错误，充值失败');
-                }
-
                 return array(
-                    "status" => $this->buyCoinByIAP($userId, $calculatedAmount, "none", $token) //???app是的判断依据是什么
+                    "status" => $status
                 );
             }
             
@@ -320,7 +323,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $formData['token']  = $token;
 
         if ($this->getCashOrdersService()->getOrderByToken($token)) {
-            return $this->createErrorResponse('error', "订单重复，充值无效！"); 
+            throw new \RuntimeException("订单重复，充值无效");
         }
 
         $order = $this->getCashOrdersService()->addOrder($formData);
