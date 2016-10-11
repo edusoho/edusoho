@@ -20,6 +20,8 @@ class Course extends BaseResource
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
+        $res['convNo'] = $this->getConversation($res['id']);
+
         return $res;
     }
 
@@ -27,16 +29,31 @@ class Course extends BaseResource
     {
         $simple = array();
 
-        $simple['id']       = $res['id'];
-        $simple['title'] = $res['title'];
-        $simple['picture']   = $this->getFileUrl($res['smallPicture']);
-        $simple['conversationNo']    = $res['conversationId'];
+        $simple['id']      = $res['id'];
+        $simple['title']   = $res['title'];
+        $simple['picture'] = $this->getFileUrl($res['smallPicture']);
+        $simple['convNo']  = $this->getConversation($res['id']);
 
         return $simple;
+    }
+
+    protected function getConversation($courseId)
+    {
+        $conversation = $this->getConversationService()->getConversationByTarget($courseId, 'course');
+        if ($conversation) {
+            return $conversation['no'];
+        }
+
+        return '';
     }
 
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

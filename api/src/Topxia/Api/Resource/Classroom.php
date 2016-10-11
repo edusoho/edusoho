@@ -30,13 +30,13 @@ class Classroom extends BaseResource
     {
         $simple = array();
 
-        $simple['id']             = $res['id'];
-        $simple['picture']        = $res['middlePicture'];
-        $simple['title']          = $res['title'];
-        $simple['about']          = $res['about'];
-        $simple['headTeacherId']  = $res['headTeacherId'];
-        $simple['teacherIds']     = $res['teacherIds'];
-        $simple['conversationNo'] = $res['convNo'];
+        $simple['id']            = $res['id'];
+        $simple['picture']       = $res['middlePicture'];
+        $simple['title']         = $res['title'];
+        $simple['about']         = $res['about'];
+        $simple['headTeacherId'] = $res['headTeacherId'];
+        $simple['teacherIds']    = $res['teacherIds'];
+        $simple['convNo']        = $this->getConversation($res['id']);
 
         return $simple;
     }
@@ -44,6 +44,7 @@ class Classroom extends BaseResource
     public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
+        $res['convNo']      = $this->getConversation($res['id']);
 
         foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
             $res[$key] = $this->getFileUrl($res[$key]);
@@ -52,8 +53,24 @@ class Classroom extends BaseResource
         return $res;
     }
 
+    protected function getConversation($classroomId)
+    {
+        $conversation = $this->getConversationService()->getConversationByTarget($classroomId, 'classroom');
+
+        if ($conversation) {
+            return $conversation['no'];
+        }
+
+        return '';
+    }
+
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }
