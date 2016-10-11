@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 
 class AppPackageUpdateController extends BaseController
 {
@@ -71,6 +72,15 @@ class AppPackageUpdateController extends BaseController
     {
         $index  = $request->query->get('index', 0);
         $errors = $this->getAppService()->beginPackageUpdate($id, $request->query->get('type'), $index);
+        if (empty($errors)) {
+            echo json_encode(array('status' => 'ok'));
+            exit;
+        }
+
+        if (isset($errors['index'])) {
+            echo json_encode($errors);
+            exit;
+        }
         return $this->createResponseWithErrors($errors);
     }
 
@@ -136,6 +146,9 @@ class AppPackageUpdateController extends BaseController
         return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
     }
 
+    /**
+     * @return AppServiceImpl
+     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

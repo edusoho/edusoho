@@ -31,6 +31,11 @@ define(function(require, exports, module) {
 
 
         $updateBtn.click(function() {
+
+            if(!confirm(Translator.trans('是否确认升级，升级过程中网站将进入维护状态'))) {
+                return;
+            }
+
             $updateBtn.hide();
             $("#updating-hint").show();
             progressBar.show();
