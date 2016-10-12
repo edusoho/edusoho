@@ -28,6 +28,7 @@
 
 {% for review in reviews if users[review.userId]|default(false) %}
   {% set user = users[review.userId] %}
+  {% set posts = data('ReviewPosts',{reviewId:review.id, targetType:targetType|default('course'), start:0,limit:5})|default(null) %}
 
   <div class="js-reviews">
     <div class="media media-evaluate">
@@ -51,7 +52,7 @@
           <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'展开全文'|trans}}]</a>
           <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'收起全文'|trans}}]</a>
           {% if canAccess %}
-            <a href="javascript:;" class="js-reply pull-right">{% if review.subPosts|default(null) is empty %}{{'回复'|trans}}{% else %}{{'收起'|trans}}{% endif %}</a>
+            <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'回复'|trans}}{% else %}{{'收起'|trans}}{% endif %}</a>
           {% endif %}
         </div>
         
@@ -62,19 +63,19 @@
           {% set postReplyUrl = path('course_review_post',{id:review.courseId,reviewId:review.id}) %}
         {% endif %}
 
-        <div class="thread-subpost-container subcomments clearfix {% if review.subPosts|default(null) is empty %}hide{% endif %}">
+        <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">
           <div class="thread-subpost-content">
-            {% include 'TopxiaWebBundle:Review/Widget:subposts.html.twig' with {posts:review.subPosts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
+            {% include 'TopxiaWebBundle:Review/Widget:subposts.html.twig' with {posts:posts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
           </div>
           
           {% if canAccess %}
-            <div class="thread-subpost-morebar clearfix {% if review.subPosts|default(null) is empty %}hide{% endif %}">
+            <div class="thread-subpost-morebar clearfix {% if posts is empty %}hide{% endif %}">
               <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'回复'|trans}}</button>
             </div>
           {% endif %}
 
           {% if app.user %}
-            <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if review.subPosts %}hide{% endif %}">
+            <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if posts %}hide{% endif %}">
               <div class="form-group">
                 <div class="controls">
                   <textarea class="form-control" name="content" data-display="{{'内容'|trans}}"></textarea>

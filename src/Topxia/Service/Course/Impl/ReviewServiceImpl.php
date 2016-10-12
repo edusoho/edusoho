@@ -45,15 +45,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $orderBy = $this->checkOrderBy($sort);
 
         $conditions = $this->prepareReviewSearchConditions($conditions);
-        $reviews    = $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
-
-        if ($reviews) {
-            foreach ($reviews as $key => $review) {
-                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), array('createdTime', 'ASC'), 0, 5);
-            }
-        }
-
-        return $reviews;
+        return $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
     }
 
     public function searchReviewsCount($conditions)

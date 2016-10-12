@@ -18,15 +18,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
 
-        $reviews = $this->getClassroomReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
-
-        if ($reviews) {
-            foreach ($reviews as $key => $review) {
-                $reviews[$key]['subPosts'] = $this->searchReviews(array('parentId' => $review['id']), array('createdTime', 'ASC'), 0, 5);
-            }
-        }
-
-        return $reviews;
+        return $this->getClassroomReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
     }
 
     public function searchReviewCount($conditions)
