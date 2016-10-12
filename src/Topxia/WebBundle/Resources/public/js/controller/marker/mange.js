@@ -38,11 +38,12 @@ define(function (require, exports, module) {
         events: {
             'mousedown .gruop-lesson-list .drag': 'itemDraggable',
             'click .lesson-list [data-role="question-remove"]': 'itemRmove',
-            'click .lesson-list [data-role="question-info"]': 'previewQuestion',
+            'click #subject-lesson-list .item-lesson': 'stopEvent',
             'mousedown .scale-blue': 'slideScale',
             'mouseenter .scale-blue': 'hoverScale',
-            'mousedown .scale-blue .item-lesson': 'itemSqe',
+            'mousedown .scale-blue .item-lesson': 'previewQuestion',
             'mousedown .js-question-preview': 'previewMouseDown',
+
         },
         setup: function () {
             this._initSortable();
@@ -98,6 +99,9 @@ define(function (require, exports, module) {
                 $marker = $this.closest('.scale-blue');
             this._deleteScale($marker, $marker_question, $list.children().length, this.get('markers_array'));
         },
+        stopEvent: function(e) {
+            e.stopPropagation();
+        },
         hoverScale: function (e) {
             var $this = $(e.currentTarget);
             if ($this.offset().left - 20 < 110) {
@@ -107,6 +111,7 @@ define(function (require, exports, module) {
             }
         },
         previewQuestion: function (e) {
+            e.stopPropagation();
             var $this = $(e.currentTarget), url = $this.data('url');
             if (url) {
                 var imgUrl = app.config.loading_img_path;
@@ -115,10 +120,6 @@ define(function (require, exports, module) {
                 $target.html($loadingImg);
                 $target.load(url);
             }
-        },
-        itemSqe: function (e) {
-            //阻止默认事件，父层的滑动
-            e.stopPropagation();
         },
         previewMouseDown: function (e) {
             //阻止默认事件，父层的拖动
@@ -319,7 +320,7 @@ define(function (require, exports, module) {
                         $new_scale_blue_item.find('[data-role="sqe-number"]').text(j + 1);
                         $new_scale_blue_item.find('[data-role="question-type"]').text('单选题');
                         $new_scale_blue_item.find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
-                        $new_scale_blue_item.find('[data-role="question-info"]').data('url','/course/'+this.get('courseId')+'/manage/question/'+questionMarkers[j].questionId+'/preview');
+                        $new_scale_blue_item.data('url','/course/'+this.get('courseId')+'/manage/question/'+questionMarkers[j].questionId+'/preview');
                         $scale_blue_item.before($new_scale_blue_item);
                     }
                     $scale_blue.after($new_scale_blue);

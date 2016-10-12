@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% for question in questions %}
-    <li class=" item-lesson {% if question.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{question.id}}" data-role="scale-blue-item" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">
+    <li class=" item-lesson {% if question.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{question.id}}" data-role="scale-blue-item" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}"  data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}" data-toggle="modal" data-target=".modal">
       <span class="sqe-number"><i class="question-remove es-icon es-icon-icon_close_circle" data-role="question-remove"></i><span data-role="sqe-number">1</span>、</span>
       <span class="title">
         <i class="icon-drag es-icon es-icon-yidong {% if loop.index == 1 %}introhelp-icon-drag{% endif %}"></i>

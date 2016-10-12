@@ -12772,7 +12772,7 @@ textarea {
 .marker-manage .lesson-list .more-questions {
   position: absolute;
   right: 15px;
-  bottom: 0;
+  bottom: -15px;
   left: 0;
   text-align: right;
   color: #919191;
@@ -12920,7 +12920,6 @@ textarea {
   overflow: visible;
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson {
-  position: relative;
   padding: 0 10px;
   margin-bottom: 0;
   text-align: left;
