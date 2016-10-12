@@ -566,8 +566,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $course               = $this->getCourseService()->getCourse($id);
                 $target['title']      = $course['title'];
                 $target['image']      = $this->getFileUrl($course['smallPicture']);
-                $target['convNo']     = empty($course['convNo']) ? '' : $course['convNo'];
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
+                $conv = $this->getConversationService()->getConversationByTarget($id, 'course');
+                $target['convNo']     = empty($conv) ? '' : $conv['no'];
                 break;
             case 'lesson':
                 $lesson          = $this->getCourseService()->getLesson($id);
@@ -738,5 +739,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getGroupService()
     {
         return ServiceKernel::instance()->createService('Group.GroupService');
+    }
+
+    protected function getConversationService()
+    {
+        return ServiceKernel::instance()->createService('IM.ConversationService');
     }
 }
