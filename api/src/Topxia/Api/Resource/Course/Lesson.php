@@ -117,9 +117,9 @@ class Lesson extends BaseResource
         $client  = $factory->createClient();
 
         $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $url    = $client->generateFileUrl($metas2['pdf']['key'], 3600);
         $pdfUri = $url['url'];
-        // $url    = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        // $url    = $client->generateFileUrl( $metas2['swf']['key'], 3600);
         // $swfUri = $url['url'];
 
         $lesson['content'] = array(
@@ -227,7 +227,7 @@ class Lesson extends BaseResource
                         }
 
                         if ($key) {
-                            $url                = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $url                = $client->generateFileUrl($key, 3600);
                             $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
                         } else {
                             $lesson['mediaUri'] = '';
