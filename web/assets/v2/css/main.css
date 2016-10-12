@@ -12638,6 +12638,8 @@ textarea {
   }
 }
 .marker-manage {
+  position: relative;
+  min-width: 1200px;
   height: 100%;
   background-color: #313131;
   overflow: hidden;

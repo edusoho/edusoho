@@ -8,7 +8,7 @@
       <li>
         <a href="/">{{course.title}}</a>
       </li>
-      <li class="active">{{lesson.title}}</li>
+      <li class="active">{{lesson.title|plain_text(50) }}</li>
       </ol>
   </div>
   <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
