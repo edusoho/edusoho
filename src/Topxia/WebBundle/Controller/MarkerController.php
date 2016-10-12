@@ -16,7 +16,7 @@ class MarkerController extends BaseController
         ));
     }
 
-    public function managePreviewAction(Request $request, $courseId, $lessonId)
+    public function previewAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -82,7 +82,7 @@ class MarkerController extends BaseController
             'updatedTime' => time(),
             'second'      => isset($data['second']) ? $data['second'] : ""
         );
-        $marker = $this->getMarkerService()->updateMarker($data['id'], $fields);
+        $marker     = $this->getMarkerService()->updateMarker($data['id'], $fields);
         return $this->createJsonResponse($marker);
     }
 
