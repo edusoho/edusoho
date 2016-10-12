@@ -356,13 +356,13 @@ class ClassroomManageController extends BaseController
             );
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
-            $member  = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $user    = $this->getCurrentUser();
-            $message = array(
+            $member      = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+            $currentUser = $this->getCurrentUser();
+            $message     = array(
                 'classroomId'    => $classroom['id'],
                 'classroomTitle' => $classroom['title'],
-                'userId'         => $user['id'],
-                'userName'       => $user['nickname'],
+                'userId'         => $currentUser['id'],
+                'userName'       => $currentUser['nickname'],
                 'type'           => 'create');
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
