@@ -1,0 +1,16 @@
+parameters:
+    biz_config:
+        database:
+            name: "%database_name%"
+            user: "%database_user%"
+            password: "%database_password%"
+            host: "%database_host%"
+            driver: "%database_driver%"
+            charset: UTF-8
+
+services:
+    biz:
+        class: Biz
+        arguments: ["%biz_config%"]
+        tags:
+            - { name: service.kernel }
