@@ -1,10 +1,10 @@
 
 @font-face {font-family: "es-icon";
-  src: url('fonts/es-icon.eot?t=1459854189'); /* IE9*/
-  src: url('fonts/es-icon.eot?t=1459854189#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('fonts/es-icon.woff?t=1459854189') format('woff'), /* chrome, firefox */
-  url('fonts/es-icon.ttf?t=1459854189') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('fonts/es-icon.svg?t=1459854189#es-icon') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1472780784'); /* IE9*/
+  src: url('iconfont.eot?t=1472780784#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1472780784') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1472780784') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1472780784#es-icon') format('svg'); /* iOS 4.1- */
 }
 
 .es-icon {
