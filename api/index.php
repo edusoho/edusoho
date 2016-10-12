@@ -2,7 +2,7 @@
 
 date_default_timezone_set('UTC');
 
-require_once __DIR__.'/../vendor2/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;

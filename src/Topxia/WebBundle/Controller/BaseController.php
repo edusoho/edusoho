@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -178,7 +178,7 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    public function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = null, \Exception $previous = null)
     {
         if ($message) {
             return new AccessDeniedException($message);

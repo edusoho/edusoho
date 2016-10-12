@@ -1,12 +1,13 @@
 <?php
 namespace Topxia\Service\Common;
 
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class SessionHandlerFactory
 {
-    private static $container;
-    private static $instance;
 
-    public static function getSessionHandler($container)
+    public static function getSessionHandler(ContainerInterface $container)
     {
         $redisSetting = self::getSettingService()->get('redis');
 

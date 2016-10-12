@@ -6,8 +6,8 @@ imports:
 
 framework:
     # esi:             ~
-    translator:      { fallback: %locale% }
-    secret:          %secret%
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -15,7 +15,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     templating:
-        engines: ['twig']
+        engines: ['twig', 'php']
         assets_version: 7.2.3
     default_locale:  "%locale%"
     trusted_proxies: ~
@@ -25,19 +25,19 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
     paths:
         "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../" : root
     globals:
-        disabled_features: %disabled_features%
+        disabled_features: "%disabled_features%"
 
 # Assetic Configuration
 assetic:
-    debug:          %kernel.debug%
+    debug:          "%kernel.debug%"
     use_controller: false
     bundles:        [ ]
     #java: /usr/bin/java
@@ -57,19 +57,19 @@ doctrine:
         connections:
             default:
                 wrapper_class: Topxia\Service\Common\Connection
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
                 charset:  UTF8
 
                 mapping_types:
                     enum: string
 
     orm:
-        auto_generate_proxy_classes: %kernel.debug%
+        auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
 
 # Swiftmailer Configuration
@@ -103,6 +103,7 @@ parameters:
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
 
 services:
+
     app.locale_listener:
         class: Topxia\WebBundle\Listener\LocaleListener
         arguments: ['%kernel.default_locale%']
@@ -120,8 +121,8 @@ services:
 
         arguments:
             dsn:      "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
-            user:     %database_user%
-            password: %database_password%
+            user:     "%database_user%"
+            password: "%database_password%"
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
@@ -129,8 +130,7 @@ services:
 
     session.handler.redis.factory:
         class: Topxia\Service\Common\Redis\RedisFactory
-        factory_class: Topxia\Service\Common\Redis\RedisFactory
-        factory_method: instance
+        factory: ['Topxia\Service\Common\Redis\RedisFactory', instance]
         arguments:
             - "@service_container"
 
@@ -140,8 +140,7 @@ services:
 
     session.handler.factory:
         class: SessionHandlerInterface
-        factory_class: Topxia\Service\Common\SessionHandlerFactory
-        factory_method: getSessionHandler
+        factory: ['Topxia\Service\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
 
