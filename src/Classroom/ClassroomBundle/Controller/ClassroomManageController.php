@@ -293,8 +293,9 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
         $reason = array(
-            'type' => 'other',
-            'note' => '手动移除'
+            'type'     => 'other',
+            'note'     => '手动移除',
+            'operator' => $user['id']
         );
         $refund  = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(

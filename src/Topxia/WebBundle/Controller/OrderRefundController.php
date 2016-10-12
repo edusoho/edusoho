@@ -39,6 +39,8 @@ class OrderRefundController extends BaseController
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
 
+            $reason['operator'] = $user['id'];
+
             $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
             return $this->createJsonResponse(true);
@@ -51,7 +53,7 @@ class OrderRefundController extends BaseController
             'targetType'    => $targetType,
             'order'         => $order,
             'maxRefundDays' => $maxRefundDays,
-            'refundOverdue' => $refundOverdue,
+            'refundOverdue' => $refundOverdue
         ));
     }
 
@@ -92,5 +94,4 @@ class OrderRefundController extends BaseController
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
-
 }
