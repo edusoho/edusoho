@@ -585,24 +585,3 @@ define(function (require, exports, module) {
         myDraggableWidget._sortList($list);
     }
 });
-
-
-// if (initMarkerArry.length > 0) {
-//     var $editbox = $(this.get('editbox'));
-//     var $subject_lesson_list = $(this.get('subject_lesson_list'));
-//     for (var i = 0; i < initMarkerArry.length; i++) {
-//         var time = parseInt(this.get("_video_time"));
-//         var width = $(".dashboard-content").width();
-//         var left = Math.round(initMarkerArry[i].second * width / time);
-//         var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", left).appendTo($editbox.find('.scalebox'));
-//         var $lesson_list = $newscale.find('.lesson-list');
-//         var questionMarkers = initMarkerArry[i].questionMarkers;
-//         for (var j = 0; j < questionMarkers.length; j++) {
-//             var pic = questionMarkers[j].includeImg ? '<span class="glyphicon glyphicon-picture"></span>' : "";
-//             var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + pic + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
-//             $li.appendTo($lesson_list);
-//         }
-//     }
-//     var $list = $editbox.find('.lesson-list');
-//     this._newSortList($list);
-// }
