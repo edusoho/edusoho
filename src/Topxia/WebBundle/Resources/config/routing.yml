@@ -1102,6 +1102,10 @@ course_lesson_marker_update:
     defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
     methods: [POST]
 
+course_question_marker_preview:
+    pattern: /course/{courseId}/question/{id}/marker/preview
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:questionMakerPreview }
+
 course_lesson_question_markers_show:
     pattern:  /course/lesson/media/{mediaId}/question_markers/show
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionMakers }

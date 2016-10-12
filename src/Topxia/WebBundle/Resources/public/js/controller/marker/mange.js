@@ -320,7 +320,7 @@ define(function (require, exports, module) {
                         $new_scale_blue_item.find('[data-role="sqe-number"]').text(j + 1);
                         $new_scale_blue_item.find('[data-role="question-type"]').text('单选题');
                         $new_scale_blue_item.find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
-                        $new_scale_blue_item.data('url','/course/'+this.get('courseId')+'/manage/question/'+questionMarkers[j].questionId+'/preview');
+                        $new_scale_blue_item.data('url','/course/'+this.get('courseId')+'/question/'+questionMarkers[j].questionId+'/marker/preview');
                         $scale_blue_item.before($new_scale_blue_item);
                     }
                     $scale_blue.after($new_scale_blue);
