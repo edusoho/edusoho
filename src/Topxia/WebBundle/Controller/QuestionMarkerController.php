@@ -96,7 +96,7 @@ class QuestionMarkerController extends BaseController
         $questionPreview = true;
 
 
-        return $this->render('TopxiaWebBundle:Marker/QuestionPreview:question-preview-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:Marker/QuestionPreview:preview-modal.html.twig', array(
             'item'            => $item,
             'type'            => $type,
             'questionPreview' => $questionPreview
