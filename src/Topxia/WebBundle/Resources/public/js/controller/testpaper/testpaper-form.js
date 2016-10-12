@@ -1,4 +1,8 @@
 define(function(require, exports, module) {
+    function tanslate(value, tag)
+    {
+        return '<'+tag+'>'+value+'</'+tag+'>'
+    }
 
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
@@ -117,18 +121,19 @@ define(function(require, exports, module) {
                     if (response.status != 'yes') {
                         var missingTexts = [];
                         var types = {
-                            single_choice: '单选题',
-                            uncertain_choice: '不定项选择题',
-                            choice: '多选题',
-                            fill: '填空题',
-                            determine: '判断题',
-                            essay: '问答题',
-                            material: '材料题'
+                            single_choice: Translator.trans('单选题'),
+                            uncertain_choice: Translator.trans('不定项选择题'),
+                            choice: Translator.trans('多选题'),
+                            fill: Translator.trans('填空题'),
+                            determine: Translator.trans('判断题'),
+                            essay: Translator.trans('问答题'),
+                            material: Translator.trans('材料题')
                         }
                         $.each(response.missing, function(type, count) {
-                            missingTexts.push(types[type] + '缺<strong>' + count + '</strong>道');
+                            missingTexts.push(types[type] + Translator.trans('缺%count%道',{count:tanslate(count, 'strong')}));
+                          // missingTexts.push(types[type] + Translator.trans('缺')+'<strong>' + count + '</strong>'+Translator.trans('道'));
                         });
-                        Notify.danger('课程题库题目数量不足，无法生成试卷：<br>' + missingTexts.join('，'), 5);
+                        Notify.danger(Translator.trans('课程题库题目数量不足，无法生成试卷：')+'<br>' + missingTexts.join('，'), 5);
                         isOk = false;
                     }
                 }
@@ -145,7 +150,7 @@ define(function(require, exports, module) {
             $form.find('.item-number').each(function() {
                 var number = $(this).val();
                 if (!/^[0-9]*$/.test(number)) {
-                    Notify.danger('题目数量只能填写数字');
+                    Notify.danger(Translator.trans('题目数量只能填写数字'));
                     $(this).focus();
                     isOk = false;
                     return false;
@@ -156,13 +161,13 @@ define(function(require, exports, module) {
             if (isOk) {
                 if (totalNumber == 0) {
                     isOk = false;
-                    Notify.danger('试卷题目总数量不能为0。');
+                    Notify.danger(Translator.trans('试卷题目总数量不能为0。'));
                     return isOk;
                 }
 
                 if (totalNumber > 1000) {
                     isOk = false;
-                    Notify.danger('试卷题目总数不能超过1000道。');
+                    Notify.danger(Translator.trans('试卷题目总数不能超过1000道。'));
                     return isOk;
                 }
             }
@@ -171,24 +176,25 @@ define(function(require, exports, module) {
                 var score = $(this).val();
 
                 if (score == '0') {
-                    Notify.danger('题目分值不能为0。');
+                    Notify.danger(Translator.trans('题目分值不能为0。'));
                     isOk = false;
                     return false;
                 }
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(score)) {
-                    Notify.danger('题目分值只能填写数字，且最多一位小数。');
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
+                    Notify.danger(Translator.trans('题目分值只能填写数字，并且在3位数以内，保留一位小数。'));
                     $(this).focus();
                     isOk = false;
                     return false;
                 }
+                
             });
 
             $form.find('.item-miss-score').each(function() {
                 var missScore = $(this).val();
 
-                if (!/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1})?$/.test(missScore)) {
-                    Notify.danger('题目漏选分值只能填写数字，且最多一位小数。');
+                if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(missScore)) {
+                    Notify.danger(Translator.trans('题目漏选分值只能填写数字，并且在3位数以内，保留一位小数。'));
                     $(this).focus();
                     isOk = false;
                     return false;
@@ -197,7 +203,7 @@ define(function(require, exports, module) {
                 var score=$(this).parent().find('.item-score').val();
 
                 if (Number(missScore) > Number(score)) {
-                    Notify.danger('题目漏选分值不能大于题目分值。');
+                    Notify.danger(Translator.trans('题目漏选分值不能大于题目分值。'));
                     isOk = false;
                     $(this).focus();
                     return false;
@@ -238,9 +244,9 @@ define(function(require, exports, module) {
                     normalPercentage = values[1] - values[0],
                     difficultyPercentage = 100 - values[1];
 
-                self.$('.simple-percentage-text').html('简单' + simplePercentage + '%');
-                self.$('.normal-percentage-text').html('一般' + normalPercentage + '%');
-                self.$('.difficulty-percentage-text').html('困难' + difficultyPercentage + '%');
+                self.$('.simple-percentage-text').html(Translator.trans('简单') + simplePercentage + '%');
+                self.$('.normal-percentage-text').html(Translator.trans('一般') + normalPercentage + '%');
+                self.$('.difficulty-percentage-text').html(Translator.trans('困难') + difficultyPercentage + '%');
 
                 self.$('input[name="percentages[simple]"]').val(simplePercentage);
                 self.$('input[name="percentages[normal]"]').val(normalPercentage);

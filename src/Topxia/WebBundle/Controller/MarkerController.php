@@ -35,7 +35,7 @@ class MarkerController extends BaseController
         $data = $request->request->all();
 
         if (empty($data['sourceMarkerId']) || empty($data['targetMarkerId'])) {
-            return $this->createMessageResponse('error', '参数错误!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('参数错误!'));
         }
 
         $this->getMarkerService()->merge($data['sourceMarkerId'], $data['targetMarkerId']);

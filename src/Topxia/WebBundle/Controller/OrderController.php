@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
@@ -23,7 +24,7 @@ class OrderController extends BaseController
         if (empty($targetType)
             || empty($targetId)
             || !array_key_exists($targetType, $orderType)) {
-            return $this->createMessageResponse('error', '参数不正确');
+            return $this->createMessageResponse('error', $this->trans('参数不正确'));
         }
 
         $processor = OrderProcessorFactory::create($targetType);
@@ -90,6 +91,10 @@ class OrderController extends BaseController
     {
         $fields = $request->request->all();
 
+        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] < 0) {
+            return $this->createMessageResponse('error', $this->trans('虚拟币填写不正确'));
+        }
+
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] > 0) {
             $scenario = "sms_user_pay";
 
@@ -97,7 +102,7 @@ class OrderController extends BaseController
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
                 if (!$result) {
-                    return $this->createMessageResponse('error', '短信验证失败。');
+                    return $this->createMessageResponse('error', $this->trans('短信验证失败。'));
                 }
             }
         }
@@ -105,16 +110,16 @@ class OrderController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
+            return $this->createMessageResponse('error', $this->trans('用户未登录，创建订单失败。'));
         }
 
         if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
-            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
+            return $this->createMessageResponse('error', $this->trans('订单中没有购买的内容，不能创建!'));
         }
 
-        $targetType  = $fields["targetType"];
-        $targetId    = $fields["targetId"];
-        $maxRate     = $fields["maxRate"];
+        $targetType = $fields["targetType"];
+        $targetId   = $fields["targetId"];
+
         $priceType   = "RMB";
         $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
@@ -132,8 +137,10 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if (isset($fields["couponCode"]) && $fields["couponCode"] == "请输入优惠码") {
+            if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == $this->trans('请输入优惠券'))) {
                 $fields["couponCode"] = "";
+            } else {
+                $fields["couponCode"] = trim($fields["couponCode"]);
             }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
@@ -143,19 +150,23 @@ class OrderController extends BaseController
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
-                $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
+                $this->createMessageResponse('error', $this->trans('实际价格不匹配，不能创建订单!'));
             }
 
             //价格比较
 
             if (intval($amount * 100) != intval($shouldPayMoney * 100)) {
-                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+                return $this->createMessageResponse('error', $this->trans('支付价格不匹配，不能创建订单!'));
             }
 
             //虚拟币抵扣率比较
+            $target = $processor->getTarget($targetId);
 
-            if (isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
-                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
+            $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
+            $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
+
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
+                return $this->createMessageResponse('error', $this->trans('虚拟币抵扣超出限定，不能创建订单!'));
             }
 
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
@@ -212,10 +223,10 @@ class OrderController extends BaseController
     public function couponCheckAction(Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
-            $code = $request->request->get('code');
+            $code = trim($request->request->get('code'));
 
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
-                throw new \RuntimeException('优惠券不支持的购买项目。');
+                throw new \RuntimeException($this->trans('优惠券不支持的购买项目。'));
             }
 
             $price = $request->request->get('amount');

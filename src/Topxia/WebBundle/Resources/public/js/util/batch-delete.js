@@ -14,17 +14,17 @@ define(function(require, exports, module) {
             });
 
             if (ids.length == 0) {
-                Notify.danger('未选中任何' + name);
+                Notify.danger(Translator.trans('未选中任何') + name);
                 return ;
             }
 
-            if (!confirm('确定要删除选中的' + ids.length + '条' + name + '吗？')) {
+            if (!confirm(Translator.trans('确定要删除选中的') + ids.length + Translator.trans('条') + name + Translator.trans('吗？'))) {
                 return ;
             }
 
             $element.find('.btn').addClass('disabled');
 
-            Notify.info('正在删除' + name + '，请稍等。', 60);
+            Notify.info(Translator.trans('正在删除') + name + Translator.trans('，请稍等。'), 60);
             
             $.post($btn.data('url'), {ids:ids}, function(response){
                 window.location.reload();

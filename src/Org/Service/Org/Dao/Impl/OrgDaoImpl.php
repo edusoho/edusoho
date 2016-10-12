@@ -46,21 +46,21 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         return $result;
     }
 
-    public function deleteOrgsByOrgCode($orgCode)
+    public function deleteOrgsByPrefixOrgCode($orgCode)
     {
-        $likeOrgCode = $orgCode."%";
+        $likeOrgCode = $orgCode . "%";
         $sql         = "DELETE  FROM {$this->getTable()} where orgCode like ? ";
         return $this->getConnection()->executeUpdate($sql, array($likeOrgCode));
     }
 
-    public function findOrgsStartByOrgCode($orgCode)
+    public function findOrgsByPrefixOrgCode($orgCode)
     {
         $sql   = "SELECT * FROM {$this->getTable()}";
         $query = array();
 
         if (!empty($orgCode)) {
             $sql .= " WHERE orgCode like ?  order by orgCode ";
-            $query = array($orgCode.'%');
+            $query = array($orgCode . '%');
         } else {
             $sql .= " order by orgCode";
         }
@@ -86,24 +86,24 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         });
     }
 
-   public function searchOrgs($conditions, $orderBy, $start, $limit)
+    public function searchOrgs($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function findOrgsByIds($ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
 
         $that = $this;
         $keys = implode(',', $ids);
@@ -116,13 +116,27 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         );
     }
 
+    public function findOrgByNameAndParentId($name, $parentId)
+    {
+        /*$sql = "SELCT * FROM {$this->getTable()} WHERE name = ? and parentId= ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($name, $parentId)) ?: null;*/
+
+
+        $that = $this;
+        return $this->fetchCached("name:{$name}:parentId:{$parentId}", $name, $parentId, function ($name, $parentId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE name = ? and parentId= ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($name, $parentId,)) ?: null;
+        });
+    }
+
+
     protected function _createSearchQueryBuilder($conditions)
-    {  
+    {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'org')
-                        ->andWhere('id = :id')
-                        ->andWhere('parentId = :parentId')
-                        ->andWhere('depth = :depth');
-        return $builder;    
+            ->from($this->table, 'org')
+            ->andWhere('id = :id')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('depth = :depth');
+        return $builder;
     }
 }

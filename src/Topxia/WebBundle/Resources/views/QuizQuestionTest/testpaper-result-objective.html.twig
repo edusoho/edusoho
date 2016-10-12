@@ -2,7 +2,7 @@
   <div class="testpaper-result-total">
     <div class="well">
       <div class="testpaper-result-total-score">{% if paperResult.status == 'finished' %}{{ paperResult.score }}{% else %}?{% endif %} <small>{{'分'|trans}}</small></div>
-      <small class="text-muted">{{'总分'|trans}} {{ paper.score }} {{'分'|trans}}</small>
+      <small class="text-muted">{{'总分%score%分'|trans({'%score%':paper.score})}}</small>
     </div>
   </div>
   <div class="media-body">
@@ -42,7 +42,17 @@
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}{% if type == 'choice' and accuracy[type].partRight != 0 or  type == 'uncertain_choice' and accuracy[type].partRight != 0 %}（其中有{{accuracy[type].partRight}}道漏选）{% endif %}</small></span></td>
+                  <td>
+                    <span class="text-danger">
+                      {{ accuracy[type].wrong + accuracy[type].partRight }}
+                      <small>
+                        {{'道'|trans}}
+                        {% if type in ['choice', 'uncertain_choice'] and accuracy[type].partRight != 0 %}
+                          {{'（其中有%partRightNum%道漏选）'|trans({'%partRightNum%': accuracy[type].partRight})}}
+                        {% endif %}
+                      </small>
+                    </span>
+                  </td>
                 {% endif %}
               {% endif %}
             {% endfor %}

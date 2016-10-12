@@ -144,6 +144,8 @@ CREATE TABLE `cloud_app` (
   `fromVersion` varchar(32) NOT NULL DEFAULT '0.0.0' COMMENT '云应用更新前版本',
   `developerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用开发者用户ID',
   `developerName` varchar(255) NOT NULL DEFAULT '' COMMENT '云应用开发者名称',
+  `edusohoMinVersion`  VARCHAR(32) NOT NULL DEFAULT '0.0.0' COMMENT '依赖Edusoho的最小版本',
+  `edusohoMaxVersion`  VARCHAR(32) NOT NULL DEFAULT 'up' COMMENT '依赖Edusoho的最大版本',
   `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用安装时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用最后更新时间',
   PRIMARY KEY (`id`),
@@ -365,7 +367,7 @@ CREATE TABLE `course_lesson` (
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
-  `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `replayStatus` enum('ungenerated','generating','generated','videoGenerated') NOT NULL DEFAULT 'ungenerated',
   `maxOnlineNum` INT NULL DEFAULT '0' COMMENT '直播在线人数峰值',
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
@@ -1039,6 +1041,7 @@ CREATE TABLE `upload_files` (
   `hashId` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
   `targetId` int(11) NOT NULL COMMENT '所存目标ID',
   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型',
+  `useType` varchar(64) DEFAULT NULL COMMENT '文件使用的模块类型' ,
   `filename` varchar(1024) NOT NULL DEFAULT '' COMMENT '文件名',
   `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
   `fileSize` bigint(20) NOT NULL DEFAULT '0' COMMENT '文件大小',
@@ -1101,6 +1104,7 @@ CREATE TABLE `user` (
   `salt` varchar(32) NOT NULL COMMENT '密码SALT',
   `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',
   `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
+  `locale` VARCHAR(20),
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
   `nickname` varchar(64) NOT NULL COMMENT '用户名',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头衔',
@@ -1290,7 +1294,7 @@ CREATE TABLE `cash_orders` (
   `status` enum('created','paid','cancelled') NOT NULL,
   `title` varchar(255) NOT NULL,
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `payment` ENUM('none','alipay','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none',
+  `payment` VARCHAR(32) NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
   `targetType` VARCHAR(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
@@ -1323,7 +1327,7 @@ CREATE TABLE `cash_flow` (
   `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
   `orderSn` varchar(40) NOT NULL COMMENT '订单号',
   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '帐目类目',
-  `payment` ENUM( 'alipay','wxpay','heepay','quickpay','iosiap' ),
+  `payment` VARCHAR(32) NULL DEFAULT '',
   `note` text COMMENT '备注',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -1900,7 +1904,8 @@ CREATE TABLE IF NOT EXISTS  `org` (
   `createdTime` int(11) unsigned NOT NULL  COMMENT '创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `orgCode` (`orgCode`)
+  UNIQUE KEY `orgCode` (`orgCode`),
+  UNIQUE KEY(`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
 DROP TABLE IF EXISTS `im_conversation`;
@@ -1996,7 +2001,7 @@ CREATE TABLE `open_course_lesson` (
   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
-  `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `replayStatus` enum('ungenerated','generating','generated','videoGenerated') NOT NULL DEFAULT 'ungenerated',
   `maxOnlineNum` INT NULL DEFAULT '0' COMMENT '直播在线人数峰值',
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
@@ -2083,4 +2088,36 @@ CREATE TABLE `order_referer` (
   KEY `order_referer_uv_expiredTime_index` (`uv`,`expiredTime`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户访问日志Token';
 
+DROP TABLE IF EXISTS `file_used`;
+CREATE TABLE `file_used` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` varchar(32) NOT NULL,
+    `fileId` int(11) NOT NULL COMMENT 'upload_files id',
+    `targetType` varchar(32) NOT NULL,
+    `targetId` int(11) NOT NULL,
+    `createdTime` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `file_used_type_targetType_targetId_index` (`type`,`targetType`,`targetId`),
+    KEY `file_used_type_targetType_targetId_fileId_index` (`type`,`targetType`,`targetId`,`fileId`),
+    KEY `file_used_fileId_index` (`fileId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `course_lesson_extend`;
+CREATE TABLE `course_lesson_extend` (
+  `id` int(10) NOT NULL COMMENT '课时ID',
+  `courseId` int(10) NOT NULL DEFAULT '0' COMMENT '课程ID',
+  `doTimes` int(10) NOT NULL DEFAULT '0' COMMENT '可考试次数',
+  `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课时扩展表';
+
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32)  NOT NULL COMMENT '权限名称',
+  `code` varchar(32)  NOT NULL COMMENT '权限代码',
+  `data` text COMMENT '权限配置',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createdUserId` int(10) unsigned NOT NULL COMMENT '创建用户ID',
+  `updatedTime`int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1

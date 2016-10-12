@@ -94,18 +94,4 @@ class LiveNotifyCommand extends BaseCommand
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
-	private function initServiceKernel()
-	{
-		$serviceKernel = ServiceKernel::create('dev', false);
-		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-		$currentUser = new CurrentUser();
-		$currentUser->fromArray(array(
-		    'id' => 1,
-		    'nickname' => '测试管理员',
-		    'currentIp' =>  '127.0.0.1',
-		    'roles' => array("ROLE_SUPER_ADMIN"),
-		));
-		$serviceKernel->setCurrentUser($currentUser);
-	}
-
 }

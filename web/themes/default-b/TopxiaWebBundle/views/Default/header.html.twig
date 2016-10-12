@@ -18,7 +18,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           {% if app.user %}
-            <li><a href="{{ path('my') }}"> 我的课程 </a></li>           
+            <li><a href="{{ path('my') }}"> {{'我的课程'|trans}} </a></li>           
             {% if setting('mobile.enabled') %}
               <li><a href="{{ path('mobile') }}" class="mobile-badge-container">
                 <span class="glyphicon glyphicon-phone"></span>
@@ -27,19 +27,19 @@
             <li>
               <form class="navbar-form navbar-right hidden-xs" action="/search" method="get">
                 <div class="form-group">
-                  <input class="form-control js-search" name="q" placeholder="搜索">
+                  <input class="form-control js-search" name="q" placeholder="{{'搜索'|trans}}">
                   <button class="button es-icon es-icon-search"></button>
                 </div>
               </form>
             </li>
             <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
               <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
-              <span class="visible-lt-ie8">通知</span>
+              <span class="visible-lt-ie8">{{'通知'|trans}}</span>
               {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
             <li>
               <a href="{{ path('message') }}" class="badge-container message-badge-container">
               <span class="glyphicon glyphicon-envelope hidden-lt-ie8"></span>
-              <span class="visible-lt-ie8">私信</span>
+              <span class="visible-lt-ie8">{{'私信'|trans}}</span>
               {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
               </a>
             </li>
@@ -56,30 +56,30 @@
             <li class="dropdown hidden-lt-ie8">
               <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
-                <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 个人设置</a></li>
+                <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> {{'我的主页'|trans}}</a></li>
+                <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> {{'个人设置'|trans}}</a></li>
                 <li class="divider"></li>
                 {% if is_granted('ROLE_BACKEND') %}
-                  <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
+                  <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> {{'管理后台'|trans}}</a></li>
                   <li class="divider"></li>
                   {% endif %}
-                <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+                <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
               </ul>
             </li>
           {% else %}
             {% if setting('mobile.enabled') %}
-              <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> 手机版</a></li>
+              <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> {{'手机版'|trans}}</a></li>
             {% endif %}
             <li>
               <form class="navbar-form navbar-right hidden-xs" action="/search" method="get">
                 <div class="form-group">
-                  <input class="form-control js-search" name="q" placeholder="搜索">
+                  <input class="form-control js-search" name="q" placeholder="{{'搜索'|trans}}">
                   <button class="button es-icon es-icon-search"></button>
                 </div>
               </form>
             </li>
-            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
-            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
           {% endif %}
         </ul>
       </div><!--/.navbar-collapse -->

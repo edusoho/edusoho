@@ -4,9 +4,9 @@
     {% if mainAppUpgrade %}
       {% set status = 1 %}
       <tr>
-        <td>主系统</td>
+        <td>{{'主系统'|trans}}</td>
         <td>
-          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">立即更新</a>
+          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{'立即更新'|trans}}</a>
           <span class="glyphicon glyphicon-info-sign text-info"></span>
           {{ '当前版本'|trans }}: {{ constant('Topxia\\System::VERSION') }}&nbsp;
           {{ '下一版本'|trans }}: {{ mainAppUpgrade.package.toVersion }}&nbsp;
@@ -15,10 +15,10 @@
       </tr>
     {% else %}
       <tr>
-        <td>主系统</td>
+        <td>{{'主系统'|trans}}</td>
         <td>
           <span class="glyphicon glyphicon-ok-sign text-success"></span>
-          已是最新版本 {{ constant('Topxia\\System::VERSION') }}
+          {{'已是最新版本'|trans}} {{ constant('Topxia\\System::VERSION') }}
         </td>
       </tr>
     {% endif %}
@@ -27,46 +27,54 @@
 
   {% if error == "error" %}
     <tr>
-      <td>主系统</td>
+      <td>{{ '主系统'|trans }}</td>
       <td rowspan="4">
-        <div class="empty"><span style="color:#cc0000;float:left;text-align:left;">云平台参数设置不正确，会影响到系统正常的运行，<a
-                href="{{ path('admin_setting_cloud') }}">请修改设置。</a></sapn></div>
+        <div class="empty"><span style="color:#cc0000;float:left;text-align:left;">{{ '云平台参数设置不正确，会影响到系统正常的运行，'|trans }}<a
+                href="{{ path('admin_setting_cloud') }}">{{ '请修改设置。'|trans }}</a></span></div>
       </td>
     </tr>
     <tr>
-      <td>应用更新</td>
+      <td>{{ '应用更新'|trans }}</td>
     </tr>
 
     <tr>
-      <td>新应用</td>
+      <td>{{ '新应用'|trans }}</td>
     </tr>
 
     <tr>
-      <td>云视频</td>
+      <td>{{ '云视频'|trans }}</td>
     </tr>
 
   {% else %}
     <tr>
-      <td>应用更新</td>
+      <td>{{ '应用更新'|trans }}</td>
       <td>{% if app_count %}
           {% if status|default(0) == 1 and app_count == 1 %}
-            <span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
-          {% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge"
-                                                                                           style="background-color:#cc0000;">
-          {% if status|default(0) == 1 %}{{ app_count - 1 }}{% else %}
-            {{ app_count }}
-          {% endif %}</span> 个应用没有更新 <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">立即更新</a>
+            <span class="glyphicon glyphicon-ok-sign text-success"></span> 
+            {{ '所有应用都已是最新版本'|trans }}
+          {% else %}
+            <span class="glyphicon glyphicon-info-sign text-info"></span>
+            {{ '还有'|trans }} 
+            <span class="badge">
+              {% if status|default(0) == 1 %}
+                {{ app_count - 1 }}
+              {% else %}
+                {{ app_count }}
+              {% endif %}
+            </span>
+            {{ '个应用没有更新'|trans }}
+            <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{ '立即更新'|trans }}</a>
           {% endif %}
-        {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
+        {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '所有应用都已是最新版本'|trans }}
         {% endif %}</td>
     </tr>
 
     <tr>
-      <td>新应用</td>
-      <td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span
-            class="badge">{{ unInstallAppCount }}</span> 个应用没有安装<a class="pull-right"
+      <td>{{ '新应用'|trans }}</td>
+      <td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还有'|trans }} <span
+            class="badge">{{ unInstallAppCount }}</span> {{ '个应用没有安装'|trans }}<a class="pull-right"
                                                                    href="{{ path("admin_app_center",{postStatus : 'all'}) }}">
-            查看</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
+            {{ '查看'|trans }}</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已安装了全部应用'|trans }}
         {% endif %}</td>
     </tr>
 
@@ -75,57 +83,56 @@
       <td>{% if setting("storage.cloud_bucket")!="" %}<span
             class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已开通'|trans }}{% if setting("storage.upload_mode") != 'cloud' %}({{ '尚未启用'|trans }})
           <a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>{% endif %}{% else %}
-          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right"
-                                                                                             href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
+          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
         {% endif %}</td>
     </tr>
   {% endif %}
   <tr>
-    <td>直播</td>
+    <td>{{ '直播'|trans }}</td>
     <td>
       {% if setting("course.live_student_capacity", 0)>0 %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
-        已开通
+        {{ '已开通'|trans }}
         {% if setting("course.live_course_enabled")==0 %}
-          (尚未启用)
-          <a class="pull-right" href="{{ path("admin_setting_course_setting") }}#live-course-set">查看</a>
+          {{ '(尚未启用)'|trans }}
+          <a class="pull-right" href="{{ path("admin_setting_course_setting") }}#live-course-set">{{ '查看'|trans }}</a>
         {% else %}
           {% if (liveCourseStatus|length) > 0 %}
             {% if (liveCourseStatus.type|default('')) == "normal" and liveCourseStatus.expire|default(0) > 0 %}
-              (有效期至{{ (liveCourseStatus.expire|default('0'))|date('Y-m-d') }} )
+              ({{ '有效期至'|trans }}{{ (liveCourseStatus.expire|default('0'))|date('Y-m-d') }} )
             {% elseif (liveCourseStatus.type|default('')) == "tryOut" %}
-              (体验用户)
+              {{ '(体验用户)'|trans }}
             {% endif %}
           {% endif %}
         {% endif %}
 
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-info"></span>
-        还未开通
-        <a class="pull-right" href="{{ path("admin_setting_course_setting") }}#live-course-set">查看</a>
+        {{ '还未开通'|trans }}
+        <a class="pull-right" href="{{ path("admin_setting_course_setting") }}#live-course-set">{{ '查看'|trans }}</a>
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <td>移动客户端</td>
+    <td>{{ '移动客户端'|trans }}</td>
     <td>
       {% if setting("mobile").enabled|default(null) %}
-        <span class="glyphicon glyphicon-ok-sign text-success"></span> 已启用
+        <span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已启用'|trans }}
       {% else %}
-        <span class="glyphicon glyphicon-info-sign text-info"></span> 还未启用<a class="pull-right"
-                                                                             href="{{ path("admin_setting_mobile") }}">查看</a>
+        <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未启用'|trans }}<a class="pull-right"
+                                                                             href="{{ path("admin_setting_mobile") }}">{{ '查看'|trans }}</a>
       {% endif %}
     </td>
   </tr>
 
-  {% if mobileCustomization.status == 'ok' %}
+  {% if mobileCustomization.status|default(null) == 'ok' %}
   <tr>
-    <td>移动端定制</td>
+    <td>{{ '移动端定制'|trans }}</td>
     <td>
       {% set currentVersion = mobileCustomization.customization.currentVersion %}
       {% set newestVersion = mobileCustomization.newestVersion %}
-      <span class="glyphicon glyphicon-ok-sign text-success"></span> 已定制
+      <span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已定制'|trans }}
       (
       {{ '当前版本'|trans }}: {{ currentVersion }}
       {% if newestVersion > currentVersion %}
@@ -137,19 +144,19 @@
                   {% set applyStatus = mobileCustomization.customization.applyStatus %}
           {% if applyStatus in ['unsubmit', 'failed'] %}
             {% if applyStatus == 'failed' %}
-              <span class="label label-danger">升级失败</span>
+              <span class="label label-danger">{{ '升级失败'|trans }}</span>
             {% endif %}
-                    <a class="btn btn-info btn-xs mls" target="_blank" href="http://demo.edusoho.com/mobile/">体验</a>
+                    <a class="btn btn-info btn-xs mls" target="_blank" href="http://demo.edusoho.com/mobile/">{{ '体验'|trans }}</a>
             <a class="btn btn-info btn-xs mobile-customization-upgrade-btn"
-               data-url="{{ path("admin_operation_mobile_customization_upgrade") }}" data-loading-text="提交中..."
-               data-data="{{ {'currentVersion': currentVersion, 'targetVersion': newestVersion}|json_encode }}">申请升级</a>
+               data-url="{{ path("admin_operation_mobile_customization_upgrade") }}" data-loading-text="{{ '提交中...'|trans }}"
+               data-data="{{ {'currentVersion': currentVersion, 'targetVersion': newestVersion}|json_encode }}">{{ '申请升级'|trans }}</a>
                   {% elseif applyStatus == 'submitted' %}
-            <span class="label label-warning">升级受理中</span>
+            <span class="label label-warning">{{ '升级受理中'|trans }}</span>
           {% elseif applyStatus == 'accepted' %}
-            <span class="label label-success">升级已受理</span>
+            <span class="label label-success">{{ '升级已受理'|trans }}</span>
           {% endif %}
                 </span>
-        <div class="mls help-block">(如有疑问，请联系客服人员 0571-86819929)</div>
+        <div class="mls help-block">{{ '(如有疑问，请联系客服人员 0571-86819929)'|trans }}</div>
       {% endif %}
     </td>
     {% endif %}

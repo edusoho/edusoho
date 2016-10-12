@@ -17,13 +17,13 @@ class OAuthClientFactory
     public static function create($type, array $config)
     {
     	if (!array_key_exists('key', $config) || !array_key_exists('secret', $config)) {
-    		throw new InvalidArgumentException('参数$config中，必需包含key, secret两个为key的值');
+    		throw new InvalidArgumentException('参数中必需包含key, secret两个为key的值');
     	}
 
         $clients = self::clients();
 
         if (!array_key_exists($type, $clients)) {
-            throw new InvalidArgumentException("参数{$type}不正确");
+            throw new InvalidArgumentException(array('参数不正确%type%', array('%type%' =>$type )));
         }
 
         $class = $clients[$type]['class'];
@@ -92,12 +92,15 @@ class OAuthClientFactory
             ),
         );
 
-        $kernel = ServiceKernel::instance();
-        if ($kernel->hasParameter('oauth2_clients')) {
-            $extras = $kernel->getParameter('oauth2_clients');
+        if (self::getServiceKernel()->hasParameter('oauth2_clients')) {
+            $extras = self::getServiceKernel()->getParameter('oauth2_clients');
             $clients = array_merge($clients, $extras);
         }
 
         return $clients;
+    }
+
+    protected static function getServiceKernel(){
+        return ServiceKernel::instance();
     }
 }

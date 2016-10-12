@@ -1,12 +1,13 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Block:block-visual-layout.html.twig' %}
 
-{% set menu = 'admin_block_visual_edit' %}
+{% set menu = menu|default('admin_block') %}
+{% set currentPage = 'admin_block_visual_edit' %}
 
-{% block page_title %} 编辑内容 {% endblock %}
+{% block page_title %} {{'编辑内容'|trans}} {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 
-{% block main %}
+{% block blockVisual %}
   <style type="text/css">
     .sortable-list .placeholder {
       margin: 10px 0;
@@ -30,7 +31,7 @@
     }
   </style>
   {% if app.debug %}
-    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">查看JSON配置</a>
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'查看JSON配置'|trans}}</a>
   {% endif %}
   {% if block.code != 'jianmo:home_top_banner' and block.code != 'live_top_banner' %}
   <!-- <div class="col-md-6"> -->
@@ -46,7 +47,7 @@
         <input type="hidden" name="mode" value="{{ block.mode|default() }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-        <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
+        <button id="block-save-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">{{'保存'|trans}}</button>
       </form>
     </div>
 

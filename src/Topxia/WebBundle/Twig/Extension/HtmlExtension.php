@@ -58,15 +58,15 @@ class HtmlExtension extends \Twig_Extension
         return $html;
     }
 
-    public function radios($name, $choices, $checked = null)
+    public function radios($name, $choices, $checked = null, $disable = null)
     {
         $html = '';
 
         foreach ($choices as $value => $label) {
             if ($checked == $value) {
-                $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" checked=\"checked\"> {$label}</label>";
+                $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable} checked=\"checked\"> {$label}</label>";
             } else {
-                $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\"> {$label}</label>";
+                $html .= "<label><input type=\"radio\" name=\"{$name}\" value=\"{$value}\" {$disable}> {$label}</label>";
             }
         }
 

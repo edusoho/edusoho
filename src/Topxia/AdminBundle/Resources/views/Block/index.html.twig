@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_operation_block' %}
+{% set menu = menu|default('admin_block') %}
 
 {% set script_controller = 'block/list' %}
 {% block main %}
@@ -8,9 +8,9 @@
 <table id="block-table" class="table table-striped">
   <thead>
     <tr>
-      <th width="50%">标题</th>
-      <th width="25%">最近更新</th>
-      <th width="25%">操作</th>
+      <th width="50%">{{'标题'|trans}}</th>
+      <th width="25%">{{'最近更新'|trans}}</th>
+      <th width="25%">{{'操作'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -22,7 +22,7 @@
         
       {% endfor %}
   {% else %}
-        <tr><td colspan="20"><div class="empty">暂无编辑区记录</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'暂无编辑区记录'|trans}}</div></td></tr>
   {% endif %}
    </tbody>
 </table>

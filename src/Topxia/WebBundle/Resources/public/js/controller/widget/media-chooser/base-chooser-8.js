@@ -18,6 +18,7 @@ define(function(require, exports, module) {
 
         attrs: {
             choosed: null,
+            fileSingleSizeLimit:null
         },
 
         events: {
@@ -119,7 +120,7 @@ define(function(require, exports, module) {
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
-                        return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                        return confirm(Translator.trans('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？'));
                     }
                     self._destoryUploader();
                 }
@@ -177,7 +178,8 @@ define(function(require, exports, module) {
                 initUrl: $el.data('initUrl'),
                 finishUrl: $el.data('finishUrl'),
                 uploadAuthUrl: $el.data('uploadAuthUrl'),
-                multi: false
+                multi: false,
+                fileSingleSizeLimit:this.get('fileSingleSizeLimit')
             });
 
             uploader.on('file.uploaded', function(file, data, response){

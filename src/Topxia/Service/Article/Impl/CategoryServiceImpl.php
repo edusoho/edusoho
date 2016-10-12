@@ -177,7 +177,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = ArrayToolkit::parts($category, array('name', 'code', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
         if (!ArrayToolkit::requireds($category, array('name', 'code', 'parentId'))) {
-            throw $this->createServiceException("缺少必要参数，，添加栏目失败");
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要参数，，添加栏目失败'));
         }
 
         $this->_filterCategoryFields($category);
@@ -196,13 +196,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategory($id);
 
         if (empty($category)) {
-            throw $this->createNoteFoundException("栏目(#{$id})不存在，更新栏目失败！");
+            throw $this->createNoteFoundException($this->getKernel()->trans('栏目(#%id%)不存在，更新栏目失败！', array('%id%' => $id)));
         }
 
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
 
         if (empty($fields)) {
-            throw $this->createServiceException('参数不正确，更新栏目失败！');
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新栏目失败！'));
         }
 
         $this->_filterCategoryFields($fields);
@@ -246,18 +246,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         ));
 
         if (empty($fields['name'])) {
-            throw $this->createServiceException("名称不能为空，保存栏目失败");
+            throw $this->createServiceException($this->getKernel()->trans('名称不能为空，保存栏目失败'));
         }
 
         if (empty($fields['code'])) {
-            throw $this->createServiceException("编码不能为空，保存栏目失败");
+            throw $this->createServiceException($this->getKernel()->trans('编码不能为空，保存栏目失败'));
         } else {
             if (!preg_match("/^[a-zA-Z0-9_]+$/i", $fields['code'])) {
-                throw $this->createServiceException("编码({$fields['code']})含有非法字符，保存栏目失败");
+                throw $this->createServiceException($this->getKernel()->trans('编码(%code%)含有非法字符，保存栏目失败',array('%code%' => $fields['code'])));
             }
 
             if (ctype_digit($fields['code'])) {
-                throw $this->createServiceException("编码({$fields['code']})不能全为数字，保存栏目失败");
+                throw $this->createServiceException($this->getKernel()->trans('编码(%code%)不能全为数字，保存栏目失败',array('%code%' => $fields['code'])));
             }
         }
 

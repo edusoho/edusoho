@@ -1,6 +1,9 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Impl;
 
+
+use Permission\Service\Role\Impl\RoleServiceImpl;
+use Topxia\Service\CloudPlatform\UpgradeLock;
 use Topxia\System;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\PluginUtil;
@@ -9,6 +12,7 @@ use Topxia\Service\Common\BaseService;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\Client\EduSohoAppClient;
+use Topxia\Service\CloudPlatform\Dao\Impl\CloudAppDaoImpl;
 
 class AppServiceImpl extends BaseService implements AppService
 {
@@ -62,7 +66,7 @@ class AppServiceImpl extends BaseService implements AppService
     public function registerApp($app)
     {
         if (!ArrayToolkit::requireds($app, array('code', 'name', 'version'))) {
-            throw $this->createServiceException('参数缺失,注册APP失败!');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失,注册APP失败!'));
         }
 
         $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version', 'type'));
@@ -108,20 +112,20 @@ class AppServiceImpl extends BaseService implements AppService
 
             $extInfos = array(
                 'host'                   => $_SERVER['HTTP_HOST'],
-                'userCount'              => (string) $this->getUserService()->searchUserCount(array()),
-                'coursePublishedCount'   => (string) $coursePublishedCount,
-                'courseUnpublishedCount' => (string) $courseUnpublishedCount,
-                'courseCount'            => (string) ($coursePublishedCount + $courseUnpublishedCount),
-                'moneyCourseCount'       => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'originPrice_GT' => '0.00')),
-                'lessonCount'            => (string) $this->getCourseService()->searchLessonCount(array()),
-                'courseMemberCount'      => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
-                'mobileLoginCount'       => (string) $this->getUserService()->searchTokenCount(array('type' => 'mobile_login')),
-                'teacherCount'           => (string) $this->getUserService()->searchUserCount(array('roles' => 'ROLE_TEACHER'))
+                'userCount'              => (string)$this->getUserService()->searchUserCount(array()),
+                'coursePublishedCount'   => (string)$coursePublishedCount,
+                'courseUnpublishedCount' => (string)$courseUnpublishedCount,
+                'courseCount'            => (string)($coursePublishedCount + $courseUnpublishedCount),
+                'moneyCourseCount'       => (string)$this->getCourseService()->searchCourseCount(array('status' => 'published', 'originPrice_GT' => '0.00')),
+                'lessonCount'            => (string)$this->getCourseService()->searchLessonCount(array()),
+                'courseMemberCount'      => (string)$this->getCourseService()->searchMemberCount(array('role' => 'student')),
+                'mobileLoginCount'       => (string)$this->getUserService()->searchTokenCount(array('type' => 'mobile_login')),
+                'teacherCount'           => (string)$this->getUserService()->searchUserCount(array('roles' => 'ROLE_TEACHER'))
             );
 
             $this->getSettingService()->set('_app_last_check', time());
         } else {
-            $extInfos = array('_t' => (string) time());
+            $extInfos = array('_t' => (string)time());
         }
 
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
@@ -173,7 +177,7 @@ class AppServiceImpl extends BaseService implements AppService
         $package = $this->getCenterPackageInfo($packageId);
 
         if (empty($package)) {
-            throw $this->createServiceException("获取应用包#{$packageId}信息失败");
+            throw $this->createServiceException($this->getKernel()->trans('获取应用包#%packageId%信息失败', array('%packageId%' => $packageId)));
         }
 
         $log = $this->getAppLogDao()->getLastLogByCodeAndToVersion($package['product']['code'], $package['toVersion']);
@@ -187,14 +191,16 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function checkEnvironmentForPackageUpdate($packageId)
     {
+        UpgradeLock::lock();
+
         $errors = array();
 
         if (!class_exists('ZipArchive')) {
-            $errors[] = "php_zip扩展未激活";
+            $errors[] = $this->getKernel()->trans('php_zip扩展未激活');
         }
 
         if (!function_exists('curl_init')) {
-            $errors[] = "php_curl扩展未激活";
+            $errors[] = $this->getKernel()->trans('php_curl扩展未激活');
         }
 
         $filesystem = new Filesystem();
@@ -203,13 +209,13 @@ class AppServiceImpl extends BaseService implements AppService
 
         if ($filesystem->exists($downloadDirectory)) {
             if (!is_writeable($downloadDirectory)) {
-                $errors[] = "下载目录({$downloadDirectory})无写权限";
+                $errors[] = $this->getKernel()->trans('下载目录(%downloadDirectory%)无写权限', array('%downloadDirectory%' => $downloadDirectory));
             }
         } else {
             try {
                 $filesystem->mkdir($downloadDirectory);
             } catch (\Exception $e) {
-                $errors[] = "下载目录({$downloadDirectory})创建失败";
+                $errors[] = $this->getKernel()->trans('下载目录(%downloadDirectory%)创建失败', array('%downloadDirectory%' => $downloadDirectory));
             }
         }
 
@@ -217,84 +223,118 @@ class AppServiceImpl extends BaseService implements AppService
 
         if ($filesystem->exists($backupdDirectory)) {
             if (!is_writeable($backupdDirectory)) {
-                $errors[] = "备份({$backupdDirectory})无写权限";
+                $errors[] = $this->getKernel()->trans('备份(%backupdDirectory%)无写权限', array('%backupdDirectory%' => $backupdDirectory));
             }
         } else {
             try {
                 $filesystem->mkdir($backupdDirectory);
             } catch (\Exception $e) {
-                $errors[] = "备份({$backupdDirectory})创建失败";
+                $errors[] = $this->getKernel()->trans('备份(%backupdDirectory%)创建失败', array('%backupdDirectory%' => $backupdDirectory));
             }
         }
 
         $rootDirectory = $this->getSystemRootDirectory();
 
         if (!is_writeable("{$rootDirectory}/app")) {
-            $errors[] = 'app目录无写权限';
+            $errors[] = $this->getKernel()->trans('app目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/src")) {
-            $errors[] = 'src目录无写权限';
+            $errors[] = $this->getKernel()->trans('src目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/vendor2")) {
-            $errors[] = 'vendor2目录无写权限';
+            $errors[] = $this->getKernel()->trans('vendor2目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/plugins")) {
-            $errors[] = 'plugins目录无写权限';
+            $errors[] = $this->getKernel()->trans('plugins目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/web")) {
-            $errors[] = 'web目录无写权限';
+            $errors[] = $this->getKernel()->trans('web目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/app/cache")) {
-            $errors[] = 'app/cache目录无写权限';
+            $errors[] = $this->getKernel()->trans('app/cache目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/app/data")) {
-            $errors[] = 'app/data目录无写权限';
+            $errors[] = $this->getKernel()->trans('app/data目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/app/config")) {
-            $errors[] = 'app/config目录无写权限';
+            $errors[] = $this->getKernel()->trans('app/config目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/app/config/config.yml")) {
-            $errors[] = 'app/config/config.yml文件无写权限';
+            $errors[] = $this->getKernel()->trans('app/config/config.yml文件无写权限');
         }
 
         $package = $this->getCenterPackageInfo($packageId);
 
-        $this->_submitRunLogForPackageUpdate('检查环境', $package, $errors);
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('检查环境'), $package, $errors);
+
+        if(!empty($errors)){
+            UpgradeLock::unlock();
+        }
 
         return $errors;
     }
 
     public function checkDependsForPackageUpdate($packageId)
     {
+        UpgradeLock::lock();
         $errors = array();
 
         try {
             $package = $this->getCenterPackageInfo($packageId);
+            // $errors  = $this->checkPluginDepend($package);
 
             if (!version_compare(System::VERSION, $package['edusohoMinVersion'], '>=')) {
-                $errors[] = "EduSoho版本需大于等于{$package['edusohoMinVersion']}，您的版本为".System::VERSION.'，请先升级EduSoho';
+                $errors[] = $this->trans('EduSoho版本需大于等于%packageEdusohoMinVersion%，您的版本为%systemVersion%，请先升级EduSoho', array('%packageEdusohoMinVersion%' => $package['edusohoMinVersion'], '%systemVersion%' => System::VERSION));
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
         }
 
-        $this->_submitRunLogForPackageUpdate('检查依赖', $package, $errors);
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('检查依赖'), $package, $errors);
 
         // @todo 依赖包检测
-
+        if(!empty($errors)){
+            UpgradeLock::unlock();
+        }
         return $errors;
+    }
+
+    /**
+     *
+     * 如果当前升级的是Edusoho则检测已经安装的插件对Edusoho版本以来的检测
+     * @param  $package
+     * @return array
+     */
+    protected function checkPluginDepend($package)
+    {
+        if ($package['product']['code'] != 'MAIN') {
+            return array();
+        }
+        $count         = $this->getAppDao()->findAppCount();
+        $apps          = $this->getAppDao()->findApps(0, $count);
+        $apps          = ArrayToolkit::index($apps, 'code');
+        $systemVersion = $apps['MAIN']['version'];
+        unset($apps['MAIN']);
+
+        $errors = array_map(function ($app) use ($systemVersion) {
+            if ($app['edusohoMaxVersion'] != 'up' && version_compare($app['edusohoMaxVersion'], $systemVersion, "<=")) {
+                return "{$app['name']}支持的最大版本为{$app['edusohoMaxVersion']},您需要升级该插件";
+            }
+        }, $apps);
+        return array_filter($errors);
     }
 
     public function backupDbForPackageUpdate($packageId)
     {
+        UpgradeLock::lock();
         $errors = array();
         try {
             $filesystem = new Filesystem();
@@ -302,7 +342,7 @@ class AppServiceImpl extends BaseService implements AppService
             $package = $this->getCenterPackageInfo($packageId);
 
             if (empty($package)) {
-                $errors[] = "获取应用包#{$packageId}信息失败";
+                $errors[] = $this->getKernel()->trans('获取应用包#%packageId%信息失败', array('%packageId%' => $packageId));
                 goto last;
             }
 
@@ -321,12 +361,16 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         last:
-        $this->_submitRunLogForPackageUpdate('备份数据库', $package, $errors);
+        if(!empty($errors)){
+            UpgradeLock::unlock();
+        }
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('备份数据库'), $package, $errors);
         return $errors;
     }
 
     public function backupFileForPackageUpdate($packageId)
     {
+        UpgradeLock::lock();
         $errors = array();
         try {
             $filesystem = new Filesystem();
@@ -334,7 +378,7 @@ class AppServiceImpl extends BaseService implements AppService
             $package = $this->getCenterPackageInfo($packageId);
 
             if (empty($package)) {
-                $errors[] = "获取应用包#{$packageId}信息失败";
+                $errors[] = $this->getKernel()->trans('获取应用包#%packageId%信息失败', array('%packageId%' => $packageId));
                 goto last;
             }
 
@@ -358,13 +402,13 @@ class AppServiceImpl extends BaseService implements AppService
             );
 
             foreach ($originDirs as $originDir) {
-                $originFullDir = $this->getSystemRootDirectory().'/'.$originDir;
+                $originFullDir = $this->getSystemRootDirectory() . '/' . $originDir;
 
                 if (!$filesystem->exists($originFullDir)) {
                     continue;
                 }
 
-                $filesystem->mirror($originFullDir, $targetBaseDir.'/'.$originDir, null, array(
+                $filesystem->mirror($originFullDir, $targetBaseDir . '/' . $originDir, null, array(
                     'override'        => true,
                     'copy_on_windows' => true
                 ));
@@ -380,31 +424,35 @@ class AppServiceImpl extends BaseService implements AppService
             );
 
             foreach ($originFiles as $originFile) {
-                $originFullFile = $this->getSystemRootDirectory().'/'.$originFile;
+                $originFullFile = $this->getSystemRootDirectory() . '/' . $originFile;
 
                 if (!$filesystem->exists($originFullFile)) {
                     continue;
                 }
 
-                $filesystem->copy($originFullFile, $targetBaseDir.'/'.$originFile, true);
+                $filesystem->copy($originFullFile, $targetBaseDir . '/' . $originFile, true);
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
         }
 
         last:
-        $this->_submitRunLogForPackageUpdate('备份文件', $package, $errors);
+        if(!empty($errors)){
+            UpgradeLock::unlock();
+        }
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('备份文件'), $package, $errors);
         return $errors;
     }
 
     public function downloadPackageForUpdate($packageId)
     {
+        UpgradeLock::lock();
         $errors = array();
         try {
             $package = $this->getCenterPackageInfo($packageId);
 
             if (empty($package)) {
-                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+                throw $this->createServiceException($this->getKernel()->trans('应用包#%packageId%不存在或网络超时，读取包信息失败', array('%packageId%' => $packageId)));
             }
 
             $filepath = $this->createAppClient()->downloadPackage($packageId);
@@ -414,30 +462,36 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $e->getMessage();
         }
 
-        $this->_submitRunLogForPackageUpdate('下载应用包', $package, $errors);
+        if(!empty($errors)){
+            UpgradeLock::unlock();
+        }
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('下载应用包'), $package, $errors);
         return $errors;
     }
 
     public function checkDownloadPackageForUpdate($packageId)
     {
+        UpgradeLock::lock();
         $result = $this->createAppClient()->checkDownloadPackage($packageId);
 
         if ($result['status'] == 'ok') {
             return array();
         }
 
+        UpgradeLock::unlock();
         return $result['errors'];
     }
 
     public function beginPackageUpdate($packageId, $type, $index = 0)
     {
+        UpgradeLock::lock();
         $errors  = array();
         $package = $packageDir = null;
         try {
             $package = $this->getCenterPackageInfo($packageId);
 
             if (empty($package)) {
-                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+                throw $this->createServiceException($this->getKernel()->trans('应用包#%packageId%不存在或网络超时，读取包信息失败', array('%packageId%' => $packageId)));
             }
 
             $packageDir = $this->makePackageFileUnzipDir($package);
@@ -450,7 +504,7 @@ class AppServiceImpl extends BaseService implements AppService
             try {
                 $this->_deleteFilesForPackageUpdate($package, $packageDir);
             } catch (\Exception $e) {
-                $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
+                $errors[] = $this->getKernel()->trans('删除文件时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage()));
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
@@ -458,7 +512,7 @@ class AppServiceImpl extends BaseService implements AppService
             try {
                 $this->_replaceFileForPackageUpdate($package, $packageDir);
             } catch (\Exception $e) {
-                $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
+                $errors[] = $this->getKernel()->trans('复制升级文件时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage()));
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
@@ -471,7 +525,7 @@ class AppServiceImpl extends BaseService implements AppService
                 goto last;
             }
         } catch (\Exception $e) {
-            $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
+            $errors[] = $this->getKernel()->trans('执行升级/安装脚本时发生了错误：%getMessage%', array('%getMessage%' => $e->getMessage()));
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             goto last;
         }
@@ -479,7 +533,16 @@ class AppServiceImpl extends BaseService implements AppService
         try {
             $this->deleteCache();
         } catch (\Exception $e) {
-            $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
+            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+            $errors[] = $this->getKernel()->trans('应用安装升级成功，但刷新缓存失败！请检查%cachePath%的权限', array('%cachePath%' => $cachePath));
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+            goto last;
+        }
+
+        try {
+            $this->_refreshDefaultRoles();
+        } catch (\Exception $e) {
+            $errors[] = $this->getKernel()->trans('刷新默认角色权限失败! ');
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
             goto last;
         }
@@ -488,11 +551,24 @@ class AppServiceImpl extends BaseService implements AppService
             $this->updateAppForPackageUpdate($package, $packageDir);
             $this->createPackageUpdateLog($package, 'SUCCESS');
             PluginUtil::refresh();
+            UpgradeLock::unlock();
         }
 
         last:
-        $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
-        return empty($info) ? $errors : $info;
+        $this->_submitRunLogForPackageUpdate($this->getKernel()->trans('执行升级'), $package, $errors);
+
+        if (empty($info)) {
+            $result = $errors;
+            UpgradeLock::unlock();
+        } else {
+            $result = $info;
+        }
+        return $result;
+    }
+
+    protected function _refreshDefaultRoles()
+    {
+        $this->getRoleService()->refreshRoles();
     }
 
     protected function deleteCache($tryCount = 0)
@@ -504,13 +580,14 @@ class AppServiceImpl extends BaseService implements AppService
         sleep($tryCount * 2);
 
         try {
-            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
+            $cachePath  = $this->getKernel()->getParameter('kernel.root_dir') . '/cache';
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
-
+            clearstatcache(true);
+            sleep(3);
             //注解需要该目录存在
-            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
-                $filesystem->mkdir($cachePath.'/annotations/topxia');
+            if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
+                $filesystem->mkdir($cachePath . '/annotations/topxia');
             }
         } catch (\Exception $e) {
             $tryCount++;
@@ -537,7 +614,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         if ($app['type'] == 'plugin') {
-            $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../plugins/'.ucfirst($app['code']).'/Scripts/uninstall.php');
+            $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../plugins/' . ucfirst($app['code']) . '/Scripts/uninstall.php');
 
             if (file_exists($uninstallScript)) {
                 include $uninstallScript;
@@ -545,16 +622,17 @@ class AppServiceImpl extends BaseService implements AppService
                 $uninstaller->uninstall();
             }
         } elseif ($app['type'] == 'theme') {
-            $themeDir   = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../web/themes/'.strtolower($app['code']));
+            $themeDir   = realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../web/themes/' . strtolower($app['code']));
             $filesystem = new Filesystem();
             $filesystem->remove($themeDir);
         }
 
         $this->getAppDao()->deleteApp($app['id']);
 
-        $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
+        $cachePath  = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
+        $this->_refreshDefaultRoles();
     }
 
     public function updateAppVersion($id, $version)
@@ -562,10 +640,10 @@ class AppServiceImpl extends BaseService implements AppService
         $app = $this->getAppDao()->getApp($id);
 
         if (empty($app)) {
-            throw $this->createServiceException("App #{$id}不存在，更新版本失败！");
+            throw $this->createServiceException($this->getKernel()->trans('App #%id%不存在，更新版本失败！', array('%id%' => $id)));
         }
 
-        $this->getLogService()->info('system', 'update_app_version', "强制更新应用「{$app['name']}」版本为「{$version}」");
+        $this->getLogService()->info('system', 'update_app_version', $this->getKernel()->trans('强制更新应用「%appName%」版本为「%version%」', array('%appName%' => $app['name'], '%version%' => $version)));
         return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
@@ -587,11 +665,11 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        if (!file_exists($packageDir.'/Upgrade.php')) {
+        if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
         }
 
-        include_once $packageDir.'/Upgrade.php';
+        include_once $packageDir . '/Upgrade.php';
         $upgrade = new \EduSohoUpgrade($this->getKernel());
 
         if (method_exists($upgrade, 'setUpgradeType')) {
@@ -608,15 +686,15 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _deleteFilesForPackageUpdate($package, $packageDir)
     {
-        if (!file_exists($packageDir.'/delete')) {
+        if (!file_exists($packageDir . '/delete')) {
             return;
         }
 
         $filesystem = new Filesystem();
-        $fh         = fopen($packageDir.'/delete', 'r');
+        $fh         = fopen($packageDir . '/delete', 'r');
 
         while ($filepath = fgets($fh)) {
-            $fullpath = $this->getPackageRootDirectory($package, $packageDir).'/'.trim($filepath);
+            $fullpath = $this->getPackageRootDirectory($package, $packageDir) . '/' . trim($filepath);
 
             if (file_exists($fullpath)) {
                 $filesystem->remove($fullpath);
@@ -636,7 +714,7 @@ class AppServiceImpl extends BaseService implements AppService
             'type'        => $package['type'],
             'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
             'toVersion'   => empty($package['toVersion']) ? '' : $package['toVersion'],
-            'message'     => $message.(empty($errors) ? '成功' : '失败'),
+            'message'     => $message . (empty($errors) ? $this->trans('成功') : $this->trans('失败')),
             'data'        => empty($errors) ? '' : json_encode($errors)
         ));
     }
@@ -649,7 +727,7 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->remove($unzipDir);
         }
 
-        $tmpUnzipDir = $unzipDir.'_tmp';
+        $tmpUnzipDir = $unzipDir . '_tmp';
 
         if ($filesystem->exists($tmpUnzipDir)) {
             $filesystem->remove($tmpUnzipDir);
@@ -660,13 +738,13 @@ class AppServiceImpl extends BaseService implements AppService
         $zip = new \ZipArchive;
 
         if ($zip->open($filepath) === true) {
-            $tmpUnzipFullDir = $tmpUnzipDir.'/'.$zip->getNameIndex(0);
+            $tmpUnzipFullDir = $tmpUnzipDir . '/' . $zip->getNameIndex(0);
             $zip->extractTo($tmpUnzipDir);
             $zip->close();
             $filesystem->rename($tmpUnzipFullDir, $unzipDir);
             $filesystem->remove($tmpUnzipDir);
         } else {
-            throw new \Exception('无法解压缩安装包！');
+            throw new \Exception($this->getKernel()->trans('无法解压缩安装包！'));
         }
     }
 
@@ -676,11 +754,11 @@ class AppServiceImpl extends BaseService implements AppService
             return $this->getSystemRootDirectory();
         }
 
-        if (file_exists($packageDir.'/ThemeApp')) {
-            return realpath($this->getKernel()->getParameter('kernel.root_dir').'/../'.'web/themes');
+        if (file_exists($packageDir . '/ThemeApp')) {
+            return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'web/themes');
         }
 
-        return realpath($this->getKernel()->getParameter('kernel.root_dir').'/../'.'plugins');
+        return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
     protected function getSystemRootDirectory()
@@ -700,20 +778,20 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function makePackageFileUnzipDir($package)
     {
-        return $this->getDownloadDirectory().'/'.$package['fileName'];
+        return $this->getDownloadDirectory() . '/' . $package['fileName'];
     }
 
     protected function addEduSohoMainApp()
     {
         $app = array(
             'code'          => 'MAIN',
-            'name'          => 'EduSoho主系统',
-            'description'   => 'EduSoho主系统',
+            'name'          => $this->getKernel()->trans('EduSoho主系统'),
+            'description'   => $this->getKernel()->trans('EduSoho主系统'),
             'icon'          => '',
             'version'       => System::VERSION,
             'fromVersion'   => '0.0.0',
             'developerId'   => 1,
-            'developerName' => 'EduSoho官方',
+            'developerName' => $this->getKernel()->trans('EduSoho官方'),
             'installedTime' => time(),
             'updatedTime'   => time()
         );
@@ -723,18 +801,20 @@ class AppServiceImpl extends BaseService implements AppService
     protected function updateAppForPackageUpdate($package, $packageDir)
     {
         $newApp = array(
-            'code'          => $package['product']['code'],
-            'name'          => $package['product']['name'],
-            'description'   => $package['product']['description'],
-            'icon'          => $package['product']['icon'],
-            'version'       => $package['toVersion'],
-            'fromVersion'   => $package['fromVersion'],
-            'developerId'   => $package['product']['developerId'],
-            'developerName' => $package['product']['developerName'],
-            'updatedTime'   => time()
+            'code'              => $package['product']['code'],
+            'name'              => $package['product']['name'],
+            'description'       => $package['product']['description'],
+            'icon'              => $package['product']['icon'],
+            'version'           => $package['toVersion'],
+            'fromVersion'       => $package['fromVersion'],
+            'developerId'       => $package['product']['developerId'],
+            'developerName'     => $package['product']['developerName'],
+            'edusohoMaxVersion' => $package['edusohoMaxVersion'],
+            'edusohoMinVersion' => $package['edusohoMinVersion'],
+            'updatedTime'       => time()
         );
 
-        if (file_exists($packageDir.'/ThemeApp')) {
+        if (file_exists($packageDir . '/ThemeApp')) {
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
@@ -750,6 +830,9 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->updateApp($app['id'], $newApp);
     }
 
+    /**
+     * @return CloudAppDaoImpl
+     */
     protected function getAppDao()
     {
         return $this->createDao('CloudPlatform.CloudAppDao');
@@ -797,5 +880,13 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    /**
+     * @return RoleServiceImpl
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Permission:Role.RoleService');
     }
 }

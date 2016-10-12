@@ -1,6 +1,7 @@
 <?php
 namespace Org\OrgBundle\Controller;
 
+use Org\Service\Org\Impl\OrgServiceImpl;
 use Topxia\Common\TreeToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,12 +10,12 @@ use Topxia\AdminBundle\Controller\BaseController;
 class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
-    {   
+    {
         $user = $this->getCurrentUser();
         $org  = $this->getOrgService()->getOrg($user['orgId']);
-        $orgs = $this->getOrgService()->findOrgsStartByOrgCode();
+        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
 
-        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq' , $org['parentId']);
+        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq', $org['parentId']);
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
@@ -53,8 +54,12 @@ class OrgManageController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $this->getOrgService()->deleteOrg($id);
-        return $this->createJsonResponse(true);
+        $relatedDatas = $this->getOrgService()->findRelatedModuleDatas($id);
+        if (empty($relatedDatas)) {
+            $this->getOrgService()->deleteOrg($id);
+            return $this->createJsonResponse(array('status' => 'success'));
+        }
+        return $this->createJsonResponse(array('status' => 'error', 'data' => $relatedDatas));
     }
 
     public function checkCodeAction(Request $request)
@@ -67,9 +72,24 @@ class OrgManageController extends BaseController
         if ($isAvaliable) {
             $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => '编码已被占用,请换一个');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('编码已被占用,请换一个'));
         }
 
+        return $this->createJsonResponse($response);
+    }
+
+    public function checkNameAction(Request $request)
+    {
+        $parentId    = $request->query->get('parentId');
+        $name        = $request->query->get('value');
+        $exclude     = $request->query->get('exclude');
+        $isAvaliable = $this->getOrgService()->isNameAvaliable($name, $parentId, $exclude);
+
+        if ($isAvaliable) {
+            $response = array('success' => true, 'message' => '');
+        } else {
+            $response = array('success' => false, 'message' => '名称已被占用,请换一个');
+        }
         return $this->createJsonResponse($response);
     }
 
@@ -96,6 +116,10 @@ class OrgManageController extends BaseController
         return $this->render('OrgBundle:Org:batch-update-org-modal.html.twig', array('module' => $module));
     }
 
+
+    /**
+     * @return OrgServiceImpl
+     */
     protected function getOrgService()
     {
         return $this->getServiceKernel()->createService('Org:Org.OrgService');

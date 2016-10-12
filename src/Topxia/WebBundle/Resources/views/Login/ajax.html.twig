@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'登录'|trans}}{{ setting('site.name') }}{% endblock %}
+{% block title %}{{'登录%name%'|trans({'%name%':setting('site.name')})}}{% endblock %}
 {% set modal_class = 'login-modal' %}
 {% block body %}
 

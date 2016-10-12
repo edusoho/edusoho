@@ -3,7 +3,7 @@
 {% if course %}
 <div class="panel panel-autumn panel-autumn-primary">
   <div class="panel-heading side-autumn-primary">
-    <h2 class="panel-title">在学课程 / <small>Learning</small></h2>
+    <h2 class="panel-title">{{'在学课程'|trans}} / <small>Learning</small></h2>
   </div>
   <div class="panel-body">
     <div class="user-learn clearfix">
@@ -13,7 +13,7 @@
     <p>《{{ course.title }}》</p>
     {% set teacher = course.teachers|first %}
     {% set progress = course.progress %}
-    <p class="teacher-name">教师：{{ teacher.nickname|default("") }}</p>
+    <p class="teacher-name">{{'教师：'|trans}}{{ teacher.nickname|default("") }}</p>
     <div class="progress-block clearfix">
       <div class="progress" style="width:90%">
         <span class="progress-bar" style="width: {{ progress.percent }};"></span>

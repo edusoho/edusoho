@@ -44,11 +44,7 @@ class Classroom extends BaseResource
 
     public function filter($res)
     {
-        foreach (array('createdTime', 'updatedTime') as $key) {
-            if (isset($res[$key])) {
-                $res[$key] = date('c', $res[$key]);
-            }
-        }
+        $res['createdTime'] = date('c', $res['createdTime']);
 
         foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
             $res[$key] = $this->getFileUrl($res[$key]);

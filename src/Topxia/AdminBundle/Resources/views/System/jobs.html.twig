@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_jobs' %}
+{% set menu = 'admin_jobs_manage' %}
 
 {% set script_controller = 'job/list' %}
 
@@ -11,36 +11,36 @@
 <form class="well well-sm form-inline">
 
   <div class="form-group">
-    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="下一次执行时间范围" style="width:160px;">
+    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="{{'下一次执行时间范围'|trans}}" style="width:160px;">
   </div>
 
   <div class="form-group">
-    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="下一次执行时间范围" style="width:160px;">
+    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="{{'下一次执行时间范围'|trans}}" style="width:160px;">
   </div>
 
 
   <div class="form-group">
-    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="任务名称" style="width:100px;">
+    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="{{'任务名称'|trans}}" style="width:100px;">
   </div>
 
   <div class="form-group">
     <select class="form-control" name="cycle">
-        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--') }}
+        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--'|trans) }}
     </select>
   </div>
 
-  <button class="btn btn-primary">搜索</button>
+  <button class="btn btn-primary">{{'搜索'|trans}}</button>
 
 </form>
 
   <table class="table table-hover" id="log-table">
     <tr>
-      <th width="5%">编号</th>
-      <th width="20%">任务名称</th>
-      <th width="20%">任务对象</th>
-      <th width="10%">执行周期</th>
-      <th width="20%">下一次执行时间</th>
-      <th width="20%">创建时间</th>
+      <th width="5%">{{'编号'|trans}}</th>
+      <th width="20%">{{'任务名称'|trans}}</th>
+      <th width="20%">{{'任务对象'|trans}}</th>
+      <th width="10%">{{'执行周期'|trans}}</th>
+      <th width="20%">{{'下一次执行时间'|trans}}</th>
+      <th width="20%">{{'创建时间'|trans}}</th>
     </tr>
     {% for job in jobs %}
       <tr>
@@ -53,18 +53,18 @@
         <td width="20%">
           {% if job.targetType == 'course' %}
             {% set course = data('Course',{courseId:job.targetId}) %}
-            课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.title}}</a>》
+            {{'课程：'|trans}}《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.title}}</a>》
           {% elseif job.targetType == 'classroom' %}
             {% set classroom = data('Classroom',{classroomId:job.targetId}) %}
-            班级：《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
+            {{'班级：'|trans}}《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
           {% elseif job.targetType == 'lesson' %}
             {% set lesson = data('CourseLesson',{lessonId:job.targetId}) %}
             {% set course = data('Course',{courseId:lesson.courseId}) %}
-            课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.title}}</a>》,课时：{{lesson.title}}
+            {{'课程：'|trans}}《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.title}}</a>》,{{'课时：'|trans}}{{lesson.title}}
           {% elseif job.targetType == 'liveOpenLesson' %}
             {% set lesson = data('OpenCourseLesson',{lessonId:job.targetId}) %}
             {% set course = data('OpenCourse',{courseId:lesson.courseId}) %}
-            公开课：《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,课时：{{lesson.title}}
+            {{'公开课：'|trans}}《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,{{'课时：'|trans}}{{lesson.title}}
           {% else %}--{% endif %}
         </td>
         <td>
@@ -78,7 +78,7 @@
         </td>
       </tr>
     {% else %}
-      <tr><td class="empty" colspan="20">无定时任务记录</tr>
+      <tr><td class="empty" colspan="20">{{'无定时任务记录'|trans}}</tr>
     {% endfor %}
   </table>
 

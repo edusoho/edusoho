@@ -6287,8 +6287,6 @@ textarea {
 }
 .form-control {
   color: #616161;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   border-color: #e1e1e1;
 }
 .form-control.form-control-lg {
@@ -13637,6 +13635,9 @@ html {
   position: absolute;
   right: 0;
 }
+.embed-responsive-16by9.masks {
+  z-index: 99;
+}
 .breadcrumb.open-course-breadcrumb {
   margin: -30px 0 0;
   background: transparent;
@@ -13644,6 +13645,15 @@ html {
 }
 .open-course-header {
   margin-bottom: 15px;
+  position: relative;
+}
+.open-course-header .black-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #000;
 }
 .open-course-header > .row {
   margin: 0;
@@ -13703,6 +13713,11 @@ html {
     width: 32%;
   }
 }
+@media (max-width: 991px) {
+  .open-course-detail-operation .operation-list.no-border {
+    border-right: 1px solid transparent;
+  }
+}
 .open-course-detail-operation .operation-img.operation-share a {
   display: inline-block;
 }
@@ -13713,7 +13728,6 @@ html {
   color: #fff;
   border-radius: 50%;
   text-align: center;
-  line-height: 36px;
   margin-right: 8px;
   background: #919191;
   -webkit-transition: all 0.3s ease;
@@ -13727,6 +13741,11 @@ html {
 }
 .open-course-detail-operation .operation-img i {
   font-size: 18px;
+  line-height: 36px;
+}
+.open-course-detail-operation .operation-img .qrcode-popover.top .qrcode-content {
+  left: -77px;
+  top: -247px;
 }
 .open-course-detail-operation .operation-zan.active,
 .open-course-detail-operation .operation-zan:hover {
@@ -13994,10 +14013,11 @@ html {
   position: relative;
   padding: 0;
   background-color: #000;
+  height: 500px;
 }
-@media (min-width: 992px) {
+@media (max-width: 767px) {
   .open-course-views {
-    height: 500px;
+    height: 300px;
   }
 }
 .open-course-views .mask-img {
@@ -14027,6 +14047,7 @@ html {
   height: 100%;
   background: #000;
   background-color: rgba(0, 0, 0, 0.9);
+  z-index: 999;
 }
 .open-course-views .mask .mask-content {
   position: absolute;
@@ -14037,6 +14058,11 @@ html {
   margin-top: -80px;
   margin-left: -165px;
   text-align: center;
+}
+@media (max-width: 991px) {
+  .open-course-views .mask .mask-content {
+    margin-top: -60px;
+  }
 }
 .open-course-views .mask .mask-content h2 {
   color: #fff;

@@ -16,7 +16,7 @@ define(function(require, exports, module) {
 			var $btn = $(e.currentTarget);
 			$.post($(this).data('url'), {targetUserId: $(this).attr('targetUserId')}, function(response) {
 				$btn.parents('.share-history-record').remove();
-				Notify.success('已取消分享！');
+				Notify.success(Translator.trans('已取消分享！'));
 				//window.location.reload();
 			}, 'json');
 		});

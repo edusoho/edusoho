@@ -51,7 +51,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             $user                = $this->getCurrentUser();
-            $conditions['orgId'] = isset($user['selectedOrgId']) ? $user['selectedOrgId'] : $user['orgId'];
+            $conditions['orgId'] = $user->getSelectOrgId();
         }
 
         return $conditions;
@@ -174,7 +174,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if (!in_array($keyOfFields, $keysArray)) {
-                throw $this->createServiceException('添加的字段有问题！');
+                throw $this->createServiceException($this->getKernel()->trans('添加的字段有问题！'));
             }
         }
 

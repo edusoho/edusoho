@@ -4,7 +4,7 @@
 style="display:none;"
 {% endif %}
 >
-<div class="col-md-8 control-label"><b>自定义默认课程图片</b></div>
+<div class="col-md-8 control-label"><b>{{'自定义默认课程图片'|trans}}</b></div>
   <form id="course-picture-form" method="post" >
     <div class="controls col-md-8 controls">
       <img src="{{ system_default_path('course.png' ) }}">
@@ -16,7 +16,7 @@ style="display:none;"
         <a id="default-course-picture-btn"
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
-        class="btn btn-default btn-sm">上传</a>
+        class="btn btn-default btn-sm">{{'上传'|trans}}</a>
       </div>
     </div>
   </form>
@@ -27,7 +27,7 @@ style="display:none;"
 style="display:none;"
 {% endif %}
 >
-  <div class="col-md-8 control-label"><b>系统默认课程图片</b></div>
+  <div class="col-md-8 control-label"><b>{{'系统默认课程图片'|trans}}</b></div>
     <div class="controls col-md-8 controls">
       <img src="{{ asset('assets/img/default/course.png') }}">
     </div>

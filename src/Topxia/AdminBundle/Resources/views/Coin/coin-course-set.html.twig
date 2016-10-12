@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_coin_model' %}
+{% set menu = 'admin_coin_settings' %}
 
 {% set script_controller = "coin/save" %}
 {% block main %}
@@ -8,21 +8,21 @@
   <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_coin_model_save')}}">
   
     <ul class="breadcrumb">
-      <li><a href="{{path('admin_coin_model')}}">使用方式设置</a></li>
-      <li class="active">课程价格设置</li>
+      <li><a href="{{path('admin_coin_model')}}">{{'使用方式设置'|trans}}</a></li>
+      <li class="active">{{'课程价格设置'|trans}}</li>
     </ul>
 
     <p>
-      <span>使用方式：</span>
+      <span>{{'使用方式：'|trans}}</span>
       <strong class="text-info">
         {% if set.cash_model =="deduction" %}
-          用于抵扣
+          {{'用于抵扣'|trans}}
         {% else %}
-          用于标价
+          {{'用于标价'|trans}}
         {% endif %}
       </strong>
-      <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">汇率：</span>
-      1元人民币兑换 
+      <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">{{'汇率：'|trans}}</span>
+      {{'1元人民币兑换'|trans}} 
       <strong class="text-info">{{ set.cash_rate}}</strong> 
       {{ setting('coin.coin_name') }}
     </p>
@@ -34,8 +34,8 @@
     <input type="hidden" name="type" value="{{type|default('course')}}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <p>
-      <button type="submit" class="btn btn-primary pull-right" id="finish" >完成</button>
-      <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">上一步</a>
+      <button type="submit" class="btn btn-primary pull-right" id="finish" >{{'完成'|trans}}</button>
+      <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">{{'上一步'|trans}}</a>
     </p>
   </form>
 {% endblock %}

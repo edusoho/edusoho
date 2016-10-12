@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                 $('#classroom-recommend-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('设置推荐班级操作成功!');
+                    Notify.success(Translator.trans('设置推荐班级操作成功!'));
                     var $tr = $(html);
 					$('#' + $tr.attr('id')).replaceWith($tr);
 
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 
 
                 }).error(function(){
-                    Notify.danger('设置推荐班级操作失败!');
+                    Notify.danger(Translator.trans('设置推荐班级操作失败!'));
                 });
             }
 
@@ -54,7 +54,6 @@ define(function(require, exports, module) {
 	};
 
 });
-
 
 
 

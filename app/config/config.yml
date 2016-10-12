@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 7.1.3
+        assets_version: 7.2.4
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -103,6 +103,16 @@ parameters:
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
 
 services:
+    app.locale_listener:
+        class: Topxia\WebBundle\Listener\LocaleListener
+        arguments: ['%kernel.default_locale%']
+        tags:
+            - { name: kernel.event_subscriber }
+    app.user_locale_listener:
+        class: Topxia\WebBundle\Listener\UserLocaleListener
+        arguments: ['@session']
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
     session.handler.pdo.connection:
         class: PDO
         calls:
@@ -177,12 +187,6 @@ services:
 
     topxia.twig.data_extension:
         class: Topxia\WebBundle\Twig\Extension\DataExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.menu_extension:
-        class: Topxia\WebBundle\Twig\Extension\MenuExtension
-        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 

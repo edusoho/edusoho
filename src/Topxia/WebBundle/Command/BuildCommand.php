@@ -212,6 +212,9 @@ class BuildCommand extends BaseCommand
 
         $directories = array(
             'asm89',
+            'bshaffer/oauth2-server-bundle',
+            'bshaffer/oauth2-server-httpfoundation-bridge',
+            'bshaffer/oauth2-server-php',
             'composer',
             'silex/silex/src',
             'pimple/pimple/lib',
@@ -249,7 +252,8 @@ class BuildCommand extends BaseCommand
             'twig/extensions/lib',
             'endroid/qrcode/src',
             'endroid/qrcode/assets',
-            'endroid/qrcode-bundle'
+            'endroid/qrcode-bundle',
+            'willdurand/js-translation-bundle'
         );
 
         foreach ($directories as $dir) {
@@ -349,7 +353,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword','materiallib','org');
+        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {

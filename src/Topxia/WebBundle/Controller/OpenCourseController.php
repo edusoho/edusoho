@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -469,6 +468,10 @@ class OpenCourseController extends BaseOpenCourseController
             throw $this->createNotFoundException();
         }
 
+        if ($material['source'] == 'opencourselesson' || !$material['lessonId']) {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+        }
+
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
@@ -547,41 +550,11 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $lesson['videoWatermarkEmbedded'] = 0;
 
-        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (($lesson['type'] == 'video' || ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated')) && $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
-            $lesson['mediaConvertStatus'] = $file['convertStatus'];
-
-            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                $factory = new CloudClientFactory();
-                $client  = $factory->createClient();
-                $hls     = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-
-                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                        'data'     => array(
-                            'id' => $file['id']
-                        ),
-                        'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
-                        'duration' => 3600
-                    ));
-
-                    $hls = array(
-                        'url' => $this->generateUrl('hls_playlist', array(
-                            'id'    => $file['id'],
-                            'token' => $token['token'],
-                            'line'  => $request->query->get('line')
-                        ), true)
-                    );
-                } else {
-                    $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-                }
-
-                $lesson['mediaHLSUri'] = $hls['url'];
-            }
-
-            if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $lesson['videoWatermarkEmbedded'] = 1;
+            if ($file) {
+                $lesson['convertStatus'] = $file['convertStatus'];
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);

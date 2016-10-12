@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\User\Impl\NotificationServiceImpl;
 
 class CourseStudentManageController extends BaseController
 {
@@ -73,9 +74,9 @@ class CourseStudentManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition['targetId'] = $id;
+        $condition['targetId']   = $id;
         $condition['targetType'] = 'course';
-        $condition['status'] = 'success';
+        $condition['status']     = 'success';
 
         $paginator = new Paginator(
             $request,
@@ -84,7 +85,7 @@ class CourseStudentManageController extends BaseController
         );
 
         $refunds = $this->getOrderService()->searchRefunds(
-            $condition, 
+            $condition,
             'createdTime',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -95,11 +96,12 @@ class CourseStudentManageController extends BaseController
 
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
+
         return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
-            'course'                     => $course,
-            'refunds'                   => $refunds,
-            'paginator'                  => $paginator,
-            'role'                       => ''
+            'course'    => $course,
+            'refunds'   => $refunds,
+            'paginator' => $paginator,
+            'role'      => 'student'
         ));
     }
 
@@ -144,18 +146,18 @@ class CourseStudentManageController extends BaseController
 
         $condition = array(
             'targetType' => 'course',
-            'targetId' => $courseId,
-            'userId' => $userId,
-            'status' => 'paid'
-            );
-        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+            'targetId'   => $courseId,
+            'userId'     => $userId,
+            'status'     => 'paid'
+        );
+        $orders    = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
             $order = $value;
         }
         $reason = array(
             'type' => 'other',
             'note' => '手动移除'
-            );
+        );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
         $this->getCourseService()->removeStudent($courseId, $userId);
@@ -170,7 +172,7 @@ class CourseStudentManageController extends BaseController
 
     public function exportCsvAction(Request $request, $id)
     {
-        $gender        = array('female' => '女', 'male' => '男', 'secret' => '秘密');
+        $gender        = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (isset($courseSetting['teacher_export_student']) && $courseSetting['teacher_export_student'] == "1") {
@@ -189,7 +191,7 @@ class CourseStudentManageController extends BaseController
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        $fields['weibo'] = "微博";
+        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
@@ -217,10 +219,10 @@ class CourseStudentManageController extends BaseController
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
         }
 
-        $str = "用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
+        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
-            $str .= ",".$value;
+            $str .= "," . $value;
         }
 
         $str .= "\r\n";
@@ -229,28 +231,28 @@ class CourseStudentManageController extends BaseController
 
         foreach ($courseMembers as $courseMember) {
             $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'].",";
-            $member .= $users[$courseMember['userId']]['email'].",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
-            $member .= $progresses[$courseMember['userId']]['percent'].",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['nickname'] . ",";
+            $member .= $users[$courseMember['userId']]['email'] . ",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']) . ",";
+            $member .= $progresses[$courseMember['userId']]['percent'] . ",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] . "," : "-" . ",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']] . ",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] . "," : "-" . ",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] . "," : "-" . ",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] . "," : "-" . ",";
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key] . "," : "-" . ",";
             }
 
             $students[] = $member;
         };
 
         $str .= implode("\r\n", $students);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
@@ -258,7 +260,7 @@ class CourseStudentManageController extends BaseController
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
@@ -292,12 +294,12 @@ class CourseStudentManageController extends BaseController
         $user    = $this->getUserService()->getUserByLoginField($keyword);
 
         if (!$user) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
         } else {
             $isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 
             if ($isCourseStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本课程的学员了');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了'));
             } else {
                 $response = array('success' => true, 'message' => '');
             }
@@ -305,7 +307,7 @@ class CourseStudentManageController extends BaseController
             $isCourseTeacher = $this->getCourseService()->isCourseTeacher($id, $user['id']);
 
             if ($isCourseTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加');
+                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加'));
             }
         }
 
@@ -315,7 +317,7 @@ class CourseStudentManageController extends BaseController
     public function showAction(Request $request, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
         }
 
         $user             = $this->getUserService()->getUser($userId);
@@ -409,7 +411,7 @@ class CourseStudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         if ($course['status'] != 'published') {
-            throw $this->createNotFoundException("未发布课程不能导入学员!");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('未发布课程不能导入学员!'));
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
@@ -447,14 +449,14 @@ class CourseStudentManageController extends BaseController
             return $userIds;
         }
     }
-    
+
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return array(
             'percent' => $percent,
@@ -498,6 +500,9 @@ class CourseStudentManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return NotificationServiceImpl
+     */
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');

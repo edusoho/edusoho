@@ -44,7 +44,7 @@
           <li>
             <i class="es-icon es-icon-arrowdropleft"></i>
             <a class="link-light" href="{{ course_show_url }}" target="_blank">
-              课时 {{ lesson.number }}: {{ lesson.title|raw }}
+              {{ '课时'|trans }} {{ lesson.number }}: {{ lesson.title|raw }}
             </a>
           </li>
         {% endfor %}

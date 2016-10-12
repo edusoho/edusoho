@@ -28,20 +28,24 @@ class DataExtension extends \Twig_Extension
     {
         $method = 'get' . ucfirst($name) . 'Datas';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException("尚未定义批量获取'{$name}'数据");
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义批量获取"%name%"数据', array('%name%' =>$name )));
         }
         return $this->{$method}($conditions, $sort, $start, $limit);
     }
 
-    public function getDatasCount($conditions)
+    public function getDatasCount($name, $conditions)
     {
         $method = 'get' . ucfirst($name) . 'DatasdeCount';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException("尚未定义获取'{$name}'数据的记录条数");
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', array('%name%' =>$name )));
         }
-        return $this->{$method}($condihtions);
+        return $this->{$method}($conditions);
     }
 
+    /**
+     * @deprecated  即将废弃，不要再使用
+     *
+     */
     public function callService($name, $method, $arguments)
     {
         $service = $this->createService($name);
@@ -95,5 +99,8 @@ class DataExtension extends \Twig_Extension
     {
         return ServiceKernel::instance()->createService($name);
     }
-
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

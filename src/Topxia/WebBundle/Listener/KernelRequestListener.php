@@ -65,7 +65,7 @@ class KernelRequestListener
                 } else {
                     $response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
                         'type'     => 'error',
-                        'message'  => '页面已过期，请重新提交数据！',
+                        'message'  => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
                         'goto'     => '',
                         'duration' => 0
                     ));
@@ -74,5 +74,9 @@ class KernelRequestListener
                 }
             }
         }
+    }
+            protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

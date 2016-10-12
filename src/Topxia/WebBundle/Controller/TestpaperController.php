@@ -73,7 +73,7 @@ class TestpaperController extends BaseController
             $canFinish     = $taskProcessor->canFinish($targetId, 'testpaper', $userId);
 
             if (!$canFinish) {
-                return $this->createMessageResponse('info', '在该任务之前，还有学习任务没有完成哦！');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('在该任务之前，还有学习任务没有完成哦！'));
             }
         }
 
@@ -81,11 +81,11 @@ class TestpaperController extends BaseController
 
         if (empty($testpaperResult)) {
             if ($testpaper['status'] == 'draft') {
-                return $this->createMessageResponse('info', '该试卷未发布，如有疑问请联系老师！');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷未发布，如有疑问请联系老师！'));
             }
 
             if ($testpaper['status'] == 'closed') {
-                return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
             }
 
             $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
@@ -117,11 +117,11 @@ class TestpaperController extends BaseController
         }
 
         if ($testpaper['status'] == 'draft') {
-            return $this->createMessageResponse('info', '该试卷未发布，如有疑问请联系老师！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷未发布，如有疑问请联系老师！'));
         }
 
         if ($testpaper['status'] == 'closed') {
-            return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('reviewing'));
@@ -142,12 +142,12 @@ class TestpaperController extends BaseController
         $testPaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (empty($testPaper)) {
-            $response = array('success' => false, 'message' => '试卷不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('试卷不存在'));
             return $this->createJsonResponse($response);
         }
 
         if ($testPaper['limitedTime'] == 0) {
-            $response = array('success' => false, 'message' => '该试卷考试时间未限制,请选择其他限制时长的试卷');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该试卷考试时间未限制,请选择其他限制时长的试卷'));
         } else {
             $response = array('success' => true, 'message' => '');
         }
@@ -160,7 +160,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
-            throw $this->createAccessDeniedException('无权预览试卷！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权预览试卷！'));
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
@@ -244,7 +244,7 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException("试卷不存在");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
         }
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
@@ -255,7 +255,7 @@ class TestpaperController extends BaseController
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($id);
 
         if (!$canLookTestpaper) {
-            throw $this->createAccessDeniedException('无权查看试卷！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权查看试卷！'));
         }
 
         $result   = $this->getTestpaperService()->showTestpaper($id, true);
@@ -298,13 +298,13 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         if (!$testpaperResult) {
-            throw $this->createNotFoundException('试卷不存在!');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在!'));
         }
 
 //权限！
 
         if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('不可以访问其他学生的试卷哦~'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -406,11 +406,11 @@ class TestpaperController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException("试卷不存在");
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
         }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
-            throw $this->createAccessDeniedException('无权批阅试卷！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权批阅试卷！'));
         }
 
         if ($testpaperResult['status'] != 'reviewing') {
@@ -514,7 +514,7 @@ class TestpaperController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $courses      = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, PHP_INT_MAX, false);
@@ -568,7 +568,7 @@ class TestpaperController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
         }
 
         $courses      = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, PHP_INT_MAX, false);
@@ -663,13 +663,13 @@ class TestpaperController extends BaseController
         $user = $this->getCurrentUser()->id;
 
         if (empty($user)) {
-            return $this->createJsonResponse(array('error' => '您尚未登录系统或登录已超时，请先登录。'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('您尚未登录系统或登录已超时，请先登录。')));
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
 
         if (empty($testpaper)) {
-            return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('试卷已删除，请联系管理员。')));
         }
 
         $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user);
@@ -678,7 +678,9 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('status' => 'nodo'));
         }
 
-        return $this->createJsonResponse(array('status' => $testResult['status'], 'resultId' => $testResult['id']));
+        $testResult['totalScore'] = $testpaper['score'];
+
+        return $this->createJsonResponse($testResult);
     }
 
     protected function getSettingService()

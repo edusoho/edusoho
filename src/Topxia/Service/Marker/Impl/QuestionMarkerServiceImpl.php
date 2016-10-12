@@ -23,7 +23,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $marker = $this->getMarkerService()->getMarker($markerId);
 
         if (empty($marker)) {
-            throw $this->createServiceException("驻点不存在");
+            throw $this->createServiceException($this->getKernel()->trans('驻点不存在'));
         }
 
         return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerId($markerId);
@@ -105,7 +105,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $questionMarker = $this->getQuestionMarker($id);
 
         if (empty($questionMarker)) {
-            throw $this->createServiceException("弹题不存在");
+            throw $this->createServiceException($this->getKernel()->trans('弹题不存在'));
         }
 
         $this->getQuestionMarkerDao()->deleteQuestionMarker($questionMarker['id']);
@@ -119,7 +119,8 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         }
 
         $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($id);
-        $this->getLogService()->info('marker', 'delete_question', "删除驻点问题#{$questionMarker['stem']}");
+
+        $this->getLogService()->info('marker', 'delete_question', $this->getKernel()->trans('删除驻点问题#%stem%', array('%stem%' => $questionMarker['stem'])));
         return true;
     }
 

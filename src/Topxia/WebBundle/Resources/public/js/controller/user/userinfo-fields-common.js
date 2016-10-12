@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Widget     = require('widget');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require("jquery.bootstrap-datetimepicker");
 
     var UserInfoFieldsItemValidate = Widget.extend({
 
@@ -17,6 +18,17 @@ define(function(require, exports, module) {
         setup:function() {
             this.createValidator();
             this.initBaseFields();
+            this.initComponents();
+        },
+
+        initComponents: function () {
+            $('.date').each(function () {
+                $(this).datetimepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    minView: 2
+                });
+            });
         },
 
         createValidator: function() {
@@ -70,7 +82,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="gender"]',
                 required: true,
-                errormessageRequired: '请选择性别'
+                errormessageRequired: Translator.trans('请选择性别')
             });
 
             validator.addItem({
@@ -87,7 +99,7 @@ define(function(require, exports, module) {
                 element: '[name="weibo"]',
                 required: true,
                 rule: 'url',
-                errormessageUrl: '微博地址不正确，须以http://开头。'
+                errormessageUrl: Translator.trans('微博地址不正确，须以http://开头。')
             });
 
             validator.addItem({

@@ -57,7 +57,7 @@ class CourseMaterialController extends CourseBaseController
 
         if ($member && $member['levelId'] > 0) {
             if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
             }
         }
 
@@ -65,6 +65,10 @@ class CourseMaterialController extends CourseBaseController
 
         if (empty($material)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($material['source'] == 'courselesson' || !$material['lessonId']) {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));

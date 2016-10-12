@@ -1,6 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group_member' %}
-{% block title %}{{groupinfo.title}}{{'小组'|trans}} - {{ parent() }}{% endblock %}
+
+{% block title %}{{'%title%小组'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
+
 
 {% block group_body %}
   <div class="panel panel-default">

@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+switch_language:
+    pattern: /switch/language
+    defaults: { _controller: TopxiaWebBundle:Default:translate }
+
 homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:coursesCategory }
@@ -653,6 +657,10 @@ course_manage:
     pattern:  /course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:CourseManage:index }
 
+course_manage_info:
+    path: /course/{id}/manage/info
+    defaults: { _controller: TopxiaWebBundle:CourseManage:info }
+
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:CourseManage:base }
@@ -797,6 +805,7 @@ course_manage_lesson_create:
 course_manage_lesson_file_status:
     pattern:  /course/{id}/manage/lesson/fileStatus
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+
 
 course_draft_create:
     pattern:  /course/draft/create
@@ -2196,6 +2205,15 @@ open_course_manage_students:
 open_course_manage_files:
     pattern:  /open/course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:index }
+
+open_course_manage_file_show:
+    pattern:  /open/course/{id}/manage/file/{fileId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:show }
+
+open_course_manage_file_convert:
+    pattern:  /open/course/{id}/manage/file/{fileId}/convert
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:convert }
+    methods: [POST]
 
 open_course_manage_files_batch_upload:
     pattern:  /open/course/{id}/manage/files/batch/upload/{targetType}

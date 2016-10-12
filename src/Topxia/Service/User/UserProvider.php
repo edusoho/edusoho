@@ -1,12 +1,12 @@
 <?php
 namespace Topxia\Service\User;
 
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProvider implements UserProviderInterface
 {
@@ -27,8 +27,9 @@ class UserProvider implements UserProviderInterface
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
-        ServiceKernel::instance()->setCurrentUser($currentUser);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
+        ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;
     }
 
@@ -44,6 +45,11 @@ class UserProvider implements UserProviderInterface
     public function supportsClass($class)
     {
         return $class === 'Topxia\Service\User\CurrentUser';
+    }
+
+    protected function getRoleService()
+    {
+        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
     }
 
     protected function getUserService()

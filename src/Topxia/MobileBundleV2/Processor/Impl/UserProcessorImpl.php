@@ -39,7 +39,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $host                  = $this->request->getSchemeAndHttpHost();
-        $record['url']         = $host.$this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['url']         = $host . $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
         $record['createdTime'] = date('c', $record['createdTime']);
         unset($record['uri']);
         return $record;
@@ -290,7 +290,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
 
         return array(
             'percent' => $percent,
@@ -339,7 +339,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $content   = $matches[2];
             $className = $matches[1];
             if ($className == "notification-footer") {
-                return "<br><br><font color=#CFCFCF><fontsize>".$content."</fontsize></font>";
+                return "<br><br><font color=#CFCFCF><fontsize>" . $content . "</fontsize></font>";
             }
             return $content;
         }, $message);
@@ -367,7 +367,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
             $this->log("user_logout", "用户退出", array(
-                "userToken" => $user)
+                    "userToken" => $user)
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
@@ -417,7 +417,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         $code = rand(0, 9);
         for ($i = 1; $i < $length; $i++) {
-            $code = $code.rand(0, 9);
+            $code = $code . rand(0, 9);
         }
         return $code;
     }
@@ -475,9 +475,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if (!$nickname) {
-            $nickname = "ES".time();
+            $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                $nickname = "ES".time();
+                $nickname = "ES" . time();
             }
         } else {
             if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
@@ -516,7 +516,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
             if ($this->controller->setting('cloud_sms.sms_enabled') == '1') {
-                $requestInfo                 = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
                     $registTypeName = $auth['register_mode'] == "mobile" ? "mobile" : "emailOrMobile";
@@ -621,49 +621,37 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
         }
-
-        $token = $this->controller->getUserToken($this->request);
-        if ($token == null || $token['type'] != MobileBaseController::TOKEN_TYPE) {
-            $token = null;
-        }
-
-        if (empty($token)) {
+        $oldToken = $this->getTokenService()->verifyToken(MobileBaseController::TOKEN_TYPE, $this->controller->getToken($this->request));
+        if (empty($oldToken) || $oldToken['type'] != MobileBaseController::TOKEN_TYPE) {
             $user = null;
         } else {
-            $user = $this->controller->getUserService()->getUser($token['userId']);
+            $user = $this->controller->getUserService()->getUser($oldToken['userId']);
         }
 
-        $site = $this->controller->getSettingService()->get('site', array());
-
+        $newToken = null;
         if ($user != null) {
             if ($user['locked']) {
                 return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
             }
-            $userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
+            $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user        = array_merge($user, $userProfile);
+            $newToken    = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
+                'userId'   => $user['id'],
+                'duration' => 3600 * 24 * 30
+            ));
         }
 
         $result = array(
-            'token' => empty($token) ? '' : $token['token'],
+            'token' => is_null($newToken) ? null : $newToken['token'],
             'user'  => empty($user) ? null : $this->controller->filterUser($user),
             'site'  => $this->getSiteInfo($this->request, $version)
         );
 
         $this->log("user_login", "用户二维码登录", array(
-            "userToken" => $token)
-        );
-
-        $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($token['userId'], $token['type']);
-        if (empty($delTokens)) {
-            return $result;
-        }
-
-        foreach ($delTokens as $delToken) {
-            if ($delToken['token'] != $token['token']) {
-                $this->controller->getTokenService()->destoryToken($delToken['token']);
-            }
-        }
+            "qrCodeToken" => $oldToken,
+            'loginToken'  => $newToken
+        ));
 
         return $result;
     }
@@ -808,9 +796,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
-        $message = array('userId' => $user['id'],
-            'userName'                => $user['nickname'],
-            'opration'                => 'follow');
+        $message = array('userId'   => $user['id'],
+                         'userName' => $user['nickname'],
+                         'opration' => 'follow');
         $this->controller->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
@@ -830,9 +818,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
-        $message = array('userId' => $user['id'],
-            'userName'                => $user['nickname'],
-            'opration'                => 'unfollow');
+        $message = array('userId'   => $user['id'],
+                         'userName' => $user['nickname'],
+                         'opration' => 'unfollow');
         $this->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
@@ -857,12 +845,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
 
-        $conditions = array(
+        $conditions              = array(
             'userId' => $user['id'],
             'type'   => 'question'
         );
-        $total   = $this->controller->getThreadService()->searchThreadCount($conditions);
-        $threads = $this->controller->getThreadService()->searchThreads(
+        $total                   = $this->controller->getThreadService()->searchThreadCount($conditions);
+        $threads                 = $this->controller->getThreadService()->searchThreads(
             $conditions,
             'createdNotStick',
             0,
@@ -872,7 +860,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         $threadSum               = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions = array(
+        $conditions      = array(
             'userId' => $user['id'],
             'type'   => 'discussion'
         );
@@ -908,10 +896,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
-        return array('thread' => $threadSum,
-            'discussion'          => $discussionSum,
-            'note'                => $noteSum,
-            'test'                => $testSum);
+        return array('thread'     => $threadSum,
+                     'discussion' => $discussionSum,
+                     'note'       => $noteSum,
+                     'test'       => $testSum);
     }
 
     public function getSchoolRoom()
@@ -950,14 +938,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $courseConditions = array(
             'userId' => $user['id']
         );
-        $sort = array(
+        $sort             = array(
             'startTime',
             'DESC'
         );
-        $allCourseTotal = $this->controller->getCourseService()->searchLearnCount($courseConditions);
-        $allLearnCourse = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $allCourseTotal);
-        $courseInfo     = null;
-        $resultCourse   = null;
+        $allCourseTotal   = $this->controller->getCourseService()->searchLearnCount($courseConditions);
+        $allLearnCourse   = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $allCourseTotal);
+        $courseInfo       = null;
+        $resultCourse     = null;
         foreach ($allLearnCourse as $key => $value) {
             $courseInfo = $this->controller->getCourseService()->getCourse($allLearnCourse[$key]['courseId']);
             if ($courseInfo['type'] == 'live') {
@@ -1091,7 +1079,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $messageConditions = array(
             'toId' => $user['id']
         );
-        $sort = array();
+        $sort              = array();
 
         $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
         $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);

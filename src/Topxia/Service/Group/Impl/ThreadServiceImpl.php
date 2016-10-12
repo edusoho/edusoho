@@ -36,17 +36,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException('话题不存在，收藏失败！');
+            throw $this->createServiceException($this->getKernel()->trans('话题不存在，收藏失败！'));
         }
 
         if ($userId == $thread['userId']) {
-            throw $this->createServiceException('不能收藏自己的话题！');
+            throw $this->createServiceException($this->getKernel()->trans('不能收藏自己的话题！'));
         }
 
         $collectThread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
 
         if (!empty($collectThread)) {
-            throw $this->createServiceException('不允许重复收藏!');
+            throw $this->createServiceException($this->getKernel()->trans('不允许重复收藏!'));
         }
 
         $this->dispatchEvent('group.thread.collect', new ServiceEvent($thread));
@@ -67,13 +67,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread = $this->getThread($threadId);
 
         if (empty($thread)) {
-            throw $this->createServiceException('话题不存在，取消收藏失败！');
+            throw $this->createServiceException($this->getKernel()->trans('话题不存在，取消收藏失败！'));
         }
 
         $collectThread = $this->getThreadCollectDao()->getThreadByUserIdAndThreadId($userId, $threadId);
 
         if (empty($collectThread)) {
-            throw $this->createServiceException('不存在此收藏关系，取消收藏失败！');
+            throw $this->createServiceException($this->getKernel()->trans('不存在此收藏关系，取消收藏失败！'));
         }
 
         return $this->getThreadCollectDao()->deleteThreadCollectByUserIdAndThreadId($userId, $threadId);
@@ -123,17 +123,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function addThread($thread)
     {
         if (empty($thread['title'])) {
-            throw $this->createServiceException("标题名称不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('标题名称不能为空！'));
         }
 
         if (empty($thread['content'])) {
-            throw $this->createServiceException("话题内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('话题内容不能为空！'));
         }
 
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+            throw $this->createServiceException($this->getKernel()->trans('发帖次数过多，请稍候尝试。'));
         }
 
         $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
@@ -143,11 +143,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
 
         if (empty($thread['groupId'])) {
-            throw $this->createServiceException("小组Id不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('小组Id不能为空！'));
         }
 
         if (empty($thread['userId'])) {
-            throw $this->createServiceException("用户ID不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('用户ID不能为空！'));
         }
 
         $thread['createdTime'] = time();
@@ -315,7 +315,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function addTrade($fields)
     {
         if (empty($fields['userId'])) {
-            throw $this->createServiceException("用户ID不能为空!");
+            throw $this->createServiceException($this->getKernel()->trans('用户ID不能为空!'));
         }
 
         return $this->getThreadTradeDao()->addTrade($fields);
@@ -324,11 +324,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function updateThread($id, $fields)
     {
         if (empty($fields['title'])) {
-            throw $this->createServiceException("标题名称不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('标题名称不能为空！'));
         }
 
         if (empty($fields['content'])) {
-            throw $this->createServiceException("话题内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('话题内容不能为空！'));
         }
 
         $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
@@ -367,13 +367,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
         if (empty($threadContent['content'])) {
-            throw $this->createServiceException("回复内容不能为空！");
+            throw $this->createServiceException($this->getKernel()->trans('回复内容不能为空！'));
         }
 
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+            throw $this->createServiceException($this->getKernel()->trans('发帖次数过多，请稍候尝试。'));
         }
 
         $threadContent['content']     = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
@@ -436,7 +436,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'threadNum', -1);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'threadNum', -1);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'threadNum', -1);
         $this->dispatchEvent('group.thread.delete', $thread);
         $this->getLogService()->info('group', 'delete_thread', "删除话题 {$thread['title']}({$thread['id']})");
     }
@@ -463,7 +463,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -1);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'postNum', -1);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -1);
 
         $this->waveThread($threadId, 'postNum', -1);
 
@@ -477,7 +477,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -$postCount);
 
-        $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'postNum', -$postCount);
+        $this->getGroupService()->waveMember($thread['groupId'], $thread['userId'], 'postNum', -$postCount);
 
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
     }

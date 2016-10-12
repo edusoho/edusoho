@@ -24,13 +24,13 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}
-					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>{{'，回答正确'|trans}}
+					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，{{'回答正确'|trans}}
 				{% elseif item.question.testResult.status == 'partRight' %}
-					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>{{'，你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>{{'。回答部分正确。得分：'|trans}}{{ item.question.testResult.score }}{{'分'|trans}}
+					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>{{'。回答部分正确。得分：%testResult.score%分'|trans({'%testResult.score%': item.question.testResult.score})}}
 				{% elseif item.question.testResult.status == 'wrong' %}
-					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>{{'，你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>{{'。回答错误'|trans}}
+					{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，{{'你的答案是'|trans}} <strong class="text-danger">{{ keys_answer|join(',') }}</strong>。{{'回答错误'|trans}}
 				{% elseif item.question.testResult.status == 'noAnswer' %}
-				  {{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>{{'，你未答题'|trans}}
+				  {{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，{{'你未答题'|trans}}
 				{% endif %}
 		  </div>
 

@@ -1,4 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% set target = ''~filter~'_index' %}
 <tr id="course-tr-{{ course.id }}">
   {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
@@ -7,19 +8,19 @@
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     
     {% if course.type == 'live' or course.type == 'liveOpen' %}
-      <span class="label label-success live-label mls">直播</span>
+      <span class="label label-success live-label mls">{{'直播'|trans}}</span>
     {% endif %}
 
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[course.id]|default(null) %}
       {% if not classroom %}
-        <span class="label label-danger live-label mls">已移除</span>
+        <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
       {% endif %}
     {% endif %}
     <br>
-    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
     {% if course.recommended %}
-      <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
+      <span class="label label-default">{{'荐:'|trans}}{{ course.recommendedTime|date('Y-m-d') }} / {{'序号:'|trans}}{{ course.recommendedSeq }}</span>
     {% endif %}
 
   </td>
@@ -28,11 +29,11 @@
   {% if filter != 'open' and filter != 'liveOpen' %}
     <td>
       {% if  course.serializeMode =="none" %}
-      <span class="text-info">非连载课程</span>
+      <span class="text-info">{{'非连载课程'|trans}}</span>
       {% elseif course.serializeMode =="serialize" %}
-      <span class="text-info">连载中</span>
+      <span class="text-info">{{'连载中'|trans}}</span>
       {% elseif course.serializeMode =="finished" %}
-      <span class="text-info">已完结</span>
+      <span class="text-info">{{'已完结'|trans}}</span>
       {% endif %}
     </td>
     {% if filter == 'classroom' %}
@@ -52,7 +53,7 @@
     {% endif %}
   {% endif %}
 
-  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td> {{ dict_macro.courseStatus( course.status) }}</td>
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
@@ -60,56 +61,11 @@
   </td>
   <td>
     <div class="btn-group">
-      <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">管理</a>
+      {% if has_permission('admin_course_content_manage') %}
+        <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}" target="_blank">{{'管理'|trans}}</a>
+      {% endif %}
 
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu pull-right">
-        {% if filter == 'normal' or filter ==  'open' %}
-          {% if not course.recommended %}
-          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
-          {% endif %}
-
-          {% if course.recommended %}
-            <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
-          {% endif %}
-
-          <li ><a class="copy-course" id="copy-course" href="javascript:"
-          {% if course.type == "live" or course.type == "liveOpen" %}
-          title="直播课程不支持复制"
-          style="color:#909090"
-          {% endif %}
-          data-toggle="modal"
-          data-target="#modal"
-          data-url="{{ path('admin_course_copy', {id:course.id}) }}"
-          data-type="{{course.type}}"
-          ><span class="glyphicon glyphicon-plus-sign"></span> 复制课程</a></li>
-        {% endif %}
-
-        <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
-        <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
-
-        
-
-        {% if course.status == 'published' %}
-          <li class="divider"></li>
-          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
-          {% if course.type != 'open' and course.type != 'liveOpen' %}
-            <li><a href="javascript:" title="发送发布课程({{course.title}})通知短信" data-url="{{path('sms_prepare',{targetType:'course',id:course.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
-          {% endif %}
-        {% endif %}
-
-        {% if course.status != 'published' %}
-          <li class="divider"></li>
-          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_course_publish', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
-        {% endif %}
-
-        {% if course.status != 'published' and app.user.isSuperAdmin() %}
-          <li class="divider"></li>
-          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('章')}}" data-part="{{default.part_name|default('节')}}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
-        {% endif %}
-      </ul>
+      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
     </div>
   </td>
 </tr>

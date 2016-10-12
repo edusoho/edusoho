@@ -32,7 +32,7 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              填空({{index+1}})： 正确答案
+              {{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}}
               <strong class="question-text-success">{{ rightAnswer|join(' 或 '|trans) }}</strong>
               {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
              {{'回答是'|trans}}

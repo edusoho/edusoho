@@ -1,17 +1,30 @@
 <?php
 namespace Topxia\Service\User;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
+class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess, \Serializable
 {
     protected $data;
+    protected $permissions;
 
     protected $rootOrgId = 1;
 
     protected $rootOrgCode = '1.';
+
+    public function serialize()
+    {
+        return serialize($this->data);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->data = unserialize($serialized);
+    }
+
 
     public function __set($name, $value)
     {
@@ -119,6 +132,11 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return true;
     }
 
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
     public function isEqualTo(UserInterface $user)
     {
         if ($this->email !== $user->getUsername()) {
@@ -143,10 +161,10 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isAdmin()
     {
-        if (count(array_intersect($this->getRoles(), array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+        $permissions = $this->getPermissions();
+        if (!empty($permissions) && in_array('admin', array_keys($permissions))) {
             return true;
         }
-
         return false;
     }
 
@@ -155,13 +173,24 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
             return true;
         }
-
         return false;
     }
 
     public function isTeacher()
     {
-        return in_array('ROLE_TEACHER', $this->getRoles());
+        $permissions = $this->getPermissions();
+        return in_array('web', array_keys($permissions));
+    }
+
+    public function getCurrentOrgId()
+    {
+        $currentOrg = $this->getCurrentOrg();
+        return $currentOrg['id'];
+    }
+
+    public function getCurrentOrg()
+    {
+        return $this->org;
     }
 
     public function getSelectOrg()
@@ -206,11 +235,65 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
             $user['orgCode'] = $this->rootOrgCode;
         }
         $this->data = $user;
+
         return $this;
     }
 
     public function toArray()
     {
         return $this->data;
+    }
+
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+        return $this;
+    }
+
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    /**
+     * @param string  $code  权限编码
+     * @return bool
+     */
+    public function hasPermission($code)
+    {
+        $currentUserPermissions = $this->getPermissions();
+
+        if(!empty($currentUserPermissions[$code])){
+            return true;
+        }
+
+        $tree = PermissionBuilder::instance()->getOriginPermissionTree(true);
+        $codeTree = $tree->find(function ($tree) use ($code){
+            return $tree->data['code'] === $code;
+        });
+
+        if(empty($codeTree)){
+            return false;
+        }
+
+        $disableTree = $codeTree->findToParent(function ($parent){
+            return isset($parent->data['disable']) && (bool)$parent->data['disable'];
+        });
+
+        if(is_null($disableTree)){
+            return false;
+        }
+
+        $parent = $disableTree->getParent();
+
+        if(is_null($parent)){
+            return false;
+        }
+
+        if(empty($parent->data['parent'])){
+            return true;
+        }else{
+            return !empty($currentUserPermissions[$parent->data['code']]);
+        }
     }
 }

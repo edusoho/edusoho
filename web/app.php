@@ -5,6 +5,17 @@ if (!file_exists(__DIR__.'/../app/data/install.lock')) {
     exit();
 }
 
+if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/../app/data/upgrade.lock')) {
+    $time = file_get_contents(__DIR__.'/../app/data/upgrade.lock');
+    date_default_timezone_set('Asia/Shanghai');
+    $currentTime = time();
+    if ($currentTime <= (int) $time) {
+        header('Content-Type: text/html; charset=utf-8');
+        echo file_get_contents(__DIR__.'/../app/Resources/TwigBundle/views/Exception/upgrade-info.html');
+        exit();
+    }
+}
+
 if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app.php/api') === 0)) {
     define('API_ENV', 'prod');
     include __DIR__.'/../api/index.php';
@@ -20,7 +31,9 @@ fix_gpc_magic();
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Use APC for autoloading to improve performance.
+
 // Change 'sf2' to a unique prefix in order to prevent cache key conflicts
+
 // with other applications also using APC.
 /*
 $loader = new ApcClassLoader('sf2', $loader);
@@ -46,6 +59,8 @@ $serviceKernel->setEnvVariable(array(
     'basePath'      => $request->getBasePath(),
     'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
 ));
+$serviceKernel->setTranslatorEnabled(true);
+$serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
 
@@ -60,6 +75,7 @@ $currentUser->fromArray(array(
     'roles'     => array()
 ));
 $serviceKernel->setCurrentUser($currentUser);
+
 // END: init service kernel
 
 // NOTICE: 防止请求捕捉失败而做异常处理

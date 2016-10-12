@@ -51,7 +51,7 @@ class NormalMail extends Mail
             return $empty;
         }
 
-        $method = 'on_' . $this->template;
+        $method = 'on_'.$this->template;
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method));
         } else {
@@ -62,7 +62,7 @@ class NormalMail extends Mail
     private function on_email_reset_password()
     {
         return array(
-            'title' => "重设{$this->params['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+            'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的密码', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
             'body'  => $this->renderBody('TopxiaWebBundle:PasswordReset:reset.txt.twig')
         );
     }
@@ -70,15 +70,15 @@ class NormalMail extends Mail
     private function on_email_system_self_test()
     {
         return array(
-            'title' => "【{$this->params['sitename']}】系统自检邮件",
-            'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
+            'title' => $this->getKernel()->trans('【%sitename%】系统自检邮件', array('%sitename%' => $this->params['sitename'])),
+            'body'  => $this->getKernel()->trans('系统邮件发送检测测试，请不要回复此邮件！')
         );
     }
 
     private function on_email_registration()
     {
-        $emailTitle        = $this->setting('auth.email_activation_title', '请激活你的帐号 完成注册');
-        $emailBody         = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+        $emailTitle        = $this->setting('auth.email_activation_title', $this->getKernel()->trans('请激活你的帐号 完成注册'));
+        $emailBody         = $this->setting('auth.email_activation_body', $this->getKernel()->trans(' 验证邮箱内容'));
         $valuesToReplace   = array($this->params['nickname'], $this->params['sitename'], $this->params['siteurl'], $this->params['verifyurl']);
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
 
@@ -94,7 +94,7 @@ class NormalMail extends Mail
     private function on_email_reset_email()
     {
         return array(
-            'title' => "重设{$this->params['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的电子邮箱",
+            'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
             'body'  => $this->renderBody('TopxiaWebBundle:Settings:email-change.txt.twig')
         );
     }
@@ -102,7 +102,7 @@ class NormalMail extends Mail
     private function on_email_verify_email()
     {
         return array(
-            'title' => "验证{$this->params['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的电子邮箱",
+            'title' => $this->getKernel()->trans('验证%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
             'body'  => $this->renderBody('TopxiaWebBundle:Settings:email-verify.txt.twig')
         );
     }
@@ -112,5 +112,10 @@ class NormalMail extends Mail
         global $kernel;
         $container = $kernel->getContainer();
         return $container->get('templating')->render($view, $this->params);
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

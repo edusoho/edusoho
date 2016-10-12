@@ -16,10 +16,12 @@ interface OrgDao
 
     public function delete($id);
 
-    public function deleteOrgsByOrgCode($orgCode);
+    public function deleteOrgsByPrefixOrgCode($orgCode);
 
-    public function findOrgsStartByOrgCode($orgCode);
+    public function findOrgsByPrefixOrgCode($orgCode);
 
     public function searchOrgs($conditions, $orderBy, $start, $limit);
+
+    public function findOrgByNameAndParentId($name, $parentId);
 
 }
