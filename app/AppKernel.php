@@ -18,6 +18,8 @@ class AppKernel extends Kernel
 
     protected $extensionManger;
 
+    private $isServiceKernelInit = false;
+
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
@@ -116,29 +118,31 @@ class AppKernel extends Kernel
 
     protected function initServiceKernel()
     {
-        $container     = $this->getContainer();
-        $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
-        $serviceKernel->setEnvVariable(array(
-            'host'          => $this->request->getHttpHost(),
-            'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
-            'basePath'      => $this->request->getBasePath(),
-            'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
-            ->setTranslatorEnabled(true)
-            ->setTranslator($container->get('translator'))
-            ->setParameterBag($container->getParameterBag())
-            ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
-            ->setConnection($container->get('database_connection'));
+        if(!$this->isServiceKernelInit){
+            $container     = $this->getContainer();
+            $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
+            $serviceKernel->setEnvVariable(array(
+                'host'          => $this->request->getHttpHost(),
+                'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+                'basePath'      => $this->request->getBasePath(),
+                'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+                ->setTranslatorEnabled(true)
+                ->setTranslator($container->get('translator'))
+                ->setParameterBag($container->getParameterBag())
+                ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
+                ->setConnection($container->get('database_connection'));
 
-        $serviceKernel->getConnection()->exec('SET NAMES UTF8');
+            $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
-            'currentIp' => $this->request->getClientIp(),
-            'roles'     => array()
-        ));
-        $serviceKernel->setCurrentUser($currentUser);
-
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray(array(
+                'id'        => 0,
+                'nickname'  => '游客',
+                'currentIp' => $this->request->getClientIp(),
+                'roles'     => array()
+            ));
+            $serviceKernel->setCurrentUser($currentUser);
+            $this->isServiceKernelInit = true;
+        }
     }
 }

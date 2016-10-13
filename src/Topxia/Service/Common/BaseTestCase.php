@@ -5,8 +5,6 @@ namespace Topxia\Service\Common;
 use Mockery;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -24,18 +22,6 @@ class BaseTestCase extends WebTestCase
     public static function setUpBeforeClass()
     {
         $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
-        self::$kernel       = self::createKernel();
-        $request              = Request::createFromGlobals();
-
-        self::$kernel->setRequest($request);
-        self::$kernel->boot();
-
-        $connection = self::$kernel->getContainer()->get('database_connection');
-        ServiceKernel::instance()
-            ->setEnvVariable(array(
-                'host'          => 'test.com',
-                'schemeAndHost' => 'http://test.com'))
-            ->setConnection(new TestCaseConnection($connection));
     }
 
     public function getServiceKernel()
@@ -109,8 +95,8 @@ class BaseTestCase extends WebTestCase
     /**
      * mock对象
      *
-     * @param $name                                       mock的类名
-     * @param $params                                     ,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     * @param string $objectName mock的类名
+     * @param array  $params     mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
 
     protected function mock($objectName, $params = array())
@@ -158,7 +144,9 @@ class BaseTestCase extends WebTestCase
     protected function createAppDatabase()
     {
         // 执行数据库的migrate脚本
-        $application = new Application(self::$kernel);
+        global $kernel;
+        $application = new Application($kernel);
+
         $application->add(new MigrationsMigrateDoctrineCommand());
         $command       = $application->find('doctrine:migrations:migrate');
         $commandTester = new CommandTester($command);
