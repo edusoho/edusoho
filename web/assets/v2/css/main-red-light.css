@@ -13171,20 +13171,31 @@ textarea {
 .marker-preview .marker-preview-content {
   position: relative;
   height: 100%;
-  padding-top: 30px;
+  padding-top: 20px;
   color: #313131;
   text-align: center;
 }
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content {
+    padding-top: 10px;
+  }
+}
 .marker-preview .marker-preview-content .title {
   font-size: 20px;
-  margin-bottom: 20px;
+  line-height: 1;
 }
 .marker-preview .marker-preview-content .marker-preview-player {
   position: absolute;
   left: 120px;
   right: 120px;
-  top: 132px;
-  bottom: 5%;
+  top: 60px;
+  bottom: 20px;
+}
+@media (max-width: 1199px) {
+  .marker-preview .marker-preview-content .marker-preview-player {
+    bottom: 10px;
+    top: 40px;
+  }
 }
 .mark-questions-modal {
   width: 756px;
