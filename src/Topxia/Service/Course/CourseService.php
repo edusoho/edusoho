@@ -398,4 +398,6 @@ interface CourseService
 
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
 
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
+
 }

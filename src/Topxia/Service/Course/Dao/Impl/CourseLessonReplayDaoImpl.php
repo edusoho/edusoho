@@ -63,9 +63,21 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}:lessonType:{$lessonType}", $courseId, $lessonId,$lessonType, function ($courseId, $lessonId, $lessonType) use ($that) {
+        return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}:lessonType:{$lessonType}", $courseId, $lessonId, $lessonType, function ($courseId, $lessonId, $lessonType) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE courseId=? AND lessonId = ? AND type = ? ";
             return $that->getConnection()->fetchAssoc($sql, array($courseId, $lessonId, $lessonType));
+        }
+
+        );
+    }
+
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}:lessonType:{$lessonType}", $courseId, $lessonId, $lessonType, function ($courseId, $lessonId, $lessonType) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId=? AND lessonId = ? AND type = ? ";
+            return $that->getConnection()->fetchAll($sql, array($courseId, $lessonId, $lessonType));
         }
 
         );
@@ -118,6 +130,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
             ->andWhere('courseId = :courseId')
             ->andWhere('lessonId = :lessonId')
             ->andWhere('hidden = :hidden')
+            ->andWhere('copyId = :copyId')
             ->andWhere('type = :type');
         return $builder;
     }
