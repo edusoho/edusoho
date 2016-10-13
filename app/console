@@ -24,8 +24,9 @@ $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('-
 if ($debug) {
     Debug::enable();
 }
-
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 $kernel = new AppKernel($env, $debug);
+$kernel->setRequest($request);
 
 $application = new Application($kernel);
 $application->run($input);

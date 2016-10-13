@@ -190,7 +190,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ?  $_SERVER['HTTP_USER_AGENT'] : '';
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;

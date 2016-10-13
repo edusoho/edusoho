@@ -132,7 +132,7 @@ class AppKernel extends Kernel
         $currentUser->fromArray(array(
             'id'        => 0,
             'nickname'  => '游客',
-            'currentIp' => '0.0.0.0', // $request->getClientIp(),
+            'currentIp' => $this->request->getClientIp(),
             'roles'     => array()
         ));
         $serviceKernel->setCurrentUser($currentUser);
