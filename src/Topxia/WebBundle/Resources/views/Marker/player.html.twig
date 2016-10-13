@@ -6,7 +6,7 @@
     <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回课时管理</a>
     <ol class="breadcrumb breadcrumb-o">
       <li>
-        <a href="/">{{course.title}}</a>
+        {{course.title}}
       </li>
       <li class="active">{{lesson.title|plain_text(50) }}</li>
       </ol>

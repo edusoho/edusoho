@@ -12672,11 +12672,11 @@ textarea {
   border-left: 1px solid #919191;
   padding-left: 15px;
 }
-.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static > a {
-  padding-left: 0;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover {
+  background-color: transparent;
 }
 .marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover > a {
-  background-color: #313131;
+  background-color: transparent;
   color: #919191;
 }
 .marker-manage .nav.nav-tabs.nav-tabs-edit .highlight {
@@ -13253,7 +13253,7 @@ textarea {
   margin-bottom: 14px;
   line-height: 30px;
   font-size: 18px;
-  color: #616161;
+  color: #313131;
 }
 .mark-questions-modal .popup-topic .list {
   padding: 10px 0 10px 40px;
@@ -13280,7 +13280,7 @@ textarea {
   line-height: 22px;
 }
 .mark-questions-modal .popup-topic.topic-resolve .list {
-  min-height: 250px;
+  min-height: 200px;
   padding: 20px;
   margin-bottom: 15px;
   -webkit-border-radius: 4px;
@@ -13288,6 +13288,9 @@ textarea {
   border-radius: 4px;
   cursor: default;
   background-color: #f5f8fa;
+}
+.mark-questions-modal .question-stem-fill-blank {
+  color: #313131;
 }
 .user-center-header {
   position: relative;

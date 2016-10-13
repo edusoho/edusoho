@@ -32,6 +32,14 @@ define(function(require, exports, module) {
             }
         });
 
+        $(".js-marker-manage-content").on('change','select[name=target]',function(){
+            console.log($form.attr('action'));
+            $.post($form.attr('action'), $form.serialize(), function(response) {
+                $('#subject-lesson-list').html(response);
+            });
+        })
+
+
 
         $(".js-marker-manage-content").on('click', '.js-question-preview', function(e) {
             $.get($(this).data('url'), function(response) {

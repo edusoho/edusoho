@@ -59,12 +59,10 @@
           border-left: 1px solid @gray;
           padding-left: 15px;
         }
-        >a {
-          padding-left: 0;
-        }
         &:hover {
+          background-color: transparent;
           >a {
-            background-color: @gray-darker;
+            background-color: transparent;
             color: @gray;
           }
         }
@@ -652,7 +650,7 @@
       margin-bottom: 14px;
       line-height: 30px;
       font-size: 18px;
-      color: @gray-dark;
+      color: @gray-darker;
     }
     .list {
       padding: 10px 0 10px 40px;
@@ -678,7 +676,7 @@
     }
     &.topic-resolve {
       .list {
-        min-height: 250px;
+        min-height: 200px;
         padding: 20px;
         margin-bottom: 15px;
         -webkit-border-radius: 4px;
@@ -688,6 +686,9 @@
         background-color: #f5f8fa;
       }
     }
+  }
+  .question-stem-fill-blank {
+    color: @gray-darker;
   }
 }
 
