@@ -74,6 +74,7 @@ isCoursePublished: course.status,
           <label class="col-md-2 control-label">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '有效期'|trans }}</label>
           <div class="col-md-8 controls radios">
             {% if course.status == 'published' %}
+              <input type="hidden" name="expiryMode" value="{{ course.expiryMode }}">
               {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, course.expiryMode|default('none'), 'disabled') }}
             {% else %}
               {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, course.expiryMode|default('none')) }}

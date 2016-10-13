@@ -2242,6 +2242,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         //按照课程有效期模式计算学员有效期
+        $deadline = 0;
         if ($course['expiryDay'] > 0) {
             if ($course['expiryMode'] == 'days') {
                 $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
@@ -2249,8 +2250,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($course['expiryMode'] == 'date') {
                 $deadline = $course['expiryDay'];
             }
-        } else {
-            $deadline = 0;
         }
 
         if (!empty($info['orderId'])) {
