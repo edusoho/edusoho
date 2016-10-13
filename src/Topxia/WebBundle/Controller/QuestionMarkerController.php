@@ -68,10 +68,6 @@ class QuestionMarkerController extends BaseController
             throw $this->createNotFoundException('题目不存在！');
         }
 
-        $allowPreviewQuestionTypes = array('determine', 'single_choice', 'uncertain_choice', "choice");
-        if (!in_array($question['type'], $allowPreviewQuestionTypes)) {
-            return $this->createJsonResponse(array('status'=>'error','msg'=>'question type does not support preview'));
-        }
         $item = array(
             'questionId'   => $question['id'],
             'questionType' => $question['type'],
@@ -258,7 +254,7 @@ class QuestionMarkerController extends BaseController
         }
 
         $conditions['parentId'] = 0;
-        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', "choice");
+        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
         $orderBy                = array('createdTime', 'DESC');
         $paginator              = new Paginator(
             $request,
