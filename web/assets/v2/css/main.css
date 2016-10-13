@@ -12672,11 +12672,11 @@ textarea {
   border-left: 1px solid #919191;
   padding-left: 15px;
 }
-.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static > a {
-  padding-left: 0;
+.marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover {
+  background-color: transparent;
 }
 .marker-manage .nav.nav-tabs.nav-tabs-edit > li.static:hover > a {
-  background-color: #313131;
+  background-color: transparent;
   color: #919191;
 }
 .marker-manage .nav.nav-tabs.nav-tabs-edit .highlight {
@@ -12715,7 +12715,7 @@ textarea {
   line-height: 40px;
   margin-bottom: 0;
   margin-left: 0;
-  cursor: pointer;
+  cursor: move;
 }
 .marker-manage .lesson-list .item-lesson .btn-preview {
   top: 0;
@@ -12759,15 +12759,6 @@ textarea {
 }
 .marker-manage .lesson-list .placeholder {
   position: relative;
-  height: 10px;
-}
-.marker-manage .lesson-list .placeholder:after {
-  content: "";
-  border: 5px solid;
-  border-color: transparent transparent transparent #e83d2c;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 .marker-manage .lesson-list .more-questions {
   position: absolute;
@@ -12923,6 +12914,7 @@ textarea {
   padding: 0 10px;
   margin-bottom: 0;
   text-align: left;
+  cursor: pointer;
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson:hover {
   background-color: #46c37b;
@@ -12935,6 +12927,17 @@ textarea {
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson .sqe-number {
   display: inline;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder {
+  height: 10px;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder:after {
+  content: "";
+  border: 5px solid;
+  border-color: transparent transparent transparent #46c37b;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .marker-manage-content .editbox .scalebox .scale {
   position: absolute;
@@ -13126,7 +13129,7 @@ textarea {
 }
 .show-introhelp .popover.bottom {
   top: 18px;
-  left: -77px;
+  left: -92px;
 }
 .show-introhelp .popover.left {
   left: -230px;
@@ -13253,7 +13256,7 @@ textarea {
   margin-bottom: 14px;
   line-height: 30px;
   font-size: 18px;
-  color: #616161;
+  color: #313131;
 }
 .mark-questions-modal .popup-topic .list {
   padding: 10px 0 10px 40px;
@@ -13280,7 +13283,7 @@ textarea {
   line-height: 22px;
 }
 .mark-questions-modal .popup-topic.topic-resolve .list {
-  min-height: 250px;
+  min-height: 200px;
   padding: 20px;
   margin-bottom: 15px;
   -webkit-border-radius: 4px;
@@ -13288,6 +13291,9 @@ textarea {
   border-radius: 4px;
   cursor: default;
   background-color: #f5f8fa;
+}
+.mark-questions-modal .question-stem-fill-blank {
+  color: #313131;
 }
 .user-center-header {
   position: relative;
