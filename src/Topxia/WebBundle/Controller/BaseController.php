@@ -29,7 +29,7 @@ abstract class BaseController extends Controller
 
     protected function isAdminOnline()
     {
-        return $this->get('security.context')->isGranted('ROLE_ADMIN');
+        return $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN');
     }
 
     public function getUser()
@@ -83,7 +83,7 @@ abstract class BaseController extends Controller
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
-        $this->container->get('security.context')->setToken($token);
+        $this->container->get('security.token_storage')->setToken($token);
 
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);

@@ -401,7 +401,7 @@ class CourseController extends CourseBaseController
         $user        = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') && !$user->hasPermission('admin_course_add')) {
             throw $this->createAccessDeniedException();
         }
 
@@ -650,7 +650,7 @@ class CourseController extends CourseBaseController
             'manage'       => $manage,
             'isNonExpired' => $isNonExpired,
             'vipChecked'   => $vipChecked,
-            'isAdmin'      => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
+            'isAdmin'      => $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')
         ));
     }
 
