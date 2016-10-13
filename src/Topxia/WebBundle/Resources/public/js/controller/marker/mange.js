@@ -76,7 +76,7 @@ define(function (require, exports, module) {
             });
             $('.scale-white').on('mousedown', function () {
                 changeleft = false;
-                $(document).on('mousemove.playertime', function () {
+                $(document).on('mousemove.playertime', function (event) {
                     window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
                     var left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
                     $('.scale-white').css('left', left);
