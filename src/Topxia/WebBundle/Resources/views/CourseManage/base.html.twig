@@ -7,7 +7,8 @@
 {% set script_arguments = {
 categoryUrl: path('category_all'),
 tagMatchUrl: path('tag_match'),
-locationUrl: path('location_all')
+locationUrl: path('location_all'),
+isCoursePublished: course.status,
 } %}
 {% block main %}
 

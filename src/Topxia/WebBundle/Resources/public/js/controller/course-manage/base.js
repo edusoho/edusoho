@@ -95,6 +95,7 @@ define(function (require, exports, module) {
             display: '副标题'
         });
 
+
         validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
@@ -129,6 +130,10 @@ define(function (require, exports, module) {
         toggleExpiryValue($("[name=expiryMode]:checked").val());
 
         $("[name='expiryMode']").change(function () {
+            if (app.arguments.isCoursePublished == 'published'){
+                return false;
+            }
+
             validator.removeItem('[name=expiryDay]');
 
             var expiryDay = $("[name='expiryDay']").val();
@@ -168,14 +173,17 @@ define(function (require, exports, module) {
                     break;
                 case 'date':
                     $(".expiry-day-js .controls > span").addClass('hidden');
+                    validator.addItem({
+                        element: '[name=expiryDay]',
+                        required: true,
+                        display: '有效期'
+                    });
                     $("#course_expiryDay").datetimepicker({
                         language: 'zh-CN',
                         autoclose: true,
                         format: 'yyyy-mm-dd',
                         minView: 'month'
                     });
-                    var tomorrow =  new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-                    $("#course_expiryDay").datetimepicker('setStartDate', tomorrow);
                     break;
                 default:
                     break;
