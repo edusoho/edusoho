@@ -10,7 +10,7 @@
       <a class="btn-preview js-question-preview" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_question_marker_preview', {id:question.id, courseId:course.id}) }}"><i class="es-icon es-icon-visibility" ></i></a>
     </li>
   {% else %}
-    <div class="empty">{{'一道题都没有'|trans}}</div>
+    <div class="empty">{{'暂无题目'|trans}}</div>
   {% endfor %}
   {% if paginator.lastPage > 1 %}
   <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url='/course/{{ course.id }}/lesson/{{ lesson.id }}/question_marker/search?page='>

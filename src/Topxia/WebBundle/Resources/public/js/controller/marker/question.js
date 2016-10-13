@@ -10,12 +10,12 @@ define(function(require, exports, module) {
         $.post($form.attr('action'), $form.serialize(), function(response) {
             $('#subject-lesson-list').html(response);
             $('[data-toggle="popover"]').popover();
-            if(!Cookie.get("marker-manage-guide")){
+            if(!Cookie.get("MARK-MANGE-GUIDE")){
                 initIntro();
             }else {
                 require('../marker/mange');
             } 
-            Cookie.set("marker-manage-guide",'true',{expires:360,path:"/"});
+            Cookie.set("MARK-MANGE-GUIDE",'true',{expires:360,path:"/"});
         });
 
         var validator = new Validator({
@@ -79,8 +79,10 @@ define(function(require, exports, module) {
             $('.js-introhelp-overlay').removeClass('hidden');
             $('.show-introhelp').addClass('show');
             var $img = $('.js-introhelp-img img'),
+                img = document.createElement('img'),
                 imgheight = $(window).height() - $img.offset().top - 80;
-            left = imgheight * 158 / 286 / 2;
+            img.src = $img.attr('src');  
+            left = imgheight *  img.width / img.height / 2 + 50;
             $img.height(imgheight);
             $('.js-introhelp-img').css('margin-left', '-' + left + 'px');
 

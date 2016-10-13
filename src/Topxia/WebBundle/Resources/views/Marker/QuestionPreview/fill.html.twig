@@ -5,25 +5,18 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	</div>
 	<div class="modal-body">
-		{#<ul class="popup-topic ">
+		<ul class="popup-topic js-topic-content">
 			<li class="title">
 				{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
 			</li>
-			<div class="testpaper-question-footer clearfix">
-				{% set input_index = 1 %}
-				{% for answer in item.question.answer %}
-					<input class="form-control" readonly type="text" data-type="fill" name="{{ item.question.id }}" placeholder="{{'填空(%input_index%)答案，请填在这里'|trans({'%input_index%': input_index})}}" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
-					{% set input_index = input_index + 1 %}
-				{% endfor %}
-			</div>
-			<li class="title">
-				{{ item.question.stem|bbCode2Html|raw }}
-			</li>
+			{% for index, answer in item.question.answer %}
 			<li class="list">
-				<div class="info">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
-			</li>
-		</ul>#}
-		<ul class="popup-topic topic-resolve js-topic-content">
+      	<span class="num">{{'%index%'|trans({'%index%': index+1})}}</span>
+      	<div class="info">正确答案：<span class="text-success">{{ answer|join(' 或 '|trans) }}</span></div>
+    	</li>
+    	{% endfor %}
+		</ul>
+		{#<ul class="popup-topic topic-resolve ">
 			<li class="title">
 				{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
 			</li>
@@ -37,7 +30,7 @@
 					{% endfor %}
 				</div>
 			</li>
-		</ul>
+		</ul>#}
 		<ul class="popup-topic topic-resolve js-topic-resolve hidden">
 			<li class="title">
 				{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
