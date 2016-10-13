@@ -188,10 +188,9 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @param  array                     $options  An associative array of options
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage, $container)
+    public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
     {
-        $request   = $container->get('request');
-        $userAgent = $request->headers->get("user-agent");
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;

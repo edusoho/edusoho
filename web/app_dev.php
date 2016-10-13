@@ -34,7 +34,7 @@ Debug::enable();
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
 $request = Request::createFromGlobals();
-
+$kernel->setRequest($request);
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等
 try {

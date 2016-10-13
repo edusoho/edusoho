@@ -115,7 +115,7 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage', '@service_container']
+        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis.factory:
         class: Topxia\Service\Common\Redis\RedisFactory

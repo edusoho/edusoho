@@ -50,8 +50,7 @@ $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-
-$kernel->boot();
+$kernel->setRequest($request);
 
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等

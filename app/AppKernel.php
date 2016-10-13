@@ -11,6 +11,8 @@ class AppKernel extends Kernel
 {
     protected $plugins = array();
 
+    protected $request;
+
     protected $extensionManger;
 
     public function __construct($environment, $debug)
@@ -25,6 +27,7 @@ class AppKernel extends Kernel
         parent::boot();
         $biz = $this->getContainer()->get('biz');
         $biz->boot();
+        $this->initServiceKernel();
     }
 
     public function registerBundles()
@@ -102,15 +105,21 @@ class AppKernel extends Kernel
         return $this->plugins;
     }
 
-    protected function initServiceKernel(Request $request)
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    protected function initServiceKernel()
     {
         $container     = $this->getContainer();
         $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
         $serviceKernel->setEnvVariable(array(
-            'host'          => $request->getHttpHost(),
-            'schemeAndHost' => $request->getSchemeAndHttpHost(),
-            'basePath'      => $request->getBasePath(),
-            'baseUrl'       => $request->getSchemeAndHttpHost() . $request->getBasePath()
+            'host'          => $this->request->getHttpHost(),
+            'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+            'basePath'      => $this->request->getBasePath(),
+            'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()
         ));
         $serviceKernel->setTranslatorEnabled(true);
         $serviceKernel->setTranslator($container->get('translator'));
