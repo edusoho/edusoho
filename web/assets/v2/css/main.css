@@ -12715,7 +12715,7 @@ textarea {
   line-height: 40px;
   margin-bottom: 0;
   margin-left: 0;
-  cursor: pointer;
+  cursor: move;
 }
 .marker-manage .lesson-list .item-lesson .btn-preview {
   top: 0;
@@ -12914,6 +12914,7 @@ textarea {
   padding: 0 10px;
   margin-bottom: 0;
   text-align: left;
+  cursor: pointer;
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson:hover {
   background-color: #46c37b;
