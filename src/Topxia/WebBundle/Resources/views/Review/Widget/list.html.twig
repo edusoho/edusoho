@@ -24,7 +24,7 @@
   </form>
 {% endif %}
 
-{% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+{% set canAccess = canAccess|default(false) %}
 
 {% for review in reviews if users[review.userId]|default(false) %}
   {% set user = users[review.userId] %}
