@@ -263,10 +263,9 @@ define(function (require, exports, module) {
         },
         _initSortable: function () {
             var _obj = this;
-            var _classname = $(_obj.element).find(_obj.get('group_list'));
-            var oldContainer;
-            var $list = $(_classname).sortable({
-                group: _classname,
+            $("#subject-lesson-list").sortable({
+                group: 'no-drop',
+                drop: false,
                 delay: 500,
                 handle: '.drag',
                 onDrop: function ($item, container, _super) {
@@ -279,6 +278,11 @@ define(function (require, exports, module) {
                         }
                     }
                 }
+            });
+            
+            $("#editbox-lesson-list").sortable({
+                group: 'no-drop',
+                drag: false
             });
         },
         _initeditbox: function (isresize) {

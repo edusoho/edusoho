@@ -12759,15 +12759,6 @@ textarea {
 }
 .marker-manage .lesson-list .placeholder {
   position: relative;
-  height: 10px;
-}
-.marker-manage .lesson-list .placeholder:after {
-  content: "";
-  border: 5px solid;
-  border-color: transparent transparent transparent #e83d2c;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 .marker-manage .lesson-list .more-questions {
   position: absolute;
@@ -12935,6 +12926,17 @@ textarea {
 }
 .marker-manage-content .editbox .scalebox .lesson-list .item-lesson .sqe-number {
   display: inline;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder {
+  height: 10px;
+}
+.marker-manage-content .editbox .scalebox .lesson-list .placeholder:after {
+  content: "";
+  border: 5px solid;
+  border-color: transparent transparent transparent #4bbbfa;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .marker-manage-content .editbox .scalebox .scale {
   position: absolute;

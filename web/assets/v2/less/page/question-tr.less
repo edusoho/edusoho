@@ -150,15 +150,6 @@
     }
     .placeholder {
       position: relative;
-      height: 10px;
-      &:after {
-        content: "";
-        border: 5px solid;
-        border-color: transparent transparent transparent @brand-danger;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
     }
     .more-questions {
       position: absolute;
@@ -313,7 +304,6 @@
         background-color: transparent;
         overflow: visible;
         .item-lesson  {
-          // position: relative;
           padding: 0 10px;
           margin-bottom: 0;
           text-align:  left;
@@ -328,6 +318,17 @@
           }
           .sqe-number {
             display: inline;
+          }
+        }
+        .placeholder {
+          height: 10px;
+          &:after {
+            content: "";
+            border: 5px solid;
+            border-color: transparent transparent transparent @brand-primary;
+            position: absolute;
+            top: 0;
+            left: 0;
           }
         }
       }
