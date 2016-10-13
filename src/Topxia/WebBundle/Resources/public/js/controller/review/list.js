@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
+    var Notify = require('common/bootstrap-notify');
+    var ThreadShowWidget = require('../thread/thread-show.js');
 
     exports.run = function() {
 
@@ -75,10 +77,17 @@ define(function(require, exports, module) {
         }
         
         var $reviews = $('.js-reviews');
-        var $fullLength = $reviews.find('.full-content').text().length;
+        /*var $fullLength = $reviews.find('.full-content').text().length;
         if( $fullLength<100){
             $reviews.find('.actions').remove();
-        }
+        }*/
+
+        $('.js-reviews').hover(function(){
+            var $fullLength = $(this).find('.full-content').text().length;
+            if( $fullLength > 100){
+                $(this).find('.show-full-btn').show();
+            }
+        })
 
         $reviews.on('click', '.show-full-btn', function(){
             var $review = $(this).parents('.media');
@@ -98,9 +107,24 @@ define(function(require, exports, module) {
             $review.find('.show-full-btn').show();
         });
   
-
+        var threadShowWidget = new ThreadShowWidget({
+            element: '.js-reviews',
+        });
       
-
+        threadShowWidget.undelegateEvents('.js-toggle-subpost-form', 'click');
+        $('.js-toggle-subpost-form').click(function(e){
+            e.stopPropagation();
+            
+            var postNum = $(this).closest('.thread-subpost-container').find('.thread-subpost-content .thread-subpost-list .thread-subpost').length;
+            
+            if (postNum >= 5) {
+                Notify.danger('评论回复已达5条上限，不能再回复!');
+                return;
+            }
+            var $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');
+            $form.toggleClass('hide');
+            threadShowWidget._initSubpostForm($form);
+        })
     };
 
 });

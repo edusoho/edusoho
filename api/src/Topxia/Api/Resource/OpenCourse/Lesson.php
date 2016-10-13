@@ -3,8 +3,8 @@
 namespace Topxia\Api\Resource\OpenCourse;
 
 use Topxia\Api\Resource\BaseResource;
-use Topxia\Service\File\Impl\UploadFileServiceImpl;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\File\Impl\UploadFileServiceImpl;
 
 class Lesson extends BaseResource
 {
@@ -14,7 +14,7 @@ class Lesson extends BaseResource
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
 
         $lesson['startTime'] = empty($lesson['startTime']) ? '' : date('c', $lesson['startTime']);
-        $lesson['endTime']   = empty($lesson['endTime']) ? '' :date('c', $lesson['endTime']);
+        $lesson['endTime']   = empty($lesson['endTime']) ? '' : date('c', $lesson['endTime']);
 
         unset($lesson['free']);
         unset($lesson['quizNum']);
@@ -56,7 +56,6 @@ class Lesson extends BaseResource
         $mediaUri    = $lesson['mediaUri'];
 
         if ($mediaSource == 'self') {
-
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
@@ -82,7 +81,7 @@ class Lesson extends BaseResource
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost() . "/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line
+                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -98,7 +97,7 @@ class Lesson extends BaseResource
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost() . "/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=" . $line
+                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -117,21 +116,21 @@ class Lesson extends BaseResource
                         }
 
                         if ($key) {
-                            $url                = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $url                = $client->generateFileUrl($key, 3600);
                             $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
                         } else {
                             $lesson['mediaUri'] = '';
                         }
                     }
                 } else {
-                    $token              = $this->getTokenService()->makeToken('local.media', array(
+                    $token = $this->getTokenService()->makeToken('local.media', array(
                         'data'     => array(
                             'id' => $file['id']
                         ),
                         'duration' => 3600,
                         'userId'   => 0
                     ));
-                    $lesson['mediaUri'] = $this->getHttpHost() . "/player/{$file['id']}/file/{$token['token']}";
+                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';

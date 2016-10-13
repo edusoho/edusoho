@@ -242,8 +242,10 @@ class DefaultController extends BaseController
 
         $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
+        $info                = $rootApi->get('/me');
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
+            "info"=>$info,
             "apps"                => $apps,
             "error"               => $error,
             "mainAppUpgrade"      => $mainAppUpgrade,
@@ -366,31 +368,31 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'todayUserSum'                 => $todayUserSum,
-            'yesterdayUserSum'             => $yesterdayUserSum,
-            'todayCourseSum'               => $todayCourseSum,
-            'yesterdayCourseSum'           => $yesterdayCourseSum,
-            'todayRegisterNum'             => $todayRegisterNum,
-            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
-            'todayLoginNum'                => $todayLoginNum,
-            'yesterdayLoginNum'            => $yesterdayLoginNum,
-            'todayCourseNum'               => $todayCourseNum,
-            'yesterdayCourseNum'           => $yesterdayCourseNum,
-            'todayLessonNum'               => $todayLessonNum,
-            'yesterdayLessonNum'           => $yesterdayLessonNum,
-            'todayJoinLessonNum'           => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'            => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
+            'todayUserSum'           => $todayUserSum,
+            'yesterdayUserSum'       => $yesterdayUserSum,
+            'todayCourseSum'         => $todayCourseSum,
+            'yesterdayCourseSum'     => $yesterdayCourseSum,
+            'todayRegisterNum'       => $todayRegisterNum,
+            'yesterdayRegisterNum'   => $yesterdayRegisterNum,
+            'todayLoginNum'          => $todayLoginNum,
+            'yesterdayLoginNum'      => $yesterdayLoginNum,
+            'todayCourseNum'         => $todayCourseNum,
+            'yesterdayCourseNum'     => $yesterdayCourseNum,
+            'todayLessonNum'         => $todayLessonNum,
+            'yesterdayLessonNum'     => $yesterdayLessonNum,
+            'todayJoinLessonNum'     => $todayJoinLessonNum,
+            'yesterdayJoinLessonNum' => $yesterdayJoinLessonNum,
+            'todayBuyLessonNum'      => $todayBuyLessonNum,
+            'yesterdayBuyLessonNum'  => $yesterdayBuyLessonNum,
 
-            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
+            'todayBuyClassroomNum'     => $todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum' => $yesterdayBuyClassroomNum,
 
-            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
+            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
 
-            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
+            'todayAllVideoViewedNum'     => $todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum' => $yesterdayAllVideoViewedNum,
 
             'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
             'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
@@ -398,20 +400,20 @@ class DefaultController extends BaseController
             'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
             'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
 
-            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
+            'todayNetVideoViewedNum'     => $todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum' => $yesterdayNetVideoViewedNum,
 
-            'todayIncome'                  => $todayIncome,
-            'yesterdayIncome'              => $yesterdayIncome,
-            'todayCourseIncome'            => $todayCourseIncome,
-            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
-            'todayClassroomIncome'         => $todayClassroomIncome,
-            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
-            'todayVipIncome'               => $todayVipIncome,
-            'yesterdayVipIncome'           => $yesterdayVipIncome,
-            'todayExitLessonNum'           => $todayExitLessonNum,
-            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
-            'keyCheckResult'               => $keyCheckResult
+            'todayIncome'              => $todayIncome,
+            'yesterdayIncome'          => $yesterdayIncome,
+            'todayCourseIncome'        => $todayCourseIncome,
+            'yesterdayCourseIncome'    => $yesterdayCourseIncome,
+            'todayClassroomIncome'     => $todayClassroomIncome,
+            'yesterdayClassroomIncome' => $yesterdayClassroomIncome,
+            'todayVipIncome'           => $todayVipIncome,
+            'yesterdayVipIncome'       => $yesterdayVipIncome,
+            'todayExitLessonNum'       => $todayExitLessonNum,
+            'yesterdayExitLessonNum'   => $yesterdayExitLessonNum,
+            'keyCheckResult'           => $keyCheckResult
         ));
     }
 

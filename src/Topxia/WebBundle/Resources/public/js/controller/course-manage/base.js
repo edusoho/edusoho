@@ -130,7 +130,7 @@ define(function (require, exports, module) {
         toggleExpiryValue($("[name=expiryMode]:checked").val());
 
         $("[name='expiryMode']").change(function () {
-            if (app.arguments.isCoursePublished == 'published'){
+            if (app.arguments.isCoursePublished == 'published') {
                 return false;
             }
 
@@ -184,6 +184,7 @@ define(function (require, exports, module) {
                         format: 'yyyy-mm-dd',
                         minView: 'month'
                     });
+                    $("#course_expiryDay").datetimepicker('setStartDate', new Date);
                     break;
                 default:
                     break;
