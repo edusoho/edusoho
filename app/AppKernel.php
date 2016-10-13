@@ -38,6 +38,7 @@ class AppKernel extends Kernel
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
+            new Activity\ActivityBundle\ActivityBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
