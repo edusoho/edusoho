@@ -77,15 +77,14 @@ define(function(require, exports, module) {
         }
         
         var $reviews = $('.js-reviews');
-        /*var $fullLength = $reviews.find('.full-content').text().length;
-        if( $fullLength<100){
-            $reviews.find('.actions').remove();
-        }*/
 
         $('.js-reviews').hover(function(){
             var $fullLength = $(this).find('.full-content').text().length;
-            if( $fullLength > 100){
+            
+            if( $fullLength > 100 && $(this).find('.short-content').is(":hidden") == false){
                 $(this).find('.show-full-btn').show();
+            } else {
+                $(this).find('.show-full-btn').hide();
             }
         })
 
