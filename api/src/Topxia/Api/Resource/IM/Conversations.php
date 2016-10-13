@@ -32,7 +32,7 @@ class Conversations extends BaseResource
             }
 
             try {
-                $conversation = $this->getConversationService()->createConversation('', 'private', 0, $members);
+                $conversation = $this->getConversationService()->createConversation('', 'private', 0, $memberIds);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
             }
