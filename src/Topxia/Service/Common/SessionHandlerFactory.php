@@ -6,11 +6,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SessionHandlerFactory
 {
-
     public static function getSessionHandler(ContainerInterface $container)
     {
         $redisSetting = self::getSettingService()->get('redis');
-
         if (isset($redisSetting['opened']) && $redisSetting['opened']) {
             $redisFactory = $container->get('session.handler.redis.factory');
 

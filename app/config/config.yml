@@ -21,7 +21,7 @@ framework:
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.factory
+        handler_id:  session.handler.factory
     fragments:       ~
 
 # Twig Configuration
