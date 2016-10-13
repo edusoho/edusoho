@@ -24,25 +24,16 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
 }
 
 use Symfony\Component\Debug\Debug;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 fix_gpc_magic();
 
 $loader = require_once __DIR__.'/../app/autoload.php';
-
 Debug::enable();
-
-require_once __DIR__.'/../app/bootstrap.php.cache';
-require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
-Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-
-$kernel->boot();
 
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等

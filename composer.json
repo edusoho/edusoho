@@ -12,7 +12,8 @@
 
 		"psr-4": {
 			"Topxia\\Api\\" : "api/src/Topxia/Api"
-		}
+		},
+		"files": [ "app/AppKernel.php" ]
 	},
 	"require" : {
 		"php" : ">=5.3.3",
