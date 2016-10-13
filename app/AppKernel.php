@@ -17,6 +17,13 @@ class AppKernel extends Kernel
         $this->extensionManger = ExtensionManager::init($this);
     }
 
+    public function boot()
+    {
+        parent::boot();
+        $biz = $this->getContainer()->get('biz');
+        $biz->boot();
+    }
+
     public function registerBundles()
     {
         $bundles = array(

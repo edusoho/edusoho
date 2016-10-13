@@ -53,10 +53,6 @@ $request = Request::createFromGlobals();
 
 $kernel->boot();
 
-// START: init service kernel
-$kernel->getContainer()->get('biz')->bootServiceKernel($request);
-// END: init service kernel
-
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等
 try {

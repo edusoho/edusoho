@@ -8,7 +8,8 @@ class SessionHandlerFactory
 {
     public static function getSessionHandler(ContainerInterface $container)
     {
-        $redisSetting = self::getSettingService()->get('redis');
+        // $redisSetting = self::getSettingService()->get('redis');
+        $redisSetting = array(); // @todo
         if (isset($redisSetting['opened']) && $redisSetting['opened']) {
             $redisFactory = $container->get('session.handler.redis.factory');
 

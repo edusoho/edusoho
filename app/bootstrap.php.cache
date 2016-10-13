@@ -26,9 +26,47 @@ public function add(array $parameters = array())
 {
 $this->parameters = array_replace($this->parameters, $parameters);
 }
-public function get($key, $default = null)
+public function get($key, $default = null, $deep = false)
 {
+if ($deep) {
+@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since version 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
+}
+if (!$deep || false === $pos = strpos($key,'[')) {
 return array_key_exists($key, $this->parameters) ? $this->parameters[$key] : $default;
+}
+$root = substr($key, 0, $pos);
+if (!array_key_exists($root, $this->parameters)) {
+return $default;
+}
+$value = $this->parameters[$root];
+$currentKey = null;
+for ($i = $pos, $c = strlen($key); $i < $c; ++$i) {
+$char = $key[$i];
+if ('['=== $char) {
+if (null !== $currentKey) {
+throw new \InvalidArgumentException(sprintf('Malformed path. Unexpected "[" at position %d.', $i));
+}
+$currentKey ='';
+} elseif (']'=== $char) {
+if (null === $currentKey) {
+throw new \InvalidArgumentException(sprintf('Malformed path. Unexpected "]" at position %d.', $i));
+}
+if (!is_array($value) || !array_key_exists($currentKey, $value)) {
+return $default;
+}
+$value = $value[$currentKey];
+$currentKey = null;
+} else {
+if (null === $currentKey) {
+throw new \InvalidArgumentException(sprintf('Malformed path. Unexpected "%s" at position %d.', $char, $i));
+}
+$currentKey .= $char;
+}
+}
+if (null !== $currentKey) {
+throw new \InvalidArgumentException(sprintf('Malformed path. Path must end with "]".'));
+}
+return $value;
 }
 public function set($key, $value)
 {
@@ -42,29 +80,42 @@ public function remove($key)
 {
 unset($this->parameters[$key]);
 }
-public function getAlpha($key, $default ='')
+public function getAlpha($key, $default ='', $deep = false)
 {
-return preg_replace('/[^[:alpha:]]/','', $this->get($key, $default));
+return preg_replace('/[^[:alpha:]]/','', $this->get($key, $default, $deep));
 }
-public function getAlnum($key, $default ='')
+public function getAlnum($key, $default ='', $deep = false)
 {
-return preg_replace('/[^[:alnum:]]/','', $this->get($key, $default));
+return preg_replace('/[^[:alnum:]]/','', $this->get($key, $default, $deep));
 }
-public function getDigits($key, $default ='')
+public function getDigits($key, $default ='', $deep = false)
 {
-return str_replace(array('-','+'),'', $this->filter($key, $default, FILTER_SANITIZE_NUMBER_INT));
+return str_replace(array('-','+'),'', $this->filter($key, $default, FILTER_SANITIZE_NUMBER_INT, array(), $deep));
 }
-public function getInt($key, $default = 0)
+public function getInt($key, $default = 0, $deep = false)
 {
-return (int) $this->get($key, $default);
+return (int) $this->get($key, $default, $deep);
 }
-public function getBoolean($key, $default = false)
+public function getBoolean($key, $default = false, $deep = false)
 {
-return $this->filter($key, $default, FILTER_VALIDATE_BOOLEAN);
+return $this->filter($key, $default, FILTER_VALIDATE_BOOLEAN, array(), $deep);
 }
-public function filter($key, $default = null, $filter = FILTER_DEFAULT, $options = array())
+public function filter($key, $default = null, $filter = FILTER_DEFAULT, $options = array(), $deep = false)
 {
-$value = $this->get($key, $default);
+static $filters = null;
+if (null === $filters) {
+foreach (filter_list() as $tmp) {
+$filters[filter_id($tmp)] = 1;
+}
+}
+if (is_bool($filter) || !isset($filters[$filter]) || is_array($deep)) {
+@trigger_error('Passing the $deep boolean as 3rd argument to the '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0. Remove it altogether as the $deep argument will be removed in 3.0.', E_USER_DEPRECATED);
+$tmp = $deep;
+$deep = $filter;
+$filter = $options;
+$options = $tmp;
+}
+$value = $this->get($key, $default, $deep);
 if (!is_array($options) && $options) {
 $options = array('flags'=> $options);
 }
@@ -461,7 +512,7 @@ return $request;
 }
 public static function create($uri, $method ='GET', $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)
 {
-$server = array_replace(array('SERVER_NAME'=>'localhost','SERVER_PORT'=> 80,'HTTP_HOST'=>'localhost','HTTP_USER_AGENT'=>'Symfony/3.X','HTTP_ACCEPT'=>'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','HTTP_ACCEPT_LANGUAGE'=>'en-us,en;q=0.5','HTTP_ACCEPT_CHARSET'=>'ISO-8859-1,utf-8;q=0.7,*;q=0.7','REMOTE_ADDR'=>'127.0.0.1','SCRIPT_NAME'=>'','SCRIPT_FILENAME'=>'','SERVER_PROTOCOL'=>'HTTP/1.1','REQUEST_TIME'=> time(),
+$server = array_replace(array('SERVER_NAME'=>'localhost','SERVER_PORT'=> 80,'HTTP_HOST'=>'localhost','HTTP_USER_AGENT'=>'Symfony/2.X','HTTP_ACCEPT'=>'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','HTTP_ACCEPT_LANGUAGE'=>'en-us,en;q=0.5','HTTP_ACCEPT_CHARSET'=>'ISO-8859-1,utf-8;q=0.7,*;q=0.7','REMOTE_ADDR'=>'127.0.0.1','SCRIPT_NAME'=>'','SCRIPT_FILENAME'=>'','SERVER_PROTOCOL'=>'HTTP/1.1','REQUEST_TIME'=> time(),
 ), $server);
 $server['PATH_INFO'] ='';
 $server['REQUEST_METHOD'] = strtoupper($method);
@@ -675,15 +726,18 @@ public static function getHttpMethodParameterOverride()
 {
 return self::$httpMethodParameterOverride;
 }
-public function get($key, $default = null)
+public function get($key, $default = null, $deep = false)
 {
-if ($this !== $result = $this->attributes->get($key, $this)) {
+if ($deep) {
+@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since version 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
+}
+if ($this !== $result = $this->query->get($key, $this, $deep)) {
 return $result;
 }
-if ($this !== $result = $this->query->get($key, $this)) {
+if ($this !== $result = $this->attributes->get($key, $this, $deep)) {
 return $result;
 }
-if ($this !== $result = $this->request->get($key, $this)) {
+if ($this !== $result = $this->request->get($key, $this, $deep)) {
 return $result;
 }
 return $default;
@@ -962,7 +1016,7 @@ static::$formats[$format] = is_array($mimeTypes) ? $mimeTypes : array($mimeTypes
 public function getRequestFormat($default ='html')
 {
 if (null === $this->format) {
-$this->format = $this->attributes->get('_format', $default);
+$this->format = $this->get('_format', $default);
 }
 return $this->format;
 }
@@ -1025,7 +1079,7 @@ if ($currentContentIsResource) {
 rewind($this->content);
 return stream_get_contents($this->content);
 }
-if (null === $this->content) {
+if (null === $this->content || false === $this->content) {
 $this->content = file_get_contents('php://input');
 }
 return $this->content;
@@ -1366,11 +1420,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.8.11';
-const VERSION_ID = 20811;
+const VERSION ='2.8.12';
+const VERSION_ID = 20812;
 const MAJOR_VERSION = 2;
 const MINOR_VERSION = 8;
-const RELEASE_VERSION = 11;
+const RELEASE_VERSION = 12;
 const EXTRA_VERSION ='';
 const END_OF_MAINTENANCE ='11/2018';
 const END_OF_LIFE ='11/2019';

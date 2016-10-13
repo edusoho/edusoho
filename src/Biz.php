@@ -23,17 +23,23 @@ class Biz extends \Codeages\Biz\Framework\Context\Kernel
         $this->boot();
     }
 
-    public function bootServiceKernel(Request $request)
+    public function boot($options = array())
+    {
+        parent::boot($options);
+        $this->bootServiceKernel();
+    }
+
+    public function bootServiceKernel()
     {
         if(!$this->serviceKernelBooted){
             $kernel = $this->container->get('kernel');
             $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-            $serviceKernel->setEnvVariable(array(
-                'host'          => $request->getHttpHost(),
-                'schemeAndHost' => $request->getSchemeAndHttpHost(),
-                'basePath'      => $request->getBasePath(),
-                'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
-            ));
+            // $serviceKernel->setEnvVariable(array(
+            //     'host'          => $request->getHttpHost(),
+            //     'schemeAndHost' => $request->getSchemeAndHttpHost(),
+            //     'basePath'      => $request->getBasePath(),
+            //     'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
+            // ));
             $serviceKernel->setTranslatorEnabled(true);
             $serviceKernel->setTranslator($this->container->get('translator'));
             $serviceKernel->setParameterBag($this->container->getParameterBag());
@@ -45,7 +51,7 @@ class Biz extends \Codeages\Biz\Framework\Context\Kernel
             $currentUser->fromArray(array(
                 'id'        => 0,
                 'nickname'  => '游客',
-                'currentIp' => $request->getClientIp(),
+                'currentIp' => '0.0.0.0', // $request->getClientIp(),
                 'roles'     => array()
             ));
             $serviceKernel->setCurrentUser($currentUser);
