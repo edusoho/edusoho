@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
+    var ThreadShowWidget = require('../thread/thread-show.js');
 
     exports.run = function() {
 
@@ -75,10 +76,17 @@ define(function(require, exports, module) {
         }
         
         var $reviews = $('.js-reviews');
-        var $fullLength = $reviews.find('.full-content').text().length;
+        /*var $fullLength = $reviews.find('.full-content').text().length;
         if( $fullLength<100){
             $reviews.find('.actions').remove();
-        }
+        }*/
+
+        $('.js-reviews').hover(function(){
+            var $fullLength = $(this).find('.full-content').text().length;
+            if( $fullLength > 100){
+                $(this).find('.show-full-btn').show();
+            }
+        })
 
         $reviews.on('click', '.show-full-btn', function(){
             var $review = $(this).parents('.media');
@@ -98,7 +106,9 @@ define(function(require, exports, module) {
             $review.find('.show-full-btn').show();
         });
   
-
+        var threadShowWidget = new ThreadShowWidget({
+            element: '.js-reviews',
+        });
       
 
     };

@@ -3,6 +3,7 @@
 {% set nav = 'review' %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block main %}
+	{% set goto = path('classroom_reviews',{id:classroom.id}) %}
 
   {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
 

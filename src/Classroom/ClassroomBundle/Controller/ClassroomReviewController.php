@@ -1,27 +1,26 @@
 <?php
 namespace Classroom\ClassroomBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomReviewController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
 
         if (!empty($conditions['classroomTitle'])) {
-            $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
+            $classrooms                 = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
             $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');
             if (count($conditions['classroomIds']) == 0) {
                 return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
-                'reviews' => array(),
-                'users' => array(),
-                'classrooms' => array(),
-                'paginator' => new Paginator($request, 0, 20),
+                    'reviews'    => array(),
+                    'users'      => array(),
+                    'classrooms' => array(),
+                    'paginator'  => new Paginator($request, 0, 20)
                 ));
             }
         }
@@ -31,21 +30,24 @@ class ClassroomReviewController extends BaseController
             $this->getClassroomReviewService()->searchReviewCount($conditions),
             20
         );
+
+        $conditions['parentId'] = 0;
+
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime', 'DESC' ),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
         return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
-            'reviews' => $reviews,
-            'users' => $users,
+            'reviews'    => $reviews,
+            'users'      => $users,
             'classrooms' => $classrooms,
-            'paginator' => $paginator,
-            ));
+            'paginator'  => $paginator
+        ));
     }
 
     public function deleteAction(Request $request, $id)

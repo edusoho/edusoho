@@ -12538,6 +12538,9 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+html {
+  height: 100%;
+}
 @-webkit-keyframes boxshow {
   0% {
     box-shadow: 0 0 15px #2db7f5;
@@ -12735,48 +12738,49 @@ textarea {
   user-select: none;
   cursor: move!important;
 }
-.question-manage {
+.marker-manage {
+  min-height: 100%;
   background-color: #eeeeee;
 }
-.question-manage .breadcrumb {
+.marker-manage .breadcrumb {
   margin-bottom: 0;
   line-height: 60px;
   background-color: #eeeeee;
   padding: 0 20px;
 }
-.question-manage .lesson-dashboard {
+.marker-manage .lesson-dashboard {
   background-color: #eeeeee;
   top: 60px;
 }
-.question-manage .lesson-dashboard .toolbar {
+.marker-manage .lesson-dashboard .toolbar {
   background-color: #eeeeee;
   border: 0;
   width: 490px;
   padding-right: 20px;
 }
 @media (max-width: 991px) {
-  .question-manage .lesson-dashboard .toolbar {
+  .marker-manage .lesson-dashboard .toolbar {
     width: 350px;
   }
 }
-.question-manage .lesson-dashboard .dashboard-body {
+.marker-manage .lesson-dashboard .dashboard-body {
   top: 0;
   bottom: 30%;
 }
-.question-manage .lesson-dashboard .dashboard-content {
+.marker-manage .lesson-dashboard .dashboard-content {
   right: 510px;
 }
 @media (max-width: 991px) and (min-width: 768px) {
-  .question-manage .lesson-dashboard .dashboard-content {
+  .marker-manage .lesson-dashboard .dashboard-content {
     right: 370px;
   }
 }
 @media (max-width: 767px) {
-  .question-manage .lesson-dashboard .dashboard-content {
+  .marker-manage .lesson-dashboard .dashboard-content {
     right: 20px;
   }
 }
-.question-manage .lesson-dashboard .mask {
+.marker-manage .lesson-dashboard .mask {
   display: none;
   position: absolute;
   width: 100%;
@@ -12784,95 +12788,95 @@ textarea {
   bottom: 30%;
   background-color: transparent;
 }
-.question-manage .lesson-list {
+.marker-manage .lesson-list {
   border: 0;
   margin: 0;
 }
-.question-manage .lesson-list .item-lesson {
+.marker-manage .lesson-list .item-lesson {
   margin: 0 0 10px;
   cursor: pointer;
   line-height: 46px;
 }
-.question-manage .lesson-list .item-lesson .before {
+.marker-manage .lesson-list .item-lesson .before {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
 }
-.question-manage .question-menu {
+.marker-manage .question-menu {
   position: relative;
   height: 90%;
 }
-.question-manage .question-menu .list-title {
+.marker-manage .question-menu .list-title {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid #e1e1e1;
 }
-.question-manage .question-menu .list-title .row {
+.marker-manage .question-menu .list-title .row {
   margin: 0;
 }
-.question-manage .question-menu .list-title .content {
+.marker-manage .question-menu .list-title .content {
   padding-left: 0;
   text-align: center;
 }
 @media (max-width: 991px) {
-  .question-manage .question-menu .list-title .content {
+  .marker-manage .question-menu .list-title .content {
     display: none;
   }
 }
-.question-manage .question-menu .lesson-list {
+.marker-manage .question-menu .lesson-list {
   min-height: 100px;
 }
-.question-manage .question-menu .lesson-list .item-lesson .title .idname,
-.question-manage .question-menu .lesson-list .item-lesson .title .number,
-.question-manage .question-menu .lesson-list .item-lesson .title .icon-close {
+.marker-manage .question-menu .lesson-list .item-lesson .title .idname,
+.marker-manage .question-menu .lesson-list .item-lesson .title .number,
+.marker-manage .question-menu .lesson-list .item-lesson .title .icon-close {
   display: none;
 }
-.question-manage .question-menu .lesson-list .item-lesson .content {
+.marker-manage .question-menu .lesson-list .item-lesson .content {
   text-align: center;
   padding-left: 0;
 }
 @media (max-width: 991px) {
-  .question-manage .question-menu .lesson-list .item-lesson .content {
+  .marker-manage .question-menu .lesson-list .item-lesson .content {
     display: none;
   }
 }
-.question-manage .question-menu .lesson-list .item-lesson .content.not-add {
+.marker-manage .question-menu .lesson-list .item-lesson .content.not-add {
   display: inline-block;
 }
-.question-manage .question-menu .lesson-list .item-lesson .content.have-add {
+.marker-manage .question-menu .lesson-list .item-lesson .content.have-add {
   display: none;
 }
-.question-manage .question-menu .lesson-list .item-lesson.dragged {
+.marker-manage .question-menu .lesson-list .item-lesson.dragged {
   background-color: #feffeb;
   background-color: rgba(254, 255, 235, 0.9);
   width: 150px!important;
   overflow: hidden;
 }
-.question-manage .question-menu .lesson-list .item-lesson.dragged .title {
+.marker-manage .question-menu .lesson-list .item-lesson.dragged .title {
   width: 100%;
 }
-.question-manage .question-menu .lesson-list .item-lesson.dragged .content {
+.marker-manage .question-menu .lesson-list .item-lesson.dragged .content {
   display: none;
 }
-.question-manage .question-menu .lesson-list .item-lesson.disdrag {
+.marker-manage .question-menu .lesson-list .item-lesson.disdrag {
   background-color: #f1f1f1;
   cursor: default;
   color: #919191;
   border: 1px dashed  #e1e1e1;
 }
-.question-manage .question-menu .lesson-list .item-lesson.disdrag a {
+.marker-manage .question-menu .lesson-list .item-lesson.disdrag a {
   color: #919191;
   cursor: default;
 }
-.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.not-add {
+.marker-manage .question-menu .lesson-list .item-lesson.disdrag .content.not-add {
   display: none;
 }
-.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.have-add {
+.marker-manage .question-menu .lesson-list .item-lesson.disdrag .content.have-add {
   display: inline-block;
 }
-.question-manage .question-menu .lesson-list .placeholder {
+.marker-manage .question-menu .lesson-list .placeholder {
   background-color: #f1f1f1;
   border: 1px dashed  #e1e1e1;
   margin-bottom: 10px;
@@ -12881,16 +12885,16 @@ textarea {
   padding: 0 10px;
   color: #919191;
 }
-.question-manage .question-menu .lesson-list .placeholder .remask {
+.marker-manage .question-menu .lesson-list .placeholder .remask {
   display: none;
 }
-.question-manage .question-menu .lesson-list .pagination {
+.marker-manage .question-menu .lesson-list .pagination {
   position: absolute;
   bottom: -5px;
   left: 0;
   margin-bottom: 0;
 }
-.question-manage .editbox {
+.marker-manage .editbox {
   position: absolute;
   left: 0;
   right: 0;
@@ -12899,7 +12903,7 @@ textarea {
   height: 20%;
   background-color: #313131;
 }
-.question-manage .editbox .remask {
+.marker-manage .editbox .remask {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -12909,12 +12913,12 @@ textarea {
   margin-left: -150px;
   text-align: center;
 }
-.question-manage .editbox .scalebox {
+.marker-manage .editbox .scalebox {
   position: relative;
   height: 20px;
   z-index: 2;
 }
-.question-manage .editbox .scalebox .scale {
+.marker-manage .editbox .scalebox .scale {
   position: absolute;
   display: block;
   height: 100%;
@@ -12922,7 +12926,7 @@ textarea {
   background-color: #fff;
   z-index: 1;
 }
-.question-manage .editbox .scalebox .scale .scale-details {
+.marker-manage .editbox .scalebox .scale .scale-details {
   position: absolute;
   left: 0;
   bottom: 100%;
@@ -12933,8 +12937,8 @@ textarea {
   text-align: center;
   color: #fff;
 }
-.question-manage .editbox .scalebox .scale.red,
-.question-manage .editbox .scalebox .scale.blue {
+.marker-manage .editbox .scalebox .scale.red,
+.marker-manage .editbox .scalebox .scale.blue {
   left: 0;
   bottom: 100%;
   height: 100%;
@@ -12942,42 +12946,42 @@ textarea {
   background-color: #ed634a;
 }
 @media (max-width: 1297px) {
-  .question-manage .editbox .scalebox .scale.red,
-  .question-manage .editbox .scalebox .scale.blue {
+  .marker-manage .editbox .scalebox .scale.red,
+  .marker-manage .editbox .scalebox .scale.blue {
     top: -40px;
   }
 }
-.question-manage .editbox .scalebox .scale.white {
+.marker-manage .editbox .scalebox .scale.white {
   height: 80%;
   opacity: 0.6;
   filter: alpha(opacity=60);
 }
-.question-manage .editbox .scalebox .scale.white .scale-details {
+.marker-manage .editbox .scalebox .scale.white .scale-details {
   visibility: visible;
   background-color: transparent;
   bottom: -20px;
 }
-.question-manage .editbox .scalebox .scale.blue {
+.marker-manage .editbox .scalebox .scale.blue {
   background-color: #2db7f5;
   height: 78px;
 }
 @media (max-width: 1297px) {
-  .question-manage .editbox .scalebox .scale.blue {
+  .marker-manage .editbox .scalebox .scale.blue {
     height: 60px;
   }
 }
-.question-manage .editbox .scalebox .scale.blue:hover {
+.marker-manage .editbox .scalebox .scale.blue:hover {
   background-color: #2db7f5;
   background-color: rgba(45, 183, 245, 0);
 }
-.question-manage .editbox .scalebox .scale.blue:hover .border {
+.marker-manage .editbox .scalebox .scale.blue:hover .border {
   background-color: #2db7f5;
   background-color: rgba(45, 183, 245, 0.5);
   -moz-animation: boxshow 1s ease infinite;
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
 }
-.question-manage .editbox .scalebox .scale.blue:hover .scale-details {
+.marker-manage .editbox .scalebox .scale.blue:hover .scale-details {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -12986,14 +12990,14 @@ textarea {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.question-manage .editbox .scalebox .scale.blue .border {
+.marker-manage .editbox .scalebox .scale.blue .border {
   position: absolute;
   width: 8px;
   margin-left: -4px;
   height: 100%;
   cursor: pointer;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details {
+.marker-manage .editbox .scalebox .scale.blue .scale-details {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -13007,12 +13011,12 @@ textarea {
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 1;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list {
   min-height: 40px;
   height: auto;
   margin: 0;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson {
   background-color: transparent;
   border: none;
   margin-bottom: 0;
@@ -13020,55 +13024,55 @@ textarea {
   height: 46px;
   overflow: hidden;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson:hover {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson:hover {
   background-color: #773cec;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title {
   position: relative;
   width: 100%;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before {
   width: 180px;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before .number {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before .number {
   display: inline;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .icon-close {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .icon-close {
   display: inline;
   position: absolute;
   top: 15px;
   right: 10px;
   color: #fff;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-close,
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content,
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-drag {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-close,
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content,
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-drag {
   display: none;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .placeholder {
+.marker-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .placeholder {
   background-color: #f1f1f1;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details.visible {
+.marker-manage .editbox .scalebox .scale.blue .scale-details.visible {
   opacity: 1;
   filter: alpha(opacity=100);
   visibility: visible;
 }
-.question-manage .editbox .scalebox .scale.blue.show {
+.marker-manage .editbox .scalebox .scale.blue.show {
   background-color: transparent;
 }
-.question-manage .editbox .scalebox .scale.blue.show .border {
+.marker-manage .editbox .scalebox .scale.blue.show .border {
   background-color: rgba(45, 183, 245, 0.5);
   -moz-animation: boxshow 1s ease infinite;
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
 }
-.question-manage .editbox .lesson-list {
+.marker-manage .editbox .lesson-list {
   z-index: 1;
   height: 100%;
   margin-top: -20px;
 }
-.question-manage .editbox .lesson-list .placeholder {
+.marker-manage .editbox .lesson-list .placeholder {
   height: 100%;
   position: relative;
   background-color: #2db7f5;
@@ -13078,7 +13082,7 @@ textarea {
   text-align: center;
   margin: 0;
 }
-.question-manage .editbox .lesson-list .placeholder .sub-remask {
+.marker-manage .editbox .lesson-list .placeholder .sub-remask {
   display: none;
 }
 .ballon-video-player .vjs-marker.bg-primary {
