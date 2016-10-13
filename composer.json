@@ -17,6 +17,7 @@
 	"require" : {
 		"php" : ">=5.3.3",
 		"symfony/symfony" : "~2.8.12",
+		"symfony/twig-bundle": "~2.8.12",
 		"symfony/assetic-bundle" : "~2.8.0",
 		"symfony/monolog-bundle" : "~2.11.1",
 		"symfony/security-acl": "~2.8.0",

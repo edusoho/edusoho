@@ -16,8 +16,7 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     templating:
-        engines: ['twig', 'php']
-        assets_version: 7.2.3
+        engines: ['twig']
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
