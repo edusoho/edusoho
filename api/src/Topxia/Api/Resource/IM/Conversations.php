@@ -29,10 +29,14 @@ class Conversations extends BaseResource
                 if (!in_array($memberId, ArrayToolkit::column($users, 'id'))) {
                     return $this->error(500, "User #{$memberId} is not exsit");
                 }
+                $user['id']       = $users[$memberId]['id'];
+                $user['nickname'] = $users[$memberId]['nickname'];
+
+                $members[] = $user;
             }
 
             try {
-                $conversation = $this->getConversationService()->createConversation('', 'private', 0, $memberIds);
+                $conversation = $this->getConversationService()->createConversation('', 'private', 0, $members);
             } catch (\Exception $e) {
                 return $this->error($e->getCode(), $e->getMessage());
             }
