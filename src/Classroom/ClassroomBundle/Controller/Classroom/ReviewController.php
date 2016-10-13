@@ -96,6 +96,12 @@ class ReviewController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
+        $postNum = $this->getClassroomReviewService()->searchReviewCount(array('parentId' => $reviewId));
+
+        if ($postNum >= 5) {
+            return $this->createJsonResponse(array('error' => $this->trans('回复数量已达5条上限，不能再回复')));
+        }
+
         $user = $this->getCurrentUser();
 
         $fields                = $request->request->all();

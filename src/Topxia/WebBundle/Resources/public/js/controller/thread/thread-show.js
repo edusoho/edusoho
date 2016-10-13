@@ -164,6 +164,11 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
+                        
+                        if (response.error) {
+                            Notify.danger(response.error);
+                            return;
+                        }
                         $btn.button('reset');
                         $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(response);
                         $form.find('textarea').val('');
