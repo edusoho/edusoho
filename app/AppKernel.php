@@ -3,6 +3,9 @@
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 class AppKernel extends Kernel
 {
@@ -49,8 +52,8 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
 
-        $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir().'/../plugins';
+        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
+        $pluginRootDir      = $this->getRootDir() . '/../plugins';
 
         if (file_exists($pluginMetaFilepath)) {
             $pluginMeta    = include_once $pluginMetaFilepath;
@@ -61,7 +64,7 @@ class AppKernel extends Kernel
                     if ($pluginMeta['protocol'] == '1.0') {
                         $c         = ucfirst($c);
                         $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     } elseif ($pluginMeta['protocol'] == '2.0') {
                         if ($c['type'] != 'plugin') {
@@ -70,7 +73,7 @@ class AppKernel extends Kernel
 
                         $c         = ucfirst($c['code']);
                         $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     }
                 }
@@ -92,11 +95,39 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     public function getPlugins()
     {
         return $this->plugins;
+    }
+
+    protected function initServiceKernel(Request $request)
+    {
+        $container     = $this->getContainer();
+        $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
+        $serviceKernel->setEnvVariable(array(
+            'host'          => $request->getHttpHost(),
+            'schemeAndHost' => $request->getSchemeAndHttpHost(),
+            'basePath'      => $request->getBasePath(),
+            'baseUrl'       => $request->getSchemeAndHttpHost() . $request->getBasePath()
+        ));
+        $serviceKernel->setTranslatorEnabled(true);
+        $serviceKernel->setTranslator($container->get('translator'));
+        $serviceKernel->setParameterBag($container->getParameterBag());
+        $serviceKernel->registerModuleDirectory(dirname(__DIR__) . '/plugins');
+        $serviceKernel->setConnection($container->get('database_connection'));
+        $serviceKernel->getConnection()->exec('SET NAMES UTF8');
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '0.0.0.0', // $request->getClientIp(),
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
+
     }
 }

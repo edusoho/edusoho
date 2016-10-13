@@ -26,38 +26,6 @@ class Biz extends \Codeages\Biz\Framework\Context\Kernel
     public function boot($options = array())
     {
         parent::boot($options);
-        $this->bootServiceKernel();
-    }
-
-    public function bootServiceKernel()
-    {
-        if(!$this->serviceKernelBooted){
-            $kernel = $this->container->get('kernel');
-            $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-            // $serviceKernel->setEnvVariable(array(
-            //     'host'          => $request->getHttpHost(),
-            //     'schemeAndHost' => $request->getSchemeAndHttpHost(),
-            //     'basePath'      => $request->getBasePath(),
-            //     'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
-            // ));
-            $serviceKernel->setTranslatorEnabled(true);
-            $serviceKernel->setTranslator($this->container->get('translator'));
-            $serviceKernel->setParameterBag($this->container->getParameterBag());
-            $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-            $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
-            $serviceKernel->getConnection()->exec('SET NAMES UTF8');
-
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray(array(
-                'id'        => 0,
-                'nickname'  => '游客',
-                'currentIp' => '0.0.0.0', // $request->getClientIp(),
-                'roles'     => array()
-            ));
-            $serviceKernel->setCurrentUser($currentUser);
-
-            $this->serviceKernelBooted = true;
-        }
     }
 
     /**
