@@ -22,9 +22,9 @@ class UploaderExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'uploader_token'   => new \Twig_SimpleFunction($this, 'makeUpoaderToken'),
-            'uploader_process' => new \Twig_SimpleFunction($this, 'getProcessMode'),
-            'uploader_accept'  => new \Twig_SimpleFunction($this, 'getUploadFileAccept')
+            new \Twig_SimpleFunction('uploader_token', array($this, 'makeUpoaderToken')),
+            new \Twig_SimpleFunction('uploader_process', array($this, 'getProcessMode')),
+            new \Twig_SimpleFunction('uploader_accept', array($this, 'getUploadFileAccept')),
         );
     }
 
