@@ -4,7 +4,9 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
 
-        $.get($('.js-pane-question').data('url'), function(response) {
+        var count = parseInt((document.body.clientHeight-350)/50);
+
+        $.get($('.js-pane-question').data('url')+ '?count', function(response) {
             $('.js-pane-question').html(response);
         })
     }
