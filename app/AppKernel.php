@@ -11,6 +11,9 @@ class AppKernel extends Kernel
 {
     protected $plugins = array();
 
+    /**
+     * @var Request
+     */
     protected $request;
 
     protected $extensionManger;
@@ -119,13 +122,13 @@ class AppKernel extends Kernel
             'host'          => $this->request->getHttpHost(),
             'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
             'basePath'      => $this->request->getBasePath(),
-            'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()
-        ));
-        $serviceKernel->setTranslatorEnabled(true);
-        $serviceKernel->setTranslator($container->get('translator'));
-        $serviceKernel->setParameterBag($container->getParameterBag());
-        $serviceKernel->registerModuleDirectory(dirname(__DIR__) . '/plugins');
-        $serviceKernel->setConnection($container->get('database_connection'));
+            'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+            ->setTranslatorEnabled(true)
+            ->setTranslator($container->get('translator'))
+            ->setParameterBag($container->getParameterBag())
+            ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
+            ->setConnection($container->get('database_connection'));
+
         $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
         $currentUser = new CurrentUser();

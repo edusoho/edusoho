@@ -16,46 +16,31 @@ class BaseTestCase extends WebTestCase
 {
     protected static $isDatabaseCreated = false;
 
-    protected static $serviceKernel = null;
-
     protected function getCurrentUser()
     {
-        return static::$serviceKernel->getCurrentUser();
+        return $this->getServiceKernel()->getCurrentUser();
     }
 
     public static function setUpBeforeClass()
     {
         $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
-        static::$kernel       = static::createKernel();
-        static::$kernel->boot();
-    }
+        self::$kernel       = self::createKernel();
+        $request              = Request::createFromGlobals();
 
-    protected function setServiceKernel()
-    {
-        if (static::$serviceKernel) {
-            return;
-        }
+        self::$kernel->setRequest($request);
+        self::$kernel->boot();
 
-        $kernel = new \AppKernel('test', false);
-        $kernel->loadClassCache();
-        $kernel->boot();
-        Request::enableHttpMethodParameterOverride();
-        $request = Request::createFromGlobals();
-
-        $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-        $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-        $connection = $kernel->getContainer()->get('database_connection');
-        $serviceKernel->setConnection(new TestCaseConnection($connection));
-        $serviceKernel->setEnvVariable(array(
-            'host'          => 'test.com',
-            'schemeAndHost' => 'http://test.com'
-        ));
-        static::$serviceKernel = $serviceKernel;
+        $connection = self::$kernel->getContainer()->get('database_connection');
+        ServiceKernel::instance()
+            ->setEnvVariable(array(
+                'host'          => 'test.com',
+                'schemeAndHost' => 'http://test.com'))
+            ->setConnection(new TestCaseConnection($connection));
     }
 
     public function getServiceKernel()
     {
-        return static::$serviceKernel;
+        return ServiceKernel::instance();
     }
 
     /**
@@ -65,8 +50,6 @@ class BaseTestCase extends WebTestCase
      */
     public function setUp()
     {
-        $this->setServiceKernel();
-
         $this->flushPool();
 
         if (!static::$isDatabaseCreated) {
@@ -83,14 +66,14 @@ class BaseTestCase extends WebTestCase
 
     protected function initDevelopSetting()
     {
-        static::$serviceKernel->createService('System.SettingService')->set('developer', array(
+        $this->getServiceKernel()->createService('System.SettingService')->set('developer', array(
             'without_network' => '1'
         ));
     }
 
     protected function initCurrentUser()
     {
-        $userService = static::$serviceKernel->createService('User.UserService');
+        $userService = $this->getServiceKernel()->createService('User.UserService');
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
@@ -100,7 +83,8 @@ class BaseTestCase extends WebTestCase
             'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
             'org'       => array('id' => 1)
         ));
-        static::$serviceKernel->setCurrentUser($currentUser);
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $user  = $userService->register(array(
             'nickname'  => 'admin',
@@ -117,9 +101,9 @@ class BaseTestCase extends WebTestCase
         $user['org']       = array('id' => 1);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
-        static::$serviceKernel->setCurrentUser($currentUser);
-        static::$serviceKernel->createService('Permission:Role.RoleService')->refreshRoles();
-        static::$serviceKernel->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getServiceKernel()->createService('Permission:Role.RoleService')->refreshRoles();
+        $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
     }
 
     /**
@@ -145,35 +129,36 @@ class BaseTestCase extends WebTestCase
 
     protected function setPool($object)
     {
-        $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
         $pool             = $reflectionObject->getProperty("pool");
         $pool->setAccessible(true);
-        $value   = $pool->getValue(static::$serviceKernel);
+        $value   = $pool->getValue($this->getServiceKernel());
         $objects = array_merge($value, $object);
-        $pool->setValue(static::$serviceKernel, $objects);
+        $pool->setValue($this->getServiceKernel(), $objects);
     }
 
     protected function flushPool()
     {
-        $reflectionObject = new \ReflectionObject(static::$serviceKernel);
+        $reflectionObject = new \ReflectionObject($this->getServiceKernel());
         $pool             = $reflectionObject->getProperty("pool");
         $pool->setAccessible(true);
-        $pool->setValue(static::$serviceKernel, array());
+        $pool->setValue($this->getServiceKernel(), array());
     }
 
     protected static function getContainer()
     {
-        return static::$kernel->getContainer();
+        return self::$kernel->getContainer();
     }
 
     public function tearDown()
     {
+
     }
 
     protected function createAppDatabase()
     {
         // 执行数据库的migrate脚本
-        $application = new Application(static::$kernel);
+        $application = new Application(self::$kernel);
         $application->add(new MigrationsMigrateDoctrineCommand());
         $command       = $application->find('doctrine:migrations:migrate');
         $commandTester = new CommandTester($command);
@@ -185,7 +170,7 @@ class BaseTestCase extends WebTestCase
 
     protected function emptyAppDatabase($emptyAll = true)
     {
-        $connection = static::$serviceKernel->getConnection();
+        $connection = $this->getServiceKernel()->getConnection();
 
         if ($emptyAll) {
             $tableNames = $connection->getSchemaManager()->listTableNames();
