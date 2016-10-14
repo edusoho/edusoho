@@ -35,9 +35,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
-        $connection = $this->getConnection();
 
-        $connection->exec("DELETE FROM `sessions`");
     }
 
     protected function isFieldExist($table, $filedName)
