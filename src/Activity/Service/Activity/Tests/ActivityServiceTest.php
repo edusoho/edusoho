@@ -6,13 +6,61 @@ use Topxia\Service\Common\BaseTestCase;
 
 class ActivityServiceTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCreateActivityWhenInvalidArgument()
+    {
+        $activity = array(
+            'title' => 'test activity'
+        );
+        $savedActivity = $this->getActivityService()->createActivity($activity);
+        $this->assertEquals($activity['title'], $savedActivity['title']);
+    }
+
+    // /**
+    //  * @expectedException \AccessDeniedException
+    //  */
+    //
+    // public function testCreateActivityWhenAccessDenied()
+    // {
+    //     $activity = array(
+    //         'title' => 'test activity'
+    //     );
+    //     $savedActivity = $this->getActivityService()->createActivity($activity);
+    //     $this->assertEquals($activity['title'], $savedActivity['title']);
+    // }
+
     public function testCreateActivity()
     {
         $activity = array(
-            'title' => 'test activity 1'
+            'title'           => 'test activity',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
         );
-        $createCourse = $this->getCourseService()->createCourse($course);
-        $result       = $this->getCourseService()->getCourse($createCourse['id']);
-        $this->assertEquals($course['title'], $result['title']);
+        $savedActivity = $this->getActivityService()->createActivity($activity);
+        $this->assertEquals($activity['title'], $savedActivity['title']);
+    }
+
+    public function testUpdateActivity()
+    {
+        $activity = array(
+            'title'           => 'test activity',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedActivity = $this->getActivityService()->createActivity($activity);
+
+        $activity['title'] = 'course activity';
+        $savedActivity     = $this->getActivityService()->updateActivity($savedActivity['id'], $activity);
+
+        $this->assertEquals($activity['title'], $savedActivity['title']);
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:Activity.ActivityService');
     }
 }

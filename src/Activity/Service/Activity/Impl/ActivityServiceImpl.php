@@ -19,12 +19,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new \InvalidArgumentException('activity is invalid');
         }
 
-        if (!$this->canCourseManage($activity['courseId'])) {
+        if (!$this->canCourseManage($activity['fromCourseId'])) {
             throw $this->createAccessDeniedException();
         }
 
         $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
-        $media     = $processor->create($activity);
+        if (!empty($processor)) {
+            $media               = $processor->create($activity);
+            $activity['mediaId'] = $media['id'];
+        }
 
         $fields = ArrayToolkit::parts($activity, array(
             'title',
@@ -40,10 +43,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'endTime'
         ));
 
-        if (!empty($media)) {
-            $fields['mediaId'] = $media['id'];
-        }
-
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
 
         return $this->getActivityDao()->add($fields);
@@ -51,6 +50,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function updateActivity($id, $fields)
     {
+        $savedActivity = $this->getActivity($id);
+        $processor     = ActivityProcessorFactory::getActivityProcessor($savedActivity['mediaType']);
+
+        if (!empty($processor) && !empty($savedActivity['mediaId'])) {
+            $media = $processor->update($savedActivity['mediaId'], $fields);
+        }
+
+        return $this->getActivityDao()->update($id, $fields);
     }
 
     public function deleteActivity($id)
@@ -65,7 +72,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function getActivityDao()
     {
-        return $this->getServiceKernel()->createDao('Activity:Activity.ActivityDao');
+        return $this->createDao('Activity:Activity.ActivityDao');
     }
 
     protected function canCourseManage($courseId)
@@ -75,11 +82,24 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function invalidActivity($activity)
     {
-        return ArrayToolkit::requireds($activity, array(
+        if (!ArrayToolkit::requireds($activity, array(
             'title',
             'mediaType',
             'fromCourseId',
             'fromCourseSetId'
-        ));
+        ))) {
+            return true;
+        }
+
+        if (!in_array($activity['mediaType'], $this->getMediaTypes())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getMediaTypes()
+    {
+        return array('text');
     }
 }

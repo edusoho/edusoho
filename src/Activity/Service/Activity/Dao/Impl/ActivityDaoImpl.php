@@ -1,6 +1,6 @@
 <?php
 
-namespace Activity\Service\Activity\Impl;
+namespace Activity\Service\Activity\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Activity\Service\Activity\Dao\ActivityDao;
@@ -11,7 +11,7 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
 
     public function get($id)
     {
-        $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
@@ -30,6 +30,9 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
 
     public function update($id, $fields)
     {
+        $fields['updatedTime'] = time();
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        return $this->get($id);
     }
 
     public function delete($id)
