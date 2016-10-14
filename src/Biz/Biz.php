@@ -1,5 +1,7 @@
 <?php
 
+namespace Biz;
+
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +27,7 @@ class Biz extends \Codeages\Biz\Framework\Context\Kernel
 
     public function boot($options = array())
     {
+        $this->put('migration_directories', dirname(dirname(__DIR__)).'/migrations');
         parent::boot($options);
     }
 
