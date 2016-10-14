@@ -11,6 +11,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     public function getActivity($id)
     {
+        return $this->getActivityDao()->get($id);
     }
 
     public function createActivity($activity)

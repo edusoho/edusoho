@@ -37,5 +37,6 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
 
     public function delete($id)
     {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 }
