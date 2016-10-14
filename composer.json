@@ -30,6 +30,7 @@
 		"doctrine/orm": "^2.4.8",
 		"doctrine/common": "~2.4.3",
 		"doctrine/doctrine-bundle": "~1.6.4",
+		"doctrine/migrations": "~1.2.0",
 		"doctrine/doctrine-migrations-bundle" : "~1.2.0",
 		"endroid/qrcode" : "~1.7.4",
 		"ezyang/htmlpurifier" : "~4.8.0",
