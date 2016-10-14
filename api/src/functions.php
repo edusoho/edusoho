@@ -1,8 +1,8 @@
 <?php
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\NotFoundException;
-use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Common\Exception\AccessDeniedException;
 
 function filter($data, $type)
 {
@@ -52,5 +52,5 @@ function createAccessDeniedException($message = 'Access Denied', $code = 0)
 
 function createNotFoundException($message = 'Not Found', $code = 0)
 {
-    return new NotFoundException($message, $code);
+    return new ResourceNotFoundException($message, $code);
 }
