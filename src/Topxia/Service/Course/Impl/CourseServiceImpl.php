@@ -463,6 +463,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $fields = $this->_filterCourseFields($fields);
 
+        //已经发布的课程不能修改课程过期模式
+        if ($course['status'] == 'published' && $fields['expiryMode'] != $course['expiryMode']) {
+            $fields['expiryMode'] = $course['expiryMode'];
+        }
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $fields        = $this->fillOrgId($fields);
@@ -2238,6 +2242,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         //按照课程有效期模式计算学员有效期
+        $deadline = 0;
         if ($course['expiryDay'] > 0) {
             if ($course['expiryMode'] == 'days') {
                 $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
@@ -2245,8 +2250,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($course['expiryMode'] == 'date') {
                 $deadline = $course['expiryDay'];
             }
-        } else {
-            $deadline = 0;
         }
 
         if (!empty($info['orderId'])) {

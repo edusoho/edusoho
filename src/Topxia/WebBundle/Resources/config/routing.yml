@@ -572,6 +572,14 @@ course_review_list:
     path:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
 
+course_review_post:
+    pattern:  /course/{id}/review/{reviewId}/post
+    defaults: { _controller: TopxiaWebBundle:CourseReview:post }
+
+course_review_delete:
+    pattern:  /course/review/{reviewId}/delete
+    defaults: { _controller: TopxiaWebBundle:CourseReview:delete }
+
 course_members:
    path: /course/{id}/members
    defaults: { _controller: TopxiaWebBundle:Course:members }
@@ -1089,6 +1097,10 @@ course_lesson_marker_manage:
     path:  /course/{courseId}/lesson/{lessonId}/marker/manage
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
+course_lesson_marker_manage_preview:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/preview
+    defaults: { _controller: TopxiaWebBundle:Marker:preview }
+
 course_lesson_marker_show:
     path:  /course/lesson/{lessonId}/marker/show
     defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
@@ -1106,6 +1118,10 @@ course_lesson_marker_update:
     path:  /course/{courseId}/lesson/{lessonId}/marker/update
     defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
     methods: [POST]
+
+course_question_marker_preview:
+    pattern: /course/{courseId}/question/{id}/marker/preview
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:questionMakerPreview }
 
 course_lesson_question_markers_show:
     path:  /course/lesson/media/{mediaId}/question_markers/show

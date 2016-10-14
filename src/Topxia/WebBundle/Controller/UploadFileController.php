@@ -24,9 +24,7 @@ class UploadFileController extends BaseController
         if (empty($user)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN非法。'));
         }
-
-        $currentUser = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
+        $this->getServiceKernel()->getCurrentUser()->fromArray($user);
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');

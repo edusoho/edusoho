@@ -540,6 +540,9 @@ define(function(require, exports, module) {
                         $("#lesson-testpaper-content").perfectScrollbar('update');
 
                     } else {
+                        if (iID) {
+                            clearInterval(iID);
+                        }
                         $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
                             if (result.error) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
@@ -562,9 +565,6 @@ define(function(require, exports, module) {
                                     html += '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
 
                                     var now = parseInt(new Date().getTime()/1000);
-                                    if (iID) {
-                                        clearInterval(iID);
-                                    }
                                     
                                     if (lesson.doTimes == 0 && lesson.redoInterval != 0 && now < (result.checkedTime + lesson.redoInterval * 3600)) {
                                         

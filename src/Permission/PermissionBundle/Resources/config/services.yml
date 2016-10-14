@@ -21,11 +21,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
 
-#    kernel.response.permission_listener:
-#        class: Permission\Listener\KernelResponseListener
-#        arguments:    ['@service_container']
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+    kernel.response.permission_listener:
+        class: Permission\Listener\KernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     routing.loader.yml:
         class: Permission\Loader\YamlFileLoader

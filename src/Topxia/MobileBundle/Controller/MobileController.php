@@ -104,14 +104,12 @@ class MobileController extends BaseController
     private function setCurrentUser($userId, $request)
     {
         $user        = $this->getUserService()->getUser($userId);
-        $currentUser = new CurrentUser();
         if ($user) {
             $user['currentIp'] = $request->getClientIp();
         } else {
             $user = array('id' => 0);
         }
-        $currentUser = $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getServiceKernel()->getCurrentUser()->fromArray($user);
     }
 
     protected function getUserToken($request)
