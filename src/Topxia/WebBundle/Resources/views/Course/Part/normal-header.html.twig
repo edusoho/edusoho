@@ -79,8 +79,11 @@
       {% if not member %}
         {% if course.expiryDay %}
           <p class="expiry-date hidden-sm">
-            <label for="">{{'有效期'|trans}}</label>
-            <span>{{ course.expiryDay }}{{'天'|trans}}</span>
+            {% if course.expiryMode|default(null) == 'date' %}
+              {{'有效期至: '|trans}}{{course.expiryDay|date('Y-m-d H:i')}}
+            {% else %}
+              {{'有效期: '|trans}} {{course.expiryDay}}{{'天'|trans}}
+            {% endif %}
           </p>
         {% endif %}
         <p class="discount-price">

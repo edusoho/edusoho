@@ -178,7 +178,6 @@ class EduCloudController extends BaseController
         $storageSetting = $this->getSettingService()->get('storage', array());
         $default        = array(
             'upload_mode'                 => 'local',
-            'cloud_bucket'                => '',
             'support_mobile'              => 0,
             'enable_playback_rates'       => 0,
             'video_quality'               => 'low',
@@ -194,10 +193,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
-
-            if (isset($set['cloud_bucket'])) {
-                $set['cloud_bucket'] = trim($set['cloud_bucket']);
-            }
 
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);

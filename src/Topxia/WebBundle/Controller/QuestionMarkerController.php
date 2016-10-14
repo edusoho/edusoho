@@ -50,6 +50,55 @@ class QuestionMarkerController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+
+    /**
+     * 视频弹题预览
+     * @param Request $request
+     * @param $courseId
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function questionMakerPreviewAction(Request $request, $courseId, $id)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $question = $this->getQuestionService()->getQuestion($id);
+
+        if (empty($question)) {
+            throw $this->createNotFoundException('题目不存在！');
+        }
+
+        $item = array(
+            'questionId'   => $question['id'],
+            'questionType' => $question['type'],
+            'question'     => $question
+        );
+
+        if ($question['subCount'] > 0) {
+            $questions = $this->getQuestionService()->findQuestionsByParentId($id);
+
+            foreach ($questions as $value) {
+                $items[] = array(
+                    'questionId'   => $value['id'],
+                    'questionType' => $value['type'],
+                    'question'     => $value
+                );
+            }
+
+            $item['items'] = $items;
+        }
+
+        $type            = in_array($question['type'], array('single_choice', 'uncertain_choice')) ? 'choice' : $question['type'];
+        $questionPreview = true;
+
+
+        return $this->render('TopxiaWebBundle:Marker/QuestionPreview:preview-modal.html.twig', array(
+            'item'            => $item,
+            'type'            => $type,
+            'questionPreview' => $questionPreview
+        ));
+    }
+
     public function sortQuestionAction(Request $Request, $markerId)
     {
         if (!$this->tryManageQuestionMarker()) {
@@ -132,7 +181,7 @@ class QuestionMarkerController extends BaseController
         $answer = $data['answer'];
         if (in_array($data['type'], array('choice', 'single_choice'))) {
             foreach ($answer as &$answerItem) {
-                $answerItem = (string) (ord($answerItem) - 65);
+                $answerItem = (string)(ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($answer as &$answerItem) {
@@ -205,12 +254,12 @@ class QuestionMarkerController extends BaseController
         }
 
         $conditions['parentId'] = 0;
-        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', "choice");
+        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
         $orderBy                = array('createdTime', 'DESC');
         $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            5
+            empty($conditions['pageSize']) ? 7 : $conditions['pageSize']
         );
 
         $paginator->setPageRange(4);

@@ -205,13 +205,14 @@ class HLSController extends BaseController
         }
 
         $enablePlayRate = $this->setting('storage.enable_playback_rates');
+        $isNoNeedLoginToken = empty($token['userId']) ? true : false;
 
-        if (!($inWhiteList || $enablePlayRate)) { //倍速播放先放行
+        if (!($inWhiteList || $isNoNeedLoginToken || $enablePlayRate)) { //倍速播放先放行
             if (!$this->getCurrentUser()->isLogin()) {
                 return $this->makeFakeTokenString();
             }
                 
-            if (!isset($token['userId']) || $this->getCurrentUser()->getId() != $token['userId']) {
+            if ($this->getCurrentUser()->getId() != $token['userId']) {
                 return $this->makeFakeTokenString();
             }
         }
