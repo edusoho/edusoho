@@ -28,6 +28,7 @@
 		"sensio/framework-extra-bundle": "^3.0.16",
 		"silex/silex" : "~2.0.3",
 		"doctrine/orm": "^2.4.8",
+		"doctrine/common": "~2.4.3",
 		"doctrine/doctrine-bundle": "~1.6.4",
 		"doctrine/doctrine-migrations-bundle" : "~1.2.0",
 		"endroid/qrcode" : "~1.7.4",
