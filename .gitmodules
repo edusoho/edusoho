@@ -1,3 +1,3 @@
 [submodule "vendor"]
 	path = vendor
-	url = https://github.com/edusoho/vendor.git
+	url = ssh://git@gitlab.howzhi.net:4422/edusoho/vendor.git
