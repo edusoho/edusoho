@@ -6,12 +6,7 @@ use Classroom\Service\Classroom\Dao\ClassroomReviewDao;
 
 class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 {
-
     protected $table = 'classroom_review';
-
-    private $serializeFields = array(
-        'tagIds' => 'json',
-    );
 
     public function getReview($id)
     {
@@ -22,14 +17,14 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 
     public function getReviewRatingSumByClassroomId($classroomId)
     {
-        $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ?";
+        $sql = "SELECT sum(rating) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
 
     public function getReviewCountByClassroomId($classroomId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ?";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE classroomId = ? AND parentId = 0";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
@@ -50,14 +45,14 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
     public function searchReviewCount($conditions)
     {
         $builder = $this->_createSearchBuilder($conditions)
-                         ->select('count(id)');
+            ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
     public function getReviewByUserIdAndClassroomId($userId, $classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? LIMIT 1;";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
 
         return $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
     }
@@ -97,6 +92,7 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
             ->andWhere('classroomId = :classroomId')
             ->andWhere('rating = :rating')
             ->andWhere('content LIKE :content')
+            ->andWhere('parentId = :parentId')
             ->andWhere('classroomId IN (:classroomIds)');
 
         return $builder;
