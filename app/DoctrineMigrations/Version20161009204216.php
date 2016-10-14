@@ -17,9 +17,10 @@ class Version20161009204216 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `im_conversation` ADD UNIQUE(`no`);");
+        $this->addSql("ALTER TABLE `im_conversation` ADD INDEX targetId ( `targetId`);");
+        $this->addSql("ALTER TABLE `im_conversation` ADD INDEX targetType ( `targetType`);");
         $this->addSql("ALTER TABLE `im_member` ADD INDEX convno_userId ( `convNo`, `userId` );");
         $this->addSql("ALTER TABLE `im_member` ADD INDEX userId_targetType ( `userId`,`targetType` );");
-        $this->addSql("ALTER TABLE `im_conversation` ADD INDEX targetObject ( `targetId`,`targetType` );");
     }
 
     /**
