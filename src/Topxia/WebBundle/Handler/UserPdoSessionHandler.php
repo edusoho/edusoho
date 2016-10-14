@@ -378,6 +378,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;
         } else {
+            var_dump($data);
+
             $userId = $token->getUser()->getId();
         }
 
@@ -732,8 +734,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
                 // DUAL is Oracle specific dummy table
                 return "MERGE INTO $this->table USING DUAL ON ($this->idCol = :id) "."WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) "."WHEN MATCHED THEN UPDATE SET $this->dataCol = :data, $this->lifetimeCol = :lifetime, $this->timeCol = :time";
             case 'sqlsrv' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
-                                      // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
-                                      // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+                // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
+                // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
                 return "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = :id) "."WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) "."WHEN MATCHED THEN UPDATE SET $this->dataCol = :data, $this->lifetimeCol = :lifetime, $this->timeCol = :time;";
             case 'sqlite':
                 return "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)";
