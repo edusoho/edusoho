@@ -571,19 +571,26 @@
   .marker-preview-content {
     position: relative;
     height: 100%;
-    padding-top: 30px;
+    padding-top: 20px;
     color: @gray-darker;
     text-align: center;
+    @media(max-width:@screen-md-max) {
+      padding-top: 10px;
+    }
     .title {
       font-size: 20px;
-      margin-bottom: 20px;
+      line-height: 1;
     }
     .marker-preview-player {
       position: absolute;
       left: 120px;
       right: 120px;
-      top: 132px;
-      bottom: 5%;
+      top: 60px;
+      bottom: 20px;
+      @media(max-width:@screen-md-max) {
+        bottom: 10px;
+        top: 40px;
+      }
     }
   }
 }
