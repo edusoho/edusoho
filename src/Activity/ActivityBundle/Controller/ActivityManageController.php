@@ -28,8 +28,19 @@ class ActivityManageController extends BaseController
     {
     }
 
-    public function activitiesAction(Request $request, $planId)
+    public function activitiesAction(Request $request, $courseId)
     {
+        $this->tryManageCourse();
+        $activities = $this->getActivityService()->findActivitiesByCourseId($courseId);
+
+        return $this->render('ActivityBundle:ActivityManage:list.html.twig', array(
+            'activities' => $activities
+        ));
+    }
+
+    protected function tryManageCourse()
+    {
+        return true;
     }
 
     protected function getActivityService()

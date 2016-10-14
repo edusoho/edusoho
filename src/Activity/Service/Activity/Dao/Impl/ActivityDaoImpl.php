@@ -39,4 +39,10 @@ class ActivityDaoImpl extends BaseDao implements ActivityDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
+
+    public function findByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->getTable()} WHERE courseId = ? LIMIT 1";
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ?: null;
+    }
 }

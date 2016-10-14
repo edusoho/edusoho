@@ -20,7 +20,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new \InvalidArgumentException('activity is invalid');
         }
 
-        if (!$this->canCourseManage($activity['fromCourseId'])) {
+        if (!$this->canManageCourse($activity['fromCourseId'])) {
             throw $this->createAccessDeniedException();
         }
 
@@ -52,7 +52,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function updateActivity($id, $fields)
     {
         $savedActivity = $this->getActivity($id);
-        $processor     = ActivityProcessorFactory::getActivityProcessor($savedActivity['mediaType']);
+
+        if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $processor = ActivityProcessorFactory::getActivityProcessor($savedActivity['mediaType']);
 
         if (!empty($processor) && !empty($savedActivity['mediaId'])) {
             $media = $processor->update($savedActivity['mediaId'], $fields);
@@ -65,6 +70,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
 
+        if (!$this->canManageCourse($activity['fromCourseId'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
         if (!empty($processor) && !empty($savedActivity['mediaId'])) {
             $processor->delete($activity['mediaId']);
@@ -73,12 +82,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->delete($id);
     }
 
+    public function findActivitiesByCourseId($courseId)
+    {
+        return $this->getActivityDao()->findByCourseId($courseId);
+    }
+
     protected function getActivityDao()
     {
         return $this->createDao('Activity:Activity.ActivityDao');
     }
 
-    protected function canCourseManage($courseId)
+    protected function canManageCourse($courseId)
     {
         return true;
     }

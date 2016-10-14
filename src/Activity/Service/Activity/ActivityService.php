@@ -12,4 +12,5 @@ interface ActivityService
 
     public function deleteActivity($id);
 
+    public function findActivitiesByCourseId($courseId);
 }
