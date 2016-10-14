@@ -65,7 +65,7 @@
 
 ## 初始化程序基础数据
 
-    app/console doctrine:migrations:migrate
+    bin/phpmig migrate
     app/console topxia:init
 
 

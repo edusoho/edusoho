@@ -39,7 +39,7 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
     ````
 
 ## 初始化程序基础数据
-    app/console doctrine:migrations:migrate
+    bin/phpmig migrate
     app/console topxia:init
 
 ## 配置Nginx
