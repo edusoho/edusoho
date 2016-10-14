@@ -6,7 +6,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class ActivityManageController extends BaseController
 {
-    public function createAction(Request $request, $type)
+    public function createAction(Request $request, $courseId, $type)
     {
         if ($request->getMethod() == 'POST') {
             $activity      = $request->request->all();
@@ -20,11 +20,11 @@ class ActivityManageController extends BaseController
         return $this->render('ActivityBundle:ActivityManage:modal.html.twig', array());
     }
 
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $courseId, $id)
     {
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $courseId, $id)
     {
     }
 
