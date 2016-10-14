@@ -18,6 +18,7 @@ class KernelResponseListener
             return;
         }
 
+        
         ServiceKernel::instance()->getCurrentUser()->setPermissions(null);
     }
 }
