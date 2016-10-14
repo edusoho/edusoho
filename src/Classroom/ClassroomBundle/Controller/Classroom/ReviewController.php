@@ -25,7 +25,8 @@ class ReviewController extends BaseController
         }
 
         $conditions = array(
-            'classroomId' => $id
+            'classroomId' => $id,
+            'parentId'    => 0
         );
 
         $reviewsNum = $this->getClassroomReviewService()->searchReviewCount($conditions);
@@ -73,7 +74,8 @@ class ReviewController extends BaseController
             'member'               => $member,
             'layout'               => $layout,
             'classroomDescription' => $classroomDescription,
-            'canReview'            => $this->isClassroomMember($classroom, $user['id'])
+            'canReview'            => $this->isClassroomMember($classroom, $user['id']),
+            'targetType'           => 'classroom'
         ));
     }
 
@@ -86,6 +88,40 @@ class ReviewController extends BaseController
         $fields['classroomId'] = $id;
         $this->getClassroomReviewService()->saveReview($fields);
 
+        return $this->createJsonResponse(true);
+    }
+
+    public function postAction(Request $request, $id, $reviewId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $postNum = $this->getClassroomReviewService()->searchReviewCount(array('parentId' => $reviewId));
+
+        if ($postNum >= 5) {
+            return $this->createJsonResponse(array('error' => $this->trans('回复数量已达5条上限，不能再回复')));
+        }
+
+        $user = $this->getCurrentUser();
+
+        $fields                = $request->request->all();
+        $fields['userId']      = $user['id'];
+        $fields['classroomId'] = $classroom['id'];
+        $fields['rating']      = 1;
+        $fields['parentId']    = $reviewId;
+
+        $post = $this->getClassroomReviewService()->saveReview($fields);
+
+        return $this->render("TopxiaWebBundle:Review/Widget:subpost-item.html.twig", array(
+            'post'      => $post,
+            'author'    => $this->getCurrentUser(),
+            'canAccess' => true
+        ));
+    }
+
+    public function deleteAction(Request $request, $reviewId)
+    {
+        $this->getClassroomReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
     }
 

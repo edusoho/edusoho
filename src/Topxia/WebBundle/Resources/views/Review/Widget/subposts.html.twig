@@ -1,0 +1,8 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<ul class="media-list thread-post-list thread-subpost-list">
+  {% for post in posts  %}
+    {% set author = data('User',{userId:post.userId}) %}
+    {% include 'TopxiaWebBundle:Review/Widget:subpost-item.html.twig' %}
+  {% endfor %}
+</ul>

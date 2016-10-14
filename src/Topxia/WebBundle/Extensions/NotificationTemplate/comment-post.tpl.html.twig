@@ -1,0 +1,21 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% if data.targetType == 'classroom' %}
+        {{ '您在班级《%classroom%》中的评价已被回复，'|trans({'%classroom%':data.title}) }}
+        <a href="{{ path('classroom_reviews',{id:data.targetId}) }}">{{'点击查看'|trans}}</a>
+      {% else %}
+        {{ '您在课程《%course%》中的评价已被回复，'|trans({'%course%':data.title}) }}
+        <a href="{{ path('course_review_list',{id:data.targetId}) }}">{{'点击查看'|trans}}</a>
+      {% endif %}
+    </div>
+
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

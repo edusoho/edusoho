@@ -144,6 +144,8 @@ CREATE TABLE `cloud_app` (
   `fromVersion` varchar(32) NOT NULL DEFAULT '0.0.0' COMMENT '云应用更新前版本',
   `developerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用开发者用户ID',
   `developerName` varchar(255) NOT NULL DEFAULT '' COMMENT '云应用开发者名称',
+  `edusohoMinVersion`  VARCHAR(32) NOT NULL DEFAULT '0.0.0' COMMENT '依赖Edusoho的最小版本',
+  `edusohoMaxVersion`  VARCHAR(32) NOT NULL DEFAULT 'up' COMMENT '依赖Edusoho的最大版本',
   `installedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用安装时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '云应用最后更新时间',
   PRIMARY KEY (`id`),
@@ -1102,6 +1104,7 @@ CREATE TABLE `user` (
   `salt` varchar(32) NOT NULL COMMENT '密码SALT',
   `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',
   `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
+  `locale` VARCHAR(20),
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
   `nickname` varchar(64) NOT NULL COMMENT '用户名',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头衔',
@@ -1901,7 +1904,8 @@ CREATE TABLE IF NOT EXISTS  `org` (
   `createdTime` int(11) unsigned NOT NULL  COMMENT '创建时间',
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0'  COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `orgCode` (`orgCode`)
+  UNIQUE KEY `orgCode` (`orgCode`),
+  UNIQUE KEY(`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
 DROP TABLE IF EXISTS `im_conversation`;
@@ -2106,4 +2110,14 @@ CREATE TABLE `course_lesson_extend` (
   `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课时扩展表';
 
-
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32)  NOT NULL COMMENT '权限名称',
+  `code` varchar(32)  NOT NULL COMMENT '权限代码',
+  `data` text COMMENT '权限配置',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createdUserId` int(10) unsigned NOT NULL COMMENT '创建用户ID',
+  `updatedTime`int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
