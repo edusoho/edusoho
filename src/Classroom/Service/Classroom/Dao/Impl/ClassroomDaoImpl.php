@@ -100,7 +100,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
-            ->andWhere('convNo = :convNo')
             ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
 
