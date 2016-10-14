@@ -3,18 +3,36 @@
 use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 class AppKernel extends Kernel
 {
     protected $plugins = array();
 
+    /**
+     * @var Request
+     */
+    protected $request;
+
     protected $extensionManger;
+
+    private $isServiceKernelInit = false;
 
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
         date_default_timezone_set('Asia/Shanghai');
         $this->extensionManger = ExtensionManager::init($this);
+    }
+
+    public function boot()
+    {
+        parent::boot();
+        $biz = $this->getContainer()->get('biz');
+        $biz->boot();
+        $this->initServiceKernel();
     }
 
     public function registerBundles()
@@ -25,7 +43,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
@@ -42,8 +59,8 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
 
-        $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir().'/../plugins';
+        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
+        $pluginRootDir      = $this->getRootDir() . '/../plugins';
 
         if (file_exists($pluginMetaFilepath)) {
             $pluginMeta    = include_once $pluginMetaFilepath;
@@ -54,7 +71,7 @@ class AppKernel extends Kernel
                     if ($pluginMeta['protocol'] == '1.0') {
                         $c         = ucfirst($c);
                         $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     } elseif ($pluginMeta['protocol'] == '2.0') {
                         if ($c['type'] != 'plugin') {
@@ -63,7 +80,7 @@ class AppKernel extends Kernel
 
                         $c         = ucfirst($c['code']);
                         $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     }
                 }
@@ -85,11 +102,47 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     public function getPlugins()
     {
         return $this->plugins;
+    }
+
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    protected function initServiceKernel()
+    {
+        if(!$this->isServiceKernelInit){
+            $container     = $this->getContainer();
+            $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
+            $serviceKernel->setEnvVariable(array(
+                'host'          => $this->request->getHttpHost(),
+                'schemeAndHost' => $this->request->getSchemeAndHttpHost(),
+                'basePath'      => $this->request->getBasePath(),
+                'baseUrl'       => $this->request->getSchemeAndHttpHost() . $this->request->getBasePath()))
+                ->setTranslatorEnabled(true)
+                ->setTranslator($container->get('translator'))
+                ->setParameterBag($container->getParameterBag())
+                ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
+                ->setConnection($container->get('database_connection'));
+
+            $serviceKernel->getConnection()->exec('SET NAMES UTF8');
+
+            $currentUser = new CurrentUser();
+            $currentUser->fromArray(array(
+                'id'        => 0,
+                'nickname'  => '游客',
+                'currentIp' => $this->request->getClientIp(),
+                'roles'     => array()
+            ));
+            $serviceKernel->setCurrentUser($currentUser);
+            $this->isServiceKernelInit = true;
+        }
     }
 }

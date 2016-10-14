@@ -342,7 +342,7 @@ class CourseOrderController extends OrderController
         }
 
         if (in_array($as, array('member', 'guest'))) {
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 $member = array(
                     'id'          => 0,
                     'courseId'    => $course['id'],

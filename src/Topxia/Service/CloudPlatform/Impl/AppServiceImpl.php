@@ -243,8 +243,8 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $this->getKernel()->trans('src目录无写权限');
         }
 
-        if (!is_writeable("{$rootDirectory}/vendor2")) {
-            $errors[] = $this->getKernel()->trans('vendor2目录无写权限');
+        if (!is_writeable("{$rootDirectory}/vendor")) {
+            $errors[] = $this->getKernel()->trans('vendor目录无写权限');
         }
 
         if (!is_writeable("{$rootDirectory}/plugins")) {

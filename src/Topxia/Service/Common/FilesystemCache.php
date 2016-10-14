@@ -8,8 +8,9 @@ class FilesystemCache extends BaseFilesystemCache
 
     public function __construct($dir)
     {
-    	$environment = ServiceKernel::instance()->getEnvironment();
-        $this->directory = $dir.DIRECTORY_SEPARATOR.$environment.DIRECTORY_SEPARATOR.'twig_cache';
+        parent::__construct($dir);
+    	/*$environment = ServiceKernel::instance()->getEnvironment();
+        $this->directory = $dir.DIRECTORY_SEPARATOR.$environment.DIRECTORY_SEPARATOR.'twig_cache';*/
     }
 
 }

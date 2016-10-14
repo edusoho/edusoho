@@ -2,7 +2,6 @@
 
 namespace Topxia\Service\Common;
 
-use Topxia\Service\Common\Connection;
 
 class TestCaseConnection extends Connection
 {

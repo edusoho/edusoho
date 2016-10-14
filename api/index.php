@@ -2,7 +2,7 @@
 
 date_default_timezone_set('UTC');
 
-require_once __DIR__.'/../vendor2/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;
@@ -13,10 +13,6 @@ use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\Debug\Debug;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Routing\Loader\YamlFileLoader;
-use Symfony\Component\Routing\RouteCollection;
 
 if (API_ENV == 'prod') {
     ErrorHandler::register(0);
@@ -24,7 +20,12 @@ if (API_ENV == 'prod') {
 }
 
 $paramaters         = include __DIR__.'/config/paramaters.php';
-$paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
+if(isset($_SERVER['HTTPS'])){
+    $paramaters['host'] = 'https://'.$_SERVER['HTTP_HOST'];
+}else{
+    $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
+}
+
 
 $connection = DriverManager::getConnection(array(
     'wrapperClass' => 'Topxia\Service\Common\Connection',
@@ -49,7 +50,7 @@ $app = new Silex\Application();
 include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+$app->register(new Silex\Provider\HttpKernelServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/templates',
 ));
