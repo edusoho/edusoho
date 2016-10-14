@@ -69,7 +69,7 @@ $resources = array(
 );
 
 foreach ($resources as $res) {
-    $app["res.{$res}"] = $app->share(function () use ($res) {
+    $app["res.{$res}"] = function () use ($res) {
         $class    = "Topxia\\Api\\Resource";
         $segments = explode('/', $res);
         foreach ($segments as $seg) {
@@ -77,5 +77,5 @@ foreach ($resources as $res) {
         }
 
         return new $class();
-    });
+    };
 }

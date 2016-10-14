@@ -168,7 +168,7 @@ class InitCommand extends BaseCommand
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
-        $this->getContainer()->get('security.context')->setToken($token);
+        $this->getContainer()->get('security.token_storage')->setToken($token);
 
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
 
@@ -298,7 +298,6 @@ EOD;
             'upload_mode'      => 'local',
             'cloud_api_server' => 'http://api.edusoho.net',
             'cloud_access_key' => '',
-            'cloud_bucket'     => '',
             'cloud_secret_key' => ''
         );
 

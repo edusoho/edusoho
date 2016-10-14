@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Topxia\Service\Common\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
@@ -131,6 +132,7 @@ class ServiceKernel
     public function setParameterBag($parameterBag)
     {
         $this->parameterBag = $parameterBag;
+        return $this;
     }
 
     public function getParameter($name)
@@ -145,6 +147,7 @@ class ServiceKernel
     public function setTranslator($translator)
     {
         $this->translator = $translator;
+        return $this;
     }
 
     public function getTranslator()
@@ -159,6 +162,7 @@ class ServiceKernel
     public function setTranslatorEnabled($boolean = true)
     {
         $this->translatorEnabled = $boolean;
+        return $this;
     }
 
     public function getTranslatorEnabled()
@@ -212,6 +216,9 @@ class ServiceKernel
         return $this->env[$key];
     }
 
+    /**
+     * @return Connection
+     */
     public function getConnection()
     {
         if (is_null($this->connection)) {
@@ -221,7 +228,7 @@ class ServiceKernel
         return $this->connection;
     }
 
-    public function setConnection($connection)
+    public function setConnection(Connection $connection)
     {
         $this->connection = $connection;
         return $this;
@@ -263,6 +270,7 @@ class ServiceKernel
     public function registerModuleDirectory($dir)
     {
         $this->_moduleDirectories[] = $dir;
+        return $this;
     }
 
     public function getModuleDirectories()
