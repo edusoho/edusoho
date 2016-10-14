@@ -103,6 +103,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     protected function getMediaTypes()
     {
-        return array('text');
+        return ActivityProcessorFactory::getActivityTypes();
     }
 }

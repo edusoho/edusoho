@@ -8,6 +8,10 @@ class ActivityProcessorFactory
 
     public static function getActivityProcessor($type)
     {
+        if (!in_array($type, self::getActivityTypes())) {
+            throw new \InvalidArgumentException('activity type is invalid');
+        }
+
         if (empty(self::$processorMap[$type])) {
             $upperType = ucfirst($type);
             $class     = __NAMESPACE__."\\Processor\\{$upperType}Processor";
@@ -19,5 +23,12 @@ class ActivityProcessorFactory
         }
 
         return self::$processorMap[$type];
+    }
+
+    public static function getActivityTypes()
+    {
+        return array(
+            'text'
+        );
     }
 }
