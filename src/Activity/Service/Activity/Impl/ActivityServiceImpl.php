@@ -65,7 +65,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
-        $processor->delete($activity['mediaId']);
+        if (!empty($processor) && !empty($savedActivity['mediaId'])) {
+            $processor->delete($activity['mediaId']);
+        }
 
         return $this->getActivityDao()->delete($id);
     }
