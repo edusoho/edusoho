@@ -3,6 +3,7 @@ imports:
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: plugin.yml }
 
 framework:
     # esi:             ~
