@@ -1,8 +1,8 @@
 parameters:
     biz_config:
         debug: "%kernel.debug%"
-        database:
-            name: "%database_name%"
+        db.options:
+            dbname: "%database_name%"
             user: "%database_user%"
             password: "%database_password%"
             host: "%database_host%"
@@ -15,7 +15,5 @@ parameters:
 
 services:
     biz:
-        class: Biz\Biz
-        arguments: ["@service_container","%biz_config%"]
-        tags:
-            - { name: service.kernel }
+        class: Codeages\Biz\Framework\Context\Biz
+        arguments: ["%biz_config%"]

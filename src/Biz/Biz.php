@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Codeages\Biz\Framework\Context\Biz as BizBase;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +14,10 @@ use Topxia\Service\TopxiaServiceProvider;
  * Date: 2016/10/12
  * Time: 18:07
  */
-class Biz extends \Codeages\Biz\Framework\Context\Kernel
+class Biz extends BizBase
 {
     protected $container;
+
     protected $serviceKernelBooted = false;
 
     public function __construct(ContainerInterface $container, array $config)
