@@ -12,7 +12,13 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
-    
+        
+        $("#buyExpireTime").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
 
         var $form = $("#price-form");
 
