@@ -1,15 +1,15 @@
-course_activities:
-  pattern:  /course/{courseId}/activities
-  defaults: { _controller: ActivityBundle:ActivityManage:activities }
+course_tasks:
+  pattern:  /course/{courseId}/tasks
+  defaults: { _controller: TaskBundle:TaskManage:tasks }
 
-course_activity_create:
-  pattern:  /course/{courseId}/activity/{type}
-  defaults: { _controller: ActivityBundle:ActivityManage:create }
+course_task_create:
+  pattern:  /course/{courseId}/task
+  defaults: { _controller: TaskBundle:TaskManage:create }
 
-course_activity_update:
-  pattern:  /course/{courseId}/activity/{id}/update
-  defaults: { _controller: ActivityBundle:ActivityManage:update }
+course_task_update:
+  pattern:  /course/{courseId}/task/{id}/update
+  defaults: { _controller: TaskBundle:TaskManage:update }
 
-course_activity_delete:
-  pattern:  /course/{courseId}/activity/{id}/delete
-  defaults: { _controller: ActivityBundle:ActivityManage:delete }
+course_task_delete:
+  pattern:  /course/{courseId}/task/{id}/delete
+  defaults: { _controller: TaskBundle:TaskManage:delete }

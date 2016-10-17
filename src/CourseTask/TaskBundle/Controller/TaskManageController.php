@@ -6,7 +6,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class TaskManageController extends BaseController
 {
-    public function createAction(Request $request, $courseId, $type)
+    public function createAction(Request $request, $courseId)
     {
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
