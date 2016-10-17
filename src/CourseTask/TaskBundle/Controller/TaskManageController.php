@@ -17,10 +17,19 @@ class TaskManageController extends BaseController
             ));
         }
 
+        $currentType   = $request->query->get('currentType', '');
         $activityTypes = $this->getActivityService()->getActivityTypes();
 
-        return $this->render('TaskBundle:TaskManage:modal.html.twig', array(
-            'activityTypes' => $activityTypes
+        if (empty($activityTypes[$currentType])) {
+            $modal = 'TaskBundle:TaskManage:modal.html.twig';
+        } else {
+            $modal = $activityTypes[$currentType]['create_modal'];
+        }
+
+        return $this->render($modal, array(
+            'activityTypes' => $activityTypes,
+            'courseId'      => $courseId,
+            'currentType'   => $currentType
         ));
     }
 

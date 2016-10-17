@@ -4,13 +4,14 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\Impl\UserServiceImpl;
 use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Topxia\Service\Common\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\Impl\UserServiceImpl;
 
 abstract class BaseController extends Controller
 {
@@ -184,6 +185,15 @@ abstract class BaseController extends Controller
             return new AccessDeniedException($message);
         } else {
             return new AccessDeniedException();
+        }
+    }
+
+    public function createInvalidArgumentException($message = null)
+    {
+        if ($message) {
+            return new InvalidArgumentException($message);
+        } else {
+            return new InvalidArgumentException();
         }
     }
 

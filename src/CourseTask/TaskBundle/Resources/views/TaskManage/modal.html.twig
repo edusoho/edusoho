@@ -2,14 +2,30 @@
 
 {% block title %}{{'添加任务'|trans}}{% endblock %}
 {% block body %}
-	{% for type, value in activityTypes  %}
-		{{type}}
-	{% endfor %}
+
+	{% if not currentType %}
+		{% for type, value in activityTypes  %}
+			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{type}}</a>
+		{% endfor %}
+	{% endif %}
+
+
+	{% if currentType %}
+		<form id='activityCreateForm' method="POST" action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}">
+			{% block activity_form_fields %}
+			{% endblock %}
+		</form>
+	{% endif %}
+
 {% endblock %}
 
 
 {% block footer %}
-	<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'保存'|trans}}</button>
+	{% if currentType %}
+		<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'保存'|trans}}</button>
+	{% endif %}
+
   	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+
   	<script>app.load('taskbundle/controller/task-manage/create')</script>
 {% endblock %}
