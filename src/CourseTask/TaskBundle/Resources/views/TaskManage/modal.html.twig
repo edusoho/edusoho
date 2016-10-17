@@ -1,0 +1,15 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'添加任务'|trans}}{% endblock %}
+{% block body %}
+	{% for type, value in activityTypes  %}
+		{{type}}
+	{% endfor %}
+{% endblock %}
+
+
+{% block footer %}
+	<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'保存'|trans}}</button>
+  	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  	<script>app.load('taskbundle/controller/task-manage/create')</script>
+{% endblock %}

@@ -117,14 +117,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
 
-        if (!in_array($activity['mediaType'], $this->getMediaTypes())) {
+        if (!in_array($activity['mediaType'], array_keys($this->getActivityTypes()))) {
             return true;
         }
 
         return false;
     }
 
-    protected function getMediaTypes()
+    public function getActivityTypes()
     {
         return ActivityProcessorFactory::getActivityTypes();
     }

@@ -6,13 +6,13 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
-use Topxia\Common\PluginVersionToolkit;
-use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 
 class WebExtension extends \Twig_Extension
 {
@@ -129,16 +129,15 @@ class WebExtension extends \Twig_Extension
         $count = $this->getAppService()->findAppCount();
         $apps  = $this->getAppService()->findApps(0, $count);
 
-        $notifies = array_reduce($apps, function ($notifies, $app){
-
-            if($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
+        $notifies = array_reduce($apps, function ($notifies, $app) {
+            if ($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
                 $notifies[] = $app['name'];
             }
 
             return $notifies;
         }, array());
 
-        return implode('、',$notifies);
+        return implode('、', $notifies);
     }
 
     public function getAdminRoles()
@@ -452,6 +451,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'sensitiveword';
         $names[] = 'permission';
         $names[] = 'org';
+        $names[] = 'task';
 
         $paths = array(
             'common' => 'common',

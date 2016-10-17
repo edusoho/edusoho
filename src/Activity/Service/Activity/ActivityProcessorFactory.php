@@ -28,7 +28,9 @@ class ActivityProcessorFactory
     public static function getActivityTypes()
     {
         return array(
-            'text'
+            'text' => array(
+                'create_modal' => ''
+            )
         );
     }
 }

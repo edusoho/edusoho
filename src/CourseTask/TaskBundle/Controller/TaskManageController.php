@@ -1,5 +1,5 @@
 <?php
-namespace CourseTask\WebBundle\Controller;
+namespace CourseTask\TaskBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
@@ -17,7 +17,11 @@ class TaskManageController extends BaseController
             ));
         }
 
-        return $this->render('TaskBundle:TaskManage:modal.html.twig', array());
+        $activityTypes = $this->getActivityService()->getActivityTypes();
+
+        return $this->render('TaskBundle:TaskManage:modal.html.twig', array(
+            'activityTypes' => $activityTypes
+        ));
     }
 
     public function updateAction(Request $request, $courseId, $id)
@@ -60,6 +64,11 @@ class TaskManageController extends BaseController
 
     protected function getTaskService()
     {
-        return $this->createService('Task:Task.TaskService');
+        return $this->createService('CourseTask:Task.TaskService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:Activity.ActivityService');
     }
 }
