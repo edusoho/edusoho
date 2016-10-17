@@ -17,8 +17,7 @@ env:
 git:
     submodules: false
 
-mysql:
-
+sudo: required
 
 before_install:
   - echo -e "Host gitlab.howzhi.net:4422\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
@@ -30,7 +29,7 @@ before_script:
   - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'tester'@'localhost'"
   - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - mkdir web/files
+  - sudo mkdir web/files
   - touch app/config/routing_plugins.yml
 
 script:

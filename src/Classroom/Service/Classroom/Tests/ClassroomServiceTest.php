@@ -940,17 +940,17 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(true, $enabled);
 
         $c_user2 = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($c_user2->fromArray($user));
+        $this->getServiceKernel()->setCurrentUser($c_user2->fromArray($user2));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
         $c_user3 = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($c_user3->fromArray($user));
+        $this->getServiceKernel()->setCurrentUser($c_user3->fromArray($user3));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
         $c_user4 = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($c_user3->fromArray($c_user4));
+        $this->getServiceKernel()->setCurrentUser($c_user4->fromArray($user4));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
