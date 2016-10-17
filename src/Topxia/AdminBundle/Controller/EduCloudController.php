@@ -132,7 +132,12 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
-        $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
+        try {
+            $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
+        } catch (\RuntimeException $e) {
+            $imUsedTotal['count'] = 0;
+        }
+
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -1108,6 +1113,7 @@ class EduCloudController extends BaseController
             if (isset($imUsedInfo['error'])) {
                 return array();
             }
+            $imUsedInfo = $imUsedInfo['count'];
         } catch (\RuntimeException $e) {
             return array();
         }
