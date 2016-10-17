@@ -5,7 +5,7 @@
 {% block title %}{{'教学计划管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
-	<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_task_create', {courseId:1}) }}"><i class="glyphicon glyphicon-plus"></i> 任务 </button>
+	<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="glyphicon glyphicon-plus"></i> 任务 </button>
 
 	<ul id="course-tasks">
 		{% for task in tasks %}

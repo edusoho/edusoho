@@ -1,16 +1,16 @@
-course_tasks:
+course_manage_tasks:
   pattern:  /course/{courseId}/tasks
   defaults: { _controller: TaskBundle:TaskManage:tasks }
 
-course_task_create:
+course_manage_task_create:
   pattern:  /course/{courseId}/task
   defaults: { _controller: TaskBundle:TaskManage:create }
 
-course_task_update:
+course_manage_task_update:
   pattern:  /course/{courseId}/task/{id}/update
   defaults: { _controller: TaskBundle:TaskManage:update }
 
-course_task_delete:
+course_manage_task_delete:
   pattern:  /course/{courseId}/task/{id}/delete
   defaults: { _controller: TaskBundle:TaskManage:delete }
 
@@ -22,6 +22,6 @@ course_task_activity_show:
   pattern:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: TaskBundle:Task:taskActivity }
 
-course_task_finish:
-  pattern:  /course/{courseId}/task/{id}/finish
-  defaults: { _controller: TaskBundle:Task:finish }
+course_task_trigger:
+  pattern:  /course/{courseId}/task/{id}/trigger/{eventName}
+  defaults: { _controller: TaskBundle:Task:trigger }

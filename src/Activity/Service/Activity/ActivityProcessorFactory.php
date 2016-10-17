@@ -25,6 +25,19 @@ class ActivityProcessorFactory
         return self::$processorMap[$type];
     }
 
+    public static function getEvent($eventName)
+    {
+        $eventNames = explode('.', $eventName);
+        $types      = self::getActivityTypes();
+
+        if (empty($types[$eventNames[0]]['events'][$eventNames[1]])) {
+            return;
+        }
+
+        $eventClass = $types[$eventNames[0]]['events'][$eventNames[1]];
+        return new $eventClass();
+    }
+
     public static function getActivityTypeConfig($type)
     {
         $types = self::getActivityTypes();
@@ -37,7 +50,8 @@ class ActivityProcessorFactory
             'text' => array(
                 'name'         => '图文',
                 'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig',
-                'show_page'    => 'ActivityBundle:Activity:text-show.html.twig'
+                'show_page'    => 'ActivityBundle:Activity:text-show.html.twig',
+                'events'       => array()
             )
         );
     }

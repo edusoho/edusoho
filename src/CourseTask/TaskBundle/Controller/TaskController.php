@@ -26,13 +26,14 @@ class TaskController extends BaseController
         ));
     }
 
-    public function triggerAction(Request $request, $courseId, $id)
+    public function triggerAction(Request $request, $courseId, $id, $eventName)
     {
         $this->getCourseService()->tryLearnCourse($courseId);
         $task = $this->getTaskService()->getTask($id);
         return $this->forward('ActivityBundle:Activity:trigger', array(
-            'request' => $request,
-            'id'      => $task['activityId']
+            'request'   => $request,
+            'id'        => $task['activityId'],
+            'eventName' => $eventName
         ));
     }
 

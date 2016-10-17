@@ -16,9 +16,13 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function triggerAction(Request $request, $id)
+    public function triggerAction(Request $request, $id, $eventName)
     {
         $activity = $this->getActivityService()->getActivity($id);
+        $data     = $request->request->all();
+
+        $this->getActivityService()->trigger($id, $eventName, $data);
+
         return $this->createJsonResponse(true);
     }
 

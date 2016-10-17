@@ -18,5 +18,5 @@ interface ActivityService
 
     public function getActivityTypes();
 
-    public function trigger($name, $data);
+    public function trigger($activityId, $name, $data);
 }

@@ -5,6 +5,7 @@ namespace Activity\Service\Activity\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Activity\Service\Activity\ActivityService;
+use Activity\Service\Activity\EventChain\EventChain;
 use Activity\Service\Activity\ActivityProcessorFactory;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
@@ -14,10 +15,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
-    public function trigger($name, $activityId, $data)
+    public function trigger($activityId, $eventName, $data)
     {
-        $activity  = $this->getActivityDao()->get($id);
-        $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
+        $activity = $this->getActivity($id);
+
+        if (in_array($eventName, array('start', 'doing', 'finish'))) {
+            $this->getKernel()->dispatchEvent("activity.{$eventName}", array($activity, $data));
+        }
+
+        $eventChain = new EventChain();
+        $eventName  = $activity['mediaType'].'.'.$eventName;
+        $event      = ActivityProcessorFactory::getEvent($eventName);
+        if (!empty($event)) {
+            $eventChain->add($event);
+        }
+        $eventChain->trigger($activity, $data);
     }
 
     public function getActivityDetail($id)

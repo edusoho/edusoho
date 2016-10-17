@@ -11,4 +11,5 @@ interface Processor
     public function delete($mediaId);
 
     public function get($mediaId);
+
 }
