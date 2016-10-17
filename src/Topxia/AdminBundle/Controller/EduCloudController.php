@@ -1016,6 +1016,54 @@ class EduCloudController extends BaseController
         return true;
     }
 
+    protected function getImUsedInfo()
+    {
+        $api       = IMAPIFactory::create();
+        $endTime   = strtotime(date('Y-m-d', strtotime('-1 day')).' 23:59:59');
+        $startTime = strtotime(date('Y-m-d', strtotime('-6 days', $endTime)).'00:00:00');
+
+        try {
+            $imUsedInfo = $api->get('/me/receive_count_period', array(
+                'startTime' => $startTime, 'endTime' => $endTime));
+
+            if (isset($imUsedInfo['error']) || empty($imUsedInfo['count'])) {
+                return array();
+            }
+            $imUsedInfo = $imUsedInfo['count'];
+        } catch (\RuntimeException $e) {
+            return array();
+        }
+
+        $chartInfo = array();
+        foreach ($imUsedInfo as $value) {
+            $chartInfo[] = array('date' => $value['sendTime'], 'count' => $value['nums']);
+        }
+
+        return $chartInfo;
+    }
+
+    protected function createGlobalImConversation()
+    {
+        $user    = $this->getCurrentUser();
+        $message = array(
+            'name'    => '站点会话',
+            'clients' => array(
+                array(
+                    'clientId'   => $user['id'],
+                    'clientName' => $user['nickname']
+                )
+            )
+        );
+
+        $result = IMAPIFactory::create()->post('/me/conversation', $message);
+
+        if (isset($result['error'])) {
+            return '';
+        }
+
+        return $result['no'];
+    }
+
     protected function getSearchService()
     {
         return $this->getServiceKernel()->createService('Search.SearchService');
