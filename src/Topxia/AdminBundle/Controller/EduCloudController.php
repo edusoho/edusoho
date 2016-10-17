@@ -1111,7 +1111,6 @@ class EduCloudController extends BaseController
             if (isset($imUsedInfo['error'])) {
                 return array();
             }
-            $imUsedInfo = $imUsedInfo['count'];
         } catch (\RuntimeException $e) {
             return array();
         }
