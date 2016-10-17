@@ -45,18 +45,21 @@
 {%- endmacro -%}
 
 
-{%- macro user_link(user, class, options = []) -%}
+{# {%- macro user_link(user, class, options = []) -%}
   {% if user %}
     <a
-      class="{{ class }} {% if 'card' in options %}js-user-card{% endif %}"
-      {% if '_blank' in options %}
-        target="_blank"
-      {% endif %}
-      href="{{ path('user_show', {id:user.id}) }}">
-      {{ user.nickname }}
+      class="{{ class }} {% if 'card' in options %}js-user-card{% endif %}" {% if '_blank' in options %} target="_blank" {% endif %}href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}
     </a>
   {% else %}
     <a class="{{ class }}" href="javascript:;"><del>用户不存在</del></a>
+  {% endif %}
+{%- endmacro -%} #}
+
+{%- macro user_link(user, class, card = true) -%}
+  {% if user %}
+    <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+  {% else %}
+    <a class="link-dark {{ class }}" href="javascript:;"><del>{{'用户不存在'|trans}}</del></a>
   {% endif %}
 {%- endmacro -%}
 
