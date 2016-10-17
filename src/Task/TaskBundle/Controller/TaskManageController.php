@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
-class ActivityManageController extends BaseController
+class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId, $type)
     {
@@ -12,12 +12,12 @@ class ActivityManageController extends BaseController
             $activity      = $request->request->all();
             $savedActivity = $this->getActivityService()->createActivity($activity);
 
-            return $this->render('ActivityBundle:ActivityManage:list-item.html.twig', array(
+            return $this->render('TaskBundle:TaskManage:list-item.html.twig', array(
                 'activity' => $savedActivity
             ));
         }
 
-        return $this->render('ActivityBundle:ActivityManage:modal.html.twig', array());
+        return $this->render('TaskBundle:TaskManage:modal.html.twig', array());
     }
 
     public function updateAction(Request $request, $courseId, $id)
@@ -26,13 +26,13 @@ class ActivityManageController extends BaseController
             $activity      = $request->request->all();
             $savedActivity = $this->getActivityService()->updateActivity($id, $activity);
 
-            return $this->render('ActivityBundle:ActivityManage:list-item.html.twig', array(
+            return $this->render('TaskBundle:TaskManage:list-item.html.twig', array(
                 'activity' => $savedActivity
             ));
         }
 
         $activity = $this->getActivityService()->getActivity($id);
-        return $this->render('ActivityBundle:ActivityManage:modal.html.twig', array(
+        return $this->render('TaskBundle:TaskManage:modal.html.twig', array(
             'activity' => $activity
         ));
     }
@@ -48,7 +48,7 @@ class ActivityManageController extends BaseController
         $this->tryManageCourse();
         $activities = $this->getActivityService()->findActivitiesByCourseId($courseId);
 
-        return $this->render('ActivityBundle:ActivityManage:list.html.twig', array(
+        return $this->render('TaskBundle:TaskManage:list.html.twig', array(
             'activities' => $activities
         ));
     }
