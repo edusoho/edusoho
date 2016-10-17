@@ -38,9 +38,16 @@ class TaskManageController extends BaseController
             ));
         }
 
-        $task = $this->getTaskService()->getTask($id);
+        $task          = $this->getTaskService()->getTask($id);
+        $activity      = $this->getActivityService()->getActivity($task['activityId']);
+        $activityTypes = $this->getActivityService()->getActivityTypes();
+
         return $this->render('TaskBundle:TaskManage:modal.html.twig', array(
-            'task' => $task
+            'task'          => $task,
+            'courseId'      => $courseId,
+            'activity'      => $activity,
+            'currentType'   => $activity['mediaType'],
+            'activityTypes' => $activityTypes
         ));
     }
 

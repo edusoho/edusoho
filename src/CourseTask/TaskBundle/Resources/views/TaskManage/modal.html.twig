@@ -2,18 +2,32 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{{'添加任务'|trans}}{% endblock %}
+{% block title %}
+	{% if activity|default(false) %}
+		{{'修改任务'|trans}}
+	{% else %}
+		{{'添加任务'|trans}}
+	{% endif %}
+{% endblock %}
+
 {% block body %}
 
-	{% if not currentType %}
+	{% if not currentType|default(false) and not activity|default(true) %}
 		{% for type, value in activityTypes  %}
 			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{value.name}}</a>
 		{% endfor %}
 	{% endif %}
 
 
-	{% if currentType %}
-		<form id='task-create-form' class="form-horizontal" method="POST" action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}">
+	{% if currentType|default(false) %}
+		<form id='task-create-form' class="form-horizontal" method="POST" 
+		{% if activity|default(false) %}
+		action="{{path('course_task_update',{courseId:courseId, id:task.id})}}"
+		{% else %}
+		action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}"
+		{% endif %}
+		>
+			<input type="hidden" name="id" value="{{task.id|default('')}}">
             <input type="hidden" name="mediaType" value='{{currentType}}'>
             <input type="hidden" name="fromCourseSetId" value='1'>
 			<input type="hidden" name="fromCourseId" value='{{courseId}}'>
@@ -25,7 +39,7 @@
 
 
 {% block footer %}
-	{% if currentType %}
+	{% if currentType|default(false) %}
 		<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'保存'|trans}}</button>
 	{% endif %}
 

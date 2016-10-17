@@ -1,1 +1,6 @@
-{{task.title}}
+<li>
+	{{task.title}} 
+	<a data-role='delete-task' href="javascript:;" data-url="{{path('course_task_delete', {id:task.id,courseId:task.courseId})}}">删除</a>
+
+	<a data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_task_update', {id:task.id,courseId:task.courseId})}}">修改</a>
+</li>

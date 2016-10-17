@@ -4,7 +4,7 @@
       <label for="title">{{'标题'|trans}}</label>
     </div>
     <div class="col-md-9 controls">
-		<input id="title" class="form-control" type="text" name="title">
+		<input id="title" class="form-control" type="text" name="title" value={{activity.title|default('')}}>
 	</div>
 </div>
 
@@ -16,7 +16,9 @@
       <textarea class="form-control" id="text-content-field" name="content"
       data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
       data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
-      ></textarea>
+      >
+      	{{activity.content|default('')}}
+      </textarea>
     </div>
 </div>
 
