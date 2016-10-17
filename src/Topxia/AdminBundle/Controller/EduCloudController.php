@@ -1105,11 +1105,7 @@ class EduCloudController extends BaseController
             $imUsedInfo = $api->get('/me/receive_count_period', array(
                 'startTime' => $startTime, 'endTime' => $endTime));
 
-<<<<<<< HEAD
             if (isset($imUsedInfo['error']) || empty($imUsedInfo['count'])) {
-=======
-            if (isset($imUsedInfo['error'])) {
->>>>>>> 188d0d934907d6d427c3ecf0539e91614d3b893a
                 return array();
             }
             $imUsedInfo = $imUsedInfo['count'];
