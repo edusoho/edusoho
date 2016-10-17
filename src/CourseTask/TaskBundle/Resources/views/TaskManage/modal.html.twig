@@ -14,7 +14,7 @@
 
 	{% if not currentType|default(false) and not activity|default(false) %}
 		{% for type, value in activityTypes  %}
-			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{value.name}}</a>
+			<a data-role="activityType" href="javascript:;" data-url="{{path('course_manage_task_create',{courseId:courseId, currentType:type})}}">{{value.name}}</a>
 		{% endfor %}
 	{% endif %}
 
@@ -22,9 +22,9 @@
 	{% if currentType|default(false) %}
 		<form id='task-create-form' class="form-horizontal" method="POST" 
 		{% if activity|default(false) %}
-		action="{{path('course_task_update',{courseId:courseId, id:task.id})}}"
+		action="{{path('course_manage_task_update',{courseId:courseId, id:task.id})}}"
 		{% else %}
-		action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}"
+		action="{{path('course_manage_task_create',{courseId:courseId, currentType:currentType})}}"
 		{% endif %}
 		>
 			<input type="hidden" name="id" value="{{task.id|default('')}}">
