@@ -49,11 +49,25 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $savedTask = $this->getTask($id);
 
-        if (!$this->canManageCourse($savedTask['fromCourseId'])) {
+        if (!$this->canManageCourse($savedTask['courseId'])) {
             throw $this->createAccessDeniedException();
         }
 
         $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+
+        $fields = ArrayToolkit::parts($fields, array(
+            'courseId',
+            'preTaskId',
+            'courseChapterId',
+            'activityId',
+            'title',
+            'isFree',
+            'isOptional',
+            'startTime',
+            'endTime',
+            'status',
+            'createdUserId'
+        ));
 
         return $this->getTaskDao()->update($id, $fields);
     }
@@ -62,7 +76,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($id);
 
-        if (!$this->canManageCourse($task['fromCourseId'])) {
+        if (!$this->canManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException();
         }
 
