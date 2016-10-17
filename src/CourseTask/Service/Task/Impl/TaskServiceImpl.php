@@ -79,7 +79,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function getTaskDao()
     {
-        return $this->createDao('Task:Task.TaskDao');
+        return $this->createDao('CourseTask:Task.TaskDao');
     }
 
     protected function canManageCourse($courseId)

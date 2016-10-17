@@ -12,73 +12,73 @@ class TaskServiceTest extends BaseTestCase
     public function testCreateTaskWhenInvalidArgument()
     {
         $task = array(
-            'title' => 'test activity'
+            'title' => 'test task'
         );
-        $savedActivity = $this->getActivityService()->createActivity($activity);
-        $this->assertEquals($activity['title'], $savedActivity['title']);
+        $savedTask = $this->getTaskService()->createTask($task);
+        $this->assertEquals($task['title'], $savedTask['title']);
     }
 
     // /**
     //  * @expectedException \AccessDeniedException
     //  */
     //
-    // public function testCreateActivityWhenAccessDenied()
+    // public function testCreateTaskWhenAccessDenied()
     // {
-    //     $activity = array(
-    //         'title' => 'test activity'
+    //     $task = array(
+    //         'title' => 'test task'
     //     );
-    //     $savedActivity = $this->getActivityService()->createActivity($activity);
-    //     $this->assertEquals($activity['title'], $savedActivity['title']);
+    //     $savedTask = $this->getTaskService()->createTask($task);
+    //     $this->assertEquals($task['title'], $savedTask['title']);
     // }
 
-    public function testCreateActivity()
+    public function testCreateTask()
     {
-        $activity = array(
-            'title'           => 'test activity',
+        $task = array(
+            'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => 1,
             'fromCourseSetId' => 1
         );
-        $savedActivity = $this->getActivityService()->createActivity($activity);
-        $this->assertEquals($activity['title'], $savedActivity['title']);
+        $savedTask = $this->getTaskService()->createTask($task);
+        $this->assertEquals($task['title'], $savedTask['title']);
     }
 
-    public function testUpdateActivity()
+    public function testUpdateTask()
     {
-        $activity = array(
-            'title'           => 'test activity',
+        $task = array(
+            'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => 1,
             'fromCourseSetId' => 1
         );
-        $savedActivity = $this->getActivityService()->createActivity($activity);
+        $savedTask = $this->getTaskService()->createTask($task);
 
-        $activity['title'] = 'course activity';
-        $savedActivity     = $this->getActivityService()->updateActivity($savedActivity['id'], $activity);
+        $task['title'] = 'course task';
+        $savedTask     = $this->getTaskService()->updateTask($savedTask['id'], $task);
 
-        $this->assertEquals($activity['title'], $savedActivity['title']);
+        $this->assertEquals($task['title'], $savedTask['title']);
     }
 
-    public function testDeleteActivity()
+    public function testDeleteTask()
     {
-        $activity = array(
-            'title'           => 'test activity',
+        $task = array(
+            'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => 1,
             'fromCourseSetId' => 1
         );
-        $savedActivity = $this->getActivityService()->createActivity($activity);
+        $savedTask = $this->getTaskService()->createTask($task);
 
-        $this->assertNotNull($savedActivity);
+        $this->assertNotNull($savedTask);
 
-        $this->getActivityService()->deleteActivity($savedActivity['id']);
+        $this->getTaskService()->deleteTask($savedTask['id']);
 
-        $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);
-        $this->assertNull($savedActivity);
+        $savedTask = $this->getTaskService()->getTask($savedTask['id']);
+        $this->assertNull($savedTask);
     }
 
-    protected function getActivityService()
+    protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Activity:Activity.ActivityService');
+        return $this->getServiceKernel()->createService('CourseTask:Task.TaskService');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace CourseTask\Service\Activity;
+namespace CourseTask\Service\Task;
 
 interface TaskService
 {

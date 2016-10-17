@@ -2,7 +2,8 @@
 
 namespace CourseTask\Service\Task\Dao\Impl;
 
-use CourseTask\Service\Common\BaseDao;
+use Topxia\Service\Common\BaseDao;
+use CourseTask\Service\Task\Dao\TaskDao;
 
 class TaskDaoImpl extends BaseDao implements TaskDao
 {
