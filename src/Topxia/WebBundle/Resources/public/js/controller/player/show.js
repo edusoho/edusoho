@@ -78,15 +78,22 @@ define(function(require, exports, module) {
             type: 'child'
         });
 
+        messenger.on('setCurrentTime', function(data) {
+            player.setCurrentTime(data.time);
+        });
+
+
         //为了不把播放器对象暴露到其他js中，所以把设置操作message过来
-        messenger.on('setPlayerPause', function() {
+        messenger.on('setPlayerPause', function(data) {
+            console.log(data);
             player.pause();
         });
 
         messenger.on('setPlayerPlay', function() {
             player.play();
         });
-        
+
+
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
             if (playerType == 'local-video-player') {
@@ -185,5 +192,4 @@ define(function(require, exports, module) {
             Store.set("durations", durationTmpArray);
         }
     };
-
 });

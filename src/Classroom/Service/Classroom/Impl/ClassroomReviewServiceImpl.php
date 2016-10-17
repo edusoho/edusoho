@@ -84,21 +84,24 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
         $review = $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($user['id'], $classroom['id']);
 
-        if (empty($review)) {
+        $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
+        if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getClassroomReviewDao()->addReview(array(
                 'userId'      => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
                 'rating'      => $fields['rating'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
+                'parentId'    => $fields['parentId'],
                 'createdTime' => time()
             ));
             $this->dispatchEvent('classReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getClassroomReviewDao()->updateReview($review['id'], array(
-                'rating'  => $fields['rating'],
-                'title'   => empty($fields['title']) ? '' : $fields['title'],
-                'content' => empty($fields['content']) ? '' : $fields['content']
+                'rating'      => $fields['rating'],
+                'title'       => empty($fields['title']) ? '' : $fields['title'],
+                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'updatedTime' => time()
             ));
         }
 

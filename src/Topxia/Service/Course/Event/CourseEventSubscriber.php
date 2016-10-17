@@ -26,7 +26,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'user.role.change'       => 'onRoleChange',
             'announcement.create'    => 'onAnnouncementCreate',
             'announcement.update'    => 'onAnnouncementUpdate',
-            'announcement.delete'    => 'onAnnouncementDelete'
+            'announcement.delete'    => 'onAnnouncementDelete',
+            'courseReview.add'       => 'onCourseReviewCreate'
         );
     }
 
@@ -333,6 +334,30 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
+    public function onCourseReviewCreate(ServiceEvent $event)
+    {
+        $review = $event->getSubject();
+
+        if ($review['parentId'] > 0) {
+            $course = $this->getCourseService()->getCourse($review['courseId']);
+
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+
+            if (!$parentReview) {
+                return false;
+            }
+
+            $message = array(
+                'title'      => $course['title'],
+                'targetId'   => $review['courseId'],
+                'targetType' => 'course',
+                'userId'     => $review['userId']
+            );
+            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+                $message);
+        }
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -385,5 +410,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getAnnouncementService()
     {
         return ServiceKernel::instance()->createService('Announcement.AnnouncementService');
+    }
+
+    protected function getReviewService()
+    {
+        return ServiceKernel::instance()->createService('Course.ReviewService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return ServiceKernel::instance()->createService('User.NotificationService');
     }
 }

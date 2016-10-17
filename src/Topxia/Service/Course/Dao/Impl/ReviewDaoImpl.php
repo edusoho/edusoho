@@ -33,7 +33,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:count", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT COUNT(id) FROM {$that->getTable()} WHERE courseId = ?";
+            $sql = "SELECT COUNT(id) FROM {$that->getTable()} WHERE courseId = ? AND parentId = 0";
             return $that->getConnection()->fetchColumn($sql, array($courseId));
         }
 
@@ -64,7 +64,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? LIMIT 1;";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
             return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
         }
 
@@ -76,7 +76,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:sum:rating", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT sum(rating) FROM {$that->getTable()} WHERE courseId = ?";
+            $sql = "SELECT sum(rating) FROM {$that->getTable()} WHERE courseId = ? AND parentId = 0";
             return $that->getConnection()->fetchColumn($sql, array($courseId));
         }
 
@@ -86,7 +86,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
     public function searchReviewsCount($conditions)
     {
         $builder = $this->createReviewSearchBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -94,10 +94,10 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createReviewSearchBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -116,13 +116,14 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('userId = :userId')
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('rating = :rating')
-                        ->andWhere('content LIKE :content')
-                        ->andWhere('courseId IN (:courseIds)')
-                        ->andWhere('private = :private');
+            ->from($this->table, $this->table)
+            ->andWhere('userId = :userId')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('rating = :rating')
+            ->andWhere('content LIKE :content')
+            ->andWhere('courseId IN (:courseIds)')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('private = :private');
 
         return $builder;
     }
