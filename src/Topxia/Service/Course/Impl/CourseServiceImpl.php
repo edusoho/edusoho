@@ -894,8 +894,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        $fields['originPrice'] = $price;
-        $fields['price']       = $price * ($discount / 10);
+        $fields['originPrice'] = $price ? : 0;
+        $fields['price']       = $price * ($discount / 10) ? : 0;
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
