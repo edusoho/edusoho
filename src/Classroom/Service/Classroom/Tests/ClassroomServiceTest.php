@@ -934,19 +934,23 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->becomeAuditor($classroom['id'], $user3['id']);
         $this->getClassroomService()->becomeStudent($classroom['id'], $user4['id']);
 
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user));
+        $c_user1 = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($c_user1->fromArray($user));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(true, $enabled);
 
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user2));
+        $c_user2 = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($c_user2->fromArray($user));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user3));
+        $c_user3 = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($c_user3->fromArray($user));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user4));
+        $c_user4 = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($c_user3->fromArray($c_user4));
         $enabled = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
