@@ -38,28 +38,28 @@ twig:
         disabled_features: "%disabled_features%"
 
 # Doctrine Configuration
-doctrine:
-    dbal:
-        default_connection: default
-        types:
-            enum: Topxia\Common\DoctrineEnumType
-        connections:
-            default:
-                wrapper_class: Topxia\Service\Common\Connection
-                driver:   "%database_driver%"
-                host:     "%database_host%"
-                port:     "%database_port%"
-                dbname:   "%database_name%"
-                user:     "%database_user%"
-                password: "%database_password%"
-                charset:  UTF8
+# doctrine:
+#     dbal:
+#         default_connection: default
+#         types:
+#             enum: Topxia\Common\DoctrineEnumType
+#         connections:
+#             default:
+#                 wrapper_class: Topxia\Service\Common\Connection
+#                 driver:   "%database_driver%"
+#                 host:     "%database_host%"
+#                 port:     "%database_port%"
+#                 dbname:   "%database_name%"
+#                 user:     "%database_user%"
+#                 password: "%database_password%"
+#                 charset:  UTF8
 
-                mapping_types:
-                    enum: string
+#                 mapping_types:
+#                     enum: string
 
-    orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
+#     orm:
+#         auto_generate_proxy_classes: "%kernel.debug%"
+#         auto_mapping: true
 
 # Swiftmailer Configuration
 # swiftmailer:

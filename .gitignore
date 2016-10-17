@@ -21,7 +21,6 @@ npm-debug.log
 /app/config/routing_plugins.yml
 /plugins/*
 /build/
-/vendor/
 /bin/
 /composer.phar
 /scripts
