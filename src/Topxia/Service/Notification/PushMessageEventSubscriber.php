@@ -12,11 +12,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return array(
 
-            'user.service.registered'   => 'onUserCreate',
+            'user.registered'           => 'onUserCreate',
             'user.unlock'               => 'onUserCreate',
             'user.lock'                 => 'onUserDelete',
             'user.update'               => 'onUserUpdate',
             'user.change_nickname'      => 'onUserUpdate',
+            'user.follow'               => 'onUserFollow',
+            'user.unfollow'             => 'onUserUnFollow',
 
             'course.publish'            => 'onCourseCreate',
             'course.update'             => 'onCourseUpdate',
@@ -70,8 +72,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
-
-            'user.service.follow'       => 'onUserFollow'
         );
     }
 
@@ -101,7 +101,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onUserFollow(ServiceEvent $event)
     {
         $friend = $event->getSubject();
-        $result = $this->pushCloud('user.service.follow', $friend);
+        $result = $this->pushCloud('user.follow', $friend);
+    }
+
+    public function onUserUnFollow(ServiceEvent $event)
+    {
+        $friend = $event->getSubject();
+        $result = $this->pushCloud('user.unfollow', $friend);
     }
 
     public function onUserCreate(ServiceEvent $event)
@@ -567,7 +573,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $target['title']      = $course['title'];
                 $target['image']      = $this->getFileUrl($course['smallPicture']);
                 $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
-                $conv = $this->getConversationService()->getConversationByTarget($id, 'course');
+                $conv                 = $this->getConversationService()->getConversationByTarget($id, 'course');
                 $target['convNo']     = empty($conv) ? '' : $conv['no'];
                 break;
             case 'lesson':
@@ -585,12 +591,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $target['image'] = $this->getFileUrl($group['logo']);
                 break;
             case 'global':
-                $schoolUtil      = new MobileSchoolUtil();
-                $schoolApp       = $schoolUtil->getAnnouncementApp();
-                $target['title'] = ServiceKernel::instance()->trans('网校公告');
-                $target['id']    = $schoolApp['id'];
-                $target['image'] = $this->getFileUrl($schoolApp['avatar']);
-                $setting = $this->getSettingService()->get('app_im', array());
+                $schoolUtil       = new MobileSchoolUtil();
+                $schoolApp        = $schoolUtil->getAnnouncementApp();
+                $target['title']  = ServiceKernel::instance()->trans('网校公告');
+                $target['id']     = $schoolApp['id'];
+                $target['image']  = $this->getFileUrl($schoolApp['avatar']);
+                $setting          = $this->getSettingService()->get('app_im', array());
                 $target['convNo'] = empty($setting['convNo']) ? '' : $setting['convNo'];
                 break;
             default:
