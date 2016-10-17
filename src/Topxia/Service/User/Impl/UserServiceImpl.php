@@ -678,7 +678,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
-        $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
+        $this->getDispatcher()->dispatch('user.registered', new ServiceEvent($user));
 
         return $user;
     }
@@ -1336,7 +1336,7 @@ class UserServiceImpl extends BaseService implements UserService
             'pair'        => $pair
         ));
         $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => $pair));
-        $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
+        $this->getDispatcher()->dispatch('user.follow', new ServiceEvent($friend));
         return $friend;
     }
 
@@ -1366,7 +1366,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => 0));
         }
 
-        $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
+        $this->getDispatcher()->dispatch('user.unfollow', new ServiceEvent($friend));
         return $result;
     }
 
