@@ -464,8 +464,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->_filterCourseFields($fields);
 
         //已经发布的课程不能修改课程过期模式
-        if ($course['status'] == 'published' && $fields['expiryMode'] != $course['expiryMode']) {
-            $fields['expiryMode'] = $course['expiryMode'];
+        if ($course['status'] == 'published') {
+            if (isset($fields['expiryMode']) && $fields['expiryMode'] != $course['expiryMode']) {
+                $fields['expiryMode'] = $course['expiryMode'];
+            }
         }
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
