@@ -17,6 +17,7 @@ class Version20161017144857 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `course_lesson` DROP `suggestHours`;");
+        $this->addSql("ALTER TABLE `open_course_lesson` DROP `suggestHours`;");
     }
 
     /**
