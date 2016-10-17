@@ -839,7 +839,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getLessonDao()->getLesson($lessonId);
         $course = $this->getCourse($lesson['courseId']);
 
-        if (empty($course['watchLimit'])) {
+        //只有视频课程才限制观看时长
+        if (empty($course['watchLimit']) || $lesson['type'] != 'video') {
             return array('status' => 'ignore');
         }
 
