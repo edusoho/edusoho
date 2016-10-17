@@ -452,6 +452,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'permission';
         $names[] = 'org';
         $names[] = 'task';
+        $names[] = 'activity';
 
         $paths = array(
             'common' => 'common',

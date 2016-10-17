@@ -8,7 +8,7 @@ class ActivityProcessorFactory
 
     public static function getActivityProcessor($type)
     {
-        if (!in_array($type, self::getActivityTypes())) {
+        if (!in_array($type, array_keys(self::getActivityTypes()))) {
             throw new \InvalidArgumentException('activity type is invalid');
         }
 

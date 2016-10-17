@@ -116,7 +116,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ))) {
             return true;
         }
-
         if (!in_array($activity['mediaType'], array_keys($this->getActivityTypes()))) {
             return true;
         }

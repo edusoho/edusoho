@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
+{% set modalSize = 'large' %}
+
 {% block title %}{{'添加任务'|trans}}{% endblock %}
 {% block body %}
 
@@ -11,9 +13,11 @@
 
 
 	{% if currentType %}
-		<form id='activityCreateForm' method="POST" action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}">
-			{% block activity_form_fields %}
-			{% endblock %}
+		<form id='task-create-form' class="form-horizontal" method="POST" action="{{path('course_task_create',{courseId:courseId, currentType:currentType})}}">
+            <input type="hidden" name="mediaType" value='{{currentType}}'>
+            <input type="hidden" name="fromCourseSetId" value='1'>
+			<input type="hidden" name="fromCourseId" value='{{courseId}}'>
+			{% include activityTypes[currentType]['create_modal'] %}
 		</form>
 	{% endif %}
 

@@ -6,7 +6,7 @@
 	<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_task_create', {courseId:1}) }}"><i class="glyphicon glyphicon-plus"></i> 任务 </button>
 
 	{% for task in tasks %}
-		{{task.title}}
+		{% include 'TaskBundle:TaskManage:list-item.html.twig' with {task:task} %}
 	{% endfor %}
 	
 {% endblock %}
