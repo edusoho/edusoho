@@ -15,12 +15,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
-    public function trigger($activityId, $eventName, $data)
+    public function trigger($id, $eventName, $data)
     {
         $activity = $this->getActivity($id);
 
         if (in_array($eventName, array('start', 'doing', 'finish'))) {
-            $this->getKernel()->dispatchEvent("activity.{$eventName}", array($activity, $data));
+            $this->dispatchEvent("activity.{$eventName}", array($activity, $data));
         }
 
         $eventChain = new EventChain();

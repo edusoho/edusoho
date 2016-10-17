@@ -25,3 +25,4 @@ course_task_activity_show:
 course_task_trigger:
   pattern:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: TaskBundle:Task:trigger }
+  methods: [POST]

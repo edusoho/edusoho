@@ -51,7 +51,9 @@ class ActivityProcessorFactory
                 'name'         => '图文',
                 'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig',
                 'show_page'    => 'ActivityBundle:Activity:text-show.html.twig',
-                'events'       => array()
+                'events'       => array(
+                    'finish' => 'Activity\\Service\\Activity\\EventChain\\ActivityFinish'
+                )
             )
         );
     }

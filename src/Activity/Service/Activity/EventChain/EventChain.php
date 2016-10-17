@@ -8,13 +8,13 @@ class EventChain
 
     public function add(Event $event)
     {
-        $events[] = $event;
+        $this->events[] = $event;
     }
 
-    public function trigger($data)
+    public function trigger($activity, $data)
     {
-        foreach ($events as $event) {
-            $event->trigger($data);
+        foreach ($this->events as $event) {
+            $event->trigger($activity, $data);
         }
     }
 }
