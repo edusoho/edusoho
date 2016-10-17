@@ -1063,7 +1063,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'copyId'        => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '0.0'
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1111,7 +1110,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($lesson['type'] == 'live') {
             $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
-            $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
         $lesson = $this->getLessonDao()->addLesson(
@@ -1267,7 +1265,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0',
             'replayStatus'  => 'ungenerated'
         ));
 
@@ -1279,7 +1276,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
             $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
-            $fields['suggestHours'] = $fields['length'] / 60;
         }
 
         if (array_key_exists('media', $fields)) {
