@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4f3fb4a2e2889987eb8914b4a2fd583d",
-    "content-hash": "80c41259ccfae54b8c6e286289c5d3e1",
+    "hash": "1214e0b5072603bd9b7e9f226ac66279",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -215,7 +214,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/221023f1ccea097c843f9e9157e5d4ce3ce0bec1",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/221023f1ccea097c843f9e9157e5d4ce3ce0bec1.zip",
                 "reference": "221023f1ccea097c843f9e9157e5d4ce3ce0bec1",
                 "shasum": ""
             },
@@ -1069,23 +1068,22 @@
         },
         {
             "name": "endroid/qrcode-bundle",
-            "version": "2.0.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/EndroidQrCodeBundle.git",
-                "reference": "8902d5b7004a3fbf98080ffca8fa696930e30366"
+                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/EndroidQrCodeBundle/zipball/8902d5b7004a3fbf98080ffca8fa696930e30366",
-                "reference": "8902d5b7004a3fbf98080ffca8fa696930e30366",
+                "url": "https://packagist.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
+                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "shasum": ""
             },
             "require": {
-                "endroid/qrcode": "^1.7.4",
+                "endroid/qrcode": "^1.5.7",
                 "php": ">=5.3.0",
                 "sensio/framework-extra-bundle": "^3.0",
-                "symfony/dependency-injection": "^2.4|^3.0",
                 "symfony/http-kernel": "^2.3|^3.0"
             },
             "require-dev": {
@@ -1124,7 +1122,7 @@
                 "qrcode",
                 "symfony"
             ],
-            "time": "2016-07-26 09:40:14"
+            "time": "2016-01-16 00:41:57"
         },
         {
             "name": "ezyang/htmlpurifier",
