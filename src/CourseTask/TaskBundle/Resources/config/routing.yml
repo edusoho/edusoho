@@ -13,3 +13,11 @@ course_task_update:
 course_task_delete:
   pattern:  /course/{courseId}/task/{id}/delete
   defaults: { _controller: TaskBundle:TaskManage:delete }
+
+course_task_show:
+  pattern:  /course/{courseId}/task/{id}/show
+  defaults: { _controller: TaskBundle:Task:show }
+
+course_task_activity_show:
+  pattern:  /course/{courseId}/task/{id}/activity_show
+  defaults: { _controller: TaskBundle:Task:taskActivity }

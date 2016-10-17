@@ -1,0 +1,9 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'taskbundle/controller/task/show' %}
+
+{% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+	<iframe src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
+{% endblock %}
