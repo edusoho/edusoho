@@ -12,7 +12,7 @@
 
 {% block body %}
 
-	{% if not currentType|default(false) and not activity|default(true) %}
+	{% if not currentType|default(false) and not activity|default(false) %}
 		{% for type, value in activityTypes  %}
 			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{value.name}}</a>
 		{% endfor %}

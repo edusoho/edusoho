@@ -42,7 +42,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
 
     public function findByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->getTable()} WHERE courseId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->getTable()} WHERE courseId = ? ";
         return $this->getConnection()->fetchAll($sql, array($courseId)) ?: null;
     }
 }
