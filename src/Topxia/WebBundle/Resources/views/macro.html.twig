@@ -1,12 +1,20 @@
 {# user_avater 已废弃，请勿使用 #}
-{%- macro user_avatar(user, class, imgClass, card = true, isTarget = false ) -%}
+{%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
-    <a class="{{ class }} {% if card %}js-user-card{% endif %}" {% if isTarget %}target="_blank"{% endif %}href=" {{ path('user_show', {id:user.id}) }} " data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
-      {{ _self.user_avater_img(user, imgClass) }}
-    </a>
+  <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+    {% if imgClass == 'avatar-md' %}
+      {% set userAvatar = user.mediumAvatar %}
+    {% elseif imgClass == 'avatar-lg' %}
+      {% set userAvatar = user.largeAvatar %}
+    {% else %}
+      {% set userAvatar = user.smallAvatar %}
+    {% endif %}
+    <img class="{{ imgClass|default('avatar-sm') }}" src="{{ filepath(userAvatar, 'avatar.png') }}">
+
+  </a>
   {% else %}
     <a class="{{ class }}" href="javascript:;">
-      {{ _self.user_avater_img(user, imgClass) }}
+      <img class="{{ imgClass|default('avatar-sm') }}"  src="{{ filepath('', 'avatar.png') }}">
     </a>
   {% endif %}
 {%- endmacro -%}
