@@ -1,16 +1,19 @@
 parameters:
     biz_config:
-        database:
-            name: "%database_name%"
+        debug: "%kernel.debug%"
+        db.options:
+            dbname: "%database_name%"
             user: "%database_user%"
             password: "%database_password%"
             host: "%database_host%"
-            driver: "%database_driver%"
-            charset: UTF-8
+            port: "%database_port%"
+            driver: pdo_mysql
+            charset: UTF8
+        cache_directory: "%kernel.root_dir%/../var/cache"
+        tmp_directory: "%kernel.root_dir%/../var/tmp"
+        log_directory: "%kernel.root_dir%/../var/logs"
 
 services:
     biz:
-        class: Biz
-        arguments: ["@service_container","%biz_config%"]
-        tags:
-            - { name: service.kernel }
+        class: Codeages\Biz\Framework\Context\Biz
+        arguments: ["%biz_config%"]

@@ -50,7 +50,6 @@ $app = new Silex\Application();
 include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-$app->register(new Silex\Provider\HttpKernelServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/templates',
 ));

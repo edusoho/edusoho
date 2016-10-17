@@ -29,10 +29,12 @@ class AppKernel extends Kernel
 
     public function boot()
     {
+        if (true === $this->booted) {
+            return;
+        }
         parent::boot();
-        $biz = $this->getContainer()->get('biz');
-        $biz->boot();
-        $this->initServiceKernel();
+        $this->bootBiz();
+        $this->bootServiceKernel();
     }
 
     public function registerBundles()
@@ -44,7 +46,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            // new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
@@ -56,7 +58,7 @@ class AppKernel extends Kernel
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
-            new OAuth2\ServerBundle\OAuth2ServerBundle()
+            // new OAuth2\ServerBundle\OAuth2ServerBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
@@ -91,7 +93,7 @@ class AppKernel extends Kernel
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
+            // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
@@ -116,10 +118,19 @@ class AppKernel extends Kernel
         return $this;
     }
 
-    protected function initServiceKernel()
+    protected function bootBiz()
+    {
+        $biz = $this->getContainer()->get('biz');
+        $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
+        $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
+        $biz->boot();
+    }
+
+    protected function bootServiceKernel()
     {
         if(!$this->isServiceKernelInit){
             $container     = $this->getContainer();
+            $biz = $container->get('biz');
             $serviceKernel = ServiceKernel::create($this->getEnvironment(), $this->isDebug());
             $serviceKernel->setEnvVariable(array(
                 'host'          => $this->request->getHttpHost(),
@@ -130,7 +141,7 @@ class AppKernel extends Kernel
                 ->setTranslator($container->get('translator'))
                 ->setParameterBag($container->getParameterBag())
                 ->registerModuleDirectory(dirname(__DIR__) . '/plugins')
-                ->setConnection($container->get('database_connection'));
+                ->setConnection($biz['db']);
 
             $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 

@@ -19,20 +19,14 @@ class LoginSuccessHandler
     private $checker;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-
-    /**
      * Constructor
      *
      * @param AuthorizationChecker $checker
      * @param Doctrine             $doctrine
      */
-    public function __construct(AuthorizationChecker $checker, Doctrine $doctrine)
+    public function __construct(AuthorizationChecker $checker)
     {
         $this->checker = $checker;
-        $this->em      = $doctrine->getManager();
     }
 
     /**

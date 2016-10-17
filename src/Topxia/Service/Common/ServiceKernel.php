@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Topxia\Service\Common\Connection;
+use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Topxia\Service\Common\Redis\RedisFactory;
