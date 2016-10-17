@@ -63,33 +63,7 @@ class AppKernel extends Kernel
             new Codeages\PluginBundle\CodeagesPluginBundle(),
         );
 
-        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir() . '/../plugins';
-
-        if (file_exists($pluginMetaFilepath)) {
-            $pluginMeta    = include_once $pluginMetaFilepath;
-            $this->plugins = $pluginMeta['installed'];
-
-            if (is_array($pluginMeta)) {
-                foreach ($pluginMeta['installed'] as $c) {
-                    if ($pluginMeta['protocol'] == '1.0') {
-                        $c         = ucfirst($c);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    } elseif ($pluginMeta['protocol'] == '2.0') {
-                        if ($c['type'] != 'plugin') {
-                            continue;
-                        }
-
-                        $c         = ucfirst($c['code']);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                        $bundles[] = new $cl();
-                    }
-                }
-            }
-        }
+        $bundles = array_merge($bundles, $this->registerPluginBundles());
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
@@ -102,6 +76,27 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
+    }
+
+    public function registerPluginBundles()
+    {
+        $bundlues = array();
+        $file = $this->getRootDir() . '/config/plugin_installed.php';
+        if (!file_exists($file)) {
+            return $bundlues;
+        }
+
+        $plugins = include $file;
+
+        $this->plugins = $plugins;
+
+        foreach ($plugins as $plugin) {
+            $code = ucfirst($plugin['code']);
+            $class = "{$code}Plugin\\{$code}Plugin";
+            $bundlues[] = new $class();
+        }
+
+        return $bundlues;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
@@ -126,7 +121,6 @@ class AppKernel extends Kernel
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz['migration.directories'][] = dirname(__DIR__) . '/src/Codeages/PluginBundle/Migrations';
         $biz['autoload.aliases']['CodeagesPluginBundle'] = 'Codeages\PluginBundle\Biz';
-        $biz['plugin.directory'] = dirname(__DIR__) . '/plugins';
         $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
         $biz->boot();
     }

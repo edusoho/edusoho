@@ -14,12 +14,24 @@ class AppDaoImpl extends GeneralDaoImpl implements AppDao
         return $this->getByFields(['code' => $code]);
     }
 
+    public function findByType($type, $start, $limit)
+    {
+        return $this->search(['type' => $type], array('created_time' => 'ASC'), $start, $limit);
+    }
+
+    public function countByType($type)
+    {
+        return $this->count(array('type' => $type));
+    }
+
     public function declares()
     {
         return array(
             'timestamps' => array('created_time', 'updated_time'),
             'serializes' => array(),
+            'orderbys' => array('created_time'),
             'conditions' => array(
+                'type = :type',
                 'name = :name',
             ),
         );

@@ -3,6 +3,7 @@ namespace Codeages\PluginBundle\Biz\Service\Impl;
 
 use Codeages\PluginBundle\Biz\Service\AppService;
 use Codeages\Biz\Framework\Service\BaseService;
+use Symfony\Component\Yaml\Yaml;
 
 class AppServiceImpl extends BaseService implements AppService
 {
@@ -14,6 +15,15 @@ class AppServiceImpl extends BaseService implements AppService
     public function getAppByCode($code)
     {
         return $this->getAppDao()->getByCode($code);
+    }
+
+    public function findAllPlugins()
+    {
+        $total = $this->getAppDao()->countByType('plugin');
+        if (empty($total)) {
+            return array();
+        }
+        return $this->getAppDao()->findByType('plugin', 0, $total);
     }
 
     public function installPlugin($code)
@@ -46,6 +56,8 @@ class AppServiceImpl extends BaseService implements AppService
         $app['version'] = $meta['version'];
 
         $app = $this->getAppDao()->create($app);
+
+        $this->rebuildPlugins();
     }
 
     public function removePlugin($code)
@@ -58,6 +70,25 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         $this->getAppDao()->delete($app['id']);
+
+        $this->rebuildPlugins();
+    }
+
+    public function rebuildPlugins()
+    {
+        $plugins = $this->findAllPlugins();
+
+        $config = array();
+        foreach ($plugins as $plugin) {
+            $config[] = array(
+                'code' => $plugin['code'],
+                'version' => $plugin['version'],
+                'type' => $plugin['type'],
+            );
+        }
+
+        $content = "<?php \n return " . var_export($config, true) . ";";
+        file_put_contents($this->biz['plugin.config_file'], $content);
     }
 
     protected function getAppDao()
