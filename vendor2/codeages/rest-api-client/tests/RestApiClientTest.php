@@ -2,23 +2,20 @@
 
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
-use Codeages\RestApiClient\HttpRequest\MockHttpRequest;
-use Codeages\RestApiClient\Tests\TestLogger;
 
 class RestApiClientTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSendAuthCode()
     {
         $config = array(
             'accessKey' => 'test_acess_key',
             'secretKey' => 'test_secret_key',
-            'endpoint' => 'http://passport.dev.com/api/v1',
+            'endpoint'  => 'http://passport.dev.com/api/v1'
         );
         $spec = new JsonHmacSpecification();
-        $logger = new TestLogger();
+        //$logger = new TestLogger();
 
-        $client = new RestApiClient($config, $spec, null, $logger, true);
+        $client = new RestApiClient($config, $spec, null, null, true);
 
         // $result = $client->get('/mobiles/13757199220/validation');
         // $result = $client->post('/users', [
@@ -29,20 +26,34 @@ class RestApiClientTest extends \PHPUnit_Framework_TestCase
         // ]);
 
         $result = $client->post('/clients', [
-            'name' => '测试',
-            'domain' => 'http://xxx.xxx.com',
-            'notify_url' => 'http://xxx.xxx.com/notify_url',
-            'notify_user' => 'http://xxx.xxx.com/notify_url',
+            'name'        => '测试',
+            'domain'      => 'http://xxx.xxx.com',
+            'notify_url'  => 'http://xxx.xxx.com/notify_url',
+            'notify_user' => 'http://xxx.xxx.com/notify_url'
         ]);
 
         // $result = $client->post('/mobiles/13757199220/code');
 
-
-
         var_dump($result);exit();
 
-
         // $this->assertEquals(1, $user['id']);
+    }
+
+    public function testImAccount()
+    {
+        $config = array(
+            'accessKey' => 'RzelPjVJQ5BSC4MYaDd6dAhr5x2N7QCY',
+            'secretKey' => 'BMCwLxD1hA7HpOqsqLm32rKJHMak6osI',
+            'endpoint'  => 'http://imapi.edusoho.net/v1/'
+        );
+        $spec = new JsonHmacSpecification();
+        //$logger = new TestLogger();
+
+        $client = new RestApiClient($config, $spec, null, null, true);
+
+        $result = $client->post('/accounts');
+
+        var_dump($result);exit;
     }
 
 }

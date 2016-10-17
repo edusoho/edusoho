@@ -132,7 +132,12 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
-        $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
+        try {
+            $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
+        } catch (\RuntimeException $e) {
+            $imUsedTotal['count'] = 0;
+        }
+
         if (!empty($imUsedTotal['error'])) {
             $imUsedTotal['count'] = 0;
         }
