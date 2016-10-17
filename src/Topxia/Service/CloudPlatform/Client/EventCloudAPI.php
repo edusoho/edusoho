@@ -23,7 +23,13 @@ class EventCloudAPI extends AbstractCloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.$uri;
-        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+
+        if ($this->isWithoutNetwork()) {
+            if ($this->debug && $this->logger) {
+                $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+            }
+            return array('network' => 'off');
+        }
 
         $headers[] = 'Content-type: application/json';
 
@@ -101,6 +107,10 @@ class EventCloudAPI extends AbstractCloudAPI
         if (empty($result)) {
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
+        }
+
+        if ($this->debug && $this->logger) {
+            $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
         }
 
         return $result;
