@@ -29,7 +29,8 @@ class UserProvider implements UserProviderInterface
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        $this->container->get('biz')->setUser($currentUser);
+        $biz = $this->container->get('biz');
+        $biz['user'] = $currentUser;
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;
     }
