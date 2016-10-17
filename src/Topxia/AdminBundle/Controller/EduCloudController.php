@@ -775,7 +775,7 @@ class EduCloudController extends BaseController
             $api       = IMAPIFactory::create();
             $imAccount = $api->get('/me/account');
 
-            if (isset($imAccount['error'])) {
+            if (isset($imAccount['error']) || empty($imAccount['account'])) {
                 $imAccount = $api->post('/accounts');
             }
 
