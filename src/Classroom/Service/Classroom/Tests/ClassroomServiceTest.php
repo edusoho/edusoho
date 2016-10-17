@@ -1003,18 +1003,18 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacherUser['id']);
         $this->getClassroomService()->becomeStudent($classroom['id'], $studentUser['id']);
 
-
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($teacherUser));
+        $teacherCurrent = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($teacherCurrent->fromArray($teacherUser));
         $enabled = $this->getClassroomService()->canTakeClassroom($classroom['id']);
         $this->assertEquals(true, $enabled);
 
-
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($auditorUser));
+        $auditorCurrentUser = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($auditorCurrentUser->fromArray($auditorUser));
         $enabled = $this->getClassroomService()->canTakeClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
 
-
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($studentUser));
+        $studentCurrentUser = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($studentCurrentUser->fromArray($studentUser));
         $enabled = $this->getClassroomService()->canTakeClassroom($classroom['id']);
         $this->assertEquals(true, $enabled);
     }
