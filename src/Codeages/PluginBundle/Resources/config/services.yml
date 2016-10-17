@@ -1,0 +1,4 @@
+services:
+#    codeages_plugin.example:
+#        class: Codeages\PluginBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

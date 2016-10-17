@@ -58,7 +58,9 @@ class AppKernel extends Kernel
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
-            // new OAuth2\ServerBundle\OAuth2ServerBundle()
+            // new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            // new TemplatePlugin\TemplatePlugin(),
+            new Codeages\PluginBundle\CodeagesPluginBundle(),
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
