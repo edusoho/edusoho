@@ -1,6 +1,6 @@
 <?php
 
-namespace Task\Service\Task\Dao;
+namespace CourseTask\Service\Task\Dao;
 
 interface TaskDao
 {

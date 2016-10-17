@@ -1,12 +1,12 @@
 <?php
 
-namespace Task\Service\Task\Dao\Impl;
+namespace CourseTask\Service\Task\Dao\Impl;
 
-use Topxia\Service\Common\BaseDao;
+use CourseTask\Service\Common\BaseDao;
 
 class TaskDaoImpl extends BaseDao implements TaskDao
 {
-    protected $table = 'task';
+    protected $table = 'course_task';
 
     public function get($id)
     {

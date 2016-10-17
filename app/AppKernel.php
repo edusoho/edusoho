@@ -39,6 +39,7 @@ class AppKernel extends Kernel
             new Org\OrgBundle\OrgBundle(),
             new Permission\PermissionBundle\PermissionBundle(),
             new Activity\ActivityBundle\ActivityBundle(),
+            new CourseTask\TaskBundle\TaskBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle()
         );

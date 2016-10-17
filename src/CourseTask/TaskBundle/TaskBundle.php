@@ -1,6 +1,6 @@
 <?php
 
-namespace Task\TaskBundle;
+namespace CourseTask\TaskBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

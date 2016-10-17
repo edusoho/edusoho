@@ -1,17 +1,17 @@
 <?php
 
-namespace Activity\Service\Activity\Tests;
+namespace CourseTask\Service\Task\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
-class ActivityServiceTest extends BaseTestCase
+class TaskServiceTest extends BaseTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testCreateActivityWhenInvalidArgument()
+    public function testCreateTaskWhenInvalidArgument()
     {
-        $activity = array(
+        $task = array(
             'title' => 'test activity'
         );
         $savedActivity = $this->getActivityService()->createActivity($activity);

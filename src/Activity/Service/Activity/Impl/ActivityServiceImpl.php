@@ -24,6 +24,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw $this->createAccessDeniedException();
         }
 
+        if (!$this->canManageCourseSet($activity['fromCourseSetId'])) {
+            throw $this->createAccessDeniedException();
+        }
+
         $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
         if (!empty($processor)) {
             $media               = $processor->create($activity);
@@ -93,6 +97,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     protected function canManageCourse($courseId)
+    {
+        return true;
+    }
+
+    protected function canManageCourseSet($fromCourseSetId)
     {
         return true;
     }

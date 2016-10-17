@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace CourseTask\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
@@ -9,11 +9,11 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId, $type)
     {
         if ($request->getMethod() == 'POST') {
-            $activity      = $request->request->all();
-            $savedActivity = $this->getActivityService()->createActivity($activity);
+            $task      = $request->request->all();
+            $savedTask = $this->getTaskService()->createTask($task);
 
             return $this->render('TaskBundle:TaskManage:list-item.html.twig', array(
-                'activity' => $savedActivity
+                'task' => $savedTask
             ));
         }
 
@@ -23,33 +23,33 @@ class TaskManageController extends BaseController
     public function updateAction(Request $request, $courseId, $id)
     {
         if ($request->getMethod() == 'POST') {
-            $activity      = $request->request->all();
-            $savedActivity = $this->getActivityService()->updateActivity($id, $activity);
+            $task      = $request->request->all();
+            $savedTask = $this->getTaskService()->updateTask($id, $task);
 
             return $this->render('TaskBundle:TaskManage:list-item.html.twig', array(
-                'activity' => $savedActivity
+                'task' => $savedTask
             ));
         }
 
-        $activity = $this->getActivityService()->getActivity($id);
+        $task = $this->getTaskService()->getTask($id);
         return $this->render('TaskBundle:TaskManage:modal.html.twig', array(
-            'activity' => $activity
+            'task' => $task
         ));
     }
 
     public function deleteAction(Request $request, $courseId, $id)
     {
-        $this->getActivityService()->deleteActivity($id);
+        $this->getTaskService()->deleteTask($id);
         return $this->createJsonResponse(true);
     }
 
-    public function activitiesAction(Request $request, $courseId)
+    public function tasksAction(Request $request, $courseId)
     {
         $this->tryManageCourse();
-        $activities = $this->getActivityService()->findActivitiesByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         return $this->render('TaskBundle:TaskManage:list.html.twig', array(
-            'activities' => $activities
+            'tasks' => $tasks
         ));
     }
 
@@ -58,8 +58,8 @@ class TaskManageController extends BaseController
         return true;
     }
 
-    protected function getActivityService()
+    protected function getTaskService()
     {
-        return $this->createService('Activity:Activity.ActivityService');
+        return $this->createService('Task:Task.TaskService');
     }
 }
