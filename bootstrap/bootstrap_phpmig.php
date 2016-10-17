@@ -17,6 +17,8 @@ $container = $kernel->getContainer();
 $container->enterScope('request');
 $container->set('request', $request, 'request');
 
-$migration = new MigrationBootstrap($container->get('biz'));
+$biz = $container->get('biz');
+
+$migration = new MigrationBootstrap($biz['db'], $biz['migration.directories']);
 
 return $migration->boot();

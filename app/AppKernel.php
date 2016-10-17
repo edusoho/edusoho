@@ -121,6 +121,7 @@ class AppKernel extends Kernel
     protected function bootBiz()
     {
         $biz = $this->getContainer()->get('biz');
+        $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
         $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
         $biz->boot();
     }
