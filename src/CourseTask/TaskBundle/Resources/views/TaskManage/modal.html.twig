@@ -7,7 +7,7 @@
 
 	{% if not currentType %}
 		{% for type, value in activityTypes  %}
-			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{type}}</a>
+			<a data-role="activityType" href="javascript:;" data-url="{{path('course_task_create',{courseId:courseId, currentType:type})}}">{{value.name}}</a>
 		{% endfor %}
 	{% endif %}
 

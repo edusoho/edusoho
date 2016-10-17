@@ -29,6 +29,7 @@ class ActivityProcessorFactory
     {
         return array(
             'text' => array(
+                'name'         => '图文',
                 'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig'
             )
         );
