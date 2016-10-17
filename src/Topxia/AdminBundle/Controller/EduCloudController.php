@@ -1104,13 +1104,13 @@ class EduCloudController extends BaseController
         try {
             $imUsedInfo = $api->get('/me/receive_count_period', array(
                 'startTime' => $startTime, 'endTime' => $endTime));
+
+            if (isset($imUsedInfo['error'])) {
+                return array();
+            }
             $imUsedInfo = $imUsedInfo['count'];
         } catch (\RuntimeException $e) {
-            $imUsedInfo = array();
-        }
-
-        if (isset($imUsedInfo['error'])) {
-            $imUsedInfo = array();
+            return array();
         }
 
         $chartInfo = array();
