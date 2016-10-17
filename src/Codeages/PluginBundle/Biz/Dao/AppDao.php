@@ -6,5 +6,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface AppDao extends GeneralDaoInterface 
 {
+    public function getByCode($code);
     
 }

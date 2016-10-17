@@ -8,12 +8,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginInstallCommand extends ContainerAwareCommand
+class PluginRemoveCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('plugin:install')
+            ->setName('plugin:remove')
             ->setDescription('...')
             ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.');
     }
@@ -26,7 +26,7 @@ class PluginInstallCommand extends ContainerAwareCommand
 
         $service = $biz->service('CodeagesPluginBundle:AppService');
 
-        $app = $service->installPlugin($code);
+        $app = $service->removePlugin($code);
     }
 
 }

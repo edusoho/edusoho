@@ -9,11 +9,16 @@ class AppDaoImpl extends GeneralDaoImpl implements AppDao
 {
     protected $table = 'app';
 
+    public function getByCode($code)
+    {
+        return $this->getByFields(['code' => $code]);
+    }
+
     public function declares()
     {
         return array(
-            'timestamps' => array('created', 'updated'),
-            'serializes' => array('ids1' => 'json', 'ids2' => 'delimiter'),
+            'timestamps' => array('created_time', 'updated_time'),
+            'serializes' => array(),
             'conditions' => array(
                 'name = :name',
             ),
