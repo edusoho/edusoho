@@ -738,7 +738,7 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('app_im', $appImSetting);
         }
 
-        $data = array();
+        $data = array('status' => 'success');
 
         try {
             $api = CloudAPIFactory::create('root');
@@ -748,12 +748,20 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
 
+        //是否接入教育云
         if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
+        } elseif (empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+                $data['status'] = 'binded_error';
+            }
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:app-im-setting.html.twig', array(
-            'data' => array('status' => 'success')
+            'data' => $data
         ));
     }
 
@@ -1096,6 +1104,7 @@ class EduCloudController extends BaseController
         try {
             $imUsedInfo = $api->get('/me/receive_count_period', array(
                 'startTime' => $startTime, 'endTime' => $endTime));
+            $imUsedInfo = $imUsedInfo['count'];
         } catch (\RuntimeException $e) {
             $imUsedInfo = array();
         }
