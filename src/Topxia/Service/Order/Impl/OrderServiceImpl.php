@@ -4,6 +4,7 @@ namespace Topxia\Service\Order\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Order\Dao\Impl\OrderDaoImpl;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -689,6 +690,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createDao('Order.OrderRefundDao');
     }
 
+    /**
+     * @return OrderDaoImpl
+     */
     protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');
