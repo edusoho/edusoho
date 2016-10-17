@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class CourseController extends BaseController
 {
@@ -540,7 +540,7 @@ class CourseController extends BaseController
 
     protected function returnDeleteStatus($result, $type)
     {
-        $dataDictionary = array('questions' => $this->getServiceKernel()->trans('问题'), 'testpapers' => $this->getServiceKernel()->trans('试卷'), 'materials' => $this->getServiceKernel()->trans('课时资料'), 'chapters' => $this->getServiceKernel()->trans('课时章节'), 'drafts' => $this->getServiceKernel()->trans('课时草稿'), 'lessons' => $this->getServiceKernel()->trans('课时'), 'lessonLearns' => $this->getServiceKernel()->trans('课时时长'), 'lessonReplays' => $this->getServiceKernel()->trans('课时录播'), 'lessonViews' => $this->getServiceKernel()->trans('课时播放时长'), 'homeworks' => $this->getServiceKernel()->trans('课时作业'), 'exercises' => $this->getServiceKernel()->trans('课时练习'), 'favorites' => $this->getServiceKernel()->trans('课时收藏'), 'notes' => $this->getServiceKernel()->trans('课时笔记'), 'threads' => $this->getServiceKernel()->trans('课程话题'), 'reviews' => $this->getServiceKernel()->trans('课程评价'), 'announcements' => $this->getServiceKernel()->trans('课程公告'), 'statuses' => $this->getServiceKernel()->trans('课程动态'), 'members' => $this->getServiceKernel()->trans('课程成员'), 'course' => $this->getServiceKernel()->trans('课程'));
+        $dataDictionary = array('questions' => $this->trans('问题'), 'testpapers' => $this->trans('试卷'), 'materials' => $this->trans('课时资料'), 'chapters' => $this->trans('课时章节'), 'drafts' => $this->trans('课时草稿'), 'lessons' => $this->trans('课时'), 'lessonLearns' => $this->trans('课时时长'), 'lessonReplays' => $this->trans('课时录播'), 'lessonViews' => $this->trans('课时播放时长'), 'homeworks' => $this->trans('课时作业'), 'exercises' => $this->trans('课时练习'), 'favorites' => $this->trans('课时收藏'), 'notes' => $this->trans('课时笔记'), 'threads' => $this->trans('课程话题'), 'reviews' => $this->trans('课程评价'), 'announcements' => $this->trans('课程公告'), 'statuses' => $this->trans('课程动态'), 'members' => $this->trans('课程成员'), 'conversation' => $this->trans('会话'), 'course' => $this->trans('课程'));
 
         if ($result > 0) {
             $message = $dataDictionary[$type].$this->getServiceKernel()->trans('数据删除');

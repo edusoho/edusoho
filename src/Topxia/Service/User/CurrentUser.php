@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess
+class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess, \Serializable
 {
     protected $data;
     protected $permissions;
@@ -14,6 +14,17 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     protected $rootOrgId = 1;
 
     protected $rootOrgCode = '1.';
+
+    public function serialize()
+    {
+       return serialize($this->data);
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->data = unserialize($serialized);
+    }
+
 
     public function __set($name, $value)
     {

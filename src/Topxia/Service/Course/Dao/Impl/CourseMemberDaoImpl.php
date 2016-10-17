@@ -259,6 +259,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    public function findUserJoinedCourseIds($userId, $joinedType)
+    {
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:joinedType:{$joinedType}", $userId, $joinedType, function ($userId, $joinedType) use ($that) {
+            $sql = "SELECT courseId FROM {$that->getTable()} WHERE  userId = ? AND joinedType = ?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $joinedType));
+        }
+
+        );
+    }
+
     public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -410,6 +422,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
             ->andWhere('isLearned = :isLearned')
+            ->andWhere('joinedType = :joinedType')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')

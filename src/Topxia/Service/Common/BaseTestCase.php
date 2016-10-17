@@ -5,6 +5,7 @@ namespace Topxia\Service\Common;
 use Mockery;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
+use Permission\Common\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -102,7 +103,7 @@ class BaseTestCase extends WebTestCase
         ));
         static::$serviceKernel->setCurrentUser($currentUser);
 
-        $user  = $userService->register(array(
+        $user = $userService->register(array(
             'nickname'  => 'admin',
             'email'     => 'admin@admin.com',
             'password'  => 'admin',
@@ -125,8 +126,8 @@ class BaseTestCase extends WebTestCase
     /**
      * mock对象
      *
-     * @param $name                                       mock的类名
-     * @param $params                                     ,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
+     * @param $name   mock的类名
+     * @param $params ,mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
 
     protected function mock($objectName, $params = array())
