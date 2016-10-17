@@ -5,15 +5,8 @@
 {% block container %}
 
   {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
-  
+
   {% if is_granted('ROLE_BACKEND') %}
-
-    {# 起什么作用 #}
-    <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide"
-         data-url="{{ path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-    </div>
-
 
     <div class="row">
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
@@ -36,13 +29,7 @@
 
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
-        {#<span class="pull-right" style="display:block">
-          <span id="onlineNum" data-url="{{ path('admin_online_count') }}">
-            {{ '正在载入在线人数...'|trans }}
-          </span>
-          （<span id="loginNum" data-url="{{ path('admin_login_count') }}">{{ '正在载入登录人数...'|trans }}</span>）
-        </span>#}
-        <h3 class="panel-title"> 
+        <h3 class="panel-title">
           {{ '网站概览'|trans }}
         </h3>
       </div>
@@ -51,45 +38,50 @@
       </div>
     </div>
 
-      {# <div class="col-md-6">
-         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">{{ 'EduSoho官方消息'|copyright_less }}</h3>
-          </div>
-          <div id="edusoho-open-message" >
-            <div class="empty">正在载入数据，请稍等。</div>
-          </div>
+    {# <div class="col-md-6">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">{{ 'EduSoho官方消息'|copyright_less }}</h3>
         </div>
-      </div> #}
-
-      {#<div id="popular-courses-panel" class="col-md-6">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <select id="popular-courses-type" class="pull-right" data-url="{{ path('admin_popular_courses') }}">
-              {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
-            </select>
-            <h3 class="panel-title">{{ '受欢迎课程'|trans }}</h3>
-          </div>
-          <div id="popular-courses-table">
-            <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-          </div>
+        <div id="edusoho-open-message" >
+          <div class="empty">正在载入数据，请稍等。</div>
         </div>
       </div>
     </div> #}
 
+    {#<div id="popular-courses-panel" class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <select id="popular-courses-type" class="pull-right" data-url="{{ path('admin_popular_courses') }}">
+            {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
+          </select>
+          <h3 class="panel-title">{{ '受欢迎课程'|trans }}</h3>
+        </div>
+        <div id="popular-courses-table">
+          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+        </div>
+      </div>
+    </div>
+  </div> #}
+
     <div class="panel panel-default panel-380">
       <div class="panel-heading">
         <div class="pull-right">
-          <span class="mrl text-sm js-data-switch-time">2016/09/01~2016/09/07</span> 
+          <span class="mrl text-sm js-data-switch-time">2016/09/01~2016/09/07</span>
           <div class="btn-group btn-group-xs">
-            <button type="button" class="btn btn-primary js-data-switch-button" data-time="2016/09/01~2016/09/07" data-url="{{path('admin_user_week_statistic')}}">最近7天</button>
-            <button type="button" class="btn btn-default js-data-switch-button" data-time="2016/09/01~2016/09/30" data-url="{{path('admin_user_month_statistic')}}">最近30天</button>
+            <button type="button" class="btn btn-primary js-data-switch-button" data-time="2016/09/01~2016/09/07"
+                    data-url="{{ path('admin_user_week_statistic') }}">最近7天
+            </button>
+            <button type="button" class="btn btn-default js-data-switch-button" data-time="2016/09/01~2016/09/30"
+                    data-url="{{ path('admin_user_month_statistic') }}">最近30天
+            </button>
           </div>
         </div>
         <h3 class="panel-title">{{ '用户统计'|trans }}</h3>
       </div>
-      <div class="panel-body js-statistic-areas" id="user-statistic" style="height:320px;" data-url="{{path('admin_user_week_statistic')}}">
-        
+      <div class="panel-body js-statistic-areas" id="user-statistic" style="height:320px;"
+           data-url="{{ path('admin_user_week_statistic') }}">
+
       </div>
     </div>
 
@@ -98,7 +90,7 @@
         <div class="panel panel-default panel-380">
           <div class="panel-heading">
             <div class="pull-right">
-              <span class="mrl text-sm">2016/09/01~2016/09/07 </span> 
+              <span class="mrl text-sm">2016/09/01~2016/09/07 </span>
               <div class="btn-group btn-group-xs">
                 <button type="button" class="btn btn-primary">最近7天</button>
                 <button type="button" class="btn btn-default">最近30天</button>
@@ -107,7 +99,7 @@
             <h3 class="panel-title">{{ '学习人次统计'|trans }}</h3>
           </div>
           <div class="panel-body" id="study-count-statistic" style="height:320px;">
-            
+
           </div>
         </div>
       </div>
@@ -115,7 +107,7 @@
         <div class="panel panel-default panel-380">
           <div class="panel-heading">
             <div class="pull-right">
-              <span class="mrl text-sm">2016/09/01~2016/09/07 </span> 
+              <span class="mrl text-sm">2016/09/01~2016/09/07 </span>
               <div class="btn-group btn-group-xs">
                 <button type="button" class="btn btn-primary">{{ '最近7天'|trans }}</button>
                 <button type="button" class="btn btn-default">{{ '最近30天'|trans }}</button>
@@ -124,7 +116,7 @@
             <h3 class="panel-title">{{ '付费订单统计'|trans }}</h3>
           </div>
           <div class="panel-body" id="pay-order-statistic" style="height:320px;">
-            
+
           </div>
         </div>
       </div>
@@ -135,16 +127,18 @@
         <div class="panel panel-default panel-420">
           <div class="panel-heading">
             <div class="pull-right">
-              <span class="mrl text-sm">2016/09/01~2016/09/07 </span> 
+              <span class="mrl text-sm">2016/09/01~2016/09/07 </span>
               <div class="btn-group btn-group-xs">
                 <button type="button" class="btn btn-primary">{{ '最近7天'|trans }}</button>
                 <button type="button" class="btn btn-default">{{ '最近30天'|trans }}</button>
               </div>
             </div>
-            <h3 class="panel-title">{{ '学习课时数'|trans }} <span class="glyphicon glyphicon-question-sign text-sm" data-toggle="tooltip" data-placement="top" title="{{ '每天课时学习数量(包括公开课)'|trans }}"></span></h3>
+            <h3 class="panel-title">{{ '学习课时数'|trans }} <span class="glyphicon glyphicon-question-sign text-sm"
+                                                              data-toggle="tooltip" data-placement="top"
+                                                              title="{{ '每天课时学习数量(包括公开课)'|trans }}"></span></h3>
           </div>
           <div class="panel-body" id="study-lesson-count-statistic" style="height:360px;">
-            
+
           </div>
         </div>
       </div>
@@ -162,83 +156,83 @@
           <div class="panel-body">
             <table class="table table-condensed table-noborder table-overflow">
               <thead>
-                <tr>
-                  <th width="10%"></th>
-                  <th width="70%">{{ '课程名'|trans }}</th>
-                  <th width="25%">{{ '新增学员'|trans }}</th>
-                </tr>
+              <tr>
+                <th width="10%"></th>
+                <th width="70%">{{ '课程名'|trans }}</th>
+                <th width="25%">{{ '新增学员'|trans }}</th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>
-                    <a class="link-primary" href="">课程名称课程名称</a>
-                  </td>
-                  <td class="pull-right prl">15</td>
-                </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>
+                  <a class="link-primary" href="">课程名称课程名称</a>
+                </td>
+                <td class="pull-right prl">15</td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -253,7 +247,7 @@
       <div class="col-md-4">
         <div class="panel panel-default panel-420">
           <div class="panel-heading">
-          <a href="" class="pull-right">{{ '更多'|trans }}</a>
+            <a href="" class="pull-right">{{ '更多'|trans }}</a>
             <h3 class="panel-title">
               {{ '最新评价'|trans }}
             </h3>
@@ -261,103 +255,103 @@
           <div class="panel-body">
             <table class="table table-condensed table-noborder table-overflow">
               <thead>
-                <tr>
-                  <th width="70%">{{ '评价内容'|trans }}</th>
-                  <th width="15%">{{ '评分'|trans }}</th>
-                  <th width="15%">{{ '操作'|trans }}</th>
-                </tr>
+              <tr>
+                <th width="70%">{{ '评价内容'|trans }}</th>
+                <th width="15%">{{ '评分'|trans }}</th>
+                <th width="15%">{{ '操作'|trans }}</th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">课程很不错，就是内容太少了</a>
-                  </td>
-                  <td class="pull-right prl">5</td>
-                  <td>
-                    <a href="" class="btn btn-default btn-xs">查看</a>
-                  </td>
-                </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">课程很不错，就是内容太少了</a>
+                </td>
+                <td class="pull-right prl">5</td>
+                <td>
+                  <a href="" class="btn btn-default btn-xs">查看</a>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -366,111 +360,112 @@
       <div class="col-md-4">
         <div class="panel panel-default search-panel panel-420">
           <div class="panel-heading">
-          <a href="" class="pull-right">{{ '更多'|trans }}</a>
+            <a href="" class="pull-right">{{ '更多'|trans }}</a>
             <h3 class="panel-title">
-              {{ '热门搜索'|trans }} <small>{{ '最近7天'|trans }}</small>
+              {{ '热门搜索'|trans }}
+              <small>{{ '最近7天'|trans }}</small>
             </h3>
           </div>
           <div class="panel-body">
             <table class="table table-condensed table-noborder table-overflow">
               <thead>
-                <tr>
-                  <th width="60%">{{ '关键词'|trans }}</th>
-                  <th width="30%">{{ '搜索次数'|trans }}</th>
-                  <th></th>
-                </tr>
+              <tr>
+                <th width="60%">{{ '关键词'|trans }}</th>
+                <th width="30%">{{ '搜索次数'|trans }}</th>
+                <th></th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="30"></div>
-                  </td>
-                  <td>30</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="20"></div>
-                  </td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td class="text-middle">
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td>
-                    <div class="search-count js-search-count" data-count="13"></div>
-                  </td>
-                  <td>13</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="10"></div>
-                  </td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="10"></div>
-                  </td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="10"></div>
-                  </td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="8"></div>
-                  </td>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="8"></div>
-                  </td>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="6"></div>
-                  </td>
-                  <td>6</td>
-                </tr>
-                <tr>
-                  <td>
-                    <a class="link-primary" href="">Edusoho安装教程</a>
-                  </td>
-                  <td class="text-middle">
-                    <div class="search-count js-search-count" data-count="4"></div>
-                  </td>
-                  <td>4</td>
-                </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="30"></div>
+                </td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="20"></div>
+                </td>
+                <td>20</td>
+              </tr>
+              <tr>
+                <td class="text-middle">
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td>
+                  <div class="search-count js-search-count" data-count="13"></div>
+                </td>
+                <td>13</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="10"></div>
+                </td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="10"></div>
+                </td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="10"></div>
+                </td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="8"></div>
+                </td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="8"></div>
+                </td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="6"></div>
+                </td>
+                <td>6</td>
+              </tr>
+              <tr>
+                <td>
+                  <a class="link-primary" href="">Edusoho安装教程</a>
+                </td>
+                <td class="text-middle">
+                  <div class="search-count js-search-count" data-count="4"></div>
+                </td>
+                <td>4</td>
+              </tr>
               </tbody>
             </table>
           </div>

@@ -216,13 +216,6 @@ class DefaultController extends BaseController
 
         $apps = $this->getAppService()->checkAppUpgrades();
 
-        $appsAll = $this->getAppService()->getCenterApps();
-
-        $codes         = ArrayToolkit::column($appsAll, 'code');
-        $installedApps = $this->getAppService()->findAppsByCodes($codes);
-
-        $unInstallAppCount = count($appsAll) - count($installedApps);
-
         $appCount = count($apps);
 
         if (isset($apps['error'])) {
@@ -243,14 +236,37 @@ class DefaultController extends BaseController
         $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
 
+
+        $cloudServiceCount = 0;
+
+        $storageSetting = $this->getSettingService()->get('storageSetting');
+        if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
+            $cloudServiceCount += 2;
+        }
+        $cloudSms = $this->getSettingService()->get('course');
+        if (empty($cloudSms['live_course_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+        if (empty($cloudSms['sms_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
+        $cloudSearch = $this->getSettingService()->get('cloud_search');
+        if (empty($cloudSearch['search_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
+
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
             "apps"                => $apps,
             "error"               => $error,
             "mainAppUpgrade"      => $mainAppUpgrade,
             "app_count"           => $appCount,
-            "unInstallAppCount"   => $unInstallAppCount,
             "liveCourseStatus"    => $liveCourseStatus,
-            "mobileCustomization" => $mobileCustomization
+            "mobileCustomization" => $mobileCustomization,
+            'cloudServiceCount'   => $cloudServiceCount
         ));
     }
 
@@ -370,34 +386,34 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'onlineCount'                  => $onlineCount,
-            'loginCount'                   => $loginCount,
+            'onlineCount' => $onlineCount,
+            'loginCount'  => $loginCount,
 
-            'todayUserSum'                 => $todayUserSum,
-            'yesterdayUserSum'             => $yesterdayUserSum,
-            'todayCourseSum'               => $todayCourseSum,
-            'yesterdayCourseSum'           => $yesterdayCourseSum,
-            'todayRegisterNum'             => $todayRegisterNum,
-            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
-            'todayLoginNum'                => $todayLoginNum,
-            'yesterdayLoginNum'            => $yesterdayLoginNum,
-            'todayCourseNum'               => $todayCourseNum,
-            'yesterdayCourseNum'           => $yesterdayCourseNum,
-            'todayLessonNum'               => $todayLessonNum,
-            'yesterdayLessonNum'           => $yesterdayLessonNum,
-            'todayJoinLessonNum'           => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'            => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
+            'todayUserSum'           => $todayUserSum,
+            'yesterdayUserSum'       => $yesterdayUserSum,
+            'todayCourseSum'         => $todayCourseSum,
+            'yesterdayCourseSum'     => $yesterdayCourseSum,
+            'todayRegisterNum'       => $todayRegisterNum,
+            'yesterdayRegisterNum'   => $yesterdayRegisterNum,
+            'todayLoginNum'          => $todayLoginNum,
+            'yesterdayLoginNum'      => $yesterdayLoginNum,
+            'todayCourseNum'         => $todayCourseNum,
+            'yesterdayCourseNum'     => $yesterdayCourseNum,
+            'todayLessonNum'         => $todayLessonNum,
+            'yesterdayLessonNum'     => $yesterdayLessonNum,
+            'todayJoinLessonNum'     => $todayJoinLessonNum,
+            'yesterdayJoinLessonNum' => $yesterdayJoinLessonNum,
+            'todayBuyLessonNum'      => $todayBuyLessonNum,
+            'yesterdayBuyLessonNum'  => $yesterdayBuyLessonNum,
 
-            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
+            'todayBuyClassroomNum'     => $todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum' => $yesterdayBuyClassroomNum,
 
-            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
+            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
+            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
 
-            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
+            'todayAllVideoViewedNum'     => $todayAllVideoViewedNum,
+            'yesterdayAllVideoViewedNum' => $yesterdayAllVideoViewedNum,
 
             'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
             'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
@@ -405,31 +421,33 @@ class DefaultController extends BaseController
             'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
             'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
 
-            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
+            'todayNetVideoViewedNum'     => $todayNetVideoViewedNum,
+            'yesterdayNetVideoViewedNum' => $yesterdayNetVideoViewedNum,
 
-            'todayIncome'                  => $todayIncome,
-            'yesterdayIncome'              => $yesterdayIncome,
-            'todayCourseIncome'            => $todayCourseIncome,
-            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
-            'todayClassroomIncome'         => $todayClassroomIncome,
-            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
-            'todayVipIncome'               => $todayVipIncome,
-            'yesterdayVipIncome'           => $yesterdayVipIncome,
-            'todayExitLessonNum'           => $todayExitLessonNum,
-            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
-            'keyCheckResult'               => $keyCheckResult
+            'todayIncome'              => $todayIncome,
+            'yesterdayIncome'          => $yesterdayIncome,
+            'todayCourseIncome'        => $todayCourseIncome,
+            'yesterdayCourseIncome'    => $yesterdayCourseIncome,
+            'todayClassroomIncome'     => $todayClassroomIncome,
+            'yesterdayClassroomIncome' => $yesterdayClassroomIncome,
+            'todayVipIncome'           => $todayVipIncome,
+            'yesterdayVipIncome'       => $yesterdayVipIncome,
+            'todayExitLessonNum'       => $todayExitLessonNum,
+            'yesterdayExitLessonNum'   => $yesterdayExitLessonNum,
+            'keyCheckResult'           => $keyCheckResult
         ));
     }
 
-    public function userWeekStatisticAction(Request $request) {
+    public function userWeekStatisticAction(Request $request)
+    {
         return $this->createJsonResponse(array(
             'time'    => '7',
             'message' => 'ok'
         ));
     }
 
-    public function userMonthStatisticAction(Request $request) {
+    public function userMonthStatisticAction(Request $request)
+    {
         return $this->createJsonResponse(array(
             'time'    => '30',
             'message' => 'ok'
