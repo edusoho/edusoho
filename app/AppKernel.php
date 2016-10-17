@@ -32,9 +32,26 @@ class AppKernel extends Kernel
         if (true === $this->booted) {
             return;
         }
-        parent::boot();
-        $this->bootBiz();
-        $this->bootServiceKernel();
+
+        if ($this->loadClassCache) {
+            $this->doLoadClassCache($this->loadClassCache[0], $this->loadClassCache[1]);
+        }
+
+        // init bundles
+        $this->initializeBundles();
+
+        // init container
+        $this->initializeContainer();
+
+        $this->initializeBiz();
+        $this->initializeServiceKernel();
+
+        foreach ($this->getBundles() as $bundle) {
+            $bundle->setContainer($this->container);
+            $bundle->boot();
+        }
+
+        $this->booted = true;
     }
 
     public function registerBundles()
@@ -63,7 +80,7 @@ class AppKernel extends Kernel
             new Codeages\PluginBundle\CodeagesPluginBundle(),
         );
 
-        $bundles = array_merge($bundles, $this->registerPluginBundles());
+        $bundles = array_merge($bundles, $this->loadPluginBundles());
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
@@ -78,7 +95,7 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    public function registerPluginBundles()
+    public function loadPluginBundles()
     {
         $bundlues = array();
         $file = $this->getRootDir() . '/config/plugin_installed.php';
@@ -115,7 +132,7 @@ class AppKernel extends Kernel
         return $this;
     }
 
-    protected function bootBiz()
+    protected function initializeBiz()
     {
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
@@ -125,7 +142,7 @@ class AppKernel extends Kernel
         $biz->boot();
     }
 
-    protected function bootServiceKernel()
+    protected function initializeServiceKernel()
     {
         if(!$this->isServiceKernelInit){
             $container     = $this->getContainer();
@@ -153,6 +170,13 @@ class AppKernel extends Kernel
             ));
             $serviceKernel->setCurrentUser($currentUser);
             $this->isServiceKernelInit = true;
+        }
+    }
+
+    protected function bootPlugins()
+    {
+        foreach ($this->plugins as $plugin) {
+            
         }
     }
 }
