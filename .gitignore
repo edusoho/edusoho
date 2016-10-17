@@ -9,7 +9,7 @@ npm-debug.log
 /web/bundles/
 /app/cache/*
 /app/config/parameters.yml
-/app/config/config_test.yml
+/app/config/parameters_test.yml
 /app/config/menu_blacklist.yml
 /app/data/*
 /app/logs/*
