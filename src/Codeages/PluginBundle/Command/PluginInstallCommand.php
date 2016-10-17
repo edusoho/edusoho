@@ -15,18 +15,20 @@ class PluginInstallCommand extends ContainerAwareCommand
         $this
             ->setName('plugin:install')
             ->setDescription('...')
-            ->addArgument('name', InputArgument::REQUIRED, 'Plugin name.');
+            ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
+        $code = $input->getArgument('code');
 
-        
+        $biz = $this->getContainer()->get('biz');
 
-        var_dump($name);
+        $service = $biz->service('CodeagesPluginBundle:AppService');
 
-        $output->writeln('Command result.');
+        $app = $service->installPluginApp($code);
+
     }
+
 
 }

@@ -2,7 +2,9 @@
 
 namespace Codeages\PluginBundle\Biz\Dao;
 
-interface AppDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface AppDao extends GeneralDaoInterface 
 {
     
 }
