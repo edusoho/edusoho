@@ -17,4 +17,6 @@ interface ActivityService
     public function findActivitiesByCourseId($courseId);
 
     public function getActivityTypes();
+
+    public function trigger($name, $data);
 }

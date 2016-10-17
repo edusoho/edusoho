@@ -23,10 +23,10 @@ class AuthenticationHelper
         if ($result['status'] == 'error') {
             switch ($result['code']) {
                 case 'max_ip_failed_limit':
-                    $result['message'] = self::getServiceKernel()->trans('您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
+                    $result['message'] = self::getServiceKernel()->trans('您当前IP下帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试。', array('%settingTemporaryLockMinutes%' => $setting['temporary_lock_minutes']));
                     break;
                 case 'max_failed_limit':
-                    $result['message'] = self::getServiceKernel()->trans('帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。', array('%settingTemporaryLockMinutes%' =>$setting['temporary_lock_minutes'] ));
+                    $result['message'] = self::getServiceKernel()->trans('帐号或密码输入错误过多，请在%settingTemporaryLockMinutes%分钟后再试，您可以通过找回并重置密码来解除封禁。', array('%settingTemporaryLockMinutes%' => $setting['temporary_lock_minutes']));
                     break;
                 default:
                     $result['message'] = self::getServiceKernel()->trans('帐号或密码输入错误过多，您已被禁止登录。');
@@ -46,11 +46,12 @@ class AuthenticationHelper
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    protected static function getSettingService()
+    private static function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
-        protected function getServiceKernel()
+
+    private static function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

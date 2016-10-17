@@ -14,6 +14,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
+    public function trigger($name, $activityId, $data)
+    {
+        $activity  = $this->getActivityDao()->get($id);
+        $processor = ActivityProcessorFactory::getActivityProcessor($activity['mediaType']);
+    }
+
     public function getActivityDetail($id)
     {
         $activity  = $this->getActivityDao()->get($id);
