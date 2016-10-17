@@ -547,6 +547,13 @@ admin:
                         admin_edu_cloud_search:
                             name: 云搜索
                             disable: true
+                admin_app_im:
+                    name: 即时聊天设置
+                    children:
+                        admin_app_im_setting:
+                            name: 即时聊天设置
+                            router_name: admin_app_im
+                            disable: true
                 admin_setting_cloud_attachment:
                     name: 云附件设置
                     children:
