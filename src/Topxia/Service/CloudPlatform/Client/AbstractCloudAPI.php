@@ -199,6 +199,6 @@ class AbstractCloudAPI
     {
         $developer = ServiceKernel::instance()->createService('System.SettingService')->get('developer');
 
-        return empty($developer['without_network']) ? false : boolval($developer['without_network']);
+        return empty($developer['without_network']) ? false : (bool) $developer['without_network'];
     }
 }
