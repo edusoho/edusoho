@@ -18,9 +18,16 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         return ServiceKernel::instance();
     }
 
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
+    }
+
     public function setUp()
     {
-        parent::setUp();
+        parent::emptyDatabase();
+        $this->flushPool();
         $this->initDevelopSetting();
         $this->initCurrentUser();
     }
