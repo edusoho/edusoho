@@ -242,7 +242,7 @@ class DefaultController extends BaseController
 
         $cloudServiceCount = 0;
 
-        $storageSetting = $this->getSettingService()->get('storageSetting');
+        $storageSetting = $this->getSettingService()->get('storage');
         if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
             $cloudServiceCount += 2;
         }
@@ -358,7 +358,8 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function userWeekStatisticAction(Request $request)
+
+    public function userStatisticAction(Request $request, $period)
     {
         return $this->createJsonResponse(array(
             'time'    => '7',
@@ -366,12 +367,35 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function userMonthStatisticAction(Request $request)
+    public function lessonLearnStatisticAction(Request $request, $period)
     {
         return $this->createJsonResponse(array(
             'time'    => '30',
             'message' => 'ok'
         ));
+    }
+
+    public function studyStatisticAction(Request $request, $period)
+    {
+        return $this->createJsonResponse(array(
+            'time'    => '7',
+            'message' => 'ok'
+        ));
+
+    }
+
+    public function orderStatisticAction(Request $request, $period)
+    {
+        return $this->createJsonResponse(array(
+            'time'    => '30',
+            'message' => 'ok'
+        ));
+
+    }
+
+    public function courseExploreAction(Request $request, $period)
+    {
+        return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig');
     }
 
     // public function onlineCountAction(Request $request)

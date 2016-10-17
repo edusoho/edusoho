@@ -44,7 +44,7 @@
           <ul class="open-serve-list">
             <li>
               <span class="key">云视频</span>
-              {% if setting('storageSetting.upload_mode') == "cloud" %}
+              {% if setting('storage.upload_mode') == "cloud" %}
                 <span class="value value-success"><i class="dot"></i>已开启</span>
               {% else %}
                 <a href="{{ path('admin_setting_cloud_video') }}" class="value value-danger"><i class="dot"></i>未开启</a>
@@ -52,7 +52,7 @@
             </li>
             <li>
               <span class="key">云文档</span>
-              {% if setting('storageSetting.upload_mode') == "cloud" %}
+              {% if setting('storage.upload_mode') == "cloud" %}
                 <span class="value value-success"><i class="dot"></i>已开启</span>
               {% else %}
                 <a href="{{ path('admin_setting_cloud_video') }}" class="value value-danger"><i class="dot"></i>未开启</a>
