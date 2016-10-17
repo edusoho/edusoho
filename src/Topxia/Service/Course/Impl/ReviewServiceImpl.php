@@ -42,11 +42,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     public function searchReviews($conditions, $sort, $start, $limit)
     {
-        if ($sort == 'latest') {
-            $orderBy = array('createdTime', 'DESC');
-        } else {
-            $orderBy = array('rating', 'DESC');
-        }
+        $orderBy = $this->checkOrderBy($sort);
 
         $conditions = $this->prepareReviewSearchConditions($conditions);
         return $this->getReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
@@ -100,20 +96,23 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
 
-        if (empty($review)) {
+        $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
+        if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->addReview(array(
                 'userId'      => $fields['userId'],
                 'courseId'    => $fields['courseId'],
                 'rating'      => $fields['rating'],
                 'private'     => $course['status'] == 'published' ? 0 : 1,
+                'parentId'    => $fields['parentId'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'createdTime' => time()
             ));
             $this->dispatchEvent('courseReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getReviewDao()->updateReview($review['id'], array(
-                'rating'  => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $fields['content']
+                'rating'      => $fields['rating'],
+                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'updatedTime' => time()
             ));
         }
 
@@ -135,6 +134,19 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $this->calculateCourseRating($review['courseId']);
 
         $this->getLogService()->info('course', 'delete_review', "删除评价#{$id}");
+    }
+
+    protected function checkOrderBy($sort)
+    {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'latest') {
+            $orderBy = array('createdTime', 'DESC');
+        } else {
+            $orderBy = array('rating', 'DESC');
+        }
+
+        return $orderBy;
     }
 
     protected function calculateCourseRating($courseId)

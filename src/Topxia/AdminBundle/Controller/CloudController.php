@@ -11,10 +11,9 @@ class CloudController extends BaseController
         $factory = new CloudClientFactory();
         $client  = $factory->createClient();
 
-        $result = $client->getBills($client->getBucket());
-
+        $result = $client->getBills();
         if (!empty($result['error'])) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('获取账单信息失败，云视频参数配置不正确，或网络通讯失败。', '获取账单信息失败'));
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('获取账单信息失败，云视频参数配置不正确，或网络通讯失败。, 获取账单信息失败'));
         }
 
         return $this->render('TopxiaAdminBundle:Cloud:bill.html.twig', array(

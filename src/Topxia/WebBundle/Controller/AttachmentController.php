@@ -91,7 +91,16 @@ class AttachmentController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $attachment = $this->getUploadFileService()->getUseFile($id);
-        $file       = $this->getUploadFileService()->getFile($attachment['fileId']);
+
+        if (empty($attachment)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($attachment['type'] != 'attachment') {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+        }
+
+        $file = $this->getUploadFileService()->getFile($attachment['fileId']);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $file['id']

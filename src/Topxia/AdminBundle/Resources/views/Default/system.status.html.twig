@@ -107,9 +107,9 @@
     {% if mainAppUpgrade %}
       {% set status = 1 %}
       <tr>
-        <td>{{'主系统'|trans}}</td>
+        <td>{{ '主系统'|trans }}</td>
         <td>
-          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{'立即更新'|trans}}</a>
+          <a class="btn btn-xs btn-info pull-right" href="{{ path("admin_app_upgrades") }}">{{ '立即更新'|trans }}</a>
           <span class="glyphicon glyphicon-info-sign text-info"></span>
           {{ '当前版本'|trans }}: {{ constant('Topxia\\System::VERSION') }}&nbsp;
           {{ '下一版本'|trans }}: {{ mainAppUpgrade.package.toVersion }}&nbsp;
@@ -118,10 +118,10 @@
       </tr>
     {% else %}
       <tr>
-        <td>{{'主系统'|trans}}</td>
+        <td>{{ '主系统'|trans }}</td>
         <td>
           <span class="glyphicon glyphicon-ok-sign text-success"></span>
-          {{'已是最新版本'|trans}} {{ constant('Topxia\\System::VERSION') }}
+          {{ '已是最新版本'|trans }} {{ constant('Topxia\\System::VERSION') }}
         </td>
       </tr>
     {% endif %}
@@ -132,7 +132,8 @@
     <tr>
       <td>{{ '主系统'|trans }}</td>
       <td rowspan="4">
-        <div class="empty"><span style="color:#cc0000;float:left;text-align:left;">{{ '云平台参数设置不正确，会影响到系统正常的运行，'|trans }}<a
+        <div class="empty"><span style="color:#cc0000;float:left;text-align:left;">{{ '云平台参数设置不正确，会影响到系统正常的运行，'|trans }}
+            <a
                 href="{{ path('admin_setting_cloud') }}">{{ '请修改设置。'|trans }}</a></span></div>
       </td>
     </tr>
@@ -153,11 +154,11 @@
       <td>{{ '应用更新'|trans }}</td>
       <td>{% if app_count %}
           {% if status|default(0) == 1 and app_count == 1 %}
-            <span class="glyphicon glyphicon-ok-sign text-success"></span> 
+            <span class="glyphicon glyphicon-ok-sign text-success"></span>
             {{ '所有应用都已是最新版本'|trans }}
           {% else %}
             <span class="glyphicon glyphicon-info-sign text-info"></span>
-            {{ '还有'|trans }} 
+            {{ '还有'|trans }}
             <span class="badge">
               {% if status|default(0) == 1 %}
                 {{ app_count - 1 }}
@@ -174,19 +175,22 @@
 
     <tr>
       <td>{{ '新应用'|trans }}</td>
-      <td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还有'|trans }} <span
-            class="badge">{{ unInstallAppCount }}</span> {{ '个应用没有安装'|trans }}<a class="pull-right"
-                                                                   href="{{ path("admin_app_center",{postStatus : 'all'}) }}">
-            {{ '查看'|trans }}</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已安装了全部应用'|trans }}
+      <td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还有'|trans }}
+          <span
+              class="badge">{{ unInstallAppCount }}</span> {{ '个应用没有安装'|trans }}<a class="pull-right"
+                                                                                   href="{{ path("admin_app_center",{postStatus : 'all'}) }}">
+          {{ '查看'|trans }}</a>{% else %}<span
+            class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已安装了全部应用'|trans }}
         {% endif %}</td>
     </tr>
 
     <tr>
       <td>{{ '云视频'|trans }}</td>
-      <td>{% if setting("storage.cloud_bucket")!="" %}<span
+      <td>  {% if  info.accessCloud|default(0) != 0 %}<span
             class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已开通'|trans }}{% if setting("storage.upload_mode") != 'cloud' %}({{ '尚未启用'|trans }})
           <a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>{% endif %}{% else %}
-          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right" href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
+          <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未开通'|trans }}<a class="pull-right"
+                                                                                             href="{{ path("admin_setting_cloud_video") }}">{{ '查看'|trans }}</a>
         {% endif %}</td>
     </tr>
   {% endif %}
@@ -224,7 +228,7 @@
         <span class="glyphicon glyphicon-ok-sign text-success"></span> {{ '已启用'|trans }}
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-info"></span> {{ '还未启用'|trans }}<a class="pull-right"
-                                                                             href="{{ path("admin_setting_mobile") }}">{{ '查看'|trans }}</a>
+                                                                                           href="{{ path("admin_setting_mobile") }}">{{ '查看'|trans }}</a>
       {% endif %}
     </td>
   </tr>
@@ -249,9 +253,11 @@
             {% if applyStatus == 'failed' %}
               <span class="label label-danger">{{ '升级失败'|trans }}</span>
             {% endif %}
-                    <a class="btn btn-info btn-xs mls" target="_blank" href="http://demo.edusoho.com/mobile/">{{ '体验'|trans }}</a>
+                    <a class="btn btn-info btn-xs mls" target="_blank"
+                       href="http://demo.edusoho.com/mobile/">{{ '体验'|trans }}</a>
             <a class="btn btn-info btn-xs mobile-customization-upgrade-btn"
-               data-url="{{ path("admin_operation_mobile_customization_upgrade") }}" data-loading-text="{{ '提交中...'|trans }}"
+               data-url="{{ path("admin_operation_mobile_customization_upgrade") }}"
+               data-loading-text="{{ '提交中...'|trans }}"
                data-data="{{ {'currentVersion': currentVersion, 'targetVersion': newestVersion}|json_encode }}">{{ '申请升级'|trans }}</a>
                   {% elseif applyStatus == 'submitted' %}
             <span class="label label-warning">{{ '升级受理中'|trans }}</span>

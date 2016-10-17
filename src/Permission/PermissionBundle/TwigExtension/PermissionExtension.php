@@ -80,7 +80,7 @@ class PermissionExtension extends \Twig_Extension
             $code = "'{$code}'";
         }
 
-        if (empty($this->loader)) {
+        /*if (empty($this->loader)) {
             $this->loader = new \Twig_Loader_Array(array(
                 'expression.twig' => '{{'.$code.'}}'
             ));
@@ -88,7 +88,15 @@ class PermissionExtension extends \Twig_Extension
             $this->loader = new \Twig_Loader_Chain(array($this->loader, $twig->getLoader()));
 
             $twig->setLoader($this->loader);
-        }
+        }*/
+
+        $loader = new \Twig_Loader_Array(array(
+            'expression.twig' => '{{'.$code.'}}'
+        ));
+
+        $loader = new \Twig_Loader_Chain(array($loader, $twig->getLoader()));
+
+        $twig->setLoader($loader);
 
         return $twig->render('expression.twig', $context);
     }

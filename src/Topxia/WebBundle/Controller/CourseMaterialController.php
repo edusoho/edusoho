@@ -67,6 +67,10 @@ class CourseMaterialController extends CourseBaseController
             throw $this->createNotFoundException();
         }
 
+        if ($material['source'] == 'courselesson' || !$material['lessonId']) {
+            return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
+        }
+
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 

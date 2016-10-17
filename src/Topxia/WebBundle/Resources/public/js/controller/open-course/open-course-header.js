@@ -122,7 +122,7 @@ define(function (require, exports, module) {
             var lesson = this.get('lesson');
             
             if (lesson.type == 'video' || lesson.type == 'audio') {
-                if (lesson.convertStatus != 'success') {
+                if (lesson.convertStatus != 'success' && lesson.storage == 'cloud') {
                     $('#media-error-dialog').show();
                     $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                     return;
@@ -229,7 +229,7 @@ define(function (require, exports, module) {
                 self.set('lesson', lesson);
 
                 if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
-                    if ((lesson.convertStatus != 'success')) {
+                    if ((lesson.convertStatus != 'success' && lesson.storage == 'cloud')) {
                         $('#media-error-dialog').show();
                         $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                         return;

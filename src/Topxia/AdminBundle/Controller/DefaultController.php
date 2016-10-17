@@ -235,6 +235,7 @@ class DefaultController extends BaseController
 
         $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
+        $info                = $rootApi->get('/me');
 
 
         $cloudServiceCount = 0;
@@ -260,6 +261,7 @@ class DefaultController extends BaseController
 
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
+            "info"=>$info,
             "apps"                => $apps,
             "error"               => $error,
             "mainAppUpgrade"      => $mainAppUpgrade,
@@ -388,6 +390,7 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'onlineCount' => $onlineCount,
             'loginCount'  => $loginCount,
+
 
             'todayUserSum'           => $todayUserSum,
             'yesterdayUserSum'       => $yesterdayUserSum,
