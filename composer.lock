@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94f54b3963da38b1792496c05e74717d",
-    "content-hash": "86b68752641cb01c8fbe00ce2483f786",
+    "hash": "4f3fb4a2e2889987eb8914b4a2fd583d",
+    "content-hash": "80c41259ccfae54b8c6e286289c5d3e1",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -207,16 +207,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "5327fb455ba6fdf4eb47ec3548b887d709949781"
+                "reference": "221023f1ccea097c843f9e9157e5d4ce3ce0bec1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/5327fb455ba6fdf4eb47ec3548b887d709949781",
-                "reference": "5327fb455ba6fdf4eb47ec3548b887d709949781",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/221023f1ccea097c843f9e9157e5d4ce3ce0bec1",
+                "reference": "221023f1ccea097c843f9e9157e5d4ce3ce0bec1",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2016-10-16 15:05:19"
+            "time": "2016-10-17 02:36:24"
         },
         {
             "name": "davedevelopment/phpmig",
