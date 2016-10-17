@@ -5,10 +5,6 @@ namespace Topxia\Service\Common;
 use Mockery;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Doctrine\Bundle\MigrationsBundle\Command\MigrationsMigrateDoctrineCommand;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
@@ -114,21 +110,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     {
         global $kernel;
         return $kernel->getContainer();
-    }
-
-    protected function createAppDatabase()
-    {
-        // 执行数据库的migrate脚本
-        global $kernel;
-        $application = new Application($kernel);
-
-        $application->add(new MigrationsMigrateDoctrineCommand());
-        $command       = $application->find('doctrine:migrations:migrate');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute(
-            array('command' => $command->getName()),
-            array('interactive' => false)
-        );
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())
