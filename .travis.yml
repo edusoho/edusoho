@@ -14,8 +14,12 @@ php:
 env:
   - SYMFONY_VERSION="~2.8.12" DB=mysql
 
+git:
+    submodules: false
+
 before_install:
   - echo -e "Host gitlab.howzhi.net:4422\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git submodule update --init --recursive
 
 before_script:
   - mysql -e 'CREATE DATABASE `edusoho-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
