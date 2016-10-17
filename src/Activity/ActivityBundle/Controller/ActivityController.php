@@ -8,7 +8,7 @@ class ActivityController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        list($activity, $detail, $typeConfg) = $this->getActivityService()->getDetailActivity($id);
+        list($activity, $detail, $typeConfg) = $this->getActivityService()->getActivityDetail($id);
 
         return $this->render($typeConfg['show_page'], array(
             'activity' => $activity,

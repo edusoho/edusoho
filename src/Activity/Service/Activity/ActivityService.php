@@ -6,7 +6,7 @@ interface ActivityService
 {
     public function getActivity($id);
 
-    public function getDetailActivity($id);
+    public function getActivityDetail($id);
 
     public function createActivity($activity);
 
