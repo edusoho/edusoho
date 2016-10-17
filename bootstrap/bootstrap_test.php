@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
-use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\TestCaseConnection;
 
@@ -15,9 +14,10 @@ $kernel->boot();
 $container = $kernel->getContainer();
 $container->enterScope('request');
 $container->set('request', $request, 'request');
-$connection = $kernel->getContainer()->get('database_connection');
+$biz = $kernel->getContainer()->get('biz');
+
 ServiceKernel::instance()
     ->setEnvVariable(array(
         'host'          => 'test.com',
         'schemeAndHost' => 'http://test.com'))
-    ->setConnection(new TestCaseConnection($connection));
+    ->setConnection(new TestCaseConnection($biz['db']));

@@ -3,6 +3,8 @@
 namespace Topxia\Service\Common;
 
 
+use Codeages\Biz\Framework\Dao\Connection;
+
 class TestCaseConnection extends Connection
 {
     private $_insertedTables = array();
