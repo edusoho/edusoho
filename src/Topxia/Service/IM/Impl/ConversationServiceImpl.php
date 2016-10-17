@@ -99,7 +99,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         $result = $this->createImApi()->post('/me/conversation', $message);
 
         if (isset($result['error'])) {
-            throw $this->createServiceException($result['error'], $result['code']);
+            throw $this->createServiceException($result['error'], $result['error']['code']);
         }
 
         return $result['no'];

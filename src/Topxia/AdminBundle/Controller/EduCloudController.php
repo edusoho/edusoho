@@ -924,7 +924,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-open'])) {
             $status = $api->get('/me/email_account');
 
-            if (isset($status['code']) && $status['code'] == 101) {
+            if (isset($status['error']) && $status['error']['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
                 $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->getServiceKernel()->trans("我的网校")));
 
