@@ -25,12 +25,19 @@ class ActivityProcessorFactory
         return self::$processorMap[$type];
     }
 
+    public static function getActivityTypeConfig($type)
+    {
+        $types = self::getActivityTypes();
+        return $types[$type];
+    }
+
     public static function getActivityTypes()
     {
         return array(
             'text' => array(
                 'name'         => '图文',
-                'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig'
+                'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig',
+                'show_page'    => 'ActivityBundle:Activity:text-show.html.twig'
             )
         );
     }

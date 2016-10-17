@@ -8,9 +8,11 @@ class ActivityController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        return $this->render('ActivityBundle:Activity:show.html.twig', array(
-            'activity' => $activity
+        list($activity, $detail, $typeConfg) = $this->getActivityService()->getDetailActivity($id);
+
+        return $this->render($typeConfg['show_page'], array(
+            'activity' => $activity,
+            'detail'   => $detail
         ));
     }
 

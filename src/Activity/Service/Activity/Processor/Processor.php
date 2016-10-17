@@ -9,4 +9,6 @@ interface Processor
     public function update($mediaId, $fields);
 
     public function delete($mediaId);
+
+    public function get($mediaId);
 }

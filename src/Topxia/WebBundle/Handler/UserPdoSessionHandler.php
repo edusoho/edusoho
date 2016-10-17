@@ -378,8 +378,6 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;
         } else {
-            var_dump($data);
-
             $userId = $token->getUser()->getId();
         }
 
