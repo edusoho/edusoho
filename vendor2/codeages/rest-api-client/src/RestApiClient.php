@@ -76,6 +76,8 @@ class RestApiClient
 
         $body = $this->http->request($method, $url, $body, $headers, $requestId);
 
+        $context = array('headers' => $headers, 'body' => $body);
+
         $result = $this->spec->unserialize($body);
         if (empty($result)) {
             $message = "[RestApiClient #{$requestId}] Resut unserialize error (url: {$url}).";
