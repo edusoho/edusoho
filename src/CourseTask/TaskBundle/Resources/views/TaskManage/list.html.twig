@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{#{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set script_controller = 'taskbundle/controller/task-manage/tasks' %}
 
@@ -13,4 +13,22 @@
 		{% endfor %}
 	</ul>
 	
+{% endblock %}#}
+
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'task' %}
+{% set script_controller = 'course-manage/task' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ '教学计划编辑'|trans }}</div>
+  </div>
+
 {% endblock %}
+
+
+
