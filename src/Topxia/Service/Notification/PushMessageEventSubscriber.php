@@ -16,7 +16,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'user.unlock'             => 'onUserCreate',
             'user.lock'               => 'onUserDelete',
             'user.update'             => 'onUserUpdate',
-            'user.change_nickname'    => 'onUserUpdate',
+            'user.change_nickname'    => 'onUserChangeNickname',
 
             'course.publish' => 'onCourseCreate',
             'course.update'  => 'onCourseUpdate',
@@ -85,21 +85,25 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $this->getCloudDataService()->push('school.' . $eventName, $data, time(), $level);
     }
 
+    public function onUserChangeNickname(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $user = $context;
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
+    }
+
     /**
      * User相关
      */
     public function onUserUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
-
-        if ($event->getName() == 'user.update') {
-            $user = $context['user'];
-        } else {
-            $user = $context;
+        if(!isset($context['user'])){
+            return;
         }
-
+        $user = $context['user'];
         $profile = $this->getUserService()->getUserProfile($user['id']);
-
         $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
     }
 
