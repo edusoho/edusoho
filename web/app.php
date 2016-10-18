@@ -28,7 +28,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 fix_gpc_magic();
 
-$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+$loader = require_once __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../app/bootstrap.php.cache';
+require_once __DIR__.'/../app/AppKernel.php';
 
 // Use APC for autoloading to improve performance.
 
@@ -40,7 +42,7 @@ $loader = new ApcClassLoader('sf2', $loader);
 $loader->register(true);
  */
 
-require_once __DIR__.'/../app/AppKernel.php';
+
 //require_once __DIR__.'/../app/AppCache.php';
 
 $kernel = new AppKernel('prod', false);
@@ -48,35 +50,7 @@ $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-
-$kernel->boot();
-
-// START: init service kernel
-$serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
-$serviceKernel->setEnvVariable(array(
-    'host'          => $request->getHttpHost(),
-    'schemeAndHost' => $request->getSchemeAndHttpHost(),
-    'basePath'      => $request->getBasePath(),
-    'baseUrl'       => $request->getSchemeAndHttpHost().$request->getBasePath()
-));
-$serviceKernel->setTranslatorEnabled(true);
-$serviceKernel->setTranslator($kernel->getContainer()->get('translator'));
-$serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-$serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
-
-$serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
-$serviceKernel->getConnection()->exec('SET NAMES UTF8');
-
-$currentUser = new CurrentUser();
-$currentUser->fromArray(array(
-    'id'        => 0,
-    'nickname'  => '游客',
-    'currentIp' => $request->getClientIp(),
-    'roles'     => array()
-));
-$serviceKernel->setCurrentUser($currentUser);
-
-// END: init service kernel
+$kernel->setRequest($request);
 
 // NOTICE: 防止请求捕捉失败而做异常处理
 // 包括：数据库连接失败等

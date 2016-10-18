@@ -2,6 +2,7 @@
 namespace Topxia\Service\User;
 
 use Permission\Common\PermissionBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,7 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class UserProvider implements UserProviderInterface
 {
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -28,7 +29,8 @@ class UserProvider implements UserProviderInterface
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-
+        $biz = $this->container->get('biz');
+        $biz['user'] = $currentUser;
         ServiceKernel::instance()->setCurrentUser($currentUser);
         return $currentUser;
     }

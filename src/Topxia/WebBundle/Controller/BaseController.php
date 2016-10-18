@@ -4,11 +4,10 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\Impl\UserServiceImpl;
-use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Topxia\Common\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\SecurityEvents;
-use Topxia\Service\Common\InvalidArgumentException;
+use Topxia\Common\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -30,7 +29,7 @@ abstract class BaseController extends Controller
 
     protected function isAdminOnline()
     {
-        return $this->get('security.context')->isGranted('ROLE_ADMIN');
+        return $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN');
     }
 
     public function getUser()
@@ -84,7 +83,7 @@ abstract class BaseController extends Controller
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser['roles']);
-        $this->container->get('security.context')->setToken($token);
+        $this->container->get('security.token_storage')->setToken($token);
 
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
@@ -179,7 +178,7 @@ abstract class BaseController extends Controller
         return $response;
     }
 
-    public function createAccessDeniedException($message = null)
+    public function createAccessDeniedException($message = null, \Exception $previous = null)
     {
         if ($message) {
             return new AccessDeniedException($message);

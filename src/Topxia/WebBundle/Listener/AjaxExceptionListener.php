@@ -11,7 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AjaxExceptionListener
 {
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -64,11 +64,11 @@ class AjaxExceptionListener
 
     public function getUser()
     {
-        if (!$this->container->has('security.context')) {
+        if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->container->get('security.context')->getToken()) {
+        if (null === $token = $this->container->get('security.token_storage')->getToken()) {
             return null;
         }
 

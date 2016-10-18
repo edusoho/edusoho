@@ -49,7 +49,7 @@ class GroupController extends BaseController
 
     public function addGroupAction(Request $request)
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') !== true) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('目前只允许管理员创建小组!'));
         }
 
@@ -420,7 +420,7 @@ class GroupController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             return true;
         }
 
@@ -439,7 +439,7 @@ class GroupController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             return true;
         }
 
