@@ -36,7 +36,7 @@ script:
   - sudo usermod -a -G www-data $USER
   - sudo chown -R www-data:www-data ./
   - sudo chmod +x /home/travis
-  - phpunit -c app/
+  - sudo -E su $USER -c "php phpunit -c app/"
 
 cache:
   directories:
