@@ -107,10 +107,10 @@
             </p>
           {% endif %}
         {% endif %}
-      {% endif %}
 
-      {% if course.buyExpireTime %}
-        <span class="text-danger text-xs">{{ '购买截止日期'|trans }}:{{ course.buyExpireTime|date('Y-m-d') }}</span>
+        {% if course.buyExpireTime %}
+          <span class="text-danger text-xs">{{ '购买截止日期'|trans }}:{{ course.buyExpireTime|date('Y-m-d') }}</span>
+        {% endif %}
       {% endif %}
 
     </div>
