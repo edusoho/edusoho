@@ -3,7 +3,6 @@
 namespace Topxia\Service\Common;
 
 use Mockery;
-use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
