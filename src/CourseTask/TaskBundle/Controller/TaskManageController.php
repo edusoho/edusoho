@@ -8,6 +8,7 @@ class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId)
     {
+        $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
             $savedTask = $this->getTaskService()->createTask($task);
@@ -29,6 +30,12 @@ class TaskManageController extends BaseController
 
     public function updateAction(Request $request, $courseId, $id)
     {
+        $this->tryManageCourse($courseId);
+        $task = $this->getTaskService()->getTask($id);
+        if ($task['courseId'] != $courseId) {
+            throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
+        }
+
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
             $savedTask = $this->getTaskService()->updateTask($id, $task);
@@ -38,7 +45,6 @@ class TaskManageController extends BaseController
             ));
         }
 
-        $task          = $this->getTaskService()->getTask($id);
         $activity      = $this->getActivityService()->getActivity($task['activityId']);
         $activityTypes = $this->getActivityService()->getActivityTypes();
 
@@ -53,20 +59,27 @@ class TaskManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
+        $this->tryManageCourse($courseId);
+        $task = $this->getTaskService()->getTask($id);
+        if ($task['courseId'] != $courseId) {
+            throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
+        }
+
         $this->getTaskService()->deleteTask($id);
         return $this->createJsonResponse(true);
     }
 
+    // TODO 是否移到CourseManageController
     public function tasksAction(Request $request, $courseId)
     {
-        $this->tryManageCourse();
+        $this->tryManageCourse($courseId);
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         return $this->render('TaskBundle:TaskManage:list.html.twig', array(
             'tasks' => $tasks
         ));
     }
 
-    protected function tryManageCourse()
+    protected function tryManageCourse($courseId)
     {
         return true;
     }
