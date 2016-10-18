@@ -528,9 +528,16 @@ class TestpaperController extends BaseController
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'reviewing',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status' => 'reviewing',
+                'checkTeacherId' => 0
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -582,9 +589,16 @@ class TestpaperController extends BaseController
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'finished',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status' => 'finished',
+                'checkTeacherId' => $user['id']
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ),            
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -630,12 +644,18 @@ class TestpaperController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
-            10
+            3
         );
 
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            $status,
+        $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status' => $status
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ), 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
