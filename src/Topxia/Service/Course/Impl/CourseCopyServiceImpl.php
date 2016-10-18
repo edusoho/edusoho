@@ -295,7 +295,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyCourse($course, $link = false)
     {
-        $fields                = ArrayToolkit::parts($course, array('price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
+        $fields                = ArrayToolkit::parts($course, array('price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'expiryMode', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
         $fields['createdTime'] = time();
 
         if ($link) {

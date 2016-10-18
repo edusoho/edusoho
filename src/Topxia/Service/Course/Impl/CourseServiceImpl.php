@@ -468,9 +468,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createServiceException($this->getKernel()->trans('课程不存在，更新失败！'));
         }
-
         $fields = $this->_filterCourseFields($fields);
 
+        //已经发布的课程不能修改课程过期模式
+        if ($course['status'] == 'published' && $fields['expiryMode'] != $course['expiryMode']) {
+            $fields['expiryMode'] = $course['expiryMode'];
+        }
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $fields        = $this->fillOrgId($fields);
@@ -509,10 +512,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function _filterCourseFields($fields)
     {
+        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
+            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+        }
+
         $fields = ArrayToolkit::filter($fields, array(
             'title'          => '',
             'subtitle'       => '',
             'about'          => '',
+            'expiryMode'     => 'none',
             'expiryDay'      => 0,
             'serializeMode'  => 'none',
             'categoryId'     => 0,
@@ -542,9 +550,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int) $item['id'];
-            }
-
-            );
+            });
         }
 
         return $fields;
@@ -2240,10 +2246,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
+        //按照课程有效期模式计算学员有效期
+        $deadline = 0;
         if ($course['expiryDay'] > 0) {
-            $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
-        } else {
-            $deadline = 0;
+            if ($course['expiryMode'] == 'days') {
+                $deadline = $course['expiryDay'] * 24 * 60 * 60 + time();
+            }
+            if ($course['expiryMode'] == 'date') {
+                $deadline = $course['expiryDay'];
+            }
         }
 
         if (!empty($info['orderId'])) {
@@ -2463,7 +2474,10 @@ class CourseServiceImpl extends BaseService implements CourseService
      * @todo refactor it.
      * @param  int|string                                $courseId
      * @param  null|string                               $otherPermission
+     * @param  int|string                                $courseId
+     * @param  null|string                               $otherPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      * @return array
      */
     public function tryManageCourse($courseId, $otherPermission = null)
@@ -2490,7 +2504,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @param  int|string                                $courseId
      * @param  null|string                               $actionPermission
+     * @param  int|string                                $courseId
+     * @param  null|string                               $actionPermission
      * @throws NotFoundException|AccessDeniedException
+     * @return array
      * @return array
      */
     public function tryAdminCourse($courseId, $actionPermission = null)
@@ -2564,13 +2581,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course) || empty($member)) {
             throw $this->createServiceException($this->getKernel()->trans('course, member参数不能为空'));
         }
-
-        /*
-        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
-        if ($course['expiryDay'] == 0) {
-        return true;
-        }
-         */
 
         if ($member['deadline'] == 0) {
             return true;

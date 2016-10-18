@@ -3,6 +3,11 @@ define(function(require, exports, module) {
     var AudioPlayer = require('./audioplayer');
 
     exports.run = function() {
+        $('.js-show-resolve').on('click',function(){
+            $this = $(this);
+            $('.js-topic-content').toggleClass('hidden');
+            $('.js-topic-resolve').toggleClass('hidden').is(":visible") ? $this.text('返回题目') : $this.text('查看解析');
+        });
 
         var players = [];
 
@@ -29,6 +34,9 @@ define(function(require, exports, module) {
         });
 
         $(document).dequeue('audio_player');
+
+
+        
 
     }
 
