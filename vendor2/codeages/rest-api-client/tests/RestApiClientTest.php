@@ -1,6 +1,7 @@
 <?php
 
 use Codeages\RestApiClient\RestApiClient;
+use Codeages\RestApiClient\Tests\TestLogger;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
 
 class RestApiClientTest extends \PHPUnit_Framework_TestCase
@@ -12,10 +13,10 @@ class RestApiClientTest extends \PHPUnit_Framework_TestCase
             'secretKey' => 'test_secret_key',
             'endpoint'  => 'http://passport.dev.com/api/v1'
         );
-        $spec = new JsonHmacSpecification();
-        //$logger = new TestLogger();
+        $spec   = new JsonHmacSpecification();
+        $logger = new TestLogger();
 
-        $client = new RestApiClient($config, $spec, null, null, true);
+        $client = new RestApiClient($config, $spec, null, $logger, true);
 
         // $result = $client->get('/mobiles/13757199220/validation');
         // $result = $client->post('/users', [
@@ -37,23 +38,6 @@ class RestApiClientTest extends \PHPUnit_Framework_TestCase
         var_dump($result);exit();
 
         // $this->assertEquals(1, $user['id']);
-    }
-
-    public function testImAccount()
-    {
-        $config = array(
-            'accessKey' => 'RzelPjVJQ5BSC4MYaDd6dAhr5x2N7QCY',
-            'secretKey' => 'BMCwLxD1hA7HpOqsqLm32rKJHMak6osI',
-            'endpoint'  => 'http://imapi.edusoho.net/v1/'
-        );
-        $spec = new JsonHmacSpecification();
-        //$logger = new TestLogger();
-
-        $client = new RestApiClient($config, $spec, null, null, true);
-
-        $result = $client->post('/accounts');
-
-        var_dump($result);exit;
     }
 
 }
