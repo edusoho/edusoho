@@ -29,11 +29,14 @@ before_script:
   - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'tester'@'localhost'"
   - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - sudo mkdir web/files
+  - mkdir web/files
   - touch app/config/routing_plugins.yml
 
 script:
-  - phpunit -c app/
+  - sudo usermod -a -G www-data $USER"
+  - sudo chown -R www-data:www-data ./
+  - sudo chmod +x /home/travis
+  - sudo -E su $USER -c "phpunit -c app/"
 
 cache:
   directories:
