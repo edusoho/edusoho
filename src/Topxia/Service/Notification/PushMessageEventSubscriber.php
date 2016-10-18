@@ -68,10 +68,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'testpaper.reviewed'        => 'onTestPaperReviewed',
 
-            'homework.check'            => 'onHomeworkCheck',
+            'homework.check'            => 'onHomeworkCheck'
 
-            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+            //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+            //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
         );
     }
 
