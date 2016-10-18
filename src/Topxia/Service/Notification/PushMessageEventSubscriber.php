@@ -18,7 +18,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'user.update'             => 'onUserUpdate',
             'user.change_nickname'    => 'onUserChangeNickname',
 
-            'course.publish' => 'onCourseCreate',
+            'course.publish' => 'onCoursePublish',
             'course.update'  => 'onCourseUpdate',
             'course.delete'  => 'onCourseDelete',
             'course.close'   => 'onCourseDelete',
@@ -27,7 +27,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.create'  => 'onCourseCreate',
 
             'course.lesson.publish'   => 'onCourseLessonCreate',
-            'course.lesson.unpublish' => 'onCourseLessonDelete',
+            'course.lesson.unpublish' => 'onCourseLessonUnpublish',
             'course.lesson.update'    => 'onCourseLessonUpdate',
             'course.lesson.delete'    => 'onCourseLessonDelete',
 
@@ -45,22 +45,22 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'thread.create'        => 'onThreadCreate',
             'thread.update'        => 'onThreadUpdate',
             'thread.delete'        => 'onThreadDelete',
-            'course.thread.create' => 'onThreadCreate',
-            'course.thread.update' => 'onThreadUpdate',
-            'course.thread.delete' => 'onThreadDelete',
-            'group.thread.create'  => 'onThreadCreate',
-            'group.thread.open'    => 'onThreadCreate',
-            'group.thread.update'  => 'onThreadUpdate',
-            'group.thread.delete'  => 'onThreadDelete',
-            'group.thread.close'   => 'onThreadDelete',
+            'course.thread.create' => 'onCourseThreadCreate',
+            'course.thread.update' => 'onCourseThreadUpdate',
+            'course.thread.delete' => 'onCourseThreadDelete',
+            'group.thread.create'  => 'onGroupThreadCreate',
+            'group.thread.open'    => 'onGroupThreadOpen',
+            'group.thread.update'  => 'onGroupThreadUpdate',
+            'group.thread.delete'  => 'onGroupThreadDelete',
+            'group.thread.close'   => 'onGroupThreadClose',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
-            'course.thread.post.create' => 'onThreadPostCreate',
-            'course.thread.post.update' => 'onThreadPostUpdate',
-            'course.thread.post.delete' => 'onThreadPostDelete',
-            'group.thread.post.create'  => 'onThreadPostCreate',
-            'group.thread.post.delete'  => 'onThreadPostDelete',
+            'course.thread.post.create' => 'onCourseThreadPostCreate',
+            'course.thread.post.update' => 'onCourseThreadPostUpdate',
+            'course.thread.post.delete' => 'onCourseThreadPostDelete',
+            'group.thread.post.create'  => 'onGroupThreadPostCreate',
+            'group.thread.post.delete'  => 'onGroupThreadPostDelete',
 
             'announcement.create' => 'onAnnouncementCreate',
 
@@ -88,9 +88,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onUserChangeNickname(ServiceEvent $event)
     {
         $context = $event->getSubject();
-        $user = $context;
+        $user    = $context;
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
+        $result  = $this->pushCloud('user.update', $this->convertUser($user, $profile));
     }
 
     /**
@@ -99,12 +99,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onUserUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
-        if(!isset($context['user'])){
+        if (!isset($context['user'])) {
             return;
         }
-        $user = $context['user'];
+        $user    = $context['user'];
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
+        $result  = $this->pushCloud('user.update', $this->convertUser($user, $profile));
     }
 
     public function onUserCreate(ServiceEvent $event)
@@ -142,36 +142,38 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $converted;
     }
 
-    /**
-     * Course相关
-     */
+    public function onCoursePublish(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $this->pushCloud('course.create', $this->convertCourse($course));
+    }
+
     public function onCourseCreate(ServiceEvent $event)
     {
         $course = $event->getSubject();
 
-        if ($event->getName() == 'course.create') {
-            //创建课程IM会话
-            $currentUser = ServiceKernel::instance()->getCurrentUser();
-            $message     = array(
-                'name'    => $course['title'],
-                'clients' => array(
-                    array(
-                        'clientId'   => $currentUser['id'],
-                        'clientName' => $currentUser['nickname']
-                    )
+        //创建课程IM会话
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
+        $message     = array(
+            'name'    => $course['title'],
+            'clients' => array(
+                array(
+                    'clientId'   => $currentUser['id'],
+                    'clientName' => $currentUser['nickname']
                 )
-            );
+            )
+        );
 
-            $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
 
-            if (isset($result['network']) && $result['network'] == 'off') {
-                return;
-            }
-
-            if (!empty($result['no'])) {
-                $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
-            }
+        if (isset($result['network']) && $result['network'] == 'off') {
+            return;
         }
+
+        if (!empty($result['no'])) {
+            $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+        }
+
 
         $this->pushCloud('course.create', $this->convertCourse($course));
     }
@@ -269,19 +271,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->pushCloud('lesson.update', $lesson);
     }
 
+    public function onCourseLessonUnpublish(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context;
+        $this->pushCloud('lesson.delete', $lesson);
+    }
+
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+        $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
-        if ($event->getName() == 'course.lesson.delete') {
-            $lesson = $context['lesson'];
-            $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
-        } else {
-            $lesson = $context;
+        if ($jobs) {
+            $this->deleteJob($jobs);
         }
 
         $this->pushCloud('lesson.delete', $lesson);
@@ -385,19 +389,67 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onThreadCreate(ServiceEvent $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.create', $this->convertThread($thread, $event->getName()));
+        $this->pushCloud('thread.create', $this->convertThread($thread, 'thread.create'));
+    }
+
+    public function onGroupThreadCreate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.create', $this->convertThread($thread, 'group.thread.create'));
+    }
+
+    public function onGroupThreadOpen(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.create', $this->convertThread($thread, 'group.thread.open'));
+    }
+
+    public function onCourseThreadCreate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.create', $this->convertThread($thread, 'course.thread.create'));
     }
 
     public function onThreadUpdate(ServiceEvent $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.update', $this->convertThread($thread, $event->getName()));
+        $this->pushCloud('thread.update', $this->convertThread($thread, 'thread.update'));
+    }
+
+    public function onCourseThreadUpdate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.update', $this->convertThread($thread, 'course.thread.update'));
+    }
+
+    public function onGroupThreadUpdate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.update', $this->convertThread($thread, 'group.thread.update'));
     }
 
     public function onThreadDelete(ServiceEvent $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.delete', $this->convertThread($thread, $event->getName()));
+        $this->pushCloud('thread.delete', $this->convertThread($thread, 'thread.delete'));
+    }
+
+    public function onCourseThreadDelete(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.delete', $this->convertThread($thread, 'course.thread.delete'));
+    }
+
+    public function onGroupThreadDelete(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.delete', $this->convertThread($thread, 'group.thread.delete'));
+    }
+
+    public function onGroupThreadClose(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.delete', $this->convertThread($thread, 'group.thread.close'));
     }
 
     protected function convertThread($thread, $eventName)
@@ -436,19 +488,43 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onThreadPostCreate(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'thread.post.create'));
     }
 
-    public function onThreadPostUpdate(ServiceEvent $event)
+    public function onCourseThreadPostCreate(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.update', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'course.thread.post.create'));
+    }
+
+    public function onGroupThreadPostCreate(ServiceEvent $event)
+    {
+        $threadPost = $event->getSubject();
+        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'group.thread.post.create'));
+    }
+
+    public function onCourseThreadPostUpdate(ServiceEvent $event)
+    {
+        $threadPost = $event->getSubject();
+        $this->pushCloud('thread_post.update', $this->convertThreadPost($threadPost, 'course.thread.post.update'));
     }
 
     public function onThreadPostDelete(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, 'thread.post.delete'));
+    }
+
+    public function onCourseThreadPostDelete(ServiceEvent $event)
+    {
+        $threadPost = $event->getSubject();
+        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, 'course.thread.post.delete'));
+    }
+
+    public function onGroupThreadPostDelete(ServiceEvent $event)
+    {
+        $threadPost = $event->getSubject();
+        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, 'group.thread.post.delete'));
     }
 
     protected function convertThreadPost($threadPost, $eventName)
