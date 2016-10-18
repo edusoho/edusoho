@@ -27,12 +27,14 @@ class TaskController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $id, $eventName)
     {
-        $task = $this->tryLearnTask($courseId, $id);
+        $task         = $this->tryLearnTask($courseId, $id);
+        $data         = $request->request->all();
+        $data['task'] = $task;
 
         return $this->forward('ActivityBundle:Activity:trigger', array(
-            'request'   => $request,
             'id'        => $task['activityId'],
-            'eventName' => $eventName
+            'eventName' => $eventName,
+            'data'      => $data
         ));
     }
 
