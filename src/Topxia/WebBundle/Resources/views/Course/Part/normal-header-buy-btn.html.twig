@@ -1,7 +1,3 @@
-{% if course.buyExpireTime %}
-  <span class="text-danger text-xs text-expire-time">截止日期:{{ course.buyExpireTime|date('Y-m-d') }}</span>
-{% endif %}
-
 {% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
   {% if courseVip%}
     {{'会员免费学'|trans}}<br/><br/>
