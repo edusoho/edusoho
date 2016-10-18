@@ -8,14 +8,14 @@ class ActivityProcessorFactory
 
     public static function getActivityProcessor($type)
     {
-        if (!in_array($type, array_keys(self::getActivityTypes()))) {
+        $types = self::getActivityTypes();
+        if (!in_array($type, array_keys($types))) {
             throw new \InvalidArgumentException('activity type is invalid');
         }
 
         if (empty(self::$processorMap[$type])) {
-            $upperType = ucfirst($type);
-            $class     = __NAMESPACE__."\\Processor\\{$upperType}Processor";
-            if (class_exists($class)) {
+            if (!empty($types[$type]['processor']) && class_exists($types[$type]['processor'])) {
+                $class                     = $types[$type]['processor'];
                 self::$processorMap[$type] = new $class();
             } else {
                 self::$processorMap[$type] = array();
@@ -49,6 +49,7 @@ class ActivityProcessorFactory
         return array(
             'text' => array(
                 'name'         => '图文',
+                'processor'    => '',
                 'create_modal' => 'ActivityBundle:ActivityManage:text.html.twig',
                 'show_page'    => 'ActivityBundle:Activity:text-show.html.twig',
                 'events'       => array(
