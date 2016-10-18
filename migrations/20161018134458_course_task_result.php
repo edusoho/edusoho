@@ -24,7 +24,7 @@ class CourseTaskResult extends Migration
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
 
-        $connection->exec("CREATE TABLE `course_learn_log` (
+        $connection->exec("CREATE TABLE `activity_learn_log` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
             `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教学活动id',
             `courseTaskId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务id',
