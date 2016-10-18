@@ -1,5 +1,5 @@
 <?php
-namespace Activity\Service\Activity\Event;
+namespace CourseTask\Service\Task\Event;
 
 use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
