@@ -1,5 +1,6 @@
 imports:
     - { resource: config_dev.yml }
+    - { resource: parameters_test.yml }
 
 framework:
     test: ~
@@ -11,13 +12,3 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
-
-swiftmailer:
-    disable_delivery: true
-
-doctrine:
-    dbal:
-        host:     127.0.0.1
-        dbname:   edusoho-test
-        user:     tester
-        password: tester
