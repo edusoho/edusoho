@@ -1,6 +1,8 @@
 <?php
 namespace Codeages\RestApiClient\Specification;
 
+use Topxia\Common\Exception\InvalidArgumentException;
+
 class JsonHmacSpecification implements Specification
 {
     protected $algo;
