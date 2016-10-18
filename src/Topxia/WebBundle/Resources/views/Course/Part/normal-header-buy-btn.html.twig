@@ -6,7 +6,7 @@
   {% endif %}
 {% else %}
   <a class="btn btn-primary btn-lg"
-    {% if course.buyExpireTime < 'now'|date('U') or course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+    {% if (course.buyExpireTime and course.buyExpireTime < 'now'|date('U')) or course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
       href="javascript:;"
       disabled="disabled"
     {% else %}
