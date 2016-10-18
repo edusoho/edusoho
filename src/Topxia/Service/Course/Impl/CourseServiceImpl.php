@@ -463,10 +463,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $fields = $this->_filterCourseFields($fields);
 
-        //已经发布的课程不能修改课程过期模式
-        if ($course['status'] == 'published' && $fields['expiryMode'] != $course['expiryMode']) {
-            $fields['expiryMode'] = $course['expiryMode'];
+        //非法提交直接报错,service应该有反馈
+        if (!empty($fields['expiryMode']) &&
+            $course['status'] == 'published' &&
+            $fields['expiryMode'] != $course['expiryMode']) {
+            throw $this->createServiceException('已发布的课程不允许修改学员有效期');
         }
+
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $fields        = $this->fillOrgId($fields);
@@ -891,8 +894,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        $fields['originPrice'] = $price;
-        $fields['price']       = $price * ($discount / 10);
+        $fields['originPrice'] = $price ? : 0;
+        $fields['price']       = $price * ($discount / 10) ? : 0;
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
@@ -1063,7 +1066,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'copyId'        => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '0.0'
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1111,7 +1113,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($lesson['type'] == 'live') {
             $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
-            $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
         $lesson = $this->getLessonDao()->addLesson(
@@ -1267,7 +1268,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0',
             'replayStatus'  => 'ungenerated'
         ));
 
@@ -1279,7 +1279,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
             $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
-            $fields['suggestHours'] = $fields['length'] / 60;
         }
 
         if (array_key_exists('media', $fields)) {
