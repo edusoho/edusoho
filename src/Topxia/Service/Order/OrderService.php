@@ -93,4 +93,6 @@ interface OrderService
     public function createPayRecord($id, array $payDate);
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array());
+
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
 }

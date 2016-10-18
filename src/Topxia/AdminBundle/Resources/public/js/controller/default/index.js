@@ -222,39 +222,36 @@ define(function (require, exports, module) {
         this.element = $("#pay-order-statistic");
         var chart = echarts.init(this.element.get(0));
 
-        var option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                right: 'right',
-                top: 'center',
-                data: ['课程订单', '班级订单', '会员订单']
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            series: [
-                {
-                    name: '订单量',
-                    type: 'pie',
-                    radus: '50%',
-                    center: ['40%', '60%'],
-                    data: [
-                        {value: 100, name: '课程订单'},
-                        {value: 200, name: '班级订单'},
-                        {value: 300, name: '会员订单'}
-                    ]
-                }
-            ]
-        };
+
         chart.showLoading();
         return $.get(this.element.data('url'), function (data) {
-            // console.log('data',data);
+
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 'right',
+                    top: 'center',
+                    data: ['课程订单', '班级订单', '会员订单']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '订单量',
+                        type: 'pie',
+                        radus: '50%',
+                        center: ['40%', '60%'],
+                        data: data
+                    }
+                ]
+            };
 
             chart.hideLoading();
             chart.setOption(option);
@@ -321,9 +318,7 @@ define(function (require, exports, module) {
     //课程排行榜
     var courseExplore = function () {
         var $element = $("#course-explore-list");
-        console.log($element.data());
         $.get($element.data('url'), function (html) {
-            console.log(html);
             $element.html(html);
         })
     }

@@ -15,7 +15,10 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 7 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 30 * 24 * 60 * 60));
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
+            'dates' => $weekAndMonthDate
+        ));
     }
 
     public function noticeAction(Request $request)
@@ -282,12 +285,23 @@ class DefaultController extends BaseController
         ));
     }
 
+    protected function getTimeRange($period)
+    {
+        $day = $period == 'week' ? 7 : 30;
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time())));
+    }
 
     public function userStatisticAction(Request $request, $period)
     {
+        $userStatistic = array('dates' => 0, 'register' => 0, 'activeUser' => 0, 'unActiveUser' => 0);
+
+        $timeRange              = $this->getTimeRange($period);
+        $userStatistic['dates'] = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+
+        var_dump($timeRange, $userStatistic);
         return $this->createJsonResponse(array(
-            'time'    => '7',
-            'message' => 'ok'
+            'userStatistic' => $userStatistic,
         ));
     }
 
@@ -310,10 +324,27 @@ class DefaultController extends BaseController
 
     public function orderStatisticAction(Request $request, $period)
     {
-        return $this->createJsonResponse(array(
-            'time'    => '30',
-            'message' => 'ok'
-        ));
+
+        $day = $period == 'week' ? 7 : 30;
+
+        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+
+        $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
+
+        $defaults   = array(
+            'course'    => array('targetType' => 'course', 'value' => 0),
+            'vip'       => array('targetType' => 'vip', 'value' => 0),
+            'classroom' => array('targetType' => 'classroom', 'value' => 0)
+        );
+        $orderDatas = ArrayToolkit::index($orderDatas, 'targetType');
+        $orderDatas = array_merge($defaults, $orderDatas);
+
+        $names = array('course' => '课程订单', 'vip' => '会员订单', 'classroom' => '班级订单');
+        array_walk($orderDatas, function (&$orderData) use ($names) {
+            $orderData['name'] = $names[$orderData['targetType']];
+            unset($orderData['targetType']);
+        });
+        return $this->createJsonResponse(array_values($orderDatas));
 
     }
 
@@ -330,6 +361,19 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig', array(
             'memberCounts' => $memberCounts,
             'courses'      => $courses
+        ));
+    }
+
+    public function courseReviewAction(Request $request)
+    {
+        $reviews = $this->getReviewService()->searchReviews(
+            array('parentId' => 0),
+            'latest',
+            0,
+            10
+        );
+        return $this->render('TopxiaAdminBundle:Default/Parts:course-review-table.html.twig', array(
+            'reviews' => $reviews
         ));
     }
 
@@ -486,6 +530,11 @@ class DefaultController extends BaseController
     private function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReviewService');
     }
 
 }

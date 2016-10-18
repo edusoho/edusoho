@@ -1,18 +1,10 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-<div class="panel panel-default panel-420">
-	<div class="panel-heading">
-   	<a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
-         	>{{'更多'|trans}}</a>
-		<h3 class="panel-title">{{'最新问答'|trans}}</h3>
-	</div>
-  <div class="panel-body">
+
   	{% if questions %}
       <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
         <thead>
           <tr>
             <th width="60%">{{'问题'|trans}}</th>
-            {#<th width="35%">{{'所属课程'|trans}}</th>
-            <th width="10%">{{'提问人'|trans}}</th>#}
             <th width="20%">{{'回复数'|trans}}</th>
             <th width="20%">{{'操作'|trans}}</th>
           </tr>
@@ -25,30 +17,10 @@
                 <a class="link-primary" href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank">
                   {{ question.title }}
                 </a>
-                {#<br />
-                <span class="text-muted text-sm">{{ question.hitNum }}{{'次查看'|trans}}</span>
-                <span class="text-muted text-sm">•</span>
-                <span class="text-muted text-sm">{{'发表于'|trans}}{{question.createdTime |date('Y-n-d H:i') }}</span>#}
   	          </td>
               <td class="pull-right prl">
                 10{# 换成真实数据 #}
               </td>
-  	          {#<td>
-  	          	{% if course %}
-  	              <a href="{{ path('course_show', {id:courses[question.courseId].id}) }}" target="_blank">{{ courses[question.courseId].title }}</a>
-  	              <br>
-  	              <span class="text-muted text-sm">{{'老师：'|trans}}
-  			            {% for teacherId in courses[question.courseId].teacherIds %}
-  			              {{ admin_macro.user_link(teachers[teacherId], 'text-muted text-sm') }}
-  			            {% endfor %}
-  			          </span>
-  		          {% else %}
-  		            --
-  		          {% endif %}
-  	          </td>
-  	          <td>
-  	            {{ admin_macro.user_link(askers[question.userId]) }}
-  	          </td>#}
   	          <td>
   	          	{% if course %}
   			          <button class="btn btn-default btn-xs js-remind-teachers" data-url="{{ path('admin_question_remind_teachers', {courseId:question.courseId, questionId:question.id}) }}">{{'提醒教师'|trans}}</button>
@@ -61,5 +33,4 @@
     {% else %}
       <div class="empty">{{'暂无最新未回复问答'|trans}}</div>
     {% endif %}
-  </div>
-</div>
+

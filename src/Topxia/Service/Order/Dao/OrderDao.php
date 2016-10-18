@@ -50,4 +50,5 @@ interface OrderDao
 
     public function analysisExitCourseOrderDataByTime($startTime, $endTime);
 
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
 }

@@ -16,6 +16,8 @@
       </td>
       <td class="pull-right prl">{{ memberCount.count }}</td>
     </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'暂无课程'|trans}}</div></td></tr>
   {% endfor %}
   </tbody>
 </table>
