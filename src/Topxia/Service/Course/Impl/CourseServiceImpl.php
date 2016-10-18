@@ -8,6 +8,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
+use Topxia\Service\Course\Dao\Impl\CourseMemberDaoImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -1963,6 +1964,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->searchMemberCount($conditions);
     }
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
     public function countMembersByStartTimeAndEndTime($startTime, $endTime)
     {
         return $this->getMemberDao()->countMembersByStartTimeAndEndTime($startTime, $endTime);
@@ -2866,6 +2872,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.FavoriteDao');
     }
 
+    /**
+     * @return CourseMemberDaoImpl
+     */
     protected function getMemberDao()
     {
         return $this->createDao('Course.CourseMemberDao');

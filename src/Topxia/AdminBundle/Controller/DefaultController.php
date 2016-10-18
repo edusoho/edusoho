@@ -4,90 +4,14 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
 use Topxia\Service\Order\Impl\OrderServiceImpl;
 use Topxia\Service\System\Impl\StatisticsServiceImpl;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
-    public function popularCoursesAction(Request $request)
-    {
-        $dateType   = $request->query->get('dateType');
-        $currentDay = $this->weekday(time());
-
-        if ($dateType == "today") {
-            $startTime = strtotime('today');
-            $endTime   = strtotime('tomorrow');
-        }
-
-        if ($dateType == "yesterday") {
-            $startTime = strtotime('yesterday');
-            $endTime   = strtotime('today');
-        }
-
-        if ($dateType == "this_week") {
-            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
-                $startTime = strtotime('Monday last week');
-                $endTime   = strtotime('Monday this week');
-            } else {
-                $startTime = strtotime('Monday this week');
-                $endTime   = strtotime('Monday next week');
-            }
-        }
-
-        if ($dateType == "last_week") {
-            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
-                $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
-                $endTime   = strtotime('Monday this week') - (7 * 24 * 60 * 60);
-            } else {
-                $startTime = strtotime('Monday last week');
-                $endTime   = strtotime('Monday this week');
-            }
-        }
-
-        if ($dateType == "this_month") {
-            $startTime = strtotime('first day of this month midnight');
-            $endTime   = strtotime('first day of next month midnight');
-        }
-
-        if ($dateType == "last_month") {
-            $startTime = strtotime('first day of last month midnight');
-            $endTime   = strtotime('first day of this month midnight');
-        }
-
-        $members   = $this->getCourseService()->countMembersByStartTimeAndEndTime($startTime, $endTime);
-        $courseIds = ArrayToolkit::column($members, "courseId");
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses, "id");
-
-        $sortedCourses = array();
-
-        $orders = $this->getOrderService()->sumOrderAmounts($startTime, $endTime, $courseIds);
-        $orders = ArrayToolkit::index($orders, "targetId");
-
-        foreach ($members as $key => $value) {
-            $course                    = array();
-            $course['title']           = $courses[$value["courseId"]]['title'];
-            $course['courseId']        = $courses[$value["courseId"]]['id'];
-            $course['addedStudentNum'] = $value['co'];
-            $course['studentNum']      = $courses[$value["courseId"]]['studentNum'];
-
-            if (isset($orders[$value["courseId"]])) {
-                $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
-            } else {
-                $course['addedMoney'] = 0;
-            }
-
-            $sortedCourses[] = $course;
-        }
-
-        return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'sortedCourses' => $sortedCourses
-        ));
-    }
 
     public function indexAction(Request $request)
     {
@@ -276,7 +200,7 @@ class DefaultController extends BaseController
 
     public function latestUsersBlockAction(Request $request)
     {
-        $users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 5);
+        $users = $this->getCourseService()->searchMemberCountGroupByFields($conditions, $groupBy);
         return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
             'users' => $users
         ));
@@ -395,20 +319,19 @@ class DefaultController extends BaseController
 
     public function courseExploreAction(Request $request, $period)
     {
-        return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig');
+        $day       = $period == 'week' ? 7 : 30;
+        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+
+        $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0), 'courseId', 0, 10);
+        $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
+        $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses      = ArrayToolkit::index($courses, 'id');
+
+        return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig', array(
+            'memberCounts' => $memberCounts,
+            'courses'      => $courses
+        ));
     }
-
-    // public function onlineCountAction(Request $request)
-    // {
-    //     $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
-    //     return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
-    // }
-
-    // public function loginCountAction(Request $request)
-    // {
-    //     $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
-    //     return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
-    // }
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {
@@ -514,6 +437,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

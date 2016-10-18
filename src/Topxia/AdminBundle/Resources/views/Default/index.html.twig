@@ -33,36 +33,10 @@
           {{ '网站概览'|trans }}
         </h3>
       </div>
-      <div class="panel-body" id="operation-analysis-table" data-url="{{ path('admin_operation_analysis') }}">
+      <div class="panel-body" id="site-overview-table" data-url="{{ path('admin_operation_analysis') }}">
         <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
       </div>
     </div>
-
-    {# <div class="col-md-6">
-       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title" id="open-message-title" data-url="{{path('admin_official_messages')}}">{{ 'EduSoho官方消息'|copyright_less }}</h3>
-        </div>
-        <div id="edusoho-open-message" >
-          <div class="empty">正在载入数据，请稍等。</div>
-        </div>
-      </div>
-    </div> #}
-
-    {#<div id="popular-courses-panel" class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <select id="popular-courses-type" class="pull-right" data-url="{{ path('admin_popular_courses') }}">
-            {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
-          </select>
-          <h3 class="panel-title">{{ '受欢迎课程'|trans }}</h3>
-        </div>
-        <div id="popular-courses-table">
-          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-        </div>
-      </div>
-    </div>
-  </div> #}
 
     <div class="panel panel-default panel-380">
       <div class="panel-heading">
@@ -163,88 +137,8 @@
             </div>
             <h3 class="panel-title">{{ '课程排行榜'|trans }}</h3>
           </div>
-          <div class="panel-body js-statistic-areas" id="course-explore-list" >
-            <table class="table table-condensed table-noborder table-overflow">
-              <thead>
-              <tr>
-                <th width="10%"></th>
-                <th width="70%">{{ '课程名'|trans }}</th>
-                <th width="25%">{{ '新增学员'|trans }}</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>1</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              <tr>
-                <td>10</td>
-                <td>
-                  <a class="link-primary" href="">课程名称课程名称</a>
-                </td>
-                <td class="pull-right prl">15</td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="panel-body js-statistic-areas" id="course-explore-list" data-url="{{ path('admin_course_explore', {period: 'week'}) }}">
+
           </div>
         </div>
       </div>
@@ -252,7 +146,18 @@
 
     <div class="row">
       <div class="col-md-4">
-        {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+
+        <div class="panel panel-default panel-420 js-course-question-list">
+          <div class="panel-heading">
+            <a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
+            >{{ '更多'|trans }}</a>
+            <h3 class="panel-title">{{ '最新问答'|trans }}</h3>
+          </div>
+          <div class="panel-body">
+            {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+          </div>
+        </div>
+
       </div>
       <div class="col-md-4">
         <div class="panel panel-default panel-420">

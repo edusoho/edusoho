@@ -10,12 +10,12 @@ define(function (require, exports, module) {
         cloudHotSearch();
 
         //ajax 获取数据
-        loadAjaxDatas();
+        loadAjaxData();
 
         //事件
-        getDataSwitchEvent();
+        registerSwitchEvent();
 
-        popularCoursesEvent();
+        //提醒教师
         remindTeachersEvent();
 
         //图表
@@ -25,6 +25,29 @@ define(function (require, exports, module) {
 
     };
 
+
+    var loadAjaxData = function () {
+        systemStatusData()
+            .then(siteOverviewData)
+            .then(usersStatistic)
+            .then(courseExplore);
+    }
+
+    var registerSwitchEvent = function () {
+
+        DataSwitchEvent('.js-user-switch-button', usersStatistic);
+
+        DataSwitchEvent('.js-study-switch-button', studyCountStatistic);
+
+        DataSwitchEvent('.js-order-switch-button', payOrderStatistic);
+
+        DataSwitchEvent('.js-lesson-switch-button', studyLessonCountStatistic);
+
+        DataSwitchEvent('.js-course-switch-button', courseExplore);
+
+    }
+
+    //热门搜索
     var cloudHotSearch = function () {
         var totalWidth = $(".js-cloud-search").parent().width();
         var $countDom = $(".js-cloud-search");
@@ -40,35 +63,7 @@ define(function (require, exports, module) {
         })
     }
 
-    var loadAjaxDatas = function () {
-        systemStatusData()
-            .then(operationData)
-            .then(popularCoursesData)
-            .then(usersStatistic)
-    }
-
-    var getDataSwitchEvent = function () {
-
-        DataSwitchEvent('.js-user-switch-button', usersStatistic);
-
-        DataSwitchEvent('.js-study-switch-button', studyCountStatistic);
-
-        DataSwitchEvent('.js-order-switch-button', payOrderStatistic);
-
-        DataSwitchEvent('.js-lesson-switch-button', studyLessonCountStatistic);
-
-        DataSwitchEvent('.js-course-switch-button', courseExplore);
-
-    }
-
-
-    var operationData = function () {
-        var $this = $('#operation-analysis-table');
-        return $.post($this.data('url'), function (html) {
-            $this.html(html);
-        });
-    }
-
+    //系统状态
     var systemStatusData = function () {
         var $this = $('#system-status');
         return $.post($this.data('url'), function (html) {
@@ -93,12 +88,14 @@ define(function (require, exports, module) {
         });
     }
 
-    var popularCoursesData = function () {
-        var $this = $("#popular-courses-type");
-        return $.get($this.data('url'), {dateType: $this.val()}, function (html) {
-            $('#popular-courses-table').html(html);
+    //网站概览
+    var siteOverviewData = function () {
+        var $this = $('#site-overview-table');
+        return $.post($this.data('url'), function (html) {
+            $this.html(html);
         });
     }
+
     /*初始化静态数据*/
     var usersStatistic = function () {
         this.element = $("#user-statistic");
@@ -212,7 +209,7 @@ define(function (require, exports, module) {
                 }
             ]
         };
-
+        chart.showLoading();
         return $.get(this.element.data('url'), function (data) {
             // console.log('data',data);
 
@@ -255,7 +252,7 @@ define(function (require, exports, module) {
                 }
             ]
         };
-
+        chart.showLoading();
         return $.get(this.element.data('url'), function (data) {
             // console.log('data',data);
 
@@ -312,6 +309,7 @@ define(function (require, exports, module) {
             ]
         };
 
+        chart.showLoading();
         return $.get(this.element.data('url'), function (data) {
             // console.log('data',data);
 
@@ -320,6 +318,7 @@ define(function (require, exports, module) {
         })
     }
 
+    //课程排行榜
     var courseExplore = function () {
         var $element = $("#course-explore-list");
         console.log($element.data());
@@ -328,6 +327,7 @@ define(function (require, exports, module) {
             $element.html(html);
         })
     }
+
     var DataSwitchEvent = function (selecter, callback) {
         $(selecter).on('click', function () {
             var $this = $(this);
@@ -345,14 +345,8 @@ define(function (require, exports, module) {
     }
 
 
-    var popularCoursesEvent = function () {
-        $("#popular-courses-type").on('change', function () {
-            popularCoursesData();
-        });
-    }
-
     var remindTeachersEvent = function () {
-        $('.tbody').on('click', 'js-remind-teachers', function () {
+        $('.js-course-question-list').on('click', '.js-remind-teachers', function () {
             $.post($(this).data('url'), function (response) {
                 Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
