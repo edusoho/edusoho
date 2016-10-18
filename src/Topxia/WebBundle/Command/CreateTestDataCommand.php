@@ -100,7 +100,8 @@ class CreateTestDataCommand extends BaseCommand
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
 
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $biz = $this->getContainer()->get('biz');
+        $serviceKernel->setConnection($biz['db']);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id'        => 0,
