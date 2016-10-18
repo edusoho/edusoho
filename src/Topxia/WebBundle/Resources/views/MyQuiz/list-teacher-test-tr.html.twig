@@ -1,3 +1,4 @@
+{% if paperResult.subjectiveScore|default(0) != 0 or status == 'reviewing' %}
 <tr>
 	<td>
 		<a href="{% if status == 'reviewing' %}{{ path('course_manage_test_teacher_check', {id:paperResult.id}) }}{% endif %}{% if status == 'finished' %}{{ path('course_manage_test_results', {id:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
@@ -24,3 +25,4 @@
 		{% endif %}
 	</td>
 </tr>
+{% endif %}
