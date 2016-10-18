@@ -22,20 +22,20 @@ class CurlHttpRequest extends HttpRequest
 
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         } elseif ($method == 'PATCH') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         } else {
             if (!empty($params)) {
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
-        }
-
-        if ($body && $method != 'GET') {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
         }
 
         curl_setopt($curl, CURLOPT_URL, $url);
