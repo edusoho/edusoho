@@ -611,7 +611,7 @@ class TestpaperController extends BaseController
     protected function makePaperResultsByWhere($paperResults, $where)
     {   
         foreach ($paperResults as $key => $paperResult) {
-            if ($paperResult['checkTeacherId'] == 0 && $where == 'my') {
+            if (empty($paperResult['checkTeacherId']) && $where == 'my' && $paperResult['status'] != 'reviewing') {
                 unset($paperResults[$key]);
             }
         }
