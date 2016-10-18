@@ -39,7 +39,7 @@
             </button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm">{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
+            <span class="text-danger text-sm">{{'未绑定授权域名不能开通即时聊天！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
           </div>
         {% elseif data.status == 'binded_error' %}
@@ -48,7 +48,7 @@
             </button>
           </div>
           <div class="col-md-10">
-            <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
+            <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通即时聊天！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
           </div>
         {% else %}
