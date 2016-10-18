@@ -22,6 +22,7 @@ npm-debug.log
 /plugins/*
 /build/
 /bin/
+!/bin/phpmig
 /composer.phar
 /scripts
 /etc/sublimetext2/edusoho.sublime-workspace
