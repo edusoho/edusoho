@@ -34,7 +34,7 @@ before_script:
 
 script:
   - sudo chmod -Rf 777 ./
-  - phpunic -c app/
+  - phpunit -c app/
 
 cache:
   directories:
