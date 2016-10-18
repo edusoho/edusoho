@@ -588,7 +588,7 @@ class TestpaperController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $testpaperResults = $this->makePaperResultsByWhere($testpaperResults);
+        $testpaperResults = $this->makePaperResultsByWhere($testpaperResults, 'course');
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpaperResults, 'userId'));
 
@@ -608,7 +608,7 @@ class TestpaperController extends BaseController
         ));
     }
 
-    protected function makePaperResultsByWhere($paperResults, $where = 'course')
+    protected function makePaperResultsByWhere($paperResults, $where)
     {   
         foreach ($paperResults as $key => $paperResult) {
             if (empty($paperResult['checkTeacherId']) && $where == 'my' && $paperResult['status'] != 'reviewing') {
