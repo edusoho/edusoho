@@ -178,6 +178,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
             ->andWhere('id = :id')
             ->andWhere('checkTeacherId = :checkTeacherId')
             ->andWhere('paperName = :paperName')
+            ->andWhere('testId :testId')
             ->andWhere('testId IN ( :testIds )')
             ->andWhere('userId = :userId')
             ->andWhere('score = :score')

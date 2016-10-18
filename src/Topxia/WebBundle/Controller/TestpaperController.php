@@ -531,8 +531,7 @@ class TestpaperController extends BaseController
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
             array(
                 'testIds' => $testpaperIds,
-                'status' => 'reviewing',
-                'checkTeacherId' => 0
+                'status'  => 'reviewing',
             ),
             array(
                 'checkedTime',
@@ -591,8 +590,8 @@ class TestpaperController extends BaseController
 
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
             array(
-                'testIds' => $testpaperIds,
-                'status' => 'finished',
+                'testIds'        => $testpaperIds,
+                'status'         => 'finished',
                 'checkTeacherId' => $user['id']
             ),
             array(
@@ -644,13 +643,13 @@ class TestpaperController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
-            3
+            10
         );
 
         $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
             array(
                 'testIds' => $testpaperIds,
-                'status' => $status
+                'status'  => $status
             ),
             array(
                 'checkedTime',
