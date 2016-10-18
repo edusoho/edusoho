@@ -8,7 +8,7 @@ class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId)
     {
-        $this->tryManageCourse($courseId);
+        $course = $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
             $savedTask = $this->getTaskService()->createTask($task);
@@ -30,8 +30,8 @@ class TaskManageController extends BaseController
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId);
-        $task = $this->getTaskService()->getTask($id);
+        $course = $this->tryManageCourse($courseId);
+        $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
             throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
         }
@@ -59,8 +59,8 @@ class TaskManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId);
-        $task = $this->getTaskService()->getTask($id);
+        $course = $this->tryManageCourse($courseId);
+        $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
             throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
         }
@@ -72,8 +72,8 @@ class TaskManageController extends BaseController
     // TODO 是否移到CourseManageController
     public function tasksAction(Request $request, $courseId)
     {
-        $this->tryManageCourse($courseId);
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $course = $this->tryManageCourse($courseId);
+        $tasks  = $this->getTaskService()->findTasksByCourseId($courseId);
         return $this->render('TaskBundle:TaskManage:list.html.twig', array(
             'tasks' => $tasks
         ));
@@ -81,7 +81,12 @@ class TaskManageController extends BaseController
 
     protected function tryManageCourse($courseId)
     {
-        return true;
+        return $this->getCourseService()->tryManageCourse($courseId);
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
     }
 
     protected function getTaskService()
