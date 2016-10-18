@@ -894,8 +894,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        $fields['originPrice'] = $price ? : 0;
-        $fields['price']       = $price * ($discount / 10) ? : 0;
+        $fields['originPrice'] = $price ?: 0;
+        $fields['price']       = $price * ($discount / 10) ?: 0;
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
@@ -1065,7 +1065,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'liveProvider'  => 'none',
             'copyId'        => 0,
             'testMode'      => 'normal',
-            'testStartTime' => 0,
+            'testStartTime' => 0
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1112,7 +1112,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 
         if ($lesson['type'] == 'live') {
-            $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
+            $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
         }
 
         $lesson = $this->getLessonDao()->addLesson(
@@ -1278,7 +1278,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields['type'] = $lesson['type'];
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
-            $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
         if (array_key_exists('media', $fields)) {
@@ -2186,6 +2186,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->deleteMembersByCourseId($courseId);
     }
 
+    public function findUserJoinedCourseIds($userId, $joinedType = 'course')
+    {
+        return $this->getMemberDao()->findUserJoinedCourseIds($userId, $joinedType);
+    }
+
     public function becomeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourse($courseId);
@@ -2448,9 +2453,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @todo refactor it.
-     * <<<<<<< HEAD
-     * =======
-     * >>>>>>> develop
      * @param  int|string                                $courseId
      * @param  null|string                               $otherPermission
      * @param  int|string                                $courseId
@@ -2481,9 +2483,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * <<<<<<< HEAD
-     * =======
-     * >>>>>>> develop
      * @param  int|string                                $courseId
      * @param  null|string                               $actionPermission
      * @param  int|string                                $courseId

@@ -1249,6 +1249,47 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testCanCreateThreadEvent()
     {
+        $textClassroom = array(
+            'title' => 'test'
+        );
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $user = $this->getUserService()->register(array(
+            'id'        => 2,
+            'nickname'  => 'admin2',
+            'email'     => 'admin2@admin.com',
+            'password'  => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array('ROLE_USER')
+        ));
+        $this->getClassroomService()->becomeAssistant($classroom['id'], $user['id']);
+
+        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user));
+        $result = $this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroom['id']));
+
+        $this->assertEquals('assistant', $result[0]);
+    }
+
+    public function testFindUserJoinedClassroomIds()
+    {
+        $textClassroom = array(
+            'title' => 'test'
+        );
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $user1 = $this->getUserService()->register(array('nickname' => 'admin3', 'password' => 'admin', 'email' => 'admin3@admin.com'));
+        $user2 = $this->getUserService()->register(array('nickname' => 'admin4', 'password' => 'admin', 'email' => 'admin4@admin.com'));
+
+        $this->getClassroomService()->becomeAuditor($classroom['id'], $user1['id']);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id']);
+
+        $members = $this->getClassroomService()->findUserJoinedClassroomIds($user1['id']);
+
+        $this->assertCount(1, $members);
     }
 
     private function createUser()
