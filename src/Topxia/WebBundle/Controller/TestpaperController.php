@@ -621,7 +621,7 @@ class TestpaperController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
-            'status'       => 'finished',
+            'status'       => $status,
             'users'        => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
             'courses'      => ArrayToolkit::index($courses, 'id'),
@@ -659,6 +659,8 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $testpaperResults = $this->makePaperResultsByWhere($testpaperResults, 'course');
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpaperResults, 'userId'));
 
