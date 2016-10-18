@@ -16,7 +16,7 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function triggerAction(Request $request, $id, $eventName)
+    public function triggerAction($id, $eventName, $data)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $data     = $request->request->all();
