@@ -67,7 +67,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         //后台IM设置权限
         $sql    = "select * from role where code='ROLE_SUPER_ADMIN';";
-        $result = $this->connection->fetchAssoc($sql);
+        $result = $connection->fetchAssoc($sql);
         if ($result) {
             $data = array_merge(json_decode($result['data']), array('admin_app_im'));
             $connection->exec("update role set data='".json_encode($data)."' where code='ROLE_SUPER_ADMIN';");
