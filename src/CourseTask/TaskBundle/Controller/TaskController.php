@@ -8,8 +8,7 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($id);
+        $task = $this->tryLearnTask($courseId, $id);
 
         return $this->render('TaskBundle:Task:show.html.twig', array(
             'task' => $task
@@ -18,8 +17,8 @@ class TaskController extends BaseController
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($id);
+        $task = $this->tryLearnTask($courseId, $id);
+
         return $this->forward('ActivityBundle:Activity:show', array(
             'request' => $request,
             'id'      => $task['activityId']
@@ -28,8 +27,8 @@ class TaskController extends BaseController
 
     public function triggerAction(Request $request, $courseId, $id, $eventName)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
-        $task = $this->getTaskService()->getTask($id);
+        $task = $this->tryLearnTask($courseId, $id);
+
         return $this->forward('ActivityBundle:Activity:trigger', array(
             'request'   => $request,
             'id'        => $task['activityId'],
@@ -39,9 +38,19 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $this->getCourseService()->tryLearnCourse($courseId);
+        $task = $this->tryLearnTask($courseId, $id);
         $this->getTaskService()->finishTask($id);
         return $this->createJsonResponse(true);
+    }
+
+    protected function tryLearnTask($courseId, $taskId)
+    {
+        $this->getCourseService()->tryLearnCourse($courseId);
+        $task = $this->getTaskService()->getTask($taskId);
+        if ($task['courseId'] != $courseId) {
+            throw $this->createAccessDeniedException();
+        }
+        return $task;
     }
 
     protected function getCourseService()
