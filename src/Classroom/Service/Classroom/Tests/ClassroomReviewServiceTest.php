@@ -2,14 +2,13 @@
 
 namespace Classroom\Service\Classroom\Tests;
 
-use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 
 class ClassroomReviewServiceTest extends BaseTestCase
 {
     public function testGetReview()
     {
-        $user = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
         $classroom = array(
             'title' => 'test'
         );
@@ -29,8 +28,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSearchReviews()
     {
-        $user        = $this->getCurrentUser();
-        $user1       = $this->createStudentUser();
+        $user  = $this->getCurrentUser();
+        $user1 = $this->createStudentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -62,8 +61,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSearchReviewCount()
     {
-        $user        = $this->getCurrentUser();
-        $user1       = $this->createStudentUser();
+        $user  = $this->getCurrentUser();
+        $user1 = $this->createStudentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -94,8 +93,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testGetUserClassroomReviewWithExistId()
     {
-        $user        = $this->getCurrentUser();
-        $user1       = $this->createStudentUser();
+        $user  = $this->getCurrentUser();
+        $user1 = $this->createStudentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -128,8 +127,8 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testGetUserClassroomReviewWithNotExistId()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->getCurrentUser();
-        $user1       = $this->createStudentUser();
+        $user  = $this->getCurrentUser();
+        $user1 = $this->createStudentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -188,7 +187,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     {
         $this->setExpectedException('Exception');
 
-        $user1       = $this->createStudentUser();
+        $user1 = $this->createStudentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -208,7 +207,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
     public function testSaveReviewWithNotExistUser()
     {
         $this->setExpectedException('Exception');
-        $user        = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -227,7 +226,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSaveReviewWithExistReview()
     {
-        $user        = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -251,7 +250,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testDeleteReviewWithExistReview()
     {
-        $user        = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $classroom = array(
             'title' => 'test'
@@ -296,19 +295,6 @@ class ClassroomReviewServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    private function createUser()
-    {
-        $user              = array();
-        $user['email']     = "user@user.com";
-        $user['nickname']  = "user";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-        return $user;
-
     }
 
     private function createStudentUser()

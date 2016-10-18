@@ -22,7 +22,7 @@ class NoteController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';

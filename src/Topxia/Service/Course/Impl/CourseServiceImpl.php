@@ -470,10 +470,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $fields = $this->_filterCourseFields($fields);
 
-        //已经发布的课程不能修改课程过期模式
-        if ($course['status'] == 'published' && $fields['expiryMode'] != $course['expiryMode']) {
-            $fields['expiryMode'] = $course['expiryMode'];
+        //非法提交直接报错,service应该有反馈
+        if (!empty($fields['expiryMode']) &&
+            $course['status'] == 'published' &&
+            $fields['expiryMode'] != $course['expiryMode']) {
+            throw $this->createServiceException('已发布的课程不允许修改学员有效期');
         }
+
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
         $fields        = $this->fillOrgId($fields);
@@ -848,7 +851,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getLessonDao()->getLesson($lessonId);
         $course = $this->getCourse($lesson['courseId']);
 
-        if (empty($course['watchLimit'])) {
+        //只有视频课程才限制观看时长
+        if (empty($course['watchLimit']) || $lesson['type'] != 'video') {
             return array('status' => 'ignore');
         }
 
@@ -897,13 +901,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
         }
 
-        if ($currency == 'coin') {
-            $fields['originPrice'] = $price;
-            $fields['price']       = $price * ($discount / 10);
-        } else {
-            $fields['originPrice'] = $price;
-            $fields['price']       = $price * ($discount / 10);
-        }
+        $fields['originPrice'] = $price ?: 0;
+        $fields['price']       = $price * ($discount / 10) ?: 0;
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
@@ -935,15 +934,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             foreach ($courses as $course) {
                 $fields = array();
 
-                if ($currency == 'coin') {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
-                    );
-                } else {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
-                    );
-                }
+                $fields = array(
+                    'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
+                );
 
                 $fields['discountId'] = $discount['id'];
                 $fields['discount']   = $discount['globalDiscount'];
@@ -963,15 +956,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 $course = $courses[$item['targetId']];
 
-                if ($currency == 'coin') {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $item['discount'] / 10
-                    );
-                } else {
-                    $fields = array(
-                        'price' => $course['originPrice'] * $item['discount'] / 10
-                    );
-                }
+                $fields = array(
+                    'price' => $course['originPrice'] * $item['discount'] / 10
+                );
 
                 $fields['discountId'] = $discount['id'];
                 $fields['discount']   = $item['discount'];
@@ -1085,8 +1072,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'liveProvider'  => 'none',
             'copyId'        => 0,
             'testMode'      => 'normal',
-            'testStartTime' => 0,
-            'suggestHours'  => '0.0'
+            'testStartTime' => 0
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1133,8 +1119,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 
         if ($lesson['type'] == 'live') {
-            $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
-            $lesson['suggestHours'] = $lesson['length'] / 60;
+            $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
         }
 
         $lesson = $this->getLessonDao()->addLesson(
@@ -1290,7 +1275,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0',
             'replayStatus'  => 'ungenerated'
         ));
 
@@ -1301,8 +1285,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields['type'] = $lesson['type'];
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
-            $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
-            $fields['suggestHours'] = $fields['length'] / 60;
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
         if (array_key_exists('media', $fields)) {

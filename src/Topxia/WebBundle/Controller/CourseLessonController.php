@@ -159,8 +159,6 @@ class CourseLessonController extends BaseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         } elseif ($lesson['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -168,8 +166,6 @@ class CourseLessonController extends BaseController
             if ($matched) {
                 $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
 
