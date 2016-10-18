@@ -164,6 +164,7 @@ class TestpaperController extends BaseController
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
+        
         $total       = $this->makeTestpaperTotal($testpaper, $items);
         $attachments = $this->findAttachments($testpaper['id']);
 
