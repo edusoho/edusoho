@@ -33,7 +33,7 @@ before_script:
   - touch app/config/routing_plugins.yml
 
 script:
-  - sudo usermod -a -G www-data $USER"
+  - sudo usermod -a -G www-data $USER
   - sudo chown -R www-data:www-data ./
   - sudo chmod +x /home/travis
   - sudo -E su $USER -c "phpunit -c app/"
