@@ -42,7 +42,7 @@
             <span class="text-danger text-sm">{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
           </div>
-        {#{% elseif data.status == 'binded_error' %}
+        {% elseif data.status == 'binded_error' %}
           <div class="col-md-2">
             <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'开启即时聊天'|trans}}
             </button>
@@ -50,7 +50,7 @@
           <div class="col-md-10">
             <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
             <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
-          </div>#}
+          </div>
         {% else %}
           {% if not setting('app_im.enabled') %}
             <div class="col-md-2 control-cloud">
