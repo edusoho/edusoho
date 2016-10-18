@@ -118,7 +118,7 @@
               {% if source|default('course') == 'classroom' %}
                 data-goto="{{ path('classroom_manage_testpaper',{id:targetId,status:'reviewing'}) }}"
               {% else %}
-                data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}"
+                data-goto="{{ path('course_manage_list_teacher_test', {status:'reviewing'}) }}"
               {% endif %}
 
               >{{'完成批阅'|trans}}</button>

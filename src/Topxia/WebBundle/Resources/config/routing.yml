@@ -975,13 +975,9 @@ course_manage_test_teacher_check:
     pattern: /test/{id}/teacher/check
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
 
-course_manage_list_teacher_test_reviewing:
-    pattern: /my/teacher/reviewing/test/list
-    defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
-
-course_manage_list_teacher_test_finished:
-    pattern: /my/teacher/finished/test/list
-    defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
+course_manage_list_teacher_test:
+    pattern: /my/teacher/reviewing/test/{status}/list
+    defaults: { _controller: TopxiaWebBundle:Testpaper:listTest }
 
 course_manage_testpaper:
     pattern: /course/{courseId}/manage/testpaper

@@ -11,8 +11,8 @@
 	</div>
 	<div class="panel-body">
 		<ul class="nav nav-tabs">
-			<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test_reviewing') }}">{{'未批阅'|trans}}</a></li>
-			<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test_finished') }}">{{'已批阅'|trans}}</a></li>
+			<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test', {status:'reviewing'}) }}">{{'未批阅'|trans}}</a></li>
+			<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('course_manage_list_teacher_test', {status:'finished'}) }}">{{'已批阅'|trans}}</a></li>
 		</ul>
 		<br>
 		{# {% block list %}{% endblock %} #}

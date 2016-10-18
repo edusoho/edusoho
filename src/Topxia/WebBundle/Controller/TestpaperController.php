@@ -509,7 +509,7 @@ class TestpaperController extends BaseController
         return $total;
     }
 
-    public function listReviewingTestAction(Request $request)
+    public function listTestAction(Request $request, $status)
     {
         $user = $this->getCurrentUser();
 
@@ -524,16 +524,18 @@ class TestpaperController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'reviewing'),
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
             10
         );
 
         $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
             $testpaperIds,
-            'reviewing',
+            $status,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $paperResults = $this->makePaperResultsByWhere($paperResults, 'my');
 
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
@@ -553,61 +555,7 @@ class TestpaperController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
-            'status'       => 'reviewing',
-            'users'        => ArrayToolkit::index($users, 'id'),
-            'paperResults' => $paperResults,
-            'courses'      => ArrayToolkit::index($courses, 'id'),
-            'testpapers'   => ArrayToolkit::index($testpapers, 'id'),
-            'teacher'      => $user,
-            'paginator'    => $paginator
-        ));
-    }
-
-    public function listFinishedTestAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
-        }
-
-        $courses      = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, PHP_INT_MAX, false);
-        $courseIds    = ArrayToolkit::column($courses, 'id');
-        $testpapers   = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
-        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
-
-        $paginator = new Paginator(
-            $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'finished'),
-            10
-        );
-
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'finished',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-
-        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-
-        $userIds = ArrayToolkit::column($paperResults, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        $targets   = ArrayToolkit::column($testpapers, 'target');
-        $courseIds = array_map(function ($target) {
-            $course = explode('/', $target);
-            $course = explode('-', $course[0]);
-            return $course[1];
-        }, $targets);
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        return $this->render('TopxiaWebBundle:MyQuiz:teacher-test-layout.html.twig', array(
-            'status'       => 'finished',
+            'status'       => $status,
             'users'        => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
             'courses'      => ArrayToolkit::index($courses, 'id'),
@@ -640,6 +588,8 @@ class TestpaperController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $testpaperResults = $this->makePaperResultsByWhere($testpaperResults, 'course');
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($testpaperResults, 'userId'));
 
         $teacherIds = ArrayToolkit::column($testpaperResults, 'checkTeacherId');
@@ -656,6 +606,17 @@ class TestpaperController extends BaseController
             'paginator'    => $paginator,
             'isTeacher'    => $this->getCourseService()->hasTeacherRole($id, $user['id']) || $user->isSuperAdmin()
         ));
+    }
+
+    protected function makePaperResultsByWhere($paperResults, $where)
+    {   
+        foreach ($paperResults as $key => $paperResult) {
+            if ($paperResult['checkTeacherId'] == 0 && $where == 'my') {
+                unset($paperResults[$key]);
+            }
+        }
+
+        return $paperResults;
     }
 
     public function userResultJsonAction(Request $request, $id)
