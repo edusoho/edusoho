@@ -17,8 +17,6 @@ env:
 git:
     submodules: false
 
-sudo: required
-
 before_install:
   - echo -e "Host gitlab.howzhi.net:4422\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - git submodule update --init --recursive
@@ -33,7 +31,6 @@ before_script:
   - touch app/config/routing_plugins.yml
 
 script:
-  - sudo chmod -Rf 777 ./
   - phpunit -c app/
 
 cache:
