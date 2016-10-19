@@ -89,7 +89,7 @@ class CacheDaoImpl extends BaseDao implements CacheDao
             $this->dataCached[$key] = $cache;
             return $cache;
         } else {
-            $this->getConnection()->update($this->table, $fields, array('name' => $name));
+            $this->getConnection()->update($this->table, $cache, array('name' => $name));
             return $this->findCachesByNames(array($name));
         }
     }

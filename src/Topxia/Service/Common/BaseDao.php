@@ -171,6 +171,7 @@ abstract class BaseDao
     {
         $key = "{$this->table}:version";
         $this->incrVersions(array($key));
+        $this->dataCached = array();
     }
 
     protected function deleteCache($keys)

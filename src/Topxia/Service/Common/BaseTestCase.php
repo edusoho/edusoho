@@ -110,9 +110,8 @@ class BaseTestCase extends WebTestCase
             'orgCode'   => '1.',
             'orgId'     => '1'
         ));
-        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-        $userService->changeUserRoles($user['id'], $roles);
-        $user              = $userService->getUserByEmail($user['email']);
+        $roles             = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $user              = $userService->changeUserRoles($user['id'], $roles);
         $user['currentIp'] = $user['createdIp'];
         $user['org']       = array('id' => 1);
         $currentUser       = new CurrentUser();
