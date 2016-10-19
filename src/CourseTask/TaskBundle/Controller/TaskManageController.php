@@ -59,6 +59,7 @@ class TaskManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
+
         $course = $this->tryManageCourse($courseId);
         $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
@@ -71,12 +72,14 @@ class TaskManageController extends BaseController
 
     // TODO 是否移到CourseManageController
     public function tasksAction(Request $request, $courseId)
-    {
+    {   
+        $courseItems = $this->getCourseService()->getCourseItems($courseId);
         $course = $this->tryManageCourse($courseId);
         $tasks  = $this->getTaskService()->findTasksByCourseId($courseId);
         return $this->render('TaskBundle:TaskManage:list.html.twig', array(
             'tasks' => $tasks,
-            'course'=> $course
+            'course'=> $course,
+            'items'=>$courseItems,
         ));
     }
 

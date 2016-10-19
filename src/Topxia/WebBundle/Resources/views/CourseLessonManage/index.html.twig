@@ -49,10 +49,6 @@
 			    {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
 			  {% elseif 'lesson' in id  %}
 			  	{% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-			  {#
-			  {% elseif  item.type == 'testpaper'  %}
-			      {% include 'TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-			  #}
 			  {% endif %}
 			{% endfor %}
 

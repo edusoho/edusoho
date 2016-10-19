@@ -24,8 +24,45 @@
 
 {% block main %}
 
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ '教学计划编辑'|trans }}</div>
+  <div class="panel panel-default panel-col lesson-manage-panel">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:1}) }}"><i class="glyphicon glyphicon-plus"></i> 任务 </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-plus"></i>
+            {{ setting('default.chapter_name')|default('章'|trans) }}/{{ setting('default.part_name')|default('节'|trans) }}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}">
+                <i class="glyphicon glyphicon-plus"></i>
+                {{'添加%chapter_name%'|trans({'%chapter_name%': setting('default.chapter_name')|default('章'|trans)})}}
+              </a>
+            </li>
+            <li>
+              <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}">
+                <i class="glyphicon glyphicon-plus"></i>
+                {{'添加%part_name%'|trans({'%part_name%': setting('default.part_name')|default('节')})}}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      {{'教学计划管理'|trans}}
+    </div>
+    <div class="panel-body">
+      <ul class="lesson-list sortable-list js-period-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
+      {% for id, item in items %}
+        {% if 'chapter' in id %}
+          {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
+        {% elseif 'lesson' in id  %}
+          {% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
   </div>
 
 {% endblock %}
