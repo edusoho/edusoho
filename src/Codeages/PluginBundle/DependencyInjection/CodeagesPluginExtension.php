@@ -24,5 +24,21 @@ class CodeagesPluginExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $bundles = $container->getParameter('kernel.bundles');
+
+        $files = array();
+
+        foreach ($bundles as $bundleClass) {
+            $refClass = new \ReflectionClass($bundleClass);
+            $file = dirname($refClass->getFileName()) . '/Resources/config/dict.yml';
+
+            if (file_exists($file) === true) {
+                $files[] = $file;
+            }
+        }
+
+        $collector = $container->getDefinition('codeages_plugin.dict_collector');
+        $collector->replaceArgument(0, $files);
     }
 }

@@ -1,4 +1,13 @@
 services:
-#    codeages_plugin.example:
-#        class: Codeages\PluginBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    codeages_plugin.dict_collector:
+        class: Codeages\PluginBundle\System\DictCollector
+        arguments:
+            - []
+            - %kernel.cache_dir%
+            - %kernel.debug%
+
+    codeages_plugin.slot_twig_extension:
+        class: Codeages\PluginBundle\Twig\SlotExtension
+        public: false
+        tags:
+            - { name: twig.extension }
