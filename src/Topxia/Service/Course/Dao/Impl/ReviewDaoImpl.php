@@ -77,7 +77,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
             $sql    = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
             $review = $that->getConnection()->fetchAssoc($sql, array($courseId, $userId));
 
-            return $review ? $this->createSerializer()->unserialize($review, $that->serializeFields) : null;
+            return $review ? $that->createSerializer()->unserialize($review, $that->serializeFields) : null;
         }
 
         );
