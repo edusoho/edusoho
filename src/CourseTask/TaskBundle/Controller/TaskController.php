@@ -20,8 +20,7 @@ class TaskController extends BaseController
         $task = $this->tryLearnTask($courseId, $id);
 
         return $this->forward('ActivityBundle:Activity:show', array(
-            'request' => $request,
-            'id'      => $task['activityId']
+            'task' => $task
         ));
     }
 

@@ -13,4 +13,5 @@ interface TaskService
     public function deleteTask($id);
 
     public function findTasksByCourseId($courseId);
+
 }

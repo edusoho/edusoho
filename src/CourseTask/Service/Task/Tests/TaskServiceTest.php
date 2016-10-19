@@ -77,6 +77,30 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNull($savedTask);
     }
 
+    public function testFindTasksByCourseId()
+    {
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedTask = $this->getTaskService()->createTask($task);
+
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedTask = $this->getTaskService()->createTask($task);
+
+        $tasks = $this->getTaskService()->findTasksByCourseId(1);
+
+        $this->assertNotNull($tasks);
+        $this->assertEquals(2, count($tasks));
+    }
+
     protected function getTaskService()
     {
         return $this->getServiceKernel()->createService('CourseTask:Task.TaskService');

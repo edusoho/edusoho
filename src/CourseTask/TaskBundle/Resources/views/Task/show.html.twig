@@ -1,10 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set script_controller = 'taskbundle/controller/task/show' %}
-
 {% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
 
+{% set script_controller = 'taskbundle/controller/task/show' %}
+
 {% block content %}
-	<iframe src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
+	<iframe id="task-detail" data-task-start-url="{{path('course_task_trigger', {id:task.id,courseId:task.courseId,eventName:'start'})}}" src="{{path('course_task_activity_show',{id:task.id,courseId:task.courseId})}}"></iframe>
 	<button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{'正在保存...'|trans}}" >{{'完成'|trans}}</button>
 {% endblock %}

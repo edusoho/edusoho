@@ -1,1 +1,7 @@
-{{activity.content|raw}}
+{% extends 'TopxiaWebBundle::blank-layout.html.twig' %}
+
+{% set script_controller = 'activitybundle/controller/activity/text-show' %}
+
+{% block content %} 
+	{{activity.content|raw}}
+{% endblock %}
