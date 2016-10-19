@@ -218,29 +218,28 @@ define(function (require, exports, module) {
             $('.live-header-mask').hide();
 
             var self = this;
-            $.get(this.get('url'), function (lesson) {
+            var lesson = this.get('lesson');
 
-                if (lesson.mediaError) {
+            if (lesson.mediaError) {
+                $('#media-error-dialog').show();
+                $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
+                return;
+            }
+            $('#media-error-dialog').hide();
+            self.set('lesson', lesson);
+
+            if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
+                if ((lesson.convertStatus != 'success' && lesson.storage == 'cloud')) {
                     $('#media-error-dialog').show();
-                    $('#media-error-dialog').find('.modal-body .media-error').html(lesson.mediaError);
+                    $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                     return;
                 }
-                $('#media-error-dialog').hide();
-                self.set('lesson', lesson);
+                var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+            } else {
+                return;
+            }
 
-                if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
-                    if ((lesson.convertStatus != 'success' && lesson.storage == 'cloud')) {
-                        $('#media-error-dialog').show();
-                        $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
-                        return;
-                    }
-                    var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-                } else {
-                    return;
-                }
-
-                self._videoPlay(playerUrl);
-            })
+            self._videoPlay(playerUrl);
         }
     });
 
