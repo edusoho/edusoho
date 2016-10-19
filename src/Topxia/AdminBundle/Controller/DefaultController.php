@@ -307,9 +307,22 @@ class DefaultController extends BaseController
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
+        $day = $period == 'week' ? 7 : 30;
+        for ($i = $day; $i > 0; $i--) {
+            $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
+            $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
+            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+        }
+
+        $timeRange          = $this->getTimeRange($period);
+        $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
+
+        $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
+        $finishedLessonData = array_merge($defaultDatas, $finishedLessonData);
+
         return $this->createJsonResponse(array(
-            'time'    => '30',
-            'message' => 'ok'
+            'date'    => $dates,
+            'data' => $this->array_value_recursive('count', $finishedLessonData),
         ));
     }
 
@@ -327,6 +340,7 @@ class DefaultController extends BaseController
             $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $defaultDatas[$date] = array('count' => 0, 'date' => $date);
         }
+
         $timeRange  = $this->getTimeRange($period);
         $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
         $newOrders  = $this->getOrderService()->analysisOrderDate($conditions);
@@ -339,7 +353,7 @@ class DefaultController extends BaseController
         $newPaidOrders = array_merge($defaultDatas, $newPaidOrders);
 
         return $this->createJsonResponse(array(
-            'dates'   => $dates,
+            'date'   => $dates,
             'new'     => $this->array_value_recursive('count', $newOrders),
             'feePaid' => $this->array_value_recursive('count', $newPaidOrders)
         ));

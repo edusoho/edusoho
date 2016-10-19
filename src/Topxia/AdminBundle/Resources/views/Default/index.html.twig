@@ -78,7 +78,7 @@
                 </button>
               </div>
             </div>
-            <h3 class="panel-title">{{ '人次统计'|trans }}</h3>
+            <h3 class="panel-title">{{ '订单统计'|trans }}</h3>
           </div>
           <div class="panel-body js-statistic-areas" id="study-count-statistic"
                data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
@@ -125,10 +125,10 @@
                         data-url="{{ path('admin_lesson_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
               </div>
             </div>
-            <h3 class="panel-title">{{ '学习课时数'|trans }}
+            <h3 class="panel-title">{{ '课时完成数'|trans }}
               <span class="glyphicon glyphicon-question-sign text-sm"
                     data-toggle="tooltip" data-placement="top"
-                    title="{{ '每天课时学习数量(包括公开课)'|trans }}"></span></h3>
+                    title="{{ '每天课时学习的完成数量'|trans }}"></span></h3>
           </div>
           <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
                data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">

@@ -164,13 +164,12 @@ define(function (require, exports, module) {
         var chart = echarts.init(this.element.get(0));
         chart.showLoading();
         return $.get(this.element.data('url'), function (datas) {
-            console.log('data',datas);
             var option = {
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['新增人次', '付费人次'] //, '学习人次'
+                    data: ['新增订单', '付费订单']
                 },
                 grid: {
                     left: '3%',
@@ -186,27 +185,26 @@ define(function (require, exports, module) {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: datas.dates
+                    data: datas.date
                 },
                 yAxis: {
                     type: 'value',
                 },
                 series: [
                     {
-                        name: '新增人次',
+                        name: '新增订单',
                         type: 'line',
                         stack: '总量',
                         data: datas.new
                     },
                     {
-                        name: '付费人次',
+                        name: '付费订单',
                         type: 'line',
                         stack: '总量',
                         data: datas.feePaid
                     }
                 ]
             };
-            console.log(option);
             chart.hideLoading();
             chart.setOption(option);
         })
@@ -256,53 +254,52 @@ define(function (require, exports, module) {
     var studyLessonCountStatistic = function () {
         this.element = $("#study-lesson-count-statistic");
         var chart = echarts.init(this.element.get(0));
-        var option = {
-            color: ['#428bca'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['16/06/12', '16/06/13', '16/06/14', '16/06/15', '16/06/16', '16/06/17', '16/06/18'],
-                    axisTick: {
-                        alignWithLabel: true
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-
-            series: [
-                {
-                    name: '学习课时数',
-                    type: 'bar',
-                    // barWidth: '20',
-                    data: [10, 52, 200, 334, 390, 330, 220]
-                }
-            ]
-        };
 
         chart.showLoading();
-        return $.get(this.element.data('url'), function (data) {
-            // console.log('data',data);
+        return $.get(this.element.data('url'), function (response) {
+            var option = {
+                color: ['#428bca'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: response.date,
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+
+                series: [
+                    {
+                        name: '学习课时数',
+                        type: 'bar',
+                        barWidth: '19',
+                        data: response.data
+                    }
+                ]
+            };
 
             chart.hideLoading();
             chart.setOption(option);
