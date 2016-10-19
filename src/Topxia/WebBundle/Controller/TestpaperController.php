@@ -529,9 +529,15 @@ class TestpaperController extends BaseController
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'reviewing',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status'  => 'reviewing',
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -583,9 +589,16 @@ class TestpaperController extends BaseController
             10
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            'finished',
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds'        => $testpaperIds,
+                'status'         => 'finished',
+                'checkTeacherId' => $user['id']
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ),            
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -634,9 +647,15 @@ class TestpaperController extends BaseController
             10
         );
 
-        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            $status,
+        $testpaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            array(
+                'testIds' => $testpaperIds,
+                'status'  => $status
+            ),
+            array(
+                'checkedTime',
+                'DESC'
+            ), 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
