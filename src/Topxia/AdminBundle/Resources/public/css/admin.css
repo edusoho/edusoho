@@ -294,7 +294,7 @@ input.LargeInput {width: 600px;}
   border-left: 1px solid #eee;
 }
 
-.subfield-list > li h3 {
+.subfield-list > li .title {
   font-size: 14px;
   color: #666;
   margin-top: 0;
