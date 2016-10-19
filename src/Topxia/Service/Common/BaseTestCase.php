@@ -5,23 +5,12 @@ namespace Topxia\Service\Common;
 use Mockery;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Doctrine\Bundle\MigrationsBundle\Command\MigrationsMigrateDoctrineCommand;
 
-class BaseTestCase extends WebTestCase
+class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
-    protected static $isDatabaseCreated = false;
-
     protected function getCurrentUser()
     {
         return $this->getServiceKernel()->getCurrentUser();
-    }
-
-    public static function setUpBeforeClass()
-    {
-        $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
     }
 
     public function getServiceKernel()
@@ -29,25 +18,18 @@ class BaseTestCase extends WebTestCase
         return ServiceKernel::instance();
     }
 
-    /**
-     * 每个testXXX执行之前，都会执行此函数，净化数据库。
-     *
-     * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
-     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
+    }
+
     public function setUp()
     {
+        parent::emptyDatabase();
         $this->flushPool();
-
-        if (!static::$isDatabaseCreated) {
-            $this->createAppDatabase();
-            static::$isDatabaseCreated = true;
-            $this->emptyAppDatabase(true);
-        } else {
-            $this->emptyAppDatabase(false);
-        }
-
-        $this->initCurrentUser();
         $this->initDevelopSetting();
+        $this->initCurrentUser();
     }
 
     protected function initDevelopSetting()
@@ -133,59 +115,8 @@ class BaseTestCase extends WebTestCase
 
     protected static function getContainer()
     {
-        return self::$kernel->getContainer();
-    }
-
-    public function tearDown()
-    {
-
-    }
-
-    protected function createAppDatabase()
-    {
-        // 执行数据库的migrate脚本
         global $kernel;
-        $application = new Application($kernel);
-
-        $application->add(new MigrationsMigrateDoctrineCommand());
-        $command       = $application->find('doctrine:migrations:migrate');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute(
-            array('command' => $command->getName()),
-            array('interactive' => false)
-        );
-    }
-
-    protected function emptyAppDatabase($emptyAll = true)
-    {
-        $connection = $this->getServiceKernel()->getConnection();
-
-        if ($emptyAll) {
-            $tableNames = $connection->getSchemaManager()->listTableNames();
-        } else {
-            $tableNames = $connection->getInsertedTables();
-            $tableNames = array_unique($tableNames);
-        }
-
-        $tableWhiteList = array(
-            'migration_versions',
-            'file_group'
-        );
-
-        $sql = '';
-
-        foreach ($tableNames as $tableName) {
-            if (in_array($tableName, $tableWhiteList)) {
-                continue;
-            }
-
-            $sql .= "TRUNCATE {$tableName};";
-        }
-
-        if (!empty($sql)) {
-            $connection->exec($sql);
-            $connection->resetInsertedTables();
-        }
+        return $kernel->getContainer();
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())

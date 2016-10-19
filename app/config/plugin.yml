@@ -1,8 +1,0 @@
-parameters:
-  plugin:
-    registered_plugins_cache_file: "%kernel.root_dir%/../app/data/plugin_registered.php"
-
-services:
-    plugin_kernel:
-      class: Topxia\Service\Common\Plugin\PluginKernel
-      arguments: ["%plugin%", "@service_container"]

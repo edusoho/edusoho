@@ -32,7 +32,7 @@ $loader = require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
 
 $kernel = new AppKernel('dev', true);
-$kernel->loadClassCache();
+// $kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $kernel->setRequest($request);
 // NOTICE: 防止请求捕捉失败而做异常处理

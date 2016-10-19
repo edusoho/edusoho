@@ -69,7 +69,8 @@ class NotHasPermissionRoutingsCommand extends BaseCommand
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
         $serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
 
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $biz = $this->getContainer()->get('biz');
+        $serviceKernel->setConnection($biz['db']);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 0,

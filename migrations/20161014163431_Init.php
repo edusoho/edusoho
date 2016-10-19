@@ -1536,7 +1536,7 @@ class Init extends Migration
             CREATE TABLE `ip_blacklist` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `ip` varchar(32) NOT NULL,
-            `type` enum('failed','banned') NOT NULL,
+            `type` ENUM('failed','banned') NOT NULL COMMENT '禁用类型',
             `counter` int(10) unsigned NOT NULL DEFAULT '0',
             `expiredTime` int(10) unsigned NOT NULL DEFAULT '0',
             `createdTime` int(10) unsigned NOT NULL DEFAULT '0',

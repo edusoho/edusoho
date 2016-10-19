@@ -2,7 +2,6 @@
 
 namespace Classroom\Service\Classroom\Tests;
 
-use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
 
 class ClassroomOrderServiceTest extends BaseTestCase
