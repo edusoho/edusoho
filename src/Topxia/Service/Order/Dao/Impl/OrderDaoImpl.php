@@ -151,6 +151,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('userId = :userId')
             ->andWhere('amount > :amount')
             ->andWhere('totalPrice >= totalPrice')
+            ->andWhere('totalPrice > :totalPriceGreaterThan')
             ->andWhere('coinAmount > :coinAmount')
             ->andWhere('status = :status')
             ->andWhere('status <> :statusPaid')
@@ -260,9 +261,17 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
     {
-        $sql = "SELECT targetType , count(targetType) as value FROM orders  WHERE STATUS = 'paid' and `createdTime`>={$startTime}  GROUP BY targetType";
+        $sql = "SELECT targetType , count(targetType) as value FROM orders  WHERE STATUS = 'paid' and `paidTime`>={$startTime}  GROUP BY targetType";
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function analysisOrderDate($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
+            ->groupBy('date');
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
 
 }

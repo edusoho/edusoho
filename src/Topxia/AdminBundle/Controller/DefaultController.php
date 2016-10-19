@@ -299,7 +299,7 @@ class DefaultController extends BaseController
         $timeRange              = $this->getTimeRange($period);
         $userStatistic['dates'] = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-       // var_dump($timeRange, $userStatistic);
+        // var_dump($timeRange, $userStatistic);
         return $this->createJsonResponse(array(
             'userStatistic' => $userStatistic,
         ));
@@ -313,13 +313,46 @@ class DefaultController extends BaseController
         ));
     }
 
+    /**
+     * @param Request $request
+     * @param $period
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * 学习人次
+     */
     public function studyStatisticAction(Request $request, $period)
     {
+        $day = $period == 'week' ? 7 : 30;
+        for ($i = $day; $i > 0; $i--) {
+            $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
+            $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
+            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+        }
+        $timeRange  = $this->getTimeRange($period);
+        $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
+        $newOrders  = $this->getOrderService()->analysisOrderDate($conditions);
+        $newOrders  = ArrayToolkit::index($newOrders, 'date');
+        $newOrders  = array_merge($defaultDatas, $newOrders);
+
+        $conditions    = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid', 'totalPriceGreaterThan' => 0);
+        $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
+        $newPaidOrders = ArrayToolkit::index($newPaidOrders, 'date');
+        $newPaidOrders = array_merge($defaultDatas, $newPaidOrders);
+
         return $this->createJsonResponse(array(
-            'time'    => '7',
-            'message' => 'ok'
+            'dates'   => $dates,
+            'new'     => $this->array_value_recursive('count', $newOrders),
+            'feePaid' => $this->array_value_recursive('count', $newPaidOrders)
         ));
 
+    }
+
+    function array_value_recursive($key, array $arr)
+    {
+        $val = array();
+        array_walk_recursive($arr, function ($v, $k) use ($key, &$val) {
+            if ($k == $key) array_push($val, $v);
+        });
+        return count($val) > 1 ? $val : array_pop($val);
     }
 
     public function orderStatisticAction(Request $request, $period)

@@ -95,4 +95,6 @@ interface OrderService
     public function createOrderLog($orderId, $type, $message = '', array $data = array());
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy);
+
+    public function analysisOrderDate($conditions);
 }

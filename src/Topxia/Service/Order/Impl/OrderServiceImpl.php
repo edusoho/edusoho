@@ -665,6 +665,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisPaidOrderGroupByTargetType($startTime, $groupBy);
     }
 
+    public function analysisOrderDate($conditions)
+    {
+        return $this->getOrderDao()->analysisOrderDate($conditions);
+    }
+
     public function updateOrder($id, $orderFileds)
     {
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
