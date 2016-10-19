@@ -77,8 +77,29 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertNull($savedActivity);
     }
 
+    public function testTrigger()
+    {
+        $task = array(
+            'title'           => 'test1 task',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedTask = $this->getTaskService()->createTask($task);
+
+        $data = array(
+            'task' => $savedTask
+        );
+        $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
+    }
+
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:Activity.ActivityService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('CourseTask:Task.TaskService');
     }
 }

@@ -16,12 +16,12 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
             'event'        => $eventName,
             'data'         => $data
         );
-        return $this->getEventLogDao()->add($fields);
+        return $this->getActivityLearnLogDao()->add($fields);
     }
 
-    protected function getEventLogDao()
+    protected function getActivityLearnLogDao()
     {
-        return $this->createDao('Activity:Activity.EventLogDao');
+        return $this->createDao('Activity:Activity.ActivityLearnLogDao');
     }
 
 }

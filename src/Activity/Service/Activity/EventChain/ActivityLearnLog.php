@@ -18,6 +18,6 @@ class ActivityLearnLog implements Event
 
     protected function getActivityLearnLogService()
     {
-        ServiceKernel::instance()->createService('Activity:Activity.ActivityLearnLogService');
+        return ServiceKernel::instance()->createService('Activity:Activity.ActivityLearnLogService');
     }
 }
