@@ -1,7 +1,7 @@
 <ul class="subfield-list four-subfield clearfix">
   {% set status = 0 %}
   <li>
-    <h3>系统版本</h3>
+    <div class="title">系统版本</div>
     <div class="info">
       {% if mainAppUpgrade %}
         {% set status = 1 %}
@@ -14,7 +14,7 @@
     </div>
   </li>
   <li>
-    <h3>网校应用</h3>
+    <div class="title">网校应用</div>
     <div class="info">
       {% if app_count %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
@@ -28,7 +28,7 @@
     </div>
   </li>
   <li>
-    <h3>教育云服务</h3>
+    <div class="title">教育云服务</div>
     <div class="info">
       <span class="glyphicon glyphicon-info-sign text-danger"></span>
       <span class="status-card-warp">
@@ -88,7 +88,7 @@
     </div>
   </li>
   <li>
-    <h3>移动客户端</h3>
+    <div class="title">移动客户端</div>
     <div class="info">
       {% if setting("mobile").enabled|default(null) %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
