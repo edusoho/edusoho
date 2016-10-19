@@ -20,6 +20,8 @@ define(function(require, exports, module) {
             minView: 'month'
         });
 
+        $("#buyExpireTime").datetimepicker('setStartDate', new Date);
+        
         var $form = $("#price-form");
 
         var validator = new Validator({
