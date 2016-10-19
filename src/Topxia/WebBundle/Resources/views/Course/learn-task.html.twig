@@ -130,32 +130,27 @@
       </div>
     </div>
 
-    <div class="toolbar" id="lesson-dashboard-toolbar">
-      <div class="toolbar-nav hidden" id="lesson-dashboard-toolbar-nav">
-        <div class="toolbar-nav-content">
-          <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
-          <ul class="toolbar-nav-stacked">
-            <li class="es-qrcode toolbar-qrcode" data-url="{{ path('course_show',{id: course.id}) }}">
-              <a>
-              <i class="es-icon es-icon-qrcode"></i>
-                <br>              
-                {{ '扫一扫'|trans }}
-                <span class="qrcode-popover">
-                  <img src="" alt="">              
-                  {{ '扫二维码继续学习'|trans }}
+    <div class="toolbar toolbar-open" id="lesson-dashboard-toolbar">
+      <div class="toolbar-nav">
+
+        <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
+        <ul class="list-unstyled">
+          <li class="es-qrcode toolbar-qrcode" data-url="{{ path('course_show',{id: course.id}) }}">
+            <i class="es-icon es-icon-qrcode"></i><br>
+            {{ '扫一扫'|trans }}
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              {{ '扫二维码继续学习'|trans }}
               {{ '二维码时效为半小时'|trans }}
-                </span>
-              </a>
-            </li>
-          </ul>
-          {#<ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
-            <li class="hide-pane" style="display:none;">
-              <a href="javascript:">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-              </a>
-            </li>
-          </ul>#}
-        </div>
+            </span>
+          </li>
+        </ul>
+        <ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
+          <li class="hide-pane" style="display:none;">
+            <a href="javascript:"><span class="glyphicon glyphicon-chevron-right"></span></a>
+          </li>
+        </ul>
+
       </div>
       <div class="toolbar-pane-container">
       </div>
