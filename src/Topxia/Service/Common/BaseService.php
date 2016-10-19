@@ -1,8 +1,11 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Topxia\Common\Exception\ResourceNotFoundException;
+use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Util\HTMLPurifierFactory;
@@ -90,7 +93,7 @@ abstract class BaseService
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {
-        return new NotFoundException($message, $code);
+        return new ResourceNotFoundException($message, $code);
     }
 
     protected function fillOrgId($fields)
@@ -101,7 +104,7 @@ abstract class BaseService
             if (!empty($fields['orgCode'])) {
                 $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
-                    throw $this->createServiceException($this->getKernel()->trans('组织机构%orgCode%不存在,更新失败', array('%orgCode%' => $fields['orgCode'])));
+                    throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
                 }
                 $fields['orgId']   = $org['id'];
                 $fields['orgCode'] = $org['orgCode'];
@@ -135,7 +138,7 @@ abstract class BaseService
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+            throw new \Topxia\Common\Exception\AccessDeniedException('未登录用户，无权操作！');
         }
 
         $permissions = $user->getPermissions();

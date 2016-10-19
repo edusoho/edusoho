@@ -24,6 +24,8 @@ class ServiceKernel
     protected $translator;
     protected $translatorEnabled;
 
+    protected $pluginKernel;
+
     protected $parameterBag;
 
     protected $currentUser;
@@ -299,6 +301,25 @@ class ServiceKernel
             return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
         }
         return strtr((string) $message, $arguments);
+    }
+
+    public function setPluginKernel($pluginKernel)
+    {
+        $this->pluginKernel = $pluginKernel;
+    }
+
+    public function getPluginKernel()
+    {
+        if (is_null($this->pluginKernel)) {
+            throw new \RuntimeException('The pluginKernel of ServiceKernel is not setted!');
+        }
+
+        return $this->pluginKernel;
+    }
+
+    public function placeHook($hookName, $subject)
+    {
+        $this->getPluginKernel()->placeHook($hookName, $subject);
     }
 
     protected function getClassName($type, $name)

@@ -1,0 +1,18 @@
+services:
+    codeages_plugin.dict_collector:
+        class: Codeages\PluginBundle\System\DictCollector
+        arguments:
+            - []
+            - %kernel.cache_dir%
+            - %kernel.debug%
+
+    # codeages_plugin.slog_manager:
+    #     class: Codeages\PluginBundle\System\SlogMangaer
+        
+    # codeages_plugin.slot_twig_extension:
+    #     class: Codeages\PluginBundle\Twig\SlotExtension
+    #     public: false
+    #     arguments:
+    #         - @codeages_plugin.slog_manager
+    #     tags:
+    #         - { name: twig.extension }

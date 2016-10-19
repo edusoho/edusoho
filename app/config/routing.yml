@@ -1,5 +1,9 @@
 web:
     resource: "@WebBundle/Resources/config/routing.yml"
+    prefix: /
+
+codeages_plugin:
+    resource: "@CodeagesPluginBundle/Resources/config/routing.yml"
     prefix:   /
 
 bazinga_jstranslation:
@@ -54,14 +58,6 @@ org_web:
 
 org_admin:
     resource: "@OrgBundle/Resources/config/routing_admin.yml"
-    prefix:   /admin
-
-task_web:
-    resource: "@TaskBundle/Resources/config/routing.yml"
-    prefix:   /
-
-task_admin:
-    resource: "@TaskBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
 custom_web:
