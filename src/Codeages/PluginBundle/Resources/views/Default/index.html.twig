@@ -1,1 +1,5 @@
 Hello World!
+
+{% set user = {nickname: 'test', id: 1} %}
+
+<div class="header"> {{ slot('dev.header', user) }} </div>

@@ -1,0 +1,3 @@
+slot_dev:
+    path: /slot_dev
+    defaults: { _controller: CodeagesPluginBundle:Default:index }
