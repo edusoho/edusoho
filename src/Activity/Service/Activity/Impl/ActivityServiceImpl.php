@@ -7,6 +7,7 @@ use Topxia\Service\Common\BaseService;
 use Activity\Service\Activity\ActivityService;
 use Activity\Service\Activity\EventChain\EventChain;
 use Activity\Service\Activity\ActivityProcessorFactory;
+use Activity\Service\Activity\EventChain\ActivityLearnLog;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -29,6 +30,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (!empty($event)) {
             $eventChain->add($event);
         }
+        $eventChain->add(new ActivityLearnLog($eventName));
         $eventChain->trigger($activity, $data);
     }
 
