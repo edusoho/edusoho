@@ -49,7 +49,7 @@ class ActivityBuilder
                 $this->activity = new TextActivity($this->biz);
                 break;
             default:
-                return null;
+                throw new UnexpectedValueException('activity not null');
                 break;
         }
 

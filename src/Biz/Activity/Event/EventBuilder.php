@@ -21,7 +21,7 @@ class EventBuilder
 
     public final static function build(Biz $biz)
     {
-        $instance = new self();
+        $instance      = new self();
         $instance->biz = $biz;
         return $instance;
     }
@@ -32,8 +32,11 @@ class EventBuilder
      */
     public final function setEventClass($class)
     {
-        $this->event = new $class($this->biz);
-        if(!$this->event instanceof Event){
+        $class = $this->getRendererClass();
+        // php 5.6之前通过字符串初始化类实例不能传参
+        $reflection  = new \ReflectionClass($class);
+        $this->event = $reflection->newInstanceArgs(array($this->biz));
+        if (!$this->event instanceof Event) {
             throw new UnexpectedValueException('class must be Event Derived Class');
         }
         return $this;
@@ -54,12 +57,12 @@ class EventBuilder
      */
     public final function done()
     {
-        if(empty($this->event)){
+        if (empty($this->event)) {
             throw new UnexpectedValueException('event not empty');
         }
 
         $eventName = $this->event->getName();
-        if(!is_string($eventName) || empty($eventName)){
+        if (!is_string($eventName) || empty($eventName)) {
             throw new UnexpectedValueException('event name must be a string');
         }
 
