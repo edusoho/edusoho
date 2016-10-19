@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\Common;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Mockery;
 use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
@@ -72,6 +73,8 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getServiceKernel()->createService('Permission:Role.RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $biz = $this->getBiz();
+        $biz['user'] = $this->getCurrentUser();
     }
 
     /**
@@ -117,6 +120,14 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     {
         global $kernel;
         return $kernel->getContainer();
+    }
+
+    /**
+     * @return Biz
+     */
+    protected function getBiz()
+    {
+        return self::$biz;
     }
 
     protected function assertArrayEquals(array $ary1, array $ary2, array $keyAry = array())

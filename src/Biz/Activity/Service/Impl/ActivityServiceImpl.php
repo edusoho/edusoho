@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Dao\Impl\ActivityDaoImpl;
 use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
@@ -32,7 +33,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $eventChain = new EventChain();
         $eventName  = $activity['mediaType'].'.'.$eventName;
         $event      = ActivityBuilder::build($this->biz)
-            ->type($activity)
+            ->type($activity['mediaType'])
             ->done()
             ->getEvent($eventName);
 
@@ -83,7 +84,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
 
-        return $this->getActivityDao()->add($fields);
+        return $this->getActivityDao()->create($fields);
     }
 
     public function updateActivity($id, $fields)
@@ -98,7 +99,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             ->type($savedActivity['mediaType'])
             ->done();
 
-        $activityModel->update($savedActivity['targetId'], $fields);
+        $activityModel->update($savedActivity['mediaId'], $fields);
 
         return $this->getActivityDao()->update($id, $fields);
     }
@@ -120,13 +121,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             ->type($activity['mediaType'])
             ->done();
 
-        $activityModel->delete($activity['targetId']);
+        $activityModel->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
     }
 
     /**
-     * @return ActivityDaoImpl
+     * @return ActivityDao
      */
     protected function getActivityDao()
     {
