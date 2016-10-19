@@ -37,7 +37,7 @@
       </div>
       <div class="media-body thread-post">
         <div class="title">{{ web_macro.user_link(user) }} 
-          {% if review.meta %}<span>{{'完成进度'|trans}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
+          {% if review.meta %}<span>{{'课程完成进度'|trans}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
           {{ review.createdTime|date('Y-m-d') }} 
         </div>
         <div class="score">
