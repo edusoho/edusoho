@@ -9,7 +9,7 @@
     <div class="es-piece">
       <div class="piece-body p-lg clearfix">
         {% if course.about %}
-          {{ add_cdn_to_img_tag(course.about)|raw }}
+          {{ course.about|cdn|raw }}
         {% else %}
           <div class="text-muted">{{'暂无课程简介'|trans}}</div>
         {% endif %}
