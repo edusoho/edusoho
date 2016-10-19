@@ -8,22 +8,30 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 {
     protected $table = 'user_token';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'data' => 'phpserialize'
     );
 
     public function getToken($id)
     {
-        $sql   = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql   = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $token = $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
+        });
     }
 
     public function getTokenByToken($token)
     {
-        $sql   = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($token));
-        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("token:{$token}", $token, function ($token) use ($that) {
+            $sql   = "SELECT * FROM {$that->getTable()} WHERE token = ? LIMIT 1";
+            $token = $that->getConnection()->fetchAssoc($sql, array($token));
+            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
+        });
     }
 
     public function addToken(array $token)
@@ -33,37 +41,80 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert token error.');
         }
-        return $this->getToken($this->getConnection()->lastInsertId());
+
+        $token = $this->getToken($this->getConnection()->lastInsertId());
+        $this->flushCache($token);
+        return $token;
+    }
+
+    protected function flushCache($token)
+    {
+        $this->incrVersions(array(
+            "{$this->table}:version:userId:{$token['userId']}",
+            "{$this->table}:version:type:{$token['type']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$token['id']}",
+            "token:{$token['token']}"
+        ));
     }
 
     public function findTokensByUserIdAndType($userId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and type = ?";
-        return $this->getConnection()->fetchAll($sql, array($userId, $type)) ?: null;
+        $that = $this;
+
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:type:{$type}", $userId, $type, function ($userId, $type) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? and type = ?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $type)) ?: null;
+        });
     }
 
     public function getTokenByType($type)
     {
-        $sql   = "SELECT * FROM {$this->table} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($type, time())) ?: null;
-        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
+        $that = $this;
+
+        $versionKey = "{$this->table}:version:type:{$type}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("type:{$type}:version:{$version}", $type, function ($type) use ($that) {
+            $sql   = "SELECT * FROM {$that->getTable()} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
+            $token = $that->getConnection()->fetchAssoc($sql, array($type, time())) ?: null;
+            return $token ? $that->createSerializer()->unserialize($token, $that->serializeFields) : null;
+        });
     }
 
     public function deleteToken($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $token  = $this->getToken($id);
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+
+        $this->flushCache($token);
+        return $result;
     }
 
     public function deleteTokensByExpiredTime($expiredTime, $limit)
     {
-        $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
-        return $this->getConnection()->executeQuery($sql, array($expiredTime));
+        $sql    = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
+        $result = $this->getConnection()->executeQuery($sql, array($expiredTime));
+        $this->clearCached();
+        return $result;
     }
 
     public function waveRemainedTimes($id, $diff)
     {
-        $sql = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $sql    = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $token = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+        $this->flushCache($token);
+
+        return $result;
     }
 
     public function searchTokenCount($conditions)

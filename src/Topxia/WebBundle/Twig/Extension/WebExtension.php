@@ -120,7 +120,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
             new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger')),
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
-            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify'))
+            new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
+            new \Twig_SimpleFunction('add_cdn_to_img_tag', array($this, 'addCdnToImgTag'))
         );
     }
 
@@ -143,6 +144,37 @@ class WebExtension extends \Twig_Extension
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function addCdnToImgTag($content)
+    {
+        $cdnUrl = $this->isCDNOpen();
+
+        if ($cdnUrl) {
+            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
+
+            if ($imgs) {
+                foreach ($imgs[1] as $img) {
+                    if (!stripos($img, 'http://')) {
+                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    }
+                }
+            }
+        }
+
+        return $content;
+    }
+
+    private function isCDNOpen()
+    {
+        $cdn    = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+
+        if ($cdnUrl) {
+            return $cdnUrl;
+        }
+
+        return false;
     }
 
     public function weixinConfig()

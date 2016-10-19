@@ -1867,6 +1867,39 @@ select:-webkit-autofill {
   white-space: nowrap;
   word-wrap: normal;
 }
+.modal-live-remind .modal-body {
+  padding: 40px;
+}
+.modal-live-remind .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.modal-live-remind .media-left img {
+  width: 160px;
+  max-width: 160px;
+}
+.modal-live-remind .media-body h4 {
+  color: #313131;
+  font-size: 16px;
+}
+.modal-live-remind .media-body p {
+  color: #919191;
+  font-size: 12px;
+}
+.modal-live-remind .live-countdown {
+  font-size: 22px;
+  color: #313131;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.modal-live-remind .live-countdown span {
+  color: #ff8a0c;
+  font-size: 40px;
+}
+.modal-live-remind .btn {
+  width: 300px;
+}
 .navbar {
   margin-bottom: 0;
   z-index: 99;
@@ -3357,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3377,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -10910,7 +10943,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;

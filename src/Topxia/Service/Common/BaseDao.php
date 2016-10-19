@@ -31,6 +31,34 @@ abstract class BaseDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
+    protected function waveCache()
+    {
+        $args     = func_get_args();
+        $callback = array_pop($args);
+        $key      = $this->table.':'.array_shift($args);
+        $redis    = $this->getRedis();
+
+        if ($redis) {
+            $currentTime = time();
+            $data        = $redis->get($key);
+
+            if ($data) {
+                if ($currentTime - $data['syncTime'] > 600) {
+                    $args[2] += $data['increment'];
+                    call_user_func_array($callback, $args);
+                    $redis->setex($key, 20 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
+                } else {
+                    $data['increment'] += $args[2];
+                    $redis->setex($key, 20 * 60 * 60, array('increment' => $data['increment'], 'syncTime' => $data['syncTime']));
+                }
+            } else {
+                $redis->setex($key, 20 * 60 * 60, array('increment' => $args[2], 'syncTime' => $currentTime));
+            }
+        } else {
+            call_user_func_array($callback, $args);
+        }
+    }
+
     public function getTable()
     {
         if ($this->table) {
@@ -68,7 +96,7 @@ abstract class BaseDao
         $args     = func_get_args();
         $callback = array_pop($args);
 
-        $key = "{$this->table}:v{$this->getTableVersion()}:".array_shift($args);
+        $key = $this->getPrefixKey().':'.array_shift($args);
 
         if (isset($this->dataCached[$key])) {
             return $this->dataCached[$key];
@@ -78,8 +106,7 @@ abstract class BaseDao
 
         if ($redis) {
             $data = $redis->get($key);
-
-            if ($data) {
+            if ($data !== false) {
                 $this->dataCached[$key] = $data;
                 return $data;
             }
@@ -94,7 +121,7 @@ abstract class BaseDao
         return $this->dataCached[$key];
     }
 
-    protected function getTableVersion()
+    protected function getCacheVersion($key)
     {
         $redis = $this->getRedis();
 
@@ -104,32 +131,69 @@ abstract class BaseDao
 
         $version = 0;
 
-        if (isset($this->dataCached['version'])) {
-            $version = $this->dataCached['version'];
+        if (isset($this->dataCached[$key])) {
+            $version = $this->dataCached[$key];
         }
 
         if ($version == 0) {
-            $version = $redis->get("{$this->table}:version");
+            $version = $redis->get($key);
 
             if (!$version) {
                 $version = 1;
-                $redis->incrBy("{$this->table}:version", $version);
+                $redis->incrBy($key, $version);
             }
 
-            $this->dataCached["version"] = $version;
+            $this->dataCached[$key] = $version;
         }
 
         return $version;
     }
 
+    protected function incrVersions($keys)
+    {
+        $redis = $this->getRedis();
+
+        if ($redis) {
+            foreach ($keys as $key) {
+                $redis->incr($key);
+                unset($this->dataCached[$key]);
+            }
+        }
+    }
+
+    protected function getTableVersion()
+    {
+        $key = "{$this->table}:version";
+        return $this->getCacheVersion($key);
+    }
+
     protected function clearCached()
     {
-        $this->dataCached = array();
+        $key = "{$this->table}:version";
+        $this->incrVersions(array($key));
+    }
+
+    protected function deleteCache($keys)
+    {
+        if (empty($keys)) {
+            return;
+        }
+
+        $deleteKeys = array();
+        foreach ($keys as $key => $value) {
+            $deleteKeys[] = $this->getPrefixKey().':'.$value;
+        }
 
         $redis = $this->getRedis();
 
         if ($redis) {
-            $redis->incr("{$this->table}:version");
+            foreach ($deleteKeys as $key) {
+                $redis->delete($key);
+            }
+        }
+
+        foreach ($deleteKeys as $key) {
+            unset($this->dataCached[$key]);
         }
     }
 
@@ -207,6 +271,11 @@ abstract class BaseDao
         }
 
         return $orderBy;
+    }
+
+    protected function getPrefixKey()
+    {
+        return "{$this->table}:v{$this->getTableVersion()}";
     }
 
     protected function hasEmptyInCondition($conditions, $fields)

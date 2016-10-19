@@ -34,13 +34,40 @@ class BlockExtension extends \Twig_Extension
         }
 
         $env = $this->container->getParameter('kernel.environment');
+
         if ($env == 'prod') {
-            return $block['content'];
+            $content = $block['content'];
+        } else {
+            $content = BlockToolkit::render($block, $this->container);
         }
 
-        // 从data渲染生成html然后返回
+        $cdnUrl = $this->isCDNOpen();
 
-        return BlockToolkit::render($block, $this->container);
+        if ($cdnUrl) {
+            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i',$content,$imgs);
+
+            if ($imgs) {
+                foreach ($imgs[1] as $img) {
+                    if (!strstr($img,'http://')) {
+                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    }
+                }
+            }
+        }
+
+        return $content;
+    }
+
+    private function isCDNOpen()
+    {
+        $cdn    = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+
+        if ($cdnUrl) {
+            return $cdnUrl;
+        }
+
+        return false;
     }
 
     public function getName()

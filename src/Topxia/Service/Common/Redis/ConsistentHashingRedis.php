@@ -65,4 +65,34 @@ class ConsistentHashingRedis
     {
         return $this->reidsPool[$this->hash->lookup($key)];
     }
+
+    public function zAdd($key, $score, $member)
+    {
+        return $this->lookup($key)->zAdd($key, $score, $member);
+    }
+
+    public function zRem($key, $member)
+    {
+        return $this->lookup($key)->zRem($key, $member);
+    }
+
+    public function zRemRangeByScore($key, $start, $end)
+    {
+        return $this->lookup($key)->zRemRangeByScore($key, $start, $end);
+    }
+
+    public function zCount($key, $start, $end)
+    {
+        return $this->lookup($key)->zCount($key, $start, $end);
+    }
+
+    public function zSize($key)
+    {
+        return $this->lookup($key)->zSize($key);
+    }
+
+    public function setTimeout($key, $ttl)
+    {
+        return $this->lookup($key)->setTimeout($key, $ttl);
+    }
 }

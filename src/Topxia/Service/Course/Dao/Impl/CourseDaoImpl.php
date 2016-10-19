@@ -16,21 +16,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        );
-    }
-
-    public function getLessonByCourseIdAndNumber($courseId, $number)
-    {
-        $that = $this;
-
-        return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $that->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
-        }
-
-        );
+        });
     }
 
     public function findCoursesByIds(array $ids)
@@ -48,16 +34,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $that = $this;
 
-        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+        $versionKey = "{$this->table}:version:parentId:{$parentId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("parentId:{$parentId}:version:{$version}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
             if (empty($parentId)) {
                 return array();
             }
 
             $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND locked = ?";
             return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
-        }
-
-        );
+        });
     }
 
     public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -130,28 +117,48 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $course['createdTime'] = time();
         $course['updatedTime'] = $course['createdTime'];
         $affected              = $this->getConnection()->insert($this->table, $course);
-        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
         }
 
-        return $this->getCourse($this->getConnection()->lastInsertId());
+        $course = $this->getCourse($this->getConnection()->lastInsertId());
+        $this->flushCache($course);
+        return $course;
     }
 
     public function updateCourse($id, $fields)
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCached();
-        return $this->getCourse($id);
+
+        $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+        $this->flushCache($course);
+
+        return $course;
     }
 
     public function deleteCourse($id)
     {
+        $course = $this->getCourse($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
+
+        $this->flushCache($course);
+
         return $result;
+    }
+
+    protected function flushCache($course)
+    {
+        $this->incrVersions(array(
+            "{$this->table}:version:parentId:{$course['parentId']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$course['id']}"
+        ));
     }
 
     public function waveCourse($id, $field, $diff)
@@ -162,13 +169,35 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%s字段不允许增减，只有%s才被允许增减'), $field, implode(',', $fields)));
         }
 
-        $currentTime = time();
+        if ($field == 'hitNum') {
+            $that = $this;
 
-        $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+            return $this->waveCache("id:{$id}:field:{$field}:diff:{$diff}", $id, $field, $diff, function ($id, $field, $diff) use ($that) {
+                $currentTime = time();
 
-        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $this->clearCached();
-        return $result;
+                $sql = "UPDATE {$that->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
+                $result = $that->getConnection()->executeQuery($sql, array($diff, $id));
+
+                $sql    = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+                $course = $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+                $that->flushCache($course);
+                return $result;
+            });
+        } else {
+            $currentTime = time();
+
+            $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
+            $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+
+            $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+            $course = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+            $this->flushCache($course);
+            return $result;
+        }
     }
 
     public function clearCourseDiscountPrice($discountId)
