@@ -3,6 +3,7 @@
 namespace Topxia\Service\Common;
 
 use Mockery;
+use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,7 +119,7 @@ class BaseTestCase extends WebTestCase
         $currentUser->fromArray($user);
         static::$serviceKernel->setCurrentUser($currentUser);
         static::$serviceKernel->createService('Permission:Role.RoleService')->refreshRoles();
-        static::$serviceKernel->getCurrentUser()->initPermissions();
+        static::$serviceKernel->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
     }
 
     /**

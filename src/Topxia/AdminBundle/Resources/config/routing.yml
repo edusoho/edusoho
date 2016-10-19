@@ -11,11 +11,6 @@ admin_notice_modal:
     pattern:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }
 
-admin_popular_courses:
-    pattern:  /popular_courses
-    defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
-    permissions: [admin]
-
 admin_question_remind_teachers:
     pattern: /course/{courseId}/question/{questionId}/remindTeachers
     defaults: { _controller: TopxiaAdminBundle:Default:questionRemindTeachers }
@@ -27,16 +22,30 @@ admin_operation_analysis:
     defaults: { _controller: TopxiaAdminBundle:Default:operationAnalysisDashbordBlock }
     permissions: [admin]
 
-admin_user_week_statistic:
-    pattern: /user/statistic/week
-    defaults: { _controller: TopxiaAdminBundle:Default:userWeekStatistic }
+admin_user_statistic:
+    pattern: /user/statistic/{period}
+    defaults: { _controller: TopxiaAdminBundle:Default:userStatistic }
     permissions: [admin]
 
-admin_user_month_statistic:
-    pattern: /user/statistic/month
-    defaults: { _controller: TopxiaAdminBundle:Default:userMonthStatistic }
+admin_lesson_learn_statistic:
+    pattern: /lesson/learn/statistic/{period}
+    defaults: { _controller: TopxiaAdminBundle:Default:lessonLearnStatistic }
     permissions: [admin]
 
+admin_study_statistic:
+    pattern: /study/statistic/{period}
+    defaults: { _controller: TopxiaAdminBundle:Default:studyStatistic }
+    permissions: [admin]
+
+admin_order_statistic:
+    pattern: /order/statistic/{period}
+    defaults: { _controller: TopxiaAdminBundle:Default:orderStatistic }
+    permissions: [admin]
+
+admin_course_explore:
+    pattern: /course/explore/{period}
+    defaults: { _controller: TopxiaAdminBundle:Default:courseExplore }
+    permissions: [admin]
 # admin_online_count:
 #     pattern: /online/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
@@ -958,7 +967,7 @@ admin_logs_prod:
 admin_logs_action_dicts:
     pattern:  /setting/logs/logActions
     defaults: { _controller: TopxiaAdminBundle:Log:logActions }
-    
+
 admin_cloud_access:
     pattern:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }
@@ -1436,7 +1445,7 @@ admin_invite_set:
 
 admin_invite_coupon:
     pattern: /invite/{filter}/coupon/
-    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'} 
+    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'}
 
 admin_invite_coupon_query:
     pattern: /invite/coupon/query/
@@ -1784,7 +1793,7 @@ admin_edu_cloud_attachment:
     pattern: /setting/edu_cloud/attachment
     defaults: { _controller: TopxiaAdminBundle:EduCloud:attachment }
     permissions: [admin_edu_cloud_attachment]
-    
+
 admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }

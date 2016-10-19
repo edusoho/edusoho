@@ -4,92 +4,21 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
+use Topxia\Service\Order\Impl\OrderServiceImpl;
+use Topxia\Service\System\Impl\StatisticsServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
-    public function popularCoursesAction(Request $request)
-    {
-        $dateType   = $request->query->get('dateType');
-        $currentDay = $this->weekday(time());
-
-        if ($dateType == "today") {
-            $startTime = strtotime('today');
-            $endTime   = strtotime('tomorrow');
-        }
-
-        if ($dateType == "yesterday") {
-            $startTime = strtotime('yesterday');
-            $endTime   = strtotime('today');
-        }
-
-        if ($dateType == "this_week") {
-            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
-                $startTime = strtotime('Monday last week');
-                $endTime   = strtotime('Monday this week');
-            } else {
-                $startTime = strtotime('Monday this week');
-                $endTime   = strtotime('Monday next week');
-            }
-        }
-
-        if ($dateType == "last_week") {
-            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
-                $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
-                $endTime   = strtotime('Monday this week') - (7 * 24 * 60 * 60);
-            } else {
-                $startTime = strtotime('Monday last week');
-                $endTime   = strtotime('Monday this week');
-            }
-        }
-
-        if ($dateType == "this_month") {
-            $startTime = strtotime('first day of this month midnight');
-            $endTime   = strtotime('first day of next month midnight');
-        }
-
-        if ($dateType == "last_month") {
-            $startTime = strtotime('first day of last month midnight');
-            $endTime   = strtotime('first day of this month midnight');
-        }
-
-        $members   = $this->getCourseService()->countMembersByStartTimeAndEndTime($startTime, $endTime);
-        $courseIds = ArrayToolkit::column($members, "courseId");
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses, "id");
-
-        $sortedCourses = array();
-
-        $orders = $this->getOrderService()->sumOrderAmounts($startTime, $endTime, $courseIds);
-        $orders = ArrayToolkit::index($orders, "targetId");
-
-        foreach ($members as $key => $value) {
-            $course                    = array();
-            $course['title']           = $courses[$value["courseId"]]['title'];
-            $course['courseId']        = $courses[$value["courseId"]]['id'];
-            $course['addedStudentNum'] = $value['co'];
-            $course['studentNum']      = $courses[$value["courseId"]]['studentNum'];
-
-            if (isset($orders[$value["courseId"]])) {
-                $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
-            } else {
-                $course['addedMoney'] = 0;
-            }
-
-            $sortedCourses[] = $course;
-        }
-
-        return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
-            'sortedCourses' => $sortedCourses
-        ));
-    }
 
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 7 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 30 * 24 * 60 * 60));
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
+            'dates' => $weekAndMonthDate
+        ));
     }
 
     public function noticeAction(Request $request)
@@ -216,13 +145,6 @@ class DefaultController extends BaseController
 
         $apps = $this->getAppService()->checkAppUpgrades();
 
-        $appsAll = $this->getAppService()->getCenterApps();
-
-        $codes         = ArrayToolkit::column($appsAll, 'code');
-        $installedApps = $this->getAppService()->findAppsByCodes($codes);
-
-        $unInstallAppCount = count($appsAll) - count($installedApps);
-
         $appCount = count($apps);
 
         if (isset($apps['error'])) {
@@ -242,21 +164,46 @@ class DefaultController extends BaseController
 
         $rootApi             = CloudAPIFactory::create('root');
         $mobileCustomization = $rootApi->get('/customization/mobile/info');
+        $info                = $rootApi->get('/me');
+
+
+        $cloudServiceCount = 0;
+
+        $storageSetting = $this->getSettingService()->get('storage');
+        if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
+            $cloudServiceCount += 2;
+        }
+        $cloudSms = $this->getSettingService()->get('course');
+        if (empty($cloudSms['live_course_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
+        $cloudSms = $this->getSettingService()->get('cloud_sms');
+        if (empty($cloudSms['sms_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
+        $cloudSearch = $this->getSettingService()->get('cloud_search');
+        if (empty($cloudSearch['search_enabled'])) {
+            $cloudServiceCount += 1;
+        }
+
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
+            "info"                => $info,
             "apps"                => $apps,
             "error"               => $error,
             "mainAppUpgrade"      => $mainAppUpgrade,
             "app_count"           => $appCount,
-            "unInstallAppCount"   => $unInstallAppCount,
             "liveCourseStatus"    => $liveCourseStatus,
-            "mobileCustomization" => $mobileCustomization
+            "mobileCustomization" => $mobileCustomization,
+            'cloudServiceCount'   => $cloudServiceCount
         ));
     }
 
     public function latestUsersBlockAction(Request $request)
     {
-        $users = $this->getUserService()->searchUsers(array(), array('createdTime', 'DESC'), 0, 5);
+        $users = $this->getCourseService()->searchMemberCountGroupByFields($conditions, $groupBy);
         return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
             'users' => $users
         ));
@@ -281,172 +228,154 @@ class DefaultController extends BaseController
         $todayTimeStart = strtotime(date("Y-m-d", time()));
         $todayTimeEnd   = strtotime(date("Y-m-d", time() + 24 * 3600));
 
-        $yesterdayTimeStart = strtotime(date("Y-m-d", time() - 24 * 3600));
-        $yesterdayTimeEnd   = strtotime(date("Y-m-d", time()));
-
-        $todayRegisterNum     = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
-        $yesterdayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd));
-
-        $todayUserSum     = $this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d", time() + 24 * 3600)));
-        $yesterdayUserSum = $this->getUserService()->findUsersCountByLessThanCreatedTime(strtotime(date("Y-m-d", time())));
-
-        $todayLoginNum     = $this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d", time())), strtotime(date("Y-m-d", time() + 24 * 3600)));
-        $yesterdayLoginNum = $this->getLogService()->analysisLoginNumByTime(strtotime(date("Y-m-d", time() - 24 * 3600)), strtotime(date("Y-m-d", time())));
-
-        $todayCourseNum     = $this->getCourseService()->searchCourseCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
-        $yesterdayCourseNum = $this->getCourseService()->searchCourseCount(array("startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd));
-
-        $todayCourseSum     = $this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d", time() + 24 * 3600)));
-        $yesterdayCourseSum = $this->getCourseService()->findCoursesCountByLessThanCreatedTime(strtotime(date("Y-m-d", time())));
-
-        $todayLessonNum = $this->getCourseService()->searchLessonCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
-
-        $yesterdayLessonNum = $this->getCourseService()->searchLessonCount(array("startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd));
-
-        $todayJoinLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "status" => "paid"));
-
-        $yesterdayJoinLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $yesterdayTimeStart, "paidEndTime" => $yesterdayTimeEnd, "status" => "paid"));
-
-        $todayBuyLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "status" => "paid", "amount" => "0.00", "targetType" => 'course'));
-
-        $yesterdayBuyLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $yesterdayTimeStart, "paidEndTime" => $yesterdayTimeEnd, "status" => "paid", "amount" => "0.00", "targetType" => 'course'));
-
-        $todayBuyClassroomNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "status" => "paid", "amount" => "0.00", "targetType" => 'classroom'));
-
-        $yesterdayBuyClassroomNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $yesterdayTimeStart, "paidEndTime" => $yesterdayTimeEnd, "status" => "paid", "amount" => "0.00", "targetType" => 'classroom'));
-
-        $todayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
-
-        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
-
-        $todayAllVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)), "fileType" => 'video'));
-
-        $yesterdayAllVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time() - 24 * 3600)), 'endTime' => strtotime(date("Y-m-d", time())), "fileType" => 'video'));
-
-        $todayCloudVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)), "fileType" => 'video', 'fileStorage' => 'cloud'));
-
-        $yesterdayCloudVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time() - 24 * 3600)), 'endTime' => strtotime(date("Y-m-d", time())), "fileType" => 'video', 'fileStorage' => 'cloud'));
-
-        $todayLocalVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)), "fileType" => 'video', 'fileStorage' => 'local'));
-
-        $yesterdayLocalVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time() - 24 * 3600)), 'endTime' => strtotime(date("Y-m-d", time())), "fileType" => 'video', 'fileStorage' => 'local'));
-
-        $todayNetVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)), "fileType" => 'video', 'fileStorage' => 'net'));
-
-        $yesterdayNetVideoViewedNum = $this->getCourseService()->searchAnalysisLessonViewCount(array('startTime' => strtotime(date("Y-m-d", time() - 24 * 3600)), 'endTime' => strtotime(date("Y-m-d", time())), "fileType" => 'video', 'fileStorage' => 'net'));
-
-        $todayExitLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "statusPaid" => "paid", "statusCreated" => "created"));
-
-        $yesterdayExitLessonNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $yesterdayTimeStart, "paidEndTime" => $yesterdayTimeEnd, "statusPaid" => "paid", "statusCreated" => "created"));
-
-        $todayIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time())), "paidEndTime" => strtotime(date("Y-m-d", time() + 24 * 3600)), "status" => "paid")) + 0.00;
-
-        $yesterdayIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time() - 24 * 3600)), "paidEndTime" => strtotime(date("Y-m-d", time())), "status" => "paid")) + 0.00;
-
-        $todayCourseIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time())), "paidEndTime" => strtotime(date("Y-m-d", time() + 24 * 3600)), "status" => "paid", "targetType" => "course")) + 0.00;
-
-        $yesterdayCourseIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time() - 24 * 3600)), "paidEndTime" => strtotime(date("Y-m-d", time())), "status" => "paid", "targetType" => "course")) + 0.00;
-
-        $todayClassroomIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time())), "paidEndTime" => strtotime(date("Y-m-d", time() + 24 * 3600)), "status" => "paid", "targetType" => "classroom")) + 0.00;
-
-        $yesterdayClassroomIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time() - 24 * 3600)), "paidEndTime" => strtotime(date("Y-m-d", time())), "status" => "paid", "targetType" => "classroom")) + 0.00;
-
-        $todayVipIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time())), "paidEndTime" => strtotime(date("Y-m-d", time() + 24 * 3600)), "status" => "paid", "targetType" => "vip")) + 0.00;
-
-        $yesterdayVipIncome = $this->getOrderService()->analysisAmount(array("paidStartTime" => strtotime(date("Y-m-d", time() - 24 * 3600)), "paidEndTime" => strtotime(date("Y-m-d", time())), "status" => "paid", "targetType" => "vip")) + 0.00;
-
-        $storageSetting = $this->getSettingService()->get('storage');
 
         $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
+        $loginCount  = $this->getStatisticsService()->getloginCount(15 * 60);
 
-        $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
+        $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
+        $totalRegisterNum = $this->getUserService()->searchUserCount(array());
 
-        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
-            $factory        = new CloudClientFactory();
-            $client         = $factory->createClient($storageSetting);
-            $keyCheckResult = $client->checkKey();
-        } else {
-            $keyCheckResult = array('error' => 'error');
-        }
+        $todayCourseMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
+        $totalCourseMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
+
+        $todayClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
+        $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
+
+        $todayVipNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'vip', "status" => "paid"));
+        $totalVipNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'vip', "status" => "paid"));
+
+
+        $todayThreadNum         = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
+        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNumLargerThan' => 0));
+        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array());
+
+        $publishedCourseNum = $this->getCourseService()->searchCourseCount(array("status" => 'published'));
+        $totalCourseNum     = $this->getCourseService()->searchCourseCount(array());
+
+
+        $publishedClassroomNum = $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'));
+        $totalClassroomNum     = $this->getClassroomService()->searchClassroomsCount(array());
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
-            'onlineCount'                  => $onlineCount,
-            'loginCount'                   => $loginCount,
+            'onlineCount' => $onlineCount,
+            'loginCount'  => $loginCount,
 
-            'todayUserSum'                 => $todayUserSum,
-            'yesterdayUserSum'             => $yesterdayUserSum,
-            'todayCourseSum'               => $todayCourseSum,
-            'yesterdayCourseSum'           => $yesterdayCourseSum,
-            'todayRegisterNum'             => $todayRegisterNum,
-            'yesterdayRegisterNum'         => $yesterdayRegisterNum,
-            'todayLoginNum'                => $todayLoginNum,
-            'yesterdayLoginNum'            => $yesterdayLoginNum,
-            'todayCourseNum'               => $todayCourseNum,
-            'yesterdayCourseNum'           => $yesterdayCourseNum,
-            'todayLessonNum'               => $todayLessonNum,
-            'yesterdayLessonNum'           => $yesterdayLessonNum,
-            'todayJoinLessonNum'           => $todayJoinLessonNum,
-            'yesterdayJoinLessonNum'       => $yesterdayJoinLessonNum,
-            'todayBuyLessonNum'            => $todayBuyLessonNum,
-            'yesterdayBuyLessonNum'        => $yesterdayBuyLessonNum,
+            'todayRegisterNum' => $todayRegisterNum,
+            'totalRegisterNum' => $totalRegisterNum,
 
-            'todayBuyClassroomNum'         => $todayBuyClassroomNum,
-            'yesterdayBuyClassroomNum'     => $yesterdayBuyClassroomNum,
+            'todayCourseMemberNum' => $todayCourseMemberNum,
+            'totalCourseMemberNum' => $totalCourseMemberNum,
 
-            'todayFinishedLessonNum'       => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum'   => $yesterdayFinishedLessonNum,
+            'todayClassroomMemberNum' => $todayClassroomMemberNum,
+            'totalClassroomMemberNum' => $totalClassroomMemberNum,
 
-            'todayAllVideoViewedNum'       => $todayAllVideoViewedNum,
-            'yesterdayAllVideoViewedNum'   => $yesterdayAllVideoViewedNum,
+            'todayVipNum' => $todayVipNum,
+            'totalVipNum' => $totalVipNum,
 
-            'todayCloudVideoViewedNum'     => $todayCloudVideoViewedNum,
-            'yesterdayCloudVideoViewedNum' => $yesterdayCloudVideoViewedNum,
+            'todayThreadNum'         => $todayThreadNum,
+            'todayThreadUnAnswerNum' => $todayThreadUnAnswerNum,
+            'totalThreadNum'         => $totalThreadNum,
 
-            'todayLocalVideoViewedNum'     => $todayLocalVideoViewedNum,
-            'yesterdayLocalVideoViewedNum' => $yesterdayLocalVideoViewedNum,
+            'publishedCourseNum' => $publishedCourseNum,
+            'totalCourseNum'     => $totalCourseNum,
 
-            'todayNetVideoViewedNum'       => $todayNetVideoViewedNum,
-            'yesterdayNetVideoViewedNum'   => $yesterdayNetVideoViewedNum,
+            'publishedClassroomNum' => $publishedClassroomNum,
+            'totalClassroomNum'     => $totalClassroomNum
 
-            'todayIncome'                  => $todayIncome,
-            'yesterdayIncome'              => $yesterdayIncome,
-            'todayCourseIncome'            => $todayCourseIncome,
-            'yesterdayCourseIncome'        => $yesterdayCourseIncome,
-            'todayClassroomIncome'         => $todayClassroomIncome,
-            'yesterdayClassroomIncome'     => $yesterdayClassroomIncome,
-            'todayVipIncome'               => $todayVipIncome,
-            'yesterdayVipIncome'           => $yesterdayVipIncome,
-            'todayExitLessonNum'           => $todayExitLessonNum,
-            'yesterdayExitLessonNum'       => $yesterdayExitLessonNum,
-            'keyCheckResult'               => $keyCheckResult
         ));
     }
 
-    public function userWeekStatisticAction(Request $request) {
+    protected function getTimeRange($period)
+    {
+        $day = $period == 'week' ? 7 : 30;
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time())));
+    }
+
+    public function userStatisticAction(Request $request, $period)
+    {
+        $userStatistic = array('dates' => 0, 'register' => 0, 'activeUser' => 0, 'unActiveUser' => 0);
+
+        $timeRange              = $this->getTimeRange($period);
+        $userStatistic['dates'] = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+
+       // var_dump($timeRange, $userStatistic);
         return $this->createJsonResponse(array(
-            'time'    => '7',
-            'message' => 'ok'
+            'userStatistic' => $userStatistic,
         ));
     }
 
-    public function userMonthStatisticAction(Request $request) {
+    public function lessonLearnStatisticAction(Request $request, $period)
+    {
         return $this->createJsonResponse(array(
             'time'    => '30',
             'message' => 'ok'
         ));
     }
 
-    // public function onlineCountAction(Request $request)
-    // {
-    //     $onlineCount = $this->getStatisticsService()->getOnlineCount(15 * 60);
-    //     return $this->createJsonResponse(array('onlineCount' => $onlineCount, 'message' => 'ok'));
-    // }
+    public function studyStatisticAction(Request $request, $period)
+    {
+        return $this->createJsonResponse(array(
+            'time'    => '7',
+            'message' => 'ok'
+        ));
 
-    // public function loginCountAction(Request $request)
-    // {
-    //     $loginCount = $this->getStatisticsService()->getloginCount(15 * 60);
-    //     return $this->createJsonResponse(array('loginCount' => $loginCount, 'message' => 'ok'));
-    // }
+    }
+
+    public function orderStatisticAction(Request $request, $period)
+    {
+
+        $day = $period == 'week' ? 7 : 30;
+
+        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+
+        $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
+
+        $defaults   = array(
+            'course'    => array('targetType' => 'course', 'value' => 0),
+            'vip'       => array('targetType' => 'vip', 'value' => 0),
+            'classroom' => array('targetType' => 'classroom', 'value' => 0)
+        );
+        $orderDatas = ArrayToolkit::index($orderDatas, 'targetType');
+        $orderDatas = array_merge($defaults, $orderDatas);
+
+        $names = array('course' => '课程订单', 'vip' => '会员订单', 'classroom' => '班级订单');
+        array_walk($orderDatas, function (&$orderData) use ($names) {
+            $orderData['name'] = $names[$orderData['targetType']];
+            unset($orderData['targetType']);
+        });
+        return $this->createJsonResponse(array_values($orderDatas));
+
+    }
+
+    public function courseExploreAction(Request $request, $period)
+    {
+        $day       = $period == 'week' ? 7 : 30;
+        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+
+        $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0), 'courseId', 0, 10);
+        $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
+        $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses      = ArrayToolkit::index($courses, 'id');
+
+        return $this->render('TopxiaAdminBundle:Default/Parts:course-explore-table.html.twig', array(
+            'memberCounts' => $memberCounts,
+            'courses'      => $courses
+        ));
+    }
+
+    public function courseReviewAction(Request $request)
+    {
+        $reviews = $this->getReviewService()->searchReviews(
+            array('parentId' => 0),
+            'latest',
+            0,
+            10
+        );
+        return $this->render('TopxiaAdminBundle:Default/Parts:course-review-table.html.twig', array(
+            'reviews' => $reviews
+        ));
+    }
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {
@@ -539,6 +468,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    /**
+     * @return StatisticsServiceImpl
+     */
     protected function getStatisticsService()
     {
         return $this->getServiceKernel()->createService('System.StatisticsService');
@@ -549,11 +481,17 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return OrderServiceImpl
+     */
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -588,4 +526,15 @@ class DefaultController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
     }
+
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
 }

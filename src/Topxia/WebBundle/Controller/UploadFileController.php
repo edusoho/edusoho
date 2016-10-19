@@ -24,9 +24,7 @@ class UploadFileController extends BaseController
         if (empty($user)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('上传TOKEN非法。'));
         }
-
-        $currentUser = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
+        $this->getServiceKernel()->getCurrentUser()->fromArray($user);
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
@@ -65,13 +63,9 @@ class UploadFileController extends BaseController
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
-        $file['filename'] = urlencode($file['filename']);
 
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "'.$file['filename'].'"');
-        }
+        $fileName = urlencode(str_replace(' ', '', $file['filename']));
+        $response->headers->set("Content-Disposition", "attachment; filename=".$fileName."; filename*=UTF-8''".$fileName);
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
 

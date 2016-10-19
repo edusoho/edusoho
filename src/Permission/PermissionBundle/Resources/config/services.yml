@@ -3,17 +3,17 @@ parameters:
     router.options.matcher_dumper_class: Permission\Dumper\PhpMatcherDumper
 
 services:
-    permission.twig.permission_extension:
-        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
     permission.admin_voter:
         class: Permission\PermissionBundle\Security\AdminVoter
         tags:
             - { name: security.voter }
         public: false
+
+    permission.twig.permission_extension:
+        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
 
     kernel.controller.permission_listener:
         class: Permission\Listener\KernelControllerListener

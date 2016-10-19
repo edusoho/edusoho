@@ -428,7 +428,7 @@ class SystemInit
     public function initAdmin($user)
     {
         $user['emailVerified'] = 1;
-        $user                  = $user                  = $this->getUserService()->register($user);
+        $user                  = $user = $this->getUserService()->register($user);
         $user['roles']         = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
         $user['currentIp']     = '127.0.0.1';
 
@@ -562,7 +562,6 @@ EOD;
                 'cloud_access_key'      => '',
                 'cloud_secret_key'      => '',
                 'cloud_api_server'      => 'http://api.edusoho.net',
-                'cloud_bucket'          => '',
                 'enable_playback_rates' => 0
             ),
             'post_num_rules' => array(
@@ -888,6 +887,7 @@ EOD;
     public function initLockFile()
     {
         file_put_contents(__DIR__.'/../../app/data/install.lock', '');
+
     }
 
     public function initRole()

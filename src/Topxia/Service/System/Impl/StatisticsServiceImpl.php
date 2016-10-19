@@ -3,6 +3,7 @@
 namespace Topxia\Service\System\Impl;
 
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\System\Dao\Impl\SessionDaoImpl;
 use Topxia\Service\System\StatisticsService;
 
 class StatisticsServiceImpl extends BaseService implements StatisticsService
@@ -38,6 +39,9 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
         return true;
     }
 
+    /**
+     * @return SessionDaoImpl
+     */
     protected function getSessionDao()
     {
         return $this->createDao('System.SessionDao');
