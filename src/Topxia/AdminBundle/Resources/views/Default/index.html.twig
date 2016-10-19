@@ -55,7 +55,8 @@
         </div>
         <h3 class="panel-title">{{ '用户统计'|trans }}</h3>
       </div>
-      <div class="panel-body js-statistic-areas" id="user-statistic" style="height:320px;">
+      <div class="panel-body js-statistic-areas" id="user-statistic"
+           data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">
 
       </div>
     </div>
@@ -79,7 +80,8 @@
             </div>
             <h3 class="panel-title">{{ '学习人次统计'|trans }}</h3>
           </div>
-          <div class="panel-body js-statistic-areas" id="study-count-statistic" style="height:320px;">
+          <div class="panel-body js-statistic-areas" id="study-count-statistic"
+               data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
 
           </div>
         </div>
@@ -128,7 +130,8 @@
                     data-toggle="tooltip" data-placement="top"
                     title="{{ '每天课时学习数量(包括公开课)'|trans }}"></span></h3>
           </div>
-          <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic" style="height:360px;">
+          <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
+               data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
 
           </div>
         </div>

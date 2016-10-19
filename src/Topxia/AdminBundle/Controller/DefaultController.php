@@ -299,7 +299,7 @@ class DefaultController extends BaseController
         $timeRange              = $this->getTimeRange($period);
         $userStatistic['dates'] = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-        var_dump($timeRange, $userStatistic);
+       // var_dump($timeRange, $userStatistic);
         return $this->createJsonResponse(array(
             'userStatistic' => $userStatistic,
         ));
