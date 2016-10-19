@@ -156,7 +156,7 @@ class WebExtension extends \Twig_Extension
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    if (strstr($img, $publicUrlPath)) {
+                    if (strpos($img, $publicUrlPath) === 0) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
