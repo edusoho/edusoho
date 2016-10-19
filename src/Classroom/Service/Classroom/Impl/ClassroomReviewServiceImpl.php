@@ -93,7 +93,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
                 'parentId'    => $fields['parentId'],
-                'createdTime' => time()
+                'createdTime' => time(),
+                'meta'        => array()
             ));
             $this->dispatchEvent('classReview.add', new ServiceEvent($review));
         } else {
@@ -101,7 +102,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'rating'      => $fields['rating'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
-                'updatedTime' => time()
+                'updatedTime' => time(),
+                'meta'        => array()
             ));
         }
 
