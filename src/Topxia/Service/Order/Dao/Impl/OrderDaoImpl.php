@@ -261,7 +261,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
     {
-        $sql = "SELECT targetType , count(targetType) as value FROM orders  WHERE STATUS = 'paid' and `paidTime`>={$startTime}  GROUP BY targetType";
+        $sql = "SELECT targetType , count(targetType) as value FROM orders  WHERE STATUS = 'paid' and `totalPrice` >0 and `paidTime`>={$startTime}  GROUP BY targetType";
         return $this->getConnection()->fetchAll($sql);
     }
 
