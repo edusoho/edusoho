@@ -31,7 +31,7 @@ class SimpleValidator
             return false;
         }
 
-        return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.]+$/u', $value);
+        return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.·]+$/u', $value);
     }
 
     public static function password($value, array $option = array())
@@ -41,7 +41,7 @@ class SimpleValidator
 
     public static function truename($value)
     {
-        return !!preg_match('/^[\x{4e00}-\x{9fa5}]{2,5}$/u', $value);
+        return !!preg_match('/^[\x{4e00}-\x{9fa5}.·]{2,5}$/u', $value);
     }
 
     public static function idcard($value)
@@ -101,7 +101,7 @@ class SimpleValidator
 
     public static function chineseAndAlphanumeric($value)
     {
-        return (bool)preg_match('/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9_])*$/u', $value);
+        return (bool)preg_match('/^([\x{4e00}-\x{9fa5}]|[a-zA-Z0-9_.·])*$/u', $value);
     }
 
 }

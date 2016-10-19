@@ -156,7 +156,7 @@ class WebExtension extends \Twig_Extension
             preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
             if ($imgs) {
                 foreach ($imgs[1] as $img) {
-                    if (strstr($img, $publicUrlPath)) {
+                    if (strpos($img, $publicUrlPath) === 0) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -963,7 +963,7 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $path = $cdnUrl.'/'.$path;
+            $path = $cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path    = $request->getSchemeAndHttpHost().$path;
