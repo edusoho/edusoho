@@ -1,0 +1,22 @@
+{% if currentType|default(false) %}
+  <form id='task-create-form' class="form-horizontal" method="POST"
+      {% if activity|default(false) %}
+        action="{{ path('course_manage_task_update',{courseId:courseId, id:task.id}) }}"
+      {% else %}
+        action="{{ path('course_manage_task_create',{courseId:courseId, currentType:currentType}) }}"
+      {% endif %}
+  >
+    {% block activity_content %}
+      <input type="hidden" name="id" value="{{ task.id|default('') }}">
+      <input type="hidden" name="activityType" value='{{ currentType }}'>
+      <input type="hidden" name="fromCourseSetId" value='1'>
+      <input type="hidden" name="fromCourseId" value='{{ courseId }}'>
+
+    {% endblock %}
+
+    {% block activity_finish %}
+    {% endblock %}
+  </form>
+{% endif %}
+
+

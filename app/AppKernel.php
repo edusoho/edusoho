@@ -60,7 +60,8 @@ class AppKernel extends Kernel
             new Activity\ActivityBundle\ActivityBundle(),
             new CourseTask\TaskBundle\TaskBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
-            // new OAuth2\ServerBundle\OAuth2ServerBundle()
+            // new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            new WebBundle\WebBundle(),
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
