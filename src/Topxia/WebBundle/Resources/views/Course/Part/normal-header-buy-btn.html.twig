@@ -6,17 +6,19 @@
   {% endif %}
 {% else %}
   <a class="btn btn-primary btn-lg"
-    {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
-      href="#modal"
-      data-toggle="modal"
-      data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-    {% elseif userVipStatus == 'ok' %}
-      id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
-    {% else %}
-      href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-    {% endif %}
-    {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+    {% if (course.buyExpireTime and course.buyExpireTime < 'now'|date('U')) or course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      href="javascript:;"
       disabled="disabled"
+    {% else %}
+      {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
+        href="#modal"
+        data-toggle="modal"
+        data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+      {% elseif userVipStatus == 'ok' %}
+        id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
+      {% else %}
+        href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+      {% endif %}
     {% endif %}
   >
     {% if userVipStatus == 'ok' %}

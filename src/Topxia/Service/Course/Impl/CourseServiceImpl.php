@@ -516,6 +516,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'title'          => '',
             'subtitle'       => '',
             'about'          => '',
+            'buyExpireTime'  => 0,
             'expiryMode'     => 'none',
             'expiryDay'      => 0,
             'serializeMode'  => 'none',

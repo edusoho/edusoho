@@ -107,7 +107,12 @@
             </p>
           {% endif %}
         {% endif %}
+
+        {% if course.buyExpireTime %}
+          <span class="text-danger text-xs">{{ '购买截止日期'|trans }}:{{ course.buyExpireTime|date('Y-m-d') }}</span>
+        {% endif %}
       {% endif %}
+
     </div>
 
     {% if not member.fake|default(false) and member and member.role == 'student' and member.levelId > 0 and userVipStatus != 'ok' %}

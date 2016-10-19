@@ -9386,6 +9386,10 @@ textarea {
     width: 50%;
   }
 }
+.course-detail-header.before .course-operation .buy .text-expire-time {
+  position: absolute;
+  margin-top: -18px;
+}
 .course-detail-header.before .course-operation .buy .btn {
   padding: 10px 30px;
 }
