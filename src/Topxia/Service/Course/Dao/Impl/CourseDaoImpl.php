@@ -150,7 +150,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $result;
     }
 
-    protected function flushCache($course)
+    public function flushCache($course)
     {
         $this->incrVersions(array(
             "{$this->table}:version:parentId:{$course['parentId']}"
