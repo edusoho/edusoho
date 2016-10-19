@@ -30,7 +30,11 @@
   <li>
     <div class="title">教育云服务</div>
     <div class="info">
-      <span class="glyphicon glyphicon-info-sign text-danger"></span>
+      {% if   cloudServiceCount > 0 %}
+        <span class="glyphicon glyphicon-info-sign text-danger"></span>
+      {% else %}
+        <span class="glyphicon glyphicon-info-sign text-success"></span>
+      {% endif %}
       <span class="status-card-warp">
         {% if   cloudServiceCount > 0 %}
           <a class="text-lg link-underline text-danger" href="">
