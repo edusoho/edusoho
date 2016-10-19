@@ -10,7 +10,7 @@ npm-debug.log
 /app/cache/*
 /app/config/plugin_installed.php
 /app/config/parameters.yml
-/app/config/config_test.yml
+/app/config/parameters_test.yml
 /app/config/menu_blacklist.yml
 /app/data/*
 /app/logs/*
@@ -23,6 +23,7 @@ npm-debug.log
 /plugins/*
 /build/
 /bin/
+!/bin/phpmig
 /composer.phar
 /scripts
 /etc/sublimetext2/edusoho.sublime-workspace

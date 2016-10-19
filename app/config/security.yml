@@ -32,7 +32,7 @@ security:
         custom_provider:
             id: topxia.user_provider
 
-    role_hierarchy: %role_hierarchy%
+    role_hierarchy: "%role_hierarchy%"
 
     firewalls:
         dev:
