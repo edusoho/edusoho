@@ -23,7 +23,7 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
-        $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
