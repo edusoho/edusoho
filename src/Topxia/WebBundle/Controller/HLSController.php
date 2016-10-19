@@ -33,8 +33,8 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $streams        = array();
-        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $streams     = array();
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
@@ -135,18 +135,20 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params             = array();
-        $params['key']      = $file['metas2'][$level]['key'];
-        $params['fileId']   = $file['id'];
-        $params['clientIp'] = $clientIp;
+        $params                 = array();
+        $params['accessKey']    = $this->setting('storage.cloud_access_key');
+        $params['key']          = $file['metas2'][$level]['key'];
+        $params['fileId']       = $file['id'];
+        $params['fileGlobalId'] = $file['globalId'];
+        $params['clientIp']     = $clientIp;
 
         if (!empty($token['data']['watchTimeLimit'])) {
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
-        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $keyencryption  = ($fromApi || $inWhiteList) ? 0 : 1;
-        $tokenFields    = array(
+        $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $keyencryption = ($fromApi || $inWhiteList) ? 0 : 1;
+        $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
@@ -158,6 +160,8 @@ class HLSController extends BaseController
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
+            $params['userId'] = $token['userId'];
+            $params['userName'] = $this->getCurrentUser()->getUsername();
         }
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
@@ -183,7 +187,7 @@ class HLSController extends BaseController
         }
 
         $api = CloudAPIFactory::create('leaf');
-
+        
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -198,20 +202,21 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $inWhiteList    = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $token          = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        $enablePlayRate = $this->setting('storage.enable_playback_rates');
+        $enablePlayRate     = $this->setting('storage.enable_playback_rates');
         $isNoNeedLoginToken = empty($token['userId']) ? true : false;
 
-        if (!($inWhiteList || $isNoNeedLoginToken || $enablePlayRate)) { //倍速播放先放行
+        if (!($inWhiteList || $isNoNeedLoginToken || $enablePlayRate)) {
+            //倍速播放先放行
             if (!$this->getCurrentUser()->isLogin()) {
                 return $this->makeFakeTokenString();
             }
-                
+
             if ($this->getCurrentUser()->getId() != $token['userId']) {
                 return $this->makeFakeTokenString();
             }
