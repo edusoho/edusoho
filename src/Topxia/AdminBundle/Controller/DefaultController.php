@@ -316,7 +316,6 @@ class DefaultController extends BaseController
 
         $timeRange = $this->getTimeRange($period);
 
-        var_dump( $timeRange);
         $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
         $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
