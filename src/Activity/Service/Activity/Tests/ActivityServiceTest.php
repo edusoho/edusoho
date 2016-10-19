@@ -77,7 +77,7 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertNull($savedActivity);
     }
 
-    public function testTrigger()
+    public function testFinishTrigger()
     {
         $task = array(
             'title'           => 'test1 task',

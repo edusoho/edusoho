@@ -1,26 +1,24 @@
 <?php
 namespace Activity\ActivityBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ActivityController extends BaseController
 {
-    public function showAction(Request $request, $id)
+    public function showAction($task)
     {
-        list($activity, $detail, $typeConfg) = $this->getActivityService()->getActivityDetail($id);
+        list($activity, $detail, $typeConfg) = $this->getActivityService()->getActivityDetail($task['activityId']);
 
         return $this->render($typeConfg['show_page'], array(
             'activity' => $activity,
-            'detail'   => $detail
+            'detail'   => $detail,
+            'task'     => $task
         ));
     }
 
     public function triggerAction($id, $eventName, $data)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $data     = $request->request->all();
-
         $this->getActivityService()->trigger($id, $eventName, $data);
 
         return $this->createJsonResponse(true);
