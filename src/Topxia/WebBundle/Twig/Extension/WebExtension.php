@@ -963,7 +963,7 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $path = $cdnUrl.'/'.$path;
+            $path = $cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path    = $request->getSchemeAndHttpHost().$path;
