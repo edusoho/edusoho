@@ -337,7 +337,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         foreach ($items as $questionId => $item) {
             $items[$questionId]['question'] = $questions[$questionId];
-
+            $seq = 1;
             if ($item['parentId'] != 0) {
                 if (!array_key_exists('items', $items[$item['parentId']])) {
                     $items[$item['parentId']]['items'] = array();
@@ -346,11 +346,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $items[$item['parentId']]['items'][$questionId]                    = $items[$questionId];
                 $formatItems['material'][$item['parentId']]['items'][$item['seq']] = $items[$questionId];
                 unset($items[$questionId]);
+                $seq++;
             } else {
                 $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
             }
         }
-
+        
         ksort($formatItems);
         return $formatItems;
         // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
@@ -773,7 +774,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperItems($testpaperId)
     {
-        return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        $testpaperItems = $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        $testpaperItems = ArrayToolkit::index($testpaperItems, 'questionId');
+        
+        $seq = 1;
+        foreach ($testpaperItems as &$item) {
+            if ($item['parentId'] != 0) {
+                $item['seq'] = $testpaperItems[$item['parentId']]['seq'].'-'.$seq;
+                $seq++;
+            }
+        }
+
+        return $testpaperItems;
     }
 
     public function updateTestpaperItems($testpaperId, $items)

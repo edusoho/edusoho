@@ -164,9 +164,10 @@ class TestpaperController extends BaseController
         }
 
         $items = $this->getTestpaperService()->previewTestpaper($testId);
-
+        
         $total       = $this->makeTestpaperTotal($testpaper, $items);
         $attachments = $this->findAttachments($testpaper['id']);
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items'       => $items,
             'limitTime'   => $testpaper['limitedTime'] * 60,
