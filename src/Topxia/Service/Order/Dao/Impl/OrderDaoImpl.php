@@ -270,7 +270,6 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
             ->groupBy('date');
-
         return $builder->execute()->fetchAll(0) ?: array();
     }
 

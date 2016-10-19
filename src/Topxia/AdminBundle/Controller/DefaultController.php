@@ -15,7 +15,7 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 7 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 30 * 24 * 60 * 60));
+        $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
             'dates' => $weekAndMonthDate
         ));
@@ -287,9 +287,9 @@ class DefaultController extends BaseController
 
     protected function getTimeRange($period)
     {
-        $day = $period == 'week' ? 7 : 30;
+        $day = $period == 'week' ? 6 : 29;
 
-        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time())));
+        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time()+ 24 * 3600)));
     }
 
     public function userStatisticAction(Request $request, $period)
@@ -306,21 +306,24 @@ class DefaultController extends BaseController
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
-        $day = $period == 'week' ? 7 : 30;
-        for ($i = $day; $i > 0; $i--) {
+        //最近七天，最近三十天
+        $day = $period == 'week' ? 6 : 29;
+        for ($i = $day; $i >= 0; $i--) {
             $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
             $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $defaultDatas[$date] = array('count' => 0, 'date' => $date);
         }
 
-        $timeRange          = $this->getTimeRange($period);
+        $timeRange = $this->getTimeRange($period);
+
+        var_dump( $timeRange);
         $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
         $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
         $finishedLessonData = array_merge($defaultDatas, $finishedLessonData);
 
         return $this->createJsonResponse(array(
-            'date'    => $dates,
+            'date' => $dates,
             'data' => $this->array_value_recursive('count', $finishedLessonData),
         ));
     }
@@ -333,8 +336,8 @@ class DefaultController extends BaseController
      */
     public function studyStatisticAction(Request $request, $period)
     {
-        $day = $period == 'week' ? 7 : 30;
-        for ($i = $day; $i > 0; $i--) {
+        $day = $period == 'week' ? 6 : 29;
+        for ($i = $day; $i >= 0; $i--) {
             $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
             $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $defaultDatas[$date] = array('count' => 0, 'date' => $date);
@@ -352,7 +355,7 @@ class DefaultController extends BaseController
         $newPaidOrders = array_merge($defaultDatas, $newPaidOrders);
 
         return $this->createJsonResponse(array(
-            'date'   => $dates,
+            'date'    => $dates,
             'new'     => $this->array_value_recursive('count', $newOrders),
             'feePaid' => $this->array_value_recursive('count', $newPaidOrders)
         ));
@@ -371,7 +374,7 @@ class DefaultController extends BaseController
     public function orderStatisticAction(Request $request, $period)
     {
 
-        $day = $period == 'week' ? 7 : 30;
+        $day = $period == 'week' ? 6 : 29;
 
         $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
 
@@ -396,7 +399,7 @@ class DefaultController extends BaseController
 
     public function courseExploreAction(Request $request, $period)
     {
-        $day       = $period == 'week' ? 7 : 30;
+        $day       = $period == 'week' ? 6 : 29;
         $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
 
         $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0), 'courseId', 0, 10);
