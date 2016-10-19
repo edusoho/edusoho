@@ -585,7 +585,11 @@ class TestpaperController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'finished'),
+            $this->getTestpaperService()->searchTestpaperResultsCount(array(
+                'testIds'        => $testpaperIds,
+                'status'         => 'finished',
+                'checkTeacherId' => $user['id']
+            )),
             10
         );
 
