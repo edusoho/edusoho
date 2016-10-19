@@ -583,22 +583,20 @@ class TestpaperController extends BaseController
         $testpapers   = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
+        $conditions = array(
+            'testIds'        => $testpaperIds,
+            'status'         => 'finished',
+            'checkTeacherId' => $user['id']
+        );
+
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->searchTestpaperResultsCount(array(
-                'testIds'        => $testpaperIds,
-                'status'         => 'finished',
-                'checkTeacherId' => $user['id']
-            )),
+            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
             10
         );
 
         $paperResults = $this->getTestpaperService()->searchTestpaperResults(
-            array(
-                'testIds'        => $testpaperIds,
-                'status'         => 'finished',
-                'checkTeacherId' => $user['id']
-            ),
+            $conditions,
             array(
                 'checkedTime',
                 'DESC'
