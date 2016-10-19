@@ -49,7 +49,7 @@
         {% endif %}
 
         <div class="form-group">
-          <label class="col-md-2 control-label">{{ '购买开放有效期'|trans }}</label>
+          <label class="col-md-2 control-label">{{ '购买截止日期'|trans }}</label>
           <div class="col-md-8 controls">
             <input type="text" id="buyExpireTime" class="form-control width-input width-input-large" name="buyExpireTime" {% if course.buyExpireTime %} value="{{ course.buyExpireTime|date('Y-m-d') }}" {% endif %}>
           </div>
