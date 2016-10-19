@@ -9,13 +9,19 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 {
     protected $table = 'course_review';
 
+    public $serializeFields = array(
+        'meta' => 'json'
+    );
+
     public function getReview($id)
     {
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+            $sql    = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $review = $that->getConnection()->fetchAssoc($sql, array($id));
+
+            return $review ? $that->createSerializer()->unserialize($review, $that->serializeFields) : null;
         }
 
         );
@@ -24,8 +30,10 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
     public function findReviewsByCourseId($courseId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId)) ?: array();
+        $sql     = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $reviews = $this->getConnection()->fetchAll($sql, array($courseId)) ?: array();
+
+        return $reviews ? $this->createSerializer()->unserializes($reviews, $this->serializeFields) : null;
     }
 
     public function getReviewCountByCourseId($courseId)
@@ -42,6 +50,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function addReview($review)
     {
+        $review   = $this->createSerializer()->serialize($review, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $review);
         $this->clearCached();
 
@@ -54,6 +63,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function updateReview($id, $fields)
     {
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getReview($id);
@@ -64,8 +74,10 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
-            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
+            $sql    = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
+            $review = $that->getConnection()->fetchAssoc($sql, array($courseId, $userId));
+
+            return $review ? $this->createSerializer()->unserialize($review, $that->serializeFields) : null;
         }
 
         );
@@ -98,7 +110,9 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ?: array();
+
+        $reviews = $builder->execute()->fetchAll();
+        return $reviews ? $this->createSerializer()->unserializes($reviews, $this->serializeFields) : array();
     }
 
     public function deleteReview($id)
