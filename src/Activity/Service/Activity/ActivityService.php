@@ -14,8 +14,6 @@ interface ActivityService
 
     public function deleteActivity($id);
 
-    public function findActivitiesByCourseId($courseId);
-
     public function getActivityTypes();
 
     public function trigger($activityId, $name, $data);

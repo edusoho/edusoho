@@ -121,11 +121,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->delete($id);
     }
 
-    public function findActivitiesByCourseId($courseId)
-    {
-        return $this->getActivityDao()->findByCourseId($courseId);
-    }
-
     protected function getActivityDao()
     {
         return $this->createDao('Activity:Activity.ActivityDao');
