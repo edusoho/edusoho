@@ -12,8 +12,7 @@ class SlotListener
 
     public function onExtend($event)
     {
-        $content = $this->controller->extend($args);
-
+        $content = call_user_func_array(array($this->controller, 'extend'), $event->getArguments());
         $event->addContent($content);
     }
 

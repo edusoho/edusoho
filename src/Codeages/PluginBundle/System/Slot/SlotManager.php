@@ -1,5 +1,5 @@
 <?php
-namespace Codeages\PluginBundle\System;
+namespace Codeages\PluginBundle\System\Slot;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -12,10 +12,11 @@ class SlotManager
         $this->dispatcher = new EventDispatcher();
     }
 
-    public function fire($name)
+    public function fire($name, $args)
     {
         $event = $event = new SlotEvent($args);
         $this->dispatcher->dispatch($name, $event);
+        return $event->getContents();
     }
 
     public function on()

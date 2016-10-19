@@ -27,14 +27,7 @@ class SlotExtension extends \Twig_Extension
 
         $name = array_shift($args);
 
-        $this->manager->fire($name, $args);
-
-
-
-
-
-        var_dump($name, $args);
-
+        return $this->manager->fire($name, $args);
     }
 
     public function getName()
