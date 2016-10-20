@@ -94,15 +94,14 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     protected function getNameSpace()
     {
-        try{
+        try {
             $user = $this->getCurrentUser()->toArray();
             if (empty($user['selectedOrgId']) || $user['selectedOrgId'] === 1) {
                 return 'default';
             }
             return 'org-'.$user['selectedOrgId'];
-        }catch (\RuntimeException $e){
+        } catch (\RuntimeException $e) {
             return 'default';
         }
-
     }
 }

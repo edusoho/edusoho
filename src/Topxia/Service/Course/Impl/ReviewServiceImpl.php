@@ -97,6 +97,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
 
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
+        $meta               = $fields['parentId'] > 0 ? array() : array('learnedNum' => $member['learnedNum'], 'lessonNum' => $course['lessonNum']);
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->addReview(array(
                 'userId'      => $fields['userId'],
@@ -105,14 +106,16 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'private'     => $course['status'] == 'published' ? 0 : 1,
                 'parentId'    => $fields['parentId'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
-                'createdTime' => time()
+                'createdTime' => time(),
+                'meta'        => $meta
             ));
             $this->dispatchEvent('courseReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getReviewDao()->updateReview($review['id'], array(
                 'rating'      => $fields['rating'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
-                'updatedTime' => time()
+                'updatedTime' => time(),
+                'meta'        => $meta
             ));
         }
 

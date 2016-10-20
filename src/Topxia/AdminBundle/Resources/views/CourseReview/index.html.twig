@@ -38,9 +38,10 @@
       <thead>
         <tr>
           <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
-          <th width="60%">{{'评价内容'|trans}}</th>
+          <th width="55%">{{'评价内容'|trans}}</th>
           <th width="8">{{'评分'|trans}}</th>
-          <th width="20%">{{'作者'|trans}}</th>
+          <th width="15%">{{'作者'|trans}}</th>
+          <th width="10%">{{'完成进度'|trans}}</th>
           <th width="8%">{{'操作'|trans}}</th>
         </tr>
       </thead>
@@ -70,6 +71,7 @@
               {{ admin_macro.user_link(author) }}<br>
               <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
             </td>
+            <td>{% if review.meta %} {{ review.meta.learnedNum }}/{{ review.meta.lessonNum }} {% endif %}</td>
             <td>
               <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'评价'|trans}}" data-url="{{ path('admin_review_delete', {id:review.id}) }}">{{'删除'|trans}}</button>
             </td>

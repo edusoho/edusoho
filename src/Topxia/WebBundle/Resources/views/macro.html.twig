@@ -1,3 +1,4 @@
+{# user_avater 已废弃，请勿使用 #}
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
   <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
@@ -18,6 +19,42 @@
   {% endif %}
 {%- endmacro -%}
 
+{# options 可以传card(显示卡片), _blank(新开窗口), null_link(空链接) #}
+{%- macro user_avatar_link(user, size, options = []) -%}
+  {% if user %}
+    <a
+      class="avatar-link-{size} {% if 'card' in options %}js-user-card{% endif %}"
+      {% if '_blank' in options %}
+        target="_blank"
+      {% endif %}
+      href="{% if 'null_link' in options %}javascript:;{% else %}{{ path('user_show', {id:user.id}) }}{% endif %}"
+      data-card-url="{{ path('user_card_show', {userId:user.id}) }}"
+      data-user-id="{{ user.id }}">
+      {{ _self.user_avater_img(user, size) }}
+    </a>
+  {% else %}
+    <a class="avatar-link-{size}" href="javascript:;">
+      {{ _self.user_avater_img(user, size) }}
+    </a>
+  {% endif %}
+{%- endmacro -%}
+
+{%- macro user_avater_img(user, size) -%}
+  {% set userAvatar = user[size~'Avatar']|default('') %}
+  <img class="avatar-{size}"  src="{{ filepath(userAvatar, 'avatar.png', 'user') }}">
+{%- endmacro -%}
+
+
+{# {%- macro user_link(user, class, options = []) -%}
+  {% if user %}
+    <a
+      class="{{ class }} {% if 'card' in options %}js-user-card{% endif %}" {% if '_blank' in options %} target="_blank" {% endif %}href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}
+    </a>
+  {% else %}
+    <a class="{{ class }}" href="javascript:;"><del>用户不存在</del></a>
+  {% endif %}
+{%- endmacro -%} #}
+
 {%- macro user_link(user, class, card = true) -%}
   {% if user %}
     <a class="link-dark {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
@@ -25,6 +62,7 @@
     <a class="link-dark {{ class }}" href="javascript:;"><del>{{'用户不存在'|trans}}</del></a>
   {% endif %}
 {%- endmacro -%}
+
 {% macro flash_messages() %}
   {% for type, flashMessages in app.session.flashbag.all() %}
     {% for flashMessage in flashMessages %}

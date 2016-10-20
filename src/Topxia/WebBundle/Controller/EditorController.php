@@ -50,7 +50,8 @@ class EditorController extends BaseController
             $parsed = $this->getFileService()->parseFileUri($record['uri']);
             FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
 
-            $url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+            //$url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$parsed['path'];
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('url' => $url));

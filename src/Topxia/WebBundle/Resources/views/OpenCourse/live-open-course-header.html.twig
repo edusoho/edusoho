@@ -52,7 +52,7 @@
     <div class="mask-content">
       <h2>{{'直播已经结束'|trans}}</h2>
       {% if lesson.replayStatus == 'videoGenerated' %}
-        <button class="btn btn-info btn-lg mask-btn live-video-replay-btn">{{'查看回放'|trans}}</button>
+        <button class="btn btn-info btn-lg mask-btn live-video-replay-btn" data-referer="{{refererUrl}}">{{'查看回放'|trans}}</button>
       {% elseif lesson.replayStatus == 'generated' %}
         {% for replay in lesson.replays if replay %}
           <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id, refererUrl:refererUrl}) }}" target="_blank">{{'查看回放'|trans}}</a>

@@ -359,7 +359,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'copyId'        => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '0.0',
             'status'        => 'unpublished'
         ));
 
@@ -395,7 +394,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($lesson['type'] == 'liveOpen') {
             $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
-            $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
         $lesson = $this->getOpenCourseLessonDao()->addLesson($lesson);
@@ -442,7 +440,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0',
             'replayStatus'  => 'ungenerated',
             'status'        => 'unpublished',
             'materialNum'   => 0
@@ -456,7 +453,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
             $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
-            $fields['suggestHours'] = $fields['length'] / 60;
         }
 
         if (array_key_exists('media', $fields)) {

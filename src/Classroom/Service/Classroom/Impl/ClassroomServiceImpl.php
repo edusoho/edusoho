@@ -175,7 +175,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId', 'orgCode', 'orgId'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
@@ -228,6 +228,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->deleteAllCoursesInClass($id);
         $this->getClassroomDao()->deleteClassroom($id);
         $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
+
+        $this->dispatchEvent("classroom.delete", $classroom);
 
         return true;
     }
@@ -1384,6 +1386,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
         $members      = $this->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
         return $members;
+    }
+
+    public function findUserJoinedClassroomIds($userId)
+    {
+        return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)

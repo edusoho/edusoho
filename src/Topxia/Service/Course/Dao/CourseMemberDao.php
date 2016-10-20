@@ -32,6 +32,8 @@ interface CourseMemberDao
 
     public function findMemberCountByCourseIdAndRole($courseId, $role);
 
+    public function findUserJoinedCourseIds($userId, $joinedType);
+
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);

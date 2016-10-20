@@ -46,7 +46,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             return $newUser;
         } catch (\Exception $e) {
             $this->getKernel()->getConnection()->rollBack();
-            return array();
+            throw $e;
         }
     }
 
