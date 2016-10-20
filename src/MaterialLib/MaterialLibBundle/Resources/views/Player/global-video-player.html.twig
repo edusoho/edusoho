@@ -14,14 +14,19 @@
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
         <div id="lesson-video-content" 
         data-user-id="{{app.user.id|default(0)}}" 
-        data-file-id="{{file.id}}" 
+        data-user-name="{{app.user.username|default('')}}"
+        data-file-global-id="{{file.globalId|default('')}}"
+        data-file-id="{{file.id}}"
         data-file-type="{{file.type}}" 
         data-url="{{url}}"
         data-player="{{player}}"
         data-agent-in-white-list="{{agentInWhiteList}}"
         data-balloon-video-player="1"
         {% if not params.watermarkOpened|default(false) == 'hidden' and not file.directives.watermarks|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-          data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null, true) }}"
+          data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
+        {% endif %}
+        {% if setting('storage.cloud_access_key') %}
+          data-access-key="{{ setting('storage.cloud_access_key') }}"
         {% endif %}
         {% if setting('storage.video_fingerprint') and app.user %}
           data-fingerprint="{{ finger_print() }}"

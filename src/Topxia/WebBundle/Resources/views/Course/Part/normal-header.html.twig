@@ -4,12 +4,17 @@
 {% do load_script('course/common') %}
 
 {% if member %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
+  {% cache 'course/' ~ course.id ~ 'normal/header/for/member' 600 %}
+    {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
+  {% endcache %}
 {% elseif course.parentId|default(false) %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+  {% cache 'course/' ~ course.id ~ '/classroom/course/normal/header/for/guest' 600 %}
+    {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+  {% endcache %}
 {% else %}
-
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {% cache 'course/' ~ course.id ~ '/not/classroom/course/normal/header/for/guest' 600 %}
+    {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {% endcache %}
 {% endif %}
 
 {% macro picture(course, previewLesson) %}
@@ -77,10 +82,17 @@
 
 
       {% if not member %}
+        {% if course.buyExpireTime %}
+          <p class="expiry-date hidden-sm">{{ '购买截止日期: '|trans }}{{ course.buyExpireTime|date('Y-m-d H:i') }}</p>
+        {% endif %}
+
         {% if course.expiryDay %}
           <p class="expiry-date hidden-sm">
-            <label for="">{{'有效期'|trans}}</label>
-            <span>{{ course.expiryDay }}{{'天'|trans}}</span>
+            {% if course.expiryMode|default(null) == 'date' %}
+              {{'学习有效期至: '|trans}}{{course.expiryDay|date('Y-m-d H:i')}}
+            {% else %}
+              {{'学习有效期: '|trans}} {{course.expiryDay}}{{'天'|trans}}
+            {% endif %}
           </p>
         {% endif %}
         <p class="discount-price">
@@ -104,7 +116,9 @@
             </p>
           {% endif %}
         {% endif %}
+
       {% endif %}
+
     </div>
 
     {% if not member.fake|default(false) and member and member.role == 'student' and member.levelId > 0 and userVipStatus != 'ok' %}

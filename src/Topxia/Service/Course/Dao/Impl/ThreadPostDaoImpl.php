@@ -11,8 +11,12 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
     public function getPost($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
@@ -25,8 +29,12 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
     public function getPostCountByThreadId($threadId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE threadId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($threadId));
+        $that = $this;
+
+        return $this->fetchCached("threadId:{$threadId}", $threadId, function ($threadId) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE threadId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($threadId));
+        });
     }
 
     public function searchThreadPosts($conditions, $orderBy, $start, $limit, $groupBy = '')
@@ -59,21 +67,29 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND threadId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId, $threadId));
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:threadId:{$threadId}", $userId, $threadId, function ($userId, $threadId) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE userId = ? AND threadId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($userId, $threadId));
+        });
     }
 
     public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE threadId = ? AND isElite = ? ORDER BY createdTime ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($threadId, $isElite)) ?: array();
+        $that = $this;
+
+        return $this->fetchCached("threadId:{$threadId}:isElite:{$isElite}:start:{$start}:limit:{$limit}", $threadId, $isElite, $start, $limit, function ($threadId, $isElite, $start, $limit) use ($that) {
+            $that->filterStartLimit($start, $limit);
+            $sql = "SELECT * FROM {$that->getTable()} WHERE threadId = ? AND isElite = ? ORDER BY createdTime ASC LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAll($sql, array($threadId, $isElite)) ?: array();
+        });
     }
 
     public function addPost(array $post)
     {
         $affected = $this->getConnection()->insert($this->table, $post);
-
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course post error.');
         }
@@ -84,18 +100,23 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     public function updatePost($id, array $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getPost($id);
     }
 
     public function deletePost($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deletePostsByThreadId($threadId)
     {
-        $sql = "DELETE FROM {$this->table} WHERE threadId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($threadId));
+        $sql    = "DELETE FROM {$this->table} WHERE threadId = ?";
+        $result = $this->getConnection()->executeUpdate($sql, array($threadId));
+        $this->clearCached();
+        return $result;
     }
 
     protected function createThreadPostSearchQueryBuilder($conditions)

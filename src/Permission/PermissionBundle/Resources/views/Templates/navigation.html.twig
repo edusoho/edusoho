@@ -1,4 +1,4 @@
-{% set permissions = sub_permissions(parentCode) %}
+\{% set permissions = sub_permissions(parentCode) %}
 
 {% if permissions|default(null) %}
   {% if menu|default(null) %}
@@ -8,7 +8,7 @@
   {% endif %}
 
   <ul class="nav navbar-nav">
-    {% for m in permissions %}
+    {% for m in permissions if not m.visable is defined or eval_expression(m.visable) %}
       {# {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %} #}
       <li {% if menu and  m.code == rootMenu.code|default(null) %}class="active"{% endif %}>
 

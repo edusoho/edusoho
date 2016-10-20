@@ -9,7 +9,9 @@ define(function(require, exports, module) {
         var videoHtml = $('#lesson-video-content');
 
         var userId = videoHtml.data("userId");
+        var userName = videoHtml.data("userName");
         var fileId = videoHtml.data("fileId");
+        var fileGlobalId = videoHtml.data("fileGlobalId");
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
@@ -21,6 +23,7 @@ define(function(require, exports, module) {
         var videoHeaderLength = videoHtml.data('videoHeaderLength');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
+        var accesskey = videoHtml.data('accessKey');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var fingerprintTime = videoHtml.data('fingerprintTime');
@@ -68,6 +71,12 @@ define(function(require, exports, module) {
                     disablePlaybackButton: disablePlaybackButton,
                     disableResolutionSwitcher: disableResolutionSwitcher
                 },
+                statsInfo: {
+                    accesskey : accesskey,
+                    globalId : fileGlobalId,
+                    userId : userId,
+                    userName : userName
+                },
                 videoHeaderLength: videoHeaderLength
             }
         );
@@ -78,15 +87,22 @@ define(function(require, exports, module) {
             type: 'child'
         });
 
+        messenger.on('setCurrentTime', function(data) {
+            player.setCurrentTime(data.time);
+        });
+
+
         //为了不把播放器对象暴露到其他js中，所以把设置操作message过来
-        messenger.on('setPlayerPause', function() {
+        messenger.on('setPlayerPause', function(data) {
+            console.log(data);
             player.pause();
         });
 
         messenger.on('setPlayerPlay', function() {
             player.play();
         });
-        
+
+
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
             if (playerType == 'local-video-player') {
@@ -185,5 +201,4 @@ define(function(require, exports, module) {
             Store.set("durations", durationTmpArray);
         }
     };
-
 });

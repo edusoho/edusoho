@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Course\Impl\CourseServiceImpl;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,6 @@ class CourseManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $course        = $this->getCourseService()->tryManageCourse($id);
-        $courseSetting = $this->getSettingService()->get('course', array());
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -163,6 +163,7 @@ class CourseManageController extends BaseController
             }
 
             if (!empty($fields)) {
+                $fields['buyExpireTime'] = strtotime($fields['buyExpireTime'].' 23:59:59');
                 $course = $this->getCourseService()->updateCourse($id, $fields);
             } else {
                 $course = $this->getCourseService()->getCourse($id);
@@ -631,6 +632,9 @@ class CourseManageController extends BaseController
         ));
     }
 
+    /**
+     * @return CourseServiceImpl
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

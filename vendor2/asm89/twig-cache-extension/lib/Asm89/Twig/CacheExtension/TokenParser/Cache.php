@@ -21,8 +21,7 @@ use Asm89\Twig\CacheExtension\Node\CacheNode;
 class Cache extends \Twig_TokenParser
 {
     /**
-     * @param \Twig_Token $token
-     *
+     * @param  \Twig_Token $token
      * @return boolean
      */
     public function decideCacheEnd(\Twig_Token $token)

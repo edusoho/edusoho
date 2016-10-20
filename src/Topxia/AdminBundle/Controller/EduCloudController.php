@@ -10,6 +10,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
@@ -109,7 +110,8 @@ class EduCloudController extends BaseController
             'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
-            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
+            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null),
+            'imUsedInfo'    => json_encode($this->getImUsedInfo())
         );
 
         if (isset($overview['service']['storage']['startMonth'])
@@ -130,6 +132,15 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
+        try {
+            $imUsedTotal = IMAPIFactory::create()->get('/me/receive_count');
+        } catch (\RuntimeException $e) {
+            $imUsedTotal['count'] = 0;
+        }
+
+        if (!empty($imUsedTotal['error'])) {
+            $imUsedTotal['count'] = 0;
+        }
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             'locked'      => isset($info['locked']) ? $info['locked'] : 0,
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -137,7 +148,8 @@ class EduCloudController extends BaseController
             'isBinded'    => $isBinded,
             'chartInfo'   => $chartInfo,
             'accessCloud' => $this->isAccessEduCloud(),
-            'overview'    => $overview
+            'overview'    => $overview,
+            'imUsedTotal' => $imUsedTotal
         ));
     }
 
@@ -174,7 +186,6 @@ class EduCloudController extends BaseController
         $storageSetting = $this->getSettingService()->get('storage', array());
         $default        = array(
             'upload_mode'                 => 'local',
-            'cloud_bucket'                => '',
             'support_mobile'              => 0,
             'enable_playback_rates'       => 0,
             'video_quality'               => 'low',
@@ -190,10 +201,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
-
-            if (isset($set['cloud_bucket'])) {
-                $set['cloud_bucket'] = trim($set['cloud_bucket']);
-            }
 
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
@@ -731,6 +738,81 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    public function appImAction(Request $request)
+    {
+        $appImSetting = $this->getSettingService()->get('app_im', array());
+        if (!$appImSetting) {
+            $appImSetting = array('enabled' => 0, 'convNo' => '');
+            $this->getSettingService()->set('app_im', $appImSetting);
+        }
+
+        $data = array('status' => 'success');
+
+        try {
+            $api = CloudAPIFactory::create('root');
+
+            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
+        }
+
+        //是否接入教育云
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+            $data['status'] = 'unconnect';
+        } elseif (empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
+                $data['status'] = 'binded_error';
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:app-im-setting.html.twig', array(
+            'data' => $data
+        ));
+    }
+
+    public function appImUpdateStatusAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $appImSetting = $this->getSettingService()->get('app_im', array());
+            $user         = $this->getCurrentUser();
+
+            //去云平台判断im账号是否存在
+            $api       = IMAPIFactory::create();
+            $imAccount = $api->get('/me/account');
+
+            if (isset($imAccount['error']) || empty($imAccount['account'])) {
+                $imAccount = $api->post('/accounts');
+            }
+
+            $status   = $request->request->get('status', 0);
+            $imStatus = $status ? 'enable' : 'disable';
+
+            //更改云IM账号状态
+            $api->post("/me/account", array('status' => $imStatus));
+
+            $appImSetting['enabled'] = $status;
+
+            //创建全站会话
+            if ($status) {
+                if (empty($appImSetting['convNo'])) {
+                    $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
+                    if ($conversation) {
+                        $appImSetting['convNo'] = $conversation['no'];
+                    }
+                }
+            }
+
+            $this->getSettingService()->set('app_im', $appImSetting);
+
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
     protected function dateFormat($time)
     {
         return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));
@@ -842,7 +924,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-open'])) {
             $status = $api->get('/me/email_account');
 
-            if (isset($status['code']) && $status['code'] == 101) {
+            if (isset($status['error']) && $status['error']['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
                 $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->getServiceKernel()->trans("我的网校")));
 
@@ -1021,6 +1103,53 @@ class EduCloudController extends BaseController
         return true;
     }
 
+    protected function getImUsedInfo()
+    {
+        $api       = IMAPIFactory::create();
+        $endTime   = strtotime(date('Y-m-d', strtotime('-1 day')).' 23:59:59');
+        $startTime = strtotime(date('Y-m-d', strtotime('-6 days', $endTime)).'00:00:00');
+
+        try {
+            $imUsedInfo = $api->get('/me/receive_count_period', array(
+                'startTime' => $startTime, 'endTime' => $endTime));
+
+            if (isset($imUsedInfo['error'])) {
+                return array();
+            }
+        } catch (\RuntimeException $e) {
+            return array();
+        }
+
+        $chartInfo = array();
+        foreach ($imUsedInfo as $value) {
+            $chartInfo[] = array('date' => $value['sendTime'], 'count' => $value['nums']);
+        }
+
+        return $chartInfo;
+    }
+
+    protected function createGlobalImConversation()
+    {
+        $user    = $this->getCurrentUser();
+        $message = array(
+            'name'    => '站点会话',
+            'clients' => array(
+                array(
+                    'clientId'   => $user['id'],
+                    'clientName' => $user['nickname']
+                )
+            )
+        );
+
+        $result = IMAPIFactory::create()->post('/me/conversation', $message);
+
+        if (isset($result['error'])) {
+            return '';
+        }
+
+        return $result['no'];
+    }
+
     protected function getSearchService()
     {
         return $this->getServiceKernel()->createService('Search.SearchService');
@@ -1049,5 +1178,10 @@ class EduCloudController extends BaseController
     protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getConversationService()
+    {
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

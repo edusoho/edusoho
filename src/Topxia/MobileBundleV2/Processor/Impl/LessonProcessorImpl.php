@@ -617,9 +617,9 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $client  = $factory->createClient();
 
         $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $url    = $client->generateFileUrl($metas2['pdf']['key'], 3600);
         $pdfUri = $url['url'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $url    = $client->generateFileUrl($metas2['swf']['key'], 3600);
         $swfUri = $url['url'];
 
         $content = $lesson['content'];

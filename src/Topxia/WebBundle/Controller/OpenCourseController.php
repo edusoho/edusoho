@@ -88,7 +88,7 @@ class OpenCourseController extends BaseOpenCourseController
         if (!$request->cookies->get('uv')) {
             $expire = strtotime(date('Y-m-d').' 23:59:59');
             $response->headers->setCookie(new Cookie("uv", uniqid($prefix = "refererToken"), $expire));
-            $response->send();
+            //$response->send();
         }
 
         if ('liveOpen' != $course['type']) {
@@ -404,12 +404,17 @@ class OpenCourseController extends BaseOpenCourseController
         }
     }
 
-    public function playerAction($courseId, $lessonId)
+    public function playerAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException('课时不存在！');
+        }
+
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            $course = $this->getOpenCourseService()->getCourse($courseId);
+            $this->createRefererLog($request, $course);
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
@@ -554,7 +559,8 @@ class OpenCourseController extends BaseOpenCourseController
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if ($file) {
-                $lesson['convertStatus'] = $file['convertStatus'];
+                $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
+                $lesson['storage']       = $file['storage'];
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);

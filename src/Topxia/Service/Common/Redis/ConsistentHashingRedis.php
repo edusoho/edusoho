@@ -26,6 +26,7 @@ class ConsistentHashingRedis
                 $this->reidsPool[$key] = $redis;
                 $redisServers[]        = $key;
             } catch (\Exception $e) {
+                throw $e;
             }
         }
 
@@ -36,33 +37,14 @@ class ConsistentHashingRedis
     {
     }
 
-    public function get($key)
+    public function __call($name, $arguments)
     {
-        return $this->lookup($key)->get($key);
-    }
+        $key   = $arguments[0];
+        $redis = $this->lookup($key);
+        if (!method_exists($redis, $name)) {
+            throw new Exception('method not exists.');
+        }
 
-    public function setex($key, $ttl, $data)
-    {
-        return $this->lookup($key)->setex($key, $ttl, $data);
-    }
-
-    public function delete($key)
-    {
-        return $this->lookup($key)->delete($key);
-    }
-
-    public function incrBy($key, $value)
-    {
-        return $this->lookup($key)->incrBy($key, $value);
-    }
-
-    public function incr($key)
-    {
-        return $this->lookup($key)->incr($key);
-    }
-
-    public function lookup($key)
-    {
-        return $this->reidsPool[$this->hash->lookup($key)];
+        return call_user_func_array(array($this->lookup($key), $name), $arguments);
     }
 }

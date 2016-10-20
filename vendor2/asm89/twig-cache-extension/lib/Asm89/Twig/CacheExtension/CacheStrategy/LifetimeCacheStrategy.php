@@ -54,7 +54,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
         return array(
             'lifetime' => $value,
-            'key'      => '__LCS__' . $annotation,
+            'key'      => '__LCS__'.$annotation
         );
     }
 

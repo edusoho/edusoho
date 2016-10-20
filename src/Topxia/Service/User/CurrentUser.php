@@ -17,7 +17,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function serialize()
     {
-        return serialize($this->data);
+       return serialize($this->data);
     }
 
     public function unserialize($serialized)

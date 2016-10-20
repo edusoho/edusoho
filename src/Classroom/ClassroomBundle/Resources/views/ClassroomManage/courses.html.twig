@@ -118,7 +118,11 @@
                             <span class="text-muted text-sm">
                                 {{'有效期:'|trans}}
                                 {% if course.expiryDay %}
+                                  {% if course.expiryMode|default(null) == 'date' %}
+                                    {{course.expiryDay|date('Y-m-d H:i')}}
+                                  {% else %}
                                     {{course.expiryDay}}{{'天'|trans}}
+                                  {% endif %}
                                 {% else %}
                                     {{'永久'|trans}}
                                 {% endif %}

@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\User\Impl\NotificationServiceImpl;
 
 class CourseStudentManageController extends BaseController
 {
@@ -135,6 +136,7 @@ class CourseStudentManageController extends BaseController
 
     public function removeAction(Request $request, $courseId, $userId)
     {
+        $user          = $this->getCurrentUser();
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (!empty($courseSetting['teacher_manage_student'])) {
@@ -149,13 +151,14 @@ class CourseStudentManageController extends BaseController
             'userId'     => $userId,
             'status'     => 'paid'
         );
-        $orders    = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
             $order = $value;
         }
         $reason = array(
-            'type' => 'other',
-            'note' => '手动移除'
+            'type'     => 'other',
+            'note'     => '手动移除',
+            'operator' => $user['id']
         );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
@@ -221,7 +224,7 @@ class CourseStudentManageController extends BaseController
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
         foreach ($fields as $key => $value) {
-            $str .= "," . $value;
+            $str .= ",".$value;
         }
 
         $str .= "\r\n";
@@ -230,28 +233,28 @@ class CourseStudentManageController extends BaseController
 
         foreach ($courseMembers as $courseMember) {
             $member = "";
-            $member .= $users[$courseMember['userId']]['nickname'] . ",";
-            $member .= $users[$courseMember['userId']]['email'] . ",";
-            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']) . ",";
-            $member .= $progresses[$courseMember['userId']]['percent'] . ",";
-            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'] . "," : "-" . ",";
-            $member .= $gender[$profiles[$courseMember['userId']]['gender']] . ",";
-            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company'] . "," : "-" . ",";
-            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job'] . "," : "-" . ",";
-            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title'] . "," : "-" . ",";
+            $member .= $users[$courseMember['userId']]['nickname'].",";
+            $member .= $users[$courseMember['userId']]['email'].",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+            $member .= $progresses[$courseMember['userId']]['percent'].",";
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key] . "," : "-" . ",";
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
             }
 
             $students[] = $member;
         };
 
         $str .= implode("\r\n", $students);
-        $str = chr(239) . chr(187) . chr(191) . $str;
+        $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf("course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
 
@@ -259,7 +262,7 @@ class CourseStudentManageController extends BaseController
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
@@ -455,7 +458,7 @@ class CourseStudentManageController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
@@ -499,6 +502,9 @@ class CourseStudentManageController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return NotificationServiceImpl
+     */
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
