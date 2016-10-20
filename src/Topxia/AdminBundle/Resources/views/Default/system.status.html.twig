@@ -37,7 +37,7 @@
       {% endif %}
       <span class="status-card-warp">
         {% if   cloudServiceCount > 0 %}
-          <a class="text-lg link-underline text-danger" href="">
+          <a class="text-lg link-underline text-danger" href="javascript:;">
           {{ cloudServiceCount }}个未开启
         </a>
         {% else %}
@@ -99,7 +99,7 @@
         <span class="text-lg">已开启</span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
-        <span class="text-lg">未开启</span>
+        <a href="{{ path('admin_setting_mobile') }}"  class="text-lg link-underline text-danger"> 未开启</a>
       {% endif %}
     </div>
   </li>
