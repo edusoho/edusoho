@@ -134,19 +134,16 @@ define(function (require, exports, module) {
                     {
                         name: '新增注册',
                         type: 'line',
-                        stack: '总量',
                         data: response.register
                     },
                     {
                         name: '活跃用户',
                         type: 'line',
-                        stack: '总量',
                         data: response.active
                     },
                     {
                         name: '流失用户',
                         type: 'line',
-                        stack: '总量',
                         data: response.unActive
                     }
                 ],
@@ -193,13 +190,11 @@ define(function (require, exports, module) {
                     {
                         name: '新增订单',
                         type: 'line',
-                        stack: '总量',
                         data: datas.new
                     },
                     {
                         name: '付费订单',
                         type: 'line',
-                        stack: '总量',
                         data: datas.feePaid
                     }
                 ],
