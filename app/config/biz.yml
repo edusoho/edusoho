@@ -12,6 +12,8 @@ parameters:
         cache_directory: "%kernel.root_dir%/../var/cache"
         tmp_directory: "%kernel.root_dir%/../var/tmp"
         log_directory: "%kernel.root_dir%/../var/logs"
+        plugin.directory: "%kernel.root_dir%/../plugins"
+        plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
 
 services:
     biz:
