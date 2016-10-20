@@ -44,7 +44,6 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
             $user   = $this->getCurrentUser();
 
             $userId = $user->getId();
-            var_dump($user);
         }
         $path     = $this->getFilePath($userId);
         $isActive = false;

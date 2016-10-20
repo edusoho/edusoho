@@ -319,7 +319,7 @@ class DefaultController extends BaseController
         $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
         $analysisRegister = ArrayToolkit::index($analysisRegister, 'date');
         for ($i = $day; $i >= 0; $i--) {
-            $date = date('Y-m-d', time() - $i * 24 * 60 * 60);
+            $date                           = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $analysisRegisterDefault[$date] = array('count' => 0, 'date' => $date);
         }
 
@@ -355,10 +355,86 @@ class DefaultController extends BaseController
         array_walk($analysisData, function (&$data) {
             $data = count(array_unique($data));
         });
+        $activeUsers             = array_values($analysisData);
+        $userStatistic['active'] = $activeUsers;
 
-        $userStatistic['active'] = array_values($analysisData);
+        //流失用户
+        //
+        $dayRegisterTotal = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
+        $dayRegisterTotal = $this->fillAnalysisUserSum($timeRange, $dayRegisterTotal);
+
+        $dayRegisterTotal = $this->array_value_recursive('count', $dayRegisterTotal);
+
+
+        $unActiveUsers = array();
+
+        array_walk($dayRegisterTotal, function ($value, $index) use (&$unActiveUsers, $activeUsers) {
+            array_push($unActiveUsers, ($value - $activeUsers[$index]));
+        });
+
+        $userStatistic['unActive'] = $unActiveUsers;
+        //  var_dump($unActiveUsers, $userStatistic['active'], $dayRegisterTotal);
 
         return $this->createJsonResponse($userStatistic);
+    }
+
+
+    protected function makeDateRange($startTime, $endTime)
+    {
+        $dates = array();
+
+        $currentTime = $startTime;
+
+        while (true) {
+            if ($currentTime >= $endTime) {
+                break;
+            }
+
+            $currentDate = date('Y-m-d', $currentTime);
+            $dates[]     = $currentDate;
+
+            $currentTime = $currentTime + 3600 * 24;
+        }
+
+        return $dates;
+    }
+
+
+    protected function fillAnalysisUserSum($timeRange, $currentData)
+    {
+        $dates       = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime']);
+        $userSumData = $currentData;
+
+        $currentData = ArrayToolkit::index($currentData, 'date');
+
+        foreach ($dates as $key => $value) {
+            $zeroData[] = array("date" => $value, "count" => 0);
+        }
+
+        if ($userSumData) {
+            $countTmp = $userSumData[0]["count"];
+
+          //  var_dump($userSumData);
+            foreach ($zeroData as $key => $value) {
+                foreach ($userSumData as $userKey => $val) {
+                 //   var_dump($userKey, $value['date'], $val['date']);
+                    if ($userKey != 0 && ($value['date'] < $val['date']) &&  isset( $userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
+                        $countTmp = $userSumData[($userKey + 1)]['count'];
+                    }
+                }
+
+                $date = $value['date'];
+
+                if (array_key_exists($date, $currentData)) {
+                    $zeroData[$key]['count'] = $currentData[$date]['count'];
+                    $countTmp                = $currentData[$date]['count'];
+                } else {
+                    $zeroData[$key]['count'] = $countTmp;
+                }
+            }
+        }
+
+        return $zeroData;
     }
 
     public function lessonLearnStatisticAction(Request $request, $period)

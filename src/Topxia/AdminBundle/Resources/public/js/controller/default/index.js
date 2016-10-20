@@ -147,7 +147,7 @@ define(function (require, exports, module) {
                         name: '流失用户',
                         type: 'line',
                         stack: '总量',
-                        data: [0, 0, 0, 0, 0, 0, 0]
+                        data: response.unActive
                     }
                 ],
                 color: ['#46C37B', '#428BCA', '#DD4646']

@@ -15,6 +15,7 @@ use Topxia\Common\StringToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\User\Dao\Impl\UserDaoImpl;
 use Topxia\Service\User\UserService;
 
 class UserServiceImpl extends BaseService implements UserService
@@ -1666,6 +1667,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('Coupon.CouponDao');
     }
 
+    /**
+     * @return UserDaoImpl
+     */
     protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
