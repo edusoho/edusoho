@@ -564,7 +564,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array(
             'id'   => $announcement['id'],
-            'type' => 'announcement.create'
+            'type' => 'announcement.create',
             'title' => $this->plainText($announcement['content'], 50),
         );
 
