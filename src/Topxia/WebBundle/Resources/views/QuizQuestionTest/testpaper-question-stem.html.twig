@@ -1,6 +1,6 @@
 <div class="testpaper-question-stem-wrap clearfix">
   <div class="testpaper-question-seq-wrap">
-    <div class="testpaper-question-seq">{{ item.seq|default('') }}</div>
+    <div class="testpaper-question-seq">{% if item.materialSeq is defined %}{{ item.materialSeq|default('') }}{% else %}{{ item.seq|default('') }}{% endif %}</div>
     <div class="testpaper-question-score">{{ item.score|default(item.question.score) }}{{'分'|trans}}</div>
   </div>
   {% if item.questionType == 'fill' %}
