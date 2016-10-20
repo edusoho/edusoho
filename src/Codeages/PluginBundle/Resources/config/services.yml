@@ -6,8 +6,18 @@ services:
             - %kernel.cache_dir%
             - %kernel.debug%
 
+    codeages_plugin.slot_collector:
+        class: Codeages\PluginBundle\System\Slot\SlotInjectionCollector
+        arguments:
+            - []
+            - %kernel.cache_dir%
+            - %kernel.debug%
+
     codeages_plugin.slot_manager:
         class: Codeages\PluginBundle\System\Slot\SlotManager
+        arguments:
+            - @codeages_plugin.slot_collector
+            - @service_container
         
     codeages_plugin.slot_twig_extension:
         class: Codeages\PluginBundle\Twig\SlotExtension

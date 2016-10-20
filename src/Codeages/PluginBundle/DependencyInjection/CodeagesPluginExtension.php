@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Finder\Finder;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -27,6 +28,12 @@ class CodeagesPluginExtension extends Extension
 
         $bundles = $container->getParameter('kernel.bundles');
 
+        $this->loadDicts($bundles, $container);
+        $this->loadSlots($bundles, $container);
+    }
+
+    public function loadDicts($bundles, $container)
+    {
         $files = array();
 
         foreach ($bundles as $bundleClass) {
@@ -40,5 +47,26 @@ class CodeagesPluginExtension extends Extension
 
         $collector = $container->getDefinition('codeages_plugin.dict_collector');
         $collector->replaceArgument(0, $files);
+    }
+
+    public function loadSlots($bundles, $container)
+    {
+
+        $files = array();
+
+        foreach ($bundles as $bundleClass) {
+            $refClass = new \ReflectionClass($bundleClass);
+            $file = dirname($refClass->getFileName()) . '/Resources/config/slots.yml';
+
+
+            if (file_exists($file) === true) {
+                $files[] = $file;
+            }
+        }
+
+            // var_dump($files);
+        $collector = $container->getDefinition('codeages_plugin.slot_collector');
+        $collector->replaceArgument(0, $files);
+
     }
 }

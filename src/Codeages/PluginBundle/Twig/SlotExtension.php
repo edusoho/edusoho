@@ -18,15 +18,8 @@ class SlotExtension extends \Twig_Extension
         );
     }
 
-    public function slot()
+    public function slot($name, $args)
     {
-        $args = func_get_args();
-        if (count($args) === 0) {
-            throw new \InvalidArgumentException('The Twig function `slot` must have at least one argument, and the first argument is the name of the slot.');
-        }
-
-        $name = array_shift($args);
-
         return $this->manager->fire($name, $args);
     }
 
