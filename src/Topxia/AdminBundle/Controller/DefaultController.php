@@ -26,7 +26,7 @@ class DefaultController extends BaseController
     /**
      * @return UserActiveServiceImpl
      */
-    private function getUserActiveLogService()
+    private function getUserActiveService()
     {
         return $this->createService('User.UserActiveService');
     }
@@ -294,12 +294,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    protected function getTimeRange($period)
-    {
-        $day = $period == 'week' ? 6 : 29;
-
-        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
-    }
 
     public function userStatisticAction(Request $request, $period)
     {
@@ -308,133 +302,43 @@ class DefaultController extends BaseController
         $days        = $this->getDaysDiff($period);
         $active_days = "30";
 
-        for ($i = $days; $i >= 0; $i--) {
-            $dates[] = date('Y/m/d', time() - $i * 24 * 60 * 60);
-            $date    = date('Ymd', time() - $i * 24 * 60 * 60);
+        //x轴显示日期
+        $xAxisDate = $this->generateDateRange($days, 'Y-m-d');
 
-            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+        $userStatistic['date'] = $xAxisDate;
+
+        //用于填充的空模板数据
+        foreach ($xAxisDate as $date) {
+            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
-
+        //每日注册用户
         $timeRange        = $this->getTimeRange($period);
         $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
         $analysisRegister = ArrayToolkit::index($analysisRegister, 'date');
-        for ($i = $days; $i >= 0; $i--) {
-            $date                           = date('Y-m-d', time() - $i * 24 * 60 * 60);
-            $analysisRegisterDefault[$date] = array('count' => 0, 'date' => $date);
-        }
+        $analysisRegister = array_merge($zeroAnalysis, $analysisRegister);
 
-        $analysisRegister          = array_merge($analysisRegisterDefault, $analysisRegister);
         $userStatistic['register'] = $this->array_value_recursive('count', $analysisRegister);
 
         //活跃用户
-        $analysis = $this->getUserActiveLogService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($days + $active_days) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
+        $activeAnalysis          = $this->getUserActiveService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($days + $active_days) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
+        $activeAnalysis          = $this->fillActiveUserCount($xAxisDate, $activeAnalysis);
+        $userStatistic['active'] = $activeAnalysis;
 
-        $userStatistic['date'] = $dates;
-
-        function diffBetweenTwoDays($day1, $day2)
-        {
-            $second1 = strtotime($day1);
-            $second2 = strtotime($day2);
-
-            return ($second1 - $second2) / 86400;
-        }
-
-        $analysisData = array();
-        array_walk($dates, function ($date) use ($analysis, &$analysisData) {
-            foreach ($analysis as $index => $value) {
-                $diff = diffBetweenTwoDays($date, $value['date']);
-                if ($diff >= 0 && $diff <= 30) {
-                    $analysisData[$date][] = $value['userid'];
-                }
-            }
-            if (empty($analysisData[$date])) {
-                $analysisData[$date] = array();
-            }
-        });
-
-        array_walk($analysisData, function (&$data) {
-            $data = count(array_unique($data));
-        });
-        $activeUsers             = array_values($analysisData);
-        $userStatistic['active'] = $activeUsers;
-
-        //流失用户
-        //
+        //每日注册总数
         $dayRegisterTotal = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
         $dayRegisterTotal = $this->fillAnalysisUserSum($timeRange, $dayRegisterTotal);
-
         $dayRegisterTotal = $this->array_value_recursive('count', $dayRegisterTotal);
 
-
-        $unActiveUsers = array();
-
-        array_walk($dayRegisterTotal, function ($value, $index) use (&$unActiveUsers, $activeUsers) {
-            array_push($unActiveUsers, ($value - $activeUsers[$index]));
+        //流失用户
+        $unActiveAnalysis = array();
+        array_walk($dayRegisterTotal, function ($value, $index) use (&$unActiveAnalysis, $activeAnalysis) {
+            //每日注册总数-每日活跃用户
+            array_push($unActiveAnalysis, ($value - $activeAnalysis[$index]));
         });
 
-        $userStatistic['unActive'] = $unActiveUsers;
-        //  var_dump($unActiveUsers, $userStatistic['active'], $dayRegisterTotal);
+        $userStatistic['unActive'] = $unActiveAnalysis;
 
         return $this->createJsonResponse($userStatistic);
-    }
-
-
-    protected function makeDateRange($startTime, $endTime)
-    {
-        $dates = array();
-
-        $currentTime = $startTime;
-
-        while (true) {
-            if ($currentTime >= $endTime) {
-                break;
-            }
-
-            $currentDate = date('Y-m-d', $currentTime);
-            $dates[]     = $currentDate;
-
-            $currentTime = $currentTime + 3600 * 24;
-        }
-
-        return $dates;
-    }
-
-
-    protected function fillAnalysisUserSum($timeRange, $currentData)
-    {
-        $dates       = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime']);
-        $userSumData = $currentData;
-
-        $currentData = ArrayToolkit::index($currentData, 'date');
-
-        foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
-        }
-
-        if ($userSumData) {
-            $countTmp = $userSumData[0]["count"];
-
-            //  var_dump($userSumData);
-            foreach ($zeroData as $key => $value) {
-                foreach ($userSumData as $userKey => $val) {
-                    //   var_dump($userKey, $value['date'], $val['date']);
-                    if ($userKey != 0 && ($value['date'] < $val['date']) && isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
-                        $countTmp = $userSumData[($userKey + 1)]['count'];
-                    }
-                }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
-            }
-        }
-
-        return $zeroData;
     }
 
     public function lessonLearnStatisticAction(Request $request, $period)
@@ -723,6 +627,102 @@ class DefaultController extends BaseController
     {
         $days = $period == 'week' ? 6 : 29;
         return $days;
+    }
+
+    protected function getTimeRange($period)
+    {
+        $days = $this->getDaysDiff($period);
+
+        return array('startTime' => strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
+    }
+
+    protected function makeDateRange($startTime, $endTime)
+    {
+        $dates = array();
+
+        $currentTime = $startTime;
+
+        while (true) {
+            if ($currentTime >= $endTime) {
+                break;
+            }
+
+            $currentDate = date('Y-m-d', $currentTime);
+            $dates[]     = $currentDate;
+
+            $currentTime = $currentTime + 3600 * 24;
+        }
+
+        return $dates;
+    }
+
+    protected function generateDateRange($days, $format = 'Y/m/d')
+    {
+        $dates = array();
+        for ($i = $days; $i >= 0; $i--) {
+            $dates[] = date($format, time() - $i * 24 * 60 * 60);
+        }
+        return $dates;
+    }
+
+    protected function fillActiveUserCount($xAxisDate, $activeAnalysis)
+    {
+        $result = array();
+        array_walk($xAxisDate, function ($date) use ($activeAnalysis, &$result) {
+            foreach ($activeAnalysis as $index => $value) {
+                //在30天内登录过系统的用户即为活跃用户
+                $diff = (strtotime($date) - strtotime($value['date'])) / 86400;
+                if ($diff >= 0 && $diff <= 30) {
+                    $result[$date][] = $value['userId'];
+                }
+            }
+            if (empty($result[$date])) {
+                $result[$date] = array();
+            }
+        });
+
+        array_walk($result, function (&$data) {
+            $data = count(array_unique($data));
+        });
+        return array_values($result);
+    }
+
+    //获取每天的注册总数
+    protected function fillAnalysisUserSum($timeRange, $currentData)
+    {
+        $dates       = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime']);
+        $userSumData = $currentData;
+
+        $currentData = ArrayToolkit::index($currentData, 'date');
+
+        foreach ($dates as $key => $value) {
+            $zeroData[] = array("date" => $value, "count" => 0);
+        }
+
+        if ($userSumData) {
+            $countTmp = $userSumData[0]["count"];
+
+            //  var_dump($userSumData);
+            foreach ($zeroData as $key => $value) {
+                foreach ($userSumData as $userKey => $val) {
+                    //   var_dump($userKey, $value['date'], $val['date']);
+                    if ($userKey != 0 && ($value['date'] < $val['date']) && isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
+                        $countTmp = $userSumData[($userKey + 1)]['count'];
+                    }
+                }
+
+                $date = $value['date'];
+
+                if (array_key_exists($date, $currentData)) {
+                    $zeroData[$key]['count'] = $currentData[$date]['count'];
+                    $countTmp                = $currentData[$date]['count'];
+                } else {
+                    $zeroData[$key]['count'] = $countTmp;
+                }
+            }
+        }
+
+        return $zeroData;
     }
 
 }

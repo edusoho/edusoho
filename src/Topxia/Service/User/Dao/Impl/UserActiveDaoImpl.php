@@ -31,7 +31,7 @@ class UserActiveDaoImpl extends BaseDao implements UserActiveDao
 
     public function analysisActiveUser($startTime, $endTime)
     {
-        $sql = "SELECT DISTINCT `userid` ,`activeTime` as date FROM `user_active_log`   WHERE createdTime >= ? AND createdTime <?";
+        $sql = "SELECT DISTINCT `userId` ,`activeTime` as date FROM `user_active_log` WHERE createdTime >= ? AND createdTime <?";
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime)) ?: array();
     }
 
