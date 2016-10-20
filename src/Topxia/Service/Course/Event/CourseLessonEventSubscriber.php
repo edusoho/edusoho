@@ -15,7 +15,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'course.lesson.create'                => array('onCourseLessonCreate', 0),
             'course.lesson.delete'                => array('onCourseLessonDelete', 0),
             'course.lesson.update'                => 'onCourseLessonUpdate',
-            'course.lesson.generate.replay'       => 'onCourseLessonGenerateReplay',
             'course.lesson.publish'               => 'onCourseLessonPublish',
             'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
             'course.lesson_start'                 => 'onLessonStart',
@@ -26,6 +25,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'chapter.create'                      => 'onChapterCreate',
             'chapter.delete'                      => 'onChapterDelete',
             'chapter.update'                      => 'onChapterUpdate',
+
             'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
             'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
             'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
@@ -100,33 +100,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
             foreach ($lessonIds as $key => $lessonId) {
                 $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
-            }
-        }
-    }
-
-    public function onCourseLessonGenerateReplay(ServiceEvent $event)
-    {
-        $context       = $event->getSubject();
-        $courseIds     = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
-        $lessonReplays = $this->getCourseService()->getCourseLessonReplayByLessonId($context['lessonId']);
-
-        if (!$lessonReplay) {
-            return false;
-        }
-
-        if (!$courseIds) {
-            return false;
-        }
-
-        $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($context['lessonId'], $courseIds), 'id');
-
-        foreach ($courseIds as $key => $courseId) {
-            foreach ($lessonReplays as $lessonReplay) {
-                unset($lessonReplay['id']);
-                $lessonReplay['courseId']    = $courseId;
-                $lessonReplay['lessonId']    = $lessonIds[$key];
-                $lessonReplay['createdTime'] = time();
-                $this->getCourseService()->addCourseLessonReplay($lessonReplay);
             }
         }
     }
@@ -367,7 +340,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $replay  = $context['replay'];
 
-        if ($replay['copyId'] > 0) {
+        if ($replay['copyId'] > 0 || $replay['type'] == 'liveOpen') {
             return false;
         }
 
@@ -398,7 +371,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $replay  = $context['replay'];
 
-        if ($replay['copyId'] > 0) {
+        if ($replay['copyId'] > 0 || $replay['type'] == 'liveOpen') {
             return false;
         }
 
