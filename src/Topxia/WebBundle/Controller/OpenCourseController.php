@@ -105,11 +105,6 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '该课时不存在！');
         }
 
-        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
-            $course = $this->getOpenCourseService()->getCourse($courseId);
-            $this->createRefererLog($request, $course);
-        }
-
         if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!$file) {
@@ -409,12 +404,17 @@ class OpenCourseController extends BaseOpenCourseController
         }
     }
 
-    public function playerAction($courseId, $lessonId)
+    public function playerAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException('课时不存在！');
+        }
+
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            $course = $this->getOpenCourseService()->getCourse($courseId);
+            $this->createRefererLog($request, $course);
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
