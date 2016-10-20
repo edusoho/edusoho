@@ -66,10 +66,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'announcement.create'       => 'onAnnouncementCreate',
 
-            'testpaper.reviewed'        => 'onTestPaperReviewed',
-
-            'homework.check'            => 'onHomeworkCheck'
-
             //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
             //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
         );
@@ -452,29 +448,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->pushCloud('announcement.create', $announcement);
     }
 
-    /**
-     * Testpaper相关
-     */
-    public function onTestPaperReviewed(ServiceEvent $event)
-    {
-        $testpaper       = $event->getSubject();
-        $testpaperResult = $event->getArgument('testpaperResult');
-
-        $testpaper['target']   = explode('-', $testpaper['target']);
-        $testpaperResultTarget = explode('-', $testpaperResult['target']);
-
-        if (empty($testpaperResultTarget[2])) {
-            return;
-        }
-
-        $testpaper['target']          = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
-        $testpaperResult['testpaper'] = $testpaper;
-
-        $testpaperResult['target'] = $this->getTarget('lesson', $testpaperResultTarget[2]);
-
-        $this->pushCloud('testpaper.reviewed', $testpaperResult);
-    }
-
     public function onOpenCourseCreate(ServiceEvent $event)
     {
         $openCourse = $event->getSubject();
@@ -545,22 +518,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $this->LiveOpenCreateJob($lesson);
             }
         }
-    }
-
-    /**
-     * Homework相关
-     */
-    public function onHomeworkCheck(ServiceEvent $event)
-    {
-        $homeworkResult = $event->getSubject();
-
-        $homework                   = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
-        $homework['target']         = $this->getTarget('course', $homeworkResult['courseId']);
-        $homeworkResult['homework'] = $homework;
-
-        $homeworkResult['target'] = $this->getTarget('lesson', $homeworkResult['lessonId']);
-
-        $this->pushCloud('homework.check', $homeworkResult);
     }
 
     protected function getTarget($type, $id)
