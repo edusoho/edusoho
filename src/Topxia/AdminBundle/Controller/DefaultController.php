@@ -373,25 +373,27 @@ class DefaultController extends BaseController
     public function studyStatisticAction(Request $request, $period)
     {
         $days = $this->getDaysDiff($period);
-        for ($i = $days; $i >= 0; $i--) {
-            $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
-            $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
-            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
+
+        //用于填充的空模板数据
+        foreach ($xAxisDate as $date) {
+            $date = date('Y-m-d', strtotime($date));
+            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
 
         $timeRange  = $this->getTimeRange($period);
         $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
         $newOrders  = $this->getOrderService()->analysisOrderDate($conditions);
         $newOrders  = ArrayToolkit::index($newOrders, 'date');
-        $newOrders  = array_merge($defaultDatas, $newOrders);
+        $newOrders  = array_merge($zeroAnalysis, $newOrders);
 
         $conditions    = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid', 'totalPriceGreaterThan' => 0);
         $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
         $newPaidOrders = ArrayToolkit::index($newPaidOrders, 'date');
-        $newPaidOrders = array_merge($defaultDatas, $newPaidOrders);
+        $newPaidOrders = array_merge($zeroAnalysis, $newPaidOrders);
 
         return $this->createJsonResponse(array(
-            'date'    => $dates,
+            'date'    => $xAxisDate,
             'new'     => $this->array_value_recursive('count', $newOrders),
             'feePaid' => $this->array_value_recursive('count', $newPaidOrders)
         ));
