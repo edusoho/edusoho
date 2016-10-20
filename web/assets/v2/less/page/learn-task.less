@@ -11,14 +11,45 @@
   .dashboard-content {
     position:absolute;
     top:0px;
-    left: 20px;
+    left: 26px;
     bottom: 0px;
-    right: 440px;
+    right: 420px+26px;
     @media (max-width: 1024px) {
       right: 360px;
     }
     @media (max-width: 767px) { 
       right: 20px;
+    }
+    .dashboard-body {
+      position: absolute;
+      top: 53px;
+      bottom: 26px;
+      width: 100%;
+    }
+    .dashboard-header {
+      position: absolute;
+      left: -26px;
+      top: 0;
+      right: 0;
+      height: 53px;
+      color: @gray;
+      .back-course-btn {
+        height: 50px;
+        width: 50px;
+        margin: 1px 12px 1px 1px ;
+        padding: 0;
+        line-height: 50px;
+        color: @gray;
+        background-color: #000;
+        text-align: center;
+        .border-radius(0);
+      }
+      .help-link {
+        float: right;
+        line-height: 53px;
+        margin-right: 20px;
+        color: @gray;
+      }
     }
   }
   .toolbar {
@@ -56,22 +87,6 @@
       right: 0;
       bottom: 0;
       overflow: hidden;
-      // .lesson-pane,
-      // .question-pane {
-      //   .opacity(0);
-      //   visibility: hidden;
-      //   z-index: 888;
-      //   // background-color: @bg-color;
-      //   // .es-transform(.8,.8);
-      //   .es-transition;
-      //   &.active {
-      //     .opacity(1);
-      //     visibility: visible;
-      //     z-index: 999;
-      //     // .es-transform(1,1);
-      //     .es-transition;
-      //   }
-      // }
       .ps-container .ps-scrollbar-y {
         right: 0px;
       }
@@ -80,30 +95,6 @@
       }
     }
   }
-  
-  // &.lesson-dashboard-open {
-    // .dashboard-content {
-    //   right: 440px;
-    //   @media (max-width: 1024px) {
-    //     right: 360px;
-    //   }
-    //   @media (max-width: 767px) { 
-    //     right: 20px;
-    //   }
-    // }
-    // .toolbar {
-      // width: 420px;
-      // @media (max-width: 1024px) { 
-      //   width: 360px;
-      // }
-      // @media (max-width: 767px) { 
-      //   display: none;
-      // }
-      // .toolbar-nav {
-      //   right: 420px;
-      // }
-    // }
-  // }
 }
 
 .lesson-dashboard .toolbar-nav-stacked {
@@ -170,12 +161,6 @@
   display: inline;
 }
 
-.lesson-dashboard .dashboard-header {
-  position: absolute;
-  left: 130px;
-  top: 0;
-  height: 40px;
-}
 
 .lesson-dashboard .dashboard-header .item-navbar {
   font-size: 16px;
@@ -189,15 +174,6 @@
 
 .lesson-dashboard .dashboard-header .item-navbar span:hover {
     color: #666;
-}
-
-.lesson-dashboard .dashboard-body {
-  position: absolute;
-  top: 50px;
-  bottom: 50px;
-  width: 100%;
-  /*background: #1d1f21;*/
-
 }
 
 .lesson-dashboard .dashboard-footer {
@@ -289,18 +265,18 @@
 .lesson-dashboard .lesson-content-text-body blockquote p {
   font-size: 14px;
 }
-.lesson-dashboard .nav-btn {
-  position: absolute;
-  /*background: #f3f3f3;*/
-  border-radius: 0;
-  z-index: 1000;
-  padding: 3px 10px;
-}
+// .lesson-dashboard .nav-btn {
+//   position: absolute;
+//   background: #f3f3f3;
+//   border-radius: 0;
+//   z-index: 1000;
+//   padding: 3px 10px;
+// }
 
-.lesson-dashboard .back-course-btn {
-  left: 0px;
-  top: -1px;
-}
+// .lesson-dashboard .back-course-btn {
+//   left: 0px;
+//   top: -1px;
+// }
 
 .lesson-dashboard .prev-lesson-btn {
   left: 90px;

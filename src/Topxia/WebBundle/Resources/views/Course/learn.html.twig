@@ -29,45 +29,35 @@
        data-starttime="{{ starttime|default('') }}"
        data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
     <div class="dashboard-content">
+      <div class="dashboard-header">
       {% set classroom = data('GetClassroomByCourseId',{courseId:course.id}) %}
       {% if classroom %}
-        <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('classroom_show', {id:classroom.id}) }}"><span
-              class="glyphicon glyphicon-chevron-left"></span> {{ '返回班级'|trans }}</a>
+        <a class="btn back-course-btn" href="{{ path('classroom_show', {id:classroom.id}) }}"><span class="glyphicon glyphicon-chevron-left"></span> {{ '返回班级'|trans }}</a>
       {% else %}
-        <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span
-              class="glyphicon glyphicon-chevron-left"></span> {{ '返回课程'|trans }}</a>
+        <a class="btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left"></span></a>
       {% endif %}
-
-      <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson"
-         data-placement="right" title="{{ '上一课时'|trans }}"><span class="glyphicon glyphicon-chevron-up"
-                                                                 title="{{ '上一课时'|trans }}"></span></a>
-      <a class="btn btn-primary nav-btn next-lesson-btn" href="javascript:" data-role="next-lesson"
-         data-placement="right" title="{{ '下一课时'|trans }}"><span class="glyphicon glyphicon-chevron-down"></span></a>
-
-      <div class="dashboard-header">
-        <div class="pull-left title-group">
-          <span class="chapter-label">
-            {% if not setting('course.custom_chapter_enabled')|default(true) %}
-            <span
-                data-role="custom-chapter-number">{{'第'|trans}}{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}</span></span>
-          {% else %}
-            {{'第'|trans}}<span
-              data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}</span>
-          {% endif %}
-          <span class="divider">&raquo;</span>
-          <span class="chapter-label">
-            {% if not setting('course.custom_chapter_enabled')|default(true) %}
-            <span
-                data-role="custom-unit-number">{{'第'|trans}}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}</span></span>
-        {% else %}
-          {{'第'|trans}}<span
-            data-role="unit-number"></span>{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节') }}{% else %}{{'节'|trans}}{% endif %}</span>
-          {% endif %}
-          <span class="divider">&raquo;</span>
-          <span class="item-label">{% if  setting('course.custom_chapter_enabled')|default(true) %}{{ '课时'|trans }}<span
-                data-role="lesson-number"></span>{% endif %}</span>
-          <span class="item-title" data-role="lesson-title">{{ '正在加载'|trans }}...</span>
-        </div>
+      {% if not setting('course.custom_chapter_enabled')|default(true) %}
+        <span class="chapter-label">
+          <span data-role="custom-chapter-number">
+            {{'第'|trans}}{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}
+          </span>
+        </span>
+      {% else %}
+        {{'第'|trans}}<span data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('章'|trans) }}{% else %}{{'章'|trans}}{% endif %}</span>
+      {% endif %}
+        <span class="divider">&raquo;</span>
+        <span class="chapter-label">
+        {% if not setting('course.custom_chapter_enabled')|default(true) %}
+        <span data-role="custom-unit-number">{{'第'|trans}}{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节'|trans) }}{% else %}{{'节'|trans}}{% endif %}</span></span>
+      {% else %}
+        {{'第'|trans}}<span data-role="unit-number"></span>{% if setting('default.part_name') %}{{ setting('default.part_name')|default('节') }}{% else %}{{'节'|trans}}{% endif %}</span>
+      {% endif %}
+        <span class="divider">&raquo;</span>
+        <span class="item-label">{% if  setting('course.custom_chapter_enabled')|default(true) %}{{ '课时'|trans }}<span data-role="lesson-number"></span>{% endif %}</span>
+        <span class="item-title" data-role="lesson-title">{{ '正在加载'|trans }}...</span>
+        <a class="help-link" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-content="满足以下条件">
+          <i class="es-icon es-icon-help mrm"></i>任务完成条件
+        </a>
       </div>
 
       <div class="dashboard-body">
@@ -122,12 +112,12 @@
 
       </div>
 
-      <div class="dashboard-footer clearfix">
+      {#<div class="dashboard-footer clearfix">
         <div class="pull-right">
           <button class="btn btn-primary finish-btn" data-role="finish-lesson" style="display:none;"><span
                 class="glyphicon glyphicon-unchecked"></span> {{ '学过了'|trans }}</button>
         </div>
-      </div>
+      </div>#}
     </div>
 
     <div class="toolbar" id="lesson-dashboard-toolbar">
