@@ -22,21 +22,23 @@
         设置内容
       </li>
     </ul>
-    <ul class="course-tasks-type row">
-      {% if not currentType|default(false) %}
+    <div class="#step-1">
+      <ul class="course-tasks-type row">
+        {% if not currentType|default(false) %}
         {% for type, value in types %}
-          <li class="col-xs-3 course-tasks-type-item js-tasks-type-item">
-            <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
-               data-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}">
-              <i class="es-icon es-icon-graphicclass"></i>
-              {{ value.name }}
-            </a>
-          </li>
+        <li class="col-xs-3 course-tasks-type-item js-tasks-type-item">
+          <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
+               data-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}"> <i class="es-icon es-icon-graphicclass"></i>
+            {{ value.name }}
+          </a>
+        </li>
         {% endfor %}
       {% endif %}
-    </ul>
+      </ul>
+    </div>
 
-    {% if currentType|default(false) %}
+    <div class="#step-2">
+      {% if currentType|default(false) %}
       <form id='task-create-form' class="form-horizontal" method="POST"
           {% if activity|default(false) %}
             action="{{ path('course_manage_task_update',{courseId:course.id, id:task.id}) }}"
@@ -44,10 +46,10 @@
             action="{{ path('course_manage_task_create',{courseId:course.id, currentType:currentType}) }}"
           {% endif %}
       >
-        <input type="hidden" name="id" value="{{ task.id|default('') }}">
-        <input type="hidden" name="activityType" value='{{ currentType }}'>
-        <input type="hidden" name="fromCourseSetId" value='1'>
-        <input type="hidden" name="fromCourseId" value='{{ course.id }}'>
+        <input type="hidden" name="id" value="{{ task.id|default('') }}">    
+        <input type="hidden" name="activityType" value='{{ currentType }}'>    
+        <input type="hidden" name="fromCourseSetId" value='1'>    
+        <input type="hidden" name="fromCourseId" value='{{ course.id }}'>    
         {% if not renderer is null and currentType|default(false) %}
           {% if activity|default(false) %}
             {{ renderer.renderEditing(activity.id)|raw }}
@@ -56,8 +58,8 @@
           {% endif %}
         {% endif %}
       </form>
-    {% endif %}
-
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
 
@@ -72,5 +74,6 @@
     <button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit"
             data-target="#task-create-form" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
   {% endif %}
-
+  <script>app.load('taskbundle/controller/task-manage/create')</script>
+  
 {% endblock %}
