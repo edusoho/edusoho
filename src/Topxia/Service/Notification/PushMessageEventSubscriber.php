@@ -462,7 +462,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             return ;
         }
 
-        $results = [];
+        $results = array();
 
         foreach ($post['target']['teacherIds'] as $teacherId) {
             if ($teacherId != $post['userId']) {
