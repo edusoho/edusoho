@@ -837,19 +837,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             return ;
         }
 
-        $params = [
+        $params = array(
             'fromId' => 0,
             'fromName' => '系统消息',
             'toName' => '全部',
-            'body' => [
+            'body' => array(
                 'v' => 1,
                 't' => 'push',
                 'b' => $body,
                 's' => $from,
                 'd' => $to,
-            ],
+            ),
             'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
-        ];
+        );
 
         if ($to['type'] == 'user') {
             $params['toId'] = $to['id'];
