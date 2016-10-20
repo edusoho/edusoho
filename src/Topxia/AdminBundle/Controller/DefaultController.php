@@ -162,7 +162,6 @@ class DefaultController extends BaseController
         }
 
         $mainAppUpgrade = null;
-
         foreach ($apps as $key => $value) {
             if (isset($value['code']) && $value['code'] == "MAIN") {
                 $mainAppUpgrade = $value;
@@ -255,8 +254,8 @@ class DefaultController extends BaseController
         $totalVipNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'vip', "status" => "paid"));
 
 
-        $todayThreadNum         = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
-        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNumLargerThan' => 0));
+        $todayThreadNum         = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNumLargerThan' => 0));
+        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
         $totalThreadNum         = $this->getThreadService()->searchThreadCount(array());
 
         $publishedCourseNum = $this->getCourseService()->searchCourseCount(array("status" => 'published'));
@@ -305,10 +304,11 @@ class DefaultController extends BaseController
     public function userStatisticAction(Request $request, $period)
     {
         $userStatistic = array();
-        $day           = $period == 'week' ? 6 : 29;
-        $active_day    = "30";
 
-        for ($i = $day; $i >= 0; $i--) {
+        $days        = $this->getDaysDiff($period);
+        $active_days = "30";
+
+        for ($i = $days; $i >= 0; $i--) {
             $dates[] = date('Y/m/d', time() - $i * 24 * 60 * 60);
             $date    = date('Ymd', time() - $i * 24 * 60 * 60);
 
@@ -318,7 +318,7 @@ class DefaultController extends BaseController
         $timeRange        = $this->getTimeRange($period);
         $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
         $analysisRegister = ArrayToolkit::index($analysisRegister, 'date');
-        for ($i = $day; $i >= 0; $i--) {
+        for ($i = $days; $i >= 0; $i--) {
             $date                           = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $analysisRegisterDefault[$date] = array('count' => 0, 'date' => $date);
         }
@@ -327,7 +327,7 @@ class DefaultController extends BaseController
         $userStatistic['register'] = $this->array_value_recursive('count', $analysisRegister);
 
         //活跃用户
-        $analysis = $this->getUserActiveLogService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($day + $active_day) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
+        $analysis = $this->getUserActiveLogService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($days + $active_days) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
 
         $userStatistic['date'] = $dates;
 
@@ -414,11 +414,11 @@ class DefaultController extends BaseController
         if ($userSumData) {
             $countTmp = $userSumData[0]["count"];
 
-          //  var_dump($userSumData);
+            //  var_dump($userSumData);
             foreach ($zeroData as $key => $value) {
                 foreach ($userSumData as $userKey => $val) {
-                 //   var_dump($userKey, $value['date'], $val['date']);
-                    if ($userKey != 0 && ($value['date'] < $val['date']) &&  isset( $userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
+                    //   var_dump($userKey, $value['date'], $val['date']);
+                    if ($userKey != 0 && ($value['date'] < $val['date']) && isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
                         $countTmp = $userSumData[($userKey + 1)]['count'];
                     }
                 }
@@ -440,8 +440,8 @@ class DefaultController extends BaseController
     public function lessonLearnStatisticAction(Request $request, $period)
     {
         //最近七天，最近三十天
-        $day = $period == 'week' ? 6 : 29;
-        for ($i = $day; $i >= 0; $i--) {
+        $days = $this->getDaysDiff($period);
+        for ($i = $days; $i >= 0; $i--) {
             $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
             $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $defaultDatas[$date] = array('count' => 0, 'date' => $date);
@@ -468,8 +468,8 @@ class DefaultController extends BaseController
      */
     public function studyStatisticAction(Request $request, $period)
     {
-        $day = $period == 'week' ? 6 : 29;
-        for ($i = $day; $i >= 0; $i--) {
+        $days = $this->getDaysDiff($period);
+        for ($i = $days; $i >= 0; $i--) {
             $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
             $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
             $defaultDatas[$date] = array('count' => 0, 'date' => $date);
@@ -506,9 +506,9 @@ class DefaultController extends BaseController
     public function orderStatisticAction(Request $request, $period)
     {
 
-        $day = $period == 'week' ? 6 : 29;
+        $days = $this->getDaysDiff($period);
 
-        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+        $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
         $orderDatas = $this->getOrderService()->analysisPaidOrderGroupByTargetType($startTime, 'targetType');
 
@@ -531,8 +531,8 @@ class DefaultController extends BaseController
 
     public function courseExploreAction(Request $request, $period)
     {
-        $day       = $period == 'week' ? 6 : 29;
-        $startTime = strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60));
+        $days      = $this->getDaysDiff($period);
+        $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
         $memberCounts = $this->getCourseService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0), 'courseId', 0, 10);
         $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
@@ -716,6 +716,13 @@ class DefaultController extends BaseController
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+
+    private function getDaysDiff($period)
+    {
+        $days = $period == 'week' ? 6 : 29;
+        return $days;
     }
 
 }
