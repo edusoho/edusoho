@@ -159,8 +159,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
         $lesson = $this->getCourseService($course['type'])->updateLesson($course['id'], $lesson['id'], $lessonFields);
 
-        $this->dispatchEvent("course.lesson.generate.replay", array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
-
         return $replayList;
     }
 
