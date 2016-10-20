@@ -214,11 +214,15 @@ define(function (require, exports, module) {
             });
         },
 
-        onLiveVideoPlay: function(){
+        onLiveVideoPlay: function(e){
             $('.live-header-mask').hide();
 
+            var $target = $(e.currentTarget);
             var self = this;
             var lesson = this.get('lesson');
+
+
+            var referer = $target.data('referer');
 
             if (lesson.mediaError) {
                 $('#media-error-dialog').show();
@@ -234,7 +238,7 @@ define(function (require, exports, module) {
                     $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
                     return;
                 }
-                var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                var playerUrl = '/open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player?referer='+referer;
             } else {
                 return;
             }

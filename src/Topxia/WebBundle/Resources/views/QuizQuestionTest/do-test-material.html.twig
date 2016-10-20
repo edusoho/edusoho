@@ -1,8 +1,4 @@
 <div class="material">
-<div class="testpaper-question-seq-wrap">
-	<div class="testpaper-question-seq">{{ item.seq|default('') }}</div>
-	<div class="testpaper-question-score">{{ item.score|default(item.question.score) }}{{'分'|trans}}</div>
-</div>
 <div class="well testpaper-question-stem-material">
 	{{ item.question.stem|fill_question_stem_html|bbCode2Html|raw }}
 	{% include 'TopxiaWebBundle:Attachment/Widget:list.html.twig' with {targetType:'question.stem', targetId:item.question.id  } %}
