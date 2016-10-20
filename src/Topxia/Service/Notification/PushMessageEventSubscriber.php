@@ -388,7 +388,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'courseId'            => $thread['target']['id'],
             'lessonId'            => $thread['relationId'],
             'questionCreatedTime' => $thread['createdTime'],
-            'questionTitle'       => $thread['title']
+            'questionTitle'       => $thread['title'],
+            'title' => "{$thread['target']['title']} 有新问题",
         );
 
         $results = array();
@@ -487,7 +488,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'lessonId'            => $post['thread']['relationId'],
                 'questionCreatedTime' => $post['thread']['createdTime'],
                 'questionTitle'       => $post['thread']['title'],
-                'postContent'         => $post['content']
+                'postContent'         => $post['content'],
+                'title' => "{$post['thread']['title']} 有新回复",
             );
 
             $this->pushIM($from, $to, $body);
@@ -563,6 +565,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array(
             'id'   => $announcement['id'],
             'type' => 'announcement.create'
+            'title' => $this->plainText($announcement['content'], 50),
         );
 
         $this->pushIM($from, $to, $body);
