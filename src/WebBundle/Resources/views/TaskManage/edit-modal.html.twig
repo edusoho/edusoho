@@ -11,46 +11,45 @@
 {% endblock %}
 
 {% block body %}
-  <div class="course-tasks-modal">
-    <ul class="es-step es-step-2 clearfix js-es-step">
-      <li class="doing">
-        <span class="number">1</span>
-        选择教学手段
-      </li>
-      <li>
-        <span class="number">2</span>
-        设置内容
-      </li>
-    </ul>
-    <div class="#step-1">
+  <div class="course-tasks-modal tab-content">
+    <div class="tab-pane js-course-tasks-pane active" >
+      <ul class="es-step es-step-3 clearfix">
+        <li class="doing">
+          <span class="number">1</span>
+          选择教学手段
+        </li>
+        <li>
+          <span class="number">2</span>
+          设置内容
+        </li>
+        <li>
+          <span class="number">3</span>
+          设置完成条件
+        </li>
+      </ul>
       <ul class="course-tasks-type row">
         {% if not currentType|default(false) %}
         {% for type, value in types %}
-        <li class="col-xs-3 course-tasks-type-item js-tasks-type-item">
-          <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
-               data-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}"> <i class="es-icon es-icon-graphicclass"></i>
+        <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
+          <a data-role="activityType" data-type="{{ type }}" href="javascript:;"data-content-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}" data-condition-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}"> <i class="es-icon es-icon-graphicclass"></i>
             {{ value.name }}
           </a>
         </li>
         {% endfor %}
-      {% endif %}
+        {% endif %}
       </ul>
     </div>
-
+    <div class="tab-pane js-course-tasks-pane" data-url="">
+    </div>
+    <div class="tab-pane js-course-tasks-pane" data-url="">
+    </div>
   </div>
 {% endblock %}
-
-
 {% block footer %}
-
-  <button type="submit" class="btn btn-primary js-task-prev-step disabled"
-          data-url="{{ path('course_manage_task_create', {courseId:1}) }}">{{ '上一步'|trans }}</button>
-  <button type="submit" class="btn btn-primary js-task-next-step disabled">{{ '下一步'|trans }}</button>
-  {#<button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>#}
+  <button id="course-tasks-prev" type="submit" class="btn btn-primary " disabled data-url="{{ path('course_manage_task_create', {courseId:1}) }}">{{ '上一步'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-primary " disabled>{{ '下一步'|trans }}</button>
   {% if currentType|default(false) %}
-    <button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit"
-            data-target="#task-create-form" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+    <button id="task-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
   {% endif %}
   <script>app.load('taskbundle/controller/task-manage/create')</script>
-  
 {% endblock %}
