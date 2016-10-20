@@ -391,7 +391,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'questionTitle'       => $thread['title']
         );
 
-        $results = [];
+        $results = array();
 
         foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
             if ($i >= 3) {
