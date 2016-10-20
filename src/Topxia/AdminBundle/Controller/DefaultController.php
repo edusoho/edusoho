@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Course\Impl\CourseServiceImpl;
+use Topxia\Service\Course\Impl\ThreadServiceImpl;
 use Topxia\Service\Order\Impl\OrderServiceImpl;
 use Topxia\Service\System\Impl\StatisticsServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
@@ -477,30 +478,18 @@ class DefaultController extends BaseController
                 $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
                 $userPostsNum   = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'], $value['id']);
 
-                if ($userPostsNum == $threadPostsNum) {
+                if ($userPostsNum == $threadPostsNum ) {
                     $unPostedQuestion[] = $value;
                 }
             }
         }
 
         $questions = $unPostedQuestion;
-
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
-        $askers  = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
-
-        $teacherIds = array();
-
-        foreach (ArrayToolkit::column($courses, 'teacherIds') as $teacherId) {
-            $teacherIds = array_merge($teacherIds, $teacherId);
-        }
-
-        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions' => $questions,
-            'courses'   => $courses,
-            'askers'    => $askers,
-            'teachers'  => $teachers
+            'courses'   => $courses
         ));
     }
 
@@ -563,6 +552,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
+    /**
+     * @return ThreadServiceImpl
+     */
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
