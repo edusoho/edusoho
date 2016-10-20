@@ -44,6 +44,26 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_lesson_replay', 'copyId')) {
             $connection->exec("ALTER TABLE course_lesson_replay ADD `copyId` int(10) DEFAULT '0' COMMENT '复制回放的ID';");
         }
+
+        if ($this->isFieldExist('course_lesson', 'suggestHours')) {
+            $connection->exec("ALTER TABLE `course_lesson` DROP `suggestHours`");
+        }
+
+        if ($this->isFieldExist('open_course_lesson', 'suggestHours')) {
+            $connection->exec("ALTER TABLE `open_course_lesson` DROP `suggestHours`");
+        }
+
+        if (!$this->isFieldExist('course', 'buyExpireTime')) {
+            $connection->exec("ALTER TABLE `course` ADD `buyExpireTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买开放有效期' AFTER `buyable`");
+        }
+
+        if (!$this->isFieldExist('course_review', 'meta')) {
+            $connection->exec("ALTER TABLE course_review add `meta` text  COMMENT '评价元信息'");
+        }
+
+        if (!$this->isFieldExist('classroom_review', 'meta')) {
+            $connection->exec("ALTER TABLE classroom_review add `meta` text  COMMENT '评价元信息'");
+        }
     }
 
     protected function batchUpdate($index)
