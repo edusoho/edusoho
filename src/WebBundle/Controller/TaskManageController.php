@@ -10,6 +10,15 @@ use Topxia\Service\Course\CourseService;
 
 class TaskManageController extends BaseController
 {
+    public function activityTypesAction(Request $request, $courseId)
+    {
+        $course = $this->tryManageCourse($courseId);
+        
+        return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
+            'course' => $course,
+            'types'  => $this->getActivityService()->getActivityTypes()
+        ));        
+    }
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -31,7 +40,7 @@ class TaskManageController extends BaseController
             $renderer = $activity->getRenderer();
         }
 
-        return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
+        return $this->render('WebBundle:TaskManage:edit-activity.html.twig', Array(
             'renderer'    => $renderer,
             'course'      => $course,
             'currentType' => $currentType,
