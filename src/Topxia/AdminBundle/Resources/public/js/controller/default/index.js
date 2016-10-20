@@ -101,8 +101,6 @@ define(function (require, exports, module) {
         this.element = $("#user-statistic");
         var chart = echarts.init(this.element.get(0));
 
-
-
         chart.showLoading();
 
         return $.get(this.element.data('url'), function (response) {
@@ -111,7 +109,7 @@ define(function (require, exports, module) {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['新增注册', '活跃用户']// '流失用户'
+                    data: ['新增注册', '活跃用户', '流失用户']
                 },
                 grid: {
                     left: '3%',
@@ -144,14 +142,15 @@ define(function (require, exports, module) {
                         type: 'line',
                         stack: '总量',
                         data: response.active
-                    }/*,
+                    },
                     {
                         name: '流失用户',
                         type: 'line',
                         stack: '总量',
                         data: [0, 0, 0, 0, 0, 0, 0]
-                    }*/
-                ]
+                    }
+                ],
+                color: ['#46C37B', '#428BCA', '#DD4646']
             };
 
             chart.hideLoading();
@@ -203,7 +202,8 @@ define(function (require, exports, module) {
                         stack: '总量',
                         data: datas.feePaid
                     }
-                ]
+                ],
+                color: ['#46C37B', '#428BCA']
             };
             chart.hideLoading();
             chart.setOption(option);
@@ -238,11 +238,12 @@ define(function (require, exports, module) {
                     {
                         name: '订单量',
                         type: 'pie',
-                        radus: '50%',
+                        radius: ['50%', '75%'],
                         center: ['40%', '60%'],
                         data: data
                     }
-                ]
+                ],
+                color: ['#1467BF', '#4EBECD', '#FFD2A1']
             };
 
             chart.hideLoading();
@@ -298,7 +299,8 @@ define(function (require, exports, module) {
                         barWidth: '19',
                         data: response.data
                     }
-                ]
+                ],
+                color: ['#428BCA']
             };
 
             chart.hideLoading();
