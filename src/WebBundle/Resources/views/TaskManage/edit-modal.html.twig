@@ -31,7 +31,7 @@
         {% if not currentType|default(false) %}
         {% for type, value in types %}
         <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
-          <a data-role="activityType" data-type="{{ type }}" href="javascript:;"data-content-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}" data-condition-url="{{ path('course_manage_task_create',{courseId:course.id, currentType:type}) }}"> <i class="es-icon es-icon-graphicclass"></i>
+          <a data-role="activityType" data-type="{{ type }}" href="javascript:;"data-content-url="{{ path('course_manage_task_create',{courseId:course.id, type:type}) }}" data-condition-url="{{ path('course_manage_task_create',{courseId:course.id, type:type}) }}"> <i class="es-icon es-icon-graphicclass"></i>
             {{ value.name }}
           </a>
         </li>
@@ -43,7 +43,7 @@
   </div>
 {% endblock %}
 {% block footer %}
-  <button id="course-tasks-prev" type="submit" class="btn btn-primary " disabled data-url="{{ path('course_manage_task_create', {courseId:1}) }}">{{ '上一步'|trans }}</button>
+  <button id="course-tasks-prev" type="submit" class="btn btn-primary " disabled >{{ '上一步'|trans }}</button>
   <button id="course-tasks-next" type="submit" class="btn btn-primary " disabled data-target="#task-create-form" >{{ '下一步'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden" data-toggle="form-submit" data-target="#task-create-form" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
   <script>app.load('taskbundle/controller/task-manage/create')</script>

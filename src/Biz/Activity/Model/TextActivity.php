@@ -8,6 +8,7 @@
 namespace Biz\Activity\Model;
 
 
+use Biz\Activity\Config\TextActivityConfig;
 use Biz\Activity\Event\TextFinishEvent;
 use Biz\Activity\Service\ActivityService;
 
@@ -15,47 +16,17 @@ class TextActivity extends Activity
 {
     public $name = '图文';
 
-    public function getRendererClass()
+    public function getConfig()
     {
-        return __NAMESPACE__ . '\\' . 'TextActivityRenderer';
+        return new TextActivityConfig($this->getBiz());
     }
 
-    public function getEventMap()
-    {
-        return array(
-            'text.start' => TextFinishEvent::class
-        );
-    }
-}
 
-class TextActivityRenderer extends ActivityRenderer
-{
-    public function renderCreating()
+
+    public function create($fields)
     {
-        return $this->render('WebBundle:ActivityManage:text.html.twig', array(
-            'currentType' => 'text'
-        ));
+        parent::create($fields);
     }
 
-    public function renderEditing($activityId)
-    {
-        $activity = $this->getActivityService()->getActivity($activityId);
-        return $this->render('WebBundle:ActivityManage:text.html.twig', array(
-            'currentType' => 'text',
-            'activity'    => $activity
-        ));
-    }
 
-    public function renderShow($activityId)
-    {
-        // TODO: Implement renderShow() method.
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
-    }
 }

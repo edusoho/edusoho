@@ -7,9 +7,9 @@ use Biz\Activity\Service\ActivityLearnLogService;
 
 class ActivityLearnLogEvent extends Event
 {
-    public function trigger($activity, $data)
+    public function trigger()
     {
-        $this->getActivityLearnLogService()->createLog($activity, $this->getName(), $data);
+        $this->getActivityLearnLogService()->createLog($this->getSubject(), $this->getName(), $this->getArguments());
     }
 
     /**

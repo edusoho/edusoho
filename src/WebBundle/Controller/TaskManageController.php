@@ -19,7 +19,7 @@ class TaskManageController extends BaseController
             'types'  => $this->getActivityService()->getActivityTypes()
         ));        
     }
-    public function createAction(Request $request, $courseId)
+    public function createAction(Request $request, $courseId, $type)
     {
         $course = $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
@@ -31,19 +31,13 @@ class TaskManageController extends BaseController
             ));
         }
 
-        $currentType = $request->query->get('currentType', '');
-
-        if(empty($currentType)){
-            $renderer = null;
-        }else{
-            $activity = $this->getActivityService()->getActivityModel($currentType);
-            $renderer = $activity->getRenderer();
-        }
+        $activity = $this->getActivityService()->getActivityModel($type);
+        $renderer = $activity->getConfig()->getRenderer();
 
         return $this->render('WebBundle:TaskManage:edit-activity.html.twig', Array(
             'renderer'    => $renderer,
             'course'      => $course,
-            'currentType' => $currentType,
+            'currentType' => $type,
             'types'       => $this->getActivityService()->getActivityTypes()
         ));
     }

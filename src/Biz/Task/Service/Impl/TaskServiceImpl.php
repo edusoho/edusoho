@@ -121,7 +121,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
 
-
     /**
      * @return ActivityService
      */

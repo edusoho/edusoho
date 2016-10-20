@@ -10,7 +10,7 @@ use Topxia\Service\Common\BaseTestCase;
 class ActivityServiceTest extends BaseTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Topxia\Common\Exception\InvalidArgumentException
      */
     public function testCreateActivityWhenInvalidArgument()
     {

@@ -11,6 +11,8 @@ namespace WebBundle\Controller;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 class BaseController extends Controller
 {
@@ -28,6 +30,11 @@ class BaseController extends Controller
     protected function createJsonResponse($data = null, $status = 200, $headers = array())
     {
         return new JsonResponse($data, $status, $headers);
+    }
+
+    protected function createResourceNotFoundException($resourceType, $resourceId, $message='')
+    {
+        return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
     /**

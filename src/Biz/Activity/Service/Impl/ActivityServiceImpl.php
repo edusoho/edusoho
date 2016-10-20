@@ -4,16 +4,16 @@ namespace Biz\Activity\Service\Impl;
 
 
 use Biz\Activity\Dao\ActivityDao;
-use Biz\Activity\Dao\Impl\ActivityDaoImpl;
+use Biz\Activity\Event\ActivityLearnLogEvent;
+use Biz\Activity\Event\EventBuilder;
+use Biz\Activity\Event\EventChain;
+use Biz\Activity\Model\ActivityBuilder;
+use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\AccessDeniedException;
-use Biz\Activity\Model\ActivityBuilder;
-use Biz\Activity\Event\EventBuilder;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Event\EventChain;
-use Biz\Activity\Event\ActivityLearnLogEvent;
+use Topxia\Common\Exception\InvalidArgumentException;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -22,7 +22,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->get($id);
     }
 
-    public function trigger($id, $eventName, $data)
+    public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
 
@@ -31,44 +31,52 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $eventChain = new EventChain();
-        $eventName  = $activity['mediaType'].'.'.$eventName;
+        $eventName  = $activity['mediaType'] . '.' . $eventName;
         $event      = ActivityBuilder::build($this->biz)
             ->type($activity['mediaType'])
             ->done()
+            ->getConfig()
             ->getEvent($eventName);
 
         if (!empty($event)) {
+            $event->setSubject($activity)->setArguments($data);
             $eventChain->add($event);
         }
 
         $logEvent = EventBuilder::build($this->biz)
             ->setEventClass(ActivityLearnLogEvent::class)
             ->setName($eventName)
+            ->setSubject($activity)
+            ->setArguments($data)
             ->done();
         $eventChain->add($logEvent);
-        $eventChain->fire($activity, $data);
+        $eventChain->fire();
     }
 
-    public function createActivity($activity)
+    public function createActivity($fields)
     {
-        if ($this->invalidActivity($activity)) {
-            throw new \InvalidArgumentException('activity is invalid');
+        if ($this->invalidActivity($fields)) {
+            throw new InvalidArgumentException('activity is invalid');
         }
 
-        if (!$this->canManageCourse($activity['fromCourseId'])) {
+        if (!$this->canManageCourse($fields['fromCourseId'])) {
             throw new AccessDeniedException();
         }
 
-        if (!$this->canManageCourseSet($activity['fromCourseSetId'])) {
+        if (!$this->canManageCourseSet($fields['fromCourseSetId'])) {
             throw new AccessDeniedException();
         }
 
         $activityModel = ActivityBuilder::build($this->biz)
-            ->type($activity['mediaType'])
+            ->type($fields['mediaType'])
             ->done();
-        $activityModel->create($activity);
+        $media         = $activityModel->create($fields);
 
-        $fields = ArrayToolkit::parts($activity, array(
+        if (!empty($media)) {
+            $fields['mediaId'] = $media['id'];
+        }
+
+        $fields = ArrayToolkit::parts($fields, array(
             'title',
             'desc',
             'mediaId',
@@ -84,7 +92,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
 
-        return $this->getActivityDao()->create($fields);
+        $activity = $this->getActivityDao()->create($fields);
+
+        $createdEvent = $activityModel->getConfig()->getEvent('activity.created');
+        if(!empty($createdEvent)){
+            $createdEvent->setSubject($activity);
+            $createdEvent->trigger();
+        }
+
+        return $activity;
     }
 
     public function updateActivity($id, $fields)
@@ -151,7 +167,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'mediaType',
             'fromCourseId',
             'fromCourseSetId'
-        ))) {
+        ))
+        ) {
             return true;
         }
         if (!in_array($activity['mediaType'], array_keys($this->getActivityTypes()))) {

@@ -4,6 +4,9 @@ namespace Biz\Activity\Event;
 
 class EventChain
 {
+    /**
+     * @var Event[]
+     */
     private $events = array();
 
     public function add(Event $event)
@@ -11,10 +14,10 @@ class EventChain
         $this->events[] = $event;
     }
 
-    public function fire($activity, $data)
+    public function fire()
     {
         foreach ($this->events as $event) {
-            $event->trigger($activity, $data);
+            $event->trigger();
         }
     }
 }

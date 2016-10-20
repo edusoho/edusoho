@@ -13,11 +13,33 @@ abstract class Event
      */
     private $biz;
 
-    public abstract function trigger($activity, $data);
+    /**
+     * @var mixed
+     */
+    protected $subject;
+
+    /**
+     * @var array
+     */
+    protected $arguments = array();
+
+    public abstract function trigger();
 
     public final function __construct(Biz $biz)
     {
         $this->biz = $biz;
+    }
+
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
+    public function setArguments(array $arguments=array())
+    {
+        $this->arguments = $arguments;
+        return $this;
     }
 
     /**
@@ -41,8 +63,18 @@ abstract class Event
     /**
      * @return Biz
      */
-    public function getBiz()
+    final protected function getBiz()
     {
         return $this->biz;
+    }
+
+    final protected function getSubject()
+    {
+        return $this->subject;
+    }
+
+    final protected function getArguments()
+    {
+        return $this->arguments;
     }
 }

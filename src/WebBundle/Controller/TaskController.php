@@ -1,10 +1,12 @@
 <?php
 namespace WebBundle\Controller;
 
+
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\Impl\CourseServiceImpl;
+
 
 class TaskController extends BaseController
 {
@@ -12,7 +14,7 @@ class TaskController extends BaseController
     {
         $task = $this->tryLearnTask($courseId, $id);
 
-        return $this->render('TaskBundle:Task:show.html.twig', array(
+        return $this->render('WebBundle:Task:show.html.twig', array(
             'task' => $task
         ));
     }
@@ -21,7 +23,7 @@ class TaskController extends BaseController
     {
         $task = $this->tryLearnTask($courseId, $id);
 
-        return $this->forward('ActivityBundle:Activity:show', array(
+        return $this->forward('WebBundle:Activity:show', array(
             'task' => $task
         ));
     }
@@ -32,7 +34,7 @@ class TaskController extends BaseController
         $data         = $request->request->all();
         $data['task'] = $task;
 
-        return $this->forward('ActivityBundle:Activity:trigger', array(
+        return $this->forward('WebBundle:Activity:trigger', array(
             'id'        => $task['activityId'],
             'eventName' => $eventName,
             'data'      => $data
@@ -48,6 +50,11 @@ class TaskController extends BaseController
     {
         $this->getCourseService()->tryLearnCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
+
+        if(empty($task)){
+            throw $this->createResourceNotFoundException('task', $taskId);
+        }
+
         if ($task['courseId'] != $courseId) {
             throw $this->createAccessDeniedException();
         }
@@ -67,6 +74,6 @@ class TaskController extends BaseController
      */
     protected function getTaskService()
     {
-        return $this->createService('CourseTask:Task.TaskService');
+        return $this->createService('Task:TaskService');
     }
 }

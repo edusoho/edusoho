@@ -7,7 +7,7 @@ course_manage_task_activity_types:
   defaults: { _controller: WebBundle:TaskManage:activityTypes}
 
 course_manage_task_create:
-  path:  /course/{courseId}/task
+  path:  /course/{courseId}/task/create/{type}
   defaults: { _controller: WebBundle:TaskManage:create }
 
 course_manage_task_update:

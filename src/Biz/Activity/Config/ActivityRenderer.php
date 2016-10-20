@@ -5,7 +5,7 @@
  * Time: 11:12
  */
 
-namespace Biz\Activity\Model;
+namespace Biz\Activity\Config;
 
 
 use Codeages\Biz\Framework\Context\Biz;

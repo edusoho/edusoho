@@ -8,10 +8,8 @@
 namespace Biz\Activity\Model;
 
 
+use Biz\Activity\Config\ActivityConfig;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\Activity\Event\Event;
-use Biz\Activity\Event\EventBuilder;
-use Topxia\Common\Exception\UnexpectedValueException;
 
 abstract class Activity
 {
@@ -49,46 +47,9 @@ abstract class Activity
     }
 
     /**
-     * @return ActivityRenderer
+     * @return ActivityConfig
      */
-    public final function getRenderer()
-    {
-        $class = $this->getRendererClass();
-        // php 5.6之前通过字符串初始化类实例不能传参
-        $reflection = new \ReflectionClass($class);
-        $renderer = $reflection->newInstanceArgs(array($this->getBiz()));
-        if(!$renderer instanceof ActivityRenderer){
-            throw new UnexpectedValueException("renderer class must be ActivityRenderer Derived Class");
-        }
-
-        return $renderer;
-    }
-
-    /**
-     * @return string
-     */
-    public abstract function getRendererClass();
-
-    /**
-     * @param string $eventName
-     * @return Event
-     */
-    public final function getEvent($eventName)
-    {
-        $map = $this->getEventMap();
-        if(empty($map) || !isset($map[$eventName])){
-            return null;
-        }
-
-        return EventBuilder::build($this->biz)->setName($eventName)->setEventClass($map[$eventName]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getEventMap()
-    {
-    }
+    public abstract function getConfig();
 
     public function getBiz()
     {

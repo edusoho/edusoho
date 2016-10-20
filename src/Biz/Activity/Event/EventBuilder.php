@@ -19,6 +19,8 @@ class EventBuilder
     private $event;
     private $eventName;
     private $biz;
+    private $subject;
+    private $arguments;
 
     public final static function build(Biz $biz)
     {
@@ -52,6 +54,18 @@ class EventBuilder
         return $this;
     }
 
+    public final function setSubject($subject)
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
+    public final function setArguments($arguments = array())
+    {
+        $this->arguments = $arguments;
+        return $this;
+    }
+
     /**
      * @return Event
      */
@@ -66,6 +80,10 @@ class EventBuilder
             throw new UnexpectedValueException('event name must be a string');
         }
 
-        return $this->event->setName($eventName);
+        return $this
+            ->event
+            ->setName($eventName)
+            ->setSubject($this->subject)
+            ->setArguments($this->arguments);
     }
 }

@@ -20,7 +20,7 @@ interface ActivityService
      */
     public function getActivityModel($type);
 
-    public function trigger($activityId, $name, $data);
+    public function trigger($activityId, $name, $data = array());
 
     public function getActivityTypes();
 }
