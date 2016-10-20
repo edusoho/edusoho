@@ -343,23 +343,23 @@ class DefaultController extends BaseController
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
-        //最近七天，最近三十天
         $days = $this->getDaysDiff($period);
-        for ($i = $days; $i >= 0; $i--) {
-            $dates[]             = date('y/m/d', time() - $i * 24 * 60 * 60);
-            $date                = date('Y-m-d', time() - $i * 24 * 60 * 60);
-            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+
+        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
+
+        //用于填充的空模板数据
+        foreach ($xAxisDate as $date) {
+            $date = date('Y-m-d', strtotime($date));
+            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
 
         $timeRange = $this->getTimeRange($period);
-
         $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
         $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
-        $finishedLessonData = array_merge($defaultDatas, $finishedLessonData);
+        $finishedLessonData = array_merge($zeroAnalysis, $finishedLessonData);
 
         return $this->createJsonResponse(array(
-            'date' => $dates,
+            'date' => $xAxisDate,
             'data' => $this->array_value_recursive('count', $finishedLessonData),
         ));
     }
