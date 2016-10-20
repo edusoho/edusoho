@@ -76,7 +76,7 @@ abstract class Activity
     public final function getEvent($eventName)
     {
         $map = $this->getEventMap();
-        if(empty($map) && !isset($map[$eventName])){
+        if(empty($map) || !isset($map[$eventName])){
             return null;
         }
 

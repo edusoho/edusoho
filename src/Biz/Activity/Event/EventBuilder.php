@@ -17,6 +17,7 @@ class EventBuilder
      * @var Event
      */
     private $event;
+    private $eventName;
     private $biz;
 
     public final static function build(Biz $biz)
@@ -32,7 +33,6 @@ class EventBuilder
      */
     public final function setEventClass($class)
     {
-        $class = $this->getRendererClass();
         // php 5.6之前通过字符串初始化类实例不能传参
         $reflection  = new \ReflectionClass($class);
         $this->event = $reflection->newInstanceArgs(array($this->biz));
@@ -48,7 +48,7 @@ class EventBuilder
      */
     public final function setName($name)
     {
-        $this->event->setName($name);
+        $this->eventName = $name;
         return $this;
     }
 
@@ -61,11 +61,11 @@ class EventBuilder
             throw new UnexpectedValueException('event not empty');
         }
 
-        $eventName = $this->event->getName();
+        $eventName = $this->eventName;
         if (!is_string($eventName) || empty($eventName)) {
             throw new UnexpectedValueException('event name must be a string');
         }
 
-        return $this->event;
+        return $this->event->setName($eventName);
     }
 }

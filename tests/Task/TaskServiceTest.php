@@ -1,7 +1,8 @@
 <?php
 
-namespace CourseTask\Service\Task\Tests;
+namespace Tests;
 
+use Biz\Task\Service\TaskService;
 use Topxia\Service\Common\BaseTestCase;
 
 class TaskServiceTest extends BaseTestCase
@@ -101,8 +102,11 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(2, count($tasks));
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('CourseTask:Task.TaskService');
+        return $this->getBiz()->service('Task:TaskService');
     }
 }
