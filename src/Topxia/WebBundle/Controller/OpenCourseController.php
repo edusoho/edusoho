@@ -105,6 +105,11 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '该课时不存在！');
         }
 
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] == 'videoGenerated') {
+            $course = $this->getOpenCourseService()->getCourse($courseId);
+            $this->createRefererLog($request, $course);
+        }
+
         if ($lesson['mediaId'] && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!$file) {
