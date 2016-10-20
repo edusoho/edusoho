@@ -780,7 +780,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $seq = 1;
         foreach ($testpaperItems as &$item) {
             if ($item['parentId'] != 0) {
-                $item['subQuestionSeq'] = $testpaperItems[$item['parentId']]['seq'].'-'.$seq;
+                $item['subQuestionSeq'] = $testpaperItems[$item['parentId']]['seq'].'.'.$seq;
                 $seq++;
             }
         }
