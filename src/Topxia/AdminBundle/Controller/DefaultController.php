@@ -9,16 +9,26 @@ use Topxia\Service\Order\Impl\OrderServiceImpl;
 use Topxia\Service\System\Impl\StatisticsServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\User\Impl\UserActiveServiceImpl;
 
 class DefaultController extends BaseController
 {
 
     public function indexAction(Request $request)
     {
+
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
             'dates' => $weekAndMonthDate
         ));
+    }
+
+    /**
+     * @return UserActiveServiceImpl
+     */
+    private function getUserActiveLogService()
+    {
+        return $this->createService('User.UserActiveService');
     }
 
     public function noticeAction(Request $request)
@@ -289,19 +299,66 @@ class DefaultController extends BaseController
     {
         $day = $period == 'week' ? 6 : 29;
 
-        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time()+ 24 * 3600)));
+        return array('startTime' => strtotime(date('Y-m-d', time() - $day * 24 * 60 * 60)), 'endTime' => strtotime(date('Y-m-d', time() + 24 * 3600)));
     }
 
     public function userStatisticAction(Request $request, $period)
     {
-        $userStatistic = array('dates' => 0, 'register' => 0, 'activeUser' => 0, 'unActiveUser' => 0);
+        $userStatistic = array();
+        $day           = $period == 'week' ? 6 : 29;
+        $active_day    = "30";
 
-        $timeRange              = $this->getTimeRange($period);
-        $userStatistic['dates'] = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+        for ($i = $day; $i >= 0; $i--) {
+            $dates[] = date('Y/m/d', time() - $i * 24 * 60 * 60);
+            $date    = date('Ymd', time() - $i * 24 * 60 * 60);
 
-        return $this->createJsonResponse(array(
-            'userStatistic' => $userStatistic,
-        ));
+            $defaultDatas[$date] = array('count' => 0, 'date' => $date);
+        }
+
+        $timeRange        = $this->getTimeRange($period);
+        $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+        $analysisRegister = ArrayToolkit::index($analysisRegister, 'date');
+        for ($i = $day; $i >= 0; $i--) {
+            $date = date('Y-m-d', time() - $i * 24 * 60 * 60);
+            $analysisRegisterDefault[$date] = array('count' => 0, 'date' => $date);
+        }
+
+        $analysisRegister          = array_merge($analysisRegisterDefault, $analysisRegister);
+        $userStatistic['register'] = $this->array_value_recursive('count', $analysisRegister);
+
+        //活跃用户
+        $analysis = $this->getUserActiveLogService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($day + $active_day) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
+
+        $userStatistic['date'] = $dates;
+
+        function diffBetweenTwoDays($day1, $day2)
+        {
+            $second1 = strtotime($day1);
+            $second2 = strtotime($day2);
+
+            return ($second1 - $second2) / 86400;
+        }
+
+        $analysisData = array();
+        array_walk($dates, function ($date) use ($analysis, &$analysisData) {
+            foreach ($analysis as $index => $value) {
+                $diff = diffBetweenTwoDays($date, $value['date']);
+                if ($diff >= 0 && $diff <= 30) {
+                    $analysisData[$date][] = $value['userid'];
+                }
+            }
+            if (empty($analysisData[$date])) {
+                $analysisData[$date] = array();
+            }
+        });
+
+        array_walk($analysisData, function (&$data) {
+            $data = count(array_unique($data));
+        });
+
+        $userStatistic['active'] = array_values($analysisData);
+
+        return $this->createJsonResponse($userStatistic);
     }
 
     public function lessonLearnStatisticAction(Request $request, $period)
@@ -365,7 +422,7 @@ class DefaultController extends BaseController
     {
         $val = array();
         array_walk_recursive($arr, function ($v, $k) use ($key, &$val) {
-            if ($k == $key) array_push($val, $v);
+            if ($k == $key) array_push($val, intval($v));
         });
         return count($val) > 1 ? $val : array_pop($val);
     }

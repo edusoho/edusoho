@@ -101,58 +101,58 @@ define(function (require, exports, module) {
         this.element = $("#user-statistic");
         var chart = echarts.init(this.element.get(0));
 
-        var option = {
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['新增注册', '活跃用户', '流失用户']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['16/06/12', '16/06/13', '16/06/14', '16/06/15', '16/06/16', '16/06/17', '16/06/18']
-            },
-            yAxis: {
-                type: 'value',
-            },
-            series: [
-                {
-                    name: '新增注册',
-                    type: 'line',
-                    stack: '总量',
-                    data: [120, 132, 101, 134, 90, 230, 210]
-                },
-                {
-                    name: '活跃用户',
-                    type: 'line',
-                    stack: '总量',
-                    data: [220, 182, 191, 234, 290, 330, 310]
-                },
-                {
-                    name: '流失用户',
-                    type: 'line',
-                    stack: '总量',
-                    data: [150, 232, 201, 154, 190, 330, 410]
-                }
-            ]
-        };
+
 
         chart.showLoading();
 
-        return $.get(this.element.data('url'), function (data) {
-            // console.log('data',data);
+        return $.get(this.element.data('url'), function (response) {
+            var option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['新增注册', '活跃用户']// '流失用户'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: response.date
+                },
+                yAxis: {
+                    type: 'value',
+                },
+                series: [
+                    {
+                        name: '新增注册',
+                        type: 'line',
+                        stack: '总量',
+                        data: response.register
+                    },
+                    {
+                        name: '活跃用户',
+                        type: 'line',
+                        stack: '总量',
+                        data: response.active
+                    }/*,
+                    {
+                        name: '流失用户',
+                        type: 'line',
+                        stack: '总量',
+                        data: [0, 0, 0, 0, 0, 0, 0]
+                    }*/
+                ]
+            };
 
             chart.hideLoading();
             chart.setOption(option);
