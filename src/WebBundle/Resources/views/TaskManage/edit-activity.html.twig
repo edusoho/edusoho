@@ -1,7 +1,3 @@
-<input type="hidden" name="id" value="{{ task.id|default('') }}">
-<input type="hidden" name="activityType" value='{{ currentType }}'>
-<input type="hidden" name="fromCourseSetId" value='1'>
-<input type="hidden" name="fromCourseId" value='{{ course.id }}'>
 {% if not renderer is null and currentType|default(false) %}
   {% if activity|default(false) %}
     {{ renderer.renderEditing(activity.id)|raw }}

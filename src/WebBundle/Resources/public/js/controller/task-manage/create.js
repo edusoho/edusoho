@@ -1,4 +1,3 @@
-
 define(function (require, exports, module) {
     var Widget = require('widget');
     var Validator = require('bootstrap.validator');
@@ -10,29 +9,30 @@ define(function (require, exports, module) {
             type: '',
             step: 1,
             validator: null,
-            setStep2:function(validator) {
-                return validator;
-            },
-            setStep3: function(validator) {
-                return validator;
-            }
+            loaded: false
         },
 
         events: {
-            'click #course-tasks-next': 'onNext',
-            'click #course-tasks-prev': 'onPrev',
-            'click .js-course-tasks-item': 'changeType',
+            'click #course-tasks-next': '_onNext',
+            'click #course-tasks-prev': '_onPrev',
+            'click .js-course-tasks-item': '_onSetType'
         },
 
 
-        changeType:function(e) {
+        _onSetType: function (e) {
             var $this = $(e.currentTarget).addClass('active');
             $this.siblings().removeClass('active');
             $('#course-tasks-next').removeAttr('disabled');
-            $('[name="mediaType"]').val($this.data('type'));
+            var type = $this.data('type');
+            $('[name="mediaType"]').val(type);
+
+            if(this.get('type') !== type){
+                this.set('loaded', false);
+                this.set('type', type);
+            }
         },
 
-        onNext: function (event) {
+        _onNext: function (event) {
             var step = this.get('step');
             if (step >= 3) {
                 return;
@@ -41,7 +41,7 @@ define(function (require, exports, module) {
             this._switchPage();
         },
 
-        onPrev: function (event) {
+        _onPrev: function (event) {
             var step = this.get('step');
             if (step <= 1) {
                 return;
@@ -53,43 +53,62 @@ define(function (require, exports, module) {
         _switchPage: function () {
             var _self = this;
             var step = this.get('step');
-            if(step==2) {
-                $("#task-editor").load($(".js-course-tasks-item a").data('content-url'),function(){
-                    $("#task-type").hide();
-                    _self._setStep2();
-                   
+            if(step == 1){
+                $("#task-type").show();
+                $(".js-step2-view").removeClass('active');
+                $(".js-step3-view").removeClass('active');
+            } else if (step == 2) {
+                !this.get('loaded') && $('.tab-content').load($(".js-course-tasks-item a").data('content-url'), function () {
+                    _self._initStep2();
                 });
-            }else if(step==3) {
-                $(".tab-pane.js-course-tasks-pane.active").removeClass('active').next().addClass('active');
-                _self._setStep3();
+                $("#task-type").hide();
+                $(".js-step2-view").addClass('active');
+                $(".js-step3-view").removeClass('active');
+
+            } else if (step == 3) {
+                $(".js-step3-view").addClass('active');
+                $(".js-step2-view").removeClass('active');
+                _self._initStep3();
             }
         },
-        _setStep2:function() {
+        _initStep2: function () {
             var validator = new Validator({
-                element: '#step2-from',
+                element: '#step2-form',
                 autoSubmit: false,
-                onFormValidated: function(error) {
+                onFormValidated: function (error) {
                     if (error) {
                         return false;
                     }
                 }
             });
-            $("#task-editor").data('validator1',validator);
-            console.log( $("#task-editor").data('validator1'));
+
+            this.set('step2-validator', validator);
+            this.set('validator', this.get('step2-validator'));
+            this.set('loaded', true);
         },
-        _setStep3:function() {
+        _initStep3: function () {
+
+            if(this.get('step3-validator') !== undefined){
+                this.set('validator', this.get('step3-validator'));
+            }
+
             var validator = new Validator({
-                    element: '#step2-from',
-                    autoSubmit: false,
-                    onFormValidated: function(error) {
-                        if (error) {
-                            return false;
-                        }
+                element: '#step3-form',
+                autoSubmit: false,
+                onFormValidated: function (error) {
+                    if (error) {
+                        return false;
                     }
-                });
-            $("task-editor").data('validator1',validator);
-        },
+                }
+            });
+
+            this.set('step3-validator', validator);
+            this.set('validator', this.get('step3-validator'));
+        }
     });
-    new TaskEditor();
-    module.exports = TaskEditor;
+
+    exports.run = function () {
+        var editor = new TaskEditor();
+        $('#task-editor').data('editor', editor);
+    };
 });
