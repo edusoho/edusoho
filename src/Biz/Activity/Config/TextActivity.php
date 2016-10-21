@@ -14,6 +14,8 @@ class TextActivity extends Activity
 {
     public $name = '图文';
 
+    public $icon = 'es-icon es-icon-graphicclass';
+
     protected function getRendererClass()
     {
         return __NAMESPACE__ . '\\' . 'TextActivityRenderer';

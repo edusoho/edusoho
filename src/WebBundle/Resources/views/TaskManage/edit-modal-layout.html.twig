@@ -1,8 +1,12 @@
-<div class="tab-pane js-course-tasks-pane">
+<div class="tab-pane js-course-tasks-pane js-activity-content">
+  <form id="step2-from">
     {% block activity_content %}
     {% endblock %}
+  </form>
 </div>
-<div class="tab-pane js-course-tasks-pane">
-  {% block activity_finish %}
-  {% endblock %}
+<div class="tab-pane js-course-tasks-pane js-activity-finish">
+  <form id="step3-form">
+    {% block activity_finish %}
+    {% endblock %}
+  </form>
 </div>
