@@ -1,38 +1,8 @@
 <div class="tab-pane js-course-tasks-pane">
-  <form id='task-create-form' class="form-horizontal" method="POST"
-    {% if activity|default(false) %}
-      action="{{ path('course_manage_task_update',{courseId:course.id, id:task.id}) }}"
-    {% else %}
-      action="{{ path('course_manage_task_create',{courseId:course.id, currentType:currentType}) }}"
-    {% endif %}>
-    <input type="hidden" name="id" value="{{ task.id|default('') }}">    
-    <input type="hidden" name="activityType" value='{{ currentType }}'>    
-    <input type="hidden" name="fromCourseSetId" value='1'>    
-    <input type="hidden" name="fromCourseId" value='{{ course.id }}'>
     {% block activity_content %}
     {% endblock %}
-  </form>
 </div>
 <div class="tab-pane js-course-tasks-pane">
-  <form id='task-create-form' class="form-horizontal" method="POST"
-    {% if activity|default(false) %}
-      action="{{ path('course_manage_task_update',{courseId:course.id, id:task.id}) }}"
-    {% else %}
-      action="{{ path('course_manage_task_create',{courseId:course.id, currentType:currentType}) }}"
-    {% endif %}>
-    <input type="hidden" name="id" value="{{ task.id|default('') }}">    
-    <input type="hidden" name="activityType" value='{{ currentType }}'>    
-    <input type="hidden" name="fromCourseSetId" value='1'>    
-    <input type="hidden" name="fromCourseId" value='{{ course.id }}'>
   {% block activity_finish %}
   {% endblock %}
-  </form>
 </div>
-
-
-{% block %}
-
-{% endblock %}
-
-
-
