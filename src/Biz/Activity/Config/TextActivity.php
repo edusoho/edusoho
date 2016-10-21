@@ -24,7 +24,7 @@ class TextActivity extends Activity
     protected function getEventMap()
     {
         return array(
-            'text.start' => TextFinishListener::class
+            'text.finish' => TextFinishListener::class
         );
     }
 
@@ -40,9 +40,7 @@ class TextActivityRenderer extends ActivityRenderer
 {
     public function renderCreating()
     {
-        return $this->render('WebBundle:ActivityManage:text.html.twig', array(
-            'currentType' => 'text'
-        ));
+        return $this->render('WebBundle:ActivityManage:text.html.twig');
     }
 
     public function renderEditing($activityId)
