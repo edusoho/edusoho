@@ -15,9 +15,9 @@ define(function (require, exports, module) {
         events: {
             'click #course-tasks-next': '_onNext',
             'click #course-tasks-prev': '_onPrev',
-            'click .js-course-tasks-item': '_onSetType'
+            'click .js-course-tasks-item': '_onSetType',
+            'click #course-tasks-submit': '_onSave'
         },
-
 
         _onSetType: function (e) {
             var $this = $(e.currentTarget).addClass('active');
@@ -104,6 +104,21 @@ define(function (require, exports, module) {
 
             this.set('step3-validator', validator);
             this.set('validator', this.get('step3-validator'));
+        },
+        
+        _onSave: function (event) {
+            var self = this;
+            var form2Data = $('#step2-form').serializeArray();
+            var data = form2Data.concat($("#step3-form").serializeArray());
+            data.push();
+
+            $.post($('.js-editor-save-url').data('url'), data)
+                .done(function () {
+                    self.element.modal('hide');
+                })
+                .fail(function () {
+                    
+                })
         }
     });
 

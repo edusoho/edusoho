@@ -1,4 +1,4 @@
-{% extends 'WebBundle:TaskManage:edit-modal-layout.html.twig' %}
+{% extends 'WebBundle:TaskManage:edit-activity-layout.html.twig' %}
 
 {% block activity_content %}
   <div class="row form-group">
@@ -23,10 +23,10 @@
 {% block activity_finish %}
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="title">{{ '完成条件'|trans }}</label>
+      <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-md-9 controls">
-      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}></div>
+      <input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}></div>
   </div>
   <script>app.load('webbundle/controller/activity-manage/text-activity-fields.js')</script>
 {% endblock %}

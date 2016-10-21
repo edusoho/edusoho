@@ -26,10 +26,7 @@ class TaskManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
             $savedTask = $this->getTaskService()->createTask($task);
-
-            return $this->render('WebBundle:TaskManage:list-item.html.twig', array(
-                'task' => $savedTask
-            ));
+            return $this->createJsonResponse(true);
         }
 
         $activity = $this->getActivityService()->getActivityConfig($type);

@@ -1,3 +1,5 @@
+<div class="js-editor-save-url" data-url="{{ path('course_manage_task_create', {courseId: course.id, type: currentType}) }}"></div>
+
 {% if not renderer is null and currentType|default(false) %}
   {% if activity|default(false) %}
     {{ renderer.renderEditing(activity.id)|raw }}
