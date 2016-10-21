@@ -7,9 +7,6 @@
 
 namespace Biz\Activity\Config;
 
-
-use Biz\Activity\Event\Event;
-use Biz\Activity\Event\EventBuilder;
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\Exception\UnexpectedValueException;
