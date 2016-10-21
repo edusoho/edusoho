@@ -29,7 +29,7 @@ class FileServiceTest extends BaseTestCase
             true
         );
 
-        $fileRecord = $this->getUploadFileService()->uploadFile('temp', $file);
+        $fileRecord = $this->getUploadFileService()->uploadFile('tmp', $file);
         $this->assertTrue(file_exists($fileRecord['file']->getRealPath()));
         unlink($fileRecord['file']->getRealPath());
     }
