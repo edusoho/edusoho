@@ -13,17 +13,7 @@
       设置完成条件
     </li>
   </ul>
-  <form id='task-create-form' class="form-horizontal" method="POST"
-    {% if activity|default(false) %}
-      action="{{ path('course_manage_task_update',{courseId:course.id, id:task.id}) }}"
-    {% else %}
-      action="{{ path('course_manage_task_create',{courseId:course.id, currentType:currentType}) }}"
-    {% endif %}
-  >
-  <input type="hidden" name="id" value="{{ task.id|default('') }}">    
-  <input type="hidden" name="activityType" value='{{ currentType }}'>    
-  <input type="hidden" name="fromCourseSetId" value='1'>    
-  <input type="hidden" name="fromCourseId" value='{{ course.id }}'>    
+     
   {% if not renderer is null and currentType|default(false) %}
     {% if activity|default(false) %}
       {{ renderer.renderEditing(activity.id)|raw }}
@@ -31,6 +21,5 @@
       {{ renderer.renderCreating()|raw }}
     {% endif %}
   {% endif %}
-  </form>
+
 {% endif %}
-<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>
