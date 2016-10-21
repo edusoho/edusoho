@@ -304,12 +304,13 @@ class DefaultController extends BaseController
         $active_days = "30";
 
         //x轴显示日期
-        $xAxisDate = $this->generateDateRange($days, 'Y-m-d');
+        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
 
         $userStatistic['date'] = $xAxisDate;
 
         //用于填充的空模板数据
         foreach ($xAxisDate as $date) {
+            $date                = date('Y-m-d', strtotime($date));
             $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
         //每日注册用户
@@ -350,11 +351,11 @@ class DefaultController extends BaseController
 
         //用于填充的空模板数据
         foreach ($xAxisDate as $date) {
-            $date = date('Y-m-d', strtotime($date));
+            $date                = date('Y-m-d', strtotime($date));
             $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
 
-        $timeRange = $this->getTimeRange($period);
+        $timeRange          = $this->getTimeRange($period);
         $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
         $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
         $finishedLessonData = array_merge($zeroAnalysis, $finishedLessonData);
@@ -373,12 +374,12 @@ class DefaultController extends BaseController
      */
     public function studyStatisticAction(Request $request, $period)
     {
-        $days = $this->getDaysDiff($period);
+        $days      = $this->getDaysDiff($period);
         $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
 
         //用于填充的空模板数据
         foreach ($xAxisDate as $date) {
-            $date = date('Y-m-d', strtotime($date));
+            $date                = date('Y-m-d', strtotime($date));
             $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
         }
 
@@ -392,6 +393,7 @@ class DefaultController extends BaseController
         $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
         $newPaidOrders = ArrayToolkit::index($newPaidOrders, 'date');
         $newPaidOrders = array_merge($zeroAnalysis, $newPaidOrders);
+
 
         return $this->createJsonResponse(array(
             'date'    => $xAxisDate,
@@ -478,14 +480,14 @@ class DefaultController extends BaseController
                 $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
                 $userPostsNum   = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'], $value['id']);
 
-                if ($userPostsNum == $threadPostsNum ) {
+                if ($userPostsNum == $threadPostsNum) {
                     $unPostedQuestion[] = $value;
                 }
             }
         }
 
         $questions = $unPostedQuestion;
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
+        $courses   = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
 
         return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions' => $questions,
