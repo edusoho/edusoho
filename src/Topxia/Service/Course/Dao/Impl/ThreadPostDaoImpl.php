@@ -77,10 +77,10 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
     public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit)
     {
+        $this->filterStartLimit($start, $limit);
+        
         $that = $this;
-
         return $this->fetchCached("threadId:{$threadId}:isElite:{$isElite}:start:{$start}:limit:{$limit}", $threadId, $isElite, $start, $limit, function ($threadId, $isElite, $start, $limit) use ($that) {
-            $this->filterStartLimit($start, $limit);
             $sql = "SELECT * FROM {$that->getTable()} WHERE threadId = ? AND isElite = ? ORDER BY createdTime ASC LIMIT {$start}, {$limit}";
             return $that->getConnection()->fetchAll($sql, array($threadId, $isElite)) ?: array();
         });

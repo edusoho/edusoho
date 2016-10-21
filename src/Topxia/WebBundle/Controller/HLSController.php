@@ -160,8 +160,9 @@ class HLSController extends BaseController
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
-            $params['userId'] = $token['userId'];
-            $params['userName'] = $this->getCurrentUser()->getUsername();
+            $params['userId']      = $token['userId'];
+            $user                  = $this->getUserService()->getUser($token['userId']);
+            $params['userName']    = $user['nickname'];
         }
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
@@ -187,7 +188,7 @@ class HLSController extends BaseController
         }
 
         $api = CloudAPIFactory::create('leaf');
-        
+
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -331,12 +332,12 @@ class HLSController extends BaseController
         return $beginning;
     }
 
-    protected function getUploadFileService()
+    protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getOldUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

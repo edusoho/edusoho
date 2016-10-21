@@ -1,24 +1,25 @@
 {% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
-  {% if courseVip%}
+  {% if courseVip %}
     {{'会员免费学'|trans}}<br/><br/>
   {% else %}
     {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
   {% endif %}
+{% elseif course.buyExpireTime and course.buyExpireTime < 'now'|date('U') %}
+  {{ '超过购买截止日期<br>不允许加入和购买'|trans|raw }}
+{% elseif course.status != 'published' %}
+  {{ '课程还未发布<br>不允许加入和购买'|trans|raw }}
+{% elseif course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum %}
+  {{ '超过最大学员人数<br>不允许加入和购买'|trans|raw }}
 {% else %}
   <a class="btn btn-primary btn-lg"
-    {% if (course.buyExpireTime and course.buyExpireTime < 'now'|date('U')) or course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
-      href="javascript:;"
-      disabled="disabled"
+    {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
+      href="#modal"
+      data-toggle="modal"
+      data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+    {% elseif userVipStatus == 'ok' %}
+      id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
     {% else %}
-      {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
-        href="#modal"
-        data-toggle="modal"
-        data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-      {% elseif userVipStatus == 'ok' %}
-        id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
-      {% else %}
-        href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-      {% endif %}
+      href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
     {% endif %}
   >
     {% if userVipStatus == 'ok' %}

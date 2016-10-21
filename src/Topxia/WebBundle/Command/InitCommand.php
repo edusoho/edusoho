@@ -1,15 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class InitCommand extends BaseCommand
 {
@@ -44,7 +44,6 @@ class InitCommand extends BaseCommand
         $this->initBlock($output);
         $this->initCrontabJob($output);
         $this->initFolders();
-
 
         $output->writeln('<info>初始化系统完毕</info>');
     }
@@ -322,18 +321,6 @@ EOD;
     private function initCategory($output)
     {
         $output->write('  初始化分类分组');
-
-        $categories = $this->getCategoryService()->findAllCategories();
-
-        foreach ($categories as $category) {
-            $this->getCategoryService()->deleteCategory($category['id']);
-        }
-
-        $groups = $this->getCategoryService()->findAllGroups();
-
-        foreach ($groups as $group) {
-            $this->getCategoryService()->deleteGroup($group['id']);
-        }
 
         $group = $this->getCategoryService()->getGroupByCode('course');
 
