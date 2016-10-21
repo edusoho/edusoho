@@ -451,8 +451,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'sensitiveword';
         $names[] = 'permission';
         $names[] = 'org';
-        $names[] = 'task';
-        $names[] = 'activity';
+        $names[] = 'web';
 
         $paths = array(
             'common' => 'common',
