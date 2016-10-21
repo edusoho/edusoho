@@ -82,8 +82,8 @@
 
 
       {% if not member %}
-        {% if course.buyExpireTime %}
-          <p class="expiry-date hidden-sm">{{ '购买截止日期: '|trans }}{{ course.buyExpireTime|date('Y-m-d H:i') }}</p>
+        {% if course.buyExpiryTime %}
+          <p class="expiry-date hidden-sm">{{ '购买截止日期: '|trans }}{{ course.buyExpiryTime|date('Y-m-d H:i') }}</p>
         {% endif %}
 
         {% if course.expiryDay %}
