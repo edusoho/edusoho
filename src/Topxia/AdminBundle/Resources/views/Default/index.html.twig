@@ -197,11 +197,14 @@
             </h3>
           </div>
           <div class="panel-body">
-            {% if setting('cloud_search.search_enabled') %}
-              <span>即将上线，敬请期待 </span>
-            {% else %}
-              <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">免费接入云搜索获取热门搜索关键词</a>
-            {% endif %}
+            <div class="empty">
+              {% if not setting('cloud_search.search_enabled') %}
+                <span>即将上线，敬请期待 </span>
+              {% else %}
+                <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">免费接入云搜索获取热门搜索关键词</a>
+              {% endif %}
+            </div>
+
             {# <table class="table table-condensed table-noborder table-overflow">
                <thead>
                <tr>
