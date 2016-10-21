@@ -8,6 +8,7 @@
 namespace Biz\Activity\Config;
 
 
+use Biz\Activity\Listener\TextFinishListener;
 use Biz\Activity\Service\ActivityService;
 
 class TextActivity extends Activity
@@ -47,7 +48,6 @@ class TextActivityRenderer extends ActivityRenderer
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         return $this->render('WebBundle:ActivityManage:text.html.twig', array(
-            'currentType' => 'text',
             'activity'    => $activity
         ));
     }
