@@ -1,18 +1,19 @@
 <?php
 /**
  * User: retamia
- * Date: 2016/10/20
- * Time: 18:00
+ * Date: 2016/10/19
+ * Time: 11:13
  */
 
 namespace Biz\Activity\Config;
 
 
-use Biz\Activity\Event\TextFinishEvent;
 use Biz\Activity\Service\ActivityService;
 
-class TextActivityConfig extends ActivityConfig
+class TextActivity extends Activity
 {
+    public $name = '图文';
+
     protected function getRendererClass()
     {
         return __NAMESPACE__ . '\\' . 'TextActivityRenderer';
@@ -21,9 +22,15 @@ class TextActivityConfig extends ActivityConfig
     protected function getEventMap()
     {
         return array(
-            'text.start' => TextFinishEvent::class
+            'text.start' => TextFinishListener::class
         );
     }
+
+    public function create($fields)
+    {
+        parent::create($fields);
+    }
+
 
 }
 

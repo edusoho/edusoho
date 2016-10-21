@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Service;
 
-use Biz\Activity\Model\Activity;
+use Biz\Activity\Config\Activity;
 
 interface ActivityService
 {
@@ -18,7 +18,7 @@ interface ActivityService
      * @param string $type 活动类型
      * @return Activity
      */
-    public function getActivityModel($type);
+    public function getActivityConfig($type);
 
     public function trigger($activityId, $name, $data = array());
 

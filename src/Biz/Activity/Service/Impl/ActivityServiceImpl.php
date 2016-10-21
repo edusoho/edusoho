@@ -3,11 +3,9 @@
 namespace Biz\Activity\Service\Impl;
 
 
+use Biz\Activity\Config\ActivityFactory;
 use Biz\Activity\Dao\ActivityDao;
-use Biz\Activity\Event\ActivityLearnLogEvent;
-use Biz\Activity\Event\EventBuilder;
-use Biz\Activity\Event\EventChain;
-use Biz\Activity\Model\ActivityBuilder;
+use Biz\Activity\Listener\ActivityLearnLogListener;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
@@ -30,27 +28,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
-        $eventChain = new EventChain();
-        $eventName  = $activity['mediaType'] . '.' . $eventName;
-        $event      = ActivityBuilder::build($this->biz)
-            ->type($activity['mediaType'])
-            ->done()
-            ->getConfig()
-            ->getEvent($eventName);
+        $listeners  = array();
+        $listener = new ActivityLearnLogListener($this->biz);
+        $listeners[] = $listener;
 
-        if (!empty($event)) {
-            $event->setSubject($activity)->setArguments($data);
-            $eventChain->add($event);
+        $eventName = $activity['mediaType'] . '.' . $eventName;
+        $data['event'] = $eventName;
+        $activityListener  = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
+        if(!is_null($activityListener)){
+            $listeners[] = $activityListener;
         }
 
-        $logEvent = EventBuilder::build($this->biz)
-            ->setEventClass(ActivityLearnLogEvent::class)
-            ->setName($eventName)
-            ->setSubject($activity)
-            ->setArguments($data)
-            ->done();
-        $eventChain->add($logEvent);
-        $eventChain->fire();
+        foreach ($listeners as $listener){
+            $listener->handle($activity, $data);
+        }
     }
 
     public function createActivity($fields)
@@ -67,9 +58,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityBuilder::build($this->biz)
-            ->type($fields['mediaType'])
-            ->done();
+        $activityModel = ActivityFactory::create($this->biz, $fields['mediaType']);
         $media         = $activityModel->create($fields);
 
         if (!empty($media)) {
@@ -94,10 +83,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $activity = $this->getActivityDao()->create($fields);
 
-        $createdEvent = $activityModel->getConfig()->getEvent('activity.created');
-        if(!empty($createdEvent)){
-            $createdEvent->setSubject($activity);
-            $createdEvent->trigger();
+        $listener = $activityModel->getListener('activity.created');
+        if (!empty($listener)) {
+            $listener->handle($activity, array());
         }
 
         return $activity;
@@ -111,18 +99,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityBuilder::build($this->biz)
-            ->type($savedActivity['mediaType'])
-            ->done();
-
+        $activityModel = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
         $activityModel->update($savedActivity['mediaId'], $fields);
 
         return $this->getActivityDao()->update($id, $fields);
     }
 
-    public function getActivityModel($type)
+    public function getActivityConfig($type)
     {
-        return ActivityBuilder::build($this->biz)->type($type)->done();
+        return ActivityFactory::create($this->biz, $type);
     }
 
     public function deleteActivity($id)
@@ -133,9 +118,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityBuilder::build($this->biz)
-            ->type($activity['mediaType'])
-            ->done();
+        $activityModel = ActivityFactory::create($this->biz, $activity['mediaType']);
 
         $activityModel->delete($activity['mediaId']);
 
@@ -180,10 +163,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function getActivityTypes()
     {
-        return array(
-            'text' => array(
-                'name' => '图文'
-            )
-        );
+        return ActivityFactory::all($this->biz);
     }
 }

@@ -17,7 +17,7 @@
     {% if activity|default(false) %}
       action="{{ path('course_manage_task_update',{courseId:course.id, id:task.id}) }}"
     {% else %}
-      action="{{ path('course_manage_task_create',{courseId:course.id, currentType:currentType}) }}"
+      action="{{ path('course_manage_task_create',{courseId:course.id, type:currentType}) }}"
     {% endif %}>
     <input type="hidden" name="id" value="{{ task.id|default('') }}">    
     <input type="hidden" name="activityType" value='{{ currentType }}'>    

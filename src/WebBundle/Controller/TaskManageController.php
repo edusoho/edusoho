@@ -5,6 +5,7 @@ namespace WebBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
 
@@ -31,8 +32,8 @@ class TaskManageController extends BaseController
             ));
         }
 
-        $activity = $this->getActivityService()->getActivityModel($type);
-        $renderer = $activity->getConfig()->getRenderer();
+        $activity = $this->getActivityService()->getActivityConfig($type);
+        $renderer = $activity->getRenderer();
 
         return $this->render('WebBundle:TaskManage:edit-activity.html.twig', Array(
             'renderer'    => $renderer,
@@ -47,7 +48,7 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
         $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
-            throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
+            throw new InvalidArgumentException('任务不在课程中');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -60,14 +61,14 @@ class TaskManageController extends BaseController
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $renderer = $this->getActivityService()->getActivityModel($activity['mediaType']);
+        $renderer = $this->getActivityService()->getActivityConfig($activity['mediaType']);
 
         return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
             'task'        => $task,
             'courseId'    => $courseId,
             'activity'    => $activity,
             'currentType' => $activity['mediaType'],
-            '$renderer'   => $renderer
+            'renderer'   => $renderer
         ));
     }
 
@@ -77,7 +78,7 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
         $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
-            throw $this->createInvalidArgumentException($this->getServiceKernel()->trans('任务不在课程中'));
+            throw new InvalidArgumentException('任务不在课程中');
         }
 
         $this->getTaskService()->deleteTask($id);

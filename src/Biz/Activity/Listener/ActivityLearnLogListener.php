@@ -1,15 +1,16 @@
 <?php
 
-namespace Biz\Activity\Event;
+namespace Biz\Activity\Listener;
 
 
 use Biz\Activity\Service\ActivityLearnLogService;
 
-class ActivityLearnLogEvent extends Event
+class ActivityLearnLogListener extends Listener
 {
-    public function trigger()
+    public function handle($activity, $data)
     {
-        $this->getActivityLearnLogService()->createLog($this->getSubject(), $this->getName(), $this->getArguments());
+        $event = $data['event'];
+        $this->getActivityLearnLogService()->createLog($activity, $event, $data);
     }
 
     /**
