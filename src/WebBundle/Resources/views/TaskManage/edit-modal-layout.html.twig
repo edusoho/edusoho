@@ -1,10 +1,39 @@
-<div class="tab-pane js-course-tasks-pane js-activity-content">
+
+<div class="tab-pane js-course-tasks-pane active">
+  <ul class="es-step es-step-3 clearfix">
+    <li>
+      <span class="number">1</span>
+      选择教学手段
+    </li>
+    <li class="doing">
+      <span class="number">2</span>
+      设置内容
+    </li>
+    <li>
+      <span class="number">3</span>
+      设置完成条件
+    </li>
+  </ul>
   <form id="step2-from">
     {% block activity_content %}
     {% endblock %}
   </form>
 </div>
-<div class="tab-pane js-course-tasks-pane js-activity-finish">
+<div class="tab-pane js-course-tasks-pane">
+  <ul class="es-step es-step-3 clearfix">
+    <li>
+      <span class="number">1</span>
+      选择教学手段
+    </li>
+    <li>
+      <span class="number">2</span>
+      设置内容
+    </li>
+    <li class="doing">
+      <span class="number">3</span>
+      设置完成条件
+    </li>
+  </ul>
   <form id="step3-form">
     {% block activity_finish %}
     {% endblock %}
