@@ -1,27 +1,39 @@
 <?php
 namespace Codeages\PluginBundle\System\Slot;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
 class SlotManager
 {
     protected $dispatcher;
 
-    public function __construct()
+    protected $collector;
+
+    public function __construct($collector, $container)
     {
-        $this->dispatcher = new EventDispatcher();
+        $this->collector = $collector;
+        $this->container = $container;
     }
 
     public function fire($name, $args)
     {
-        $event = $event = new SlotEvent($args);
-        $this->dispatcher->dispatch($name, $event);
-        return $event->getContents();
+
+        $injections = $this->collector->getInjections($name);
+        if (empty($injections)) {
+            return '';
+        }
+
+        $contents = array();
+
+        foreach ($injections as $name => $class) {
+            $injection = new $class();
+
+            foreach ($args as $argName => $argValue) {
+                $injection->setContainer($this->container);
+                $injection->setArgements($args);
+            }
+
+            $contents[] = $injection->inject();
+        }
+
+        return implode('', $contents);
     }
-
-    public function on()
-    {
-
-    }
-
 }
