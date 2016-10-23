@@ -1,0 +1,1 @@
+console.log('i am topxiaweb/default/test.js');

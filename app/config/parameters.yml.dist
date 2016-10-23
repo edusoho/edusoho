@@ -9,6 +9,11 @@ parameters:
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    assets:
+        packages:
+            webpack:
+                base_urls:
+                    - 'http://127.0.0.1:3030'
 
     #扩展参数
     #oauth2_clients: #oauth2客户端配置
