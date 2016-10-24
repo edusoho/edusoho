@@ -163,7 +163,7 @@ class CourseManageController extends BaseController
             }
 
             if (!empty($fields)) {
-                $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
+                $this->filterFields($fields);
                 $course = $this->getCourseService()->updateCourse($id, $fields);
             } else {
                 $course = $this->getCourseService()->getCourse($id);
@@ -630,6 +630,17 @@ class CourseManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseManage:open-course-marketing.html.twig', array(
             'course' => $course
         ));
+    }
+
+    private function filterFields(&$fields)
+    {
+        if (!empty($fields['enableBuyExpiryTime']) && !empty($fields['buyExpiryTime'])) {
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
+        } else {
+            $fields['buyExpiryTime'] = 0;
+        }
+
+        unset($fields['enableBuyExpiryTime']);
     }
 
     /**

@@ -12,16 +12,6 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
-        
-        $("#buyExpiryTime").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month'
-        });
-
-        $("#buyExpiryTime").datetimepicker('setStartDate', new Date);
-        
         var $form = $("#price-form");
 
         var validator = new Validator({
@@ -29,6 +19,15 @@ define(function(require, exports, module) {
             failSilently: true,
             triggerType: 'change'
         });
+
+        $("input[name=buyExpiryTime]").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
+
+        $("input[name=buyExpiryTime]").datetimepicker('setStartDate', new Date);
 
         validator.addItem({
             element: '[name="price"]',
@@ -84,6 +83,19 @@ define(function(require, exports, module) {
             }
         });
 
+        $('input[name=enableBuyExpiryTime]').change(function(){
+            if($(this).val()=="1"){
+                $('#buyExpiryTime').removeClass('hide');
+                validator.addItem({
+                    element: '[name=buyExpiryTime]',
+                    required: true,
+                    display: '购买截止日期'
+                });
+            }else {
+                $('#buyExpiryTime').addClass('hide');
+                validator.removeItem('[name=buyExpiryTime]');
+            }
+        });
     };
 
 });
