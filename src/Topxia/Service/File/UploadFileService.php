@@ -25,7 +25,7 @@ interface UploadFileService
 
     public function finishedUpload($params);
 
-    public function moveFile($targetType, $targetId, $originalFile = null, $data);
+    public function moveFile($targetType, $targetId, $originalFile = null, $data = array());
 
     public function setFileProcessed($params);
 

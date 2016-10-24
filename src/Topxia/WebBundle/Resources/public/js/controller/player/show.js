@@ -9,7 +9,9 @@ define(function(require, exports, module) {
         var videoHtml = $('#lesson-video-content');
 
         var userId = videoHtml.data("userId");
+        var userName = videoHtml.data("userName");
         var fileId = videoHtml.data("fileId");
+        var fileGlobalId = videoHtml.data("fileGlobalId");
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
@@ -21,6 +23,7 @@ define(function(require, exports, module) {
         var videoHeaderLength = videoHtml.data('videoHeaderLength');
         var enablePlaybackRates = videoHtml.data('enablePlaybackRates');
         var watermark = videoHtml.data('watermark');
+        var accesskey = videoHtml.data('accessKey');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var fingerprintTime = videoHtml.data('fingerprintTime');
@@ -67,6 +70,12 @@ define(function(require, exports, module) {
                     disableVolumeButton: disableVolumeButton,
                     disablePlaybackButton: disablePlaybackButton,
                     disableResolutionSwitcher: disableResolutionSwitcher
+                },
+                statsInfo: {
+                    accesskey : accesskey,
+                    globalId : fileGlobalId,
+                    userId : userId,
+                    userName : userName
                 },
                 videoHeaderLength: videoHeaderLength
             }

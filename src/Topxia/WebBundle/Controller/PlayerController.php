@@ -55,6 +55,7 @@ class PlayerController extends BaseController
 
             $url = $this->getPlayUrl($id, $context);
         } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $e->getMessage());
         }
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,

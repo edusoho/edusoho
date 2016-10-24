@@ -25,7 +25,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $order = $this->getClassroomOrderService()->createOrder($info);
         $this->assertEquals($order['status'], 'created');
@@ -50,7 +50,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $this->getClassroomOrderService()->createOrder($info);
         $this->getClassroomOrderService()->createOrder($info);
@@ -61,12 +61,12 @@ class ClassroomOrderServiceTest extends BaseTestCase
      */
     public function testCreateOrderWithEmptyClassroom()
     {
-        $info        = array('targetId' => '100', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00');
+        $info = array('targetId' => '100', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00');
 
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $this->getClassroomOrderService()->createOrder($info);
     }
@@ -76,11 +76,11 @@ class ClassroomOrderServiceTest extends BaseTestCase
      */
     public function testCreateOrderWithEmptyCantBuyClassroom()
     {
-        $info        = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00');
+        $info          = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00');
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $fields = array('buyable' => '0');
         $this->getClassroomService()->updateClassroom($classroom['id'], $fields); //封闭班级
@@ -93,7 +93,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $order = $this->getClassroomOrderService()->createOrder($info);
         $this->getClassroomOrderService()->doSuccessPayOrder($order['id']);
@@ -108,7 +108,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $order = $this->getClassroomOrderService()->createOrder($info);
 
@@ -138,7 +138,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
             'tenpay_secret'    => ''
         );
         $this->getSettingService()->set('payment', $payment);
-        $course       = array(
+        $course = array(
             'title' => 'course 1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -151,7 +151,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
             'targetId'   => $createCourse['id'],
             'payment'    => 'none'
         );
-        $createOrder  = $this->getOrderService()->createOrder($order);
+        $createOrder = $this->getOrderService()->createOrder($order);
         $this->getClassroomOrderService()->doSuccessPayOrder($createOrder['id']);
     }
 
@@ -162,7 +162,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
             'title' => 'test',
             'price' => '200'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']); //publish
         $order    = $this->getClassroomOrderService()->createOrder($info);
         $payOrder = $this->getOrderService()->payOrder(array(
@@ -188,11 +188,10 @@ class ClassroomOrderServiceTest extends BaseTestCase
     public function getOrder()
     {
         $info          = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00', 'note' => '11', 'coupon' => '123', 'couponDiscount' => '0.0');
-        $user          = $this->createUser();
         $textClassroom = array(
             'title' => 'test'
         );
-        $classroom     = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $order  = $this->getClassroomOrderService()->createOrder($info);
         $result = $this->getClassroomOrderService()->getOrder($order['id']);

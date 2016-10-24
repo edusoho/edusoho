@@ -1,33 +1,33 @@
 <?php
 
 namespace Topxia\Api\Util;
+
 use Topxia\Service\Common\ServiceKernel;
 
 class MobileSchoolUtil
 {
-
     private function getSchoolApps()
     {
-        $mobile = ServiceKernel::instance()->createService('System.SettingService')->get('mobile');
-        $site = ServiceKernel::instance()->createService('System.SettingService')->get('site');
+        $mobile  = ServiceKernel::instance()->createService('System.SettingService')->get('mobile');
+        $site    = ServiceKernel::instance()->createService('System.SettingService')->get('site');
         $apps[1] = array(
-            'id' => "1",
-            'code' => 'announcement',
-            'name' => $site['name'],
-            'title' => $site['slogan'],
-            'about' => $mobile['about'],
-            'avatar' => $mobile['logo'],
+            'id'       => "1",
+            'code'     => 'global',
+            'name'     => '网校公告',
+            'title'    => empty($site['slogan']) ? '' : $site['slogan'],
+            'about'    => empty($mobile['about']) ? '' : $mobile['about'],
+            'avatar'   => empty($mobile['logo']) ? '' : $mobile['logo'],
             'callback' => '/mobileschools/announcements'
         );
 
         $apps[2] = array(
-            'id' => "2",
-            'code' => 'news',
-            'name' => '资讯',
-            'title' => '网校资讯服务',
-            'about' => '',
-            'avatar' => 'img/mobile/article_app_icon.jpg',
-            'callback' => '',
+            'id'       => "2",
+            'code'     => 'news',
+            'name'     => '资讯',
+            'title'    => '网校资讯服务',
+            'about'    => '',
+            'avatar'   => 'img/mobile/article_app_icon.jpg',
+            'callback' => ''
         );
 
         return $apps;
