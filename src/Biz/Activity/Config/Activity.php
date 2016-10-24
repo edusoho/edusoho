@@ -78,11 +78,6 @@ abstract class Activity
     }
 
     /**
-     * @return string
-     */
-    protected abstract function getRendererClass();
-
-    /**
      * @return mixed
      */
     protected abstract function getEventMap();
