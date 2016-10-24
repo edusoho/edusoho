@@ -93,7 +93,6 @@ define(function(require, exports, module) {
                 });
             }else {
                 $('#buyExpiryTime').addClass('hide');
-                $('[name=buyExpiryTime]').val('');
                 validator.removeItem('[name=buyExpiryTime]');
             }
         });
