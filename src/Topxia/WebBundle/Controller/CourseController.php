@@ -335,6 +335,10 @@ class CourseController extends CourseBaseController
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
+        if ($course['status'] == 'closed') {
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
+        }
+
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
