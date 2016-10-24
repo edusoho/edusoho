@@ -14,10 +14,6 @@ class ImMember extends Migration
 
         $connection->exec("drop table IF EXISTS im_my_conversation");
 
-        $connection->exec("UPDATE course SET `convNo` = '' WHERE `convNo` = '0';");
-
-        $connection->exec("UPDATE classroom SET `convNo` = '' WHERE `convNo` = '0';");
-
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `im_member`(
  	              `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -42,8 +38,7 @@ class ImMember extends Migration
         $connection->exec("ALTER TABLE `im_conversation` ADD `targetType` VARCHAR(16) NOT NULL DEFAULT '' AFTER `no`");
         $connection->exec("ALTER TABLE `im_conversation` ADD `targetId` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `targetType`");
         $connection->exec("ALTER TABLE `im_conversation` ADD `title` VARCHAR(255) NOT NULL DEFAULT ''");
-        $connection->exec("alter table `course` drop column convNo");
-        $connection->exec("alter table `classroom` drop column convNo");
+
 
         $connection->exec("ALTER TABLE `im_conversation` ADD UNIQUE(`no`);");
         $connection->exec("ALTER TABLE `im_conversation` ADD INDEX targetId ( `targetId`);");
