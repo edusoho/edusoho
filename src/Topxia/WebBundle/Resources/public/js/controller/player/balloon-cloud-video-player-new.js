@@ -87,6 +87,18 @@ define(function(require, exports, module) {
                 });
             }
 
+            if(self.get('statsInfo') != '' ) {
+                var statsInfo = self.get('statsInfo');
+                extConfig = $.extend(extConfig, {
+                    statsInfo: {
+                        accesskey : statsInfo.accesskey,
+                        globalId : statsInfo.globalId,
+                        userId : statsInfo.userId,
+                        userName : statsInfo.userName
+                    }
+                });
+            }
+
             var player = new VideoPlayerSDK($.extend({
                 id: elementId,
                 disableControlBar: self.get('disableControlBar'),

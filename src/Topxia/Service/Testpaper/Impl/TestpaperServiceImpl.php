@@ -337,7 +337,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         foreach ($items as $questionId => $item) {
             $items[$questionId]['question'] = $questions[$questionId];
-
             if ($item['parentId'] != 0) {
                 if (!array_key_exists('items', $items[$item['parentId']])) {
                     $items[$item['parentId']]['items'] = array();
@@ -350,7 +349,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $formatItems[$item['questionType']][$item['questionId']] = $items[$questionId];
             }
         }
-
+        
         ksort($formatItems);
         return $formatItems;
         // 'questionIds' => $items = ArrayToolkit::column($items, 'questionId')
@@ -773,7 +772,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function getTestpaperItems($testpaperId)
     {
-        return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        $testpaperItems = $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
+        return ArrayToolkit::index($testpaperItems, 'questionId');
     }
 
     public function updateTestpaperItems($testpaperId, $items)

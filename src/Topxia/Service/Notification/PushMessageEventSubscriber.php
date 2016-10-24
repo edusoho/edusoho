@@ -5,6 +5,7 @@ use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\CloudPlatform\IMAPIFactory;
 
 class PushMessageEventSubscriber implements EventSubscriberInterface
 {
@@ -66,12 +67,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             'announcement.create'       => 'onAnnouncementCreate',
 
-            'testpaper.reviewed'        => 'onTestPaperReviewed',
-
-            'homework.check'            => 'onHomeworkCheck',
-
-            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+            //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+            //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
         );
     }
 
@@ -313,8 +310,30 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $imSetting         = $this->getSettingService()->get('app_im', array());
         $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+        $article = $this->convertArticle($article);
+        $article['_noPushIM'] = 1;
 
-        $this->pushCloud('article.create', $this->convertArticle($article));
+        $this->pushCloud('article.create', $article);
+
+        $from       = array(
+            'id'    => $article['app']['id'],
+            'type'  => $article['app']['code'],
+        );
+
+        $to = array(
+            'type' => 'global',
+            'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
+        );
+
+        $body = array(
+            'type'    => 'news.create',
+            'id'      => $article['id'],
+            'title'   => $article['title'],
+            'image'   => $article['thumb'],
+            'content' => $this->plainText($article['body'], 50)
+        );
+
+        $this->pushIM($from, $to, $body);
     }
 
     public function onArticleUpdate(ServiceEvent $event)
@@ -344,7 +363,44 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onThreadCreate(ServiceEvent $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.create', $this->convertThread($thread, $event->getName()));
+        $thread = $this->convertThread($thread, $event->getName());
+        $thread['_noPushIM'] = 1;
+
+        $this->pushCloud('thread.create', $thread);
+
+        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            return ;
+        }
+
+        $from   = array(
+            'type'  => $thread['target']['type'],
+            'id'    => $thread['target']['id'],
+        );
+
+        $to   = array(
+            'type' => 'user',
+            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
+        );
+
+        $body = array(
+            'type'                => 'question.created',
+            'threadId'            => $thread['id'],
+            'courseId'            => $thread['target']['id'],
+            'lessonId'            => $thread['relationId'],
+            'questionCreatedTime' => $thread['createdTime'],
+            'questionTitle'       => $thread['title'],
+            'title' => "{$thread['target']['title']} 有新问题",
+        );
+
+        $results = array();
+
+        foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
+            if ($i >= 3) {
+                break;
+            }
+            $to['id'] = $teacherId;
+            $results[] = $this->pushIM($from, $to, $body);
+        }
     }
 
     public function onThreadUpdate(ServiceEvent $event)
@@ -394,8 +450,49 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
      */
     public function onThreadPostCreate(ServiceEvent $event)
     {
-        $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, $event->getName()));
+        $post = $event->getSubject();
+        $post = $this->convertThreadPost($post, $event->getName());
+        $post['_noPushIM'] = 1;
+        $this->pushCloud('thread_post.create', $post);
+
+        if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
+            return ;
+        }
+
+        if ($post['thread']['type'] != 'question') {
+            return ;
+        }
+
+        foreach ($post['target']['teacherIds'] as $teacherId) {
+            if ($teacherId != $post['userId']) {
+                continue;
+            }
+
+            $from   = array(
+                'type'  => $post['target']['type'],
+                'id'    => $post['target']['id'],
+            );
+
+            $to   = array(
+                'type' => 'user',
+                'id' => $post['thread']['userId'],
+                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
+            );
+
+            $body = array(
+                'type'                => 'question.answered',
+                'threadId'            => $post['threadId'],
+                'courseId'            => $post['target']['id'],
+                'lessonId'            => $post['thread']['relationId'],
+                'questionCreatedTime' => $post['thread']['createdTime'],
+                'questionTitle'       => $post['thread']['title'],
+                'postContent'         => $post['content'],
+                'title' => "{$post['thread']['title']} 有新回复",
+            );
+
+            $this->pushIM($from, $to, $body);
+        }
+
     }
 
     public function onThreadPostUpdate(ServiceEvent $event)
@@ -448,31 +545,29 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $target                 = $this->getTarget($announcement['targetType'], $announcement['targetId']);
         $announcement['target'] = $target;
+        $announcement['_noPushIM'] = 1;
 
         $this->pushCloud('announcement.create', $announcement);
-    }
 
-    /**
-     * Testpaper相关
-     */
-    public function onTestPaperReviewed(ServiceEvent $event)
-    {
-        $testpaper       = $event->getSubject();
-        $testpaperResult = $event->getArgument('testpaperResult');
+        $from = array(
+            'type'  => $target['type'],
+            'id'    => $target['id'],
+        );
 
-        $testpaper['target']   = explode('-', $testpaper['target']);
-        $testpaperResultTarget = explode('-', $testpaperResult['target']);
+        $to = array(
+            'type' => $target['type'],
+            'id'   => $target['id'],
+            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
+        );
 
-        if (empty($testpaperResultTarget[2])) {
-            return;
-        }
+        $body = array(
+            'id'   => $announcement['id'],
+            'type' => 'announcement.create',
+            'title' => $this->plainText($announcement['content'], 50),
+        );
 
-        $testpaper['target']          = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
-        $testpaperResult['testpaper'] = $testpaper;
+        $this->pushIM($from, $to, $body);
 
-        $testpaperResult['target'] = $this->getTarget('lesson', $testpaperResultTarget[2]);
-
-        $this->pushCloud('testpaper.reviewed', $testpaperResult);
     }
 
     public function onOpenCourseCreate(ServiceEvent $event)
@@ -545,22 +640,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $this->LiveOpenCreateJob($lesson);
             }
         }
-    }
-
-    /**
-     * Homework相关
-     */
-    public function onHomeworkCheck(ServiceEvent $event)
-    {
-        $homeworkResult = $event->getSubject();
-
-        $homework                   = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
-        $homework['target']         = $this->getTarget('course', $homeworkResult['courseId']);
-        $homeworkResult['homework'] = $homework;
-
-        $homeworkResult['target'] = $this->getTarget('lesson', $homeworkResult['lessonId']);
-
-        $this->pushCloud('homework.check', $homeworkResult);
     }
 
     protected function getTarget($type, $id)
@@ -750,5 +829,47 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getConversationService()
     {
         return ServiceKernel::instance()->createService('IM.ConversationService');
+    }
+
+    protected function pushIM($from, $to, $body)
+    {
+        $setting = $this->getSettingService()->get('app_im', array());
+        if (empty($setting['enabled'])) {
+            return ;
+        }
+
+        $params = array(
+            'fromId' => 0,
+            'fromName' => '系统消息',
+            'toName' => '全部',
+            'body' => array(
+                'v' => 1,
+                't' => 'push',
+                'b' => $body,
+                's' => $from,
+                'd' => $to,
+            ),
+            'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
+        );
+
+        if ($to['type'] == 'user') {
+            $params['toId'] = $to['id'];
+        }
+
+        if (empty($params['convNo'])) {
+            return ;
+        }
+
+        try {
+            $api = IMAPIFactory::create();
+            $result = $api->post('/push', $params);
+
+            $setting = $this->getSettingService()->get('developer', array());
+            if (!empty($setting['debug'])) {
+                IMAPIFactory::getLogger()->debug('API RESULT', !is_array($result) ? array() : $result);
+            }
+        } catch (\Exception $e) {
+            IMAPIFactory::getLogger()->warning('API REQUEST ERROR:' . $e->getMessage());
+        }
     }
 }

@@ -320,12 +320,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function addCourseLessonReplay($courseLessonReplay)
     {
-        return $this->getCourseLessonReplayDao()->addCourseLessonReplay($courseLessonReplay);
+        $replay = $this->getCourseLessonReplayDao()->addCourseLessonReplay($courseLessonReplay);
+
+        $this->dispatchEvent("course.lesson.replay.create", array('replay' => $replay));
+
+        return $replay;
     }
 
     public function deleteLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
-        return $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, $lessonType);
+        $result = $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, $lessonType);
+        $this->dispatchEvent("course.lesson.review.delete", array('lessonId' => $lessonId));
+
+        return $result;
     }
 
     public function findUserLeanedCourseCount($userId, $filters = array())
@@ -516,6 +523,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'title'          => '',
             'subtitle'       => '',
             'about'          => '',
+            'buyExpiryTime'  => 0,
             'expiryMode'     => 'none',
             'expiryDay'      => 0,
             'serializeMode'  => 'none',
@@ -2633,38 +2641,36 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseReplay = array('courseId' => $courseId, 'lessonId' => $lessonId);
         $course       = $this->tryManageCourse($courseId);
         $lesson       = $this->getLessonDao()->getLesson($lessonId);
-        $mediaId      = $lesson["mediaId"];
-        $client       = new EdusohoLiveClient();
-        $replayList   = $client->createReplayList($mediaId, $this->getKernel()->trans('录播回放'), $lesson["liveProvider"]);
 
-        if (array_key_exists("error", $replayList)) {
+        $client     = new EdusohoLiveClient();
+        $replayList = $client->createReplayList($lesson['mediaId'], $this->getKernel()->trans('录播回放'), $lesson['liveProvider']);
+
+        if (isset($replayList['error'])) {
             return $replayList;
         }
 
-        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+        $this->deleteLessonReplayByLessonId($lessonId);
 
-        if (array_key_exists("data", $replayList)) {
-            $replayList = json_decode($replayList["data"], true);
+        if (isset($replayList['data'])) {
+            $replayList = json_decode($replayList['data'], true);
         }
 
         foreach ($replayList as $key => $replay) {
             $fields                = array();
-            $fields["courseId"]    = $courseId;
-            $fields["lessonId"]    = $lessonId;
-            $fields["title"]       = $replay["subject"];
-            $fields["replayId"]    = $replay["id"];
-            $fields["userId"]      = $this->getCurrentUser()->id;
-            $fields["createdTime"] = time();
-            $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+            $fields['courseId']    = $courseId;
+            $fields['lessonId']    = $lessonId;
+            $fields['title']       = $replay['subject'];
+            $fields['replayId']    = $replay['id'];
+            $fields['userId']      = $this->getCurrentUser()->id;
+            $fields['createdTime'] = time();
+            $courseLessonReplay    = $this->addCourseLessonReplay($fields);
         }
 
         $fields = array(
-            "replayStatus" => "generated"
+            'replayStatus' => 'generated'
         );
 
         $lesson = $this->updateLesson($courseId, $lessonId, $fields);
-
-        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
 
         return $replayList;
     }
@@ -2696,6 +2702,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent("course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
 
         return $lesson;
+    }
+
+    public function updateReplayShow($showReplayIds, $lessonId)
+    {
+        $replayLessons = $this->getCourseLessonReplayByLessonId($lessonId);
+
+        if (!$replayLessons) {
+            return false;
+        }
+
+        foreach ($replayLessons as $replay) {
+            if (empty($showReplayIds) || (!$replay['hidden'] && !in_array($replay['id'], $showReplayIds))) {
+                $this->updateCourseLessonReplay($replay['id'], array('hidden' => 1));
+            } elseif ($replay['hidden'] && in_array($replay['id'], $showReplayIds)) {
+                $this->updateCourseLessonReplay($replay['id'], array('hidden' => 0));
+            }
+        }
+
+        return true;
     }
 
     public function entryReplay($lessonId, $courseLessonReplayId)
@@ -2751,17 +2776,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseLessonReplay($id, $fields)
     {
-        $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+        $lessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
 
-        if (empty($replayCourse)) {
+        if (empty($lessonReplay)) {
             throw $this->createServiceException($this->getKernel()->trans('录播回放不存在，更新失败！'));
         }
 
         $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
 
-        $updatedCourseLessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
+        $lessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
 
-        return $updatedCourseLessonReplay;
+        $this->dispatchEvent("course.lesson.replay.update", array('replay' => $lessonReplay));
+
+        return $lessonReplay;
     }
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType = 'live')
@@ -2779,6 +2806,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
     {
         return $this->getCourseLessonReplayDao()->searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
+    }
+
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
+    {
+        return $this->getCourseLessonReplayDao()->findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
     }
 
     protected function isClassroomMember($course, $userId)

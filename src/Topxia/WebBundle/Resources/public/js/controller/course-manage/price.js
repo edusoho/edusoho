@@ -12,8 +12,16 @@ define(function(require, exports, module) {
     }
 
     exports.run = function() {
-    
+        
+        $("#buyExpiryTime").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            minView: 'month'
+        });
 
+        $("#buyExpiryTime").datetimepicker('setStartDate', new Date);
+        
         var $form = $("#price-form");
 
         var validator = new Validator({
