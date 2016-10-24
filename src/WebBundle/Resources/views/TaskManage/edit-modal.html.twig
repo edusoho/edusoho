@@ -44,9 +44,9 @@
 
     </div>
 
-    <input type="hidden" name="id" value="{{ task.id|default('') }}">
-    <input type="hidden" name="fromCourseSetId" value='1'>
-    <input type="hidden" name="fromCourseId" value='{{ course.id }}'>
+    <input class="js-hidden-data" type="hidden" name="id" value="{{ task.id|default('') }}">
+    <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='1'>
+    <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
   </div>
 {% endblock %}
 {% block footer %}

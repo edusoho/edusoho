@@ -20,11 +20,13 @@ class TaskManageController extends BaseController
             'types'  => $this->getActivityService()->getActivityTypes()
         ));        
     }
+
     public function createAction(Request $request, $courseId, $type)
     {
         $course = $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
+            $task['mediaType'] = $type;
             $savedTask = $this->getTaskService()->createTask($task);
             return $this->createJsonResponse(true);
         }

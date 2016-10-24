@@ -26,7 +26,7 @@ define(function (require, exports, module) {
             var type = $this.data('type');
             $('[name="mediaType"]').val(type);
 
-            if(this.get('type') !== type){
+            if (this.get('type') !== type) {
                 this.set('loaded', false);
                 this.set('type', type);
             }
@@ -53,7 +53,7 @@ define(function (require, exports, module) {
         _switchPage: function () {
             var _self = this;
             var step = this.get('step');
-            if(step == 1){
+            if (step == 1) {
                 $("#task-type").show();
                 $(".js-step2-view").removeClass('active');
                 $(".js-step3-view").removeClass('active');
@@ -88,7 +88,7 @@ define(function (require, exports, module) {
         },
         _initStep3: function () {
 
-            if(this.get('step3-validator') !== undefined){
+            if (this.get('step3-validator') !== undefined) {
                 this.set('validator', this.get('step3-validator'));
             }
 
@@ -105,19 +105,29 @@ define(function (require, exports, module) {
             this.set('step3-validator', validator);
             this.set('validator', this.get('step3-validator'));
         },
-        
+
         _onSave: function (event) {
             var self = this;
-            var form2Data = $('#step2-form').serializeArray();
-            var data = form2Data.concat($("#step3-form").serializeArray());
-            data.push();
+
+            var hideData = $(".js-hidden-data")
+                .map(function () {
+                    var key = $(this).attr('name');
+                    var value = $(this).val();
+                    return {name: key, value: value};
+                }).filter(function (index, obj) {
+                    return obj.value !== '';
+                }).get();
+
+            var data = hideData
+                .concat($('#step2-form').serializeArray())
+                .concat($("#step3-form").serializeArray());
 
             $.post($('.js-editor-save-url').data('url'), data)
                 .done(function () {
                     self.element.modal('hide');
                 })
                 .fail(function () {
-                    
+
                 })
         }
     });
