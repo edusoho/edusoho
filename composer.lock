@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1214e0b5072603bd9b7e9f226ac66279",
+    "hash": "6a6263bbe3b8d15897106f0437c93067",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -206,16 +206,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.2",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "221023f1ccea097c843f9e9157e5d4ce3ce0bec1"
+                "reference": "87422c705dfb9fe2126f85e3c1e3ccca6b791c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/221023f1ccea097c843f9e9157e5d4ce3ce0bec1.zip",
-                "reference": "221023f1ccea097c843f9e9157e5d4ce3ce0bec1",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/87422c705dfb9fe2126f85e3c1e3ccca6b791c45.zip",
+                "reference": "87422c705dfb9fe2126f85e3c1e3ccca6b791c45",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +237,46 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2016-10-17 02:36:24"
+            "time": "2016-10-24 00:09:36"
+        },
+        {
+            "name": "codeages/rest-api-client",
+            "version": "v0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/rest-api-client.git",
+                "reference": "fcbab7f360a85b3775ecae183c2d961522033387"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/codeages/rest-api-client/fcbab7f360a85b3775ecae183c2d961522033387.zip",
+                "reference": "fcbab7f360a85b3775ecae183c2d961522033387",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codeages\\RestApiClient\\": "src",
+                    "Codeages\\RestApiClient\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Codeages Team",
+                    "email": "team@codeages.com",
+                    "homepage": "http://www.codeages.com"
+                }
+            ],
+            "description": "A PHP REST API Client.",
+            "time": "2016-10-10 05:06:52"
         },
         {
             "name": "davedevelopment/phpmig",
@@ -1626,16 +1665,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.2",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf"
+                "reference": "c0125896dbb151380ab47e96c621741e79623beb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/088c04e2f261c33bed6ca5245491cfca69195ccf",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf",
+                "url": "https://packagist.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
+                "reference": "c0125896dbb151380ab47e96c621741e79623beb",
                 "shasum": ""
             },
             "require": {
@@ -1670,7 +1709,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-04-03 06:00:07"
+            "time": "2016-10-17 15:23:22"
         },
         {
             "name": "phpoffice/phpexcel",
