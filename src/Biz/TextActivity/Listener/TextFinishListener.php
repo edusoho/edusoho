@@ -1,7 +1,8 @@
 <?php
 
-namespace Biz\Activity\Listener;
+namespace Biz\TextActivity\Listener;
 
+use Biz\Activity\Listener\Listener;
 
 class TextFinishListener extends Listener
 {
