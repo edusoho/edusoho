@@ -1,6 +1,5 @@
 *.py
 Gruntfile.js
-package.json
 **/node_modules/
 **/node_modules/*
 npm-debug.log
