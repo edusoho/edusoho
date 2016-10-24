@@ -1,4 +1,5 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+{% do script(['web/activity-manage/text-activity-fields.js']) %}
 
 {% block activity_content %}
   <div class="row form-group">
@@ -29,4 +30,3 @@
       {#<input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}></div>#}
   </div>
 {% endblock %}
-

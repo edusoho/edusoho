@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/19
- * Time: 11:10
- */
 
 namespace Biz\Activity\Config;
 
@@ -13,9 +8,6 @@ use Topxia\Common\Exception\UnexpectedValueException;
 
 abstract class Activity
 {
-    protected $name = '';
-
-    protected $icon = '';
 
     private $biz;
 
@@ -65,7 +57,7 @@ abstract class Activity
      *
      * @return array<String, String>
      */
-    public abstract function getActionMap();
+    public abstract function registerActions();
 
     /**
      * @param $action
@@ -73,30 +65,16 @@ abstract class Activity
      */
     public final function getAction($action)
     {
-        $map = $this->getActionMap();
+        $map = $this->registerActions();
         return $map[$action];
     }
 
     /**
      * @return mixed
      */
-    protected abstract function getEventMap();
+    protected abstract function registerListeners();
 
-    /**
-     * @return string
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+    public abstract function getMetas();
 
     /**
      * @param string $eventName

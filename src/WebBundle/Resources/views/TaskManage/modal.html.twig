@@ -2,8 +2,7 @@
 {% set modal_class= "modal-md" %}
 
 {% do css(['web.css']) %}
-{% do script(['web/task-manage/create.js']) %}
-
+{% do script(['libs/ckeditor.js','libs/jquery-validation.js','web/task-manage/create.js']) %}
 
 {% block title %}
   {% if activity|default(false) %}
@@ -44,8 +43,8 @@
             <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
               <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
                  data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
-                <i class="{{ value.icon }}"></i>
-                {{ value.name }}
+                <i class="{{ value.metas.icon }}"></i>
+                {{ value.metas.name }}
               </a>
             </li>
           {% endfor %}

@@ -7,18 +7,22 @@ use Biz\Activity\Config\Activity;
 
 class TextActivity extends Activity
 {
-    public $name = '图文';
+    public function getMetas()
+    {
+        return array(
+            'name' => '图文',
+            'icon' => 'es-icon es-icon-graphicclass'
+        );
+    }
 
-    public $icon = 'es-icon es-icon-graphicclass';
-
-    protected function getEventMap()
+    protected function registerListeners()
     {
         return array(
             'text.finish' => 'Biz\\TextActivity\\Listener\\TextFinishListener'
         );
     }
 
-    public function getActionMap()
+    public function registerActions()
     {
         return array(
             'create' => 'WebBundle:TextActivity:create',

@@ -1,5 +1,7 @@
 import 'jquery-validation';
 
+console.log("jquery-validation");
+
 $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
   errorElement: 'p',

@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/9/26
- * Time: 17:44
- */
 
 namespace Topxia\Service\CloudPlatform;
 
