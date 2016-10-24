@@ -37,6 +37,7 @@ let bundleEntry = {};
    */
 parameters.registeredBundles.forEach((bundle) => {
   const bundleAssetsDir = `${srcDir}/${bundle}/Resources/assets`;
+  console.log(bundleAssetsDir);
 
   const bundleName = bundle.replace('Bundle', '').replace('/', '').toLowerCase();
 

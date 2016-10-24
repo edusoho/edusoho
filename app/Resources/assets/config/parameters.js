@@ -7,7 +7,7 @@
 const parameters = {
   registeredBundles: [ //register php bundles
     'Topxia/WebBundle',
-    // 'Topxia/AdminBundle',
+    'WebBundle',
   ],
   output: {
     path : '../../../../web/build', //file output path, relative to this file
