@@ -272,7 +272,6 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testDeleteClassroom()
     {
-        $user          = $this->getCurrentUser();
         $textClassroom = array(
             'title' => 'test'
         );
