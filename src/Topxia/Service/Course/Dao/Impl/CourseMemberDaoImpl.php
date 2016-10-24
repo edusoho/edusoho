@@ -16,21 +16,34 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        }
-
-        );
+        });
     }
 
     public function addMember($member)
     {
         $affected = $this->getConnection()->insert($this->table, $member);
-        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course member error.');
         }
 
-        return $this->getMember($this->getConnection()->lastInsertId());
+        $member = $this->getMember($this->getConnection()->lastInsertId());
+        $this->flushCache($member);
+        return $member;
+    }
+
+    protected function flushCache($courseMember)
+    {
+        $this->incrVersions(array(
+            "{$this->table}:version:userId:{$courseMember['userId']}",
+            "{$this->table}:version:courseId:{$courseMember['courseId']}"
+        ));
+
+        $this->deleteCache(array(
+            "id:{$courseMember['id']}",
+            "courseId:{$courseMember['courseId']}:userId:{$courseMember['userId']}",
+            "courseId:{$courseMember['courseId']}:userId:{$courseMember['userId']}:isLearned:1"
+        ));
     }
 
     public function getMemberByCourseIdAndUserId($courseId, $userId)
@@ -103,7 +116,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:onlyPublished:{$onlyPublished}:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";
@@ -122,7 +138,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
             $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
@@ -141,7 +160,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:type:{$type}:isLearned:{$isLearned}", $userId, $role, $type, $isLearned, function ($userId, $role, $type, $isLearned) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:type:{$type}:isLearned:{$isLearned}", $userId, $role, $type, $isLearned, function ($userId, $role, $type, $isLearned) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
             $sql .= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
@@ -168,7 +190,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:onlyPublished:{$onlyPublished}", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT m.* FROM {$that->getTable()} m ";
             $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";
@@ -189,7 +214,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:isLearned:{$isLearned}:count", $userId, $role, $isLearned, function ($userId, $role, $isLearned) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}:role:{$role}:isLearned:{$isLearned}:count", $userId, $role, $isLearned, function ($userId, $role, $isLearned) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  userId = ? AND role = ? AND isLearned = ?";
             return $that->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
         }
@@ -215,7 +243,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:role:{$role}:start:{$start}:limit:{$limit}", $courseId, $role, $start, $limit, function ($courseId, $role, $start, $limit) use ($that) {
+        $versionKey = "{$this->table}:version:courseId:{$courseId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("courseId:{$courseId}:version:{$version}:role:{$role}:start:{$start}:limit:{$limit}", $courseId, $role, $start, $limit, function ($courseId, $role, $start, $limit) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
 
             return $that->getConnection()->fetchAll($sql, array($courseId, $role));
@@ -226,7 +257,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:role:student:start:{$start}:limit:{$limit}", $courseId, $start, $limit, function ($courseId, $start, $limit) use ($that) {
+        $versionKey = "{$this->table}:version:courseId:{$courseId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("courseId:{$courseId}:version:{$version}:role:student:start:{$start}:limit:{$limit}", $courseId, $start, $limit, function ($courseId, $start, $limit) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND role = 'student' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
             return $that->getConnection()->fetchAll($sql, array($courseId));
@@ -237,7 +271,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:role:{$role}:count", $courseId, $role, function ($courseId, $role) use ($that) {
+        $versionKey = "{$this->table}:version:courseId:{$courseId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("courseId:{$courseId}:version:{$version}:role:{$role}:count", $courseId, $role, function ($courseId, $role) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND role = ?";
             return $that->getConnection()->fetchColumn($sql, array($courseId, $role));
         }
@@ -257,6 +294,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         }
 
         return $this->getConnection()->fetchColumn($sql, array($courseId));
+    }
+
+    public function findUserJoinedCourseIds($userId, $joinedType)
+    {
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:joinedType:{$joinedType}", $userId, $joinedType, function ($userId, $joinedType) use ($that) {
+            $sql = "SELECT courseId FROM {$that->getTable()} WHERE  userId = ? AND joinedType = ?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $joinedType));
+        }
+
+        );
     }
 
     public function searchMemberCount($conditions)
@@ -320,8 +369,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function updateMember($id, $member)
     {
         $this->getConnection()->update($this->table, $member, array('id' => $id));
-        $this->clearCached();
-        return $this->getMember($id);
+
+        $sql          = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
+        $courseMember = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+
+        $this->flushCache($courseMember);
+
+        return $courseMember;
     }
 
     public function updateMembers($conditions, $updateFields)
@@ -343,8 +397,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function deleteMember($id)
     {
+        $member = $this->getMember($id);
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
-        $this->clearCached();
+        $this->flushCache($member);
         return $result;
     }
 
@@ -366,9 +421,11 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function deleteMemberByCourseIdAndUserId($courseId, $userId)
     {
+        $member = $this->getMemberByCourseIdAndUserId($courseId, $userId);
+
         $sql    = "DELETE FROM {$this->table} WHERE userId = ? AND courseId = ?";
         $result = $this->getConnection()->executeUpdate($sql, array($userId, $courseId));
-        $this->clearCached();
+        $this->flushCache($member);
         return $result;
     }
 
@@ -376,7 +433,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}", $userId, function ($userId) use ($that) {
+        $versionKey = "{$this->table}:version:userId:{$userId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("userId:{$userId}:version:{$version}", $userId, function ($userId) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
             return $that->getConnection()->fetchAll($sql, array($userId));
         }
@@ -395,7 +455,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
+        $versionKey = "{$this->table}:version:courseId:{$courseId}";
+        $version    = $this->getCacheVersion($versionKey);
+
+        return $this->fetchCached("courseId:{$courseId}:version:{$version}", $courseId, function ($courseId) use ($that) {
             $sql = "SELECT userId FROM {$that->getTable()} WHERE courseId = ?";
             return $that->getConnection()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
         }
@@ -410,6 +473,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('userId = :userId')
             ->andWhere('courseId = :courseId')
             ->andWhere('isLearned = :isLearned')
+            ->andWhere('joinedType = :joinedType')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')

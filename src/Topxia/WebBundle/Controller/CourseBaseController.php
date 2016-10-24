@@ -13,7 +13,7 @@ abstract class CourseBaseController extends BaseController
 
         $previewAs = $request->query->get('previewAs');
         $user      = $this->getCurrentUser();
-        $member    = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member    = $user['id'] ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
         $member = $this->previewAsMember($previewAs, $member, $course);
 

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Twig\Extension;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
+use Topxia\WebBundle\Util\CdnUrl;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\WebBundle\Util\UploadToken;
@@ -57,7 +58,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('space2nbsp', array($this, 'spaceToNbsp')),
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
             new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
-            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale'))
+            new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
+            new \Twig_SimpleFilter('cdn', array($this, 'cdn'))
         );
     }
 
@@ -72,7 +74,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('default_path', array($this, 'getDefaultPath')),
             // file_url 即将废弃，不要再使用
             new \Twig_SimpleFunction('file_url', array($this, 'getFileUrl')),
-
+            // system_default_path，即将废弃，不要再使用
             new \Twig_SimpleFunction('system_default_path', array($this, 'getSystemDefaultPath')),
             new \Twig_SimpleFunction('fileurl', array($this, 'getFurl')),
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
@@ -143,6 +145,26 @@ class WebExtension extends \Twig_Extension
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function cdn($content)
+    {
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get('content');
+
+        if ($cdnUrl) {
+            $publicUrlPath = $this->container->getParameter('topxia.upload.public_url_path');
+            preg_match_all('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', $content, $imgs);
+            if ($imgs) {
+                foreach ($imgs[1] as $img) {
+                    if (strpos($img, $publicUrlPath) === 0) {
+                        $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
+                    }
+                }
+            }
+        }
+
+        return $content;
     }
 
     public function weixinConfig()
@@ -813,7 +835,7 @@ class WebExtension extends \Twig_Extension
         return $this->parseUri($uri, $absolute);
     }
 
-    private function parseUri($uri, $absolute = false)
+    private function parseUri($uri, $absolute = false, $package = 'content')
     {
         if (strpos($uri, "http://") !== false) {
             return $uri;
@@ -832,12 +854,9 @@ class WebExtension extends \Twig_Extension
         } else {
             $url = $uri;
         }
-
         $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
-        $url = ltrim($url, ' /');
-        $url = $assets->getUrl($url);
 
-        return $this->addHost($url, $absolute);
+        return $this->addHost($url, $absolute, $package);
     }
 
     public function getSystemDefaultPath($defaultKey, $absolute = false)
@@ -908,17 +927,17 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
-    public function getFurl($path, $defaultKey = false)
+    public function getFurl($path, $defaultKey = false, $package = 'content')
     {
-        return $this->getPublicFilePath($path, $defaultKey, true);
+        return $this->getPublicFilePath($path, $defaultKey, true, $package);
     }
 
-    public function getFpath($path, $defaultKey = false)
+    public function getFpath($path, $defaultKey = false, $package = 'content')
     {
-        return $this->getPublicFilePath($path, $defaultKey, false);
+        return $this->getPublicFilePath($path, $defaultKey, false, $package);
     }
 
-    private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false, $package = 'content')
     {
         $assets = $this->container->get('templating.helper.assets');
 
@@ -931,20 +950,19 @@ class WebExtension extends \Twig_Extension
                     && $defaultSetting[$defaultKey])
             ) {
                 $path = $defaultSetting[$defaultKey];
-                return $this->parseUri($path, $absolute);
+                return $this->parseUri($path, $absolute, $package);
             } else {
-                $path = $assets->getUrl('assets/img/default/'.$defaultKey);
-                return $this->addHost($path, $absolute);
+                return $this->addHost('/assets/img/default/'.$defaultKey, $absolute, $package);
             }
         }
 
-        return $this->parseUri($path, $absolute);
+        return $this->parseUri($path, $absolute, $package);
     }
 
-    private function addHost($path, $absolute)
+    private function addHost($path, $absolute, $package = 'content')
     {
-        $cdn    = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.$path;
@@ -1240,11 +1258,7 @@ class WebExtension extends \Twig_Extension
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
                 $default = '余额支付';
             } else {
-                if ($order['amount'] == 0) {
-                    $default = "无";
-                } else {
-                    $default = $this->getDictText('payment', $order['payment']);
-                }
+                $default = $this->getDictText('payment', $order['payment']);
             }
         }
 
@@ -1364,9 +1378,6 @@ class WebExtension extends \Twig_Extension
         return ServiceKernel::instance();
     }
 
-    /**
-     * @return AppServiceImpl
-     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

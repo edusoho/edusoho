@@ -3,6 +3,7 @@ namespace Topxia\Service\Common;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
+use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
 use Topxia\Common\Exception\ResourceNotFoundException;
 use Topxia\Common\Exception\UnexpectedValueException;
@@ -14,6 +15,7 @@ use Topxia\Service\Common\AccessDeniedException;
 abstract class BaseService
 {
     private $logger = null;
+    private $lock   = null;
 
     protected function createService($name)
     {
@@ -133,6 +135,7 @@ abstract class BaseService
 
         return $this->logger;
     }
+
     protected function isAdminUser()
     {
         $user = $this->getCurrentUser();
@@ -146,5 +149,14 @@ abstract class BaseService
             return true;
         }
         return false;
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock();
+        }
+
+        return $this->lock;
     }
 }

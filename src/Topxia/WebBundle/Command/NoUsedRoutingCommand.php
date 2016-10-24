@@ -1,23 +1,14 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Symfony\Component\Yaml\Yaml;
+use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Topxia\Service\CloudPlatform\Client\FailoverCloudAPI;
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Symfony\Component\Yaml\Yaml;
-
 
 class NoUsedRoutingCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this->setName('util:no-used-routing')
@@ -36,64 +27,61 @@ class NoUsedRoutingCommand extends BaseCommand
             $rootPath.'src/Classroom/ClassroomBundle/Resources/config/routing.yml',
             $rootPath.'src/Classroom/ClassroomBundle/Resources/config/routing_admin.yml',
             $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing.yml',
-            $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing_admin.yml',
+            $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing_admin.yml'
         );
 
         $bundls = array(
-            'TopxiaWebBundle' => 'Topxia\\WebBundle\\Controller',
+            'TopxiaWebBundle'   => 'Topxia\\WebBundle\\Controller',
             'TopxiaAdminBundle' => 'Topxia\\AdminBundle\\Controller',
-            'ClassroomBundle' => 'Classroom\\ClassroomBundle\\Controller',
-            'MaterialLibBundle' => 'MaterialLib\\MaterialLibBundle\\Controller',
+            'ClassroomBundle'   => 'Classroom\\ClassroomBundle\\Controller',
+            'MaterialLibBundle' => 'MaterialLib\\MaterialLibBundle\\Controller'
         );
 
         foreach ($configs as $routingConfig) {
-            
             $routings = Yaml::parse($routingConfig);
-            
-            if(empty($routings)){
+
+            if (empty($routings)) {
                 continue;
             }
 
             foreach ($routings as $key => $routing) {
-                if(isset($routing['defaults']['_controller'])){
+                if (isset($routing['defaults']['_controller'])) {
                     $controller = $routing['defaults']['_controller'];
                     $controller = explode(':', $controller);
 
-                    $bandleName = $controller[0];
+                    $bandleName     = $controller[0];
                     $controllerName = str_replace('/', '\\', $controller[1]);
-                    $methodName = $controller[2];
+                    $methodName     = $controller[2];
 
                     $classExists = class_exists($bundls[$bandleName].'\\'.$controllerName.'Controller');
-                    if(!$classExists){
-                        continue;   
+                    if (!$classExists) {
+                        continue;
                     }
 
-                    $classInfo =new \ReflectionClass($bundls[$bandleName].'\\'.$controllerName.'Controller');
+                    $classInfo = new \ReflectionClass($bundls[$bandleName].'\\'.$controllerName.'Controller');
                     $hasMethod = $classInfo->hasMethod($methodName.'Action');
-                    if(!$hasMethod){
-                    }
+                    // if(!$hasMethod){
+                    // }
                 }
             }
         }
-
     }
 
     protected function initServiceKernel()
     {
         $serviceKernel = ServiceKernel::create('dev', true);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
-        $serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
+        $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
 
         $biz = $this->getContainer()->get('biz');
         $serviceKernel->setConnection($biz['db']);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 0,
-            'nickname' => '游客',
-            'currentIp' =>  '127.0.0.1',
-            'roles' => array(),
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
         ));
         $serviceKernel->setCurrentUser($currentUser);
     }
-
 }

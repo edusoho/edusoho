@@ -74,7 +74,6 @@
         </div>
       </div>
       #}
-
       {% if 'lesson_credit' in features %}
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
@@ -84,15 +83,6 @@
         </div>
       </div>
       {% endif %}
-
-      <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-suggest-hour-field">{{'学习时长'|trans}}</label></div>
-        <div class="col-md-9 controls">{{'建议'|trans}}
-          <input id="lesson-suggest-hour-field" class="form-control width-input width-input-small" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('0.0') }}"> {{'小时'|trans}}
-          <div class="help-block">{{'（如未设置，则默认完成时长为：客观题每题5分钟、主观题每题30分钟。合计取整）'|trans}}
-          </div>
-        </div>
-      </div>
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

@@ -130,18 +130,6 @@
   </div>
   {% endif %}
 
-
-  <div class="form-group">
-    <div class="col-md-2 control-label"><label>{{'建议学习时长'|trans}}</label></div>
-    <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-suggest-period-field" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('1.0') }}">{{'小时'|trans}}
-      <span class="for-video-type">{{'（如未设置，则默认学习时长为视频时长3倍取整。）'|trans}}</span>
-      <span class="for-audio-type">{{'（如未设置，则默认学习时长为音频时长3倍取整。）'|trans}}</span>
-      <span class="for-flash-type for-text-type for-ppt-type for-document-type">{{'（如未设置，则默认学习时长1小时。）'|trans}}</span>
-      <div class="help-block"></div>
-    </div>
-  </div>
-
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 

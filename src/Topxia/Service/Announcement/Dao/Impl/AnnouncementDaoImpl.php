@@ -32,14 +32,18 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     public function getAnnouncement($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function addAnnouncement($fields)
     {
         $affected = $this->getConnection()->insert($this->table, $fields);
-
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert announcement error.');
         }
@@ -49,13 +53,16 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     public function deleteAnnouncement($id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeUpdate($sql, array($id));
+        $sql    = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
+        $result = $this->getConnection()->executeUpdate($sql, array($id));
+        $this->clearCached();
+        return $result;
     }
 
     public function updateAnnouncement($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getAnnouncement($id);
     }
 

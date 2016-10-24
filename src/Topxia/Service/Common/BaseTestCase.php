@@ -4,8 +4,10 @@ namespace Topxia\Service\Common;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Mockery;
-use Permission\Common\PermissionBuilder;
 use Topxia\Service\User\CurrentUser;
+
+
+use Permission\Common\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
@@ -55,7 +57,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
-        $user  = $userService->register(array(
+        $user = $userService->register(array(
             'nickname'  => 'admin',
             'email'     => 'admin@admin.com',
             'password'  => 'admin',
@@ -63,9 +65,8 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             'orgCode'   => '1.',
             'orgId'     => '1'
         ));
-        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-        $userService->changeUserRoles($user['id'], $roles);
-        $user              = $userService->getUserByEmail($user['email']);
+        $roles             = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $user              = $userService->changeUserRoles($user['id'], $roles);
         $user['currentIp'] = $user['createdIp'];
         $user['org']       = array('id' => 1);
         $currentUser       = new CurrentUser();

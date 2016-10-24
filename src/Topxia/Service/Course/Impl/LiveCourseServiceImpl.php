@@ -159,9 +159,31 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
         $lesson = $this->getCourseService($course['type'])->updateLesson($course['id'], $lesson['id'], $lessonFields);
 
-        $this->dispatchEvent("course.lesson.generate.replay", array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
-
         return $replayList;
+    }
+
+    public function findBeginingLiveCourse($afterSecond)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isLogin()) {
+            return array();
+        }
+
+        $lessons = $this->getLessonDao()->findBeginningLiveCoures($afterSecond, 10);
+
+        foreach ($lessons as $key => $lesson) {
+            $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
+            if (!empty($member)) {
+                $lesson['course']   = $this->getCourseService()->getCourse($lesson['courseId']);
+                $teacherMembers     = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                $teacherIds         = ArrayToolkit::column($teacherMembers, 'userId');
+                $lesson['teachers'] = $this->getUserService()->findUsersByIds($teacherIds);
+
+                return $lesson;
+            }
+        }
+
+        return array();
     }
 
     private function _getSpeaker($courseTeachers)
@@ -213,7 +235,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $liveLogoUrl;
     }
 
-    protected function getCourseService($courseType)
+    protected function getCourseService($courseType = 'live')
     {
         if ($courseType == 'liveOpen') {
             return $this->createService('OpenCourse.OpenCourseService');
@@ -230,6 +252,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getLessonDao()
+    {
+        return $this->createDao('Course.LessonDao');
     }
 
     protected function getSettingService()

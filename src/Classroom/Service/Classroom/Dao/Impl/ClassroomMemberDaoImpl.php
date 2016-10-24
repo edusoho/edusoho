@@ -193,6 +193,12 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getConnection()->executeQuery($sql, array($classroomId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public function findUserJoinedClassroomIds($userId)
+    {
+        $sql = "SELECT classroomId FROM {$this->table} WHERE userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['role'])) {

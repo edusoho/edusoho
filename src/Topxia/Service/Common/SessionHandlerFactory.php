@@ -8,9 +8,8 @@ class SessionHandlerFactory
 {
     public static function getSessionHandler(ContainerInterface $container)
     {
-        // $redisSetting = self::getSettingService()->get('redis');
-        $redisSetting = array(); // @todo
-        if (isset($redisSetting['opened']) && $redisSetting['opened']) {
+        $redisPath = $container->getParameter('kernel.root_dir').'/data/redis.php';
+        if (file_exists($redisPath)) {
             $redisFactory = $container->get('session.handler.redis.factory');
 
             if ($redisFactory->getRedis()) {
@@ -19,10 +18,5 @@ class SessionHandlerFactory
         }
 
         return $container->get('session.handler.pdo');
-    }
-
-    private static function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
