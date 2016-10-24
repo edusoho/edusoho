@@ -13,14 +13,14 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         
-        $("#buyExpireTime").datetimepicker({
+        $("#buyExpiryTime").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
         });
 
-        $("#buyExpireTime").datetimepicker('setStartDate', new Date);
+        $("#buyExpiryTime").datetimepicker('setStartDate', new Date);
         
         var $form = $("#price-form");
 
