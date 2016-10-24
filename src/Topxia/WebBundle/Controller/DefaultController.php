@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
 {
+    public function webpackTestAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Default:webpack-test.html.twig');
+    }
+
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();

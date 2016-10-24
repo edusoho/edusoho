@@ -24,7 +24,7 @@ framework:
         handler_id:  session.handler.factory
     fragments:       ~
     http_method_override: true
-    assets: ~
+    assets: %assets%
 
 # Twig Configuration
 twig:
@@ -167,6 +167,7 @@ services:
 
     topxia.twig.html_extension:
         class: Topxia\WebBundle\Twig\Extension\HtmlExtension
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
