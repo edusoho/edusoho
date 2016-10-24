@@ -52,6 +52,7 @@
           <label class="col-md-2 control-label">{{ '购买截止日期'|trans }}</label>
           <div class="col-md-8 controls">
             <input type="text" id="buyExpireTime" class="form-control width-input width-input-large" name="buyExpireTime" {% if course.buyExpireTime %} value="{{ course.buyExpireTime|date('Y-m-d') }}" {% endif %}>
+            <div class="help-block">{{'到达截止日期学员无法购买，不填写则无限制'|trans}}</div>
           </div>
         </div>
 
