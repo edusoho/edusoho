@@ -188,7 +188,7 @@ class FileServiceImpl extends BaseService implements FileService
         $directory .= '/'.$parsed['directory'];
 
         //如果是图片，并且被旋转过了，把图片转正
-        if (FileToolkit::isImageFile($file) && FileToolkit::getFileExtension($file) != 'gif') {
+        if (in_array(strtolower($file->guessExtension()), array('jpeg','tiff'))) {
             $exif = exif_read_data($file->getRealPath());
             if (!empty($exif['Orientation'])) {
                 $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
