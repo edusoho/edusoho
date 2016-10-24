@@ -260,7 +260,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        if(isset($context['lesson'])){
+            $lesson = $context['lesson'];
+        }else{
+            $lesson = $context;
+        }
+        
         $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
         if ($jobs) {

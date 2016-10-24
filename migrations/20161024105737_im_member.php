@@ -12,14 +12,14 @@ class ImMember extends Migration
         $biz        = $this->getContainer();
         $connection = $biz['db'];
 
-        $connection->exec("drop table im_my_conversation");
-        $connection->exec("ALTER TABLE course CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '课程会话ID';");
+        $connection->exec("drop table IF EXISTS im_my_conversation");
+
         $connection->exec("UPDATE course SET `convNo` = '' WHERE `convNo` = '0';");
-        $connection->exec("ALTER TABLE classroom CHANGE conversationId convNo VARCHAR(32) NOT NULL DEFAULT ''  COMMENT '班级会话ID';");
+
         $connection->exec("UPDATE classroom SET `convNo` = '' WHERE `convNo` = '0';");
 
         $connection->exec("
-            CREATE TABLE `im_member` (
+            CREATE TABLE IF NOT EXISTS `im_member`(
  	              `id` int(10) NOT NULL AUTO_INCREMENT,
  	              `convNo` varchar(32) NOT NULL COMMENT '会话ID',
  	              `targetId` int(10) NOT NULL,
@@ -32,7 +32,7 @@ class ImMember extends Migration
 
         //后台IM设置权限
         $sql = "select * from role where code='ROLE_SUPER_ADMIN';";
-        $result = $this->connection->fetchAssoc($sql);
+        $result = $connection->fetchAssoc($sql);
 
         if ($result) {
             $data = array_merge(json_decode($result['data']), array('admin_app_im'));
