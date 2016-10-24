@@ -3,12 +3,12 @@
 namespace Topxia\Service\Content\Impl;
 
 use Imagine\Imagick\Imagine;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\FileService;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -55,18 +55,26 @@ class FileServiceImpl extends BaseService implements FileService
 
     public function uploadFile($group, File $file, $target = null)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createServiceException($this->getKernel()->trans('用户尚未登录。'));
+        }
+
+        return $this->addFile($group, $file);
+    }
+
+    public function addFile($group, File $file)
+    {
         $errors = FileToolkit::validateFileExtension($file);
         if ($errors) {
             @unlink($file->getRealPath());
             throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
         }
         $group = $this->getGroupDao()->findGroupByCode($group);
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createServiceException($this->getKernel()->trans('用户尚未登录。'));
-        }
-        $record = array();
-        $record['userId'] = $user['id'];
+
+        $record           = array();
+        $user             = $this->getCurrentUser();
+        $record['userId'] = empty($user) || !$user->isLogin() ? 0 : $user['id'];
 
         if (!empty($group)) {
             $record['groupId'] = $group['id'];
@@ -74,11 +82,11 @@ class FileServiceImpl extends BaseService implements FileService
         // @todo fix it.
         $record['mime'] = '';
         // $record['mime'] = $file->getMimeType();
-        $record['size'] = $file->getSize();
-        $record['uri'] = $this->generateUri($group, $file);
+        $record['size']        = $file->getSize();
+        $record['uri']         = $this->generateUri($group, $file);
         $record['createdTime'] = time();
-        $record = $this->getFileDao()->addFile($record);
-        $record['file'] = $this->saveFile($file, $record['uri']);
+        $record                = $this->getFileDao()->addFile($record);
+        $record['file']        = $this->saveFile($file, $record['uri']);
 
         return $record;
     }
@@ -91,7 +99,7 @@ class FileServiceImpl extends BaseService implements FileService
             $filename = $file->getFilename();
         }
         $errors = array();
-        $regex = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
+        $regex  = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
             $errors[] = $this->getKernel()->trans('只允许上传以下扩展名的文件：').$extensions;
         }
@@ -168,7 +176,7 @@ class FileServiceImpl extends BaseService implements FileService
     public function getFileObject($fileId)
     {
         $fileInDao = $this->getFileDao()->getFile($fileId);
-        $parsed = $this->parseFileUri($fileInDao['uri']);
+        $parsed    = $this->parseFileUri($fileInDao['uri']);
 
         return new File($parsed['fullpath']);
     }
@@ -188,7 +196,7 @@ class FileServiceImpl extends BaseService implements FileService
         $directory .= '/'.$parsed['directory'];
 
         //如果是图片，并且被旋转过了，把图片转正
-        if (in_array(strtolower($file->guessExtension()), array('jpeg','tiff'))) {
+        if (in_array(strtolower($file->guessExtension()), array('jpeg', 'tiff'))) {
             $exif = exif_read_data($file->getRealPath());
             if (!empty($exif['Orientation'])) {
                 $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
@@ -223,7 +231,7 @@ class FileServiceImpl extends BaseService implements FileService
         }
 
         $filenameParts = explode('.', $filename);
-        $ext = array_pop($filenameParts);
+        $ext           = array_pop($filenameParts);
         if (empty($ext)) {
             throw $this->createServiceException($this->getKernel()->trans('获取文件扩展名失败！'));
         }
@@ -242,14 +250,14 @@ class FileServiceImpl extends BaseService implements FileService
     public function parseFileUri($uri)
     {
         $parsed = array();
-        $parts = explode('://', $uri);
+        $parts  = explode('://', $uri);
         if (empty($parts) || count($parts) != 2) {
             throw $this->createServiceException($this->getKernel()->trans('解析文件URI(%uri%)失败！', array('%uri%' => $uri)));
         }
-        $parsed['access'] = $parts[0];
-        $parsed['path'] = $parts[1];
+        $parsed['access']    = $parts[0];
+        $parsed['path']      = $parts[1];
         $parsed['directory'] = dirname($parsed['path']);
-        $parsed['name'] = basename($parsed['path']);
+        $parsed['name']      = basename($parsed['path']);
 
         $directory = $this->getKernel()->getParameter('topxia.upload.public_directory');
 
