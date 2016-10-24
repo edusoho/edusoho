@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 use Topxia\Service\Course\Impl\CourseServiceImpl;
 use Topxia\Service\Course\Impl\ThreadServiceImpl;
 use Topxia\Service\Order\Impl\OrderServiceImpl;
@@ -17,7 +18,11 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-
+        /* $total = $this->getUserService()->findUsersCountByLessThanCreatedTime( strtotime(date('Y-m-d', time() - 6 * 24 * 60 * 60)));
+         var_dump($total);
+         $timeRange = $this->getTimeRange(7);
+         $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime']);
+        */
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
             'dates' => $weekAndMonthDate
@@ -179,6 +184,7 @@ class DefaultController extends BaseController
 
         $cloudServiceCount = 0;
 
+
         $storageSetting = $this->getSettingService()->get('storage');
         if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
             $cloudServiceCount += 2;
@@ -327,9 +333,9 @@ class DefaultController extends BaseController
         $userStatistic['active'] = $activeAnalysis;
 
         //每日注册总数
-        $dayRegisterTotal = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-        $dayRegisterTotal = $this->fillAnalysisUserSum($timeRange, $dayRegisterTotal);
-        $dayRegisterTotal = $this->array_value_recursive('count', $dayRegisterTotal);
+        $registerCount    = $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['startTime']);
+        $dayRegisterTotal = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+        $dayRegisterTotal = $this->fillAnalysisUserSum($registerCount, $zeroAnalysis, $dayRegisterTotal);
 
         //流失用户
         $unActiveAnalysis = array();
@@ -588,6 +594,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
+    /**
+     * @return AppServiceImpl
+     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -684,41 +693,18 @@ class DefaultController extends BaseController
     }
 
     //获取每天的注册总数
-    protected function fillAnalysisUserSum($timeRange, $currentData)
+    protected function fillAnalysisUserSum($registerCount, $zeroAnalysis, $dayRegisterTotal)
     {
-        $dates       = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime']);
-        $userSumData = $currentData;
+        $dayRegisterTotal = ArrayToolkit::index($dayRegisterTotal, 'date');
+        $dayRegisterTotal = array_merge($zeroAnalysis, $dayRegisterTotal);
 
-        $currentData = ArrayToolkit::index($currentData, 'date');
-
-        foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
-        }
-
-        if ($userSumData) {
-            $countTmp = $userSumData[0]["count"];
-
-            //  var_dump($userSumData);
-            foreach ($zeroData as $key => $value) {
-                foreach ($userSumData as $userKey => $val) {
-                    //   var_dump($userKey, $value['date'], $val['date']);
-                    if ($userKey != 0 && ($value['date'] < $val['date']) && isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date']) {
-                        $countTmp = $userSumData[($userKey + 1)]['count'];
-                    }
-                }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
-            }
-        }
-
-        return $zeroData;
+        $previousRegisterTotalCount = 0;
+        array_walk($dayRegisterTotal, function (&$data) use ($registerCount, &$previousRegisterTotalCount) {
+            //累加前一天的计算总数
+            $data['count'] += empty($previousRegisterTotalCount) ? $registerCount : $previousRegisterTotalCount;
+            $previousRegisterTotalCount = $data['count'];
+        });
+        return $this->array_value_recursive('count', $dayRegisterTotal);
     }
 
 }

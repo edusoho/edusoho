@@ -3,7 +3,6 @@
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block container %}
-
   {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 
   {% if is_granted('ROLE_BACKEND') %}
@@ -53,7 +52,11 @@
             </button>
           </div>
         </div>
-        <h3 class="panel-title">{{ '用户统计'|trans }}</h3>
+        <h3 class="panel-title">{{ '用户统计'|trans }}
+          <span class="glyphicon glyphicon-question-sign text-sm"
+                data-toggle="tooltip" data-placement="top"
+                title="{{ '活跃用户数：在30天内登录过系统的用户即为活跃用户; <br/>流失用户数：在30天内没有登录过系统的注册用户即为流失用户'|trans }}"></span>
+        </h3>
       </div>
       <div class="panel-body js-statistic-areas" id="user-statistic"
            data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">
@@ -204,108 +207,6 @@
                 <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">免费接入云搜索获取热门搜索关键词</a>
               {% endif %}
             </div>
-
-            {# <table class="table table-condensed table-noborder table-overflow">
-               <thead>
-               <tr>
-                 <th width="60%">{{ '关键词'|trans }}</th>
-                 <th width="30%">{{ '搜索次数'|trans }}</th>
-                 <th></th>
-               </tr>
-               </thead>
-               <tbody>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="30"></div>
-                 </td>
-                 <td>30</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="20"></div>
-                 </td>
-                 <td>20</td>
-               </tr>
-               <tr>
-                 <td class="text-middle">
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td>
-                   <div class="search-count js-cloud-search" data-count="13"></div>
-                 </td>
-                 <td>13</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="10"></div>
-                 </td>
-                 <td>10</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="10"></div>
-                 </td>
-                 <td>10</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="10"></div>
-                 </td>
-                 <td>10</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="8"></div>
-                 </td>
-                 <td>8</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="8"></div>
-                 </td>
-                 <td>8</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="6"></div>
-                 </td>
-                 <td>6</td>
-               </tr>
-               <tr>
-                 <td>
-                   <a class="link-primary" href="">Edusoho安装教程</a>
-                 </td>
-                 <td class="text-middle">
-                   <div class="search-count js-cloud-search" data-count="4"></div>
-                 </td>
-                 <td>4</td>
-               </tr>
-               </tbody>
-             </table>#}
           </div>
         </div>
       </div>

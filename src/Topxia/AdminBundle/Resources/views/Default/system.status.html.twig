@@ -6,7 +6,7 @@
       {% if mainAppUpgrade %}
         {% set status = 1 %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
-        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}">更新</a>
+         <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}">{{ mainAppUpgrade.package.toVersion }} 更新</a>
       {% else %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
         <span class="text-lg">{{ constant('Topxia\\System::VERSION') }}</span>
@@ -16,15 +16,14 @@
   <li>
     <div class="title">网校应用</div>
     <div class="info">
-      {% if app_count %}
+      {% if app_count == 0 or (app_count == 1 and  mainAppUpgrade) %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">已更新</span>
+      {% else %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
         <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ app_count - status }}
           个未更新</a>
-      {% else %}
-        <span class="glyphicon glyphicon-ok-sign text-success"></span>
-        <span class="text-lg">已更新</span>
       {% endif %}
-
     </div>
   </li>
   <li>
@@ -99,7 +98,7 @@
         <span class="text-lg">已开启</span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
-        <a href="{{ path('admin_setting_mobile') }}"  class="text-lg link-underline text-danger"> 未开启</a>
+        <a href="{{ path('admin_setting_mobile') }}" class="text-lg link-underline text-danger"> 未开启</a>
       {% endif %}
     </div>
   </li>

@@ -19,6 +19,7 @@ define(function (require, exports, module) {
         remindTeachersEvent();
 
         //图表
+        courseExplore();
         studyCountStatistic();
         payOrderStatistic();
         studyLessonCountStatistic()
@@ -29,8 +30,7 @@ define(function (require, exports, module) {
     var loadAjaxData = function () {
         systemStatusData()
             .then(siteOverviewData)
-            .then(usersStatistic)
-            .then(courseExplore);
+            .then(usersStatistic);
     }
 
     var registerSwitchEvent = function () {
