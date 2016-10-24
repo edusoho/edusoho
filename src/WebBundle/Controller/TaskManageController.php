@@ -14,28 +14,28 @@ class TaskManageController extends BaseController
     public function activityTypesAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
-        
+
         return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
             'course' => $course,
             'types'  => $this->getActivityService()->getActivityTypes()
-        ));        
+        ));
     }
 
     public function createAction(Request $request, $courseId, $type)
     {
         $course = $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
-            $task      = $request->request->all();
+            $task              = $request->request->all();
             $task['mediaType'] = $type;
-            $savedTask = $this->getTaskService()->createTask($task);
+            $savedTask         = $this->getTaskService()->createTask($task);
             return $this->createJsonResponse(true);
         }
 
-        $activity = $this->getActivityService()->getActivityConfig($type);
-        $renderer = $activity->getRenderer();
+        $activity         = $this->getActivityService()->getActivityConfig($type);
+        $createController = $activity->getAction('create');
 
         return $this->render('WebBundle:TaskManage:edit-activity.html.twig', Array(
-            'renderer'    => $renderer,
+            'activity_controller'  => $createController,
             'course'      => $course,
             'currentType' => $type,
             'types'       => $this->getActivityService()->getActivityTypes()
@@ -67,7 +67,7 @@ class TaskManageController extends BaseController
             'courseId'    => $courseId,
             'activity'    => $activity,
             'currentType' => $activity['mediaType'],
-            'renderer'   => $renderer
+            'renderer'    => $renderer
         ));
     }
 

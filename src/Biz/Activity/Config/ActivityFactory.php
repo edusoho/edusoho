@@ -8,8 +8,8 @@
 namespace Biz\Activity\Config;
 
 
+use Biz\TextActivity\TextActivity;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\Exception\UnexpectedValueException;
 
 class ActivityFactory
 {

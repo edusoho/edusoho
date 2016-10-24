@@ -10,6 +10,7 @@ namespace Biz\Activity\Config;
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\Exception\UnexpectedValueException;
+use WebBundle\Controller\ActivityActionInterface;
 
 abstract class Activity
 {
@@ -49,19 +50,18 @@ abstract class Activity
     }
 
     /**
-     * @return ActivityRenderer
+     * @return array<String, ActivityActionInterface.class.name>
      */
-    public final function getRenderer()
-    {
-        $class = $this->getRendererClass();
-        // php 5.6之前通过字符串初始化类实例不能传参
-        $reflection = new \ReflectionClass($class);
-        $renderer = $reflection->newInstanceArgs(array($this->getBiz()));
-        if(!$renderer instanceof ActivityRenderer){
-            throw new UnexpectedValueException("renderer class must be ActivityRenderer Derived Class");
-        }
+    public abstract function getActionMap();
 
-        return $renderer;
+    /**
+     * @param $action
+     * @return String
+     */
+    public final function getAction($action)
+    {
+        $map = $this->getActionMap();
+        return $map[$action];
     }
 
     /**
