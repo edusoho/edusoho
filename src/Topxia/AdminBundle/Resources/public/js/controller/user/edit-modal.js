@@ -43,7 +43,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="truename"]',
-            rule: 'chinese minlength{min:2} maxlength{max:5}'
+            rule: 'chinese_alphanumeric minlength{min:2} maxlength{max:36}'
         });
 
         validator.addItem({
