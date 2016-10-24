@@ -60,6 +60,7 @@ class CourseMemberImporter extends Importer
                     'title'      => $this->getServiceKernel()->trans('购买课程《%title%》(管理员添加)', array('%title%' => $targetObject['title'])),
                     'targetType' => 'course',
                     'targetId'   => $targetObject['id'],
+                    'totalPrice' => $targetObject['price'],
                     'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
                     'payment'    => 'outside',
                     'snPrefix'   => 'C',
