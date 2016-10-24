@@ -11,17 +11,17 @@ use Topxia\Service\Course\CourseService;
 
 class TaskManageController extends BaseController
 {
-    public function activityTypesAction(Request $request, $courseId)
+    public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
 
-        return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
+        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'course' => $course,
             'types'  => $this->getActivityService()->getActivityTypes()
         ));
     }
 
-    public function createAction(Request $request, $courseId, $type)
+    public function taskFieldsAction(Request $request, $courseId, $type)
     {
         $course = $this->tryManageCourse($courseId);
         if ($request->getMethod() == 'POST') {
@@ -34,7 +34,7 @@ class TaskManageController extends BaseController
         $activity         = $this->getActivityService()->getActivityConfig($type);
         $createController = $activity->getAction('create');
 
-        return $this->render('WebBundle:TaskManage:edit-activity.html.twig', Array(
+        return $this->render('WebBundle:TaskManage:task-fields.html.twig', Array(
             'activity_controller'  => $createController,
             'course'      => $course,
             'currentType' => $type,
@@ -62,7 +62,7 @@ class TaskManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $renderer = $this->getActivityService()->getActivityConfig($activity['mediaType']);
 
-        return $this->render('WebBundle:TaskManage:edit-modal.html.twig', array(
+        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'task'        => $task,
             'courseId'    => $courseId,
             'activity'    => $activity,

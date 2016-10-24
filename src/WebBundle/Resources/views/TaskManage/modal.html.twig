@@ -32,7 +32,7 @@
           {% for type, value in types  %}
           <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
             <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
-               data-content-url="{{ path('course_manage_task_create',{courseId:course.id, type:type}) }}">
+               data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, type:type}) }}">
               <i class="{{ value.icon }}"></i>
               {{ value.name }}
             </a>
