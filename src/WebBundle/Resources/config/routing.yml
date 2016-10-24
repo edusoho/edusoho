@@ -2,13 +2,13 @@ course_manage_tasks:
   path:  /course/{courseId}/tasks
   defaults: { _controller: WebBundle:TaskManage:tasks }
 
-course_manage_task_activity_types:
-  path:  /course/{courseId}/task/activity_types
-  defaults: { _controller: WebBundle:TaskManage:activityTypes}
-
 course_manage_task_create:
-  path:  /course/{courseId}/task/create/{type}
-  defaults: { _controller: WebBundle:TaskManage:create }
+  path:  /course/{courseId}/task
+  defaults: { _controller: WebBundle:TaskManage:create}
+
+course_manage_task_fields:
+  path:  /course/{courseId}/task_fields/{type}
+  defaults: { _controller: WebBundle:TaskManage:taskFields }
 
 course_manage_task_update:
   path:  /course/{courseId}/task/{id}/update

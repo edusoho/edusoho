@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/21
- * Time: 10:30
- */
 
 namespace Biz\Activity\Listener;
 

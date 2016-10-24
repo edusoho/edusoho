@@ -3,8 +3,8 @@ parameters:
         debug: "%kernel.debug%"
         db.options:
             dbname: edusoho-test
-            user: root
-            password: 
+            user: tester
+            password: tester
             host: "%database_host%"
             port: "%database_port%"
             driver: pdo_mysql
