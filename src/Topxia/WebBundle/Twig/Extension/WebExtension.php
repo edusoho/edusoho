@@ -1210,7 +1210,6 @@ class WebExtension extends \Twig_Extension
     public function getSetting($name, $default = null)
     {
         $names = explode('.', $name);
-
         $name = array_shift($names);
 
         if (empty($name)) {

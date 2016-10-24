@@ -38,6 +38,7 @@ class InitCommand extends BaseCommand
         $this->initTag($output);
         $this->initRefundSetting($output);
         $this->initThemes($output);
+        $this->initCoin($output);
         $this->initFile($output);
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
@@ -440,6 +441,22 @@ EOD;
         $output->write('  初始化主题');
 
         $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+
+        $output->writeln(' ...<info>成功</info>');
+    }
+
+    public function initCoin($output)
+    {
+        $output->write('  初始化虚拟币');
+
+        $default = array(
+            'cash_model'   => "none",
+            'price_type'   => "RMB",
+            'cash_rate'    => 1,
+            'coin_enabled' => 0
+        );
+
+        $this->getSettingService()->set('coin', $default);
 
         $output->writeln(' ...<info>成功</info>');
     }
