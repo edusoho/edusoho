@@ -5,6 +5,7 @@ namespace WebBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
@@ -15,30 +16,16 @@ class TaskManageController extends BaseController
     {
         $course = $this->tryManageCourse($courseId);
 
-        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
-            'course' => $course,
-            'types'  => $this->getActivityService()->getActivityTypes()
-        ));
-    }
-
-    public function taskFieldsAction(Request $request, $courseId, $type)
-    {
-        $course = $this->tryManageCourse($courseId);
-        if ($request->getMethod() == 'POST') {
-            $task              = $request->request->all();
-            $task['mediaType'] = $type;
-            $savedTask         = $this->getTaskService()->createTask($task);
+        if ($request->isMethod('POST')) {
+            $task      = $request->request->all();
+            $savedTask = $this->getTaskService()->createTask($task);
             return $this->createJsonResponse(true);
         }
 
-        $activity         = $this->getActivityService()->getActivityConfig($type);
-        $createController = $activity->getAction('create');
-
-        return $this->render('WebBundle:TaskManage:task-fields.html.twig', Array(
-            'activity_controller'  => $createController,
-            'course'      => $course,
-            'currentType' => $type,
-            'types'       => $this->getActivityService()->getActivityTypes()
+        return $this->render('WebBundle:TaskManage:modal.html.twig', array(
+            'course' => $course,
+            'mode'   => 'create',
+            'types'  => $this->getActivityService()->getActivityTypes()
         ));
     }
 
@@ -52,24 +39,43 @@ class TaskManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $task      = $request->request->all();
-            $savedTask = $this->getTaskService()->updateTask($id, $task);
+            unset($task['mediaType']);
+            unset($task['fromCourseSetId']);
+            unset($task['fromCourseId']);
 
-            return $this->render('WebBundle:TaskManage:list-item.html.twig', array(
-                'task' => $savedTask
-            ));
+            $savedTask = $this->getTaskService()->updateTask($id, $task);
+            return $this->createJsonResponse(true);
         }
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $activity       = $this->getActivityService()->getActivity($task['activityId']);
+        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $editController = $config->getAction('edit');
 
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
-            'task'        => $task,
-            'course'    => $course,
-            'activity'    => $activity,
-            'currentType' => $activity['mediaType'],
-            'activity_controller'    => $editController
+            'mode'                => 'edit',
+            'currentType'         => $activity['mediaType'],
+            'activity_controller' => $editController,
+            'course'              => $course,
+            'task'                => $task
         ));
+    }
+
+    public function taskFieldsAction(Request $request, $courseId, $mode)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        if ($mode === 'create') {
+            $type = $request->query->get('type');
+            return $this->forward('WebBundle:Activity:create', array(
+                'type' => $type,
+            ));
+        } else {
+            $id   = $request->query->get('id');
+            $task = $this->getTaskService()->getTask($id);
+            return $this->forward('WebBundle:Activity:update', array(
+                'id' => $task['activityId']
+            ));
+        }
     }
 
     public function deleteAction(Request $request, $courseId, $id)

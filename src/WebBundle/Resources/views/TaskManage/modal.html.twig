@@ -2,7 +2,7 @@
 {% set modal_class= "modal-md" %}
 
 {% do css(['web.css']) %}
-{% do script(['web/taskmanage/create.js']) %}
+{% do script(['web/task-manage/create.js']) %}
 
 
 {% block title %}
@@ -14,7 +14,15 @@
 {% endblock %}
 
 {% block body %}
-  <div class="course-tasks-modal " id="task-editor">
+  <div class="course-tasks-modal" id="task-editor" data-editor-mode="{{ mode }}"
+      {% if mode == 'edit' %}
+        data-editor-type="{{ currentType }}"
+        data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
+        data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
+      {% elseif mode == 'create' %}
+        data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
+      {% endif %}
+  >
     <div id="task-type">
       <ul class="es-step es-step-3 clearfix">
         <li class="doing">
@@ -32,14 +40,14 @@
       </ul>
       <ul class="course-tasks-type row">
         {% if types is defined %}
-          {% for type, value in types  %}
-          <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
-            <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
-               data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, type:type}) }}">
-              <i class="{{ value.icon }}"></i>
-              {{ value.name }}
-            </a>
-          </li>
+          {% for type, value in types %}
+            <li class="col-xs-3 course-tasks-type-item js-course-tasks-item">
+              <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
+                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+                <i class="{{ value.icon }}"></i>
+                {{ value.name }}
+              </a>
+            </li>
           {% endfor %}
         {% endif %}
       </ul>
@@ -49,7 +57,6 @@
 
     </div>
 
-    <input class="js-hidden-data" type="hidden" name="id" value="{{ task.id|default('') }}">
     <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='1'>
     <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
   </div>
@@ -57,6 +64,6 @@
 {% block footer %}
   <button id="course-tasks-prev" type="submit" class="btn btn-primary">{{ '上一步'|trans }}</button>
   <button id="course-tasks-next" type="submit" class="btn btn-primary">{{ '下一步'|trans }}</button>
-  <button id="course-tasks-submit" type="submit" class="btn btn-primary" data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
-  {#<script>app.load('webbundle/controller/task-manage/create.js')</script>#}
+  <button id="course-tasks-submit" type="submit" class="btn btn-primary"
+          data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
 {% endblock %}

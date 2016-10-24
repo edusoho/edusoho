@@ -7,7 +7,7 @@ course_manage_task_create:
   defaults: { _controller: WebBundle:TaskManage:create}
 
 course_manage_task_fields:
-  path:  /course/{courseId}/task_fields/{type}
+  path:  /course/{courseId}/task_fields/{mode}
   defaults: { _controller: WebBundle:TaskManage:taskFields }
 
 course_manage_task_update:

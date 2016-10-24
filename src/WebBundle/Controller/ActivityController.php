@@ -3,13 +3,27 @@ namespace WebBundle\Controller;
 
 
 use Biz\Activity\Service\ActivityService;
+use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function showAction($task)
+    public function updateAction(Request $request, $id)
     {
-
+        $activity = $this->getActivityService()->getActivity($id);
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $editController = $config->getAction('edit');
+        return $this->forward($editController, array(
+            'activity' => $activity
+        ));
     }
+
+    public function createAction(Request $request, $type)
+    {
+        $config         = $this->getActivityService()->getActivityConfig($type);
+        $createController = $config->getAction('create');
+        return $this->forward($createController);
+    }
+
 
     public function triggerAction($id, $eventName, $data)
     {
@@ -22,6 +36,6 @@ class ActivityController extends BaseController
      */
     protected function getActivityService()
     {
-        return $this->createService('Activity:Activity.ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }
