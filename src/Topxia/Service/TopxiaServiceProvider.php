@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/13
- * Time: 09:10
- */
 
 namespace Topxia\Service;
 

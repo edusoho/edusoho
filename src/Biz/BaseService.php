@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/19
- * Time: 14:17
- */
 
 namespace Biz;
 

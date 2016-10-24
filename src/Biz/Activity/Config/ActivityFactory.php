@@ -1,9 +1,4 @@
 <?php
-/**
- * User: retamia
- * Date: 2016/10/19
- * Time: 13:10
- */
 
 namespace Biz\Activity\Config;
 
