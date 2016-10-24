@@ -1,0 +1,82 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_app_im_setting' %}
+{% set script_controller = 'setting/app-im' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <p style="text-align:center;font-size:16px">{{'即时聊天服务由EduSoho教育云提供'|trans}} 
+          <a href="http://open.edusoho.com/educloud" target="_blank">{{'了解详情'|trans}}</a>
+        </p>
+        </br>
+      </div>
+    </div>
+    <hr>
+  {% else %}
+    <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+
+      {#{{ render(controller('TopxiaAdminBundle:Default:inspect')) }}#}
+      
+      <div class="row form-group search-button">
+        {% if data.status == 'unconnect' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'开启即时聊天'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用即时聊天服务！'|trans}}</span>
+            <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
+          </div>
+        {% elseif data.status == 'unbinded' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'开启即时聊天'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'未绑定授权域名不能开通即时聊天！'|trans}}</span>
+            <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
+          </div>
+        {% elseif data.status == 'binded_error' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'开启即时聊天'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通即时聊天！'|trans}}</span>
+            <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
+          </div>
+        {% else %}
+          {% if not setting('app_im.enabled') %}
+            <div class="col-md-2 control-cloud">
+              <button class="btn btn-primary mhs app-im-open" type="submit" data-loading-text="{{'正在启动...'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="1">{{'开启即时聊天'|trans}}</button>
+            </div>
+          {% else %}
+            <div class="col-md-2 control-cloud success">
+              <span class="text-success">{{'已开启'|trans}}</span>
+            </div>
+            <div class="controls col-md-8 cloud-warning">
+              <button class="btn btn-primary mhs app-im-close" type="submit" data-loading-text="{{'正在关闭...'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="0">{{'关闭'|trans}}</button>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <h4>{{'IM功能说明'|trans}}</h4>
+
+      {{'当前功能仅支持阔知学堂3.6及以上版本；'|trans}}<br>
+      {{'开启后，课程和班级会生成相应即时聊天讨论组和使用个人聊天功能；'|trans}}<br>
+      {{'利于老师发布课程、班级的相关信息并且及时、有效的通知到学生；'|trans}}<br>
+      {{'利于师生无障碍的针对课程、班级的内容进行沟通和交流；'|trans}}<br>
+      {{'利于促进学生之间的交流，提高网校活跃度；'|trans}}<br>
+
+
+    </form>
+  {% endif %}
+
+{% endblock %}

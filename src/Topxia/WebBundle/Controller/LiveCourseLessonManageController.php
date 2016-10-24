@@ -161,21 +161,18 @@ class LiveCourseLessonManageController extends BaseController
 
     public function editLessonReplayAction(Request $request, $lessonId, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course        = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson        = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $replayLessons = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
 
         if ($request->getMethod() == 'POST') {
             $ids = $request->request->get("visibleReplaies");
-            $this->getCourseService()->updateCourseLessonReplayByLessonId($lessonId, array('hidden' => 1));
 
-            foreach ($ids as $id) {
-                $this->getCourseService()->updateCourseLessonReplay($id, array('hidden' => 0));
-            }
+            $this->getCourseService()->updateReplayShow($ids, $lessonId);
 
             return $this->redirect($this->generateUrl('live_course_manage_replay', array('id' => $courseId)));
         }
 
-        $replayLessons = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
             'lessonId'      => $lessonId,

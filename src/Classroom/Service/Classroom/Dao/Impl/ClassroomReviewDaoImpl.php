@@ -8,11 +8,17 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 {
     protected $table = 'classroom_review';
 
+    public $serializeFields = array(
+        'meta' => 'json'
+    );
+
     public function getReview($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $review = $this->getConnection()->fetchAssoc($sql, array($id));
+
+        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
     }
 
     public function getReviewRatingSumByClassroomId($classroomId)
@@ -39,7 +45,8 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
             ->setMaxResults($limit)
             ->addOrderBy($orderBy[0], $orderBy[1]);
 
-        return $builder->execute()->fetchAll() ?: array();
+        $reviews = $builder->execute()->fetchAll();
+        return $reviews ? $this->createSerializer()->unserializes($reviews, $this->serializeFields) : array();
     }
 
     public function searchReviewCount($conditions)
@@ -54,11 +61,14 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId = ? AND parentId = 0 LIMIT 1;";
 
-        return $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
+        $review = $this->getConnection()->fetchAssoc($sql, array($classroomId, $userId)) ?: null;
+
+        return $review ? $this->createSerializer()->unserialize($review, $this->serializeFields) : null;
     }
 
     public function addReview($review)
     {
+        $review   = $this->createSerializer()->serialize($review, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $review);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert review error.');
@@ -69,6 +79,7 @@ class ClassroomReviewDaoImpl extends BaseDao implements ClassroomReviewDao
 
     public function updateReview($id, $fields)
     {
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getReview($id);

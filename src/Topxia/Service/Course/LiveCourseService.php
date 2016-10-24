@@ -16,4 +16,6 @@ interface LiveCourseService
 
     public function generateLessonReplay($course, $lesson);
 
+    public function findBeginingLiveCourse($afterSecond);
+
 }

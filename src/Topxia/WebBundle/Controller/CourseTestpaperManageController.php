@@ -447,28 +447,12 @@ class CourseTestpaperManageController extends BaseController
         $items    = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
         $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentId' => 0));
 
-        $items                    = ArrayToolkit::index($items, 'questionType');
-        $objectiveQuestionsCount  = 0;
-        $subjectiveQuestionsCount = 0;
-
-        foreach ($items as $key => $item) {
-            if ($key == 'essay' || $key == 'material') {
-                $subjectiveQuestionsCount = $subjectiveQuestionsCount + $item['num'];
-            } else {
-                $objectiveQuestionsCount = $objectiveQuestionsCount + $item['num'];
-            }
-        }
-
-        $objectiveQuestionsCountHour = number_format(($objectiveQuestionsCount * 5) / 60, 1);
-        $suggestHours                = number_format(($objectiveQuestionsCount * 5) / 60, 1) + $subjectiveQuestionsCount * 0.5;
-        $multiple                    = ceil($suggestHours / 0.5) * 0.5;
-        $suggestHours                = $suggestHours > $multiple ? ($multiple + 0.5) : $multiple;
+        $items = ArrayToolkit::index($items, 'questionType');
 
         $items['material'] = $subItems[0];
 
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-get-table.html.twig', array(
-            'suggestHours' => $suggestHours,
-            'items'        => $items
+            'items' => $items
         ));
     }
 

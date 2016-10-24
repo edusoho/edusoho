@@ -18,7 +18,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $that = $this;
 
         return $this->fetchCached('id:{$id}', $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $sql    = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $thread = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $thread ? $that->createSerializer()->unserialize($thread, $that->getSerializeFields()) : null;
@@ -49,9 +49,9 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
@@ -65,7 +65,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function searchThreadCount($conditions)
     {
         $builder = $this->createThreadSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -81,24 +81,24 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere("updateTime >= :updateTime_GE")
-                        ->andWhere("targetType = :targetType")
-                        ->andWhere('targetId = :targetId')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('type = :type')
-                        ->andWhere('sticky = :isStick')
-                        ->andWhere('nice = :nice')
-                        ->andWhere('postNum = :postNum')
-                        ->andWhere('postNum > :postNumLargerThan')
-                        ->andWhere("status = :status")
-                        ->andWhere("createdTime >= :startTime")
-                        ->andWhere("createdTime <= :endTime")
-                        ->andWhere('title LIKE :title')
-                        ->andWhere('id NOT IN ( :excludeIds )')
-                        ->andWhere('targetId IN (:targetIds)')
-                        ->andWhere('startTime > :startTimeGreaterThan')
-                        ->andWhere('content LIKE :content');
+            ->from($this->table, $this->table)
+            ->andWhere("updateTime >= :updateTime_GE")
+            ->andWhere("targetType = :targetType")
+            ->andWhere('targetId = :targetId')
+            ->andWhere('userId = :userId')
+            ->andWhere('type = :type')
+            ->andWhere('sticky = :isStick')
+            ->andWhere('nice = :nice')
+            ->andWhere('postNum = :postNum')
+            ->andWhere('postNum > :postNumLargerThan')
+            ->andWhere("status = :status")
+            ->andWhere("createdTime >= :startTime")
+            ->andWhere("createdTime <= :endTime")
+            ->andWhere('title LIKE :title')
+            ->andWhere('id NOT IN ( :excludeIds )')
+            ->andWhere('targetId IN (:targetIds)')
+            ->andWhere('startTime > :startTimeGreaterThan')
+            ->andWhere('content LIKE :content');
 
         return $builder;
     }
@@ -122,10 +122,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function updateThread($id, $fields)
     {
-        $this->clearCached();
         $fields['updateTime'] = time();
         $this->createSerializer()->serialize($fields, $this->serializeFields);
-        $fields['updateTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getThread($id);
@@ -144,7 +142,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $fields = array('postNum', 'hitNum', 'memberNum');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减',array('%field%'=>$field,'%fields%'=>implode(',', $fields)))));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减', array('%field%' => $field, '%fields%' => implode(',', $fields)))));
         }
 
         $currentTime = time();

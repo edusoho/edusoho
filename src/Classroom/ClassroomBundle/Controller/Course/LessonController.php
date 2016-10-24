@@ -13,7 +13,7 @@ class LessonController extends BaseController
         $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $user      = $this->getCurrentUser();
-        $member    = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member    = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$user->isLogin()) {
             return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
@@ -51,7 +51,7 @@ class LessonController extends BaseController
     public function listAction(Request $request, $classroomId, $courseId)
     {
         $user   = $this->getCurrentUser();
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
         return $this->render('ClassroomBundle:Classroom/Course:lessons-list.html.twig', array(
             'classroomId' => $classroomId,
             'courseId'    => $courseId,

@@ -368,10 +368,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             $conditions = array(
                 'tagId'      => $tagId,
                 'idNotEqual' => $article['id'],
-                'hasThumb'   => true
+                'hasThumb'   => true,
+                'status'     => 'published'
             );
-            $count      = $self->searchArticlesCount($conditions);
-            $articles   = $self->searchArticles($conditions, 'normal', 0, $count);
+            $count    = $self->searchArticlesCount($conditions);
+            $articles = $self->searchArticles($conditions, 'normal', 0, $count);
             return ArrayToolkit::index($articles, 'id');
         }, $article['tagIds']);
 

@@ -6,7 +6,17 @@
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
     {% if item.free or member or course.buyable or course.tryLookable %}
-      <a {% if member %}href="{{ lessonUrl }}" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
+      <a 
+      {% if member %}
+        {% if item.type == 'live' and item.endTime > timestamp() %}
+          href="{{path('live_course_play', {courseId:item.courseId, lessonId:item.id})}}" 
+          target="_blank" 
+        {% else %}
+          href="{{ lessonUrl }}" 
+        {% endif %}
+      {% else %}
+        href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"
+      {% endif %}
       title="{{ item.title }}">
       {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
       <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} {{'课时'|trans}}{{ item.number }}：{% endif %}{{ item.title|raw }}</span>

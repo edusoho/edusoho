@@ -53,8 +53,8 @@ define(function(require, exports, module) {
         ],
         [
             'chinese_alphanumeric',
-            /^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i,
-            Translator.trans('%display%必须是中文字、英文字母、数字及下划线组成', {display: '{{display}}'})
+            /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i,
+            Translator.trans('%display%必须是中文字、英文字母、数字及特殊符号_ . ·组成', {display: '{{display}}'})
         ],
         [
            'reg_inviteCode',
