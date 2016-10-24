@@ -25,7 +25,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $that = $this;
 
         return $this->fetchCached("type:{$type}:start:{$start}:limit:{$limit}", $type, $start, $limit, function ($type, $start, $limit) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY createdTime DESC";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
             return $that->getConnection()->fetchAll($sql, array($type)) ?: array();
         });

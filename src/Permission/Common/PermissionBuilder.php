@@ -1,11 +1,11 @@
 <?php
 namespace Permission\Common;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\PluginVersionToolkit;
 use Topxia\Common\Tree;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Finder\Finder;
+use Topxia\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilder
@@ -13,7 +13,7 @@ class PermissionBuilder
     private $position = 'admin';
 
     private static $builder;
-    private        $cached = array();
+    private $cached = array();
 
     private function __construct()
     {
@@ -28,7 +28,7 @@ class PermissionBuilder
     }
 
     /**
-     * @param array $roles 角色
+     * @param  array $roles           角色
      * @return array $permissions[]
      */
     public function getPermissionsByRoles(array $roles)
@@ -37,12 +37,12 @@ class PermissionBuilder
             return array();
         }
 
-        $permissionBuilder = PermissionBuilder::instance();
+        $permissionBuilder = self::instance();
         $originPermissions = $permissionBuilder->getOriginPermissions();
 
         if (in_array('ROLE_SUPER_ADMIN', $roles)) {
             $permissions = $originPermissions;
-        }else{
+        } else {
             $roleService = ServiceKernel::instance()->createService('Permission:Role.RoleService');
 
             $permissionCode = array();
@@ -83,17 +83,17 @@ class PermissionBuilder
 
         $userPermissionTree = $this->getUserPermissionTree();
 
-        $codeTree = $userPermissionTree->find(function ($tree) use ($code, $group){
+        $codeTree = $userPermissionTree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });
 
-        if(is_null($codeTree)){
+        if (is_null($codeTree)) {
             return $this->cached['getSubPermissions'][$code];
         }
 
         $children = array();
         foreach ($codeTree->getChildren() as $child) {
-            if (empty($group) || (isset($child->data['group']) && $child->data['group'] == $group)){
+            if (empty($group) || (isset($child->data['group']) && $child->data['group'] == $group)) {
                 $children[] = $child->data;
             }
         }
@@ -102,9 +102,9 @@ class PermissionBuilder
 
         foreach ($subPermission as $value) {
             $issetDisable = isset($value['disable']) && $value['disable'];
-            $isGroup = empty($group) || (isset($value['group']) && $value['group'] == $group);
-            $isExist = in_array($value['code'], $childrenCodes, true);
-            if($issetDisable && $isGroup && !$isExist){
+            $isGroup      = empty($group) || (isset($value['group']) && $value['group'] == $group);
+            $isExist      = in_array($value['code'], $childrenCodes, true);
+            if ($issetDisable && $isGroup && !$isExist) {
                 $children[] = $value;
             }
         }
@@ -124,7 +124,7 @@ class PermissionBuilder
 
         $userPermissionTree = $this->getUserPermissionTree();
 
-        $codeTree = $userPermissionTree->find(function ($tree) use ($code){
+        $codeTree = $userPermissionTree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });
 
@@ -167,11 +167,11 @@ class PermissionBuilder
 
         $userPermissionTree = $this->getUserPermissionTree();
 
-        $codeTree = $userPermissionTree->find(function ($tree) use ($code){
+        $codeTree = $userPermissionTree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });
 
-        if(is_null($codeTree)){
+        if (is_null($codeTree)) {
             return $this->cached['getPermissionByCode'][$code];
         }
 
@@ -179,7 +179,7 @@ class PermissionBuilder
         return $this->cached['getPermissionByCode'][$code];
     }
 
-    public function getOriginSubPermissions($code, $group=null)
+    public function getOriginSubPermissions($code, $group = null)
     {
         if (isset($this->cached['getOriginSubPermissions'][$code][$group])) {
             return $this->cached['getOriginSubPermissions'][$code][$group];
@@ -193,17 +193,16 @@ class PermissionBuilder
             $this->cached['getOriginSubPermissions'][$code] = array();
         }
 
-
         $tree = $this->getOriginPermissionTree(true);
 
-        $codeTree = $tree->find(function ($tree) use ($code){
+        $codeTree = $tree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });
 
         $permissions = array();
-        if(!is_null($codeTree)){
-            foreach ($codeTree->getChildren() as $child){
-                if (empty($group) || (isset($child->data['group']) && $child->data['group'] == $group)){
+        if (!is_null($codeTree)) {
+            foreach ($codeTree->getChildren() as $child) {
+                if (empty($group) || (isset($child->data['group']) && $child->data['group'] == $group)) {
                     $permissions[] = $child->data;
                 }
             }
@@ -218,17 +217,17 @@ class PermissionBuilder
         $configPaths = array();
         $position    = $this->position;
 
-        $rootDir = realpath(__DIR__ . '/../../../');
+        $rootDir = realpath(__DIR__.'/../../../');
 
         $finder = new Finder();
         $finder->directories()->depth('== 0');
 
-        if (glob($rootDir . '/src/*/*/Resources', GLOB_ONLYDIR)) {
-            $finder->in($rootDir . '/src/*/*/Resources');
+        if (glob($rootDir.'/src/*/*/Resources', GLOB_ONLYDIR)) {
+            $finder->in($rootDir.'/src/*/*/Resources');
         }
 
         foreach ($finder as $dir) {
-            $filepath = $dir->getRealPath() . "/menus_{$position}.yml";
+            $filepath = $dir->getRealPath()."/menus_{$position}.yml";
             if (file_exists($filepath)) {
                 $configPaths[] = $filepath;
             }
@@ -242,7 +241,7 @@ class PermissionBuilder
                 continue;
             }
 
-            if(!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])){
+            if (!PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
                 continue;
             }
 
@@ -254,12 +253,12 @@ class PermissionBuilder
     }
 
     /**
-     * @param bool $needDisable 树结构里是否需要包含权限管理被忽略的权限
+     * @param  bool   $needDisable 树结构里是否需要包含权限管理被忽略的权限
      * @return Tree
      */
     public function getOriginPermissionTree($needDisable = false)
     {
-        $index = (int)$needDisable;
+        $index = (int) $needDisable;
         if (isset($this->cached['getOriginPermissionTree'][$index])) {
             return $this->cached['getOriginPermissionTree'][$index];
         }
@@ -285,7 +284,7 @@ class PermissionBuilder
         }
 
         $environment = ServiceKernel::instance()->getEnvironment();
-        $cacheFile   = "../app/cache/" . $environment . "/menus_cache_" . $this->position . ".php";
+        $cacheFile   = "../app/cache/".$environment."/menus_cache_".$this->position.".php";
         if ($environment != "dev" && file_exists($cacheFile)) {
             $this->cached['getOriginPermissions'] = include $cacheFile;
             return $this->cached['getOriginPermissions'];
@@ -293,7 +292,7 @@ class PermissionBuilder
 
         $configs     = $this->getPermissionConfig();
         $permissions = array();
-        foreach ($configs as $key => $config) {
+        foreach ($configs as $config) {
             if (!file_exists($config)) {
                 continue;
             }
@@ -312,7 +311,7 @@ class PermissionBuilder
             return $permissions;
         }
 
-        $cache = "<?php \nreturn " . var_export($permissions, true) . ';';
+        $cache = "<?php \nreturn ".var_export($permissions, true).';';
         file_put_contents($cacheFile, $cache);
 
         return $permissions;
@@ -328,17 +327,17 @@ class PermissionBuilder
     {
         $userPermissionTree = $this->getUserPermissionTree();
 
-        $codeTree = $userPermissionTree->find(function ($tree) use ($code){
+        $codeTree = $userPermissionTree->find(function ($tree) use ($code) {
             return $tree->data['code'] === $code;
         });
 
-        if(is_null($codeTree)){
+        if (is_null($codeTree)) {
             return array();
         }
 
         $parent = $codeTree->getParent();
 
-        if(is_null($parent)){
+        if (is_null($parent)) {
             return array();
         }
 
@@ -350,7 +349,6 @@ class PermissionBuilder
         $menus = array();
 
         foreach ($parents as $key => $value) {
-
             $value['code'] = $key;
             $value['name'] = ServiceKernel::instance()->trans($value['name']);
             $menus[$key]   = $value;
@@ -376,7 +374,7 @@ class PermissionBuilder
      */
     public function getUserPermissionTree()
     {
-        if(isset($this->cached['getUserPermissionTree'])){
+        if (isset($this->cached['getUserPermissionTree'])) {
             return $this->cached['getUserPermissionTree'];
         }
 
@@ -388,8 +386,8 @@ class PermissionBuilder
 
         $i = 1;
         foreach ($menus as $code => &$menu) {
-            $menu['code']     = $code;
-            $menu['weight']   = $i * 100;
+            $menu['code']   = $code;
+            $menu['weight'] = $i * 100;
 
             if (empty($menu['group'])) {
                 $menu['group'] = 1;
@@ -413,7 +411,7 @@ class PermissionBuilder
             return $a['weight'] > $b['weight'] ? 1 : -1;
         });
 
-        $userPermissionTree = Tree::buildWithArray($menus, null, 'code', 'parent');
+        $userPermissionTree                    = Tree::buildWithArray($menus, null, 'code', 'parent');
         $this->cached['getUserPermissionTree'] = $userPermissionTree;
         return $this->cached['getUserPermissionTree'];
     }

@@ -796,12 +796,10 @@ class EduCloudController extends BaseController
             $appImSetting['enabled'] = $status;
 
             //创建全站会话
-            if ($status) {
-                if (empty($appImSetting['convNo'])) {
-                    $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
-                    if ($conversation) {
-                        $appImSetting['convNo'] = $conversation['no'];
-                    }
+            if ($status && empty($appImSetting['convNo'])) {
+                $conversation = $this->getConversationService()->createConversation('全站会话', 'global', 0, array($user));
+                if ($conversation) {
+                    $appImSetting['convNo'] = $conversation['no'];
                 }
             }
 

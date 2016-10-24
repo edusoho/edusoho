@@ -67,7 +67,7 @@ class PermissionExtension extends \Twig_Extension
                 $params[$key] = "{$value}";
             }
         }
-        // return $menu;
+
         return $this->container->get('router')->generate($route, $params);
     }
 
@@ -79,16 +79,6 @@ class PermissionExtension extends \Twig_Extension
         } else {
             $code = "'{$code}'";
         }
-
-        /*if (empty($this->loader)) {
-            $this->loader = new \Twig_Loader_Array(array(
-                'expression.twig' => '{{'.$code.'}}'
-            ));
-
-            $this->loader = new \Twig_Loader_Chain(array($this->loader, $twig->getLoader()));
-
-            $twig->setLoader($this->loader);
-        }*/
 
         $loader = new \Twig_Loader_Array(array(
             'expression.twig' => '{{'.$code.'}}'
@@ -103,7 +93,7 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionByCode($code)
     {
-        return $permission = $this->createPermissionBuilder()->getOriginPermissionByCode($code);
+        return $this->createPermissionBuilder()->getOriginPermissionByCode($code);
     }
 
     public function hasPermission($code)
