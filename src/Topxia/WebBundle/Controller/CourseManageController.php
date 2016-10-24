@@ -163,7 +163,7 @@ class CourseManageController extends BaseController
             }
 
             if (!empty($fields)) {
-                $fields['buyExpireTime'] = strtotime($fields['buyExpireTime'].' 23:59:59');
+                $fields['buyExpiryTime'] = empty($fields['buyExpiryTime']) ? 0 : strtotime($fields['buyExpiryTime'].' 23:59:59');
                 $course = $this->getCourseService()->updateCourse($id, $fields);
             } else {
                 $course = $this->getCourseService()->getCourse($id);
