@@ -1274,7 +1274,9 @@ class ClassroomServiceTest extends BaseTestCase
         ));
         $this->getClassroomService()->becomeAssistant($classroom['id'], $user['id']);
 
-        $this->getServiceKernel()->setCurrentUser((new CurrentUser())->fromArray($user));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $result = $this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroom['id']));
 
         $this->assertEquals('assistant', $result[0]);
