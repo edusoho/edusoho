@@ -334,12 +334,8 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id)
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
-        
-        $user = $this->getCurrentUser();
 
-        $student = $this->getCourseService()->getCourseMember($id, $user['id']);
-
-        if ($course['status'] == 'closed' && $student == null) {
+        if ($course['status'] == 'closed' && $member == null) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
         }
 
