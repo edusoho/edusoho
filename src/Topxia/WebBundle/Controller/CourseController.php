@@ -333,17 +333,15 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id)
     {
-        list($course, $member) = $this->buildCourseLayoutData($request, $id);
-
         $user = $this->getCurrentUser();
 
-        $allowRoles = array(
-            'ROLE_ADMIN','ROLE_SUPER_ADMIN','ROLE_TEACHER'
-        );
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        if ($course['status'] == 'closed' && $member == null && !array_intersect($allowRoles, $user['roles'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
-        }
+        if (!array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN'), $user['roles'])) {
+            if ($course['status'] == 'closed' && $member == null) {
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
+            }
+        }     
 
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
