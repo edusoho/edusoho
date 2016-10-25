@@ -38,10 +38,14 @@
 
   {% endblock %}
 
+
+
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
+
+  {% do script(['libs/vendor.js', 'web.js']) %}
 
   {% block head_scripts %}{% endblock %}
 

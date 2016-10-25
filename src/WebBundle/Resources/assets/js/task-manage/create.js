@@ -107,11 +107,10 @@ class Editor {
             $(".js-step3-view").removeClass('active');
             $("#course-tasks-next").removeAttr('disabled');
             $("#course-tasks-prev").removeAttr('disabled');
-            !this.loaded && $('.tab-content').load(this._contentUrl, function () {
-                _self.loaded = true;
-                $('#task-type').data('step2_form',$('#step2-form'));
-                $('#task-type').data('step3_form',$('#step3-form'));
-            });
+            if(!this.loaded) {
+                var html = '<iframe src="'+this._contentUrl+'" style="width:100%;min-height:500px"></iframe>';
+                $("#task-content").html(html);  
+            }
         } else if (step == 3) {
             $(".js-step3-view").addClass('active');
             $(".js-step2-view").removeClass('active');
