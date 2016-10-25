@@ -1,10 +1,10 @@
-var editor = CKEDITOR.replace('text-content-field', {
-    toolbar: 'Full',
-    filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
-    filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
-    allowedContent: true,
-    height: 300
-});
+// var editor = CKEDITOR.replace('text-content-field', {
+//     toolbar: 'Full',
+//     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
+//     filebrowserFlashUploadUrl: $('#text-content-field').data('flashUploadUrl'),
+//     allowedContent: true,
+//     height: 300
+// });
 
 
 
@@ -12,7 +12,6 @@ var $step2_form = $('#task-type').data('step2_form');
 console.log( $step2_form );
 var validator2 = $step2_form.validate({
   onkeyup: false,
-  focusCleanup: true,
   rules: {
     title: {
       required: true,
@@ -34,7 +33,6 @@ var $step3_form = $('#task-type').data('step3_form');
 console.log($step3_form);
 var validator3 = $step3_form.validate({
   onkeyup: false,
-  focusCleanup: true,
   rules: {
     condition: {
       required: true,

@@ -100,28 +100,25 @@ class Editor {
             $("#task-type").show();
             $(".js-step2-view").removeClass('active');
             $(".js-step3-view").removeClass('active');
+            $("#course-tasks-prev").attr('disabled','disabled');
         } else if (step == 2) {
             $("#task-type").hide();
             $(".js-step2-view").addClass('active');
             $(".js-step3-view").removeClass('active');
+            $("#course-tasks-next").removeAttr('disabled');
+            $("#course-tasks-prev").removeAttr('disabled');
             !this.loaded && $('.tab-content').load(this._contentUrl, function () {
-                _self._initStep2();
+                _self.loaded = true;
+                $('#task-type').data('step2_form',$('#step2-form'));
+                $('#task-type').data('step3_form',$('#step3-form'));
             });
         } else if (step == 3) {
             $(".js-step3-view").addClass('active');
             $(".js-step2-view").removeClass('active');
-            _self._initStep3();
+            $("#course-tasks-next").attr('disabled','disabled');
         }
     }
 
-    _initStep2() {
-        this.loaded = true;
-        $('#task-type').data('step2_form',$('#step2-form'));
-        $('#task-type').data('step3_form',$('#step3-form'))
-    }
-    _initStep3() {
-        $('#task-type').data('step3_form',$('#step3-form'))
-    }
     _validator(index) {
         var validator = $('#task-type').data('validator'+index);
         var validatorArray = $('#task-type').data('validatorArray'+index);
