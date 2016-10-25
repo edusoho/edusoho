@@ -16,6 +16,7 @@ class TextActivityController extends BaseController implements ActivityActionInt
     public function editAction(Request $request, $id)
     {
         $activity = $this->getActivityService()->getActivity($id);
+
         return $this->render('WebBundle:TextActivity:modal.html.twig', array(
             'activity'    => $activity
         ));
