@@ -333,9 +333,9 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
-
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
+        
+        $user = $this->getCurrentUser();
 
         $student = $this->getCourseService()->getCourseMember($id, $user['id']);
 
