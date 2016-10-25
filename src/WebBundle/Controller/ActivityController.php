@@ -13,7 +13,7 @@ class ActivityController extends BaseController
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $editController = $config->getAction('edit');
         return $this->forward($editController, array(
-            'activity' => $activity
+            'id' => $activity['id']
         ));
     }
 
