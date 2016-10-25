@@ -7,7 +7,7 @@
       <label for="title">{{ '标题'|trans }}</label>
     </div>
     <div class="col-md-9 controls">
-      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}></div>
+      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} ></div>
   </div>
   <div class="row form-group">
     <div class="col-md-2 control-label">
@@ -27,6 +27,6 @@
       <label for="condition">{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-md-9 controls">
-      {#<input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}></div>#}
+      <input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}></div>
   </div>
 {% endblock %}

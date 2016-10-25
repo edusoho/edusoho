@@ -32,12 +32,18 @@ class Editor {
         if (this.step >= 3) {
             return;
         }
+        if(this.step != 1  && !this._validator(this.step)) {
+            return;
+        }
         this.step++;
         this._switchPage();
     }
 
     _onPrev() {
         if (this.step <= 1 || (this.mode === 'edit' && this.step <= 2)) {
+            return;
+        }
+        if(this.step != 1 && !this._validator(this.step)) {
             return;
         }
         this.step--;
@@ -58,6 +64,9 @@ class Editor {
     }
 
     _onSave() {
+        if(!this._validator(this.step)) {
+            return;
+        }
         let self = this;
         var postData = $('.js-hidden-data')
             .map((index, node) => {
@@ -107,10 +116,26 @@ class Editor {
 
     _initStep2() {
         this.loaded = true;
+        $('#task-type').data('step2_form',$('#step2-form'));
+        $('#task-type').data('step3_form',$('#step3-form'))
     }
-
     _initStep3() {
-
+        $('#task-type').data('step3_form',$('#step3-form'))
+    }
+    _validator(index) {
+        var validator = $('#task-type').data('validator'+index);
+        var validatorArray = $('#task-type').data('validatorArray'+index);
+        var isvalidator;
+        for(var i= 0;i<validatorArray.length;i++) {
+            isvalidator = validator.element(validatorArray[i]);
+            if(!isvalidator) {
+                break;
+            }
+        }
+        if(!isvalidator) {
+            return false;
+        }
+        return true;
     }
 }
 
