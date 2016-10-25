@@ -120,15 +120,7 @@ class Editor {
 
     _validator(index) {
         var validator = $('#task-type').data('validator'+index);
-        var validatorArray = $('#task-type').data('validatorArray'+index);
-        var isvalidator;
-        for(var i= 0;i<validatorArray.length;i++) {
-            isvalidator = validator.element(validatorArray[i]);
-            if(!isvalidator) {
-                break;
-            }
-        }
-        if(!isvalidator) {
+        if(!isvalidator.form()) {
             return false;
         }
         return true;
