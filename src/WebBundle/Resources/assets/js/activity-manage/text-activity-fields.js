@@ -7,9 +7,12 @@
 // });
 
 parent.taskValidatorInit = function() {
-    var $tabcontent = $('#tab-content');
-    
-    var $step2_form = $tabcontent.data('step2_form');
+    var windowjQuery = parent.$;
+    var $taskcontent = $(window.parent.document).find('#task-content');
+
+    var $step2_form = windowjQuery.data($taskcontent[0], 'step2_form');
+    var $step3_form = windowjQuery.data($taskcontent[0], 'step3_form');
+
     var validator2 = $step2_form.validate({
         onkeyup: false,
         rules: {
@@ -23,9 +26,7 @@ parent.taskValidatorInit = function() {
           content:"请输入内容"
         }
     });
-    $tabcontent.data('validator2',validator2);
 
-    var $step3_form = $tabcontent.data('step2_form');
     var validator3 = $step3_form.validate({
         onkeyup: false,
         rules: {
@@ -37,7 +38,9 @@ parent.taskValidatorInit = function() {
           condition: "请输完成条件",
         }
     });
-    $tabcontent.data('validator3',validator3);
+
+    windowjQuery.data($taskcontent[0], 'validator2',validator2);
+    windowjQuery.data($taskcontent[0], 'validator3',validator3);
 }
 
 

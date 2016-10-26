@@ -108,18 +108,21 @@ class Editor {
             $("#course-tasks-next").removeAttr('disabled');
             $("#course-tasks-prev").removeAttr('disabled');
             if(!this.loaded) {
+                this.loaded = false;
                 var html = '<iframe id="taskiframe" name="taskiframe" src="'+this._contentUrl+'" style="width:100%;min-height:500px"></iframe>';
                 $("#task-content").html(html); 
                 var win = document.getElementById('taskiframe').contentWindow || iframe;
                 $(win).load(function(){
                     var windowjQuery = $('#taskiframe')[0].contentWindow.$;
-                    var f = $('#taskiframe').contents().find('#tab-content');
-                    windowjQuery.data(f[0], 'step2_form',f.find("#step2-form"));
-                    windowjQuery.data(f[0], 'step3_form',f.find("#step3-form"));
+                    var $content = $('#taskiframe').contents().find('#tab-content');
+                    $("#task-content").data('step2_form',$content.find("#step2-form"));
+                    $("#task-content").data('step3_form',$content.find("#step3-form"));
                     taskValidatorInit();
+
                 });
             }
         } else if (step == 3) {
+            console.log(step);
             $(".js-step3-view").addClass('active');
             $(".js-step2-view").removeClass('active');
             $("#course-tasks-next").attr('disabled','disabled');
@@ -127,11 +130,7 @@ class Editor {
     }
 
     _validator(index) {
-        var windowjQuery = $('#taskiframe')[0].contentWindow.$;
-        var f = $('#taskiframe').contents().find('#tab-content');
-        console.log(f);
-        var validator = windowjQuery.data(f[0], 'validator'+index);
-        console.log(validator);
+        var validator = $("#task-content").data('validator'+index)
         if(validator && !validator.form()) {
             return false;
         }
