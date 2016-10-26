@@ -34,7 +34,6 @@
     BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
   </script>
 {% else %}
-  {% if notices|default(false) %}
     <div class="col-md-6">
       <div class="panel panel-default panel-150">
         <div class="panel-heading">
@@ -45,12 +44,13 @@
           {% for notice in notices %}
             <li>
               <a class="link-primary" href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a>
-              {# <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span> #}
+               <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span>
             </li>
+            {% else %}
+              <div class="empty"> 暂无公告</div>
           {% endfor %}
           </ul>
         </div>
       </div>
     </div>
-  {% endif %}
 {% endif %}

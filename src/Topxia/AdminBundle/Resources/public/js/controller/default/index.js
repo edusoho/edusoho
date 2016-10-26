@@ -164,7 +164,7 @@ define(function (require, exports, module) {
                 },
                 grid: {
                     left: '3%',
-                    right: '4%',
+                    right: '6%',
                     bottom: '3%',
                     containLabel: true
                 },
