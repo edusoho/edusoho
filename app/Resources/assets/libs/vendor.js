@@ -3,6 +3,8 @@
 import 'jquery';
 import 'bootstrap';
 import 'bootstrap-notify';
+// import 'bootstrap-datetimepicker';
+require('bootstrap-datepicker-webpack');
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {

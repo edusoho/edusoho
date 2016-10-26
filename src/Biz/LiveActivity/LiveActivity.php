@@ -32,6 +32,21 @@ class LiveActivity extends Activity
 
     public function create($fields)
     {
-        parent::create($fields);
+        return $this->getLiveActivityService()->createActivityDetail($fields);
+    }
+
+    public function update($id, $fields)
+    {
+        return $this->getLiveActivityService()->updateActivityDetail($id, $fields);
+    }
+
+    public function get($targetId)
+    {
+        return $this->getLiveActivityService()->getActivityDetail($targetId);
+    }
+
+    protected function getLiveActivityService()
+    {
+        return $this->getBiz()->service('LiveActivity:LiveActivityService');
     }
 }
