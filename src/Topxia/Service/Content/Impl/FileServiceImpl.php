@@ -9,6 +9,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Content\FileService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -212,14 +213,28 @@ class FileServiceImpl extends BaseService implements FileService
                         break;
                 }
 
-                imagejpeg($image, $directory.'/'.$parsed['name']);
+                $targetFile = $this->getTargetFile($directory, $parsed['name']);
+                imagejpeg($image, $targetFile);
                 imagedestroy($image);
 
-                return new File($directory.'/'.$parsed['name']);
+                return new File($targetFile);
             }
         }
 
         return $file->move($directory, $parsed['name']);
+    }
+
+    protected function getTargetFile($directory, $name = null)
+    {
+        if (!is_dir($directory)) {
+            if (false === @mkdir($directory, 0777, true) && !is_dir($directory)) {
+                throw new FileException(sprintf('Unable to create the "%s" directory', $directory));
+            }
+        } elseif (!is_writable($directory)) {
+            throw new FileException(sprintf('Unable to write in the "%s" directory', $directory));
+        }
+
+        return rtrim($directory, '/\\').DIRECTORY_SEPARATOR.($name);
     }
 
     protected function generateUri($group, $file)
