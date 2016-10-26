@@ -123,8 +123,8 @@ class Editor {
             }
         } else if (step == 3) {
             console.log(step);
-            $(".js-step3-view").addClass('active');
-            $(".js-step2-view").removeClass('active');
+            $('#taskiframe').contents().find(".js-step3-view").addClass('active');
+            $('#taskiframe').contents().find(".js-step2-view").removeClass('active');
             $("#course-tasks-next").attr('disabled','disabled');
         }
     }
