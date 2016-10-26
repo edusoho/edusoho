@@ -6,11 +6,17 @@ define(function (require, exports, module) {
     require('echarts');
 
     exports.run = function () {
-        //热门搜索
-        cloudHotSearch();
 
         //ajax 获取数据
-        loadAjaxData();
+        systemStatusData();
+        siteOverviewData();
+
+        //图表
+        usersStatistic();
+        courseExplore();
+        studyCountStatistic();
+        payOrderStatistic();
+        studyLessonCountStatistic()
 
         //事件
         registerSwitchEvent();
@@ -18,20 +24,9 @@ define(function (require, exports, module) {
         //提醒教师
         remindTeachersEvent();
 
-        //图表
-        courseExplore();
-        studyCountStatistic();
-        payOrderStatistic();
-        studyLessonCountStatistic()
-
+        //热门搜索
+        cloudHotSearch();
     };
-
-
-    var loadAjaxData = function () {
-        systemStatusData()
-            .then(siteOverviewData)
-            .then(usersStatistic);
-    }
 
     var registerSwitchEvent = function () {
 
@@ -104,6 +99,7 @@ define(function (require, exports, module) {
         chart.showLoading();
 
         return $.get(this.element.data('url'), function (response) {
+            console.log(response)
             var option = {
                 tooltip: {
                     trigger: 'axis'
@@ -125,7 +121,7 @@ define(function (require, exports, module) {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: response.date
+                    data: response.xAxis.date
                 },
                 yAxis: {
                     type: 'value',
@@ -134,17 +130,17 @@ define(function (require, exports, module) {
                     {
                         name: '新增注册',
                         type: 'line',
-                        data: response.register
+                        data: response.series.registerCount
                     },
                     {
                         name: '活跃用户',
                         type: 'line',
-                        data: response.active
+                        data: response.series.activeUserCount
                     },
                     {
                         name: '流失用户',
                         type: 'line',
-                        data: response.unActive
+                        data: response.series.lostUserCount
                     }
                 ],
                 color: ['#46C37B', '#428BCA', '#DD4646']
@@ -254,11 +250,11 @@ define(function (require, exports, module) {
         chart.showLoading();
         return $.get(this.element.data('url'), function (response) {
             var option = {
-                color: ['#428bca'],
+                color: ['#428BCA'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'shadow'
+                        type: ''
                     }
                 },
                 toolbox: {
@@ -291,11 +287,10 @@ define(function (require, exports, module) {
                     {
                         name: '学习课时数',
                         type: 'bar',
-                        barWidth: '19',
+                        barWidth: '16',
                         data: response.data
                     }
-                ],
-                color: ['#428BCA']
+                ]
             };
 
             chart.hideLoading();

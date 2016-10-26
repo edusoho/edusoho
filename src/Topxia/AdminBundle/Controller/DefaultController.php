@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -207,50 +208,28 @@ class DefaultController extends BaseController
 
     public function userStatisticAction(Request $request, $period)
     {
-        $userStatistic = array();
 
-        $days        = $this->getDaysDiff($period);
-        $active_days = "30";
+        $series    = array();
+        $days      = $this->getDaysDiff($period);
+        $timeRange = $this->getTimeRange($period);
 
-        //x轴显示日期
-        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
-
-        $userStatistic['date'] = $xAxisDate;
-
-        //用于填充的空模板数据
-        foreach ($xAxisDate as $date) {
-            $date                = date('Y-m-d', strtotime($date));
-            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
-        }
         //每日注册用户
-        $timeRange        = $this->getTimeRange($period);
-        $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
-        $analysisRegister = ArrayToolkit::index($analysisRegister, 'date');
-        $analysisRegister = array_merge($zeroAnalysis, $analysisRegister);
-
-        $userStatistic['register'] = $this->array_value_recursive('count', $analysisRegister);
+        $series['registerCount'] = $this->getRegisterCount($timeRange);
 
         //活跃用户
-        $activeAnalysis          = $this->getUserActiveService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($days + $active_days) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
-        $activeAnalysis          = $this->fillActiveUserCount($xAxisDate, $activeAnalysis);
-        $userStatistic['active'] = $activeAnalysis;
+        $series['activeUserCount'] = $this->getActiveuserCount($days);
 
         //每日注册总数
-        $registerCount    = $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['startTime']);
-        $dayRegisterTotal = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
-        $dayRegisterTotal = $this->fillAnalysisUserSum($registerCount, $zeroAnalysis, $dayRegisterTotal);
+        $series['registerTotalCount'] = $this->getRegisterTotalCount($timeRange, $days);
+
+        $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
 
         //流失用户
-        $unActiveAnalysis = array();
-        array_walk($dayRegisterTotal, function ($value, $index) use (&$unActiveAnalysis, $activeAnalysis) {
-            //每日注册总数-每日活跃用户
-            array_push($unActiveAnalysis, ($value - $activeAnalysis[$index]));
-        });
+        $userAnalysis['series']['lostUserCount'] = $this->getLostUserCount($userAnalysis);;
 
-        $userStatistic['unActive'] = $unActiveAnalysis;
-
-        return $this->createJsonResponse($userStatistic);
+        return $this->createJsonResponse($userAnalysis);
     }
+
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
@@ -434,6 +413,44 @@ class DefaultController extends BaseController
         return false;
     }
 
+    private function getRegisterCount($timeRange)
+    {
+        $analysisRegister = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+
+        return $analysisRegister;
+    }
+
+    private function getActiveuserCount($days)
+    {
+        $active_days    = "30";
+        $activeAnalysis = $this->getUserActiveService()->analysisActiveUser(strtotime(date('Y-m-d', time() - ($days + $active_days) * 24 * 60 * 60)), strtotime(date('Y-m-d', time() + 24 * 60 * 60)));
+        $activeAnalysis = $this->fillActiveUserCount($days, $activeAnalysis);
+
+        return $activeAnalysis;
+    }
+
+    private function getRegisterTotalCount($timeRange, $days)
+    {
+        $registerCount    = $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['startTime']);
+        $dayRegisterTotal = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+        $dayRegisterTotal = $this->fillAnalysisUserSum($registerCount, $dayRegisterTotal, $days);
+
+        return $dayRegisterTotal;
+    }
+
+    private function getLostUserCount($userAnalysis)
+    {
+        $lostUserCount = array();
+
+        $dayRegisterTotal = $userAnalysis['series']['registerTotalCount'];
+        $activeUserCount  = $userAnalysis['series']['activeUserCount'];
+        array_walk($dayRegisterTotal, function ($value, $index) use (&$lostUserCount, $activeUserCount) {
+            $lostUserCount[] = $value - $activeUserCount[$index];
+        });
+
+        return $lostUserCount;
+    }
+
     private function getDaysDiff($period)
     {
         $days = $period == 'week' ? 6 : 29;
@@ -476,9 +493,10 @@ class DefaultController extends BaseController
         return $dates;
     }
 
-    protected function fillActiveUserCount($xAxisDate, $activeAnalysis)
+    protected function fillActiveUserCount($days, $activeAnalysis)
     {
-        $result = array();
+        $xAxisDate = $this->generateDateRange($days, 'Y-m-d');
+        $result    = array();
         array_walk($xAxisDate, function ($date) use ($activeAnalysis, &$result) {
             foreach ($activeAnalysis as $index => $value) {
                 //在30天内登录过系统的用户即为活跃用户
@@ -492,16 +510,24 @@ class DefaultController extends BaseController
             }
         });
 
-        array_walk($result, function (&$data) {
-            $data = count(array_unique($data));
+        array_walk($result, function (&$data, $key) {
+            $data = array('count' => count(array_unique($data)), 'date' => $key);
         });
-        return array_values($result);
+        //var_dump($result);
+
+        return $result; //array_values($result);
     }
 
     //获取每天的注册总数
-    protected function fillAnalysisUserSum($registerCount, $zeroAnalysis, $dayRegisterTotal)
+    protected function fillAnalysisUserSum($registerCount, $dayRegisterTotal, $days)
     {
         $dayRegisterTotal = ArrayToolkit::index($dayRegisterTotal, 'date');
+
+        $xAxisDate = $this->generateDateRange($days, 'Y-m-d');
+        foreach ($xAxisDate as $date) {
+            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
+        }
+
         $dayRegisterTotal = array_merge($zeroAnalysis, $dayRegisterTotal);
 
         $previousRegisterTotalCount = 0;
@@ -510,7 +536,8 @@ class DefaultController extends BaseController
             $data['count'] += empty($previousRegisterTotalCount) ? $registerCount : $previousRegisterTotalCount;
             $previousRegisterTotalCount = $data['count'];
         });
-        return $this->array_value_recursive('count', $dayRegisterTotal);
+
+        return $dayRegisterTotal; // $this->array_value_recursive('count', $dayRegisterTotal);
     }
 
 
