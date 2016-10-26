@@ -1,4 +1,3 @@
-
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% if is_trial() %}
   <script>
@@ -44,7 +43,7 @@
           {% for notice in notices %}
             <li>
               <a class="link-primary" href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a>
-               <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span>
+              {# <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span>#}
             </li>
             {% else %}
               <div class="empty"> 暂无公告</div>
