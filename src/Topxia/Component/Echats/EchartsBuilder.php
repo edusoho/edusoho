@@ -52,7 +52,7 @@ class EchartsBuilder
         return $lineChatsData;
     }
 
-    protected static function generateDateRange($days, $format = 'Y/m/d')
+    public static function generateDateRange($days, $format = 'Y/m/d')
     {
         $dates = array();
         for ($i = $days; $i >= 0; $i--) {
@@ -61,7 +61,7 @@ class EchartsBuilder
         return $dates;
     }
 
-    protected static function generateZeroData($xAxis)
+    public static function generateZeroData($xAxis)
     {
         $zeroAnalysis = array();
         //用于填充的空模板数据
@@ -72,7 +72,7 @@ class EchartsBuilder
         return $zeroAnalysis;
     }
 
-    protected static function arrayValueRecursive(array $array, $key)
+    public static function arrayValueRecursive(array $array, $key)
     {
         $val = array();
         array_walk_recursive($array, function ($v, $k) use ($key, &$val) {
