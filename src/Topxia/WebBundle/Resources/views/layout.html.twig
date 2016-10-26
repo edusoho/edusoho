@@ -45,7 +45,7 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 
-  {% do script(['libs/vendor.js', 'web.js']) %}
+  
 
   {% block head_scripts %}{% endblock %}
 
@@ -96,6 +96,7 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
+{% do script(['libs/vendor.js', 'web.js'], 1000) %}
 {% if script() is empty %}
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 {% else %}

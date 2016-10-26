@@ -108,8 +108,13 @@ class Editor {
             $("#course-tasks-next").removeAttr('disabled');
             $("#course-tasks-prev").removeAttr('disabled');
             if(!this.loaded) {
-                var html = '<iframe src="'+this._contentUrl+'" style="width:100%;min-height:500px"></iframe>';
-                $("#task-content").html(html);  
+                var html = '<iframe id="taskiframe" name="taskiframe" src="'+this._contentUrl+'" style="width:100%;min-height:500px"></iframe>';
+                $("#task-content").html(html); 
+
+                var oFrm = document.getElementById('taskiframe');
+                oFrm.onload  = function() {
+                    taskValidatorInit();
+                }
             }
         } else if (step == 3) {
             $(".js-step3-view").addClass('active');
@@ -119,8 +124,11 @@ class Editor {
     }
 
     _validator(index) {
-        var validator = $('#task-type').data('validator'+index);
-        if(!isvalidator.form()) {
+        var validator = taskvalidator2;
+        if(index==3) {
+            validator = taskvalidator3;
+        }
+        if(validator && !validator.form()) {
             return false;
         }
         return true;
