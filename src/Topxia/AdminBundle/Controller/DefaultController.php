@@ -150,7 +150,7 @@ class DefaultController extends BaseController
         }
 
 
-        return $this->render('TopxiaAdminBundle:Default:system.status.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Default:system-status.html.twig', array(
             "info"                => $info,
             "apps"                => $apps,
             "error"               => $error,
