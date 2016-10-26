@@ -32,13 +32,13 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
 
     protected function isRedisOpened()
     {
-        $redisSetting = $this->getSettingService()->get('redis', array());
+        $redisPath = $this->getKernel()->getParameter('kernel.root_dir').'/data/redis.php';
 
-        if (empty($redisSetting['opened']) || $redisSetting['opened'] == 0) {
-            return false;
+        if (file_exists($redisPath)) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
