@@ -164,7 +164,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
                     ->andWhere('createdTime < :endTime')
                     ->andWhere('createdTime < :createdTime_LT')
                     ->andWhere('title LIKE :title')
-                    ->andWhere('targetType IN ( :targetTypes)');
+                    ->andWhere('targetType IN ( :targetTypes)')
+                    ->andWhere('updatedTime >= :updatedTime_GE ');
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)
