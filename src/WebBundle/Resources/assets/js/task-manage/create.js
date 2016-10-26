@@ -97,12 +97,14 @@ class Editor {
         var $type = $("#task-manage-type"),
             $next = $("#course-tasks-next"),
             $prev = $("#course-tasks-prev"),
-            $iframe = $('#task-manage-content-iframe').contents();
+            $iframe = $('#task-manage-content-iframe').contents(),
+            $submit = $('#course-tasks-submit');
 
         if (this.step == 1) {
             $type.show();
             this.$task_manage_content.hide();
             $prev.attr('disabled','disabled');
+            $submit.attr('disabled','disabled');
         } else if (this.step == 2) {
             $type.hide();
             this.$task_manage_content.show();
@@ -110,6 +112,7 @@ class Editor {
             $iframe.find(".js-step2-view").addClass('active');
             $next.removeAttr('disabled');
             $prev.removeAttr('disabled');
+            $submit.removeAttr('disabled');
             if(!this.loaded) {
                 this.loaded = true;
                 this._initIframe();
@@ -125,7 +128,7 @@ class Editor {
         var html = '<iframe class="task-manage-content-iframe" id="task-manage-content-iframe" name="task-manage-content-iframe" src="'+this._contentUrl+'"</iframe>';
         this.$task_manage_content.html(html); 
         var iframewin = document.getElementById('task-manage-content-iframe').contentWindow || iframe;
-        $(iframewin).load(event=>(){
+        $(iframewin).load(()=>{
             var $iframe = $('#task-manage-content-iframe');
             var windowjQuery = $iframe[0].contentWindow.$;
             var $iframecontent = $iframe.contents().find('#iframe-content');
