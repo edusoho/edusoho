@@ -110,13 +110,14 @@ class Editor {
             if(!this.loaded) {
                 var html = '<iframe id="taskiframe" name="taskiframe" src="'+this._contentUrl+'" style="width:100%;min-height:500px"></iframe>';
                 $("#task-content").html(html); 
-                // var win = document.getElementById('taskiframe').contentWindow || iframe;
-                // $(win).load(function(){
-                //     $(window.frames["taskiframe"].document).find('#tab-content').data('step2_form',$("#step2-form"));
-                //     $(window.frames["taskiframe"].document).find('#tab-content').data('step3_form',$("#step3-form"));
-                //     console.log('test');
-                //     taskValidatorInit();
-                // });
+                var win = document.getElementById('taskiframe').contentWindow || iframe;
+                $(win).load(function(){
+                    var windowjQuery = $('#taskiframe')[0].contentWindow.$;
+                    var f = $('#taskiframe').contents().find('#tab-content');
+                    windowjQuery.data(f[0], 'step2_form',f.find("#step2-form"));
+                    windowjQuery.data(f[0], 'step3_form',f.find("#step3-form"));
+                    taskValidatorInit();
+                });
             }
         } else if (step == 3) {
             $(".js-step3-view").addClass('active');
@@ -128,6 +129,7 @@ class Editor {
     _validator(index) {
         var windowjQuery = $('#taskiframe')[0].contentWindow.$;
         var f = $('#taskiframe').contents().find('#tab-content');
+        console.log(f);
         var validator = windowjQuery.data(f[0], 'validator'+index);
         console.log(validator);
         if(validator && !validator.form()) {

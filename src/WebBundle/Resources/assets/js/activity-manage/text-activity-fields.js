@@ -6,10 +6,10 @@
 //     height: 300
 // });
 
-// parent.taskValidatorInit = function() {
-    console.log('children');
-    var $step2_form = $('#step2-form');
-    console.log($step2_form);
+parent.taskValidatorInit = function() {
+    var $tabcontent = $('#tab-content');
+    
+    var $step2_form = $tabcontent.data('step2_form');
     var validator2 = $step2_form.validate({
         onkeyup: false,
         rules: {
@@ -23,9 +23,9 @@
           content:"请输入内容"
         }
     });
-    $('#tab-content').data('validator2',validator2);
+    $tabcontent.data('validator2',validator2);
 
-    var $step3_form = $('#step3-form');
+    var $step3_form = $tabcontent.data('step2_form');
     var validator3 = $step3_form.validate({
         onkeyup: false,
         rules: {
@@ -37,8 +37,8 @@
           condition: "请输完成条件",
         }
     });
-    $('#tab-content').data('validator3',validator3);
-// }
+    $tabcontent.data('validator3',validator3);
+}
 
 
 
