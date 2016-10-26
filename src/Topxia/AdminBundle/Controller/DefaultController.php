@@ -105,7 +105,7 @@ class DefaultController extends BaseController
 
         $upgradeAppCount = count($apps);
 
-        $indexApps = ArrayToolkit::index($apps, 'code');
+        $indexApps      = ArrayToolkit::index($apps, 'code');
         $mainAppUpgrade = empty($indexApps['MAIN']) ? array() : $indexApps['MAIN'];
 
         if ($mainAppUpgrade) {
@@ -113,8 +113,8 @@ class DefaultController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Default:system-status.html.twig', array(
-            "mainAppUpgrade"    => $mainAppUpgrade,
-            "upgradeAppCount"   => $upgradeAppCount,
+            "mainAppUpgrade"            => $mainAppUpgrade,
+            "upgradeAppCount"           => $upgradeAppCount,
             'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount()
         ));
     }
@@ -124,14 +124,14 @@ class DefaultController extends BaseController
         $disabledCloudServiceCount = 0;
 
         $settingKeys = array(
-            'course.live_course_enabled' => '',
-            'cloud_sms.sms_enabled' => '',
+            'course.live_course_enabled'  => '',
+            'cloud_sms.sms_enabled'       => '',
             'cloud_search.search_enabled' => '',
-            'storage.upload_mode' => 'cloud'
+            'storage.upload_mode'         => 'cloud'
         );
 
         foreach ($settingKeys as $settingName => $expect) {
-            if(empty($expect)){
+            if (empty($expect)) {
                 $disabledCloudServiceCount += empty($this->setting($settingName)) ? 1 : 0;
             } else {
                 $value = $this->setting($settingName);
@@ -434,80 +434,6 @@ class DefaultController extends BaseController
         return false;
     }
 
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getStatisticsService()
-    {
-        return $this->getServiceKernel()->createService('System.StatisticsService');
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getLogService()
-    {
-        return $this->getServiceKernel()->createService('System.LogService');
-    }
-
-    /**
-     * @return AppService
-     */
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
-
-    protected function getCashService()
-    {
-        return $this->getServiceKernel()->createService('Cash.CashService');
-    }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('topxia.twig.web_extension');
-    }
-
-    protected function getUpgradeNoticeService()
-    {
-        return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
-    }
-
-    private function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getReviewService()
-    {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
-    }
-
-
-    private function getUserActiveService()
-    {
-        return $this->createService('User.UserActiveService');
-    }
-
     private function getDaysDiff($period)
     {
         $days = $period == 'week' ? 6 : 29;
@@ -587,4 +513,78 @@ class DefaultController extends BaseController
         return $this->array_value_recursive('count', $dayRegisterTotal);
     }
 
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getStatisticsService()
+    {
+        return $this->getServiceKernel()->createService('System.StatisticsService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    /**
+     * @return AppService
+     */
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getUpgradeNoticeService()
+    {
+        return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+
+    private function getUserActiveService()
+    {
+        return $this->createService('User.UserActiveService');
+    }
 }
