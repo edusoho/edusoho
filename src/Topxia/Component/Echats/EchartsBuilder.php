@@ -16,14 +16,14 @@ class EchartsBuilder
     public static function createLineDefaultData($days, $format, $series)
     {
         $lineChatsData                  = array();
-        $lineChatsData['xAxis']['date'] = static::generateDateRange($days, $format);
+        $lineChatsData['xAxis']['date'] = EchartsBuilder::generateDateRange($days, $format);
 
-        $zeroAnalysis = static::generateZeroData($lineChatsData['xAxis']['date']);
+        $zeroAnalysis = EchartsBuilder::generateZeroData($lineChatsData['xAxis']['date']);
         array_walk($series, function (&$data, $key) use ($zeroAnalysis) {
             $data = ArrayToolkit::index($data, 'date');
             $data = array_merge($zeroAnalysis, $data);
 
-            $data = static::arrayValueRecursive($data, 'count');
+            $data = EchartsBuilder::arrayValueRecursive($data, 'count');
         });
         $lineChatsData['series'] = $series;
         return $lineChatsData;
@@ -39,20 +39,20 @@ class EchartsBuilder
     public static function createBarDefaultData($days, $format, $series)
     {
         $lineChatsData                  = array();
-        $lineChatsData['xAxis']['date'] = static::generateDateRange($days, $format);
-        $zeroAnalysis                   = static::generateZeroData($lineChatsData['xAxis']['date']);
+        $lineChatsData['xAxis']['date'] = EchartsBuilder::generateDateRange($days, $format);
+        $zeroAnalysis                   = EchartsBuilder::generateZeroData($lineChatsData['xAxis']['date']);
 
         array_walk($series, function (&$data, $key) use ($zeroAnalysis) {
             $data = ArrayToolkit::index($data, 'date');
             $data = array_merge($zeroAnalysis, $data);
 
-            $data = static::arrayValueRecursive($data, 'count');
+            $data = EchartsBuilder::arrayValueRecursive($data, 'count');
         });
         $lineChatsData['series'] = $series;
         return $lineChatsData;
     }
 
-    protected static function generateDateRange($days, $format = 'Y/m/d')
+    public static function generateDateRange($days, $format = 'Y/m/d')
     {
         $dates = array();
         for ($i = $days; $i >= 0; $i--) {
@@ -61,7 +61,7 @@ class EchartsBuilder
         return $dates;
     }
 
-    protected static function generateZeroData($xAxis)
+    public static function generateZeroData($xAxis)
     {
         $zeroAnalysis = array();
         //用于填充的空模板数据
@@ -72,7 +72,7 @@ class EchartsBuilder
         return $zeroAnalysis;
     }
 
-    protected static function arrayValueRecursive(array $array, $key)
+    public static function arrayValueRecursive(array $array, $key)
     {
         $val = array();
         array_walk_recursive($array, function ($v, $k) use ($key, &$val) {

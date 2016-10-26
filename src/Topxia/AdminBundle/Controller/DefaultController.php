@@ -132,10 +132,10 @@ class DefaultController extends BaseController
         );
 
         foreach ($settingKeys as $settingName => $expect) {
+            $value = $this->setting($settingName);
             if (empty($expect)) {
-                $disabledCloudServiceCount += empty($this->setting($settingName)) ? 1 : 0;
+                $disabledCloudServiceCount += empty($value) ? 1 : 0;
             } else {
-                $value = $this->setting($settingName);
                 $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
             }
         }
