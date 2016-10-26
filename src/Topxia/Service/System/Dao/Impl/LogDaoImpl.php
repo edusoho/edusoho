@@ -26,8 +26,8 @@ class LogDaoImpl extends BaseDao implements LogDao
 	        ->setFirstResult($start)
 	        ->setMaxResults($limit);
 
-        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
-            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        for ($i = 0; $i < count($sort); $i = $i + 2) {
+            $builder->addOrderBy($sort[$i], $sort[$i + 1]);
         };
         
 		$builder;
