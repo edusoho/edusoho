@@ -270,7 +270,7 @@ define(function (require, exports, module) {
                 xAxis: [
                     {
                         type: 'category',
-                        data: response.date,
+                        data: response.xAxis.date,
                         axisTick: {
                             alignWithLabel: true
                         }
@@ -287,7 +287,7 @@ define(function (require, exports, module) {
                         name: '学习课时数',
                         type: 'bar',
                         barWidth: '16',
-                        data: response.data
+                        data: response.series.finishedLessonCount
                     }
                 ]
             };

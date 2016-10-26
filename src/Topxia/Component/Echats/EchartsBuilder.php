@@ -36,9 +36,20 @@ class EchartsBuilder
     }
 
     //柱状图
-    public function createBarDefaultData()
+    public static function createBarDefaultData($days, $format, $series)
     {
+        $lineChatsData                  = array();
+        $lineChatsData['xAxis']['date'] = static::generateDateRange($days, $format);
+        $zeroAnalysis                   = static::generateZeroData($lineChatsData['xAxis']['date']);
 
+        array_walk($series, function (&$data, $key) use ($zeroAnalysis) {
+            $data = ArrayToolkit::index($data, 'date');
+            $data = array_merge($zeroAnalysis, $data);
+
+            $data = static::arrayValueRecursive($data, 'count');
+        });
+        $lineChatsData['series'] = $series;
+        return $lineChatsData;
     }
 
     protected static function generateDateRange($days, $format = 'Y/m/d')

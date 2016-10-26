@@ -233,25 +233,16 @@ class DefaultController extends BaseController
 
     public function lessonLearnStatisticAction(Request $request, $period)
     {
-        $days = $this->getDaysDiff($period);
+        $days   = $this->getDaysDiff($period);
+        $series = array();
 
-        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
+        $timeRange                     = $this->getTimeRange($period);
+        $finishedLessonData            = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
+        $series['finishedLessonCount'] = $finishedLessonData;
 
-        //用于填充的空模板数据
-        foreach ($xAxisDate as $date) {
-            $date                = date('Y-m-d', strtotime($date));
-            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
-        }
+        $LessonLearnAnalysis = EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series);
 
-        $timeRange          = $this->getTimeRange($period);
-        $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-        $finishedLessonData = ArrayToolkit::index($finishedLessonData, 'date');
-        $finishedLessonData = array_merge($zeroAnalysis, $finishedLessonData);
-
-        return $this->createJsonResponse(array(
-            'date' => $xAxisDate,
-            'data' => $this->array_value_recursive('count', $finishedLessonData),
-        ));
+        return $this->createJsonResponse($LessonLearnAnalysis);
     }
 
     /**
@@ -267,26 +258,17 @@ class DefaultController extends BaseController
         $timeRange = $this->getTimeRange($period);
 
 
-        $conditions          = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
-        $newOrders           = $this->getOrderService()->analysisOrderDate($conditions);
+        $conditions              = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
+        $newOrders               = $this->getOrderService()->analysisOrderDate($conditions);
         $series['newOrderCount'] = $newOrders;
 
         $conditions['totalPriceGreaterThan'] = 0;
         $newPaidOrders                       = $this->getOrderService()->analysisOrderDate($conditions);
-        $series['newPaidOrderCount']             = $newPaidOrders;
+        $series['newPaidOrderCount']         = $newPaidOrders;
 
         $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
         return $this->createJsonResponse($userAnalysis);
 
-    }
-
-    function array_value_recursive($key, array $arr)
-    {
-        $val = array();
-        array_walk_recursive($arr, function ($v, $k) use ($key, &$val) {
-            if ($k == $key) array_push($val, intval($v));
-        });
-        return count($val) > 1 ? $val : array_pop($val);
     }
 
     public function orderStatisticAction(Request $request, $period)
@@ -526,7 +508,7 @@ class DefaultController extends BaseController
             $previousRegisterTotalCount = $data['count'];
         });
 
-        return $dayRegisterTotal; // $this->array_value_recursive('count', $dayRegisterTotal);
+        return $dayRegisterTotal;
     }
 
 
