@@ -26,6 +26,7 @@ class KernelRequestListener
         if ($request->getMethod() === 'POST' && $request->getPathInfo() === '/login_check') {
             $forbidden = AuthenticationHelper::checkLoginForbidden($request);
             if ($forbidden['status'] == 'error') {
+                // $request->attributes->set(SecurityContextInterface::AUTHENTICATION_ERROR, new AuthenticationException($forbidden['message']));
                 $event->setResponse(new RedirectResponse('/login'));
                 return;
             }
