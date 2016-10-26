@@ -99,7 +99,6 @@ define(function (require, exports, module) {
         chart.showLoading();
 
         return $.get(this.element.data('url'), function (response) {
-            console.log(response)
             var option = {
                 tooltip: {
                     trigger: 'axis'
@@ -177,7 +176,7 @@ define(function (require, exports, module) {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: datas.date
+                    data: datas.xAxis.date
                 },
                 yAxis: {
                     type: 'value',
@@ -186,12 +185,12 @@ define(function (require, exports, module) {
                     {
                         name: '新增订单',
                         type: 'line',
-                        data: datas.new
+                        data: datas.series.newOrderCount
                     },
                     {
                         name: '付费订单',
                         type: 'line',
-                        data: datas.feePaid
+                        data: datas.series.newPaidOrderCount
                     }
                 ],
                 color: ['#46C37B', '#428BCA']

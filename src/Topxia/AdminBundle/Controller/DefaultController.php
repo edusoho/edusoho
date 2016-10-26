@@ -258,36 +258,25 @@ class DefaultController extends BaseController
      * @param Request $request
      * @param $period
      * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * 学习人次
+     * 订单统计
      */
     public function studyStatisticAction(Request $request, $period)
     {
+        $series    = array();
         $days      = $this->getDaysDiff($period);
-        $xAxisDate = $this->generateDateRange($days, 'Y/m/d');
-
-        //用于填充的空模板数据
-        foreach ($xAxisDate as $date) {
-            $date                = date('Y-m-d', strtotime($date));
-            $zeroAnalysis[$date] = array('count' => 0, 'date' => $date);
-        }
-
-        $timeRange  = $this->getTimeRange($period);
-        $conditions = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
-        $newOrders  = $this->getOrderService()->analysisOrderDate($conditions);
-        $newOrders  = ArrayToolkit::index($newOrders, 'date');
-        $newOrders  = array_merge($zeroAnalysis, $newOrders);
-
-        $conditions    = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid', 'totalPriceGreaterThan' => 0);
-        $newPaidOrders = $this->getOrderService()->analysisOrderDate($conditions);
-        $newPaidOrders = ArrayToolkit::index($newPaidOrders, 'date');
-        $newPaidOrders = array_merge($zeroAnalysis, $newPaidOrders);
+        $timeRange = $this->getTimeRange($period);
 
 
-        return $this->createJsonResponse(array(
-            'date'    => $xAxisDate,
-            'new'     => $this->array_value_recursive('count', $newOrders),
-            'feePaid' => $this->array_value_recursive('count', $newPaidOrders)
-        ));
+        $conditions          = array('paidStartTime' => $timeRange['startTime'], 'paidEndTime' => $timeRange['endTime'], 'status' => 'paid');
+        $newOrders           = $this->getOrderService()->analysisOrderDate($conditions);
+        $series['newOrderCount'] = $newOrders;
+
+        $conditions['totalPriceGreaterThan'] = 0;
+        $newPaidOrders                       = $this->getOrderService()->analysisOrderDate($conditions);
+        $series['newPaidOrderCount']             = $newPaidOrders;
+
+        $userAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
+        return $this->createJsonResponse($userAnalysis);
 
     }
 
