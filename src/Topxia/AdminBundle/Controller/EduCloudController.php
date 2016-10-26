@@ -1184,4 +1184,15 @@ class EduCloudController extends BaseController
     {
         return $this->getServiceKernel()->createService('IM.ConversationService');
     }
+
+    // 添加云直播
+    public function liveAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud:live.html.twig');
+    }
+    // 添加重建索引模态框
+    public function modalAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud:part/buildindex-modal.html.twig');
+    }
 }

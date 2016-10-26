@@ -223,7 +223,7 @@
       <div class="mask"></div>
     {% endif %}
 
-    <div class="controls radios">
+    {#<div class="controls radios">
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
         {% if storageSetting.upload_mode|default('local') == "local" or info.accessCloud|default(0) == 0 %}
           <div class="row">
@@ -253,14 +253,119 @@
               href="http://open.edusoho.com/show/cloud/video" target="_blank">{{ '这里'|trans }}</a>{{ '了解详情。'|trans }}
         </div>
       {% endif %}
-    </div>
+    </div>#}
 
-    {% if  info.accessCloud|default(0) != 0 and storageSetting.upload_mode|default('cloud') == "cloud" %}
-      <div class="page-header clearfix">
+   
+      {#<div class="page-header clearfix">
         <h1 class="pull-left">{{ '云视频功能设置'|trans }}</h1>
+      </div>#}
+
+
+      <div class="panel panel-default notice-panel">
+        <div class="panel-body">
+          <i class="es-icon es-icon-infooutline text-primary"></i>
+          <div class="text-md mbl">尚未启用云视频</div>
+          <div class="color-gray notice-desc">云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。<a href="">点击这里</a>了解详情。</div>
+          <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+        </div>
       </div>
 
+    {% include 'TopxiaAdminBundle:EduCloud:part/side-bar.html.twig'  %}
+      
+
+      <!-- 概览 -->
+      <div class="buy-cloud-video clearfix">
+        <img class="pull-left" src="/assets/v2/img/educloud/shopping_cart.png" alt="">
+        <div class="buy-section pull-left">
+          <h4 class="mbl"><a class="" href="/buy/cloud/video" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</h4>
+          <div class="color-gray">最低 ￥7.2/GB/年</div>
+        </div>
+      </div>
+      <div class="buy-cloud-video clearfix">
+        <img class="pull-left" src="/assets/v2/img/educloud/shopping_cart.png" alt="">
+        <div class="buy-section pull-left">
+          <h4 class="mbl">开通流量年包，视频流量更划算。<a class="" href="/doc/ServiceGuide/video-package/index.html" target="_blank">什么是流量年包？</a></h4>
+          <div class="gray-dark">联系官方立即开通 : <span class="color-primary">0571-28022356</span></div>
+        </div>
+      </div>
+      <div class="panel panel-default panel-chart">
+        <input id="spaceItemData" type="hidden" value="{{spaceItem|default('')}}"/>
+        <div class="panel-heading">存储空间使用趋势<span class="text-muted">（最近7个月）</span><a class="pull-right" href="">更多&ensp;></a></div>
+        <div class="panel-body">
+          <div id="spaceItemChart" style="width: 100%;height:400px;"></div>
+        </div>
+      </div>
+      <div class="panel panel-default panel-chart">
+        <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+        <div class="panel-heading">
+          流量使用趋势
+          <span class="text-muted">（最近7个月）</span>
+          <a class="pull-right" href="">更多&ensp;></a>
+        </div>
+        <div class="panel-body">
+          <div id="flowItemChart"></div>
+        </div>
+      </div>
+      <div class="page-heading">
+        云视频开关
+      </div>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">启用云视频：</label>
+          <div class="controls col-md-9 radios">
+            <label>
+              <input type="radio" name="cloud_open" value="1"> 开启
+            </label>
+            <label>
+              <input type="radio" name="cloud_open" value="0" checked="checked"> 关闭
+            </label>
+            <div class="help-block">
+              云视频为您提供安全、高性价比、以及优质的视听体验的视频服务，让您轻松创建在线视频课程。<a href="">点击这里</a>了解详情。
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- 设置 -->
+      <div class="page-heading">
+        基本设置
+      </div>
       <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">视频转码画质：</label>
+          <div class="controls col-sm-9 radios">
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 流畅
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合PPT讲解">
+              </a>
+            </label>
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1" checked="checked"> 标准
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合屏幕录制、摄像头拍摄">
+              </a>
+            </label>
+            <label>
+              <input type="radio" name="video-view" id="inlineRadio1" value="option1"> 精细
+              <a href="javascript:;" class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" class="btn btn-warning" data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="top"  data-content="适合动态电影">
+              </a>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="" class="col-sm-3 control-label">视频转码音质：</label>
+          <div class="controls col-sm-9 radios">
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1"> 流畅
+            </label>
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1"> 标准
+            </label>
+            <label>
+              <input type="radio" name="video-voice" id="inlineRadio2" value="option1"> 高品
+            </label>
+          </div>
+        </div>
+
 
       <div class="row form-group">
         <div class="row form-group">
@@ -292,18 +397,7 @@
 
           </div>
         </div>
-        <div class="row form-group">
-          <div class="col-md-3 control-label">
-            <label for="enable_playback_rates">倍速播放</label>
-          </div>
-          <div class="controls col-md-8 radios">
-            {{ radios('enable_playback_rates', {'1':'开启', '0':'关闭'}, storageSetting.enable_playback_rates) }}
-            <div class="help-block">
-              开启后，云视频课时支持倍速播放；<br/>
-              <span style="color: red">注：仅支持高版本谷歌浏览器，火狐浏览器以及QQ浏览器（极速模式）。</span>
-            </div>
-          </div>
-        </div>
+
 
 
         <hr>
@@ -400,7 +494,6 @@
             <div class="help-block">建议时长在0.5 - 1.5秒之间</div>
           </div>
         </div>
-        {% if storageSetting.upload_mode == 'cloud' %}
 
           <hr>
           <div class="upload-mode">
@@ -425,9 +518,6 @@
 
 
               <div class="head-leader-edit"
-                  {% if not headLeader|default(null) %}
-                    style="display:none;"
-                  {% endif %}
               >
                 <span data-role="placeholder">{{ headLeader.filename|default('') }}</span>
                 <button class="btn btn-link btn-sm edit-btn" type="button"><i
@@ -467,7 +557,6 @@
               </div>
             </div>
           </div>
-        {% endif %}
 
         <div class="row form-group">
           <div class="col-md-3 control-label"></div>
@@ -479,7 +568,6 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-    {% endif %}
   {% endif %}
   </div>
 {% endblock %}

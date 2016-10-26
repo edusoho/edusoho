@@ -1,0 +1,70 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_cloud_edulive' %}
+{% set script_controller = 'setting/cloud-live' %}
+
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">尚未启用云直播</div>
+    <div class="color-gray notice-desc">尚未购买云直播服务，不能启用，<a href="">立即购买</a> 或 <a href="">了解详情</a>。</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+  </div>
+</div>
+
+{% include 'TopxiaAdminBundle:EduCloud:part/side-bar.html.twig'  %}
+
+<!-- 概览 -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="">升级</a>｜<a href="">续费</a>  
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      教室容量：
+      <span class="h3 text-primary plm prs">22</span>人
+    </div>
+    <div class="pll pbm">
+      服务期限：
+      <span class="color-gray plm">2016-01-10 ~ 2017-01-10</span>
+      <div class="text-danger pts">
+        您的云直播服务已到期，请尽快续费，以免影响正常使用
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    直播峰值趋势
+    <span class="text-muted">（最近1个月）</span>
+    <a class="pull-right" href="">更多&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="liveTopChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+
+<!-- 设置 -->
+<div class="page-heading">
+  云直播开关
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">启用云直播：</label>
+    <div class="controls col-md-9 radios">
+      <label>
+        <input type="radio" name="cloud_live_switch" value="1"> 开启
+      </label>
+      <label>
+        <input type="radio" name="cloud_live_switch" value="0" checked="checked"> 关闭
+      </label>
+      <div class="help-block">
+        大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="">点击这里</a>了解详情。
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

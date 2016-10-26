@@ -18,6 +18,14 @@
         <div class="alert alert-danger" role="alert">{{'您的教育云服务已被禁用，请联系客服人员：'|trans}}0571-86819929。</div>
       {% endif %}
 
+      <div class="panel panel-default notice-panel">
+        <div class="panel-body">
+          <i class="es-icon es-icon-infooutline text-danger"></i>
+          <div class="text-md mbl">您的教育云服务已被禁用</div>
+          <div class="color-gray notice-desc">若有疑问，请联系客服人员：0571-86819929</div>
+        </div>
+      </div>
+
       {% if is_trial() %}
         {% if trialhtml is not null %}
           {{ trialhtml|raw }}
@@ -28,7 +36,135 @@
           <div class="mask"></div>
         {% endif %}
 
-        <div class="panel panel-default">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="edu-user clearfix">
+              <div class="user-part pull-left">
+                <img class="img-circle" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}>
+                <div class="user-name text-md pts">Hi,<span class="text-primary">阿本</span></div>
+              </div>
+              <div class="user-part pull-left">
+                <div class="ptm">余额</div>
+                <div class="money">¥66.00</div>
+                <button class="btn btn-primary btn-xs mrs">充值</button> 
+                <a href="">费用中心</a>
+              </div>
+              <div class="user-part pull-left">
+                <div class="ptm">代金券</div>
+                <div class="money">¥38.00</div>
+                <a href="">代金券管理</a>
+              </div>
+            </div>
+            <div class="edu-combo">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">已开通服务</div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="edu-combo">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">需要开通／购买的服务</div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a href="" class="my-products-item">
+                      <i class="es-icon es-icon-playcircleoutline"></i>
+                      云视频
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="panel-title">产品更新日志</div>
+              </div>
+              <div class="panel-body">
+                <ul class="update-list">
+                  <li class="pvs">
+                    <a href="" class="text-overflow link-gray">
+                      <i class="es-icon es-icon-dot text-primary"></i>
+                      <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                    </a>
+                  </li>
+                  <li class="pvs">
+                    <a href="" class="text-overflow link-gray">
+                      <i class="es-icon es-icon-dot text-primary"></i>
+                      <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                    </a>
+                  </li>
+                  <li class="pvs">
+                    <a href="" class="text-overflow link-gray">
+                      <i class="es-icon es-icon-dot text-primary"></i>
+                      <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                    </a>
+                  </li>
+                  <li class="pvs">
+                    <a href="" class="text-overflow link-gray">
+                      <i class="es-icon es-icon-dot text-primary"></i>
+                      <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                    </a>
+                  </li>
+                  <li class="pvs">
+                    <a href="" class="text-overflow link-gray">
+                      <i class="es-icon es-icon-dot text-primary"></i>
+                      <span class="text-muted mrm">9-23</span>云视频流量计算器，云短信用量预云视频流量计算器，云短信用量预
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {#<div class="panel panel-default">
           <div class="panel-body">
             <div class="edu-user">
               <div class="pull-left">
@@ -48,10 +184,11 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>#}
+
 
           <!--账户余额-->
-          {% include 'TopxiaAdminBundle:EduCloud:cloud-account.html.twig'  %}
+          {#{% include 'TopxiaAdminBundle:EduCloud:cloud-account.html.twig'  %}#}
 
           
           {#
@@ -69,9 +206,9 @@
           #}
 
 
-          <div class="page-header clearfix">
+          {#<div class="page-header clearfix">
             <h1 class="pull-left">{{'产品与服务'|trans}}</h1>
-          </div>
+          </div>#}
 
             <!--服务动态内容 --> 
             <!-- <div class="edu-service row"> -->
@@ -91,9 +228,9 @@
               {#{% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}#}
 
             <!-- </div> -->
-          <div class="edu-service row">
+          <!-- <div class="edu-service row"> -->
             <!-- 云视频包状态 -->
-            {% include 'TopxiaAdminBundle:EduCloud:cloud-storage.html.twig'  %}
+            {#{% include 'TopxiaAdminBundle:EduCloud:cloud-storage.html.twig'  %}#}
             <!-- <div class="col-md-6">
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -104,7 +241,7 @@
             </div> -->
 
             <!-- 云视频使用情况（最近七个月） -->
-            {% include 'TopxiaAdminBundle:EduCloud:cloud-storage-chart.html.twig'  %}
+            {#{% include 'TopxiaAdminBundle:EduCloud:cloud-storage-chart.html.twig'  %}
 
             <!-- 云直播信息 -->
             {% include 'TopxiaAdminBundle:EduCloud:cloud-live.html.twig'  %}
@@ -122,9 +259,9 @@
             {#{% include 'TopxiaAdminBundle:EduCloud:cloud-email-chart.html.twig'  %}#}
 
             <!-- IM信息） -->
-            {% include 'TopxiaAdminBundle:EduCloud:cloud-im.html.twig'  %}
+           {#} {% include 'TopxiaAdminBundle:EduCloud:cloud-im.html.twig'  %}
             <!-- IM使用情况（最近七天） -->
-            {% include 'TopxiaAdminBundle:EduCloud:cloud-im-chart.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-im-chart.html.twig'  %}#}
           </div>
           
         </div>
