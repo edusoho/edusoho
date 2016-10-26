@@ -1,10 +1,8 @@
 <ul class="subfield-list four-subfield clearfix">
-  {% set status = 0 %}
   <li>
     <div class="title">系统版本</div>
     <div class="info">
       {% if mainAppUpgrade %}
-        {% set status = 1 %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
          <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}">{{ mainAppUpgrade.package.toVersion }} 更新</a>
       {% else %}
@@ -16,12 +14,12 @@
   <li>
     <div class="title">网校应用</div>
     <div class="info">
-      {% if app_count == 0 or (app_count == 1 and  mainAppUpgrade) %}
+      {% if upgradeAppCount %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
         <span class="text-lg">已更新</span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
-        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ app_count - status }}
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ upgradeAppCount }}
           个未更新</a>
       {% endif %}
     </div>

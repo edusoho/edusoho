@@ -106,7 +106,7 @@ class DefaultController extends BaseController
 
         $apps = $this->getAppService()->checkAppUpgrades();
 
-        $appCount = count($apps);
+        $upgradeAppCount = count($apps);
 
         if (isset($apps['error'])) {
             $error = "error";
@@ -155,7 +155,7 @@ class DefaultController extends BaseController
             "apps"                => $apps,
             "error"               => $error,
             "mainAppUpgrade"      => $mainAppUpgrade,
-            "app_count"           => $appCount,
+            "upgradeAppCount"     => $upgradeAppCount,
             "liveCourseStatus"    => $liveCourseStatus,
             "mobileCustomization" => $mobileCustomization,
             'cloudServiceCount'   => $cloudServiceCount
