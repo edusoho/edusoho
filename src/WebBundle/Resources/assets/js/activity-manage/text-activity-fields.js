@@ -6,40 +6,44 @@
 //     height: 300
 // });
 
-parent.taskValidatorInit = function() {
-    var windowjQuery = parent.$;
-    var $taskcontent = $(window.parent.document).find('#task-manage-content');
-    var $step2_form = windowjQuery.data($taskcontent[0], 'step2_form');
-    var $step3_form = windowjQuery.data($taskcontent[0], 'step3_form');
+window.onload = ()=> {
+  taskValidator();
+}
 
-    var validator2 = $step2_form.validate({
-        onkeyup: false,
-        rules: {
-          title: {
-            required: true,
-          },
-          content: 'required',
+function taskValidator() {
+  var windowjQuery = parent.$;
+  var $taskcontent = $(window.parent.document).find('#task-manage-content');
+  var $step2_form = windowjQuery.data($taskcontent[0], 'step2_form');
+  var $step3_form = windowjQuery.data($taskcontent[0], 'step3_form');
+
+  var validator2 = $step2_form.validate({
+      onkeyup: false,
+      rules: {
+        title: {
+          required: true,
         },
-        messages: {
-          title: "请输入标题",
-          content:"请输入内容"
-        }
-    });
+        content: 'required',
+      },
+      messages: {
+        title: "请输入标题",
+        content:"请输入内容"
+      }
+  });
 
-    var validator3 = $step3_form.validate({
-        onkeyup: false,
-        rules: {
-          condition: {
-            required: true,
-          },
+  var validator3 = $step3_form.validate({
+      onkeyup: false,
+      rules: {
+        condition: {
+          required: true,
         },
-        messages: {
-          condition: "请输完成条件",
-        }
-    });
+      },
+      messages: {
+        condition: "请输完成条件",
+      }
+  });
 
-    windowjQuery.data($taskcontent[0], 'validator2',validator2);
-    windowjQuery.data($taskcontent[0], 'validator3',validator3);
+  windowjQuery.data($taskcontent[0], 'validator2',validator2);
+  windowjQuery.data($taskcontent[0], 'validator3',validator3);
 }
 
 

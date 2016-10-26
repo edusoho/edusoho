@@ -133,7 +133,6 @@ class Editor {
             var windowjQuery = $iframe[0].contentWindow.$;
             var $iframecontent = $iframe.contents().find('#iframe-content');
             this.$task_manage_content.data('step2_form',$iframecontent.find("#step2-form")).data('step3_form',$iframecontent.find("#step3-form"));
-            taskValidatorInit();
         });
     }
 
