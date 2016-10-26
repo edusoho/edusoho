@@ -18,11 +18,6 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-        /* $total = $this->getUserService()->findUsersCountByLessThanCreatedTime( strtotime(date('Y-m-d', time() - 6 * 24 * 60 * 60)));
-         var_dump($total);
-         $timeRange = $this->getTimeRange(7);
-         $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime']);
-        */
         $weekAndMonthDate = array('weekDate' => date('Y-m-d', time() - 6 * 24 * 60 * 60), 'monthDate' => date('Y-m-d', time() - 29 * 24 * 60 * 60));
         return $this->render('TopxiaAdminBundle:Default:index.html.twig', array(
             'dates' => $weekAndMonthDate
@@ -35,34 +30,6 @@ class DefaultController extends BaseController
     private function getUserActiveService()
     {
         return $this->createService('User.UserActiveService');
-    }
-
-    public function noticeAction(Request $request)
-    {
-        //高级去版权用户不显示提醒
-        $copyright = $this->setting('copyright', array());
-        if (!empty($copyright) && $copyright['owned'] == 1 && $copyright['thirdCopyright'] == 1) {
-            return $this->createJsonResponse(array('result' => false));
-        }
-
-        $user       = $this->getCurrentUser();
-        $userNotice = $this->getUpgradeNoticeService()->getNoticeByUserIdAndVersionAndCode($user['id'], '7.0.0', 'MAIN');
-
-        if ($userNotice) {
-            return $this->createJsonResponse(array('result' => false));
-        }
-
-        $noticeFields = array(
-            'userId'  => $user['id'],
-            'version' => '7.0.0',
-            'code'    => 'MAIN'
-        );
-        $this->getUpgradeNoticeService()->addNotice($noticeFields);
-
-        $engine  = $this->container->get('templating');
-        $content = $engine->render('TopxiaAdminBundle:Default:notice-modal.html.twig');
-
-        return $this->createJsonResponse(array('result' => true, 'html' => $content));
     }
 
     public function feedbackAction(Request $request)

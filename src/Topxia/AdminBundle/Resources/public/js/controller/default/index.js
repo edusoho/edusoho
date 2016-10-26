@@ -327,26 +327,12 @@ define(function (require, exports, module) {
         })
     }
 
-
     var remindTeachersEvent = function () {
         $('.js-course-question-list').on('click', '.js-remind-teachers', function () {
             $.post($(this).data('url'), function (response) {
                 Notify.success(Translator.trans('提醒教师的通知，发送成功！'));
             });
         });
-    }
-
-    function noticeModal() {
-        var noticeUrl = $('#admin-notice').val();
-        return $.post(noticeUrl, function (data) {
-            if (data['result']) {
-                $('.modal').html(data['html']);
-                $('.modal').modal({
-                    backdrop: 'static',
-                    show: true
-                });
-            }
-        })
     }
 
 });

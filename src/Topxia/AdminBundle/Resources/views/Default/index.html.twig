@@ -5,8 +5,6 @@
 {% block container %}
   {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 
-  {% if is_granted('ROLE_BACKEND') %}
-
     <div class="row">
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
         {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
@@ -211,9 +209,4 @@
         </div>
       </div>
     </div>
-  {% else %}
-    <h4>{{ '欢迎来到%name%管理后台'|trans({'%name%': setting('site.name') }) }}</h4>
-  {% endif %}
-
-  <input type="hidden" id="admin-notice" value="{{ path('admin_notice_modal') }}"/>
 {% endblock %}
