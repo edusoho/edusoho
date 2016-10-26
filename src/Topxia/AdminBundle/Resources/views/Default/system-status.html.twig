@@ -26,15 +26,15 @@
   <li>
     <div class="title">教育云服务</div>
     <div class="info">
-      {% if   cloudServiceCount > 0 %}
+      {% if   disabledCloudServiceCount > 0 %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-success"></span>
       {% endif %}
       <span class="status-card-warp">
-        {% if   cloudServiceCount > 0 %}
+        {% if   disabledCloudServiceCount > 0 %}
           <a class="text-lg link-underline text-danger" href="javascript:;">
-          {{ cloudServiceCount }}个未开启
+          {{ disabledCloudServiceCount }}个未开启
         </a>
         {% else %}
           <span class="value value-success"><i class="dot"></i>已开启</span>

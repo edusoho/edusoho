@@ -100,55 +100,47 @@ class DefaultController extends BaseController
 
     public function systemStatusAction()
     {
-        $apps  = array();
-        $error = "";
-
         $apps = $this->getAppService()->checkAppUpgrades();
 
         $upgradeAppCount = count($apps);
 
-        if (isset($apps['error'])) {
-            $error = "error";
-        }
+        $indexApps = ArrayToolkit::index($apps, 'code');
+        $mainAppUpgrade = empty($indexApps['MAIN']) ? array() : $indexApps['MAIN'];
 
-        $mainAppUpgrade = null;
-        foreach ($apps as $key => $value) {
-            if (isset($value['code']) && $value['code'] == "MAIN") {
-                $mainAppUpgrade = $value;
-            }
-        }
         if ($mainAppUpgrade) {
             $upgradeAppCount = $upgradeAppCount - 1;
         }
 
-        $cloudServiceCount = 0;
-
-        $storageSetting = $this->getSettingService()->get('storage');
-        if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
-            $cloudServiceCount += 2;
-        }
-        $cloudSms = $this->getSettingService()->get('course');
-        if (empty($cloudSms['live_course_enabled'])) {
-            $cloudServiceCount += 1;
-        }
-
-        $cloudSms = $this->getSettingService()->get('cloud_sms');
-        if (empty($cloudSms['sms_enabled'])) {
-            $cloudServiceCount += 1;
-        }
-
-        $cloudSearch = $this->getSettingService()->get('cloud_search');
-        if (empty($cloudSearch['search_enabled'])) {
-            $cloudServiceCount += 1;
-        }
-
-
         return $this->render('TopxiaAdminBundle:Default:system-status.html.twig', array(
             "mainAppUpgrade"    => $mainAppUpgrade,
             "upgradeAppCount"   => $upgradeAppCount,
-            'cloudServiceCount' => $cloudServiceCount
+            'disabledCloudServiceCount' => $this->getDisabledCloudServiceCount()
         ));
     }
+
+    protected function getDisabledCloudServiceCount()
+    {
+        $disabledCloudServiceCount = 0;
+
+        $settingKeys = array(
+            'course.live_course_enabled' => '',
+            'cloud_sms.sms_enabled' => '',
+            'cloud_search.search_enabled' => '',
+            'storage.upload_mode' => 'cloud'
+        );
+
+        foreach ($settingKeys as $settingName => $expect) {
+            if(empty($expect)){
+                $disabledCloudServiceCount += empty($this->setting($settingName)) ? 1 : 0;
+            } else {
+                $value = $this->setting($settingName);
+                $disabledCloudServiceCount += empty($value) || $value != $expect ? 2 : 0;
+            }
+        }
+
+        return $disabledCloudServiceCount;
+    }
+
 
     public function latestUsersBlockAction(Request $request)
     {
