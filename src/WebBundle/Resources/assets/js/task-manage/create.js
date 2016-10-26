@@ -4,6 +4,7 @@ class Editor {
         this.mode = $editor.data('editorMode');
         this.elem = $modal;
         this.$task_manage_content = $('#task-manage-content');
+        this.$iframe_content = null;
         this.type = $editor.data('editorType');
         this.step = 1;
         this.loaded = false;
@@ -78,18 +79,19 @@ class Editor {
                 return obj.value !== '';
             })
             .get()
-            .concat($('#step2-form').serializeArray())
-            .concat($("#step3-form").serializeArray())
+            .concat(this.$iframe_content.find('#step2-form').serializeArray())
+            .concat(this.$iframe_content.find("#step3-form").serializeArray())
             .concat([
                 {name: 'mediaType', value: this.type}
             ]);
-
+        console.log(postData);
         $.post(this._saveUrl, postData)
             .done((response) => {
-                self.elem.modal('hide');
+                this.elem.modal('hide');
             })
             .fail((response) => {
-
+                this.elem.modal('hide');
+                console.log(response);
             });
     }
 
@@ -135,8 +137,8 @@ class Editor {
         $(iframewin).load(()=>{
             var $iframe = $('#task-manage-content-iframe');
             var windowjQuery = $iframe[0].contentWindow.$;
-            var $iframecontent = $iframe.contents().find('#iframe-content');
-            this.$task_manage_content.data('step2_form',$iframecontent.find("#step2-form")).data('step3_form',$iframecontent.find("#step3-form"));
+            this.$iframe_content = $iframe.contents().find('#iframe-content');
+            this.$task_manage_content.data('step2_form',this.$iframe_content.find("#step2-form")).data('step3_form',this.$iframe_content.find("#step3-form"));
         });
     }
 
