@@ -4,14 +4,8 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
-use Topxia\Service\Course\Impl\CourseServiceImpl;
-use Topxia\Service\Course\Impl\ThreadServiceImpl;
-use Topxia\Service\Order\Impl\OrderServiceImpl;
-use Topxia\Service\System\Impl\StatisticsServiceImpl;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\User\Impl\UserActiveServiceImpl;
 
 class DefaultController extends BaseController
 {
@@ -29,9 +23,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    /**
-     * @return UserActiveServiceImpl
-     */
     private function getUserActiveService()
     {
         return $this->createService('User.UserActiveService');
@@ -552,33 +543,21 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    /**
-     * @return StatisticsServiceImpl
-     */
     protected function getStatisticsService()
     {
         return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
-    /**
-     * @return ThreadServiceImpl
-     */
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    /**
-     * @return CourseServiceImpl
-     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    /**
-     * @return OrderServiceImpl
-     */
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -594,9 +573,6 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-    /**
-     * @return AppServiceImpl
-     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
