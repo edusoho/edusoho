@@ -113,6 +113,9 @@ class Editor {
             $next.removeAttr('disabled');
             $prev.removeAttr('disabled');
             $submit.removeAttr('disabled');
+            if(this.mode === 'edit') {
+                $prev.attr('disabled','disabled');
+            }
             if(!this.loaded) {
                 this.loaded = true;
                 this._initIframe();
@@ -121,6 +124,7 @@ class Editor {
             $iframe.find(".js-step3-view").addClass('active');
             $iframe.find(".js-step2-view").removeClass('active');
             $next.attr('disabled','disabled');
+            $prev.removeAttr('disabled');
         }
     }
 
