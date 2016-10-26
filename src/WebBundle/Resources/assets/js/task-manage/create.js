@@ -122,16 +122,14 @@ class Editor {
     }
 
     _initIframe() {
-        var _self = this;
         var html = '<iframe class="task-manage-content-iframe" id="task-manage-content-iframe" name="task-manage-content-iframe" src="'+this._contentUrl+'"</iframe>';
-        _self.$task_manage_content.html(html); 
-        var win = document.getElementById('task-manage-content-iframe').contentWindow || iframe;
-        $(win).load(function(){
+        this.$task_manage_content.html(html); 
+        var iframewin = document.getElementById('task-manage-content-iframe').contentWindow || iframe;
+        $(iframewin).load(event=>(){
             var $iframe = $('#task-manage-content-iframe');
             var windowjQuery = $iframe[0].contentWindow.$;
             var $iframecontent = $iframe.contents().find('#iframe-content');
-            console.log(_self.$task_manage_content);
-            _self.$task_manage_content.data('step2_form',$iframecontent.find("#step2-form")).data('step3_form',$iframecontent.find("#step3-form"));
+            this.$task_manage_content.data('step2_form',$iframecontent.find("#step2-form")).data('step3_form',$iframecontent.find("#step3-form"));
             taskValidatorInit();
         });
     }
