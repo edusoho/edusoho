@@ -8,8 +8,7 @@
 
 parent.taskValidatorInit = function() {
     var windowjQuery = parent.$;
-    var $taskcontent = $(window.parent.document).find('#task-content');
-
+    var $taskcontent = $(window.parent.document).find('#task-manage-content');
     var $step2_form = windowjQuery.data($taskcontent[0], 'step2_form');
     var $step3_form = windowjQuery.data($taskcontent[0], 'step3_form');
 
