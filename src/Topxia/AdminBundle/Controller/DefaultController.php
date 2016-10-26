@@ -100,9 +100,8 @@ class DefaultController extends BaseController
 
     public function systemStatusAction()
     {
-        $apps          = array();
-        $systemVersion = "";
-        $error         = "";
+        $apps  = array();
+        $error = "";
 
         $apps = $this->getAppService()->checkAppUpgrades();
 
@@ -118,17 +117,11 @@ class DefaultController extends BaseController
                 $mainAppUpgrade = $value;
             }
         }
-
-        $api              = CloudAPIFactory::create('leaf');
-        $liveCourseStatus = $api->get('/lives/account');
-
-        $rootApi             = CloudAPIFactory::create('root');
-        $mobileCustomization = $rootApi->get('/customization/mobile/info');
-        $info                = $rootApi->get('/me');
-
+        if ($mainAppUpgrade) {
+            $upgradeAppCount = $upgradeAppCount - 1;
+        }
 
         $cloudServiceCount = 0;
-
 
         $storageSetting = $this->getSettingService()->get('storage');
         if (empty($storageSetting['upload_mode']) || $storageSetting['upload_mode'] != 'cloud') {
@@ -151,14 +144,9 @@ class DefaultController extends BaseController
 
 
         return $this->render('TopxiaAdminBundle:Default:system-status.html.twig', array(
-            "info"                => $info,
-            "apps"                => $apps,
-            "error"               => $error,
-            "mainAppUpgrade"      => $mainAppUpgrade,
-            "upgradeAppCount"     => $upgradeAppCount,
-            "liveCourseStatus"    => $liveCourseStatus,
-            "mobileCustomization" => $mobileCustomization,
-            'cloudServiceCount'   => $cloudServiceCount
+            "mainAppUpgrade"    => $mainAppUpgrade,
+            "upgradeAppCount"   => $upgradeAppCount,
+            'cloudServiceCount' => $cloudServiceCount
         ));
     }
 
@@ -562,7 +550,7 @@ class DefaultController extends BaseController
     {
         return $this->createService('User.UserActiveService');
     }
-    
+
     private function getDaysDiff($period)
     {
         $days = $period == 'week' ? 6 : 29;
