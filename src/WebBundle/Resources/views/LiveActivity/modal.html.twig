@@ -18,19 +18,19 @@
   </div>
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="time_last">{{ '直播时长'|trans }}</label>
+      <label for="length">{{ '直播时长'|trans }}</label>
     </div>
     <div class="col-md-9 controls">
-      <input id="time_last" class="form-control width-input width-input-large" type="text" name="time_last" value={{ activity.time_last|default('') }}>分钟
+      <input id="length" class="form-control width-input width-input-large" type="text" name="length" value={{ activity.length|default('') }}>分钟
     </div>
   </div>
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="text-content-field" class="style1">{{ '直播说明'|trans }}</label>
+      <label for="text-remark-field" class="style1">{{ '直播说明'|trans }}</label>
     </div>
     <div class="col-md-9 controls">
-      <textarea class="form-control" id="text-content-field" name="content" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
-    >{{ activity.desc|default('') }}</textarea>
+      <textarea class="form-control" id="text-remark-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+    >{{ activity.remark|default('') }}</textarea>
     </div>
   </div>
 {% endblock %}

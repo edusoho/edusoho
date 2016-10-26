@@ -2,11 +2,11 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -44,6 +44,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status',
             'createdUserId'
         ));
+
+        if (isset($fields['startTime'])) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+        if (isset($fields['endTime'])) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
 
         return $this->getTaskDao()->create($fields);
     }
@@ -119,7 +126,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         return false;
     }
-
 
     /**
      * @return ActivityService

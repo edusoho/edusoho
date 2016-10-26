@@ -66,7 +66,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
-            'desc',
+            'remark',
             'mediaId',
             'mediaType',
             'content',
@@ -105,7 +105,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $activityModel = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
-        $activityModel->update($savedActivity['mediaId'], $fields);
+        if (!empty($savedActivity['mediaId'])) {
+            $activityModel->update($savedActivity['mediaId'], $fields);
+        }
 
         return $this->getActivityDao()->update($id, $fields);
     }
