@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
@@ -147,28 +148,6 @@ class DefaultController extends BaseController
             "mainAppUpgrade"    => $mainAppUpgrade,
             "upgradeAppCount"   => $upgradeAppCount,
             'cloudServiceCount' => $cloudServiceCount
-        ));
-    }
-
-    public function latestUsersBlockAction(Request $request)
-    {
-        $users = $this->getCourseService()->searchMemberCountGroupByFields($conditions, $groupBy);
-        return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
-            'users' => $users
-        ));
-    }
-
-    public function userCoinsRecordsBlockAction(Request $request)
-    {
-        $userIds = $this->getCashService()->findUserIdsByFlows("outflow", "", "DESC", 0, 5);
-
-        $userIds = ArrayToolkit::column($userIds, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('TopxiaAdminBundle:Default:user-coins-block.html.twig', array(
-            'userIds' => $userIds,
-            'users'   => $users
         ));
     }
 
@@ -434,17 +413,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function latestPaidOrdersBlockAction(Request $request)
-    {
-        $orders = $this->getOrderService()->searchOrders(array('status' => 'paid'), 'latest', 0, 5);
-        $users  = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:Default:latest-paid-orders-block.html.twig', array(
-            'orders' => $orders,
-            'users'  => $users
-        ));
-    }
-
     public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
     {
         $course   = $this->getCourseService()->getCourse($courseId);
@@ -464,11 +432,6 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
-    private function getToken()
-    {
-        $site = $this->getSettingService()->get('site');
-        return 'token_'.date('Ymd', time()).$site['url'];
-    }
 
     public function weekday($time)
     {
@@ -515,6 +478,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
