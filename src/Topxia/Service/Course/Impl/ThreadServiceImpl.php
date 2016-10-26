@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Course\Dao\Impl\ThreadPostDaoImpl;
 use Topxia\Service\Course\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -494,6 +495,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->createDao('Course.ThreadDao');
     }
 
+    /**
+     * @return ThreadPostDaoImpl
+     */
     protected function getThreadPostDao()
     {
         return $this->createDao('Course.ThreadPostDao');
