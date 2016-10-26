@@ -18,11 +18,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    private function getUserActiveService()
-    {
-        return $this->createService('User.UserActiveService');
-    }
-
     public function feedbackAction(Request $request)
     {
         $site  = $this->getSettingService()->get('site');
@@ -33,11 +28,11 @@ class DefaultController extends BaseController
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
-    
+
     public function validateDomainAction(Request $request)
     {
         $inspectList = array(
-            $this->addInspectRole('host', $this->hostInspect($request))
+            $this->addInspectRole('host', $this->domainInspect($request))
         );
         $inspectList = array_filter($inspectList);
         return $this->render('TopxiaAdminBundle:Default:domain.html.twig', array(
@@ -54,7 +49,7 @@ class DefaultController extends BaseController
         return array('name' => $name, 'value' => $value);
     }
 
-    private function hostInspect($request)
+    private function domainInspect($request)
     {
         $currentHost        = $request->server->get('HTTP_HOST');
         $siteSetting        = $this->getSettingService()->get('site');
@@ -563,6 +558,11 @@ class DefaultController extends BaseController
     }
 
 
+    private function getUserActiveService()
+    {
+        return $this->createService('User.UserActiveService');
+    }
+    
     private function getDaysDiff($period)
     {
         $days = $period == 'week' ? 6 : 29;
