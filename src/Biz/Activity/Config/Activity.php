@@ -8,7 +8,6 @@ use Topxia\Common\Exception\UnexpectedValueException;
 
 abstract class Activity
 {
-
     private $biz;
 
     /**
@@ -39,7 +38,7 @@ abstract class Activity
     {
     }
 
-    public final function __construct(Biz $biz)
+    final public function __construct(Biz $biz)
     {
         $this->biz = $biz;
     }
@@ -57,13 +56,13 @@ abstract class Activity
      *
      * @return array<String, String>
      */
-    public abstract function registerActions();
+    abstract public function registerActions();
 
     /**
-     * @param $action
+     * @param  $action
      * @return String
      */
-    public final function getAction($action)
+    final public function getAction($action)
     {
         $map = $this->registerActions();
         return $map[$action];
@@ -72,17 +71,17 @@ abstract class Activity
     /**
      * @return mixed
      */
-    protected abstract function registerListeners();
+    abstract protected function registerListeners();
 
-    public abstract function getMetas();
+    abstract public function getMetas();
 
     /**
-     * @param string $eventName
+     * @param  string     $eventName
      * @return Listener
      */
-    public final function getListener($eventName)
+    final public function getListener($eventName)
     {
-        $map = $this->getEventMap();
+        $map = $this->registerListeners();
         if (empty($map) || !isset($map[$eventName])) {
             return null;
         }
