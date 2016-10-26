@@ -57,8 +57,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $fields['mediaType']);
-        $media         = $activityModel->create($fields);
+        $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
+        $media          = $activityConfig->create($fields);
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
@@ -88,7 +88,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $activity = $this->getActivityDao()->create($fields);
 
-        $listener = $activityModel->getListener('activity.created');
+        $listener = $activityConfig->getListener('activity.created');
         if (!empty($listener)) {
             $listener->handle($activity, array());
         }
@@ -104,9 +104,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
+        $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
         if (!empty($savedActivity['mediaId'])) {
-            $activityModel->update($savedActivity['mediaId'], $fields);
+            $activityConfig->update($savedActivity['mediaId'], $fields);
         }
 
         return $this->getActivityDao()->update($id, $fields);
@@ -125,9 +125,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $activity['mediaType']);
+        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
 
-        $activityModel->delete($activity['mediaId']);
+        $activityConfig->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
     }
