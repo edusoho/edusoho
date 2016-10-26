@@ -28,17 +28,21 @@ class LogServiceImpl extends BaseService implements LogService
     {
         $conditions = $this->prepareSearchConditions($conditions);
 
-        switch ($sort) {
-            case 'created':
-                $sort = array('createdTime', 'DESC');
-                break;
-            case 'createdByAsc':
-                $sort = array('createdTime', 'ASC');
-                break;
+        if (is_array($sort)) {
+            $sort = $sort;
+        } else {
+            switch ($sort) {
+                case 'created':
+                    $sort = array('createdTime', 'DESC');
+                    break;
+                case 'createdByAsc':
+                    $sort = array('createdTime', 'ASC');
+                    break;
 
-            default:
-                throw $this->createServiceException('参数sort不正确。');
-                break;
+                default:
+                    throw $this->createServiceException('参数sort不正确。');
+                    break;
+            }
         }
 
         $logs = $this->getLogDao()->searchLogs($conditions, $sort, $start, $limit);
