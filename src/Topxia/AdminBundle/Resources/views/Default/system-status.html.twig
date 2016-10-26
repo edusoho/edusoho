@@ -14,28 +14,27 @@
   <li>
     <div class="title">网校应用</div>
     <div class="info">
-      {% if upgradeAppCount  %}
+      {% if upgradeAppCount == 0 %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
         <span class="text-lg">已更新</span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
-        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ upgradeAppCount }}
-          个未更新</a>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ upgradeAppCount }} 个未更新</a>
       {% endif %}
     </div>
   </li>
   <li>
     <div class="title">教育云服务</div>
     <div class="info">
-      {% if   cloudServiceCount > 0 %}
+      {% if   disabledCloudServiceCount > 0 %}
         <span class="glyphicon glyphicon-info-sign text-danger"></span>
       {% else %}
         <span class="glyphicon glyphicon-info-sign text-success"></span>
       {% endif %}
       <span class="status-card-warp">
-        {% if   cloudServiceCount > 0 %}
+        {% if   disabledCloudServiceCount > 0 %}
           <a class="text-lg link-underline text-danger" href="javascript:;">
-          {{ cloudServiceCount }}个未开启
+          {{ disabledCloudServiceCount }}个未开启
         </a>
         {% else %}
           <span class="value value-success"><i class="dot"></i>已开启</span>
