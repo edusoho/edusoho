@@ -16,14 +16,14 @@ class EchartsBuilder
     public static function createLineDefaultData($days, $format, $series)
     {
         $lineChatsData                  = array();
-        $lineChatsData['xAxis']['date'] = self::generateDateRange($days, $format);
+        $lineChatsData['xAxis']['date'] = EchartsBuilder::generateDateRange($days, $format);
 
-        $zeroAnalysis = self::generateZeroData($lineChatsData['xAxis']['date']);
+        $zeroAnalysis = EchartsBuilder::generateZeroData($lineChatsData['xAxis']['date']);
         array_walk($series, function (&$data, $key) use ($zeroAnalysis) {
             $data = ArrayToolkit::index($data, 'date');
             $data = array_merge($zeroAnalysis, $data);
 
-            $data = self::arrayValueRecursive($data, 'count');
+            $data = EchartsBuilder::arrayValueRecursive($data, 'count');
         });
         $lineChatsData['series'] = $series;
         return $lineChatsData;
@@ -39,14 +39,14 @@ class EchartsBuilder
     public static function createBarDefaultData($days, $format, $series)
     {
         $lineChatsData                  = array();
-        $lineChatsData['xAxis']['date'] = self::generateDateRange($days, $format);
-        $zeroAnalysis                   = self::generateZeroData($lineChatsData['xAxis']['date']);
+        $lineChatsData['xAxis']['date'] = EchartsBuilder::generateDateRange($days, $format);
+        $zeroAnalysis                   = EchartsBuilder::generateZeroData($lineChatsData['xAxis']['date']);
 
         array_walk($series, function (&$data, $key) use ($zeroAnalysis) {
             $data = ArrayToolkit::index($data, 'date');
             $data = array_merge($zeroAnalysis, $data);
 
-            $data = self::arrayValueRecursive($data, 'count');
+            $data = EchartsBuilder::arrayValueRecursive($data, 'count');
         });
         $lineChatsData['series'] = $series;
         return $lineChatsData;
