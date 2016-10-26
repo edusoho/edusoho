@@ -3,7 +3,8 @@
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block container %}
-  {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
+  {# 域名检查提示#}
+  {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
 
     <div class="row">
       {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}

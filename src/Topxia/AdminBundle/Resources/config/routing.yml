@@ -2,11 +2,6 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
-admin_inspect:
-    pattern:  /inspect
-    defaults: { _controller: TopxiaAdminBundle:Default:inspect }
-    permissions: [admin]
-
 admin_notice_modal:
     pattern:  /notice/modal
     defaults: { _controller: TopxiaAdminBundle:Default:notice }

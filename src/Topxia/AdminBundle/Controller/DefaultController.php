@@ -33,13 +33,14 @@ class DefaultController extends BaseController
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
-    public function inspectAction(Request $request)
+    
+    public function validateDomainAction(Request $request)
     {
         $inspectList = array(
             $this->addInspectRole('host', $this->hostInspect($request))
         );
         $inspectList = array_filter($inspectList);
-        return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Default:domain.html.twig', array(
             'inspectList' => $inspectList
         ));
     }
@@ -100,15 +101,6 @@ class DefaultController extends BaseController
     {
         $url = "http://open.edusoho.com/api/v1/context/notice";
         return CurlToolkit::request('GET', $url);
-    }
-
-    public function officialMessagesAction()
-    {
-        $message = $this->getAppService()->getMessages();
-
-        return $this->render('TopxiaAdminBundle:Default:official.messages.html.twig', array(
-            "message" => $message
-        ));
     }
 
     public function systemStatusAction()
