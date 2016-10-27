@@ -120,9 +120,9 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        foreach ($orderBys as $orderBy) {
-            $builder->addOrderBy($orderBy[0], $orderBy[1]);
-        }
+        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
+            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        };
 
         return $builder->execute()->fetchAll() ?: array();
     }
