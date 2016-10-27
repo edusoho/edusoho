@@ -21,8 +21,7 @@
     {% elseif mode == 'create' %}
       data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
     {% endif %}>
-    <div id="task-manage-type" class="{% if mode == 'edit' %}hidden {% endif %}">
-      <ul class="es-step es-step-3 clearfix">
+    <ul class="es-step es-step-3 clearfix" id="task-manage-step">
         <li class="doing">
           <span class="number">1</span>
           选择教学手段
@@ -36,6 +35,7 @@
           设置完成条件
         </li>
       </ul>
+    <div id="task-manage-type" class="{% if mode == 'edit' %}hidden {% endif %}">
       <ul class="task-manage-type-list row">
         {% if types is defined %}
           {% for type, value in types %}
@@ -48,6 +48,72 @@
             </li>
           {% endfor %}
         {% endif %}
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-videoclass"></i>
+            看视频
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-description"></i>
+            看文档
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-pptclass"></i>
+            看PPT
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-flashclass"></i>
+            看flash
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-audioclass"></i>
+            听音频
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-videocam"></i>
+            参加直播
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-filedownload"></i>
+            下载资料
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-exam"></i>
+            做作业题
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-mylibrarybooks"></i>
+            做练习题
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-lesson"></i>
+            参加考试
+          </a>
+        </li>
+        <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
+          <a data-role="activityType">
+            <i class="es-icon es-icon-comment"></i>
+            参加讨论
+          </a>
+        </li>
       </ul>
     </div>
     <div id="task-manage-content"></div>

@@ -36,7 +36,7 @@ class Editor {
         if(this.step != 1  && !this._validator(this.step)) {
             return;
         }
-        this.step++;
+        this.step += 1;
         this._switchPage();
     }
 
@@ -47,7 +47,7 @@ class Editor {
         if(this.step != 1 && !this._validator(this.step)) {
             return;
         }
-        this.step--;
+        this.step -= 1;
         this._switchPage();
     }
 
@@ -84,14 +84,12 @@ class Editor {
             .concat([
                 {name: 'mediaType', value: this.type}
             ]);
-        console.log(postData);
         $.post(this._saveUrl, postData)
             .done((response) => {
                 this.elem.modal('hide');
             })
             .fail((response) => {
                 this.elem.modal('hide');
-                console.log(response);
             });
     }
 
@@ -100,29 +98,34 @@ class Editor {
             $next = $("#course-tasks-next"),
             $prev = $("#course-tasks-prev"),
             $iframe = $('#task-manage-content-iframe').contents(),
-            $submit = $('#course-tasks-submit');
-
+            $submit = $('#course-tasks-submit'),
+            $step = $('#task-manage-step');
         if (this.step == 1) {
+            $step.find('li:eq(0)').addClass('doing').siblings().removeClass('doing');
             $type.show();
             this.$task_manage_content.hide();
             $prev.attr('disabled','disabled');
             $submit.attr('disabled','disabled');
         } else if (this.step == 2) {
+            $step.find('li:eq(1)').addClass('doing').siblings().removeClass('doing');
+            $next.attr('disabled','disabled');
             $type.hide();
             this.$task_manage_content.show();
             $iframe.find(".js-step3-view").removeClass('active');
             $iframe.find(".js-step2-view").addClass('active');
-            $next.removeAttr('disabled');
-            $prev.removeAttr('disabled');
-            $submit.removeAttr('disabled');
             if(this.mode === 'edit') {
                 $prev.attr('disabled','disabled');
             }
             if(!this.loaded) {
                 this.loaded = true;
                 this._initIframe();
+                return;
             }
+            $next.removeAttr('disabled');
+            $prev.removeAttr('disabled');
+            $submit.removeAttr('disabled');
         } else if (this.step == 3) {
+            $step.find('li:eq(2)').addClass('doing').siblings().removeClass('doing');
             $iframe.find(".js-step3-view").addClass('active');
             $iframe.find(".js-step2-view").removeClass('active');
             $next.attr('disabled','disabled');
@@ -135,15 +138,20 @@ class Editor {
         this.$task_manage_content.html(html); 
         var iframewin = document.getElementById('task-manage-content-iframe').contentWindow || iframe;
         $(iframewin).load(()=>{
+            $("#course-tasks-next").removeAttr('disabled');
+            $("#course-tasks-prev").removeAttr('disabled');
+            $('#course-tasks-submit').removeAttr('disabled');
             var $iframe = $('#task-manage-content-iframe');
             var windowjQuery = $iframe[0].contentWindow.$;
-            this.$iframe_content = $iframe.contents().find('#iframe-content');
-            this.$task_manage_content.data('step2_form',this.$iframe_content.find("#step2-form")).data('step3_form',this.$iframe_content.find("#step3-form"));
+            this.$iframe_content = $iframe.contents().find('body').addClass('task-iframe-body').find('#iframe-content');
         });
     }
 
     _validator(index) {
-        var validator = this.$task_manage_content.data('validator'+index);
+        var $iframe = $('#task-manage-content-iframe');
+        var windowjQuery = $iframe[0].contentWindow.$;
+        var $from =  this.$iframe_content.find("#step"+index+"-form");
+        var validator = windowjQuery.data($from[0], 'validator');
         if(validator && !validator.form()) {
             return false;
         }
