@@ -39,4 +39,5 @@ npm run compile:debug  #不压缩
 * webpack编译失败的通知
 * npm run compile 没修改的话也会git变化
 * libs和common的区别能不能再改进
+* build之后chunk-manifest.json问题优化
 * 搞成独立npm
