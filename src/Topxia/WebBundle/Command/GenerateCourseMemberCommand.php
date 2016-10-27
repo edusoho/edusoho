@@ -55,22 +55,18 @@ class GenerateCourseMemberCommand extends BaseCommand
     protected function becomeStudent($member)
     {
         $orderFileds = array(
-            'priceType'      => 'RMB',
-            'totalPrice'     => 0,
-            'amount'         => 0,
-            'coinRate'       => 1,
-            'coinAmount'     => 0,
-            'userId'         => $member["userId"],
-            'payment'        => 'none',
-            'targetId'       => $member['courseId'],
-            'coupon'         => '',
-            'couponDiscount' => 0
+            'price' => 0,
+            'remark' => '',
+            'isAdminAdded' => 1
         );
 
-        $processor = OrderProcessorFactory::create('course');
-        $processor->createOrder($orderFileds, $fields);
+        list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($member["userId"], $member['courseId'], $orderFileds);
     }
 
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+    }
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
