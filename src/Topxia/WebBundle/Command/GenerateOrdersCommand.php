@@ -10,7 +10,7 @@ class GenerateOrdersCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:generate-orders')
-            ->addArgument('courseId', InputArgument::REQUIRED, '课程id');
+            ->addArgument('courseId', InputArgument::REQUIRED, '课程id')
             ->addArgument('index', InputArgument::REQUIRED, '数量');
     }
 
