@@ -52,8 +52,6 @@ use Symfony\Component\Yaml\Yaml;
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活跃用户记录表';
             INSERT INTO user_active_log (userid, activeTime,createdTime) SELECT `sess_user_id`, FROM_UNIXTIME(`sess_time`, '%Y%m%d'),`sess_time` FROM `sessions`;
             ");
-        } else {
-            $connection->exec("DROP TABLE IF EXISTS `user_active_log`");
         }
 
         if (!$this->isIndexExist('status', 'courseId_createdTime')) {
