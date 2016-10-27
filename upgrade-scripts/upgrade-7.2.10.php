@@ -59,6 +59,17 @@ use Symfony\Component\Yaml\Yaml;
         if (!$this->isIndexExist('status', 'courseId_createdTime')) {
             $connection->exec("ALTER TABLE status ADD INDEX courseId_createdTime (courseId, createdTime);");
         }
+
+        $cdnSetting = $this->getSettingService()->get('cdn', array());
+        if(!empty($cdnSetting['url'])) {
+            $newCdnSetting = array(
+                'enabled' => $cdnSetting['enabled'],
+                'defaultUrl' => $cdnSetting['url'],
+                'userUrl' => '',
+                'contentUrl' => ''
+            );
+            $this->getSettingService()->set('cdn', $newCdnSetting);
+        }
     }
 
     protected function isFieldExist($table, $filedName)
