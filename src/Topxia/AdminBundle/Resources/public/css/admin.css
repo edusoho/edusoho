@@ -305,13 +305,14 @@ input.LargeInput {width: 600px;}
 
 .subfield-list > li .number {
   font-size: 24px;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
   display: block;
   color: #333;
 }
 
 .subfield-list li p {
   margin-bottom: 0;
+  color: #999;
 }
 
 .subfield-list.four-subfield > li {
