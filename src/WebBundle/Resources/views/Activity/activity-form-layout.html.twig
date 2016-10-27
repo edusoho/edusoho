@@ -39,8 +39,4 @@
     {% endblock %}
   </form>
 </div>
-{% block script %}
-  {% for path in script()  %}
-    <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
-  {% endfor %}
-{% endblock %}
+{% include 'TopxiaWebBundle::js_loader.html.twig' %}

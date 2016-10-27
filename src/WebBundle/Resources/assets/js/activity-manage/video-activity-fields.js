@@ -1,7 +1,10 @@
-/**
- * Created by Simon on 27/10/2016.
- */
 
+console.log(window);
+console.log(window.UploaderSDK);
+
+let uploaderSdk = new window.UploaderSDK({
+
+});
 
 $("#material a").click(function (e) {
     e.preventDefault()
