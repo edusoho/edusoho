@@ -362,7 +362,7 @@ input.LargeInput {width: 600px;}
 .status-card-warp .status-card {
   display: none;
   position: absolute;
-  top: 110%;
+  top:100%;
   left: -50px;
   width: 170px;
   height: 180px;
@@ -370,6 +370,7 @@ input.LargeInput {width: 600px;}
   border-radius: 4px;
   border: 1px solid #f1f1f1;
   box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+
 }
 
 .status-card-warp .open-serve-list {
