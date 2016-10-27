@@ -5,7 +5,6 @@
 {% block container %}
   {# 域名检查提示#}
   {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
-{{ dump(setting('copyright.thirdCopyright')) }}
   <div class="row">
     {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
       {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}

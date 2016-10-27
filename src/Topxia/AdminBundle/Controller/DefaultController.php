@@ -346,10 +346,10 @@ class DefaultController extends BaseController
 
     public function cloudSearchRankingAction(Request $request)
     {
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->get('/search/words/ranking', array());
-        var_dump($result);
-        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('result' => $result));
+        $api           = CloudAPIFactory::create('root');
+        $result        = $api->get('/search/words/ranking', array());
+        $searchRanking = isset($result['items']) ? $result['items'] : array();
+        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('searchRankings' => $searchRanking));
     }
 
 
