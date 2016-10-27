@@ -41,7 +41,7 @@ class SimpleValidator
 
     public static function truename($value)
     {
-        return !!preg_match('/^[\x{4e00}-\x{9fa5}.·]{2,5}$/u', $value);
+        return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.·]{4,36}$/u', $value);
     }
 
     public static function idcard($value)
