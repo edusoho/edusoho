@@ -2,11 +2,13 @@
 namespace Topxia\Service\User;
 
 use Permission\Common\PermissionBuilder;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
@@ -23,6 +25,10 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
+        $forbidden = AuthenticationHelper::checkLoginForbidden($this->container->get('request'));
+        if ($forbidden['status'] == 'error') {
+            throw new AuthenticationException($forbidden['message']);
+        }
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();
