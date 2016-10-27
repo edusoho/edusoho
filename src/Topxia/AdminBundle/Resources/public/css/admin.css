@@ -281,10 +281,13 @@ input.LargeInput {width: 600px;}
 }
 
 .tata-popover {
-  max-width: 370px;
-  width: 370px;
   color: #666;
   font-size: 12px;
+}
+
+.tata-popover-lg {
+  max-width: 370px;
+  width: 370px;
 }
 
 .tata-popover .popover-item + .popover-item {
