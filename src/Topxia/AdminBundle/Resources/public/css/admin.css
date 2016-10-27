@@ -269,11 +269,35 @@ input.LargeInput {width: 600px;}
   height: 420px;
 }
 
+.color-gray {
+  color: #999;
+}
+
 .search-count {
  height: 10px;
  background: #428bca;
  border-radius: 2px;
  float: right;
+}
+
+.tata-popover {
+  color: #666;
+  font-size: 12px;
+}
+
+.tata-popover-lg {
+  max-width: 370px;
+  width: 370px;
+}
+
+.tata-popover .popover-item + .popover-item {
+  margin-top: 15px;
+}
+
+.tata-popover .popover-item .title {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
 }
 
 .subfield-list {
@@ -313,6 +337,10 @@ input.LargeInput {width: 600px;}
 .subfield-list li p {
   margin-bottom: 0;
   color: #999;
+}
+
+.subfield-list .text-lg {
+  font-size: 16px;
 }
 
 .subfield-list.four-subfield > li {
