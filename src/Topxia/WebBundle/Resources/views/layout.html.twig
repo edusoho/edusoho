@@ -90,11 +90,11 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
-{% if script() is empty or use_webapck_loader|default(false) == false %}
-  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-{% else %}
+{% if script() is not empty or use_webapck_loader|default(false) == true %}
   {# webpack #}
   {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
+{% else %}
+  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 {% endif %}
 
 </body>
