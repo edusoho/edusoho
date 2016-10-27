@@ -1,0 +1,28 @@
+<table class="table table-condensed table-noborder table-overflow">
+  <thead>
+  <tr>
+    <th width="70%">{{ '评价内容'|trans }}</th>
+    <th width="15%">{{ '评分'|trans }}</th>
+    <th width="15%">{{ '操作'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  {% for review in reviews %}
+    {% set author = users[review.userId]|default(null) %}
+    {% set course = courses[review.courseId]|default(null) %}
+    <tr>
+      <td>
+        <a class="link-primary" target="_blank" href="{{ path('course_review_list',{id:review.courseId}) }}">  {{ review.content|plain_text(60) }}</a>
+      </td>
+      <td class="pull-right prl">{{ review.rating }}{{'星'|trans}}</td>
+      <td>
+        <a target="_blank" href="{{ path('course_review_list',{id:review.courseId}) }}" class="btn btn-default btn-xs">查看</a>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'暂无评价'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
