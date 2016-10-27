@@ -2,10 +2,9 @@
 namespace Topxia\WebBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\AccessDeniedException;
-use Topxia\WebBundle\Handler\AuthenticationHelper;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class KernelRequestListener
@@ -18,18 +17,8 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-
         if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
             return;
-        }
-
-        if ($request->getMethod() === 'POST' && $request->getPathInfo() === '/login_check') {
-            $forbidden = AuthenticationHelper::checkLoginForbidden($request);
-            if ($forbidden['status'] == 'error') {
-                // $request->attributes->set(SecurityContextInterface::AUTHENTICATION_ERROR, new AuthenticationException($forbidden['message']));
-                $event->setResponse(new RedirectResponse('/login'));
-                return;
-            }
         }
 
         $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
