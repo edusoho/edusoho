@@ -11,7 +11,7 @@ define(function (require, exports, module) {
             html: true,
             trigger: 'hover',
             placement: 'bottom',
-            template: '<div class="popover tata-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
             content: function() {
 
                 var html = $(this).siblings('.popover-content').html();
@@ -23,7 +23,7 @@ define(function (require, exports, module) {
             html: true,
             trigger: 'hover',
             placement: 'bottom',
-            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            template: '<div class="popover tata-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
             content: function() {
 
                 var html = $(this).siblings('.popover-content').html();
