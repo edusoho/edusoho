@@ -10,6 +10,7 @@ class GenerateOrdersCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('util:generate-orders')
+            ->addArgument('courseId', InputArgument::REQUIRED, '课程id');
             ->addArgument('index', InputArgument::REQUIRED, '数量');
     }
 
@@ -18,8 +19,9 @@ class GenerateOrdersCommand extends BaseCommand
         $this->initServiceKernel();
 
         $index = $input->getArgument('index');
+        $courseId = $input->getArgument('courseId');
 
-        $course = $this->getCourseService()->getCourse(1);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         for ($i = 0; $i < $index; $i++) {
             $user = $this->getUserService()->getUserByLoginField('test_'.$i);
