@@ -101,12 +101,12 @@ class UserServiceImpl extends BaseService implements UserService
         if($isVerified){
             $conditions['hasVerifiedMobile'] = true;
             $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
-        }else{
-            $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
-            $userIds = ArrayToolkit::column($users, 'id');
-            $profiles = $this->searchUserProfiles(array('mobile' => 1, 'ids' => $userIds), array('id', 'desc'), 0, PHP_INT_MAX);
-            $users = ArrayToolkit::index($users, 'id');
+        }else{ 
+            $profiles = $this->getProfileDao()->findDistinctMobileProfiles($start, $limit);
+            $conditions['userIds'] = ArrayToolkit::column($profiles, 'id');
+            $users = $this->searchUsers($conditions, $orderBy, 0, PHP_INT_MAX);
             $profiles = ArrayToolkit::index($profiles, 'id');
+            $users = ArrayToolkit::index($users, 'id');
             $users = array_intersect_key($users, $profiles);
         }
 
@@ -1644,9 +1644,13 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false)
     {
+        if(empty($userIds)){
+            return array();
+        }
+
         $conditions = array(
-            'locked' => 0,
-            'ids'    => $userIds
+            'locked'  => 0,
+            'userIds' => $userIds
         );
 
         $orderBy = array('createdTime', 'DESC');

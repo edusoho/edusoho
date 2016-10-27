@@ -124,6 +124,15 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function findDistinctMobileProfiles($start, $limit)
+    {
+        $sql = "SELECT *
+                FROM `user_profile` 
+                GROUP BY `mobile`
+                LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     private function createProfileQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
