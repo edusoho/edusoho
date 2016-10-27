@@ -78,9 +78,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->getCountByMobileNotEmpty();
     }
 
-    public function countUserHasMobile($isVerified=false)
+    public function countUserHasMobile($needVerified=false)
     {
-        if($isVerified){
+        if($needVerified){
             $count = $this->searchUserCount(array(
                     'locked' => 0,
                     'hasVerifiedMobile' => true
@@ -92,13 +92,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $count;
     }
 
-    public function findUsersHasMobile($start, $limit, $isVerified=false)
+    public function findUsersHasMobile($start, $limit, $needVerified = false)
     {
         $conditions = array(
             'locked' => 0
         );
         $orderBy = array('createdTime', 'ASC');
-        if($isVerified){
+        if($needVerified){
             $conditions['hasVerifiedMobile'] = true;
             $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
         }else{ 
@@ -1653,23 +1653,18 @@ class UserServiceImpl extends BaseService implements UserService
             'userIds' => $userIds
         );
 
-        $orderBy = array('createdTime', 'ASC');
-        
-        $conditions['hasVerifiedMobile'] = true;
-        $count = $this->searchUserCount($conditions);
-        $users = $this->searchUsers($conditions, $orderBy, 0, $count);
-        $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
-
         if($needVerified){
+            $conditions['hasVerifiedMobile'] = true;
+            $count = $this->searchUserCount($conditions);
+            $users = $this->searchUsers($conditions, array('createdTime', 'ASC'), 0, $count);
+            $mobiles = ArrayToolkit::column($users, 'verifiedMobile');
             return $mobiles;
-        }
-        
-        $profiles = $this->searchUserProfiles(array('mobile' => 1, 'ids' => $userIds), array('id', 'ASC'), 0, PHP_INT_MAX);
-        $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
+        } else {
+            $profiles = $this->searchUserProfiles(array('mobile' => 1, 'ids' => $userIds), array('id', 'ASC'), 0, PHP_INT_MAX);
+            $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
 
-        $mobiles = array_merge($mobiles, $profileMobiles);
-        $mobiles = array_filter($mobiles);
-        return array_unique($mobiles);
+            return $profileMobiles;
+        }
     }
 
     public function updateUserLocale($id, $locale)
