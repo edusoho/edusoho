@@ -139,3 +139,24 @@ a:hover {
 .search-part-table tbody > tr > td .part-total {
   text-align: right;
 }
+.sms-table {
+  color: #666666;
+}
+.sms-table tbody > tr > td:nth-child(3) {
+  color: #999999;
+}
+.head-leader-edit .file-name {
+  display: inline-block;
+  padding: 10px;
+  margin-top: 10px;
+  color: #666666;
+  border: 1px solid #dddddd;
+  background-color: #fafafa;
+}
+.cloud-progress {
+  border-radius: 10px;
+  height: 16px;
+}
+.cloud-progress .progress-bar {
+  border-radius: 10px;
+}
