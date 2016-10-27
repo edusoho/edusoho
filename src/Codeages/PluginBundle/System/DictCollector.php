@@ -20,6 +20,8 @@ class DictCollector
             $resources = array();
             $dict = array();
 
+            var_dump($files);
+
             foreach ($files as $file) {
                 $resources[] = new FileResource($file);
                 $dict = array_merge($dict, Yaml::parse(file_get_contents($file)));
