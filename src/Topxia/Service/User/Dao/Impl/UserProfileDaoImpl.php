@@ -128,6 +128,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
     {
         $sql = "SELECT *
                 FROM `user_profile` 
+                WHERE `mobile` != ''
                 GROUP BY `mobile`
                 LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql);
