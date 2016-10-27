@@ -157,10 +157,10 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->searchUserCount(array());
 
-        $todayCourseMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
+        $todayCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
         $todayClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
 
-        $totalCourseMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
+        $totalCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
         $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
 
         $todayVipNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'vip', "status" => "paid"));
@@ -343,6 +343,14 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function cloudSearchRankingAction(Request $request)
+    {
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->get('/search/words/ranking', array());
+       // var_dump($result);
+        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('result' => $result));
     }
 
 
