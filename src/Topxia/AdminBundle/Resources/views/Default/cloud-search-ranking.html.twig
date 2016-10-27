@@ -13,7 +13,8 @@
     {% if searchRanking.words %}
       <tr>
         <td>
-          <a class="link-primary" href="">{{ searchRanking.words }}</a>
+          <a class="link-primary" target="_blank"
+             href="{{ path('cloud_search',{q:searchRanking.words}) }}">{{ searchRanking.words }}</a>
         </td>
         <td class="text-middle">
           <div class="search-count js-cloud-search" data-count="{{ searchRanking.amount }}"></div>
