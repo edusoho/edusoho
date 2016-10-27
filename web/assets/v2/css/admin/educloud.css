@@ -160,3 +160,38 @@ a:hover {
 .cloud-progress .progress-bar {
   border-radius: 10px;
 }
+.cloud-banner-top {
+  position: relative;
+}
+.cloud-banner-top .access-btn {
+  display: inline-block;
+  position: absolute;
+  right: 264px;
+  bottom: 70px;
+  padding: 12px 50px;
+  color: #fff;
+  border: 1px solid #fff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.cloud-banner-top .access-btn:hover {
+  background-color: #428af0;
+}
+.cloud-banner.banner-bg-blue {
+  padding-left: 80px;
+  background-color: #F6F9FF;
+}
+.cloud-banner.banner-bg-gray {
+  padding-right: 100px;
+  background-color: #F5F5F5;
+}
+.cloud-banner .title {
+  padding-top: 100px;
+  font-size: 26px;
+  font-weight: bold;
+}
+.cloud-banner .subtitle {
+  font-size: 26px;
+}
