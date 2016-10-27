@@ -266,14 +266,19 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    public function searchMembers($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        foreach ($orderBys as $orderBy) {
+            $builder->addOrderBy($orderBy[0], $orderBy[1]);
+        }
+        
         return $builder->execute()->fetchAll() ?: array();
     }
 
