@@ -336,6 +336,10 @@ input.LargeInput {width: 600px;}
   color: #999;
 }
 
+.subfield-list .text-lg {
+  font-size: 16px;
+}
+
 .subfield-list.four-subfield > li {
   width: 25%;
 }

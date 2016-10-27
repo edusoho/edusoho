@@ -4,8 +4,8 @@
     <div class="info">
       {% if mainAppUpgrade %}
         <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
-          {{ mainAppUpgrade.package.fromVersion }}
-         <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> 有更新</a>
+        <span class="text-lg">{{ mainAppUpgrade.package.fromVersion }}</span>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> 有更新</a>
       {% else %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
         <span class="text-lg">{{ constant('Topxia\\System::VERSION') }}</span>
