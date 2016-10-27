@@ -168,8 +168,8 @@ class DefaultController extends BaseController
         $totalVipNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'vip', "status" => "paid"));
 
 
-        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
-        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array());
+        $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
+        $totalThreadNum         = $this->getThreadService()->searchThreadCount(array('type' => 'question'));
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'onlineCount' => $onlineCount,
@@ -348,7 +348,7 @@ class DefaultController extends BaseController
     {
         $api    = CloudAPIFactory::create('root');
         $result = $api->get('/search/words/ranking', array());
-        // var_dump($result);
+        var_dump($result);
         return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('result' => $result));
     }
 
