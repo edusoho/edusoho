@@ -497,7 +497,6 @@ class LiveCourseController extends BaseController
         $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
 
-        $result['resourceNo'] = 'a01e8e1701e94e0580b82fa4d4f599fa';
         if (empty($result['resourceNo'])) {
             throw $this->createNotFoundException($this->trans('回放视频找不到了'));
         }
