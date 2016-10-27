@@ -447,7 +447,15 @@ define(function(require, exports, module) {
                             } else {
                                 if (lesson.replays && lesson.replays.length > 0) {
                                     $.each(lesson.replays, function(i, n) {
-                                        $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        //ES直播，直接播放云资源
+                                        if (lesson.liveProvider == 5) {
+                                            //路由要重构
+                                            var getResourceNoUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/get_replay_url';
+                                            $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ getResourceNoUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        } else {
+                                            $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
+                                        }
+                                        
                                     });
                                 }
                             }
@@ -471,6 +479,14 @@ define(function(require, exports, module) {
                     });
                     $("#lesson-live-content").scrollTop(0);
                     $("#lesson-live-content").perfectScrollbar('update');
+
+                    //点击ES直播回放
+                    $('body').on('click', '.js-play-es-live', function(){
+                        $btn = $(this);
+                        $.get($btn.data('url'), function(resp){
+                            self._globalFilePlay(resp.globalId);
+                        });
+                    });
 
                 } else if (lesson.type == 'testpaper') {
                     var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
@@ -817,7 +833,15 @@ define(function(require, exports, module) {
 
             return $countDown;          
         },
+        _globalFilePlay: function(globalId)
+        {
+            globalId = 'a01e8e1701e94e0580b82fa4d4f599fa';
+            var playerUrl = '/global_file/'+globalId+'/player';
+            var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
+            $("#lesson-video-content").show();
+            $("#lesson-video-content").html(html);
+        },
         _videoPlay: function(lesson){
             var self = this;
 

@@ -494,6 +494,11 @@ class LiveCourseController extends BaseController
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
 
+        //可能是ES直播
+        if (!empty($result['resourceNo'])) {
+            return $this->createJsonResponse(array('globalId' => $result['resourceNo']));
+        }
+
         return $this->createJsonResponse(array(
             'url'   => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null
