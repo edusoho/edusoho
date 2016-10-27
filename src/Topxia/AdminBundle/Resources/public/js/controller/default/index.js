@@ -20,11 +20,9 @@ define(function (require, exports, module) {
         });
 
         //ajax 获取数据
-        systemStatusData();
-        siteOverviewData();
+        loadAjaxData();
 
         //图表
-        usersStatistic();
         courseExplore();
         studyCountStatistic();
         payOrderStatistic();
@@ -40,6 +38,12 @@ define(function (require, exports, module) {
         cloudHotSearch();
 
     };
+
+    var loadAjaxData = function () {
+        systemStatusData()
+            .then(siteOverviewData)
+            .then(usersStatistic);
+    }
 
     var registerSwitchEvent = function () {
 
