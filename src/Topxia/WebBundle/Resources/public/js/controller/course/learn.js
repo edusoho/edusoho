@@ -835,7 +835,6 @@ define(function(require, exports, module) {
         },
         _globalFilePlay: function(globalId)
         {
-            globalId = 'a01e8e1701e94e0580b82fa4d4f599fa';
             var playerUrl = '/global_file/'+globalId+'/player';
             var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
