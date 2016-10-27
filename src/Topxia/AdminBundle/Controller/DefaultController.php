@@ -11,6 +11,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Course\ThreadService;
 use Topxia\Service\Order\OrderService;
+use Vip\Service\Vip\VipService;
 
 class DefaultController extends BaseController
 {
@@ -164,9 +165,12 @@ class DefaultController extends BaseController
         $totalCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
         $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
 
-        $todayVipNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'vip', "status" => "paid"));
-        $totalVipNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'vip', "status" => "paid"));
-
+        $todayVipNum = 0;
+        $totalVipNum = 0;
+        if ($this->isPluginInstalled('vip')) {
+            $todayVipNum = $this->getVipService()->searchMembersCount(array("boughtTimeLessThan" => $todayTimeStart, "boughtTimeMoreThan" => $todayTimeEnd, "boughtType" => 'new'));
+            $totalVipNum = $this->getVipService()->searchMembersCount(array());
+        }
 
         $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));
         $totalThreadNum         = $this->getThreadService()->searchThreadCount(array('postNum' => 0, 'type' => 'question'));
@@ -558,19 +562,26 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('User.UpgradeNoticeService');
     }
 
-    private function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }
 
-
-    private function getUserActiveService()
+    protected function getUserActiveService()
     {
         return $this->createService('User.UserActiveService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('Vip:Vip.VipService');
+    }
+
+    protected function isPluginInstalled($name)
+    {
+        return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
     }
 }
