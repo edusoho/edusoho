@@ -95,9 +95,9 @@ class UserServiceImpl extends BaseService implements UserService
     public function findUsersHasMobile($start, $limit, $isVerified=false)
     {
         $conditions = array(
-                'locked' => 0
-            );
-            $orderBy = array('createdTime', 'DESC');
+            'locked' => 0
+        );
+        $orderBy = array('createdTime', 'ASC');
         if($isVerified){
             $conditions['hasVerifiedMobile'] = true;
             $users = $this->searchUsers($conditions, $orderBy, $start, $limit);
@@ -1653,7 +1653,7 @@ class UserServiceImpl extends BaseService implements UserService
             'userIds' => $userIds
         );
 
-        $orderBy = array('createdTime', 'DESC');
+        $orderBy = array('createdTime', 'ASC');
         
         $conditions['hasVerifiedMobile'] = true;
         $count = $this->searchUserCount($conditions);
@@ -1664,7 +1664,7 @@ class UserServiceImpl extends BaseService implements UserService
             return $mobiles;
         }
         
-        $profiles = $this->searchUserProfiles(array('mobile' => 1, 'ids' => $userIds), array('id', 'desc'), 0, PHP_INT_MAX);
+        $profiles = $this->searchUserProfiles(array('mobile' => 1, 'ids' => $userIds), array('id', 'ASC'), 0, PHP_INT_MAX);
         $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
 
         $mobiles = array_merge($mobiles, $profileMobiles);
