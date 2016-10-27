@@ -40,7 +40,7 @@
 
         validator.addItem({
             element: '[name="profile[truename]"]',
-            rule: 'minlength{min:2} maxlength{max:36}'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:36}'
         });
 
         validator.addItem({

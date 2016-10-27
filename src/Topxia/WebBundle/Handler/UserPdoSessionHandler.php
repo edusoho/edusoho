@@ -163,6 +163,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @var bool Whether session to create ,default is true
      */
     private $createable = true;
+
     /**
      * Constructor.
      *
@@ -184,8 +185,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
      *
-     * @param  \PDO|string|null          $pdoOrDsn A \PDO instance or DSN string or null
-     * @param  array                     $options  An associative array of options
+     * @param  \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or null
+     * @param  array $options An associative array of options
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
     public function __construct($pdoOrDsn = null, array $options = array(), TokenStorage $storage)
@@ -568,6 +569,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     private function doRead($sessionId)
     {
+        //var_dump($sessionId);
         $this->sessionExpired = false;
 
         if (self::LOCK_ADVISORY === $this->lockMode) {
@@ -634,7 +636,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * @todo implement missing advisory locks
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
-     * @param  string           $sessionId Session ID
+     * @param  string $sessionId Session ID
      * @throws \DomainException When an unsupported PDO driver is used
      * @return \PDOStatement    The statement that needs to be executed later to release the lock
      */

@@ -66,4 +66,6 @@ interface CourseMemberDao
 
     public function findMemberUserIdsByCourseId($courseId);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
 }

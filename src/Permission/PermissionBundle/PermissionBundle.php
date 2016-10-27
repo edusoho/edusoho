@@ -6,7 +6,7 @@ use Topxia\Common\ExtensionalBundle;
 
 class PermissionBundle extends ExtensionalBundle
 {
-	public function getEnabledExtensions()
+    public function getEnabledExtensions()
     {
         return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
     }

@@ -1,13 +1,12 @@
-
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% if is_trial() %}
   <script>
     var _hmt = _hmt || [];
   </script>
   <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
-  <div class="row form-group">
-    <div class="help-block">
-      <p style = "text-align: left;font-size:18px">
+  <div class="col-md-12">
+    <div class="alert alert-warning">
+      <p>
         &nbsp;&nbsp;{{'欢迎使用，试用将于'|trans}} 
         <span style="color:#fed032;"> 
           {% if trialTime.endTime is defined %}
@@ -21,7 +20,7 @@
           {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}{{'未知'|trans}}{% endif %}
         </span> {{'天。'|trans}}
       </p>
-      <p style = "text-align: left;font-size:18px">
+      <p>
         &nbsp; {{'您可以联系销售人员购买授权版本，或者延长试用期限。'|trans}}{{'电话：'|trans}}0571-86819929 {{'或'|trans}} 
         <span>
           <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
@@ -34,17 +33,23 @@
     BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
   </script>
 {% else %}
-  {% if notices|default(false) %}
-    <div class="col-md-12">
-      <div class="main-system-alert">
-        <h2> {{'站长公告'|trans}}</h2>
-          <ul class="alert-list">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-150">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'站长公告'|trans}}</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="admin-notice-list">
           {% for notice in notices %}
-            <li class="glyphicon glyphicon-bell" style="color:#fed032;font-size:16px;"><a href="{{notice.detailUrl}}" style="margin-left:22px;" target="_blank">{{notice.content}}<span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span></a></li>
+            <li>
+              <a class="link-primary" href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a>
+              {# <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span>#}
+            </li>
+            {% else %}
+              <div class="empty"> 暂无公告</div>
           {% endfor %}
           </ul>
+        </div>
       </div>
     </div>
-  {% endif %}
 {% endif %}
-

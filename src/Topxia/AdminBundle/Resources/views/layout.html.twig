@@ -81,59 +81,62 @@
   </div>
   
   <div class="container">
-    <div class="row">
-      {% set notifies = plugin_update_notify() %}
-      {% if not notifies is empty %}
-        <div style="margin: 0 15px">
-          <div class="alert alert-danger">
-            【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！ <a href="{{ path('admin_app_upgrades') }}">请立即升级！</a>
+    
+    {% set notifies = plugin_update_notify() %}
+    {% if not notifies is empty %}
+      <div class="alert alert-warning">
+        【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！请立即升级！ <a href="{{ path('admin_app_upgrades') }}">查看详情</a>
+      </div>
+    {% endif %}
+
+    {% block container %}
+      <div class="row">  
+        {% block content %}
+          <div class="col-md-2">
+            {% block sidebar %}
+              {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
+            {% endblock %}
           </div>
-        </div>
-      {% endif %}
-      {% block content %}
-        <div class="col-md-2">
-          {% block sidebar %}
-            {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
-          {% endblock %}
-        </div>
 
-        <div class="col-md-10">
-          <div class="page-header clearfix">
+          <div class="col-md-10">
+            <div class="page-header clearfix">
 
-            <h1 class="pull-left">
-              {% block page_title %}
-                {{ currentMenu.fullname|default(currentMenu.name) }}
-              {% endblock %}
-            </h1>
-            <div class="pull-right">
+              <h1 class="pull-left">
+                {% block page_title %}
+                  {{ currentMenu.fullname|default(currentMenu.name) }}
+                {% endblock %}
+              </h1>
+              <div class="pull-right">
 
-              {% block page_buttons %}
+                {% block page_buttons %}
 
-                {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
-                  {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
-                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                  {% endfor %}
-                {% else %}
-                  {% for m in sub_permissions(currentMenu.code,'topBtn') %}
-                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                  {% endfor %}
-                {% endif %}
-              {% endblock %}
+                  {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                    {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                      {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                    {% endfor %}
+                  {% else %}
+                    {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                      {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                    {% endfor %}
+                  {% endif %}
+                {% endblock %}
 
+              </div>
             </div>
+
+            {% block content_header %}{% endblock %}
+            
+            {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
+
+            {% block capsule %}{% endblock %}
+
+            {% block main %}{% endblock %}
           </div>
 
-          {% block content_header %}{% endblock %}
-          
-          {% block tabs %}{% include 'PermissionBundle:Templates:tabs.html.twig' %}{% endblock %}
+        {% endblock %}
+      </div>
+    {% endblock %}
 
-          {% block capsule %}{% endblock %}
-
-          {% block main %}{% endblock %}
-        </div>
-
-      {% endblock %}
-    </div>
   </div>
 
   {% block footer %}
