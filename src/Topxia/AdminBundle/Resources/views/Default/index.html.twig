@@ -5,31 +5,66 @@
 {% block container %}
   {# 域名检查提示#}
   {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
-
   <div class="row">
     {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
       {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     {% endif %}
 
-    {% if setting('copyright.thirdCopyright')|default(null) != 1 %}
-      <div class="col-md-6">
-        <div class="panel panel-default panel-150">
-          <div class="panel-heading">
-            <h3 class="panel-title">{{ '系统状态'|trans }}</h3>
-          </div>
-          <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
-            <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
-          </div>
+    <div class="
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+        col-md-6
+      {% else %}
+        col-md-12
+      {% endif %}
+      ">
+      <div class="panel panel-default panel-150">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ '状态栏'|trans }}</h3>
+        </div>
+        <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
+          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
         </div>
       </div>
-    {% endif %}
+    </div>
   </div>
 
   <div class="panel panel-default">
     <div class="panel-heading clearfix">
       <h3 class="panel-title">
-        {{ '今日数据'|trans }}
+        {{ '今日数据'|trans }} 
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '登录用户'|trans }}</div>
+            <div class="content">{{ '15分钟内活动的登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '在线总数'|trans }}</div>
+            <div class="content">{{ '15分钟内活动用户数，包括登录用户及未登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增注册'|trans }}</div>
+            <div class="content">{{ '平台新增用户数，包括自主注册、第三方注册及导入'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增学员人次'|trans }}</div>
+            <div class="content">{{ '今日加入课程和班级的总人次，1个学员加入2个课程，算2人次'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增会员'|trans }}</div>
+            <div class="content">{{ '今日购买会员的人数'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复问答'|trans }}</div>
+            <div class="content">{{ '今日新产生问题中未回答的数量'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复总数'|trans }}</div>
+            <div class="content">{{ '到目前为止，未回答问题总数'|trans }}</div>
+          </div>
+        </div>
       </h3>
+
     </div>
     <div class="panel-body" id="site-overview-table" data-url="{{ path('admin_operation_analysis') }}">
       <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
@@ -52,9 +87,17 @@
         </div>
       </div>
       <h3 class="panel-title">{{ '用户统计'|trans }}
-        <span class="glyphicon glyphicon-question-sign text-sm"
-              data-toggle="tooltip" data-placement="top"
-              title="{{ '活跃用户数：在30天内登录过系统的用户即为活跃用户; <br/>流失用户数：在30天内没有登录过系统的注册用户即为流失用户'|trans }}"></span>
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '活跃用户数'|trans }}</div>
+            <div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '流失用户数'|trans }}</div>
+            <div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>
+          </div>
+        </div>
       </h3>
     </div>
     <div class="panel-body js-statistic-areas" id="user-statistic"
@@ -80,7 +123,20 @@
               </button>
             </div>
           </div>
-          <h3 class="panel-title">{{ '订单统计'|trans }}</h3>
+          <h3 class="panel-title">{{ '订单统计'|trans }}
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            <div class="popover-content hidden">
+              <div class="popover-item">
+                <div class="title">{{ '新增订单'|trans }}</div>
+                <div class="content">{{ '平台当日产生的所有订单，包括免费和付费'|trans }}</div>
+              </div>
+              <div class="popover-item">
+                <div class="title">{{ '付费订单'|trans }}</div>
+                <div class="content">{{ '平台当日产生的订单价格大于0元的订单'|trans }}</div>
+              </div>
+            </div>
+          </h3>
         </div>
         <div class="panel-body js-statistic-areas" id="study-count-statistic"
              data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
@@ -128,9 +184,14 @@
             </div>
           </div>
           <h3 class="panel-title">{{ '课时完成数'|trans }}
-            <span class="glyphicon glyphicon-question-sign text-sm"
-                  data-toggle="tooltip" data-placement="top"
-                  title="{{ '每天课时学习的完成数量'|trans }}"></span></h3>
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            <div class="popover-content hidden">
+              <div class="popover-item">
+                <div class="content">{{ '点击"学过了"的课时数量'|trans }}</div>
+              </div>
+            </div>
+          </h3>
         </div>
         <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
              data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
@@ -192,7 +253,7 @@
     <div class="col-md-4">
       <div class="panel panel-default search-panel panel-420">
         <div class="panel-heading">
-          <a href="" class="pull-right">{{ '更多'|trans }}</a>
+          {# <a href="" class="pull-right">{{ '更多'|trans }}</a>#}
           <h3 class="panel-title">
             {{ '热门搜索'|trans }}
             <small>{{ '最近7天'|trans }}</small>

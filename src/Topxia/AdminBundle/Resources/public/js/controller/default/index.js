@@ -7,12 +7,34 @@ define(function (require, exports, module) {
 
     exports.run = function () {
 
+        $('.js-today-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
+
+        $('.js-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
+
         //ajax 获取数据
-        systemStatusData();
-        siteOverviewData();
+        loadAjaxData();
 
         //图表
-        usersStatistic();
         courseExplore();
         studyCountStatistic();
         payOrderStatistic();
@@ -26,7 +48,14 @@ define(function (require, exports, module) {
 
         //热门搜索
         cloudHotSearch();
+
     };
+
+    var loadAjaxData = function () {
+        systemStatusData()
+            .then(siteOverviewData)
+            .then(usersStatistic);
+    }
 
     var registerSwitchEvent = function () {
 
@@ -229,7 +258,7 @@ define(function (require, exports, module) {
                         name: '订单量',
                         type: 'pie',
                         radius: ['50%', '75%'],
-                        center: ['40%', '60%'],
+                        center: ['40%', '50%'],
                         data: data
                     }
                 ],
