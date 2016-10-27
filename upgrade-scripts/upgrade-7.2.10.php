@@ -56,16 +56,9 @@ use Symfony\Component\Yaml\Yaml;
             $connection->exec("DROP TABLE IF EXISTS `user_active_log`");
         }
 
-        if (!$this->isIndexExist('status', 'courseId_createdTime') && $this->isFieldOwnIndex('status', 'courseId') && $this->isFieldExist('status', 'createdTime')) {
+        if (!$this->isIndexExist('status', 'courseId_createdTime')) {
             $connection->exec("ALTER TABLE status ADD INDEX courseId_createdTime (courseId, createdTime);");
         }
-    }
-
-    protected function isFieldOwnIndex($table, $fieldName) {
-        $sql = "show index from `{$table}` where column_name like '{$fieldName}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
     }
 
     protected function isFieldExist($table, $filedName)
