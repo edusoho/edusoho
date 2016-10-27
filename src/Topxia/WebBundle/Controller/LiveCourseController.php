@@ -489,15 +489,26 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    /**
+     * [playESLiveReplayAction 播放ES直播回放]
+     */
+    public function playESLiveReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+
+        $result['resourceNo'] = 'a01e8e1701e94e0580b82fa4d4f599fa';
+        if (empty($result['resourceNo'])) {
+            throw $this->createNotFoundException($this->trans('回放视频找不到了'));
+        }
+
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $result['resourceNo']));
+    }
+
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
-
-        //可能是ES直播
-        if (!empty($result['resourceNo'])) {
-            return $this->createJsonResponse(array('globalId' => $result['resourceNo']));
-        }
 
         return $this->createJsonResponse(array(
             'url'   => $result['url'],

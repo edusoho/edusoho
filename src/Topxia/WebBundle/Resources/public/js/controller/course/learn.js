@@ -447,11 +447,11 @@ define(function(require, exports, module) {
                             } else {
                                 if (lesson.replays && lesson.replays.length > 0) {
                                     $.each(lesson.replays, function(i, n) {
-                                        //ES直播，直接播放云资源
+                                        //ES直播，直接播放云资源，TODO(后期需要和其他直播供应商一致的行为)
                                         if (lesson.liveProvider == 5) {
-                                            //路由要重构
-                                            var getResourceNoUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/get_replay_url';
-                                            $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ getResourceNoUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
+                                            //路由要重构,写死很恶心
+                                            var playerUrl =  '/course/'+lesson.courseId+'/lesson/'+lesson.id+'/replay/'+n.id+'/play_es_live_replay';
+                                            $countDown += "<a class='btn btn-primary js-play-es-live' href='javascript:;' data-url='"+ playerUrl +"'>" + n.title + "</a>&nbsp;&nbsp;";
                                         } else {
                                             $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
                                         }
@@ -483,9 +483,7 @@ define(function(require, exports, module) {
                     //点击ES直播回放
                     $('body').on('click', '.js-play-es-live', function(){
                         $btn = $(this);
-                        $.get($btn.data('url'), function(resp){
-                            self._globalFilePlay(resp.globalId);
-                        });
+                        self._playESLiveReplay($btn.data('url'));
                     });
 
                 } else if (lesson.type == 'testpaper') {
@@ -833,13 +831,10 @@ define(function(require, exports, module) {
 
             return $countDown;          
         },
-        _globalFilePlay: function(globalId)
+        _playESLiveReplay: function(playerUrl)
         {
-            var playerUrl = '/global_file/'+globalId+'/player';
             var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-
-            $("#lesson-video-content").show();
-            $("#lesson-video-content").html(html);
+            $("#lesson-live-content").html(html);
         },
         _videoPlay: function(lesson){
             var self = this;
