@@ -88,7 +88,6 @@ class SmsController extends BaseController
         }
 
         $parameters['url'] = $url.' ';
-
         if (!empty($students)) {
             if ($targetType == 'course' && $course['parentId']) {
                 $studentIds = ArrayToolkit::column($students, 'userId');
