@@ -86,9 +86,9 @@ use Symfony\Component\Yaml\Yaml;
         return empty($result) ? false : true;
     }
 
-    protected function isIndexExist($table, $filedName, $indexName)
+    protected function isIndexExist($table, $indexName)
     {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $sql    = "show index from `{$table}`  where Key_name='{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
