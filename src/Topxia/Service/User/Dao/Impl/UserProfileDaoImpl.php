@@ -172,6 +172,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             ->andWhere('idcard LIKE :idcard')
             ->andWhere('id IN (:ids)')
             ->andWhere('mobile = :tel')
+            ->andWhere('mobile <> :mobileNotEqual')
             ->andWhere('qq LIKE :qq');
     }
 }

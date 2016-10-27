@@ -84,7 +84,7 @@ class SmsController extends BaseController
         }
 
         if (!$this->getSmsService()->isOpen($smsType)) {
-            // throw new \RuntimeException($this->trans('请先开启相关设置!'));
+            throw new \RuntimeException($this->trans('请先开启相关设置!'));
         }
 
         $parameters['url'] = $url.' ';
