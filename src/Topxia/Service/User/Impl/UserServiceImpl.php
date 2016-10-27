@@ -8,6 +8,7 @@ use Topxia\Common\SimpleValidator;
 use Topxia\Service\User\UserService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\User\Dao\Impl\UserDaoImpl;
 use Topxia\Common\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\File\File;
 use Permission\Service\Role\Impl\RoleServiceImpl;
@@ -310,7 +311,7 @@ class UserServiceImpl extends BaseService implements UserService
             'medium' => array("120", "120"),
             'small'  => array("48", "48")
         );
-        $options = array_merge($options, array(
+        $options   = array_merge($options, array(
             'x'      => "0",
             'y'      => "0",
             'x2'     => "200",
@@ -943,11 +944,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $token                = array();
         $token['type']        = $type;
-        $token['userId']      = $userId ? (int) $userId : 0;
+        $token['userId']      = $userId ? (int)$userId : 0;
         $token['token']       = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data']        = serialize($data);
         $token['times']       = empty($args['times']) ? 0 : intval($args['times']);
-        $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+        $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token                = $this->getUserTokenDao()->addToken($token);
         return $token['token'];
@@ -1265,7 +1266,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function waveUserCounter($userId, $name, $number)
     {
-        if (!ctype_digit((string) $number)) {
+        if (!ctype_digit((string)$number)) {
             throw new UnexpectedValueException('计数器的数量，必须为数字');
         }
 
@@ -1500,8 +1501,8 @@ class UserServiceImpl extends BaseService implements UserService
         $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
 
         $this->getProfileDao()->updateProfile($userId, array(
-            'truename' => $lastestApproval['truename'],
-            'idcard'   => $lastestApproval['idcard'])
+                'truename' => $lastestApproval['truename'],
+                'idcard'   => $lastestApproval['idcard'])
         );
 
         $currentUser = $this->getCurrentUser();
@@ -1718,6 +1719,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('Coupon.CouponDao');
     }
 
+    /**
+     * @return UserDaoImpl
+     */
     protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
@@ -1820,7 +1824,8 @@ class UserServiceImpl extends BaseService implements UserService
 class UserSerialize
 {
     public static function
-    serialize(array $user) {
+    serialize(array $user)
+    {
         $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
         return $user;
     }
