@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\Echats\EchartsBuilder;
 use Topxia\Service\CloudPlatform\AppService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Course\ThreadService;
+use Topxia\Service\Order\OrderService;
 
 class DefaultController extends BaseController
 {
@@ -155,10 +157,10 @@ class DefaultController extends BaseController
         $todayRegisterNum = $this->getUserService()->searchUserCount(array("startTime" => $todayTimeStart, "endTime" => $todayTimeEnd));
         $totalRegisterNum = $this->getUserService()->searchUserCount(array());
 
-        $todayCourseMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
-        $totalCourseMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
-
+        $todayCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'course', "status" => "paid"));
         $todayClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'classroom', "status" => "paid"));
+
+        $totalCourseMemberNum    = $this->getOrderService()->searchOrderCount(array("targetType" => 'course', "status" => "paid"));
         $totalClassroomMemberNum = $this->getOrderService()->searchOrderCount(array("targetType" => 'classroom', "status" => "paid"));
 
         $todayVipNum = $this->getOrderService()->searchOrderCount(array("paidStartTime" => $todayTimeStart, "paidEndTime" => $todayTimeEnd, "targetType" => 'vip', "status" => "paid"));
@@ -168,13 +170,6 @@ class DefaultController extends BaseController
         $todayThreadNum         = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNumLargerThan' => 0));
         $todayThreadUnAnswerNum = $this->getThreadService()->searchThreadCount(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0));
         $totalThreadNum         = $this->getThreadService()->searchThreadCount(array());
-
-        $publishedCourseNum = $this->getCourseService()->searchCourseCount(array("status" => 'published'));
-        $totalCourseNum     = $this->getCourseService()->searchCourseCount(array());
-
-
-        $publishedClassroomNum = $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'));
-        $totalClassroomNum     = $this->getClassroomService()->searchClassroomsCount(array());
 
         return $this->render('TopxiaAdminBundle:Default:operation-analysis-dashbord.html.twig', array(
             'onlineCount' => $onlineCount,
@@ -195,13 +190,6 @@ class DefaultController extends BaseController
             'todayThreadNum'         => $todayThreadNum,
             'todayThreadUnAnswerNum' => $todayThreadUnAnswerNum,
             'totalThreadNum'         => $totalThreadNum,
-
-            'publishedCourseNum' => $publishedCourseNum,
-            'totalCourseNum'     => $totalCourseNum,
-
-            'publishedClassroomNum' => $publishedClassroomNum,
-            'totalClassroomNum'     => $totalClassroomNum
-
         ));
     }
 
@@ -328,25 +316,9 @@ class DefaultController extends BaseController
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {
-        $questions = $this->getThreadService()->searchThreads(array('type' => 'question'), 'createdNotStick', 0, 5);
+        $questions = $this->getThreadService()->searchThreads(array('type' => 'question', 'postNum' => 0), 'createdNotStick', 0, 10);
 
-        $unPostedQuestion = array();
-
-        foreach ($questions as $key => $value) {
-            if ($value['postNum'] == 0) {
-                $unPostedQuestion[] = $value;
-            } else {
-                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
-                $userPostsNum   = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'], $value['id']);
-
-                if ($userPostsNum == $threadPostsNum) {
-                    $unPostedQuestion[] = $value;
-                }
-            }
-        }
-
-        $questions = $unPostedQuestion;
-        $courses   = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
 
         return $this->render('TopxiaAdminBundle:Default:unsolved-questions-block.html.twig', array(
             'questions' => $questions,
@@ -371,6 +343,14 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function cloudSearchRankingAction(Request $request)
+    {
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->get('/search/words/ranking', array());
+       // var_dump($result);
+        return $this->render('TopxiaAdminBundle:Default:cloud-search-ranking.html.twig', array('result' => $result));
     }
 
 
@@ -522,6 +502,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('System.StatisticsService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
@@ -532,6 +515,9 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');

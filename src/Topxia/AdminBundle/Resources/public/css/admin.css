@@ -295,7 +295,7 @@ input.LargeInput {width: 600px;}
 
 .subfield-list > li .title {
   font-size: 14px;
-  color: #666;
+  color: #333;
   margin-top: 0;
 }
 
@@ -304,26 +304,23 @@ input.LargeInput {width: 600px;}
 }
 
 .subfield-list > li .number {
-  font-size: 12px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  /*margin-bottom: 10px;*/
   display: block;
-  color: #2a6496;
-}
-
-.subfield-list > li .number span {
-  font-size: 22px;
+  color: #333;
 }
 
 .subfield-list li p {
   margin-bottom: 0;
+  color: #999;
 }
 
 .subfield-list.four-subfield > li {
   width: 25%;
 }
 
-.subfield-list.eight-subfield > li {
-  width: 12.5%;
+.subfield-list.five-subfield > li {
+  width: 20%;
 }
 
 .status-card-warp {

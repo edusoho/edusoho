@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\Dao\Impl\ThreadPostDaoImpl;
+use Topxia\Service\Course\Dao\ThreadDao;
 use Topxia\Service\Course\ThreadService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -490,6 +491,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('course.thread.post.delete', $post);
     }
 
+    /**
+     * @return ThreadDao
+     */
     protected function getThreadDao()
     {
         return $this->createDao('Course.ThreadDao');
