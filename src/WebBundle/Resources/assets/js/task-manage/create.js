@@ -78,6 +78,7 @@ class Editor {
         $.post(this._saveUrl, postData)
             .done((response) => {
                 self.elem.modal('hide');
+                location.reload();
             })
             .fail((response) => {
 
