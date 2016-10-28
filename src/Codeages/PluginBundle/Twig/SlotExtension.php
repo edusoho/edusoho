@@ -25,6 +25,6 @@ class SlotExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'slot_extension';
+        return 'codeages_plugin_slot_extension';
     }
 }
