@@ -107,9 +107,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
 
         if ($orderBy[0] == 'recommendedSeq') {
             $builder->addOrderBy('recommendedTime', 'DESC');

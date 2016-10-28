@@ -29,8 +29,6 @@ class LogDaoImpl extends BaseDao implements LogDao
         for ($i = 0; $i < count($sort); $i = $i + 2) {
             $builder->addOrderBy($sort[$i], $sort[$i + 1]);
         };
-        
-		$builder;
   
        	return $builder->execute()->fetchAll() ? : array();
 	}

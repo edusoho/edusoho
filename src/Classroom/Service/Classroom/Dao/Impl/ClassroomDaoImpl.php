@@ -43,6 +43,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->setMaxResults($limit)
             ->addOrderBy($orderBy[0], $orderBy[1]);
 
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };    
+
         $classrooms = $builder->execute()->fetchAll();
 
         return $classrooms ? $this->createSerializer()->unserializes($classrooms, $this->serializeFields) : array();
