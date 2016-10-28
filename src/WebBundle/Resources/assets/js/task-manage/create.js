@@ -56,7 +56,6 @@ class Editor {
         this.contentUrl = $this.data('contentUrl');
         ( this.type !== type ) ? this.loaded = false : this.loaded = true; 
         this.type = type;
-        console.log("teyp");
         this._renderNext(true);
     }
 
