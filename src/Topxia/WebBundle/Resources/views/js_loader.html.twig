@@ -1,7 +1,22 @@
+
 {% for path in script()  %}
-  {% if path starts with 'http://' %}
-    <script src="{{ path }}"></script>
-  {% else %}
-    <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
-  {% endif %}
+  {#{% if use_webapck_loader_async|default(false) == false %}#}
+    {% if path starts with 'http://' %}
+      <script src="{{ path }}"></script>
+    {% else %}
+      <script src="{{ asset('build/' ~ path, 'webpack') }}" ansync="true"></script>
+    {% endif %}
+  {#{% else %}
+    <div data-src="{{ asset('build/' ~ path, 'webpack') }}"  id="#loader-async"></div>
+    <script >
+      var loadScript = function(url) {
+        var loader_async = document.getElemntById("#loader-async");
+        var script = document.createElement('script');
+        script.async = false;  // 这里
+        script.setAttribute('src', );
+        document. 
+        document.body.appendChild(script);
+      };
+    </script>
+  {% endif %}#}
 {% endfor %}
