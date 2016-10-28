@@ -92,9 +92,13 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };
+
         $orders = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }

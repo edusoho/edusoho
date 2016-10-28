@@ -527,7 +527,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-        $orderBy = array();
 
         if (!is_array($sort)) {
             if ($sort == 'early') {

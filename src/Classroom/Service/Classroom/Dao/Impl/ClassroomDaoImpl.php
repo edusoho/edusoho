@@ -41,7 +41,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)
-            ->addOrderBy($orderBy[0], $orderBy[1]);
+
+        for ($i = 0; $i < count($orderBy); $i = $i + 2) {
+            $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
+        };    
 
         $classrooms = $builder->execute()->fetchAll();
 
