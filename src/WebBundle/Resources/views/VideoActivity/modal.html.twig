@@ -76,10 +76,10 @@
 {% block activity_finish %}
   <div class="row form-group">
     <div class="col-xs-2 control-label">
-      <label for="condition">{{ '完成条件'|trans }}</label>
+      <label>{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}>
+    <p class="form-control-static">观看到最后</p>
     </div>
   </div>
 {% endblock %}
