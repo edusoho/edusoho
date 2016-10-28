@@ -4,6 +4,7 @@ class Editor {
         this.$task_manage_content = $('#task-manage-content');
         this.$task_manage_type = $('#task-manage-type');
         this.$iframe_body = null;
+        this.iframe_jQuery = null;
         this.iframe_name = 'task-manage-content-iframe';
         this.mode = this.$task_manage_type.data('editorMode');
         this.type = this.$task_manage_type.data('editorType');
@@ -99,23 +100,21 @@ class Editor {
     _initIframe() {
         var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" src="'+this.contentUrl+'"</iframe>';
         this.$task_manage_content.html(html); 
-        var iframewin = document.getElementById(this.iframe_name).contentWindow || iframe;
-        $(iframewin).load(()=>{
+        var iframewindow = document.getElementById(this.iframe_name).contentWindow || iframe;
+        $(iframewindow).load(()=>{
             var $iframe = $('#'+this.iframe_name);
-            var windowjQuery = $iframe[0].contentWindow.$;
+            this.iframe_jQuery = $iframe[0].contentWindow.$;
             this.$iframe_body = $iframe.contents().find('body').addClass('task-iframe-body');
             this._rendButton(2);
         });
     }
 
     _validator(index) {
-        var $iframe = $('#'+this.iframe_name);
-        var windowjQuery = $iframe[0].contentWindow.$;
-        if(this.$iframe_body.length <= 0 ) {
+        if(!this.loaded) {
             return;
         }
         var $from =  this.$iframe_body.find("#step"+index+"-form");
-        var validator = windowjQuery.data($from[0], 'validator');
+        var validator = this.iframe_jQuery.data($from[0], 'validator');
         if(validator && !validator.form()) {
             return false;
         }
@@ -148,9 +147,11 @@ class Editor {
     }
 
     _rendStepIframe(step) {
-        var  $iframe = $('#'+this.iframe_name).contents();
-        (step === 2) ? $iframe.find(".js-step2-view").addClass('active') : $iframe.find(".js-step2-view").removeClass('active');
-        (step === 3) ? $iframe.find(".js-step3-view").addClass('active') : $iframe.find(".js-step3-view").removeClass('active');
+        if(!this.loaded) {
+            return;
+        }
+        (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');
+        (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active') : this.$iframe_body.find(".js-step3-view").removeClass('active');
     }
 
     _renderStep(index) {
