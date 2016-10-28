@@ -31,8 +31,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $students = $this->getCourseService()->findCourseStudents($courseId, 0, PHP_INT_MAX);
         $late30Days = array();
-        for($i = 0; $i < 30; $i++) {
-            $late30Days[] = date("d", strtotime('-'. $i .' days'));
+        for ($i = 0; $i < 30; $i++) {
+            $day = date("m-d", strtotime('-'. $i .' days'));
+            $late30Days[$day]['day'] = $day;
+        }
+
+        foreach ($students as $student) {
+
         }
     }
 
