@@ -93,13 +93,11 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
-        $builder = $this->createDynamicQueryBuilder($conditions)
+        return $this->createDynamicQueryBuilder($conditions)
 
             ->from($this->table, $this->table)
             ->andWhere('targetType IN (:targetTypes)')
             ->andWhere('targetId IN (:targetIds)')
             ->andWhere('convNo = :convNo');
-
-        return $builder;
     }
 }

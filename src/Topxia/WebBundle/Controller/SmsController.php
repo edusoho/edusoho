@@ -12,13 +12,14 @@ class SmsController extends BaseController
     public function prepareAction(Request $request, $targetType, $id)
     {
         $item                  = array();
-        $verifiedMobileUserNum = 0;
+        $mobileNum             = 0;
+        $mobileNeedVerified    = false;
         $url                   = '';
         $smsType               = 'sms_'.$targetType.'_publish';
 
         if ($targetType == 'classroom') {
             $item                  = $this->getClassroomService()->getClassroom($id);
-            $verifiedMobileUserNum = $this->getUserService()->getUserCountByMobileNotEmpty();
+            $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
             $url                   = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
@@ -28,10 +29,10 @@ class SmsController extends BaseController
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($item['id']);
 
                 if ($classroom) {
-                    $verifiedMobileUserNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'], 1);
+                    $mobileNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'], 1);
                 }
             } else {
-                $verifiedMobileUserNum = $this->getUserService()->getUserCountByMobileNotEmpty();
+                $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
             }
         }
 
@@ -40,7 +41,7 @@ class SmsController extends BaseController
             'item'       => $item,
             'targetType' => $targetType,
             'url'        => $url,
-            'count'      => $verifiedMobileUserNum,
+            'count'      => $mobileNum,
             'index'      => 1,
             'isOpen'     => $this->getSmsService()->isOpen($smsType)
         ));
@@ -54,6 +55,7 @@ class SmsController extends BaseController
         $url         = $request->query->get('url');
         $count       = $request->query->get('count');
         $parameters  = array();
+        $mobileNeedVerified    = false;
 
         if ($targetType == 'classroom') {
             $classroom                     = $this->getClassroomService()->getClassroom($id);
@@ -62,9 +64,7 @@ class SmsController extends BaseController
             $classroom['title']            = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description                   = $parameters['classroom_title'].$this->trans('发布');
-            $profiles                      = $this->getUserService()->searchUserProfiles(array('mobile' => '1'), array('id', 'DESC'), 0, PHP_INT_MAX);
-            $userIds                       = ArrayToolkit::column($profiles, 'id');
-            $students                      = $this->getUserService()->searchUsers(array('locked' => 0, 'ids' => $userIds), array('createdTime', 'DESC'), $index, $onceSendNum);
+            $students                      = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
         } elseif ($targetType == 'course') {
             $course                     = $this->getCourseService()->getCourse($id);
             $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
@@ -79,9 +79,7 @@ class SmsController extends BaseController
                     $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime', 'Desc'), $index, $onceSendNum);
                 }
             } else {
-                $profiles = $this->getUserService()->searchUserProfiles(array('mobile' => '1'), array('id', 'DESC'), 0, PHP_INT_MAX);
-                $userIds  = ArrayToolkit::column($profiles, 'id');
-                $students = $this->getUserService()->searchUsers(array('locked' => 0, 'ids' => $userIds), array('createdTime', 'DESC'), $index, $onceSendNum);
+                $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
             }
         }
 

@@ -4,6 +4,7 @@ namespace Biz\Activity\Config;
 
 
 use Biz\TextActivity\TextActivity;
+use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
 
 class ActivityFactory
@@ -24,7 +25,8 @@ class ActivityFactory
     public final static function all(Biz $biz)
     {
         return array(
-            'text' => new TextActivity($biz)
+            'text' => new TextActivity($biz),
+            'video' => new VideoActivity($biz)
         );
     }
 }

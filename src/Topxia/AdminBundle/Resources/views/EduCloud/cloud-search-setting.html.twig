@@ -20,7 +20,7 @@
   {% else %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
-      {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
+      {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
       {% if data.status == 'unlink' %}
         <div class="text-center">
           <h1 class="text-muted">{{'网络问题，无法连接'|trans}}{{ 'EduSoho'|copyright_less }}{{'开放云平台'|trans}}</h1>

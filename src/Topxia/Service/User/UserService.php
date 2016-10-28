@@ -16,6 +16,12 @@ interface UserService
 
     public function getUserCountByMobileNotEmpty();
 
+    public function countUserHasMobile($isVerified=false);
+
+    public function findUsersHasMobile($start, $limit, $isVerified=false);
+
+    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false);
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $id);
