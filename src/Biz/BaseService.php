@@ -2,13 +2,12 @@
 
 namespace Biz;
 
-
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
     /**
-     * @param $alias
+     * @param  $alias
      * @return GeneralDaoImpl
      */
     protected function createDao($alias)
@@ -19,6 +18,11 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function getCurrentUser()
     {
         return $this->biz['user'];
+    }
+
+    protected function createService($alias)
+    {
+        return $this->biz->service($alias);
     }
 
 }

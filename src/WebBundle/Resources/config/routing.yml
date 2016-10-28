@@ -30,3 +30,60 @@ course_task_trigger:
   path:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: WebBundle:Task:trigger }
   methods: [POST]
+
+#testpaper
+course_manage_testpaper:
+  path: /testpaper2/course/{courseId}/manage/testpaper
+  defaults: { _controller: WebBundle:TestpaperManage:index }
+
+course_manage_testpaper_create:
+  path: /testpaper2/course/{courseId}/manage/testpaper/create
+  defaults: { _controller: WebBundle:TestpaperManage:create }
+
+course_manage_testpaper_questions:
+    path: /testpaper2/course/{courseId}/manage/testpaper/{testpaperId}/items
+    defaults: { _controller: WebBundle:TestpaperManage:questions }
+
+testpaper_do:
+    path: /lesson/{lessonId}/testpaper/{testId}/do
+    defaults: { _controller: WebBundle:Testpaper:doTestpaper }
+
+testpaper_show:
+    path: /testpaper/{testId}/show
+    defaults: { _controller: WebBundle:Testpaper:showTest }
+
+testpaper_result_show:
+    path: /testpaper/{testId}/result
+    defaults: { _controller: WebBundle:Testpaper:showResult }
+
+
+
+#homework
+course_manage_homework:
+  path: /course/{courseId}/manage/homework
+  defaults: { _controller: WebBundle:HomeworkManage:index }
+
+course_manage_homework_create:
+  path: /course/{courseId}/manage/lesson/{lessonId}/homework/create
+  defaults: { _controller: WebBundle:HomeworkManage:create }
+
+course_manage_homework_question_picker:
+  pattern: /course/{courseId}/manage/question/picker
+  defaults: { _controller: WebBundle:HomeworkManage:questionPicker }
+
+course_manage_homework_question_picked:
+  pattern: /course/{courseId}/manage/question/picked
+  defaults: { _controller: WebBundle:HomeworkManage:questionPicked }
+
+
+#exercise
+course_manage_exercise_create:
+  path: /course/{courseId}/manage/lesson/{lessonId}/exercise/create
+  defaults: { _controller: WebBundle:ExerciseManage:create }
+
+#todo 与homework_check合并
+course_exercise_check:
+    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/check
+    defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
+
+

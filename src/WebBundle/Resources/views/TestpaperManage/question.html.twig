@@ -70,11 +70,11 @@ tr.placeholder:before {
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="hide testpaper-table-tbody">
             {% for item in typeItems %}
               {% set question = questions[item.questionId] %}
-              {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
+              {% include 'WebBundle:TestpaperManage:question-tr.html.twig' %}
               {% if subItems[item.questionId]|default(null) %}
                 {% for item in subItems[item.questionId] %}
                   {% set question = questions[item.questionId] %}
-                  {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
+                  {% include 'WebBundle:TestpaperManage:question-tr.html.twig' %}
                 {% endfor %}
               {% endif %}
             {% endfor %}
@@ -140,9 +140,5 @@ tr.placeholder:before {
   </script>
 
 </div>
-
-
-
-
 
 {% endblock %}
