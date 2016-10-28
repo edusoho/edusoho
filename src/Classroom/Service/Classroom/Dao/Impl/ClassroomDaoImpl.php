@@ -40,7 +40,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
-            ->setMaxResults($limit)
+            ->setMaxResults($limit);
 
         for ($i = 0; $i < count($orderBy); $i = $i + 2) {
             $builder->addOrderBy($orderBy[$i], $orderBy[$i + 1]);
