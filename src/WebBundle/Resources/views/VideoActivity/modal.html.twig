@@ -47,7 +47,7 @@
           {% set storageSetting = setting('storage') %}
           <div id="uploader-container" 
             data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
-            data-init-url="{{ path('uploader_init', {token: token}) }}"
+            data-init-url="{{ url('uploader_init', {token: token}, true) }}"
             {% if storageSetting.upload_mode == 'cloud' %}
               data-uploader-mode="sdk"
               data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
