@@ -1,6 +1,8 @@
 {% extends 'TopxiaWebBundle:CourseManage/Dashboard:layout.html.twig' %}
 
 {% set submenu = 'course_dashboard' %}
+{% do load_script('course-manage/dashboard/course') %}
+
 {% block dashboard %}
   <ul class="course-dashboard-header course-dashboard-ul">
     <li>
@@ -17,6 +19,7 @@
     </li>
   </ul>
 
+  <div id="main" style="height:400px;"></div>
 
   <ul class="course-dashboard-footer course-dashboard-ul">
     <li>

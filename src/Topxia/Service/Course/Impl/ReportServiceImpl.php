@@ -27,6 +27,14 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $summary;
     }
 
+    public function getLateMonthLearndData($courseId)
+    {
+        $students = $this->getCourseService()->findCourseStudents($courseId, 0, PHP_INT_MAX);
+        $late30Days = array();
+        for($i = 0; $i < 30; $i++) {
+            $late30Days[] = date("d", strtotime('-'. $i .' days'));
+        }
+    }
 
     protected function getCourseService()
     {

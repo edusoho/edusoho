@@ -249,9 +249,11 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         $summary = $this->getCourseReportService()->summary($id);
+        $lateMonthLearndData = $this->getCourseReportService()->getLateMonthLearndData($id);
         return $this->render('TopxiaWebBundle:CourseManage/DashBoard:course.html.twig', array(
             'course' => $course,
-            'summary' => $summary
+            'summary' => $summary,
+            'lateMonthLearndData' => $lateMonthLearndData
         ));
     }
 
