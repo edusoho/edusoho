@@ -130,6 +130,7 @@ class Editor {
             if(this.mode != 'edit') {
                 this._rendSubmit(true);
                 this._renderPrev(true);
+                this._renderNext(true); 
                 return;
             }
             this._renderPrev(false);
