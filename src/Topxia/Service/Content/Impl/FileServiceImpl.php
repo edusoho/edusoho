@@ -201,7 +201,7 @@ class FileServiceImpl extends BaseService implements FileService
         try {
             //如果是图片，并且被旋转过了，把图片转正
             if (in_array(strtolower($newFile->guessExtension()), array('jpeg', 'tiff'))) {
-                $exif = exif_read_data($newFile->getRealPath());
+                $exif = @exif_read_data($newFile->getRealPath());
                 if (!empty($exif['Orientation'])) {
                     $image = imagecreatefromstring(file_get_contents($newFile->getRealPath()));
                     switch ($exif['Orientation']) {
