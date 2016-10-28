@@ -13,14 +13,7 @@
 {% endblock %}
 
 {% block body %}
-  <div class="task-manage-editor" id="task-manage-editor" data-editor-mode="{{ mode }}"
-    {% if mode == 'edit' %}
-      data-editor-type="{{ currentType }}"
-      data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
-      data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
-    {% elseif mode == 'create' %}
-      data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
-    {% endif %}>
+  <div class="task-manage-editor" id="task-manage-editor">
     <ul class="es-step es-step-3 clearfix" id="task-manage-step">
         <li class="doing">
           <span class="number">1</span>
@@ -35,13 +28,19 @@
           设置完成条件
         </li>
       </ul>
-    <div id="task-manage-type" class="{% if mode == 'edit' %}hidden {% endif %}">
+    <div id="task-manage-type" class="{% if mode == 'edit' %}hidden {% endif %}" data-editor-mode="{{ mode }}"
+    {% if mode == 'edit' %}
+      data-editor-type="{{ currentType }}"
+      data-editor-step2-url="{{ path('course_manage_task_fields', {courseId: course.id, mode: 'edit', id: task.id}) }}"
+      data-save-url="{{ path('course_manage_task_update', {courseId: course.id, id: task.id }) }}"
+    {% elseif mode == 'create' %}
+      data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
+    {% endif %}>
       <ul class="task-manage-type-list row">
         {% if types is defined %}
           {% for type, value in types %}
-            <li class="col-xs-3 task-manage-type-item js-course-tasks-item">
-              <a data-role="activityType" data-type="{{ type }}" href="javascript:;"
-                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+            <li class="col-xs-3 task-manage-type-item js-course-tasks-item" data-role="activityType" data-type="{{ type }}" data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
+              <a href="javascript:;">
                 <i class="{{ value.metas.icon }}"></i>
                 {{ value.metas.name }}
               </a>
