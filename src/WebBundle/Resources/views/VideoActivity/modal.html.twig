@@ -41,7 +41,24 @@
         <li role="presentation"><a href="#video-chooser-import-pane">导入网络视频</a></li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane active" id="video-chooser-upload-pane"> 上传资料</div>
+        <div class="tab-pane active" id="video-chooser-upload-pane">
+          {% set targetType = 'courseactivity' %}
+          {% set token = uploader_token(targetType, courseId, 'private') %}
+          {% set storageSetting = setting('storage') %}
+          <div id="uploader-container" 
+            data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+            data-init-url="{{ path('uploader_init', {token: token}) }}"
+            {% if storageSetting.upload_mode == 'cloud' %}
+              data-uploader-mode="sdk"
+              data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+            {% else %}
+              data-uploader-mode="local"
+              data-accept="{{ uploader_accept(targetType, 'local_video')|json_encode }}"
+            {% endif %}
+            data-process="{{ uploader_process(targetType) }}"
+            >
+          </div>  
+        </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
           <div class="btn-group">
             <span>资料来源</span>

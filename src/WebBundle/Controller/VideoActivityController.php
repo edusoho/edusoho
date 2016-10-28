@@ -22,9 +22,11 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         // TODO: Implement editAction() method.
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:VideoActivity:modal.html.twig');
+        return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
+            'courseId' => $courseId
+        ));
     }
 
 
