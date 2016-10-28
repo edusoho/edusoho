@@ -91,8 +91,6 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
-
         $conditions = array(
             'userId'   => $learn['userId'],
             'courseId' => $learn['courseId'],
@@ -121,6 +119,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
         $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
 
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
         if (!empty($classroom)) {
             $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
