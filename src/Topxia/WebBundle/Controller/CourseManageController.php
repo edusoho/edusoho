@@ -245,6 +245,32 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function courseDashboardAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $summary = $this->getCourseReportService()->summary($id);
+        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:course.html.twig', array(
+            'course' => $course,
+            'summary' => $summary
+        ));
+    }
+
+    public function lessonDashboardAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function lessonlearnDashboardAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage/DashBoard:lesson-learn.html.twig', array(
+            'course' => $course
+        ));
+    }
+
     public function orderAction(Request $request, $id)
     {
         $this->getCourseService()->tryManageCourse($id);
@@ -649,6 +675,11 @@ class CourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseReportService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReportService');
     }
 
     protected function getLevelService()

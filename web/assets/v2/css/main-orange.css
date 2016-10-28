@@ -9843,6 +9843,21 @@ textarea {
   padding: 15px 10px 5px 5px;
   cursor: pointer;
 }
+.dashboard-panel .course-dashboard-ul {
+  list-style-type: none;
+}
+.dashboard-panel .course-dashboard-ul li {
+  width: 33%;
+  float: left;
+  margin: 20px auto;
+  padding: 0 5px;
+  text-align: center;
+}
+.dashboard-panel .course-dashboard-ul li .title {
+  font-size: 14px;
+  color: #333;
+  margin-top: 0;
+}
 .class-bg-layer {
   position: absolute;
   top: 5px;
