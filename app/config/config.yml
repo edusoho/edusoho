@@ -8,7 +8,7 @@ imports:
 
 framework:
     # esi:             ~
-    # translator:      { fallback: "%locale%" }
+    # translator:      { fallback: "%locale%", logging: false }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -25,6 +25,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets: "%assets%"
+
 
 # Twig Configuration
 twig:
