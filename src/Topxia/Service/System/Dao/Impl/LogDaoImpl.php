@@ -51,6 +51,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('level = :level')
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
+			->andWhere('createdTime >= :startDateTime_GE')
 			->andWhere('createdTime < :endDateTime')
 			->andWhere('userId IN ( :userIds )');
 
