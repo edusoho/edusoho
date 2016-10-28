@@ -11,7 +11,7 @@ class VideoActivity extends Activity
     {
         return array(
             'name' => '视频',
-            'icon' => 'es-icon es-icon-graphicclass'
+            'icon' => 'es-icon es-icon-videoclass'
         );
     }
 
