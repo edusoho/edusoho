@@ -164,15 +164,15 @@ class Editor {
     }
 
     _renderNext(show) {
-        show ? $("#course-tasks-next").removeAttr('disabled') : $("#course-tasks-next").attr('disabled','disabled');
+        show ? $("#course-tasks-next").removeClass('hidden') : $("#course-tasks-next").addClass('hidden');
     }
 
     _renderPrev(show) {
-        show ? $("#course-tasks-prev").removeAttr('disabled') : $("#course-tasks-prev").attr('disabled','disabled');
+        show ? $("#course-tasks-prev").removeClass('hidden') : $("#course-tasks-prev").addClass('hidden');
     }
 
     _rendSubmit(show) {
-        show ? $("#course-tasks-submit").removeAttr('disabled') : $("#course-tasks-submit").attr('disabled','disabled');
+        show ? $("#course-tasks-submit").removeClass('hidden') : $("#course-tasks-submit").addClass('hidden');
     }
 
 }
