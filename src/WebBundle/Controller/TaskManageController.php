@@ -1,14 +1,12 @@
 <?php
 namespace WebBundle\Controller;
 
-
-use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseService;
+use Biz\Activity\Service\ActivityService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
 {
@@ -38,7 +36,7 @@ class TaskManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $task      = $request->request->all();
+            $task = $request->request->all();
             unset($task['mediaType']);
             unset($task['fromCourseSetId']);
             unset($task['fromCourseId']);
@@ -68,7 +66,7 @@ class TaskManageController extends BaseController
             $type = $request->query->get('type');
             return $this->forward('WebBundle:Activity:create', array(
                 'courseId' => $courseId,
-                'type'     => $type,
+                'type'     => $type
             ));
         } else {
             $id   = $request->query->get('id');
@@ -81,7 +79,6 @@ class TaskManageController extends BaseController
 
     public function deleteAction(Request $request, $courseId, $id)
     {
-
         $course = $this->tryManageCourse($courseId);
         $task   = $this->getTaskService()->getTask($id);
         if ($task['courseId'] != $courseId) {
@@ -89,7 +86,7 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($id);
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('success' => true));
     }
 
     // TODO 是否移到CourseManageController
@@ -101,7 +98,7 @@ class TaskManageController extends BaseController
         return $this->render('WebBundle:TaskManage:list.html.twig', array(
             'tasks'  => $tasks,
             'course' => $course,
-            'items'  => $courseItems,
+            'items'  => $courseItems
         ));
     }
 

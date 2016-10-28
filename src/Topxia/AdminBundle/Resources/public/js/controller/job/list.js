@@ -16,6 +16,12 @@ define(function(require, exports, module){
 		$("#log-table").on('click', '.hide-data', function(){
 			$(this).hide().parent().find('.show-data').show().end().find('.data').hide();
 		});	
+
+		$("#tips").popover({
+		    html: true,
+		    trigger: 'hover',//'hover','click'
+		    content: $("#tips-html").html()
+		});
 	};
 
 });

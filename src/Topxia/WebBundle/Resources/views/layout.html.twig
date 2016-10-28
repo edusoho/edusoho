@@ -36,10 +36,14 @@
 
   {% endblock %}
 
+
+
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
+
+  
 
   {% block head_scripts %}{% endblock %}
 
@@ -90,8 +94,11 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
+
+
 {% if script() is not empty or use_webapck_loader|default(false) == true %}
   {# webpack #}
+  {% do script(['libs/vendor.js', 'web.js'], 1000) %}
   {% include 'TopxiaWebBundle::script_boot_webpack.html.twig' %}
 {% else %}
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}

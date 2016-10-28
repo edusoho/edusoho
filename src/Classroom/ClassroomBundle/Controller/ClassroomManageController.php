@@ -316,6 +316,7 @@ class ClassroomManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
+
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
@@ -341,7 +342,8 @@ class ClassroomManageController extends BaseController
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
                 'payment'    => 'outside',
-                'snPrefix'   => 'CR'
+                'snPrefix'   => 'CR',
+                'totalPrice' => $classroom['price']
             ));
 
             $this->getOrderService()->payOrder(array(

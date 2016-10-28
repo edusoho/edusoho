@@ -2,15 +2,14 @@
 
 namespace Biz\Activity\Service\Impl;
 
-
-use Biz\Activity\Config\ActivityFactory;
-use Biz\Activity\Dao\ActivityDao;
-use Biz\Activity\Listener\ActivityLearnLogListener;
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Dao\ActivityDao;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Activity\Config\ActivityFactory;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\Exception\AccessDeniedException;
+use Biz\Activity\Listener\ActivityLearnLogListener;
 use Topxia\Common\Exception\InvalidArgumentException;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
@@ -28,18 +27,18 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
-        $listeners  = array();
-        $listener = new ActivityLearnLogListener($this->biz);
+        $listeners   = array();
+        $listener    = new ActivityLearnLogListener($this->biz);
         $listeners[] = $listener;
 
-        $eventName = $activity['mediaType'] . '.' . $eventName;
-        $data['event'] = $eventName;
-        $activityListener  = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
-        if(!is_null($activityListener)){
+        $eventName        = $activity['mediaType'].'.'.$eventName;
+        $data['event']    = $eventName;
+        $activityListener = ActivityFactory::create($this->biz, $activity['mediaType'])->getListener($eventName);
+        if (!is_null($activityListener)) {
             $listeners[] = $activityListener;
         }
 
-        foreach ($listeners as $listener){
+        foreach ($listeners as $listener) {
             $listener->handle($activity, $data);
         }
     }
@@ -58,8 +57,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $fields['mediaType']);
-        $media         = $activityModel->create($fields);
+        $activityConfig = ActivityFactory::create($this->biz, $fields['mediaType']);
+        $media          = $activityConfig->create($fields);
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
@@ -80,10 +79,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ));
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
+        if (isset($fields['startTime'])) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+        if (isset($fields['endTime'])) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
 
         $activity = $this->getActivityDao()->create($fields);
 
-        $listener = $activityModel->getListener('activity.created');
+        $listener = $activityConfig->getListener('activity.created');
         if (!empty($listener)) {
             $listener->handle($activity, array());
         }
@@ -99,8 +104,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
-        $activityModel->update($savedActivity['mediaId'], $fields);
+        $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
+        if (!empty($savedActivity['mediaId'])) {
+            $activityConfig->update($savedActivity['mediaId'], $fields);
+        }
 
         return $this->getActivityDao()->update($id, $fields);
     }
@@ -118,9 +125,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
-        $activityModel = ActivityFactory::create($this->biz, $activity['mediaType']);
+        $activityConfig = ActivityFactory::create($this->biz, $activity['mediaType']);
 
-        $activityModel->delete($activity['mediaId']);
+        $activityConfig->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
     }

@@ -1,15 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class InitCommand extends BaseCommand
 {
@@ -38,13 +38,13 @@ class InitCommand extends BaseCommand
         $this->initTag($output);
         $this->initRefundSetting($output);
         $this->initThemes($output);
+        $this->initCoin($output);
         $this->initFile($output);
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
         $this->initBlock($output);
         $this->initCrontabJob($output);
         $this->initFolders();
-
 
         $output->writeln('<info>初始化系统完毕</info>');
     }
@@ -323,18 +323,6 @@ EOD;
     {
         $output->write('  初始化分类分组');
 
-        $categories = $this->getCategoryService()->findAllCategories();
-
-        foreach ($categories as $category) {
-            $this->getCategoryService()->deleteCategory($category['id']);
-        }
-
-        $groups = $this->getCategoryService()->findAllGroups();
-
-        foreach ($groups as $group) {
-            $this->getCategoryService()->deleteGroup($group['id']);
-        }
-
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (!$group) {
@@ -453,6 +441,22 @@ EOD;
         $output->write('  初始化主题');
 
         $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+
+        $output->writeln(' ...<info>成功</info>');
+    }
+
+    public function initCoin($output)
+    {
+        $output->write('  初始化虚拟币');
+
+        $default = array(
+            'cash_model'   => "none",
+            'price_type'   => "RMB",
+            'cash_rate'    => 1,
+            'coin_enabled' => 0
+        );
+
+        $this->getSettingService()->set('coin', $default);
 
         $output->writeln(' ...<info>成功</info>');
     }

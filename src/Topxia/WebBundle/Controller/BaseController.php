@@ -299,8 +299,8 @@ abstract class BaseController extends Controller
         return $conditions;
     }
 
-    protected function trans($text)
+    protected function trans($text, $arguments = array(), $domain = null, $locale = null)
     {
-        return $this->getServiceKernel()->trans($text);
+        return $this->getServiceKernel()->trans($text, $arguments, $domain, $locale);
     }
 }

@@ -567,6 +567,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $member['role']    = array('student');
                 $member['orderId'] = $fields['orderId'];
+                $member['createdTime'] = time();
             }
 
             $member = MemberSerialize::serialize($member);

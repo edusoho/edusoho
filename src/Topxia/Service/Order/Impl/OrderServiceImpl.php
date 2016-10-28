@@ -4,6 +4,7 @@ namespace Topxia\Service\Order\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Order\Dao\OrderDao;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
 
@@ -228,7 +229,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function generateOrderSn($order)
     {
-        $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
+        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
@@ -447,7 +448,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $actualAmount = 0;
             }
 
-            $actualAmount = number_format((float) $actualAmount, 2, '.', '');
+            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
 
             $this->getOrderRefundDao()->updateRefund($refund['id'], array(
                 'status'       => 'success',
@@ -659,6 +660,16 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
     }
 
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
+    {
+        return $this->getOrderDao()->analysisPaidOrderGroupByTargetType($startTime, $groupBy);
+    }
+
+    public function analysisOrderDate($conditions)
+    {
+        return $this->getOrderDao()->analysisOrderDate($conditions);
+    }
+
     public function updateOrder($id, $orderFileds)
     {
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
@@ -689,6 +700,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createDao('Order.OrderRefundDao');
     }
 
+    /**
+     * @return OrderDao
+     */
     protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');

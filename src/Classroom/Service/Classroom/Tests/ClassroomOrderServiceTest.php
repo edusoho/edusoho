@@ -198,18 +198,6 @@ class ClassroomOrderServiceTest extends BaseTestCase
         $this->assertEquals($order['status'], $result['status']);
     }
 
-    private function createUser()
-    {
-        $user              = array();
-        $user['email']     = "user@user.com";
-        $user['nickname']  = "user";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-        return $user;
-    }
-
     private function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
