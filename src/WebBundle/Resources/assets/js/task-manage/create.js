@@ -54,7 +54,7 @@ class Editor {
         var type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
-        ( this.type !== type ) ? this.loaded == false : this.loaded == true; 
+        ( this.type !== type ) ? this.loaded = false : this.loaded = true; 
         this.type = type;
         console.log("teyp");
         this._renderNext(true);
@@ -108,6 +108,7 @@ class Editor {
             var $iframe = $('#'+this.iframe_name);
             this.iframe_jQuery = $iframe[0].contentWindow.$;
             this.$iframe_body = $iframe.contents().find('body').addClass('task-iframe-body');
+            $iframe.height(this.$iframe_body.height());
             this._rendButton(2);
         });
     }
