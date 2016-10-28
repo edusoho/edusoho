@@ -131,7 +131,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
             $count = $this->getCourseService()->searchMemberCount($conditions);
 
             $members = $this->getCourseService()->searchMembers(
-                $conditions
+                $conditions,
                 array('updatedTime','DESC'),
                 0,
                 $count
