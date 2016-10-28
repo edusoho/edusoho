@@ -86,7 +86,7 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($id);
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('success' => true));
     }
 
     // TODO 是否移到CourseManageController
