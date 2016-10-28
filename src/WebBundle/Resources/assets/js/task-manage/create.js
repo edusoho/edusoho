@@ -100,7 +100,8 @@ class Editor {
     }
 
     _initIframe() {
-        var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" src="'+this.contentUrl+'"</iframe>';
+        var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
+        console.log(this.contentUrl);
         this.$task_manage_content.html(html); 
         var iframewindow = document.getElementById(this.iframe_name).contentWindow || iframe;
         $(iframewindow).load(()=>{

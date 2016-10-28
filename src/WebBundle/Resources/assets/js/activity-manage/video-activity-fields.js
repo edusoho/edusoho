@@ -1,3 +1,4 @@
+$('#upload-iframe').height($('#upload-iframe').contents().find('body').height());
 
 setTimeout(() => {
     
@@ -15,3 +16,5 @@ setTimeout(() => {
         $(this).tab('show')
     });
 }, 1000);
+
+
