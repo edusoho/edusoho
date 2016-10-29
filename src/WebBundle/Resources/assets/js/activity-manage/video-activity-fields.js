@@ -1,6 +1,8 @@
+
+
+//设置上传控件的高度
 $('#upload-iframe').height($('#upload-iframe').contents().find('body').height());
-
-
+//设置任务高度；
 
 
 
