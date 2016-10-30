@@ -52,4 +52,9 @@ class TenpayRequest extends Request {
         return strtolower(md5($sign));
     }
 
+    public function form()
+    {
+        
+    }
+
 }
