@@ -47,7 +47,7 @@ class ConversationServiceTest extends BaseTestCase
 
         $this->createApiMock('3b5db36d838e8252db2ebc170693db66');
 
-        $conversation1 = $this->getConversationService()->createConversation('conversation1', 'course', 1, $members);
+        $this->getConversationService()->createConversation('conversation1', 'course', 1, $members);
 
         $this->createApiMock('8fdb36d838e8252db2ebc170693db89');
         $conversation2 = $this->getConversationService()->createConversation('conversation2', 'classroom', 1, $members);
@@ -100,7 +100,7 @@ class ConversationServiceTest extends BaseTestCase
 
         $this->assertEquals('3b5db36d838e8252db2ebc170693db66', $convNo);
 
-        $convNo2 = $this->getConversationService()->createCloudConversation('conversation2', array());
+        $this->getConversationService()->createCloudConversation('conversation2', array());
     }
 
     public function testAddConversation()
@@ -140,7 +140,7 @@ class ConversationServiceTest extends BaseTestCase
             'title'      => 'conversation1',
             'memberIds'  => array()
         );
-        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+        $this->getConversationService()->addConversation($createConversation1);
 
         $createConversation2 = array(
             'no'         => '8fdb36d838e8252db2ebc170693db89',
@@ -149,7 +149,7 @@ class ConversationServiceTest extends BaseTestCase
             'title'      => 'conversation2',
             'memberIds'  => array()
         );
-        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+        $this->getConversationService()->addConversation($createConversation2);
 
         $conversations = $this->getConversationService()->searchConversations(array('targetTypes' => array('course')), array('createdTime', 'DESC'), 0, 1);
 
@@ -168,7 +168,7 @@ class ConversationServiceTest extends BaseTestCase
             'title'      => 'conversation1',
             'memberIds'  => array()
         );
-        $conversation1 = $this->getConversationService()->addConversation($createConversation1);
+        $this->getConversationService()->addConversation($createConversation1);
 
         $createConversation2 = array(
             'no'         => '8fdb36d838e8252db2ebc170693db89',
@@ -177,7 +177,7 @@ class ConversationServiceTest extends BaseTestCase
             'title'      => 'conversation2',
             'memberIds'  => array()
         );
-        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+        $this->getConversationService()->addConversation($createConversation2);
 
         $count = $this->getConversationService()->searchConversationCount(array('targetTypes' => array('classroom')));
 
@@ -202,7 +202,7 @@ class ConversationServiceTest extends BaseTestCase
             'title'      => 'conversation2',
             'memberIds'  => array()
         );
-        $conversation2 = $this->getConversationService()->addConversation($createConversation2);
+        $this->getConversationService()->addConversation($createConversation2);
 
         $this->getConversationService()->deleteConversationByTargetIdAndTargetType(1, 'course');
 
@@ -243,7 +243,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 1
         );
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
 
         $member = $this->getConversationService()->getMemberByConvNoAndUserId('3b5db36d838e8252db2ebc170693db66', 1);
 
@@ -259,7 +259,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 1
         );
-        $member1 = $this->getConversationService()->addMember($createMember1);
+        $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
             'convNo'     => '3b5db36d838e8252db2ebc170693db66',
@@ -267,7 +267,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 2
         );
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
 
         $members = $this->getConversationService()->findMembersByConvNo('3b5db36d838e8252db2ebc170693db66');
 
@@ -282,7 +282,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 1
         );
-        $member1 = $this->getConversationService()->addMember($createMember1);
+        $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
             'convNo'     => '8fdb36d838e8252db2ebc170693db89',
@@ -290,7 +290,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'classroom',
             'userId'     => 1
         );
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
 
         $convMembers = $this->getConversationService()->findMembersByUserIdAndTargetType(1, 'classroom');
 
@@ -353,7 +353,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 1
         );
-        $member1 = $this->getConversationService()->addMember($createMember1);
+        $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
             'convNo'     => '3b5db36d838e8252db2ebc170693db66',
@@ -361,7 +361,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'course',
             'userId'     => 2
         );
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
         $this->getConversationService()->deleteMembersByTargetIdAndTargetType('1', 'course');
 
         $memberCount = $this->getConversationService()->searchMemberCount(array('targetId' => 1, 'targetType' => 'course'));
@@ -472,7 +472,7 @@ class ConversationServiceTest extends BaseTestCase
             'userId'     => 1
         );
 
-        $member1 = $this->getConversationService()->addMember($createMember1);
+        $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
             'convNo'     => '8fdb36d838e8252db2ebc170693db89',
@@ -481,7 +481,7 @@ class ConversationServiceTest extends BaseTestCase
             'userId'     => 1
         );
 
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
 
         $members = $this->getConversationService()->searchMembers(array('targetTypes' => array('classroom'), 'userId' => 1), array('createdTime', 'DESC'), 0, 1);
         $this->assertEquals($createMember2['targetType'], $members[0]['targetType']);
@@ -496,7 +496,7 @@ class ConversationServiceTest extends BaseTestCase
             'userId'     => 1
         );
 
-        $member1 = $this->getConversationService()->addMember($createMember1);
+        $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
             'convNo'     => '8fdb36d838e8252db2ebc170693db89',
@@ -504,7 +504,7 @@ class ConversationServiceTest extends BaseTestCase
             'targetType' => 'classroom',
             'userId'     => 1
         );
-        $member2 = $this->getConversationService()->addMember($createMember2);
+        $this->getConversationService()->addMember($createMember2);
 
         $count = $this->getConversationService()->searchMemberCount(array('targetTypes' => array('classroom'), 'userId' => 1));
 

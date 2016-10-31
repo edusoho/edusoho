@@ -44,9 +44,12 @@ class LoginBindController extends BaseController
     {
         $code        = $request->query->get('code');
         $inviteCode  = $request->query->get('inviteCode');
+
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+
         $request->getSession()->set('oauth_token', $token);
 
         if ($bind) {
@@ -91,6 +94,8 @@ class LoginBindController extends BaseController
 
             if ($message == 'unaudited') {
                 $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。', array('%name%' => $clientMeta['name']));
+            } elseif($message == 'unAuthorize') {
+                return $this->redirect($this->generateUrl('login'));
             } else {
                 $message = $this->trans('抱歉！暂时无法通过第三方帐号登录。原因：%message%', array('%message%' => $message));
             }
@@ -443,6 +448,7 @@ class LoginBindController extends BaseController
         }
 
         $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;

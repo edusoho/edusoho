@@ -272,7 +272,7 @@
         </div>
         <div class="tab-pane" id="video-chooser-disk-pane">
           <div id="file-browser-video" data-role="file-browser"
-               data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}"
+               data-base-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
                data-empty="{{ '暂无视频文件，请先上传。'|trans }}">

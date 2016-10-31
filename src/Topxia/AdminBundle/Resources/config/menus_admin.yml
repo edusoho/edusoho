@@ -712,11 +712,11 @@ admin:
                             disable: true
                             router_name: admin_setting_mobile
                 admin_optimize:
-                    name: 优化和备份
+                    name: 系统优化
                     group: 2
                     children:
                         admin_optimize_settings:
-                            name: 优化和备份
+                            name: 系统优化
                             disable: true
                             router_name: admin_optimize
                 admin_jobs:

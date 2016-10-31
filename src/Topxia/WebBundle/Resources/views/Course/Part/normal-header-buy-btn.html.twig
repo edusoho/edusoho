@@ -4,7 +4,7 @@
   {% else %}
     {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
   {% endif %}
-{% elseif course.buyExpireTime and course.buyExpireTime < 'now'|date('U') %}
+{% elseif course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U') %}
   {{ '超过购买截止日期<br>不允许加入和购买'|trans|raw }}
 {% elseif course.status != 'published' %}
   {{ '课程还未发布<br>不允许加入和购买'|trans|raw }}

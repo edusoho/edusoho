@@ -40,11 +40,6 @@ class Classrooms extends BaseResource
         $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
 
-        foreach ($classrooms as $key => $value) {
-            $classrooms[$key]['createdTime'] = strval(strtotime($value['createdTime']));
-            $classrooms[$key]['updatedTime'] = empty($value['updatedTime']) ? 0 : $value['updatedTime'];
-        }
-
         return $this->wrap($classrooms, $total);
     }
 

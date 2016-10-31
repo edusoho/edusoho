@@ -43,7 +43,4 @@
 <script src="{{ cdnUrl }}{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
 <script src="{{ url('bazinga_jstranslation_js') }}"></script>
 
-{% for path in script()  %}
-  <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
-{% endfor %}
-
+{% include 'TopxiaWebBundle::js_loader.html.twig' %}
