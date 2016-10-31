@@ -92,7 +92,7 @@ define(function(require, exports, module) {
             }
             $.post($(this).data('url'), function(html) {
                 if(html.error){
-                    if(html.error.code == 10019) {
+                    if(html.code == 10019) {
                         Notify.danger(Translator.trans('录制失败，直播时您没有进行录制！'));
                     } else if(html.error.code == 1403) {
                         Notify.danger(Translator.trans('尚未生成回放文件!'));
