@@ -2,7 +2,7 @@
 {% set modal_class= "modal-md" %}
 
 {% do css(['web.css']) %}
-{% do script(['web/task-manage/create.js']) %}
+{% do script(['libs/jquery-validation.js','web/task-manage/create.js']) %}
 
 {% block title %}
   {% if activity|default(false) %}
