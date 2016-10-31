@@ -67,7 +67,7 @@ class ClassroomAdminController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom', array());
 
         $default = array(
-            'explore_default_orderBy' => 'latest'
+            'explore_default_orderBy' => 'createdTime'
         );
 
         $classroomSetting = array_merge($default, $classroomSetting);

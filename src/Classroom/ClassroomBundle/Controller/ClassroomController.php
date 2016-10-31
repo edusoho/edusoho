@@ -66,7 +66,7 @@ class ClassroomController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom');
 
         if (!isset($classroomSetting['explore_default_orderBy'])) {
-            $classroomSetting['explore_default_orderBy'] = 'latest';
+            $classroomSetting['explore_default_orderBy'] = 'createdTime';
         }
 
         $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
@@ -77,7 +77,7 @@ class ClassroomController extends BaseController
         } else {
             $orderBy = array($orderBy, 'desc');
         }
-        
+
         unset($conditions['orderBy']);
 
         $paginator = new Paginator(
