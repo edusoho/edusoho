@@ -1,29 +1,25 @@
 <script type="text/javascript">
   var script = '{{ script()|join(',') }}';
-  var script_arry = script.split(",");   
+  var script_arry = script.split(",");  
   script_arry.map(function(val,index){
-    if(script_arry[index].indexOf('http://')<0) {
+    if(!new RegExp('http://').test(script_arry[index])) {
       var asset = "{{ asset('build/', 'webpack') }}";
       script_arry[index]=asset+script_arry[index];
     }
   })
 
   var Loader = (function() {
-
     var load_cursor = 0;
     var load_queue;
-
     var loadFinished = function() {
       load_cursor ++;
       if (load_cursor < load_queue.length) {
         loadScript();
       }
     }
-
     function loadError (oError) {
       console.error("The script " + oError.target.src + " is not accessible.");
     }
-
 
     var loadScript = function() {
       var url = load_queue[load_cursor];
@@ -59,6 +55,7 @@
     return {
       load: loadMultiScript,
     };
+    
   })();
 
   Loader.load(script_arry);  
