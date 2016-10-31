@@ -94,7 +94,7 @@ define(function(require, exports, module) {
                 if(html.error){
                     if(html.code == 10019) {
                         Notify.danger(Translator.trans('录制失败，直播时您没有进行录制！'));
-                    } else if(html.error.code == 1403) {
+                    } else if(html.code == 1403) {
                         Notify.danger(Translator.trans('尚未生成回放文件!'));
                     } else {
                         Notify.danger(Translator.trans('录制失败！'));
