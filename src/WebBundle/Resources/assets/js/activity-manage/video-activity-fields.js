@@ -1,7 +1,7 @@
 //设置任务高度；
 var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 
-setTimeout(() => {
+// setTimeout(() => {
     
     let $uploader = $('#uploader-container');
 
@@ -20,6 +20,6 @@ setTimeout(() => {
         e.preventDefault()
         $(this).tab('show')
     });
-}, 1000);
+// }, 1000);
 
 
