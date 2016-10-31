@@ -9,19 +9,21 @@ class ActivityController extends BaseController
 {
     public function updateAction(Request $request, $id)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $activity       = $this->getActivityService()->getActivity($id);
+        $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $editController = $config->getAction('edit');
         return $this->forward($editController, array(
             'id' => $activity['id']
         ));
     }
 
-    public function createAction(Request $request, $type)
+    public function createAction(Request $request, $type, $courseId)
     {
-        $config         = $this->getActivityService()->getActivityConfig($type);
+        $config           = $this->getActivityService()->getActivityConfig($type);
         $createController = $config->getAction('create');
-        return $this->forward($createController);
+        return $this->forward($createController, array(
+            'courseId' => $courseId
+        ));
     }
 
 

@@ -1,0 +1,85 @@
+{% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/video-activity-fields.js']) %}
+
+{% block activity_content %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="title">{{ '标题'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="title">{{ '是否免费课时'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <input id="title" class="form-control" type="checkbox" name="free" value={{ activity.title|default('') }}></div>
+  </div>
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <textarea class="form-control" id="text-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+      >{{ activity.content|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="text-content-field" class="style1">{{ '视频'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <ul class="nav nav-pills" id="material">
+        <li role="presentation" class="active"><a href="#video-chooser-upload-pane">上传资料</a></li>
+        <li role="presentation"><a href="#video-chooser-disk-pane">从资料库中选择</a></li>
+        <li role="presentation"><a href="#video-chooser-course-file">从课程中选择文件</a></li>
+        <li role="presentation"><a href="#video-chooser-import-pane">导入网络视频</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="video-chooser-upload-pane">
+          {% set targetType = 'courseactivity' %}
+          {% set token = uploader_token(targetType, courseId, 'private') %}
+          {% set storageSetting = setting('storage') %}
+          <div id="uploader-container" 
+            data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+            data-init-url="{{ path('uploader_init', {token: token}) }}"
+            {% if storageSetting.upload_mode == 'cloud' %}
+              data-uploader-mode="sdk"
+              data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+            {% else %}
+              data-uploader-mode="local"
+              data-accept="{{ uploader_accept(targetType, 'local_video')|json_encode }}"
+            {% endif %}
+            data-process="{{ uploader_process(targetType) }}"
+            >
+          </div>  
+        </div>
+        <div class="tab-pane" id="video-chooser-disk-pane">
+          <div class="btn-group">
+            <span>资料来源</span>
+            <a href=" " type="button" class="btn btn-default btn-sm ">{{ '来自上传'|trans }}</a>
+            <a href=" " type="button" class="btn btn-default btn-sm">{{ '来自分享'|trans }}</a>
+            <a href=" " type="button" class="btn btn-default btn-sm">{{ '公共资料'|trans }}</a>
+            <a href=" " type="button" class="btn btn-default btn-sm">{{ '我的收藏'|trans }}</a>
+          </div>
+        </div>
+        <div class="tab-pane" id="video-chooser-course-file"> 从课程中选择文件</div>
+        <div class="tab-pane" id="video-chooser-import-pane"> 导入网络视频</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label>{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+    <p class="form-control-static">观看到最后</p>
+    </div>
+  </div>
+{% endblock %}
