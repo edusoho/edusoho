@@ -1086,6 +1086,7 @@ class FileToolkit
                 }
             }
         } catch (\Exception $e) {
+            //报错了不旋转，保证不影响上传流程
         }
 
         return false;
