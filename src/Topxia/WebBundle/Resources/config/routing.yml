@@ -174,11 +174,6 @@ attachment_list:
     defaults: { _controller: TopxiaWebBundle:Attachment:list }
     methods: [GET]
 
-attachment_item_show:
-    path: /attachment/file/{fileId}/show
-    defaults: { _controller: TopxiaWebBundle:Attachment:fileShow }
-    methods: [GET]
-
 attachment_preview:
     path: /attachment/{id}/preview
     defaults: { _controller: TopxiaWebBundle:Attachment:preview }
