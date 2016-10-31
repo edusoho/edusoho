@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\WebBundle\Util\UploaderToken;
 
 class CourseLessonManageController extends BaseController
 {
@@ -499,6 +500,23 @@ class CourseLessonManageController extends BaseController
         }
 
         return $this->createJsonResponse($files);
+    }
+
+    public function batchCreateAction(Request $request, $id)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        $token  = $request->query->get('token');
+        $parser = new UploaderToken();
+        $params = $parser->parse($token);
+
+        if (!$params) {
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('上传授权码不正确，请重试！')));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:batch-create-modal.html.twig', array(
+            'token'      => $token,
+            'targetType' => $params['targetType']
+        ));
     }
 
     protected function secondsToText($value)
