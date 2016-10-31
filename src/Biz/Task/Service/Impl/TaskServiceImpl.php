@@ -2,11 +2,11 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -26,7 +26,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw new AccessDeniedException();
         }
 
-        $activity                = $this->getActivityService()->createActivity($fields);
+        $activity = $this->getActivityService()->createActivity($fields);
+
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $this->getCurrentUser()->getId();
         $fields['courseId']      = $activity['fromCourseId'];
@@ -55,21 +56,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->canManageCourse($savedTask['courseId'])) {
             throw new AccessDeniedException();
         }
-
-        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
         $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'preTaskId',
-            'courseChapterId',
-            'activityId',
             'title',
             'isFree',
             'isOptional',
             'startTime',
             'endTime',
-            'status',
-            'createdUserId'
+            'status'
         ));
 
         return $this->getTaskDao()->update($id, $fields);
@@ -119,7 +114,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         return false;
     }
-
 
     /**
      * @return ActivityService
