@@ -70,10 +70,15 @@ class ClassroomController extends BaseController
         }
 
         $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
-
+        
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $orderBy = array($orderBy, 'asc');
+        } else {
+            $orderBy = array($orderBy, 'desc');
+        }
+        
         unset($conditions['orderBy']);
-
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -83,7 +88,7 @@ class ClassroomController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array($orderBy, 'desc'),
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -117,7 +122,7 @@ class ClassroomController extends BaseController
             'categoryParent'           => $categoryParent,
             'filter'                   => $filter,
             'levels'                   => $levels,
-            'orderBy'                  => $orderBy
+            'orderBy'                  => $orderBy[0]
         ));
     }
 
