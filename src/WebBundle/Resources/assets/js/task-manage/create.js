@@ -23,15 +23,17 @@ class Editor {
     }
 
     _init() {
-        if (this.mode === 'edit') {
-            this.contentUrl = this.$task_manage_type.data('editorStep2Url');
-            this.step = 2;
-            this._switchPage();
+        if(this.mode != 'edit') {
+            this._inItStep1form();
+            return;
         }
+        this.contentUrl = this.$task_manage_type.data('editorStep2Url');
+        this.step = 2;
+        this._switchPage();
     }
 
     _onNext(e) {
-        if (this.step === 3 || (this.step != 1 && !this._validator(this.step))) {
+        if (this.step === 3 || !this._validator(this.step)) {
             return;
         }
         this.step += 1;
@@ -52,7 +54,7 @@ class Editor {
         var type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
-        ( this.type !== type ) ? this.loaded == false : this.loaded == true; 
+        ( this.type !== type ) ? this.loaded = false : this.loaded = true; 
         this.type = type;
         this._renderNext(true);
     }
@@ -98,23 +100,46 @@ class Editor {
     }
 
     _initIframe() {
-        var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" src="'+this.contentUrl+'"</iframe>';
+        var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
+        console.log(this.contentUrl);
         this.$task_manage_content.html(html); 
         var iframewindow = document.getElementById(this.iframe_name).contentWindow || iframe;
         $(iframewindow).load(()=>{
             var $iframe = $('#'+this.iframe_name);
             this.iframe_jQuery = $iframe[0].contentWindow.$;
             this.$iframe_body = $iframe.contents().find('body').addClass('task-iframe-body');
+            $iframe.height(this.$iframe_body.height());
             this._rendButton(2);
         });
     }
 
+    _inItStep1form() {
+        var  $step1_form = $("#step1-form");
+        var validator = $step1_form.validate({
+            onkeyup: false,
+            rules: {
+                title: {
+                  required: true,
+                },
+                content: 'required',
+            },
+            messages: {
+                title: "请输入标题",
+                content:"请输入内容"
+            }
+        });
+        $step1_form.data('validator',validator);
+    }
+
     _validator(index) {
-        if(!this.loaded) {
-            return;
+        if(index === 1) {
+            var validator = $("#step1-form").data('validator');
+        } else {
+            if(this.loaded) {
+                var $from =  this.$iframe_body.find("#step"+index+"-form");
+                var validator = this.iframe_jQuery.data($from[0], 'validator');
+            }
         }
-        var $from =  this.$iframe_body.find("#step"+index+"-form");
-        var validator = this.iframe_jQuery.data($from[0], 'validator');
         if(validator && !validator.form()) {
             return false;
         }
@@ -165,7 +190,7 @@ class Editor {
     }
 
     _renderNext(show) {
-        show ? $("#course-tasks-next").removeClass('hidden') : $("#course-tasks-next").addClass('hidden');
+        show ? $("#course-tasks-next").removeAttr('disabled') : $("#course-tasks-next").attr('disabled','disabled');
     }
 
     _renderPrev(show) {

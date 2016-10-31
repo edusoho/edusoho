@@ -1,40 +1,37 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
-{#{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/video-activity-fields.js']) %}#}
-{% do script(['web/activity-manage/video-activity-fields.js']) %}
+{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/video-activity-fields.js']) %}
 
 {% block activity_content %}
   <div class="row form-group">
-    <div class="col-md-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="title">{{ '标题'|trans }}</label>
     </div>
-    <div class="col-md-9 controls">
-      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}></div>
+    <div class="col-xs-9 controls">
+      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
+    </div>
   </div>
   <div class="row form-group">
-    <div class="col-md-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="title">{{ '是否免费课时'|trans }}</label>
     </div>
-    <div class="col-md-9 controls">
+    <div class="col-xs-9 controls">
       <input id="title" class="form-control" type="checkbox" name="free" value={{ activity.title|default('') }}></div>
   </div>
   <div class="row form-group">
-    <div class="col-md-2 control-label">
+    <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
     </div>
-    <div class="col-md-9 controls">
-      <textarea class="form-control" id="text-content-field" name="content"
-                data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
-                data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
-                data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+    <div class="col-xs-9 controls">
+      <textarea class="form-control" id="text-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
       >{{ activity.content|default('') }}</textarea>
     </div>
   </div>
 
   <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="text-content-field" class="style">{{ '视频'|trans }}</label>
+    <div class="col-xs-2 control-label">
+      <label for="text-content-field" class="style1">{{ '视频'|trans }}</label>
     </div>
-    <div class="col-md-9 controls">
+    <div class="col-xs-9 controls">
       <ul class="nav nav-pills" id="material">
         <li role="presentation" class="active"><a href="#video-chooser-upload-pane">上传资料</a></li>
         <li role="presentation"><a href="#video-chooser-disk-pane">从资料库中选择</a></li>
@@ -48,7 +45,8 @@
           {% set storageSetting = setting('storage') %}
           <div id="uploader-container" 
             data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
-            data-init-url="{{ url('uploader_init', {token: token}, true) }}"
+            data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
+            data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
             {% if storageSetting.upload_mode == 'cloud' %}
               data-uploader-mode="sdk"
               data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
@@ -94,24 +92,21 @@
           <div class="js-material-list">
             <div class="empty">资源加载中...</div>
           </div>
-
         </div>
         <div class="tab-pane" id="video-chooser-course-file"> 从课程中选择文件</div>
         <div class="tab-pane" id="video-chooser-import-pane"> 导入网络视频</div>
       </div>
     </div>
   </div>
-
 {% endblock %}
-
 
 {% block activity_finish %}
   <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="condition">{{ '完成条件'|trans }}</label>
+    <div class="col-xs-2 control-label">
+      <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-md-9 controls">
-      <input id="condition" class="form-control" type="text" name="condition" value={{ activity.title|default('') }}>
+    <div class="col-xs-9 controls">
+    <p class="form-control-static">观看到最后</p>
     </div>
   </div>
 {% endblock %}

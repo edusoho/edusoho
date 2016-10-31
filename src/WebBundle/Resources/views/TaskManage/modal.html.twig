@@ -2,7 +2,7 @@
 {% set modal_class= "modal-md" %}
 
 {% do css(['web.css']) %}
-{% do script(['libs/jquery-validation.js','web/task-manage/create.js']) %}
+{% do script(['web/task-manage/create.js']) %}
 
 {% block title %}
   {% if activity|default(false) %}
@@ -108,6 +108,24 @@
           </a>
         </li>
       </ul>
+      <form class="form-horizontal" id="step1-form" >
+        <div class="row form-group">
+          <div class="col-xs-2 control-label">
+          <label for="title">{{ '标题'|trans }}</label>
+          </div>
+          <div class="col-xs-9 controls">
+            <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} >
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-9 col-xs-offset-2 controls">
+            <label>
+              <input type="checkbox">设为选修 
+            </label>
+            <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>
+          </div>
+        </div>
+      </form>
     </div>
     <div id="task-manage-content"></div>
     <input class="js-hidden-data" type="hidden" name="fromCourseSetId" value='1'>
@@ -116,6 +134,6 @@
 {% endblock %}
 {% block footer %}
   <button id="course-tasks-prev" type="submit" class="btn btn-default hidden " >{{ '上一步'|trans }}</button>
-  <button id="course-tasks-next" type="submit" class="btn btn-primary">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-primary" disabled>{{ '下一步'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-info hidden"  data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
 {% endblock %}
