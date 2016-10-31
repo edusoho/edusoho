@@ -75,6 +75,8 @@ class ClassroomAdminController extends BaseController
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
 
+            $classroomSetting = array_merge($classroomSetting, $set);
+
             $this->getSettingService()->set('classroom', $set);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('班级设置成功！'));
         }
