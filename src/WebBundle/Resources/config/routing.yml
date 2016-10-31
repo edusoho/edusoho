@@ -40,8 +40,13 @@ media_materiallib_contacts:
     defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
 
 media_corusefile_choose:
-    path: /media/corusefile/choose
+    path: /media/corusefile/{courseId}/choose
     defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
+
+media_video_import:
+    path: /media/course/{courseId}/import
+    defaults: { _controller: WebBundle:MediaProccess:import }
+
 
 uploader_init_v2:
   path:  /uploader/v2/init

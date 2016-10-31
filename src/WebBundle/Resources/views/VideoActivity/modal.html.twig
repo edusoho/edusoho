@@ -1,7 +1,7 @@
 {% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
 
-{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/video-activity-fields.js']) %}
-
+{#{% do script(['http://localhost:12345/sdk.js', 'web/activity-manage/video-activity-fields.js']) %}#}
+{% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
   <div class="row form-group">
     <div class="col-xs-2 control-label">
@@ -23,7 +23,10 @@
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <textarea class="form-control" id="text-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+      <textarea class="form-control" id="text-content-field" name="content"
+                data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+                data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+                data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
       >{{ activity.content|default('') }}</textarea>
     </div>
   </div>
@@ -40,7 +43,7 @@
            style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}</div>
     </div>
 
-     <div class="col-xs-9 controls file-chooser-main">
+    <div class="col-xs-9 controls file-chooser-main">
       <ul class="nav nav-pills" id="material">
         <li role="presentation" class="active"><a href="#chooser-upload-pane">上传资料</a></li>
         <li role="presentation"><a href="#chooser-disk-pane">从资料库中选择</a></li>
@@ -52,20 +55,20 @@
           {% set targetType = 'courseactivity' %}
           {% set token = uploader_token(targetType, courseId, 'private') %}
           {% set storageSetting = setting('storage') %}
-          <div id="uploader-container" 
-            data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
-            data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
-            data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
-            {% if storageSetting.upload_mode == 'cloud' %}
-              data-uploader-mode="sdk"
-              data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
-            {% else %}
-              data-uploader-mode="local"
-              data-accept="{{ uploader_accept(targetType, 'local_video')|json_encode }}"
-            {% endif %}
-            data-process="{{ uploader_process(targetType) }}"
-            >
-          </div>  
+          <div id="uploader-container"
+               data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+               data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
+               data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
+              {% if storageSetting.upload_mode == 'cloud' %}
+                data-uploader-mode="sdk"
+                data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+              {% else %}
+                data-uploader-mode="local"
+                data-accept="{{ uploader_accept(targetType, 'local_video')|json_encode }}"
+              {% endif %}
+               data-process="{{ uploader_process(targetType) }}"
+          >
+          </div>
         </div>
 
         <div class="tab-pane" id="chooser-disk-pane">
@@ -74,10 +77,16 @@
         <div class="tab-pane" id="chooser-course-file">
           {% include 'WebBundle:Component:course-file-choose.html.twig' %}
         </div>
-        <div class="tab-pane" id="chooser-import-pane"> 导入网络视频</div>
+        <div class="tab-pane" id="chooser-import-pane">
+          {% include 'WebBundle:Component:import-video.html.twig' %}
+          <input id="lesson-media-field" type="hidden" name="media" value="{#{{ field_value(lesson, 'media')|json_encode }}#}">
+        </div>
       </div>
     </div>
     <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
+    <input id="mediaType" class="form-control" type="hidden" name="mediaType"
+           value={{ activity.mediaType|default('video') }}>
+    <input id="media" class="form-control" type="hidden" name="media" value="">
   </div>
 {% endblock %}
 
@@ -87,7 +96,7 @@
       <label>{{ '完成条件'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-    <p class="form-control-static">观看到最后</p>
+      <p class="form-control-static">观看到最后</p>
     </div>
   </div>
 {% endblock %}

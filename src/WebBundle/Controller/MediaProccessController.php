@@ -11,14 +11,13 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\File\Impl\UploadFileServiceImpl;
-
+use Topxia\Component\MediaParser\ParserProxy;
 /**
  * Class MediaProccessController
  * @package WebBundle\Controller
  * 用来处理活动中文件选取(上传，从资料库选择，从课程文件选择，导入网络文件)逻辑
  */
-class MediaProccessController extends BaseController
+use Topxia\Service\File\UploadFileService;class MediaProccessController extends BaseController
 {
 
     public function materialChooseAction(Request $request)
@@ -92,11 +91,6 @@ class MediaProccessController extends BaseController
         $courseType = $request->query->get('courseType');
         $courseType = empty($courseType) ? 'course' : $courseType;
 
-
-        var_dump(array(
-            'courseId' => $courseId,
-            'type'     => $courseType
-        ));
         $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
             array(
                 'courseId' => $courseId,
@@ -132,8 +126,18 @@ class MediaProccessController extends BaseController
 
     }
 
+    public function importAction(Request $request)
+    {
+        $url = $request->query->get('url');
+
+        $proxy = new ParserProxy();
+        $item  = $proxy->parseItem($url);
+
+        return $this->createJsonResponse($item);
+    }
+
     /**
-     * @return UploadFileServiceImpl
+     * @return UploadFileService
      */
     protected function getUploadFileService()
     {
