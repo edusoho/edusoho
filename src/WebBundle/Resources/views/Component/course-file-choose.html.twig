@@ -1,0 +1,5 @@
+{% do script (['web/component/coursefile-choose.js']) %}
+
+<div data-role="course-file-browser"
+     data-url="{{ path('media_corusefile_choose', {courseId:courseId, type:'video', courseType:'course'}) }}">
+</div>

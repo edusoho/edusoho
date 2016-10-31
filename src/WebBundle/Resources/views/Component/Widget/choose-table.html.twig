@@ -1,4 +1,4 @@
-{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "TopxiaWebBundle::macro.html.twig" as macro %}
 <table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
   <tr>
@@ -10,8 +10,13 @@
   </thead>
   <tbody>
   {% for file in files %}
-    <tr id="material-table-tr-{{ file.id }}" data-id="{{ file.id }}">
-      <td>
+    <tr id="material-table-tr-{{ file.id }}"  class="file-browser-item"
+        data-id="{{ file.id }}"
+        data-name="{{ file.filename }}"
+        data-status="{{ file.convertStatus }}"
+        data-length="{{ file.length }}"
+    >
+      <td >
         {{ file.filename }}
       </td>
       <td>
@@ -29,4 +34,4 @@
   {% endfor %}
   </tbody>
 </table>
-{{ admin_macro.paginator(paginator|default(null)) }}
+{{ macro.paginator(paginator|default(null)) }}

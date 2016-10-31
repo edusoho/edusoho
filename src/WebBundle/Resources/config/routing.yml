@@ -30,3 +30,17 @@ course_task_trigger:
   path:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: WebBundle:Task:trigger }
   methods: [POST]
+
+media_materiallib_choose:
+    path: /media/materiallib/choose
+    defaults: { _controller: WebBundle:MediaProccess:materialChoose }
+
+media_materiallib_contacts:
+    path: /media/materiallib/contacts
+    defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
+
+media_corusefile_choose:
+    path: /media/corusefile/choose
+    defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
+
+
