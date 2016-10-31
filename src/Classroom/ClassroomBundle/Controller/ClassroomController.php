@@ -63,7 +63,14 @@ class ClassroomController extends BaseController
             }
         }
 
-        $orderBy = !isset($conditions['orderBy']) ? 'createdTime' : $conditions['orderBy'];
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
+        if (!isset($classroomSetting['explore_default_orderBy'])) {
+            $classroomSetting['explore_default_orderBy'] = 'latest';
+        }
+
+        $orderBy = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
+
         unset($conditions['orderBy']);
 
         $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
