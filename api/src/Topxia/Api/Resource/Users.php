@@ -13,7 +13,7 @@ class Users extends BaseResource
         $conditions = $request->query->all();
 
         if (empty($conditions)) {
-            // return array();
+            return array();
         }
 
         // @deprecated 兼容老接口，即将去除
