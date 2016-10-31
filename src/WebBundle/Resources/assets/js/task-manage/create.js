@@ -18,18 +18,18 @@ class Editor {
     _initEvent() {
         $(this.$element).on('click', '#course-tasks-next', event=>this._onNext(event));
         $(this.$element).on('click', '#course-tasks-prev', event=>this._onPrev(event));
-        $(this.$element).on('click', '.js-course-tasks-item', event=>this._onSetType(event));
+        if(this.mode != 'edit'){
+            $(this.$element).on('click', '.js-course-tasks-item', event=>this._onSetType(event));    
+        }
         $(this.$element).on('click', '#course-tasks-submit', event=>this._onSave(event));
     }
 
     _init() {
-        if(this.mode != 'edit') {
-            this._inItStep1form();
-            return;
+        this._inItStep1form();
+        if(this.mode == 'edit'){
+            this.contentUrl = this.$task_manage_type.data('editorStep2Url');
+            this._switchPage();    
         }
-        this.contentUrl = this.$task_manage_type.data('editorStep2Url');
-        this.step = 2;
-        this._switchPage();
     }
 
     _onNext(e) {
@@ -74,6 +74,7 @@ class Editor {
                 return obj.value !== '';
             })
             .get()
+            .concat($('#step1-form').serializeArray())
             .concat(this.$iframe_body.find('#step2-form').serializeArray())
             .concat(this.$iframe_body.find("#step3-form").serializeArray())
             .concat([

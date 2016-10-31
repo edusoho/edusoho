@@ -52,6 +52,8 @@ class TaskManageController extends BaseController
         return $this->render('WebBundle:TaskManage:modal.html.twig', array(
             'mode'                => 'edit',
             'currentType'         => $activity['mediaType'],
+            'activity'            => $activity,
+            'types'               => $this->getActivityService()->getActivityTypes(),
             'activity_controller' => $editController,
             'course'              => $course,
             'task'                => $task
