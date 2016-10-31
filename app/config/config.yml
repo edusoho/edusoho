@@ -23,7 +23,11 @@ framework:
         handler_id:  session.handler.factory
     fragments:       ~
     http_method_override: true
-    assets: %assets%
+    assets:
+        packages:
+            webpack:
+                base_urls:
+                    - %webpack_base_url%
 
 # Twig Configuration
 twig:
