@@ -16,6 +16,11 @@ class UserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    public function onUserRegistered(ServiceEvent $event)
+    {
+        $this->sendRegisterMessage($user);
+    }
+
     public function onUserFollowed(ServiceEvent $event)
     {
         $friend = $event->getSubject();
@@ -99,7 +104,12 @@ class UserEventSubscriber implements EventSubscriberInterface
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
     }
-    
+        
+    private function getSettingService()
+    {
+        return ServiceKernel:instance()->createService('User.SettingService');
+    }
+
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
