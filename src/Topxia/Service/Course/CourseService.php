@@ -245,6 +245,8 @@ interface CourseService
 
     public function searchMemberCount($conditions);
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
     public function findWillOverdueCourses();
 
     public function getCourseMember($courseId, $userId);

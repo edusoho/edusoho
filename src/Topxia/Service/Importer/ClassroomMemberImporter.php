@@ -63,7 +63,8 @@ class ClassroomMemberImporter extends Importer
                     'targetId'   => $targetObject['id'],
                     'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
                     'payment'    => 'outside',
-                    'snPrefix'   => 'CR'
+                    'snPrefix'   => 'CR',
+                    'totalPrice' => $targetObject['price']
                 ));
 
                 $this->getOrderService()->payOrder(array(

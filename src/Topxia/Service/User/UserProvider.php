@@ -2,15 +2,19 @@
 namespace Topxia\Service\User;
 
 use Permission\Common\PermissionBuilder;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Handler\AuthenticationHelper;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Topxia\Service\Common\ServiceKernel;
 
 class UserProvider implements UserProviderInterface
 {
+    private $container;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -24,6 +28,10 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
 
+        $forbidden = AuthenticationHelper::checkLoginForbidden($this->container->get('request'));
+        if ($forbidden['status'] == 'error') {
+            throw new AuthenticationException($forbidden['message']);
+        }
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $user['org']       = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
         $currentUser       = new CurrentUser();

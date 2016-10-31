@@ -1,13 +1,12 @@
 <?php
 namespace Permission\Service\Role\Impl;
 
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
 use Permission\Common\PermissionBuilder;
 use Permission\Service\Role\RoleService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Exception\AccessDeniedException;
-use Topxia\Common\Exception\InvalidArgumentException;
 use Topxia\Common\Exception\UnexpectedValueException;
-use Topxia\Service\Common\BaseService;
 
 class RoleServiceImpl extends BaseService implements RoleService
 {
@@ -28,26 +27,26 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role['createdUserId'] = $user['id'];
         $role                  = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
 
-        if(!ArrayToolkit::requireds($role, array('name', 'code'))){
+        if (!ArrayToolkit::requireds($role, array('name', 'code'))) {
             throw new UnexpectedValueException('缺乏必要字段');
         }
 
-        $this->getLogService()->info('role', 'create_role', '新增权限用户组"' . $role['name'] . '"', $role);
+        $this->getLogService()->info('role', 'create_role', '新增权限用户组"'.$role['name'].'"', $role);
         return $this->getRoleDao()->createRole($role);
     }
 
     public function updateRole($id, array $fields)
     {
         $this->checkChangeRole($id);
-        $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
+        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
 
-        if(isset($fields['code'])){
+        if (isset($fields['code'])) {
             unset($fields['code']);
         }
 
         $fields['updatedTime'] = time();
         $role                  = $this->getRoleDao()->updateRole($id, $fields);
-        $this->getLogService()->info('role', 'update_role', '更新权限用户组"' . $role['name'] . '"', $role);
+        $this->getLogService()->info('role', 'update_role', '更新权限用户组"'.$role['name'].'"', $role);
         return $role;
     }
 
@@ -56,7 +55,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role = $this->checkChangeRole($id);
         if (!empty($role)) {
             $this->getRoleDao()->deleteRole($id);
-            $this->getLogService()->info('role', 'delete_role', '删除橘色"' . $role['name'] . '"', $role);
+            $this->getLogService()->info('role', 'delete_role', '删除橘色"'.$role['name'].'"', $role);
         }
     }
 
@@ -73,12 +72,10 @@ class RoleServiceImpl extends BaseService implements RoleService
                 break;
 
             default:
-                throw new InvalidArgumentException('参数sort不正确。');
+                $sort = array('createdTime', 'DESC');
                 break;
         }
-        $roles = $this->getRoleDao()->searchRoles($conditions, $sort, $start, $limit);
-
-        return $roles;
+        return $this->getRoleDao()->searchRoles($conditions, $sort, $start, $limit);
     }
 
     public function searchRolesCount($conditions)
@@ -144,14 +141,14 @@ class RoleServiceImpl extends BaseService implements RoleService
             'ROLE_SUPER_ADMIN' => array('name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'),
             'ROLE_ADMIN'       => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
             'ROLE_TEACHER'     => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
-            'ROLE_USER'        => array('name' => '学员', 'code' => 'ROLE_USER'),
+            'ROLE_USER'        => array('name' => '学员', 'code' => 'ROLE_USER')
         );
-        $userRole  = $userRoles[$code];
+        $userRole = $userRoles[$code];
 
         $userRole['data']          = $role;
         $userRole['createdTime']   = time();
         $userRole['createdUserId'] = $this->getCurrentUser()->getId();
-        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"' . $userRole['name'] . '"', $userRole);
+        $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
         return $this->getRoleDao()->createRole($userRole);
     }
 
@@ -182,7 +179,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         if (empty($conditions['name'])) {
             unset($conditions['name']);
         } else {
-            $conditions['nameLike'] = '%' . $conditions['name'] . '%';
+            $conditions['nameLike'] = '%'.$conditions['name'].'%';
         }
 
         return $conditions;
