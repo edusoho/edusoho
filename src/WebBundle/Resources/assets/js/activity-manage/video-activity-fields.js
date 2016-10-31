@@ -51,13 +51,15 @@ class MaterialLibChoose {
         $('.js-material-list').load(url, params, function () {
             console.log('page is on loading')
         })
+
     }
 
 
     onClickMaterialType(event ) {
+        console.log(1);
         let that = event.currentTarget;
         var type = $(that).data('type');
-        $(that).removeClass('active').addClass('active');
+        $(that).addClass('active').siblings().removeClass('active');
         $('input[name=sourceFrom]').val(type);
         switch (type) {
             case 'my' :
@@ -78,7 +80,7 @@ class MaterialLibChoose {
     }
 
     _loadSharingContacts(url) {
-        $('.js-file-owner').load(url, function(teachers){
+        $.get(url, function(teachers){
             console.log(teachers,isNaN(Object), Object.keys(teachers).length);
             if (Object.keys(teachers).length > 0) {
                 var html=`<option value=''>${Translator.trans('请选择老师')}</option>`;
@@ -88,7 +90,7 @@ class MaterialLibChoose {
 
                 $(".js-file-owner", self.element).html(html);
             }
-        })
+        },'json')
         console.log('hihihi',url)
     }
 
@@ -113,3 +115,5 @@ class MaterialLibChoose {
 }
 
 new MaterialLibChoose($('#video-chooser-disk-pane'), 'video');
+$('#video-chooser-disk-pane').height(350);
+

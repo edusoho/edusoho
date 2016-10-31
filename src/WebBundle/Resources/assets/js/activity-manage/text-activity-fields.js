@@ -30,13 +30,9 @@ class Text{
         var validator = $step2_form.validate({
             onkeyup: false,
             rules: {
-                title: {
-                  required: true,
-                },
                 content: 'required',
             },
             messages: {
-                title: "请输入标题",
                 content:"请输入内容"
             }
         });
