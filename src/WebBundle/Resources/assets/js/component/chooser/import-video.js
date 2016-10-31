@@ -4,16 +4,14 @@
 
 
 class FileImport {
-    constructor(element) {
-        this.element = element;
+    constructor(container) {
+        this.container = container;
         this.initEvent();
     }
 
     initEvent() {
-        $(this.element).on('click', this._onImport.bind(this));
-        $('[data-role=trigger]').on('click', this._open)
-
-
+        $(this.container).on('click', '.js-video-import', this._onImport.bind(this));
+        $(this.container).on('click', 'js-choose-trigger',this._open)
     }
 
 
@@ -73,4 +71,4 @@ class FileImport {
     }
 }
 
-new FileImport('[data-role=import]');
+new FileImport($('#chooser-import-panel'));

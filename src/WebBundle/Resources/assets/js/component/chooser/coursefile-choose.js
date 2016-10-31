@@ -22,7 +22,7 @@ class CourseFileChoose {
         $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $('[data-role=trigger]').on('click', this._open)
+        $(this.modal).on('click', 'js-choose-trigger',this._open)
     }
 
     _initTabs() {
@@ -82,4 +82,4 @@ class CourseFileChoose {
 }
 
 
-new CourseFileChoose($('#chooser-course-file'), 'video');
+new CourseFileChoose($('#chooser-course-panel'), 'video');

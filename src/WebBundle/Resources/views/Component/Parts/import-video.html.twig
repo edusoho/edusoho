@@ -1,4 +1,4 @@
-{% do script(['web/component/import-video.js']) %}
+{% do script(['web/component/chooser/import-video.js']) %}
 
 <div class="tab-pane" id="video-chooser-import-pane">
   {% if lesson|default(null) %}
@@ -8,7 +8,7 @@
     <input class="form-control" type="text" placeholder="{{ '支持优酷、土豆、腾讯、网易公开课的视频页面地址导入'|trans }}"
            data-role="import-url">
     <span class="input-group-btn">
-              <button type="button" class="btn btn-default" data-role="import"
+              <button type="button" class="btn btn-default js-video-import" data-role="import"
                       data-url="{{ path('course_manage_media_import', {id:courseId}) }}"
                       data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
             </span>

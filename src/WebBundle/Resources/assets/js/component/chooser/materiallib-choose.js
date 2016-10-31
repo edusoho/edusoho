@@ -25,8 +25,7 @@ class MaterialLibChoose {
         $(this.modal).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
         $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-
-        $('[data-role=trigger]').on('click', this._open)
+        $(this.container).on('click', 'js-choose-trigger',this._open)
     }
 
     _initTabs() {
@@ -159,4 +158,4 @@ class MaterialLibChoose {
 }
 
 
-new MaterialLibChoose($('#chooser-disk-pane'), 'video');
+new MaterialLibChoose($('#chooser-material-panel'), 'video');
