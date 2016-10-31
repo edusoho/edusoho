@@ -1,4 +1,5 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% do css(['web.css']) %}
 {% do script(['libs/ckeditor.js','libs/jquery-validation.js'], 500) %}
 
 {% block body %}
@@ -17,6 +18,3 @@
     </div>
   </div>
 {% endblock %}
-
-
-

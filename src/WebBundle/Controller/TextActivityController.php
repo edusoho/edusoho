@@ -22,7 +22,7 @@ class TextActivityController extends BaseController implements ActivityActionInt
         ));
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $courseId)
     {
         return $this->render('WebBundle:TextActivity:modal.html.twig');
     }
