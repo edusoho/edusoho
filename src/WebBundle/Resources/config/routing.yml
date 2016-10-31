@@ -43,4 +43,12 @@ media_corusefile_choose:
     path: /media/corusefile/choose
     defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
 
+uploader_init_v2:
+  path:  /uploader/v2/init
+  defaults: { _controller: WebBundle:Uploader:init }
+  methods: [GET]
 
+uploader_finished_v2:
+  path:  /uploader/v2/finished
+  defaults: { _controller: WebBundle:Uploader:finished }
+  methods: [GET]

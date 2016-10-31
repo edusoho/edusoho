@@ -52,7 +52,7 @@ class PathPackage extends Package
         $this->basePath = $cdnUrl . $this->basePath;
     }
 
-    public function getUrl($path)
+    public function getUrl($path, $version = null)
     {
         if (false !== strpos($path, '://') || 0 === strpos($path, '//')) {
             return $path;
