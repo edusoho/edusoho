@@ -1,6 +1,7 @@
 /**
  * Created by Simon on 31/10/2016.
  */
+var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 
 class CourseFileChoose {
 
@@ -13,22 +14,13 @@ class CourseFileChoose {
 
     _init() {
         this._loadList();
-        this._initTabs();
     }
 
     _initEvent() {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $(this.container).on('click', 'js-choose-trigger',this._open)
-    }
-
-    _initTabs() {
-        $("#material a").click(function (e) {
-            e.preventDefault();
-
-            $(this).tab('show')
-        });
+        $('.js-choose-trigger').on('click',this._open)
     }
 
     _loadList() {
@@ -52,11 +44,13 @@ class CourseFileChoose {
     _close() {
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _open() {
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _onSelectFile(event) {
