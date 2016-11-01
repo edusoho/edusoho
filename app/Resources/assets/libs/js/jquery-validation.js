@@ -4,11 +4,8 @@ $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
   errorElement: 'p',
   highlight: function(element, errorClass, validClass) {
-    console.log("highlight");
     let $row = $(element).closest('.form-group');
-    console.log($row);
     $row.addClass('has-error');
-    console.log($row.hasClass('has-error'));
     $row.find('.help-block').each(function() {
       let $this = $(this);
       if (!$this.hasClass('jq-validate-error')) {
@@ -17,7 +14,6 @@ $.validator.setDefaults({
     });
   },
   unhighlight: function(element, errorClass, validClass) {
-    console.log("unhighlight");
     let $row = $(element).closest('.form-group');
     $row.removeClass('has-error');
     $row.find('.help-block').each(function() {
@@ -28,7 +24,6 @@ $.validator.setDefaults({
     });
   },
   errorPlacement: function(error, element) {
-    console.log("");
     if (element.parent().hasClass('input-group')) {
       element.parent().after(error);
     } else if (element.parent().is('label')) {
