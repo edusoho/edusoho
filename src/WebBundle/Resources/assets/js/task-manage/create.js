@@ -182,7 +182,7 @@ class Editor {
     }
 
     _renderStep(step) {
-        $('#task-manage-step').find('li:eq('+ (step-1) +')').addClass('doing').siblings().removeClass('doing');
+        $('#task-manage-step').find('li:eq('+ (step-1) +')').addClass('done').siblings().removeClass('done');
     }
 
     _renderContent(step) {
