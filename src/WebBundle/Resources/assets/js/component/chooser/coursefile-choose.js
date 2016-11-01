@@ -20,7 +20,7 @@ class CourseFileChoose {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $('.js-choose-trigger').on('click',this._open)
+        $('.js-choose-trigger').on('click', this._open)
     }
 
     _loadList() {
@@ -66,6 +66,14 @@ class CourseFileChoose {
         $('[name="media"]').val(value);
         $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
+        this._fillMinuteAndSecond(file.length);
+    }
+
+    _fillMinuteAndSecond(fileLength) {
+        let minute = parseInt(fileLength / 60);
+        let second = Math.round(fileLength % 60);
+        $("#minute").val(minute);
+        $("#second").val(second)
     }
 
 }
