@@ -2,14 +2,6 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
-  <div class="row form-group">
-    <div class="col-xs-2 control-label">
-      <label for="title">{{ '标题'|trans }}</label>
-    </div>
-    <div class="col-xs-9 controls">
-      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
-    </div>
-  </div>
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
@@ -37,7 +29,6 @@
     <div class="col-xs-9">
       <input class="form-control width-input width-input-small" id="minute" type="text" name="minute" value="">{{'分'|trans}}
       <input class="form-control width-input width-input-small" id="second" type="text" name="second" value="">{{'秒'|trans}}
-      <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
     </div>
   </div>
 

@@ -66,6 +66,12 @@ class VideoActivity extends Activity
         return $this->getVideoActivityDao()->get($id);
     }
 
+    public function delete($id)
+    {
+        return $this->getVideoActivityDao()->delete($id);
+    }
+
+
     protected function getVideoExt($fields)
     {
         $media = json_decode($fields['media'], true);
