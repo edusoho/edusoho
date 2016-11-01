@@ -29,5 +29,8 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
-
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
 }

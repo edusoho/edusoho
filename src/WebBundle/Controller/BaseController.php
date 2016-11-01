@@ -27,6 +27,14 @@ class BaseController extends Controller
         return new JsonResponse($data, $status, $headers);
     }
 
+    protected function createJsonpResponse($data = null, $callback='callback', $status=200, $headers=array())
+    {
+        $response = $this->createJsonResponse($data, $status, $headers);
+        return $response
+            ->setCallback($callback)
+            ;
+    }
+
     protected function createResourceNotFoundException($resourceType, $resourceId, $message='')
     {
         return new ResourceNotFoundException($resourceType, $resourceId, $message);

@@ -45,7 +45,8 @@
           {% set storageSetting = setting('storage') %}
           <div id="uploader-container" 
             data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
-            data-init-url="{{ path('uploader_init', {token: token}) }}"
+            data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
+            data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
             {% if storageSetting.upload_mode == 'cloud' %}
               data-uploader-mode="sdk"
               data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
@@ -60,10 +61,36 @@
         <div class="tab-pane" id="video-chooser-disk-pane">
           <div class="btn-group">
             <span>资料来源</span>
-            <a href=" " type="button" class="btn btn-default btn-sm ">{{ '来自上传'|trans }}</a>
-            <a href=" " type="button" class="btn btn-default btn-sm">{{ '来自分享'|trans }}</a>
-            <a href=" " type="button" class="btn btn-default btn-sm">{{ '公共资料'|trans }}</a>
-            <a href=" " type="button" class="btn btn-default btn-sm">{{ '我的收藏'|trans }}</a>
+            <a type="button" class="btn btn-default btn-sm js-material-type active"
+               data-type="my">{{ '来自上传'|trans }}</a>
+            <a type="button" class="btn btn-default btn-sm js-material-type" data-type="sharing" data-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}">{{ '来自分享'|trans }}</a>
+            <a type="button" class="btn btn-default btn-sm js-material-type" data-type="public">{{ '公共资料'|trans }}</a>
+            <a type="button" class="btn btn-default btn-sm js-material-type" data-type="favorite">{{ '我的收藏'|trans }}</a>
+          </div>
+          <div class="row material-search-form">
+            <div class="col-xs-5 js-file-name-group">
+                <span class="input-group">
+                  <input name="file-filter-by-name" class="form-control width-input-small js-file-name" type="text"
+                         placeholder="输入视频标题关键字">
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default js-browser-search"
+                            data-url="{{ path('material_lib_choose') }}"
+                            data-loading-text="正在加载，请稍等">搜索</button>
+                  </span>
+                </span>
+            </div>
+            <div class="js-file-owner-group hidden">
+              <span class="file-filter-by-owner-container col-xs-5" style="">
+                <select name="file-filter-by-owner" class="js-file-owner form-control width-input-large">
+                  <option value="">请选择老师</option>
+                </select>
+              </span>
+            </div>
+          </div>
+          <input type="hidden" name="sourceFrom" value="my">
+          <input type="hidden" name="page" value="1">
+          <div class="js-material-list">
+            <div class="empty">资源加载中...</div>
           </div>
         </div>
         <div class="tab-pane" id="video-chooser-course-file"> 从课程中选择文件</div>

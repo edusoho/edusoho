@@ -13,6 +13,8 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
+    private $container;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
