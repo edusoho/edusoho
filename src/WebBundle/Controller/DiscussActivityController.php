@@ -20,9 +20,11 @@ class DiscussActivityController extends BaseController implements ActivityAction
         ));
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $courseId)
     {
-        return $this->render('WebBundle:DiscussActivity:modal.html.twig');
+        return $this->render('WebBundle:DiscussActivity:modal.html.twig', array(
+            'courseId' => $courseId
+        ));
     }
 
     /**
