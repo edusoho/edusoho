@@ -2,8 +2,6 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-
 class CourseFileChoose {
 
     constructor($modal, mediaType) {
@@ -39,7 +37,6 @@ class CourseFileChoose {
 
         $containter.load(url, function () {
             console.log('page is on loading');
-            $parentiframe.height($parentiframe.contents().find('body').height());
         })
     }
 
