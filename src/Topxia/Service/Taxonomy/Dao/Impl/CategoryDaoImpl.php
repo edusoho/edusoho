@@ -128,7 +128,9 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findCategoriesByIds(array $ids)
     {
-        if (empty($ids)) {
+        $ids = array_unique($ids);
+
+        if (empty($ids) || array_intersect($ids, array(0)) == array(0)) {
             return array();
         }
 
