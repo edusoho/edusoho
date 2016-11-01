@@ -29,6 +29,7 @@ class ServiceKernel
     protected $currentUser;
 
     protected $pool = array();
+    protected $connection;
 
     protected $classMaps = array();
 
