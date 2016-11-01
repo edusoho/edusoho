@@ -17,7 +17,9 @@ use Topxia\Component\MediaParser\ParserProxy;
  * @package WebBundle\Controller
  * 用来处理活动中文件选取(上传，从资料库选择，从课程文件选择，导入网络文件)逻辑
  */
-use Topxia\Service\File\UploadFileService;class MediaProccessController extends BaseController
+use Topxia\Service\File\UploadFileService;
+
+class MediaProccessController extends BaseController
 {
 
     public function materialChooseAction(Request $request)
@@ -27,10 +29,10 @@ use Topxia\Service\File\UploadFileService;class MediaProccessController extends 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
         }
-
         $currentUserId = $currentUser['id'];
         $conditions    = $request->request->all();
 
+        $request->query->set('page', $conditions['page']);
 
         $conditions['status']        = 'ok';
         $conditions['currentUserId'] = $currentUserId;

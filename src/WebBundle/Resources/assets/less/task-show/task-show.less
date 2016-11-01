@@ -1,0 +1,153 @@
+.mouse-control {
+  >.mouse-leave {
+    display: inline-block;
+  }
+  >.mouse-enter {
+    display: none;
+  }
+  &:hover {
+    >.mouse-leave {
+      display: none;
+    }
+    >.mouse-enter {
+      display: inline-block;
+    }
+  }
+}
+
+.task-dashboard-body {
+  background-color: #111111;
+  height: 100%;
+  padding-right: 442px;
+  .dashboard-header {
+    position: absolute;
+    left: 26px;
+    right: 442px+18px;
+    height: 53px;
+    line-height: 53px;
+    color:@gray;
+    font-size: 16px;
+    z-index: 1;
+    .back-link {
+      color: @gray;
+      padding-right: 30px;
+      font-size: 22px;
+      &:hover {
+        color: @brand-primary;
+      }
+    }
+  }
+  .dashboard-content {
+    position: absolute;
+    left: 26px;
+    right: 442px+18px;
+    top:53px;
+    bottom: 26px;
+    background-color: #fff;
+  }
+  .dashboard-toolbar {
+    position: absolute;
+    right: 442px;
+    top:0;
+    height: 100%;
+    display: table;
+    .dashboard-toolbar-nav {
+      display: table-cell;
+      margin-bottom: 0;
+      vertical-align: middle;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      >li {
+        margin-bottom: 10px;
+        >a {
+          padding:12px 15px;
+          display: inline-block;
+          background-color: #333333;
+          color: @gray;
+          text-align: center;
+        }
+        &.active,
+        &:hover {
+          >a {
+            background-color: @brand-primary;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  .dashboard-panel {
+    position: absolute;
+    right: 0;
+    top:0;
+    bottom: 0;
+    width: 442px;
+    .dashboard-group {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      background-color: #151515;
+    }
+  }
+  .task-group {
+    padding: 15px 17px;
+    .task-list {
+      list-style: none;
+      padding: 0;
+      >.task-item {
+        position: relative;
+        padding: 12px 0 12px 30px;
+        line-height: 1;
+        cursor: pointer;
+        >a {
+          display: inline-block;
+          max-width: 280px;
+          color: @gray-dark;
+        }
+        .left-menu {
+          position: absolute;
+          left: 0;
+          top: 11px;
+        }
+        .right-menu {
+          position: absolute;
+          top:14px;
+          right: 0;
+        }
+        &:hover,
+        &.active{
+          >a,
+          .left-menu
+           {
+            color: @brand-primary
+          }
+        }
+        &.task-title {
+          color: @gray;
+          cursor: default;
+          >a {
+            color: @gray;
+            cursor: default;
+          }
+          &:hover {
+            >a,
+            .left-menu
+             {
+              color:@gray;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+

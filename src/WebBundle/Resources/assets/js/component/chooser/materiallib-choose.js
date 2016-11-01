@@ -6,8 +6,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class MaterialLibChoose {
 
-    constructor($modal, mediaType) {
-        this.modal = $modal;
+    constructor($container, mediaType) {
+        this.container = $container;
         this.mediaType = mediaType;
         this.loadShareingContacts = false;
         this._init();
@@ -16,25 +16,15 @@ class MaterialLibChoose {
 
     _init() {
         this._loadList();
-        this._initTabs();
     }
 
     _initEvent() {
-        $(this.modal).on('click', '.js-material-type', this._switchFileSource.bind(this));
-        $(this.modal).on('change', '.js-file-owner', this._fileterByFileOwner)
-        $(this.modal).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
-        $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
-        $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $(this.container).on('click', 'js-choose-trigger',this._open)
-    }
-
-    _initTabs() {
-        $("#material a").click(function (e) {
-            e.preventDefault();
-            $("#iframe").height($("iframe").contents().find('body').height());
-            $parentiframe.height($parentiframe.contents().find('body').height());
-            $(this).tab('show')
-        });
+        $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
+        $(this.container).on('change', '.js-file-owner', this._fileterByFileOwner)
+        $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
+        $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
+        $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+        $('.js-choose-trigger').on('click',this._open)
     }
 
     _loadList() {
@@ -44,16 +34,18 @@ class MaterialLibChoose {
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
         $('.js-material-list').load(url, params, function () {
-            console.log('page is on loading')
+            $parentiframe.height($parentiframe.contents().find('body').height());
         })
 
     }
 
     _paginationList(event) {
         event.stopImmediatePropagation();
+        event.preventDefault();
         let $that = $(event.currentTarget);
-        console.log('_paginationList');
-        $('input[name=page]').val($that.html());
+
+        let page = this._getUrlParameter($that.attr('href'), 'page');
+        $('input[name=page]').val(page);
         this._loadList();
     }
 
@@ -86,8 +78,6 @@ class MaterialLibChoose {
             console.error('teacher list has been loaded');
             return;
         }
-        console.log('teacher list is  loaded');
-
         $.get(url, function (teachers) {
             if (Object.keys(teachers).length > 0) {
                 var html = `<option value=''>${Translator.trans('请选择老师')}</option>`;
@@ -133,11 +123,13 @@ class MaterialLibChoose {
     _close() {
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _open() {
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _onSelectFile(event) {
@@ -145,7 +137,6 @@ class MaterialLibChoose {
         var file = $that.data();
         this._onChange(file);
         this._close();
-        console.log($that, $that.data())
     }
 
     _onChange(file) {
@@ -153,6 +144,23 @@ class MaterialLibChoose {
         $('[name="media"]').val(value);
         $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
+    }
+
+    _getUrlParameter(url, param) {
+        var sPageParams = url.split('?');
+        if (sPageParams && sPageParams.length == 2) {
+            var sPageURL = decodeURIComponent(sPageParams[1]);
+            var sURLVariables = sPageURL.split('&');
+            for (let i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === param) {
+                    return sParameterName[1] === undefined ? null : sParameterName[1];
+                }
+            }
+        }
+        return null;
+
     }
 
 }

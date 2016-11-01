@@ -1,13 +1,12 @@
 /**
  * Created by Simon on 31/10/2016.
  */
-
 var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 
 class CourseFileChoose {
 
-    constructor($modal, mediaType) {
-        this.modal = $modal;
+    constructor($container, mediaType) {
+        this.container = $container;
         this.mediaType = mediaType;
         this._init();
         this._initEvent();
@@ -15,23 +14,13 @@ class CourseFileChoose {
 
     _init() {
         this._loadList();
-        this._initTabs();
     }
 
     _initEvent() {
-        $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
-        $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+        $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
+        $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $(this.modal).on('click', 'js-choose-trigger',this._open)
-    }
-
-    _initTabs() {
-        $("#material a").click(function (e) {
-            e.preventDefault();
-            $("#iframe").height($("iframe").contents().find('body').height());
-            $parentiframe.height($parentiframe.contents().find('body').height());
-            $(this).tab('show')
-        });
+        $('.js-choose-trigger').on('click',this._open)
     }
 
     _loadList() {
@@ -39,7 +28,7 @@ class CourseFileChoose {
         let url = $containter.data('url');
 
         $containter.load(url, function () {
-            console.log('page is on loading')
+            console.log('page is on loading');
         })
     }
 
@@ -52,16 +41,16 @@ class CourseFileChoose {
     }
 
 
-
-
     _close() {
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _open() {
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _onSelectFile(event) {
