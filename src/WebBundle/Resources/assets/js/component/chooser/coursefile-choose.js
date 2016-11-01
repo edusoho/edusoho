@@ -4,8 +4,8 @@
 
 class CourseFileChoose {
 
-    constructor($modal, mediaType) {
-        this.modal = $modal;
+    constructor($container, mediaType) {
+        this.container = $container;
         this.mediaType = mediaType;
         this._init();
         this._initEvent();
@@ -17,10 +17,10 @@ class CourseFileChoose {
     }
 
     _initEvent() {
-        $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
-        $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+        $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
+        $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $(this.modal).on('click', 'js-choose-trigger',this._open)
+        $(this.container).on('click', 'js-choose-trigger',this._open)
     }
 
     _initTabs() {
@@ -47,8 +47,6 @@ class CourseFileChoose {
         $('input[name=page]').val($that.html());
         this._loadList();
     }
-
-
 
 
     _close() {
