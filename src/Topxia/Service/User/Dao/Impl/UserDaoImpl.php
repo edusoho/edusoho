@@ -277,9 +277,9 @@ class UserDaoImpl extends BaseDao implements UserDao
             'lastPasswordFailTime')))) {
 
             $fields['updatedTime'] = time();
-            $this->getConnection()->update($this->table, $fields, array('id' => $id));
             $user = $this->getUser($id);
             if($fields['updatedTime'] - $user['updatedTime'] > 600) {
+                $this->getConnection()->update($this->table, $fields, array('id' => $id));
                 $this->clearCached();
             }
             return $user;
