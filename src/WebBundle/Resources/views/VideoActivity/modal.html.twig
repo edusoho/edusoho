@@ -2,21 +2,12 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
-  {#<div class="row form-group">#}
-    {#<div class="col-xs-2 control-label">#}
-      {#<label for="title">{{ '标题'|trans }}</label>#}
-    {#</div>#}
-    {#<div class="col-xs-9 controls">#}
-      {#<input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>#}
-    {#</div>#}
-  {#</div>#}
   <div class="row form-group">
     <div class="col-xs-2 control-label">
-
+      <label for="title">{{ '标题'|trans }}</label>
     </div>
     <div class="col-xs-9 controls">
-      <input id="title" type="checkbox" name="free" value={{ activity.title|default('') }}>
-      <label for="title">{{ '是否免费课时'|trans }}</label>
+      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
     </div>
   </div>
   <div class="row form-group">
@@ -49,6 +40,7 @@
       <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
     </div>
   </div>
+
 {% endblock %}
 
 {% block activity_finish %}

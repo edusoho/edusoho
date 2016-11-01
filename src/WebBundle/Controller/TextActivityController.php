@@ -13,7 +13,7 @@ class TextActivityController extends BaseController implements ActivityActionInt
 
     }
 
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
 

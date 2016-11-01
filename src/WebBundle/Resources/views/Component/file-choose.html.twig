@@ -31,12 +31,9 @@
 
     <div class="tab-pane" id="chooser-import-panel">
       {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
-      {# <input id="lesson-media-field" type="hidden" name="media"
-              value="{{ field_value(lesson, 'media')|json_encode }}">#}
     </div>
   </div>
 </div>
 <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
-<input id="mediaType" class="form-control" type="hidden" name="mediaType"
-       value={{ activity.mediaType|default(mediaType) }}>
-<input id="media" class="form-control" type="hidden" name="media" value="">
+<input id="mediaType" class="form-control" type="hidden" name="mediaType" value={{ activity.mediaType|default(mediaType) }}>
+<input id="media" class="form-control" type="hidden" name="media" value="{{ activity.ext.media|default(null)|json_encode }}">
