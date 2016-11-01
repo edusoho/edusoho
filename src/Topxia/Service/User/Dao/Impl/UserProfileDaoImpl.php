@@ -124,6 +124,15 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function findDistinctMobileProfiles($start, $limit)
+    {
+        $start = (int) $start;
+        $limit = (int) $limit;
+
+        $sql = "SELECT * FROM {$this->table} WHERE `mobile` <> '' GROUP BY `mobile` ORDER BY `id` ASC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     private function createProfileQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($v) {
@@ -163,6 +172,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             ->andWhere('idcard LIKE :idcard')
             ->andWhere('id IN (:ids)')
             ->andWhere('mobile = :tel')
+            ->andWhere('mobile <> :mobileNotEqual')
             ->andWhere('qq LIKE :qq');
     }
 }

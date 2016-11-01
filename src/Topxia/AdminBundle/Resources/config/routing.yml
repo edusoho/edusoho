@@ -18,36 +18,36 @@ admin_operation_analysis:
     permissions: [admin]
 
 admin_user_statistic:
-    pattern: /user/statistic/{period}
+    path: /user/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:userStatistic }
     permissions: [admin]
 
 admin_lesson_learn_statistic:
-    pattern: /lesson/learn/statistic/{period}
+    path: /lesson/learn/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:lessonLearnStatistic }
     permissions: [admin]
 
 admin_study_statistic:
-    pattern: /study/statistic/{period}
+    path: /study/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:studyStatistic }
     permissions: [admin]
 
 admin_order_statistic:
-    pattern: /order/statistic/{period}
+    path: /order/statistic/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:orderStatistic }
     permissions: [admin]
 
 admin_course_explore:
-    pattern: /course/explore/{period}
+    path: /course/explore/{period}
     defaults: { _controller: TopxiaAdminBundle:Default:courseExplore }
     permissions: [admin]
 # admin_online_count:
-#     pattern: /online/count
+#     path: /online/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:onlineCount }
 #     permissions: [admin]
 
 # admin_login_count:
-#     pattern: /login/count
+#     path: /login/count
 #     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 #     permissions: [admin]
 
@@ -955,7 +955,7 @@ admin_logs:
     path:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 admin_performance:
-    pattern:  /setting/performance
+    path:  /setting/performance
     defaults: { _controller: TopxiaAdminBundle:Setting:performance }
 
 admin_logs_prod:
@@ -1811,11 +1811,11 @@ admin_edu_cloud_search_close:
     permissions: [admin_edu_cloud_search]
 
 admin_app_im:
-    pattern: /setting/app/im
+    path: /setting/app/im
     defaults: { _controller: TopxiaAdminBundle:EduCloud:appIm }
 
 admin_app_im_update:
-    pattern: /setting/app/im/update
+    path: /setting/app/im/update
     defaults: { _controller: TopxiaAdminBundle:EduCloud:appImUpdateStatus }
     methods: [POST]
 
