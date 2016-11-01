@@ -12,7 +12,9 @@
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
 {% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id ~ '/header' 600 %}
+    {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  {% endcache %}
 {% endblock %}
 
 {% block content %}
