@@ -215,6 +215,7 @@ class BuildCommand extends BaseCommand
             'bshaffer/oauth2-server-bundle',
             'bshaffer/oauth2-server-httpfoundation-bridge',
             'bshaffer/oauth2-server-php',
+            'codeages/rest-api-client',
             'composer',
             'silex/silex/src',
             'pimple/pimple/lib',

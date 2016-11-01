@@ -40,11 +40,12 @@ class CodeagesPluginExtension extends Extension
             $refClass = new \ReflectionClass($bundleClass);
             $file = dirname($refClass->getFileName()) . '/Resources/config/dict.yml';
 
+
             if (file_exists($file) === true) {
                 $files[] = $file;
             }
         }
-
+        
         $collector = $container->getDefinition('codeages_plugin.dict_collector');
         $collector->replaceArgument(0, $files);
     }
@@ -64,7 +65,6 @@ class CodeagesPluginExtension extends Extension
             }
         }
 
-            // var_dump($files);
         $collector = $container->getDefinition('codeages_plugin.slot_collector');
         $collector->replaceArgument(0, $files);
 

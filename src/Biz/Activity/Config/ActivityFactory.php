@@ -3,6 +3,7 @@
 namespace Biz\Activity\Config;
 
 use Biz\TextActivity\TextActivity;
+use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\DiscussActivity\DiscussActivity;
 
@@ -23,7 +24,8 @@ class ActivityFactory
     {
         return array(
             'text'    => new TextActivity($biz),
-            'discuss' => new DiscussActivity($biz)
+            'discuss' => new DiscussActivity($biz),
+            'video'   => new VideoActivity($biz)
         );
     }
 }

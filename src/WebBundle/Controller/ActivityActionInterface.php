@@ -16,5 +16,5 @@ interface ActivityActionInterface
 
     public function editAction(Request $request, $id);
 
-    public function createAction(Request $request);
+    public function createAction(Request $request, $courseId);
 }

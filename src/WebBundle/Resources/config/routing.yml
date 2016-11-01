@@ -30,3 +30,30 @@ course_task_trigger:
   path:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: WebBundle:Task:trigger }
   methods: [POST]
+
+media_materiallib_choose:
+    path: /media/materiallib/choose
+    defaults: { _controller: WebBundle:MediaProccess:materialChoose }
+
+media_materiallib_contacts:
+    path: /media/materiallib/contacts
+    defaults: { _controller: WebBundle:MediaProccess:findMySharingContacts }
+
+media_corusefile_choose:
+    path: /media/corusefile/{courseId}/choose
+    defaults: { _controller: WebBundle:MediaProccess:CourseFileChoose }
+
+media_video_import:
+    path: /media/course/{courseId}/import
+    defaults: { _controller: WebBundle:MediaProccess:import }
+
+
+uploader_init_v2:
+  path:  /uploader/v2/init
+  defaults: { _controller: WebBundle:Uploader:init }
+  methods: [GET]
+
+uploader_finished_v2:
+  path:  /uploader/v2/finished
+  defaults: { _controller: WebBundle:Uploader:finished }
+  methods: [GET]

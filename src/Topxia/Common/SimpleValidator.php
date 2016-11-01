@@ -39,9 +39,25 @@ class SimpleValidator
         return !!preg_match('/^[\S]{5,20}$/u', $value);
     }
 
-    public static function truename($value)
+    //真实姓名改成和nickname一样
+    public static function truename($value, array $option = array())
     {
-        return !!preg_match('/^[\x{4e00}-\x{9fa5}.·]{2,5}$/u', $value);
+        $option = array_merge(
+            array('minLength' => 4, 'maxLength' => 18),
+            $option
+        );
+
+        $len = (strlen($value) + mb_strlen($value, 'utf-8')) / 2;
+
+        if ($len > $option['maxLength'] || $len < $option['minLength']) {
+            return false;
+        }
+
+        if (preg_match('/^1\d{10}$/', $value)) {
+            return false;
+        }
+
+        return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z_.·]+$/u', $value);
     }
 
     public static function idcard($value)

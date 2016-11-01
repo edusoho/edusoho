@@ -15,8 +15,7 @@ class Version20161009104841 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE  `course` ADD COLUMN   `expiryMode` ENUM('date','days','none') NOT NULL DEFAULT 'none' COMMENT '有效期模式（截止日期|有效期天数|不设置）' AFTER `originCoinPrice`");
+        $this->addSql(" ALTER TABLE  `course` ADD COLUMN   `expiryMode` ENUM('date','days','none') NOT NULL DEFAULT 'none' COMMENT '有效期模式（截止日期|有效期天数|不设置）' AFTER `originCoinPrice`");
     }
 
     /**

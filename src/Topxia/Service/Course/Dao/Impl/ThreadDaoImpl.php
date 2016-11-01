@@ -25,7 +25,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $that = $this;
 
         return $this->fetchCached("type:{$type}:start:{$start}:limit:{$limit}", $type, $start, $limit, function ($type, $start, $limit) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY createdTime DESC";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
             return $that->getConnection()->fetchAll($sql, array($type)) ?: array();
         });
@@ -84,7 +84,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         foreach ($orderBys as $orderBy) {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
         }
-
+        $builder->getSQL();
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -155,7 +155,9 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('title LIKE :title')
             ->andWhere('content LIKE :content')
             ->andWhere('courseId IN (:courseIds)')
-            ->andWhere('private = :private');
+            ->andWhere('private = :private')
+            ->andWhere('createdTime >= :startCreatedTime')
+            ->andWhere('createdTime < :endCreatedTime');
 
         return $builder;
     }

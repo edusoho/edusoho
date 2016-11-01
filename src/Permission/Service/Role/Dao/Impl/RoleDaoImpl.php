@@ -1,8 +1,8 @@
 <?php
 namespace Permission\Service\Role\Dao\Impl;
 
-use Permission\Service\Role\Dao\RoleDao;
 use Topxia\Service\Common\BaseDao;
+use Permission\Service\Role\Dao\RoleDao;
 
 class RoleDaoImpl extends BaseDao implements RoleDao
 {
@@ -100,13 +100,12 @@ class RoleDaoImpl extends BaseDao implements RoleDao
 
     protected function createSearchQueryBuilder($conditions)
     {
-        $builder = $this->createDynamicQueryBuilder($conditions)
+        return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere("name = :name")
             ->andWhere("name like :nameLike")
             ->andWhere("code = :code")
             ->andWhere('createdUserId = :createdUserId');
-        return $builder;
     }
 
     protected function getRoleDao()

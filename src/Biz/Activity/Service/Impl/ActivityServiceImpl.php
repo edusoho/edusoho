@@ -109,6 +109,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activityConfig->update($savedActivity['mediaId'], $fields);
         }
 
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'desc',
+            'content',
+            'length',
+            'startTime',
+            'endTime'
+        ));
         return $this->getActivityDao()->update($id, $fields);
     }
 

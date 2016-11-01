@@ -2,34 +2,31 @@
 
 namespace Topxia\Service\Util;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
 
 class PluginUtil extends BaseService
 {
-	private static $filesystem;
-	private static $kernel;
+    private static $filesystem;
+    private static $kernel;
 
-	public static function refresh ()
-	{
+    public static function refresh()
+    {
         self::$filesystem = new Filesystem();
-        self::$kernel = ServiceKernel::instance();
+        self::$kernel     = ServiceKernel::instance();
 
         $count = self::getAppService()->findAppCount();
-        $apps = self::getAppService()->findApps(0, $count);
+        $apps  = self::getAppService()->findApps(0, $count);
 
         self::refreshMetaFile($apps);
         self::refreshRoutingFile($apps);
-	}
+    }
 
-	public static function refreshMetaFile($apps)
+    public static function refreshMetaFile($apps)
     {
         $pluginMetas = array(
-            'protocol' => '2.0',
+            'protocol'  => '2.0',
             'installed' => array()
         );
 
@@ -39,29 +36,29 @@ class PluginUtil extends BaseService
             }
 
             $pluginMetas['installed'][$app['code']] = array(
-                'code' => $app['code'],
+                'code'    => $app['code'],
                 'version' => $app['version'],
-                'type' => $app['type'],
+                'type'    => $app['type']
             );
         }
 
-        $dataDirectory = realpath(self::$kernel->getParameter('kernel.root_dir') . '/data/');
+        $dataDirectory = realpath(self::$kernel->getParameter('kernel.root_dir').'/data/');
         if (empty($dataDirectory)) {
-            throw new \RuntimeException( $this->getKernel()->trans('app/data目录不存在，请先创建'));
+            throw new \RuntimeException(self::$kernel->trans('app/data目录不存在，请先创建'));
         }
 
-        $metaFilePath = $dataDirectory . '/plugin_installed.php';
+        $metaFilePath = $dataDirectory.'/plugin_installed.php';
         if (self::$filesystem->exists($metaFilePath)) {
             self::$filesystem->remove($metaFilePath);
         }
 
-        $fileContent = "<?php \nreturn " . var_export($pluginMetas, true) . ";";
+        $fileContent = "<?php \nreturn ".var_export($pluginMetas, true).";";
         file_put_contents($metaFilePath, $fileContent);
     }
 
     public static function refreshRoutingFile($apps)
     {
-        $pluginRootDirectory = realpath(self::$kernel->getParameter('kernel.root_dir') . '/../plugins');
+        $pluginRootDirectory = realpath(self::$kernel->getParameter('kernel.root_dir').'/../plugins');
 
         $config = '';
 
@@ -86,13 +83,12 @@ class PluginUtil extends BaseService
             }
         }
 
-        $pluginRouteFilePath = self::$kernel->getParameter('kernel.root_dir') . '/config/routing_plugins.yml';
+        $pluginRouteFilePath = self::$kernel->getParameter('kernel.root_dir').'/config/routing_plugins.yml';
         if (!self::$filesystem->exists($pluginRouteFilePath)) {
             self::$filesystem->touch($pluginRouteFilePath);
         }
 
         file_put_contents($pluginRouteFilePath, $config);
-
     }
 
     private static function getSettingService()
@@ -100,9 +96,8 @@ class PluginUtil extends BaseService
         return self::$kernel->createService('System.SettingService');
     }
 
-	private static function getAppService()
-	{
-		return self::$kernel->createService('CloudPlatform.AppService');
-	}
-
+    private static function getAppService()
+    {
+        return self::$kernel->createService('CloudPlatform.AppService');
+    }
 }

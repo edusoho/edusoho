@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\User\UserService;
 
 class SmsServiceImpl extends BaseService implements SmsService
 {
@@ -26,9 +27,9 @@ class SmsServiceImpl extends BaseService implements SmsService
             throw new \RuntimeException($this->getKernel()->trans('云短信相关设置未开启!'));
         }
 
+        //这里不考虑去重，只考虑unlock
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         $to      = implode(',', $mobiles);
-
         try {
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
@@ -36,21 +37,15 @@ class SmsServiceImpl extends BaseService implements SmsService
             throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
         }
 
-        $users        = $this->getUserService()->findUsersByIds($userIds);
-        $userProfiles = ArrayToolkit::index($this->getUserService()->findUserProfilesByIds($userIds), 'id');
-
-        $message = $this->getKernel()->trans('对');
-
-        foreach ($users as $user) {
-            $message .= 'userId: '.$user['id'].';nickname: '.$user['nickname'].';verifiedMobile: '.$user['verifiedMobile'].';mobile: '.$userProfiles[$user['id']]['mobile'].';';
-        }
-
-        $message .= $this->getKernel()->trans('发送用于%Type%的通知短信',array('%Type%'=>$smsType));
+        $message = $this->getKernel()->trans('对%To%发送用于%Type%的通知短信',array('%To%'=>$to ,'%Type%'=>$smsType));
         $this->getLogService()->info('sms', $smsType, $message, $mobiles);
 
         return true;
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User.UserService');

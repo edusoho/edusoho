@@ -9,9 +9,10 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 {
     protected $table = 'orders';
 
-    private $serializeFields = array(
-        'data' => 'json'
-    );
+    private $serializeFields
+        = array(
+            'data' => 'json'
+        );
 
     public function getOrder($id)
     {
@@ -89,11 +90,11 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
-        $orders = $builder->execute()->fetchAll() ?: array();
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        $orders  = $builder->execute()->fetchAll() ?: array();
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
@@ -120,7 +121,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function searchOrderCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -143,25 +144,26 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         }
 
         return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'course_order')
-                    ->andWhere('sn = :sn')
-                    ->andWhere('targetType = :targetType')
-                    ->andWhere('targetId = :targetId')
-                    ->andWhere('userId = :userId')
-                    ->andWhere('amount > :amount')
-                    ->andWhere('totalPrice >= totalPrice')
-                    ->andWhere('coinAmount > :coinAmount')
-                    ->andWhere('status = :status')
-                    ->andWhere('status <> :statusPaid')
-                    ->andWhere('status <> :statusCreated')
-                    ->andWhere('payment = :payment')
-                    ->andWhere('createdTime >= :createdTimeGreaterThan')
-                    ->andWhere('paidTime >= :paidStartTime')
-                    ->andWhere('paidTime < :paidEndTime')
-                    ->andWhere('createdTime >= :startTime')
-                    ->andWhere('createdTime < :endTime')
-                    ->andWhere('createdTime < :createdTime_LT')
-                    ->andWhere('title LIKE :title');
+            ->from($this->table, 'course_order')
+            ->andWhere('sn = :sn')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('userId = :userId')
+            ->andWhere('amount > :amount')
+            ->andWhere('totalPrice >= totalPrice')
+            ->andWhere('totalPrice > :totalPriceGreaterThan')
+            ->andWhere('coinAmount > :coinAmount')
+            ->andWhere('status = :status')
+            ->andWhere('status <> :statusPaid')
+            ->andWhere('status <> :statusCreated')
+            ->andWhere('payment = :payment')
+            ->andWhere('createdTime >= :createdTimeGreaterThan')
+            ->andWhere('paidTime >= :paidStartTime')
+            ->andWhere('paidTime < :paidEndTime')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime < :endTime')
+            ->andWhere('createdTime < :createdTime_LT')
+            ->andWhere('title LIKE :title');
     }
 
     public function sumOrderPriceByTargetAndStatuses($targetType, $targetId, array $statuses)
@@ -208,21 +210,21 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function analysisAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(amount)');
+            ->select('sum(amount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisCoinAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(coinAmount)');
+            ->select('sum(coinAmount)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function analysisTotalPrice($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('sum(totalPrice)');
+            ->select('sum(totalPrice)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -256,4 +258,19 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
         return $this->getConnection()->fetchAll($sql);
     }
+
+    public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
+    {
+        $sql = "SELECT targetType , count(targetType) as value FROM orders  WHERE STATUS = 'paid' and `totalPrice` >0 and `paidTime`>={$startTime}  GROUP BY targetType";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisOrderDate($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select("count(id) as count ,from_unixtime(paidTime,'%Y-%m-%d') date")
+            ->groupBy('date');
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
 }
