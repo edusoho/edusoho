@@ -16,7 +16,6 @@ class MaterialLibChoose {
 
     _init() {
         this._loadList();
-        this._initTabs();
     }
 
     _initEvent() {
@@ -26,14 +25,6 @@ class MaterialLibChoose {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
         $('.js-choose-trigger').on('click',this._open)
-    }
-
-    _initTabs() {
-        $("#material a").click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-            $parentiframe.height($parentiframe.contents().find('body').height());
-        });
     }
 
     _loadList() {
@@ -130,15 +121,15 @@ class MaterialLibChoose {
     }
 
     _close() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _open() {
-        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
+        $parentiframe.height($parentiframe.contents().find('body').height());
     }
 
     _onSelectFile(event) {

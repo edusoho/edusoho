@@ -2,6 +2,7 @@
  * Created by Simon on 31/10/2016.
  */
 
+var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 
 class FileImport {
     constructor(container) {
@@ -44,7 +45,7 @@ class FileImport {
             self._onChange(media);
             $urlInput.val('');
         }, 'json').error(function (jqXHR, textStatus, errorThrown) {
-            Notify.danger(Translator.trans('读取视频页面信息失败，请检查您的输入的页面地址后重试'));
+            alert(Translator.trans('读取视频页面信息失败，请检查您的输入的页面地址后重试'));
         }).always(function () {
             $btn.button('reset');
         });
@@ -54,11 +55,13 @@ class FileImport {
 
 
     _close() {
+        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
     }
 
     _open() {
+        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
     }
