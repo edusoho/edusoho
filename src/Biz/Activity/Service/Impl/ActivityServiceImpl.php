@@ -105,6 +105,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
+            'remark',
             'desc',
             'content',
             'length',

@@ -55,9 +55,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function updateLiveActivity($id, $fields)
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
-        // var_dump($liveActivity);
-        // var_dump($fields);exit();
-        $liveParams = array(
+        $liveParams   = array(
             'liveId'   => $liveActivity['liveId'],
             'provider' => $liveActivity['liveProvider'],
             'summary'  => $fields['remark'],
@@ -75,8 +73,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         $client = new EdusohoLiveClient();
-        var_dump($liveParams);
-        $live = $client->updateLive($liveParams);
+        $live   = $client->updateLive($liveParams);
         //live activity自身没有需要更新的信息
     }
 
@@ -87,9 +84,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        var_dump($liveActivity);
         $client = new EdusohoLiveClient();
-        $client->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+        $result = $client->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
         $this->getLiveActivityDao()->delete($id);
     }
 
