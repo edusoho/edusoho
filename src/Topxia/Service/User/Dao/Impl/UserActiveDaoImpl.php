@@ -19,6 +19,11 @@ class UserActiveDaoImpl extends BaseDao implements UserActiveDao
     {
         $activeUser['createdTime'] = time();
         $this->getConnection()->insert($this->getTable(), $activeUser);
+
+        $startTime = strtotime(date('Y-m-d', time()));
+        $this->deleteCache(array(
+            "userId:{$activeUser['userId']}:startTime:{$startTime}"
+        ));
     }
 
     public function getActiveUser($userId)
