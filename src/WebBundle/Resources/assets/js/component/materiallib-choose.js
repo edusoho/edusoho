@@ -45,7 +45,8 @@ class MaterialLibChoose {
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
         $('.js-material-list').load(url, params, function () {
-            console.log('page is on loading')
+            console.log('page is on loading');
+            $parentiframe.height($parentiframe.contents().find('body').height());
         })
 
     }

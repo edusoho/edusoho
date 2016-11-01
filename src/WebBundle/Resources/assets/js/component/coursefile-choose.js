@@ -28,8 +28,7 @@ class CourseFileChoose {
     _initTabs() {
         $("#material a").click(function (e) {
             e.preventDefault();
-            $("#iframe").height($("iframe").contents().find('body').height());
-            $parentiframe.height($parentiframe.contents().find('body').height());
+
             $(this).tab('show')
         });
     }
@@ -39,7 +38,8 @@ class CourseFileChoose {
         let url = $containter.data('url');
 
         $containter.load(url, function () {
-            console.log('page is on loading')
+            console.log('page is on loading');
+            $parentiframe.height($parentiframe.contents().find('body').height());
         })
     }
 
