@@ -221,7 +221,7 @@ uploader_batch_uplod:
 uploader_finished:
     pattern:  /uploader/finished
     defaults: { _controller: TopxiaWebBundle:Uploader:finished }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_upload_callback:
     pattern:  /uploader/upload_callback
