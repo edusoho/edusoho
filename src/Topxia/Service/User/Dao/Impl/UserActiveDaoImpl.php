@@ -33,7 +33,8 @@ class UserActiveDaoImpl extends BaseDao implements UserActiveDao
 
         return $this->fetchCached("userId:{$userId}:startTime:{$startTime}", $userId, $startTime, function ($userId, $startTime) use ($that) {
             $sql       = "SELECT * FROM `user_active_log` WHERE `userId` = ? AND createdTime >= ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($userId, $startTime));
+            $result = $that->getConnection()->fetchAssoc($sql, array($userId, $startTime));
+            return $result ? $result : array() ;
         });
 
     }
