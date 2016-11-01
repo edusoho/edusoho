@@ -14,6 +14,8 @@ define(function(require, exports, module) {
             fileSingleSizeLimit: 1024 * 1024 * 1024 * 2   //2G
         });
 
+        var uploader = esuploader.uploader;
+
         esuploader.on('preupload', function(file){
             var params = {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
@@ -26,6 +28,15 @@ define(function(require, exports, module) {
         esuploader.on('file.uploaded', function(file, data, response){
             var file = {cFile:file, resFile:response};
             files.push(file);
+        });
+
+        uploader.on('uploadAccept', function(){
+            console.log(' iam in>>??');
+            return false;
+        })
+
+        uploader.on('uploadError', function(file){
+            console.log(file);
         });
 
         $('.js-batch-create-lesson-btn').on('click', function() {
