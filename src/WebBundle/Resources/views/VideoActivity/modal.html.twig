@@ -2,20 +2,22 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
+  {#<div class="row form-group">#}
+    {#<div class="col-xs-2 control-label">#}
+      {#<label for="title">{{ '标题'|trans }}</label>#}
+    {#</div>#}
+    {#<div class="col-xs-9 controls">#}
+      {#<input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>#}
+    {#</div>#}
+  {#</div>#}
   <div class="row form-group">
     <div class="col-xs-2 control-label">
-      <label for="title">{{ '标题'|trans }}</label>
+
     </div>
     <div class="col-xs-9 controls">
-      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-xs-2 control-label">
+      <input id="title" type="checkbox" name="free" value={{ activity.title|default('') }}>
       <label for="title">{{ '是否免费课时'|trans }}</label>
     </div>
-    <div class="col-xs-9 controls">
-      <input id="title" class="form-control" type="checkbox" name="free" value={{ activity.title|default('') }}></div>
   </div>
   <div class="row form-group">
     <div class="col-xs-2 control-label">
@@ -32,10 +34,20 @@
 
   <div class="row form-group">
     <div class="col-xs-2 control-label">
-      <label for="text-content-field" class="style1">{{ '视频'|trans }}</label>
+      <label for="media" class="style">{{ '视频'|trans }}</label>
     </div>
     {% set mediaType = 'video' %}
     {% include 'WebBundle:Component:file-choose.html.twig' %}
+  </div>
+  <div class="form-group for-video-type" id="lesson-length-form-group">
+    <div class="col-xs-2 control-label for-video-type">
+      <label>{{'视频时长'|trans}}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <input class="form-control width-input width-input-small" id="minute" type="text" name="minute" value="">{{'分'|trans}}
+      <input class="form-control width-input width-input-small" id="second" type="text" name="second" value="">{{'秒'|trans}}
+      <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
+    </div>
   </div>
 {% endblock %}
 
