@@ -41,7 +41,7 @@
     <li>
       <i class="es-icon es-icon-chevronright"></i>
       <a target="_blank" class="link-light" href="{{ path('course_homework_result', {courseId:course.id, homeworkId:homeworkResult.homeworkId, resultId:homeworkResult.id, userId:app.user.id}) }}">
-        {{'%title %第%number%课时'|trans({'%title%': '《' + course.title + '》','%number%': lesson.number}) }}
+        {{'%title %第%number%课时'|trans({'%title%': '《' + lesson.title + '》','%number%': lesson.number}) }}
       </a>
     </li>
   {% endfor %}
