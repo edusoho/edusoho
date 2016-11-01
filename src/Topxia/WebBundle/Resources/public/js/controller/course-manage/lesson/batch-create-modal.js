@@ -31,9 +31,9 @@ define(function(require, exports, module) {
         $('.js-batch-create-lesson-btn').on('click', function() {
             var fileStatus = esuploader.uploader.getStats();
             if (fileStatus.progressNum > 0) {
-                Notify.danger('还有文件再上传,请等待所有文件上传完成');
+                Notify.danger(Translator.trans('还有文件再上传,请等待所有文件上传完成'));
             } else if (fileStatus.successNum == 0) {
-                Notify.danger('还没有上传成功的文件');
+                Notify.danger(Translator.trans('还没有上传成功的文件'));
             } else {
                 var $bth = $(this);
                 $.each(files, function(index , file){
@@ -53,15 +53,15 @@ define(function(require, exports, module) {
                 url: $('.js-batch-create-lesson-btn').data('url'),
                 data: {fileId:file.resFile.id},
                 success: function(resp) {
-                    $statusCol.addClass('text-success').html('创建课时成功');
+                    $statusCol.addClass('text-success').html(Translator.trans('创建课时成功'));
                 },
                 error: function(resp) {
-                    $statusCol.addClass('text-danger').html('创建课时失败');
+                    $statusCol.addClass('text-danger').html(Translator.trans('创建课时失败'));
                 }
             });
 
             if (isLast) {
-                if (confirm('批量创建课时成功，是否要刷新页面?')) {
+                if (confirm(Translator.trans('批量创建课时成功，是否要刷新页面?'))) {
                     window.location.reload();
                 }
             }
