@@ -1,10 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-{% block stylesheets %}
-  {% for path in css() %}
-    <link href="{{ asset('build/' ~ path, 'webpack') }}" rel="stylesheet" />
-  {% endfor %}
-{% endblock %}
+{% include 'TopxiaWebBundle::css_loader.html.twig' %}
 
 <div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
   <div class="modal-content">
@@ -16,11 +12,7 @@
     {% if not hide_footer|default(false) %}
       <div class="modal-footer">{% block footer %}{% endblock %}</div>
     {% endif %}
-    {% block script %}
-      {% for path in script()  %}
-        <script src="{{ asset('build/' ~ path, 'webpack') }}"></script>
-      {% endfor %}
-    {% endblock %}
+    {% include 'TopxiaWebBundle::js_loader_async.html.twig' %}
   </div>
 </div>
 

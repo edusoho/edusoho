@@ -84,9 +84,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
-            new \Twig_SimpleFunction('dict', array($this, 'getDict')),
-            // dict_text 已经废弃，不要再使用,请使用macro方式
-            new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
@@ -1304,24 +1301,6 @@ class WebExtension extends \Twig_Extension
     {
         $builder = new CategoryBuilder();
         return $builder->buildChoices($groupName, $indent);
-    }
-
-    public function getDict($type)
-    {
-        $dict = ExtensionManager::instance()->getDataDict($type);
-
-        return ServiceKernel::instance()->transArray($dict);
-    }
-
-    public function getDictText($type, $key)
-    {
-        $dict = $this->getDict($type);
-
-        if (empty($dict) || !isset($dict[$key])) {
-            return '';
-        }
-
-        return $dict[$key];
     }
 
     public function getNextExecutedTime()

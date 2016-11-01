@@ -26,7 +26,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw new AccessDeniedException();
         }
 
-        $activity                = $this->getActivityService()->createActivity($fields);
+        $activity = $this->getActivityService()->createActivity($fields);
+
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $this->getCurrentUser()->getId();
         $fields['courseId']      = $activity['fromCourseId'];
@@ -45,13 +46,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             'createdUserId'
         ));
 
-        if (isset($fields['startTime'])) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-        if (isset($fields['endTime'])) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
-
         return $this->getTaskDao()->create($fields);
     }
 
@@ -62,21 +56,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->canManageCourse($savedTask['courseId'])) {
             throw new AccessDeniedException();
         }
-
-        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
         $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'preTaskId',
-            'courseChapterId',
-            'activityId',
             'title',
             'isFree',
             'isOptional',
             'startTime',
             'endTime',
-            'status',
-            'createdUserId'
+            'status'
         ));
 
         return $this->getTaskDao()->update($id, $fields);

@@ -26,3 +26,11 @@ services:
             - @codeages_plugin.slot_manager
         tags:
             - { name: twig.extension }
+
+    codeages_plugin.dict_twig_extension:
+        class: Codeages\PluginBundle\Twig\DictExtension
+        public: false
+        arguments:
+            - @codeages_plugin.dict_collector
+        tags:
+            - { name: twig.extension }

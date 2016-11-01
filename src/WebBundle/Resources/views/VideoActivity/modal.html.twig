@@ -1,0 +1,51 @@
+{% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+
+{% do script([ 'web/activity-manage/video-activity-fields.js']) %}
+{% block activity_content %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="title">{{ '标题'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="title">{{ '是否免费课时'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <input id="title" class="form-control" type="checkbox" name="free" value={{ activity.title|default('') }}></div>
+  </div>
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <textarea class="form-control" id="text-content-field" name="content"
+                data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+                data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+                data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+      >{{ activity.content|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="text-content-field" class="style1">{{ '视频'|trans }}</label>
+    </div>
+    {% set mediaType = 'video' %}
+    {% include 'WebBundle:Component:file-choose.html.twig' %}
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label>{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-9 controls">
+      <p class="form-control-static">观看到最后</p>
+    </div>
+  </div>
+{% endblock %}

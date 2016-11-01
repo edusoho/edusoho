@@ -16,11 +16,13 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $type)
+    public function createAction(Request $request, $type, $courseId)
     {
         $config           = $this->getActivityService()->getActivityConfig($type);
         $createController = $config->getAction('create');
-        return $this->forward($createController);
+        return $this->forward($createController, array(
+            'courseId' => $courseId
+        ));
     }
 
     public function triggerAction($id, $eventName, $data)

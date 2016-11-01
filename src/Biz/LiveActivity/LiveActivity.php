@@ -32,12 +32,12 @@ class LiveActivity extends Activity
 
     public function create($fields)
     {
-        // return $this->getLiveActivityService()->createActivityDetail($fields);
+        return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
     public function update($id, $fields)
     {
-        // return $this->getLiveActivityService()->updateActivityDetail($id, $fields);
+        return $this->getLiveActivityService()->updateLiveActivity($id, $fields);
     }
 
     public function get($targetId)
@@ -45,8 +45,13 @@ class LiveActivity extends Activity
         // return $this->getLiveActivityService()->getActivityDetail($targetId);
     }
 
-    // protected function getLiveActivityService()
-    // {
-    //     return $this->getBiz()->service('LiveActivity:LiveActivityService');
-    // }
+    public function delete($targetId)
+    {
+        return $this->getLiveActivityService()->deleteLiveActivity($targetId);
+    }
+
+    protected function getLiveActivityService()
+    {
+        return $this->getBiz()->service('LiveActivity:LiveActivityService');
+    }
 }

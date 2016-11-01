@@ -1,0 +1,9 @@
+{% for path in script()  %}
+  {% if path starts with 'http://' %}
+    <script src="{{ path }}"></script>
+  {% else %}
+    <script src="{{ asset('build/' ~ path, 'webpack') }}" ansync="true"></script>
+  {% endif %}
+{% endfor %}
+
+
