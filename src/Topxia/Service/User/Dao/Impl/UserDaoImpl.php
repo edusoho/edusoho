@@ -267,10 +267,30 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function updateUser($id, $fields)
     {
-        $fields['updatedTime'] = time();
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
-        $this->clearCached();
-        return $this->getUser($id);
+        if (empty(array_diff(array_keys($fields), array(
+            'loginIp', 
+            'loginTime', 
+            'updatedTime',
+            'loginSessionId',
+            'lockDeadline',
+            'consecutivePasswordErrorTimes',
+            'lastPasswordFailTime')))) {
+
+            $fields['updatedTime'] = time();
+            $this->getConnection()->update($this->table, $fields, array('id' => $id));
+            $user = $this->getUser($id);
+            if($fields['updatedTime']-$user['updatedTime'] > 600) {
+                $this->clearCached();
+            }
+            return $user;
+            
+        } else {
+            $fields['updatedTime'] = time();
+            $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+            $this->clearCached();
+            return $this->getUser($id);
+        }
     }
 
     public function waveCounterById($id, $name, $number)
