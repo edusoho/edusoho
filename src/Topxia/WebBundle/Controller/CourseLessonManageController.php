@@ -502,7 +502,7 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse($files);
     }
 
-    public function batchCreateAction(Request $request, $id)
+    public function batchLessonModalAction(Request $request, $id)
     {
         $this->getCourseService()->tryManageCourse($id);
         $token  = $request->query->get('token');
@@ -515,8 +515,19 @@ class CourseLessonManageController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseLessonManage:batch-create-modal.html.twig', array(
             'token'      => $token,
-            'targetType' => $params['targetType']
+            'targetType' => $params['targetType'],
+            'courseId' => $id
         ));
+    }
+
+    public function createFromFileAction(Request $request, $id)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+        $fileId = $request->request->get('fileId');
+
+        $this->getCourseService()->createLessonByFileId($id, $fileId);
+
+        return $this->createJsonResponse(array('success' => 1));
     }
 
     protected function secondsToText($value)

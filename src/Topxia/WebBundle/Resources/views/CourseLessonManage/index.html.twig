@@ -19,7 +19,7 @@
 			{% endif %}
 
 			{% if course.type == 'normal' and setting('storage.upload_mode') == 'cloud' %}
-				<button class="btn btn-info btn-sm" id="batch-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_lesson_batch_create', {id:course.id, token:uploader_token('materiallib', app.user.id, 'private')}) }}"><i class="glyphicon glyphicon-plus"></i> {{ '批量添加课时'|trans }}</button>
+				<button class="btn btn-info btn-sm" id="batch-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_lesson_batch_modal', {id:course.id, token:uploader_token('materiallib', app.user.id, 'private')}) }}"><i class="glyphicon glyphicon-plus"></i> {{ '批量添加课时'|trans }}</button>
 			{% endif %}
 
 			<div class="btn-group">

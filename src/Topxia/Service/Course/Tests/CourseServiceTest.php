@@ -1326,6 +1326,32 @@ class CourseServiceTest extends BaseTestCase
         $createdLesson = $this->getCourseService()->createLesson($lesson);
     }
 
+    public function testCreateLessonByFileId()
+    {
+        $course = array(
+            'title' => 'online test course 1'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+
+        $fakeFile = array(
+            'id' => 1,
+            'filename' => 'fake video',
+            'type' => 'video',
+            'length' => 100,
+            'fileSize' => 1024
+        );
+        $this->mock('File.UploadFileService', array(
+            array('functionName' => 'getFile', 'runTimes' => 2, 'returnValue' => $fakeFile),
+            array('functionName' => 'waveUploadFile', 'runTimes' => 1, 'returnValue' => array())
+        ));
+
+        $lesson = $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
+
+        $this->assertEquals($fakeFile['id'], $lesson['mediaId']);
+        $this->assertEquals($fakeFile['filename'], $lesson['title']);
+        $this->assertEquals($fakeFile['length'], $lesson['length']);
+    }
+
     public function testGetCourseDraft()
     {
         $user        = $this->createUser();

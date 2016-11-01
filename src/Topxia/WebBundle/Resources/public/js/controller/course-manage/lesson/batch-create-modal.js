@@ -1,8 +1,9 @@
 define(function(require, exports, module) {
-    var BatchUploader = require('./batch-uploader');
+    var BatchUploader = require('topxiawebbundle/controller/uploader/batch-uploader');
 
     exports.run = function() {
 
+        var fileIdArrs = [];
         var $el = $('#batch-uploader');
         var esuploader = new BatchUploader({
             element: $el,
@@ -21,10 +22,34 @@ define(function(require, exports, module) {
             esuploader.set('process', params);
         });
 
-        $el.parents('.modal').on('hidden.bs.modal', function(){
+        esuploader.on('file.uploaded', function(file, data, response){
+            fileIdArrs.push(response.id);
+        });
+
+        $el.parents('.modal').on('hidden.bs.modal', function()  {
             window.location.reload();
         });
 
+        $('.js-batch-create-lesson-btn').on('click', function() {
+            var $bth = $(this);
+
+        });
+
+        function createLessonByFileId(fileId)
+        {
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: $('.js-batch-create-lesson-btn').data('url'),
+                data: {fileId:fileId},
+                success: function(resp) {
+                    
+                },
+                error: function(resp) {
+                    
+                }
+            });
+        }
     };
 
 });

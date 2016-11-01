@@ -1143,6 +1143,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $lesson;
     }
 
+    public function createLessonByFileId($courseId, $fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+        $lessonFileds = array(
+            'courseId'      => $courseId,
+            'title'         => $file['filename'],
+            'type'          => $file['type'],
+            'media'         => array('source' => 'self', 'id' => $fileId, 'name' => $file['filename']),
+            'mediaId'       => $fileId,
+            'length'        => $file['length'],
+        );
+
+        return $this->createLesson($lessonFileds);
+    }
+
     public function analysisLessonDataByTime($startTime, $endTime)
     {
         return $this->getLessonDao()->analysisLessonDataByTime($startTime, $endTime);
