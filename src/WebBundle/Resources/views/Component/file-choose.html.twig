@@ -9,11 +9,11 @@
 
 <div class="col-xs-9 controls file-chooser-main">
   <ul class="nav nav-pills" id="material">
-    <li role="presentation" class="active"><a href="#chooser-upload-pane">上传资料</a></li>
-    <li role="presentation"><a href="#chooser-disk-pane">从资料库中选择</a></li>
-    <li role="presentation"><a href="#chooser-course-file">从课程中选择文件</a></li>
+    <li role="presentation" class="active"><a href="#chooser-upload-panel">上传资料</a></li>
+    <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
+    <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
     {% if mediaType == 'video' %}
-      <li role="presentation"><a href="#chooser-import-pane">导入网络视频</a></li>
+      <li role="presentation"><a href="#chooser-import-panel">导入网络视频</a></li>
     {% endif %}
   </ul>
   <div class="tab-content">
@@ -31,8 +31,8 @@
 
     <div class="tab-pane" id="chooser-import-panel">
       {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
-     {# <input id="lesson-media-field" type="hidden" name="media"
-             value="{{ field_value(lesson, 'media')|json_encode }}">#}
+      {# <input id="lesson-media-field" type="hidden" name="media"
+              value="{{ field_value(lesson, 'media')|json_encode }}">#}
     </div>
   </div>
 </div>
