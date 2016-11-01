@@ -112,6 +112,7 @@ class Editor {
             this.$iframe_body = $iframe.contents().find('body').addClass('task-iframe-body');
             $iframe.height(this.$iframe_body.height());
             this._rendButton(2);
+            console.log();
         });
     }
 

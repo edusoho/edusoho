@@ -5,7 +5,7 @@
     if(!new RegExp('http://').test(val)) {
       var asset = "{{ asset('build/', 'webpack') }}";
       //@ TODO 需要拼接到symfony生成的版本号之前
-      script_array[index] = asset + val;
+      script_array[index] = asset.split('?')[0] + val;
     }
   });
 

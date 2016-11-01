@@ -2,8 +2,6 @@
  * Created by Simon on 31/10/2016.
  */
 
-var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
-
 class CourseFileChoose {
 
     constructor($modal, mediaType) {
@@ -28,8 +26,7 @@ class CourseFileChoose {
     _initTabs() {
         $("#material a").click(function (e) {
             e.preventDefault();
-            $("#iframe").height($("iframe").contents().find('body').height());
-            $parentiframe.height($parentiframe.contents().find('body').height());
+
             $(this).tab('show')
         });
     }
@@ -39,7 +36,7 @@ class CourseFileChoose {
         let url = $containter.data('url');
 
         $containter.load(url, function () {
-            console.log('page is on loading')
+            console.log('page is on loading');
         })
     }
 

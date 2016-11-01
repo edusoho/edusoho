@@ -31,9 +31,8 @@ class MaterialLibChoose {
     _initTabs() {
         $("#material a").click(function (e) {
             e.preventDefault();
-            $("#iframe").height($("iframe").contents().find('body').height());
+            $(this).tab('show');
             $parentiframe.height($parentiframe.contents().find('body').height());
-            $(this).tab('show')
         });
     }
 
@@ -44,7 +43,8 @@ class MaterialLibChoose {
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
         $('.js-material-list').load(url, params, function () {
-            console.log('page is on loading')
+            console.log('page is on loading');
+            $parentiframe.height($parentiframe.contents().find('body').height());
         })
 
     }
