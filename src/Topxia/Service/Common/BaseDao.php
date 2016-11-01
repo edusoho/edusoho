@@ -73,12 +73,12 @@ abstract class BaseDao
      */
     public function getConnection()
     {
-        return $this->connection;
+        return $this->connectionFactory->getConnection();
     }
 
-    public function setConnection($connection)
+    public function setConnectionFactory($connectionFactory)
     {
-        $this->connection = $connection;
+        $this->connectionFactory = $connectionFactory;
     }
 
     public function getRedis()
