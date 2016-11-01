@@ -10,11 +10,11 @@
       <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }}>
     </div>
   </div>
-  <div class="row form-group">
+  <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
     </div>
-    <div class="col-xs-9 controls">
+    <div class="col-xs-9">
       <textarea class="form-control" id="text-content-field" name="content"
                 data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
                 data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div class="row form-group">
+  <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="media" class="style">{{ '视频'|trans }}</label>
     </div>
@@ -34,7 +34,7 @@
     <div class="col-xs-2 control-label for-video-type">
       <label>{{'视频时长'|trans}}</label>
     </div>
-    <div class="col-xs-9 controls">
+    <div class="col-xs-9">
       <input class="form-control width-input width-input-small" id="minute" type="text" name="minute" value="">{{'分'|trans}}
       <input class="form-control width-input width-input-small" id="second" type="text" name="second" value="">{{'秒'|trans}}
       <div class="help-block">{{'时长必须为非负整数'|trans}}</div>
@@ -44,11 +44,11 @@
 {% endblock %}
 
 {% block activity_finish %}
-  <div class="row form-group">
+  <div class=" form-group">
     <div class="col-xs-2 control-label">
       <label>{{ '完成条件'|trans }}</label>
     </div>
-    <div class="col-xs-9 controls">
+    <div class="col-xs-9">
       <p class="form-control-static">观看到最后</p>
     </div>
   </div>

@@ -3,6 +3,7 @@ class Editor {
         this.$element = $modal;
         this.$task_manage_content = $('#task-manage-content');
         this.$task_manage_type = $('#task-manage-type');
+        this.$frame = null;
         this.$iframe_body = null;
         this.iframe_jQuery = null;
         this.iframe_name = 'task-manage-content-iframe';
@@ -49,9 +50,9 @@ class Editor {
     }
 
     _onSetType(event) {
-        var $this = $(event.currentTarget).addClass('active');
+        const $this = $(event.currentTarget).addClass('active');
         $this.siblings().removeClass('active');
-        var type = $this.data('type');
+        let type = $this.data('type');
         $('[name="mediaType"]').val(type);
         this.contentUrl = $this.data('contentUrl');
         ( this.type !== type ) ? this.loaded = false : this.loaded = true; 
@@ -64,10 +65,10 @@ class Editor {
             return;
         }
         let self = this;
-        var postData = $('.js-hidden-data')
+        let postData = $('.js-hidden-data')
             .map((index, node) => {
-                var name = $(node).attr('name');
-                var value = $(node).val();
+                let name = $(node).attr('name');
+                let value = $(node).val();
                 return {name: name, value: value}
             })
             .filter((index, obj) => {
@@ -102,23 +103,20 @@ class Editor {
     }
 
     _initIframe() {
-        var html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
-        console.log(this.contentUrl);
+        let html = '<iframe class="'+this.iframe_name+'" id="'+this.iframe_name+'" name="'+this.iframe_name+'" scrolling="no" src="'+this.contentUrl+'"</iframe>';
         this.$task_manage_content.html(html); 
-        var iframewindow = document.getElementById(this.iframe_name).contentWindow || iframe;
-        $(iframewindow).load(()=>{
-            var $iframe = $('#'+this.iframe_name);
-            this.iframe_jQuery = $iframe[0].contentWindow.$;
-            this.$iframe_body = $iframe.contents().find('body').addClass('task-iframe-body');
-            $iframe.height(this.$iframe_body.height());
+        this.$frame = $('#'+this.iframe_name);
+        this.$frame.load(()=>{
+            this.iframe_jQuery = this.$frame[0].contentWindow.$;
+            this.$iframe_body = this.$frame.contents().find('body').addClass('task-iframe-body');
+            this.$frame.height(this.$iframe_body.height());
             this._rendButton(2);
-            console.log();
         });
     }
 
     _inItStep1form() {
-        var  $step1_form = $("#step1-form");
-        var validator = $step1_form.validate({
+        let  $step1_form = $("#step1-form");
+        let validator = $step1_form.validate({
             onkeyup: false,
             rules: {
                 title: {
@@ -134,16 +132,16 @@ class Editor {
         $step1_form.data('validator',validator);
     }
 
-    _validator(index) {
-        if(index === 1) {
-            var validator = $("#step1-form").data('validator');
-        } else {
-            if(this.loaded) {
-                var $from =  this.$iframe_body.find("#step"+index+"-form");
-                var validator = this.iframe_jQuery.data($from[0], 'validator');
-            }
+    _validator(step) {
+        let validator =null;
+        if(step===1) {
+            validator = $("#step1-form").data('validator');
+        }else if(this.loaded) {
+           var $from =  this.$iframe_body.find("#step"+step+"-form");
+           validator = this.iframe_jQuery.data($from[0], 'validator'); 
         }
         if(validator && !validator.form()) {
+            this.$frame ? this.$frame.height(this.$iframe_body.height()):"";
             return false;
         }
         return true;
@@ -183,8 +181,8 @@ class Editor {
         (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active') : this.$iframe_body.find(".js-step3-view").removeClass('active');
     }
 
-    _renderStep(index) {
-        $('#task-manage-step').find('li:eq('+ (index-1) +')').addClass('doing').siblings().removeClass('doing');
+    _renderStep(step) {
+        $('#task-manage-step').find('li:eq('+ (step-1) +')').addClass('done').siblings().removeClass('done');
     }
 
     _renderContent(step) {
