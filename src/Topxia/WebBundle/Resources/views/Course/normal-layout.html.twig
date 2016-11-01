@@ -26,7 +26,11 @@
       {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
 
       <section class="es-section">
-        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+
+        {% cache 'course/' ~ course.id ~ '/user/' ~ app.user.id ~ '/normal-nav' 600 %}
+          {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% endcache %}
+
         {% block course_main %}{% endblock %}
       </section>
       {% block dashboard_relatedCoursesBlock %}
