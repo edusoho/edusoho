@@ -93,28 +93,52 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function findNavigations($start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array());
+        $that = $this;
+
+        return $this->fetchCached("order_by:sequence:asc:start:{$start}:limit:{$limit}", $start, $limit, function ($start, $limit) use ($that) {
+            $that->filterStartLimit($start, $limit);
+            $sql = "SELECT * FROM {$that->getTable()} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAll($sql, array());
+        });
     }
 
     public function searchNavigationCount($conditions)
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
-        return $builder->execute()->fetchColumn(0);
+        $key = 'count';
+        foreach ($conditions as $key => $value) {
+            $key = $key.":{$key}:{$value}";
+        }
+
+        $that = $this;
+        return $this->fetchCached($key, $conditions, function ($conditions) use ($that) {
+
+            $builder = $that->_createSearchQueryBuilder($conditions)
+                ->select('COUNT(id)');
+            return $builder->execute()->fetchColumn(0);
+        });
     }
 
     public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
-        $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+        $key = 'search';
+        foreach ($conditions as $key => $value) {
+            $key = $key.":{$key}:{$value}";
+        }
 
-        return $builder->execute()->fetchAll() ?: array();
+        $key = $key.":{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+
+        $that = $this;
+
+        return $this->fetchCached($key, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
+            $that->filterStartLimit($start, $limit);
+            $builder = $that->_createSearchQueryBuilder($conditions)
+                ->select('*')
+                ->orderBy($orderBy[0], $orderBy[1])
+                ->setFirstResult($start)
+                ->setMaxResults($limit);
+
+            return $builder->execute()->fetchAll() ?: array();
+        });
     }
 
     protected function _createSearchQueryBuilder($conditions)

@@ -45,6 +45,10 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function findUserByNickname($nickname)
     {
+        if(empty($nickname)) {
+            return array();
+        }
+
         $that = $this;
 
         return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
