@@ -25,7 +25,8 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
 
         return $this->fetchCached("ip:{$ip}:type:{$type}", $ip, $type, function ($ip, $type) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE ip = ? AND type =? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($ip, $type));
+            $result = $that->getConnection()->fetchAssoc($sql, array($ip, $type));
+            return $result ? $result : array();
         });
     }
 
