@@ -1151,6 +1151,10 @@ course_lesson_question_marker_list:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/list
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:question }
 
+course_lesson_texttrack_list:
+    pattern:  /course/{courseId}/lesson/{lessonId}/texttrack/list
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:textTrack }
+
 course_lesson_question_marker_search:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
     defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
