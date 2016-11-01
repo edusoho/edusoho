@@ -279,11 +279,11 @@ class UserDaoImpl extends BaseDao implements UserDao
             $fields['updatedTime'] = time();
             $this->getConnection()->update($this->table, $fields, array('id' => $id));
             $user = $this->getUser($id);
-            if($fields['updatedTime']-$user['updatedTime'] > 600) {
+            if($fields['updatedTime'] - $user['updatedTime'] > 600) {
                 $this->clearCached();
             }
             return $user;
-            
+
         } else {
             $fields['updatedTime'] = time();
             $this->getConnection()->update($this->table, $fields, array('id' => $id));
