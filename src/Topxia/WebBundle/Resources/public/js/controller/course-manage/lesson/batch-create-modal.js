@@ -1,9 +1,10 @@
 define(function(require, exports, module) {
     var BatchUploader = require('topxiawebbundle/controller/uploader/batch-uploader');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
-        var fileIdArrs = [];
+        var files = [];
         var $el = $('#batch-uploader');
         var esuploader = new BatchUploader({
             element: $el,
@@ -23,32 +24,47 @@ define(function(require, exports, module) {
         });
 
         esuploader.on('file.uploaded', function(file, data, response){
-            fileIdArrs.push(response.id);
-        });
-
-        $el.parents('.modal').on('hidden.bs.modal', function()  {
-            window.location.reload();
+            var file = {cFile:file, resFile:response};
+            files.push(file);
         });
 
         $('.js-batch-create-lesson-btn').on('click', function() {
-            var $bth = $(this);
+            var fileStatus = esuploader.uploader.getStats();
+            if (fileStatus.progressNum > 0) {
+                Notify.danger('还有文件再上传,请等待所有文件上传完成');
+            } else if (fileStatus.successNum == 0) {
+                Notify.danger('还没有上传成功的文件');
+            } else {
+                var $bth = $(this);
+                $.each(files, function(index , file){
+                    var isLast = index+1 == files.length;
+                    createLessonByFile(file, isLast);
+                });
+            }
 
         });
 
-        function createLessonByFileId(fileId)
+        function createLessonByFile(file, isLast)
         {
+            var $statusCol = $('#'+file.cFile.id).find('.file-status');
             $.ajax({
                 type: 'post',
                 async: false,
                 url: $('.js-batch-create-lesson-btn').data('url'),
-                data: {fileId:fileId},
+                data: {fileId:file.resFile.id},
                 success: function(resp) {
-                    
+                    $statusCol.addClass('text-success').html('创建课时成功');
                 },
                 error: function(resp) {
-                    
+                    $statusCol.addClass('text-danger').html('创建课时失败');
                 }
             });
+
+            if (isLast) {
+                if (confirm('批量创建课时成功，是否要刷新页面?')) {
+                    window.location.reload();
+                }
+            }
         }
     };
 

@@ -224,6 +224,6 @@
 {% endblock %}
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'关闭'|trans}}</button>
-    <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_lesson_create_from_file', {id:courseId}) }}">{{'批量添加'|trans}}</button>
+    <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_lesson_create_from_file', {id:courseId}) }}" data-loading-text="{{ '正在创建课时,请不要关闭窗口'|trans }}">{{'批量添加'|trans}}</button>
 {% endblock %}
 
