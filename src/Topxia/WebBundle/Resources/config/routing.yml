@@ -207,7 +207,7 @@ uploader_entry:
 uploader_init:
     pattern:  /uploader/init
     defaults: { _controller: TopxiaWebBundle:Uploader:init }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_auth:
     pattern:  /uploader/auth
@@ -226,7 +226,7 @@ uploader_finished:
 uploader_upload_callback:
     pattern:  /uploader/upload_callback
     defaults: { _controller: TopxiaWebBundle:Uploader:uploadCallback }
-    methods: [POST]
+    methods: [GET, POST]
 
 uploader_process_callback:
     pattern:  /uploader/process_callback
