@@ -25,7 +25,7 @@ class MaterialLibChoose {
         $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
-        $(this.container).on('click', 'js-choose-trigger', this._open)
+        $('.js-choose-trigger').on('click',this._open)
     }
 
     _initTabs() {
@@ -130,11 +130,13 @@ class MaterialLibChoose {
     }
 
     _close() {
+        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-main').addClass('hidden');
         $('.file-chooser-bar').removeClass('hidden');
     }
 
     _open() {
+        $parentiframe.height($parentiframe.contents().find('body').height());
         $('.file-chooser-bar').addClass('hidden');
         $('.file-chooser-main').removeClass('hidden');
     }

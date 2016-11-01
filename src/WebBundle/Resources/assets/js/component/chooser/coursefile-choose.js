@@ -20,7 +20,7 @@ class CourseFileChoose {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $(this.container).on('click', 'js-choose-trigger',this._open)
+        $('.js-choose-trigger').on('click',this._open)
     }
 
     _initTabs() {

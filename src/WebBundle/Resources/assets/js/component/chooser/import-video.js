@@ -11,7 +11,7 @@ class FileImport {
 
     initEvent() {
         $(this.container).on('click', '.js-video-import', this._onImport.bind(this));
-        $(this.container).on('click', 'js-choose-trigger',this._open)
+        $('.js-choose-trigger').on('click',this._open)
     }
 
 
