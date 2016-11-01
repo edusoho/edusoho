@@ -6,8 +6,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class MaterialLibChoose {
 
-    constructor($modal, mediaType) {
-        this.modal = $modal;
+    constructor($container, mediaType) {
+        this.container = $container;
         this.mediaType = mediaType;
         this.loadShareingContacts = false;
         this._init();
@@ -20,11 +20,11 @@ class MaterialLibChoose {
     }
 
     _initEvent() {
-        $(this.modal).on('click', '.js-material-type', this._switchFileSource.bind(this));
-        $(this.modal).on('change', '.js-file-owner', this._fileterByFileOwner)
-        $(this.modal).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
-        $(this.modal).on('click', '.pagination a', this._paginationList.bind(this));
-        $(this.modal).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+        $(this.container).on('click', '.js-material-type', this._switchFileSource.bind(this));
+        $(this.container).on('change', '.js-file-owner', this._fileterByFileOwner)
+        $(this.container).on('click', '.js-browser-search', this._fileterByFileName.bind(this));
+        $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
+        $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
         $(this.container).on('click', 'js-choose-trigger',this._open)
     }
 
