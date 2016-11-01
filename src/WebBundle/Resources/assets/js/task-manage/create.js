@@ -144,6 +144,7 @@ class Editor {
             }
         }
         if(validator && !validator.form()) {
+            $('#'+this.iframe_name).height(this.$iframe_body.height());
             return false;
         }
         return true;
