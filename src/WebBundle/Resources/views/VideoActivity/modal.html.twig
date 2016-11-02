@@ -27,6 +27,7 @@
       <label>{{ '视频时长'|trans }}</label>
     </div>
     <div class="col-xs-9">
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
       <input class="form-control width-input width-input-small" id="minute" type="text" name="minute"
              value="{{ activity.minute|default(null) }}">{{ '分'|trans }}
       <input class="form-control width-input width-input-small" id="second" type="text" name="second"
