@@ -10,7 +10,9 @@ class Testpaper {
     this._inItStep2form();
 
     let testpaperId = $('#testpaper-media').find('option:selected').val();
-    this._getItemsTable($('#testpaper-media').data('getTestpaperItems'), testpaperId);
+    if (testpaperId != 0) {
+    	this._getItemsTable($('#testpaper-media').data('getTestpaperItems'), testpaperId);
+    }
   }
 
   _initEvent() {
@@ -23,7 +25,7 @@ class Testpaper {
   	var $this = $(event.currentTarget);
     var mediaId = $this.find('option:selected').val();
     
-    if (mediaId != '') {
+    if (mediaId != 0) {
         this.$element.find('#activity-title').val($this.find('option:selected').text());
         this._getItemsTable($this.data('getTestpaperItems'), mediaId);
     } else {
