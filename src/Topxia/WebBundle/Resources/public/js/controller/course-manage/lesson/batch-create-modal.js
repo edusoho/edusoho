@@ -30,13 +30,19 @@ define(function(require, exports, module) {
             files.push(file);
         });
 
-        uploader.on('uploadAccept', function(){
-            console.log(' iam in>>??');
-            return false;
-        })
+        $el.parents('.modal').on('hidden.bs.modal', function(){
+            window.location.reload();
+        });
 
         uploader.on('uploadError', function(file){
-            console.log(file);
+            if (!'retryNum' in file) {
+                file.retryNum = 0;
+            }
+
+            if (file.retryNum < 3) {
+                uploader.retry(file);
+                file.retryNum = file.retryNum+1;
+            }
         });
 
         $('.js-batch-create-lesson-btn').on('click', function() {
