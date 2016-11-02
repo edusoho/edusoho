@@ -120,6 +120,24 @@
           <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control" value="{{loginConnect[type ~ '_secret']}}">
         </div>
       </div>
+      {% if type == 'weixinmob' %}
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="weixinmob_mp_key" >{{ client.mp_key_setting_label }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="weixinmob_mp_key" name="weixinmob_mp_key" class="form-control" value="{{loginConnect['weixinmob_mp_key']}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="weixinmob_mp_secret" >{{ client.mp_secret_setting_label }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="weixinmob_mp_secret" name="weixinmob_mp_secret" class="form-control" value="{{loginConnect['weixinmob_mp_secret']}}">
+        </div>
+      </div>
+      {% endif %}
         <div class="form-group">
           <div class="col-md-3 control-label">
             <label for="">{{'登录时必须设置邮箱'|trans}}</label>
