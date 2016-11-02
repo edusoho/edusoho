@@ -14,4 +14,7 @@ interface TaskService
 
     public function findTasksByCourseId($courseId);
 
+    public function findTaskResultsByCourseId($courseId);
+
+    public function findTaskResults($couseTaskId);
 }

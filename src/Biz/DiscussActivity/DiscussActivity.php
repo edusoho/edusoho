@@ -10,7 +10,7 @@ class DiscussActivity extends Activity
     {
         return array(
             'name' => '讨论',
-            'icon' => 'es-icon es-icon-graphicclass'
+            'icon' => 'es-icon es-icon-comment'
         );
     }
 

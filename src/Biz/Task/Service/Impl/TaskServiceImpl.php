@@ -89,12 +89,27 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseId($courseId);
     }
 
+    public function findTaskResultsByCourseId($courseId)
+    {
+        return $this->getTaskResultDao()->findByCourseId($courseId);
+    }
+
+    public function findTaskResults($couseTaskId)
+    {
+        return $this->getTaskResultDao()->findByTaskId($courseTaskId);
+    }
+
     /**
      * @return TaskDao
      */
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
+    }
+
+    protected function getTaskResultDao()
+    {
+        return $this->createDao('Task:TaskResultDao');
     }
 
     protected function canManageCourse($courseId)
