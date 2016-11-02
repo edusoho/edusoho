@@ -4,6 +4,7 @@ namespace Biz\Activity\Config;
 
 use Biz\TextActivity\TextActivity;
 use Codeages\Biz\Framework\Context\Biz;
+use Biz\HomeworkActivity\HomeworkActivity;
 use Biz\TestpaperActivity\TestpaperActivity;
 
 class ActivityFactory
