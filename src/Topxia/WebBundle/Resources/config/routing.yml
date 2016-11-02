@@ -248,7 +248,7 @@ uploader_chunks_finish:
 uploadfile_upload:
     path:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
-    methods: [POST]
+    methods: [POST, OPTIONS]
 
 uploadfile_browser:
     path:  /uploadfile/browser
