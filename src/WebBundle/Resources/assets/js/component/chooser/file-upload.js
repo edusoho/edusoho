@@ -12,7 +12,18 @@ let uploaderSdk = new UploaderSDK({
 
 uploaderSdk.on('file.finish', (file) => {
   file.source = 'self';
+
+  if(file.length !== 0 && file.length !== undefined){
+    let $minute = $('#minute');
+    let $second = $('#second');
+    let length = parseInt(file.length);
+    let minute = parseInt(length / 60);
+    let second = length % 60;
+    $minute.val(minute);
+    $second.val(second);
+    file.minute = minute;
+    file.second = second;
+  }
+
   $('[name="media"]').val(JSON.stringify(file));
 });
-
-
