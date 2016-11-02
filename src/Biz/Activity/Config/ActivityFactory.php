@@ -24,9 +24,9 @@ class ActivityFactory
     final public static function all(Biz $biz)
     {
         return array(
-            'live'  => new LiveActivity($biz),
             'video' => new VideoActivity($biz),
             'text'    => new TextActivity($biz),
+            'live'  => new LiveActivity($biz),
             'discuss' => new DiscussActivity($biz)
         );
     }
