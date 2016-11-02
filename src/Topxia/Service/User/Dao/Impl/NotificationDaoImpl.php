@@ -60,10 +60,10 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
 
         $keys = 'search';
         foreach ($conditions as $key => $value) {
-            $keys .= ":{$key}:{$value}";
+            $keys = $keys.":{$key}:{$value}";
         }
 
-        $keys .= ":{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
+        $keys = $keys.":{$orderBy[0]}:{$orderBy[1]}:start:{$start}:limit:{$limit}";
 
         return $this->fetchCached($keys, $conditions, $orderBy, $start, $limit, function ($conditions, $orderBy, $start, $limit) use ($that) {
             $that->filterStartLimit($start, $limit);
