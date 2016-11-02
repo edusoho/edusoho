@@ -2,31 +2,32 @@
 
 namespace Biz\Activity\Config;
 
-
+use Biz\LiveActivity\LiveActivity;
 use Biz\TextActivity\TextActivity;
 use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
+use Biz\DiscussActivity\DiscussActivity;
 
 class ActivityFactory
 {
-
-
     /**
-     * @param Biz $biz
-     * @param     $type
+     * @param  Biz        $biz
+     * @param  $type
      * @return Activity
      */
-    public final static function create(Biz $biz, $type)
+    final public static function create(Biz $biz, $type)
     {
         $activities = self::all($biz);
         return $activities[$type];
     }
 
-    public final static function all(Biz $biz)
+    final public static function all(Biz $biz)
     {
         return array(
-            'text' => new TextActivity($biz),
-            'video' => new VideoActivity($biz)
+            'video' => new VideoActivity($biz),
+            'text'    => new TextActivity($biz),
+            'live'  => new LiveActivity($biz),
+            'discuss' => new DiscussActivity($biz)
         );
     }
 }

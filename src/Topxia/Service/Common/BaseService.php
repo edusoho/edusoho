@@ -1,16 +1,13 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Topxia\Service\Common\Lock;
 use Monolog\Handler\StreamHandler;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Common\Exception\UnexpectedValueException;
 use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Common\NotFoundException;
 use Topxia\Service\Util\HTMLPurifierFactory;
-use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Common\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
 
 abstract class BaseService
 {
@@ -87,7 +84,7 @@ abstract class BaseService
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
-        return new AccessDeniedException($message, null, $code);
+        return new AccessDeniedException($message, $code);
     }
 
     /**
@@ -141,7 +138,7 @@ abstract class BaseService
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw new \Topxia\Common\Exception\AccessDeniedException('未登录用户，无权操作！');
+            throw new AccessDeniedException('未登录用户，无权操作！');
         }
 
         $permissions = $user->getPermissions();

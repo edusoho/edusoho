@@ -15,8 +15,9 @@ class TaskManageController extends BaseController
         $course = $this->tryManageCourse($courseId);
 
         if ($request->isMethod('POST')) {
-            $task      = $request->request->all();
-            $savedTask = $this->getTaskService()->createTask($task);
+            $task              = $request->request->all();
+            $task['_base_url'] = $request->getSchemeAndHttpHost();
+            $savedTask         = $this->getTaskService()->createTask($this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 
@@ -37,11 +38,13 @@ class TaskManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $task = $request->request->all();
-            unset($task['mediaType']);
-            unset($task['fromCourseSetId']);
-            unset($task['fromCourseId']);
 
-            $savedTask = $this->getTaskService()->updateTask($id, $task);
+            // unset($task['mediaType']);
+            // unset($task['fromCourseSetId']);
+            // unset($task['fromCourseId']);
+
+            $task['_base_url'] = $request->getSchemeAndHttpHost();
+            $savedTask         = $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
             return $this->createJsonResponse(true);
         }
 
@@ -132,5 +135,18 @@ class TaskManageController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    //datetime to int
+    protected function parseTimeFields($fields)
+    {
+        if (isset($fields['startTime'])) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+        if (isset($fields['endTime'])) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
+
+        return $fields;
     }
 }
