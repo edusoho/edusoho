@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $courseId, $id)
     {
     }
 
