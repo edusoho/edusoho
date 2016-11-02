@@ -2,7 +2,7 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
-  {% set mediaType = 'audio' %}
+  {% set mediaType = activity.mediaType|default('audio') %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>
@@ -27,6 +27,7 @@
       <label>{{ '音频时长'|trans }}</label>
     </div>
     <div class="col-xs-9">
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
       <input class="form-control width-input width-input-small" id="minute" type="text" name="minute"
              value="{{ activity.minute|default(null) }}">{{ '分'|trans }}
       <input class="form-control width-input width-input-small" id="second" type="text" name="second"
@@ -34,8 +35,8 @@
     </div>
   </div>
 
-{% endblock %}
 
+{% endblock %}
 {% block activity_finish %}
   <div class=" form-group">
     <div class="col-xs-2 control-label">

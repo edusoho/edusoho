@@ -2,7 +2,7 @@
 
 {% do script([ 'web/activity-manage/video-activity-fields.js']) %}
 {% block activity_content %}
-  {% set mediaType = 'video' %}
+  {% set mediaType = activity.mediaType|default('video') %}
   <div class="form-group">
     <div class="col-xs-2 control-label">
       <label for="text-content-field" class="style1">{{ '简介'|trans }}</label>

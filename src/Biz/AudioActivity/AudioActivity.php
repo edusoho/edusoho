@@ -20,7 +20,7 @@ class AudioActivity extends Activity
     public function create($fields)
     {
         $videoActivity = $this->getAudioExt($fields);
-        $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
+        $videoActivity = $this->getAudioActivityDao()->create($videoActivity);
         return $videoActivity;
     }
 
@@ -30,9 +30,9 @@ class AudioActivity extends Activity
     public function update($targetId, $fields)
     {
         $videoActivity      = $this->getAudioExt($fields);
-        $existVideoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
+        $existVideoActivity = $this->getAudioActivityDao()->get($fields['mediaId']);
         $videoActivity      = array_merge($existVideoActivity, $videoActivity);
-        $videoActivity      = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
+        $videoActivity      = $this->getAudioActivityDao()->update($fields['mediaId'], $videoActivity);
         return $videoActivity;
     }
 

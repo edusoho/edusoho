@@ -21,7 +21,8 @@ class AudioActivityController extends BaseController implements ActivityActionIn
     {
         $activity = $this->getActivityService()->getActivity($id);
         $activity = $this->fillMinuteAndSecond($activity);
-        return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
+       // var_dump($activity);
+        return $this->render('WebBundle:AudioActivity:modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
         ));
@@ -34,5 +35,17 @@ class AudioActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
+    protected function fillMinuteAndSecond($activity)
+    {
+        if (!empty($activity['length'])) {
+            $activity['minute'] = intval($activity['length'] / 60);
+            $activity['second'] = intval($activity['length'] % 60);
+        }
+        return $activity;
+    }
 
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
 }
