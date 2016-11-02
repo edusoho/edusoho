@@ -95,6 +95,9 @@ abstract class Activity
         return $listener;
     }
 
+    /**
+     * @return Biz
+     */
     protected function getBiz()
     {
         return $this->biz;
