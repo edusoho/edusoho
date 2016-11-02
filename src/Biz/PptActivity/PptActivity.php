@@ -7,7 +7,6 @@ namespace Biz\PptActivity;
 use Biz\Activity\Config\Activity;
 use Biz\PptActivity\Dao\PptActivityDao;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class PptActivity extends Activity
 {
@@ -61,7 +60,7 @@ class PptActivity extends Activity
         ));
 
         $media                       = $this->parseMedia($fields['media']);
-        $ppt['mediaId']              = $media['id'];
+        $updateFields['mediaId']     = $media['id'];
         $updateFields['updatedTime'] = time();
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
@@ -73,7 +72,7 @@ class PptActivity extends Activity
 
     public function get($targetId)
     {
-        parent::get($targetId);
+        return $this->getPptActivityDao()->get($targetId);
     }
 
     protected function parseMedia($media)

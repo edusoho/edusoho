@@ -5,7 +5,7 @@
 var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe');
 $("#material a").click(function (e) {
     e.preventDefault();
-    $(this).tab('show')
+    $(this).tab('show');
     $parentiframe.height($parentiframe.contents().find('body').height());
 });
 
