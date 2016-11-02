@@ -497,11 +497,9 @@ class LiveCourseController extends BaseController
         $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
 
-        if (empty($result['resourceNo'])) {
-            throw $this->createNotFoundException($this->trans('回放视频找不到了'));
-        }
+        $globalId = empty($result['resourceNo']) ? 0 : $result['resourceNo'];
 
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $result['resourceNo']));
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('globalId' => $globalId));
     }
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
