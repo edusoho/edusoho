@@ -5,9 +5,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class CourseFileChoose {
 
-    constructor($container, mediaType) {
+    constructor($container) {
         this.container = $container;
-        this.mediaType = mediaType;
         this._init();
         this._initEvent();
     }
@@ -26,17 +25,13 @@ class CourseFileChoose {
     _loadList() {
         let $containter = $('[data-role=course-file-browser]');
         let url = $containter.data('url');
-
-        $containter.load(url, function () {
-            console.log('page is on loading');
-        })
+        $.get(url, {'type': $("input[name=type]").val()}, function (html) {
+            $containter.html(html);
+        });
     }
 
     _paginationList(event) {
         event.stopImmediatePropagation();
-        let $that = $(event.currentTarget);
-        console.log('_paginationList');
-        $('input[name=page]').val($that.html());
         this._loadList();
     }
 
@@ -58,7 +53,6 @@ class CourseFileChoose {
         var file = $that.data();
         this._onChange(file);
         this._close();
-        console.log($that, $that.data())
     }
 
     _onChange(file) {
@@ -78,4 +72,4 @@ class CourseFileChoose {
 }
 
 
-new CourseFileChoose($('#chooser-course-panel'), 'video');
+new CourseFileChoose($('#chooser-course-panel'));
