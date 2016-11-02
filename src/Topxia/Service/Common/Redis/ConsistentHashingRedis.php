@@ -40,11 +40,12 @@ class ConsistentHashingRedis
     public function __call($name, $arguments)
     {
         $key   = $arguments[0];
-        $redis = $this->lookup($key);
+        $target = $this->hash->lookup($key);
+        $redis = $this->reidsPool[$target];
         if (!method_exists($redis, $name)) {
             throw new Exception('method not exists.');
         }
 
-        return call_user_func_array(array($this->lookup($key), $name), $arguments);
+        return call_user_func_array(array($redis, $name), $arguments);
     }
 }
