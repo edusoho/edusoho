@@ -74,7 +74,7 @@ class TaskController extends BaseController
         if (empty($tasks)) {
             return $tasks;
         }
-        $taskResults = $this->getTaskService()->findTaskResultsByCourseId($courseId);
+        $taskResults = $this->getTaskService()->findTaskResultsByCourseId($courseId, $this->getUser()->getId());
         if (!empty($taskResults)) {
             foreach ($taskResults as $tr) {
                 foreach ($tasks as $tk => $t) {
