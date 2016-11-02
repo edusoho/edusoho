@@ -38,9 +38,5 @@
   </div>
 </div>
 <div class="col-xs-offset-2 col-xs-9">
-  <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
-  <input id="mediaType" class="form-control" type="hidden" name="mediaType"
-         value={{ activity.mediaType|default(mediaType) }}>
-  <input id="media" class="form-control" type="hidden" name="media"
-         value="{{ activity.ext.media|default(null)|json_encode }}">
+  <input id="media" type="hidden" name="media" value="{{ activity.ext.media|default(null)|json_encode }}">
 </div>

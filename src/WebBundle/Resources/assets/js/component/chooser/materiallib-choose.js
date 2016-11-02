@@ -6,9 +6,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class MaterialLibChoose {
 
-    constructor($container, mediaType) {
+    constructor($container) {
         this.container = $container;
-        this.mediaType = mediaType;
         this.loadShareingContacts = false;
         this._init();
         this._initEvent();
@@ -33,6 +32,7 @@ class MaterialLibChoose {
         let params = {};
         params.sourceFrom = $('input[name=sourceFrom]').val();
         params.page = $('input[name=page]').val();
+        params.type = $('input[name=type]').val();
         $('.js-material-list').load(url, params, function () {
             $parentiframe.height($parentiframe.contents().find('body').height());
         })
@@ -142,7 +142,6 @@ class MaterialLibChoose {
     _onChange(file) {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
-        $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
         this._fillMinuteAndSecond(file.length);
     }
@@ -174,4 +173,4 @@ class MaterialLibChoose {
 }
 
 
-new MaterialLibChoose($('#chooser-material-panel'), 'video');
+new MaterialLibChoose($('#chooser-material-panel'));

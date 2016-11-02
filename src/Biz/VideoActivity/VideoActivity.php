@@ -21,8 +21,8 @@ class VideoActivity extends Activity
     protected function registerListeners()
     {
         return array(
-            'vidow.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
-            'vidow.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
+            'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
+            'video.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
         );
     }
 
@@ -37,28 +37,19 @@ class VideoActivity extends Activity
 
     public function create($fields)
     {
-
-        $fields['length'] = $this->getVideoLength($fields);
         $videoActivity    = $this->getVideoExt($fields);
-
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
         return $videoActivity;
-        $fields['mediaId'] = $videoActivity['id'];
-        return $fields;
     }
 
 
     public function update($activityId, $fields)
     {
-        $fields['length'] = $this->getVideoLength($fields);
-
         $videoActivity      = $this->getVideoExt($fields);
         $existVideoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
-        $videoActivity      = array_merge($existVideoActivity, $videoActivity);
-        $videoActivity      = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
+        $videoActivity = array_merge($existVideoActivity, $videoActivity);
+        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
         return $videoActivity;
-        $fields['mediaId'] = $videoActivity['id'];
-        return $fields;
     }
 
     public function get($id)
