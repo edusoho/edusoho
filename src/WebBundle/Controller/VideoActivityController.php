@@ -8,6 +8,7 @@
 namespace WebBundle\Controller;
 
 
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
@@ -17,9 +18,13 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         // TODO: Implement showAction() method.
     }
 
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id, $courseId)
     {
-        // TODO: Implement editAction() method.
+        $activity = $this->getActivityService()->getActivity($id);
+        return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
+            'activity' => $activity,
+            'courseId' => $courseId
+        ));
     }
 
     public function createAction(Request $request, $courseId)
@@ -29,6 +34,9 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');

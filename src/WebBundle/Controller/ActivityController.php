@@ -6,13 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id, $courseId)
     {
         $activity       = $this->getActivityService()->getActivity($id);
         $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $editController = $config->getAction('edit');
         return $this->forward($editController, array(
-            'id' => $activity['id']
+            'id'       => $activity['id'],
+            'courseId' => $courseId
         ));
     }
 

@@ -1,19 +1,22 @@
 {% do script(['web/component/file-choose.js']) %}
-<div class="file-chooser-bar hidden">
-  <span data-role="placeholder"></span>
+<div class="file-chooser-bar {% if not  activity.ext.media|default(null) %}hidden {% endif %}">
+  <span data-role="placeholder">{{ activity.ext.media.name|default(null) }}</span>
   <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
         class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
   <div class="alert alert-warning" data-role="waiting-tip"
        style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}</div>
 </div>
 
-<div class="col-xs-9 controls file-chooser-main">
+{% set mediaSource = activity.ext.mediaSource|default('self') %}
+<div class="col-xs-9 controls file-chooser-main {% if  activity.ext.media|default(null) %}hidden {% endif %}">
   <ul class="nav nav-pills" id="material">
-    <li role="presentation" class="active"><a href="#chooser-upload-panel">上传资料</a></li>
+    <li role="presentation" {% if mediaSource == 'self' %}class="active" {% endif %}><a
+          href="#chooser-upload-panel">上传资料</a></li>
     <li role="presentation"><a href="#chooser-material-panel">从资料库中选择</a></li>
     <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
     {% if mediaType == 'video' %}
-      <li role="presentation"><a href="#chooser-import-panel">导入网络视频</a></li>
+      <li role="presentation" {% if mediaSource != 'self' %} class="active" {% endif %}><a href="#chooser-import-panel">导入网络视频</a>
+      </li>
     {% endif %}
   </ul>
   <div class="tab-content">
@@ -31,13 +34,13 @@
 
     <div class="tab-pane" id="chooser-import-panel">
       {% include 'WebBundle:Component/Parts:import-video.html.twig' %}
-      {# <input id="lesson-media-field" type="hidden" name="media"
-              value="{{ field_value(lesson, 'media')|json_encode }}">#}
     </div>
   </div>
 </div>
 <div class="col-xs-offset-2 col-xs-9">
   <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
-  <input id="mediaType" class="form-control" type="hidden" name="mediaType" value={{ activity.mediaType|default(mediaType) }}>
-  <input id="media" class="form-control" type="hidden" name="media" value="">
+  <input id="mediaType" class="form-control" type="hidden" name="mediaType"
+         value={{ activity.mediaType|default(mediaType) }}>
+  <input id="media" class="form-control" type="hidden" name="media"
+         value="{{ activity.ext.media|default(null)|json_encode }}">
 </div>

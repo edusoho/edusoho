@@ -77,7 +77,8 @@ class TaskManageController extends BaseController
             $id   = $request->query->get('id');
             $task = $this->getTaskService()->getTask($id);
             return $this->forward('WebBundle:Activity:update', array(
-                'id' => $task['activityId']
+                'id'       => $task['activityId'],
+                'courseId' => $courseId
             ));
         }
     }

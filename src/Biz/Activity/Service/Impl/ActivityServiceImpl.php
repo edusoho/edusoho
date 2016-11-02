@@ -16,7 +16,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     public function getActivity($id)
     {
-        return $this->getActivityDao()->get($id);
+        $activity = $this->getActivityDao()->get($id);
+
+        if (!empty($activity['mediaId'])) {
+            $activityConfig  = ActivityFactory::create($this->biz, $activity['mediaType']);
+            $media           = $activityConfig->get($activity['mediaId']);
+            $activity['ext'] = $media;
+        }
+        return $activity;
     }
 
     public function trigger($id, $eventName, $data = array())
@@ -63,6 +70,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
+
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
