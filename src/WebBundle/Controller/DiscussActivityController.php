@@ -9,6 +9,10 @@ class DiscussActivityController extends BaseController implements ActivityAction
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+        return $this->render('WebBundle:DiscussActivity:show.html.twig', array(
+            'activity' => $activity
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

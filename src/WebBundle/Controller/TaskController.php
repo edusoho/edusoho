@@ -10,10 +10,12 @@ class TaskController extends BaseController
 {
     public function showAction(Request $request, $courseId, $id)
     {
-        $task = $this->tryLearnTask($courseId, $id);
+        $task     = $this->tryLearnTask($courseId, $id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->render('WebBundle:Task:show.html.twig', array(
-            'task' => $task
+            'task'     => $task,
+            'activity' => $activity
         ));
     }
 

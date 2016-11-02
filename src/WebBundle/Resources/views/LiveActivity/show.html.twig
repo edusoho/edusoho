@@ -1,1 +1,7 @@
-show.html.twig
+{% extends 'TopxiaWebBundle::blank-layout.html.twig' %}
+
+
+{% block content %} 
+	<pre>{{activity.remark|raw}}</pre>
+  {#<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>#}
+{% endblock %}

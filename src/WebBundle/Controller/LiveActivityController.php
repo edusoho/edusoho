@@ -9,6 +9,10 @@ class LiveActivityController extends BaseController implements ActivityActionInt
 {
     public function showAction(Request $request, $id, $courseId)
     {
+        $activity = $this->getActivityService()->getActivity($id);
+        return $this->render('WebBundle:LiveActivity:show.html.twig', array(
+            'activity' => $activity
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)

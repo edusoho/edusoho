@@ -13,8 +13,8 @@ class ActivityController extends BaseController
         $createController = $config->getAction('show');
 
         return $this->forward($createController, array(
-            'courseId'   => $courseId,
-            'activityId' => $id
+            'courseId' => $courseId,
+            'id'       => $id
         ));
     }
 
