@@ -47,5 +47,5 @@ services:
     topxia.templating.locator:
         class:          "%templating.locator.class%"
         arguments:      ['@topxia.file_locator', '%kernel.cache_dir%']
-    templating.locator:
-        alias:          topxia.templating.locator
+    # templating.locator:
+    #     alias:          topxia.templating.locator
