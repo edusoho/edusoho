@@ -4,10 +4,13 @@ class Live {
     }
     init(){
 
-        $("#startTime").daterangepicker({
+        // $("#startTime").datepicker({
+        //     autoclose: true,
+        //     format: 'yyyy-mm-dd',
+        // });
+        $("#startTime").datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
-            minView: 'month'
         });
 
         // $('#datetimepicker').datetimepicker({
