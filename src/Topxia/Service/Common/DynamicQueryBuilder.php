@@ -19,17 +19,7 @@ class DynamicQueryBuilder extends QueryBuilder
         foreach ($this->conditions as $field => $value) {
             $this->setParameter(":{$field}", $value);
         }
-        return $this;
-    }
-
-    public function fetchAll()
-    {
-        return $this->connection->fetchAll(parent::getSQL(), parent::getParameters(), parent::getParameterTypes());
-    }
-
-    public function fetchColumn($num)
-    {
-        return $this->connection->fetchColumn(parent::getSQL(), parent::getParameters(), $num, parent::getParameterTypes());
+        return parent::execute();
     }
 
     public function where($where)
