@@ -809,6 +809,14 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+course_manage_lesson_batch_modal:
+    pattern:  /course/{id}/manage/lesson/batch/modal
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:batchLessonModal }
+
+course_manage_lesson_create_from_file:
+    pattern:  /course/{id}/manage/lesson/create/from/file
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:createFromFile }
+
 course_manage_lesson_file_status:
     pattern:  /course/{id}/manage/lesson/fileStatus
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
