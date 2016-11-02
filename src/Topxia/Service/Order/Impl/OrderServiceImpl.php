@@ -71,6 +71,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payment = ExtensionManager::instance()->getDataDict('payment');
         $payment = array_keys($payment);
+
         if (!in_array($order['payment'], $payment)) {
             throw $this->createServiceException($this->getKernel()->trans('创建订单失败：payment取值不正确。'));
         }
