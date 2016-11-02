@@ -151,7 +151,7 @@ class MaterialLibChoose {
         let minute = parseInt(fileLength / 60);
         let second = Math.round(fileLength % 60);
         $("#minute").val(minute);
-        $("#second").val(second)
+        $("#second").val(second);
     }
 
     _getUrlParameter(url, param) {

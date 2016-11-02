@@ -21,6 +21,7 @@ class VideoActivityController extends BaseController implements ActivityActionIn
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('WebBundle:VideoActivity:modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
@@ -34,6 +35,16 @@ class VideoActivityController extends BaseController implements ActivityActionIn
         ));
     }
 
+
+    protected function fillMinuteAndSecond($activity)
+    {
+        if (!empty($activity['length'])) {
+            $activity['minute'] = intval($activity['length'] / 60);
+            $activity['second'] = intval($activity['length'] % 60);
+        }
+        return $activity;
+    }
+
     /**
      * @return ActivityService
      */
@@ -41,4 +52,6 @@ class VideoActivityController extends BaseController implements ActivityActionIn
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
+
+
 }
