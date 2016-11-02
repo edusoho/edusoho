@@ -29,6 +29,7 @@ class Editor {
         this._inItStep1form();
         if(this.mode == 'edit'){
             this.contentUrl = this.$task_manage_type.data('editorStep2Url');
+            this.step = 2;
             this._switchPage();    
         }
     }
