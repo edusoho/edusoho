@@ -20,7 +20,7 @@ const parameters = {
     "jquery-validation": ['../libs/js/jquery-validation.js'],
     "jquery-form": ['jquery-form'],
     // "bootstrap-datetimepicker": ['bootstrap-datetimepicker'],
-    "bootstrap-datetimepicker": ['bootstrap-datepicker-webpack'],
+    "bootstrap-datetimepicker": ['bootstrap-datetimepicker'],
     "perfect-scrollbar":['perfect-scrollbar'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
@@ -33,6 +33,7 @@ const parameters = {
     'bootstrap-notify/bootstrap-notify.js',
     // The `.` will auto be replaced to `-` for compatibility 
     'respond.js/dest/respond.src.js',
+    'bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
     // 'bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
   ],
 }
