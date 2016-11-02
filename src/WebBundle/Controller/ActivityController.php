@@ -1,7 +1,6 @@
 <?php
 namespace WebBundle\Controller;
 
-
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,7 +24,6 @@ class ActivityController extends BaseController
             'courseId' => $courseId
         ));
     }
-
 
     public function triggerAction($id, $eventName, $data)
     {

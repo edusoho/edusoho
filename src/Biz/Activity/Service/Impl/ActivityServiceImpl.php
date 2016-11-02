@@ -66,7 +66,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
-            'desc',
+            'remark',
             'mediaId',
             'mediaType',
             'content',
@@ -79,12 +79,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ));
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
-        if (isset($fields['startTime'])) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-        if (isset($fields['endTime'])) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
 
         $activity = $this->getActivityDao()->create($fields);
 
@@ -111,12 +105,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
+            'remark',
             'desc',
             'content',
             'length',
             'startTime',
             'endTime'
         ));
+
         return $this->getActivityDao()->update($id, $fields);
     }
 
