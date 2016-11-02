@@ -1547,7 +1547,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $createLessonView['fileType']    = $lesson['type'];
                 $createLessonView['fileSource']  = $lesson['mediaSource'];
 
-                $this->createLessonView($createLessonView);
+                // $this->createLessonView($createLessonView);
             }
 
             $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
