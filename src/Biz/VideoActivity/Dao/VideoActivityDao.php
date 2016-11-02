@@ -10,7 +10,5 @@ namespace Biz\VideoActivity\Dao;
 
 interface  VideoActivityDao
 {
-    public function updateByActivityId($activityId, $fields);
 
-    public function getByActivityId($activityId);
 }
