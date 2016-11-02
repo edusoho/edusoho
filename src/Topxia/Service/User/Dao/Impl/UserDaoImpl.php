@@ -37,10 +37,8 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
             $sql    = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
             $result = $that->getConnection()->fetchAssoc($sql, array($email));
-            return $result;
-        }
-
-        );
+            return $result?:array();
+        });
     }
 
     public function findUserByNickname($nickname)
@@ -53,10 +51,9 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE nickname = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($nickname));
-        }
-
-        );
+            $result = $that->getConnection()->fetchAssoc($sql, array($nickname));
+            return $result ? : array();
+        });
     }
 
     public function getCountByMobileNotEmpty()

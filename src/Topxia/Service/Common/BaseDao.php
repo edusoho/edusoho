@@ -43,7 +43,7 @@ abstract class BaseDao
             $data        = $redis->get($key);
 
             if ($data) {
-                if ($currentTime - $data['syncTime'] > 600) {
+                if ($currentTime - $data['syncTime'] > 60000) {
                     $args[2] += $data['increment'];
                     call_user_func_array($callback, $args);
                     $redis->setex($key, 20 * 60 * 60, array('increment' => 0, 'syncTime' => $currentTime));
