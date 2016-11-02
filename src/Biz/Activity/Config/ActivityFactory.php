@@ -3,6 +3,7 @@
 namespace Biz\Activity\Config;
 
 use Biz\LiveActivity\LiveActivity;
+use Biz\PptActivity\PptActivity;
 use Biz\TextActivity\TextActivity;
 use Biz\VideoActivity\VideoActivity;
 use Codeages\Biz\Framework\Context\Biz;
@@ -27,7 +28,8 @@ class ActivityFactory
             'video' => new VideoActivity($biz),
             'text'    => new TextActivity($biz),
             'live'  => new LiveActivity($biz),
-            'discuss' => new DiscussActivity($biz)
+            'discuss' => new DiscussActivity($biz),
+            'ppt' => new PptActivity($biz)
         );
     }
 }

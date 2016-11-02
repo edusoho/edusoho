@@ -1,0 +1,38 @@
+{% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+{% do script(['web/activity-manage/ppt-activity-fields.js']) %}
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-xs-2 control-label">
+      <label for="media" class="style">PPT</label>
+    </div>
+    <div id="file-choose-type" class="hidden" data-type="ppt"></div>
+    {% set mediaType = 'ppt' %}
+    {% include 'WebBundle:Component:file-choose.html.twig' %}
+  </div>
+{% endblock %}
+
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-xs-2 control-label">
+      <label for="condition-select">{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="condition-select" name="finishType">
+        <option value="end">观看到最后一页</option>
+        <option value="detail">至少观看X分钟</option>
+      </select>
+    </div>
+  </div>
+  <div class=" form-group hidden" id="condition-group">
+    <div class="col-xs-2 control-label">
+      <label for="condition-detail">{{ '至少观看'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="1">
+    </div>
+    <div class="col-xs-4 controls">
+      <p class="form-control-static">分钟</p>
+    </div>
+  </div>
+{% endblock %}

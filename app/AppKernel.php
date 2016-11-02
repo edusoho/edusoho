@@ -169,6 +169,7 @@ class AppKernel extends Kernel
                 'currentIp' => $this->request->getClientIp(),
                 'roles'     => array()
             ));
+            $biz['user'] = $currentUser;
             $serviceKernel->setCurrentUser($currentUser);
             $this->isServiceKernelInit = true;
         }
