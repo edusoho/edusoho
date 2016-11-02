@@ -8,18 +8,10 @@ class DynamicQueryBuilder extends QueryBuilder
 {
     protected $conditions;
 
-    public function __construct($connection, $conditions)
+    public function __construct(Connection $connection, $conditions)
     {
-        $this->connection = $connection;
+        parent::__construct($connection);
         $this->conditions = $conditions;
-    }
-
-    public function execute()
-    {
-        foreach ($this->conditions as $field => $value) {
-            $this->setParameter(":{$field}", $value);
-        }
-        return parent::execute();
     }
 
     public function where($where)
@@ -88,6 +80,15 @@ class DynamicQueryBuilder extends QueryBuilder
         $where = str_replace(":{$conditionName}", join(',', $marks), $where);
 
         return $where;
+    }
+
+    public function execute()
+    {
+        foreach ($this->conditions as $field => $value) {
+            $this->setParameter(":{$field}", $value);
+        }
+
+        return parent::execute();
     }
 
     protected function isInCondition($where)
