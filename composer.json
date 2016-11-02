@@ -55,8 +55,7 @@
 		"mockery/mockery": "^0.9.4",
 		"endroid/qrcode-bundle": "~1.6",
 		"bshaffer/oauth2-server-bundle": "^0.3.0",
-		"codeages/rest-api-client": "^0.1.2",
-		"wenqin/scpc": "dev-master"
+		"codeages/rest-api-client": "^0.1.2"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
