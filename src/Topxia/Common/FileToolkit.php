@@ -890,6 +890,8 @@ class FileToolkit
             return 'ppt';
         } elseif (in_array($extension, array('swf'))) {
             return 'flash';
+        } elseif (in_array($extension, array('srt'))) {
+            return 'caption';
         } else {
             return 'other';
         }
