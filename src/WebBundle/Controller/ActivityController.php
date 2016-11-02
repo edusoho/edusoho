@@ -1,12 +1,23 @@
 <?php
 namespace WebBundle\Controller;
 
-
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
+    public function showAction(Request $request, $id, $courseId)
+    {
+        $activity         = $this->getActivityService()->getActivity($id);
+        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $createController = $config->getAction('show');
+
+        return $this->forward($createController, array(
+            'courseId' => $courseId,
+            'id'       => $id
+        ));
+    }
+
     public function updateAction(Request $request, $id, $courseId)
     {
         $activity       = $this->getActivityService()->getActivity($id);
@@ -26,7 +37,6 @@ class ActivityController extends BaseController
             'courseId' => $courseId
         ));
     }
-
 
     public function triggerAction($id, $eventName, $data)
     {

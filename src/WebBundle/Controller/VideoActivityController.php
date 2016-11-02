@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoActivityController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $id, $courseId)
     {
         // TODO: Implement showAction() method.
     }

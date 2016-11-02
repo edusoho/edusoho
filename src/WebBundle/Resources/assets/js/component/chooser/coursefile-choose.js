@@ -64,7 +64,6 @@ class CourseFileChoose {
     _onChange(file) {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
-        $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
         this._fillMinuteAndSecond(file.length);
     }

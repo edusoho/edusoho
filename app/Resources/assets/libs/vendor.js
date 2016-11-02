@@ -4,6 +4,8 @@ import './vendor.less';
 import 'jquery';
 import 'bootstrap';
 import 'bootstrap-notify';
+// require('bootstrap-datepicker-webpack');
+
 
 
 
