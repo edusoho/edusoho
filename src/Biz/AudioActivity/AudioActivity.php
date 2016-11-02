@@ -9,9 +9,49 @@ namespace Biz\AudioActivity;
 
 
 use Biz\Activity\Config\Activity;
+use Biz\AudioActivity\Dao\AudioActivityDao;
 
-class AudioActivity extends   Activity
+class AudioActivity extends Activity
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function create($fields)
+    {
+        $videoActivity = $this->getAudioExt($fields);
+        $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
+        return $videoActivity;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update($targetId, $fields)
+    {
+        $videoActivity      = $this->getAudioExt($fields);
+        $existVideoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
+        $videoActivity      = array_merge($existVideoActivity, $videoActivity);
+        $videoActivity      = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivity);
+        return $videoActivity;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete($id)
+    {
+        $this->getAudioActivityDao()->delete($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get($id)
+    {
+        return $this->getAudioActivityDao()->get($id);
+    }
+
     public function registerActions()
     {
         return array(
@@ -37,5 +77,20 @@ class AudioActivity extends   Activity
         );
     }
 
+    protected function getAudioExt($fields)
+    {
+        $media = json_decode($fields['media'], true);
+        return array(
+            'mediaId' => $media['id'],
+            'media'   => $media
+        );
+    }
 
+    /**
+     * @return AudioActivityDao
+     */
+    protected function getAudioActivityDao()
+    {
+        return $this->getBiz()->dao("AudioActivity:AudioActivityDao");
+    }
 }
