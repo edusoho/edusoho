@@ -1351,6 +1351,26 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($fakeFile['filename'], $lesson['title']);
         $this->assertEquals($fakeFile['length'], $lesson['length']);
     }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCreateLessonByFileIdWithFileNotExist()
+    {
+        $course = array(
+            'title' => 'online test course 1'
+        );
+        $course = $this->getCourseService()->createCourse($course);
+
+        $fakeFile = array(
+            'id' => 996,
+            'filename' => 'fake video',
+            'type' => 'video',
+            'length' => 100,
+            'fileSize' => 1024
+        );
+
+        $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
+    }
 
     public function testGetCourseDraft()
     {
