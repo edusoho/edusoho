@@ -2,6 +2,6 @@
 
 
 {% block content %} 
-	{{activity.content|raw}}
-  <script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>
+	<pre>{{activity.content|raw}}</pre>
+  {#<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>#}
 {% endblock %}

@@ -6,7 +6,7 @@ $('.delete-task').on('click', function(evt){
 	$.post($(evt.target).data('url'), function(data) {
 		if (data.success) {
 			$.notify('success', data.message);
-			// location.reload();
+			location.reload();
 		} else{
 			$.notify('danger', data.message);
 		}
