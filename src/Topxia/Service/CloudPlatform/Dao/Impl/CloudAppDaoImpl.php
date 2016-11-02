@@ -23,7 +23,7 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
     {
         $that = $this;
 
-        return $this->fetchCached("code:{$code}", $code, function ($id) use ($that) {
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($code)) ? : null;
         });
