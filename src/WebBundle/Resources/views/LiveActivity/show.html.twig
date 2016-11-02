@@ -2,6 +2,23 @@
 
 
 {% block content %} 
+	<script type="text/javascript">
+	var live_activity_data  = {
+			liveStartTimeFormat: '{{activity.startTimeFormat}}',
+			liveEndTimeFormat: '{{activity.endTimeFormat}}',
+			startTime: '{{activity.startTime}}',
+			endTime: '{{activity.endTime}}',
+			courseId: '{{activity.fromCourseId}}',
+			id: '{{activity.id}}',
+			liveId: '{{activity.liveId}}',
+			liveProvider: '{{activity.liveProvider}}',
+			isTeacher: null,
+			replayStatus: 'videoGenerated', //
+			liveMediaError: null,
+			replays: null,
+			nowDate : new Date().getTime()
+		};
+	</script>
 	<pre>{{activity.remark|raw}}</pre>
   {#<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>#}
 {% endblock %}
