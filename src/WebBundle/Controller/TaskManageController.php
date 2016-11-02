@@ -65,7 +65,8 @@ class TaskManageController extends BaseController
         if ($mode === 'create') {
             $type = $request->query->get('type');
             return $this->forward('WebBundle:Activity:create', array(
-                'type' => $type
+                'type'     => $type,
+                'courseId' => $courseId
             ));
         } else {
             $id   = $request->query->get('id');

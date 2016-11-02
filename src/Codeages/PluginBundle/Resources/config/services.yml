@@ -29,7 +29,7 @@ services:
 
     codeages_plugin.dict_twig_extension:
         class: Codeages\PluginBundle\Twig\DictExtension
-        public: false
+        public: true
         arguments:
             - @codeages_plugin.dict_collector
         tags:

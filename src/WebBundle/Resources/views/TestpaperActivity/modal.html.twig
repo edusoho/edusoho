@@ -1,0 +1,120 @@
+{% extends 'WebBundle:Activity:activity-form-layout.html.twig' %}
+{% do css(['web.css']) %}
+{% do script(['web/activity-manage/testpaper-activity-fields.js'], 300) %}
+
+{% block activity_content %}
+  <form id="#step2-form" class="form-horizontal lesson-form" method="post">
+    <div class="form-group">
+      <div class="col-xs-2 control-label">
+        <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
+      </div>
+      <div class="col-xs-9 controls">
+        <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_manage_testpaper_items_get',{courseId:courseId}) }}">
+          {{select_options(testpaperNames, activity.testpaperMediaId|default(''), '请选择试卷'|trans)}}
+        </select>
+        <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group" id="questionItemShowDiv" style="display:none;">
+      <div class="col-xs-2 control-label"></div>
+      <div class="col-xs-9 controls" id="questionItemShowTable"></div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-2 control-label"><label>{{'时间限制'|trans}}</label></div>
+      <div class="col-xs-9 controls radios">
+        <input class="form-control width-input width-input-small" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+        <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-2 control-label"><label>{{'考试次数'|trans}}</label></div>
+      <div class="col-xs-9 controls radios">
+        {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
+      </div>
+    </div>
+
+    <div class="form-group" {% if activity.doTimes|default('0') == 1 %}style="display:none;" {% endif %}>
+      <div class="col-xs-2 control-label"><label for="lesson-redo-interval-field">{{'重考间隔'|trans}}</label></div>
+      <div class="col-xs-9 controls">
+        <input id="lesson-redo-interval-field" class="form-control width-input width-input-small" type="text" name="redoInterval" value="{{ activity.redoInterval|default('0') }}"> {{'小时'|trans}}
+        <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'|trans}}"></i>
+        <div class="help-block">{{'0小时，表示无限制。'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group starttime-check-div" {% if activity.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
+      <div class="col-xs-2 control-label">
+        <label>{{'考试开始时间'|trans}}</label>
+      </div>
+      <div class="col-xs-9 controls radios">
+        {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
+
+        <label class="starttime-input" {% if activity.testMode|default('normal') == 'normal' %}style="display:none;" {% endif %}>
+          <input class="form-control width-input width-input-large" type="text" name="startTime" value="{{ activity.startTime|default('0')|date('Y-m-d H:i') }}">
+        </label>
+        <div class="help-block"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-2 control-label"><label for="activity-title">{{'标题'|trans}}</label></div>
+      <div class="col-xs-9 controls">
+        <input id="activity-title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}">
+      </div>
+    </div>
+
+    {% if 'lesson_credit' in features %}
+      <div class="form-group">
+        <div class="col-xs-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
+        <div class="col-xs-9 controls">
+          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
+          <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
+        </div>
+      </div>
+    {% endif %}
+  </form>
+
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="condition-select">{{ '考评方式'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="" name="checkType">
+        {{ select_options({'score':'分数'|trans}, activity.checkType|default('score')) }}
+      </select>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-xs-2 control-label">
+      <label for="condition-select">{{ '完成条件'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="condition-select" name="finishCondition">
+        {{ select_options({'score':'分数达标'|trans,'submit':'提交答卷'|trans}, activity.finishCondition['type']|default('score')) }}
+      </select>
+
+      <input type="hidden" name="finishScore" value="{{ activity.finishCondition['score']|default('0') }}" />
+      <input type="hidden" name="mediaType" value="testpaper" />
+      {#<div class="difficulty-percentage-slider noUi-target noUi-ltr noUi-horizontal noUi-background">
+        <div class="noUi-base">
+          <div class="noUi-origin" data-style="left" style="left: 30%;">
+            <div class="noUi-handle noUi-handle-lower"></div>
+          </div>
+          <div class="noUi-origin" data-style="left" style="left: 70%;">
+            <div class="noUi-handle noUi-handle-upper"></div>
+          </div>
+        </div>
+      </div>#}
+
+    </div>
+  </div>
+  
+  
+{% endblock %}

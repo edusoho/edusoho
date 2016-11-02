@@ -50,7 +50,7 @@
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
       <div class="panel-body">
-        {% for type in paper.metas.question_type_seq %}
+        {% for type,count in paper.metas.counts if count > 0 %}
 
           {% for item in items[type] %}
             {% if item.questionType != 'material' %}

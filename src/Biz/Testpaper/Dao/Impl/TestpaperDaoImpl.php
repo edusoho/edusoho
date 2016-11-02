@@ -46,9 +46,9 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
         );
 
         $declares['conditions'] = array(
-            'target = :target',
-            'target LIKE :targetLike',
-            'status LIKE :status'
+            'courseId = :courseId',
+            'courseId IN (:courseIds)',
+            'status = :status'
         );
 
         $declares['serializes'] = array(

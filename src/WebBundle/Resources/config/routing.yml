@@ -41,21 +41,32 @@ course_manage_testpaper_create:
   defaults: { _controller: WebBundle:TestpaperManage:create }
 
 course_manage_testpaper_questions:
-    path: /testpaper2/course/{courseId}/manage/testpaper/{testpaperId}/items
-    defaults: { _controller: WebBundle:TestpaperManage:questions }
+  path: /testpaper2/course/{courseId}/manage/testpaper/{testpaperId}/items
+  defaults: { _controller: WebBundle:TestpaperManage:questions }
+
+course_manage_testpaper_items_get:
+  path: /testpaper2/course/{courseId}/manage/testpaper/items/get
+  defaults: { _controller: WebBundle:TestpaperManage:itemsGet }
 
 testpaper_do:
-    path: /lesson/{lessonId}/testpaper/{testId}/do
-    defaults: { _controller: WebBundle:Testpaper:doTestpaper }
+  path: /lesson/{lessonId}/testpaper/{testId}/do
+  defaults: { _controller: WebBundle:Testpaper:doTestpaper }
 
 testpaper_show:
-    path: /testpaper/{testId}/show
-    defaults: { _controller: WebBundle:Testpaper:showTest }
+  path: /testpaper/{testId}/show
+  defaults: { _controller: WebBundle:Testpaper:showTest }
 
 testpaper_result_show:
-    path: /testpaper/{testId}/result
-    defaults: { _controller: WebBundle:Testpaper:showResult }
+  path: /testpaper/result/{resultId}/show
+  defaults: { _controller: WebBundle:Testpaper:showResult }
 
+testpaper_result_submit:
+  path: /testpaper/result/{resultId}/submit
+  defaults: { _controller: WebBundle:Testpaper:submitTest }
+
+testpaper_finish_test:
+  path: /testpaper/result/{resultId}/finish
+  defaults: { _controller: WebBundle:Testpaper:finishTest }
 
 
 #homework

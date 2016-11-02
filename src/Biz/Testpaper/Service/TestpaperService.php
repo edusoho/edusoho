@@ -85,7 +85,7 @@ interface TestpaperService
      * @param  [type] $id             [description]
      * @return [type] [description]
      */
-    public function startTestpaper($id, $type, $courseId, $lessonId);
+    public function startTestpaper($id, $lessonId);
 
     public function previewTestpaper($testpaperId);
 

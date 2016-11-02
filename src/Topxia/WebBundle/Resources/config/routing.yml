@@ -987,17 +987,17 @@ course_manage_list_teacher_test_finished:
     path: /my/teacher/finished/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listFinishedTest }
 
-course_manage_testpaper:
-    path: /course/{courseId}/manage/testpaper
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
+# course_manage_testpaper:
+#     path: /course/{courseId}/manage/testpaper
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:index }
 
 course_manage_test_check:
     path: /course/check/{id}/{status}/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheckInCourse }
 
-course_manage_testpaper_create:
-    path: /course/{courseId}/manage/testpaper/create
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
+# course_manage_testpaper_create:
+#     path: /course/{courseId}/manage/testpaper/create
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:create }
 
 course_manage_testpaper_build_check:
     path: /course/{courseId}/manage/testpaper/build_check
@@ -1029,9 +1029,9 @@ course_manage_testpaper_items:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
-course_manage_testpaper_items_get:
-    path: /course/{courseId}/manage/testpaper/items_get
-    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
+# course_manage_testpaper_items_get:
+#     path: /course/{courseId}/manage/testpaper/items_get
+#     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
 
 course_manage_testpaper_items_reset:
     path: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset

@@ -52,10 +52,10 @@ class TestpaperManageController extends BaseController
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
 
-            return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
+            return $this->redirect($this->generateUrl('course_manage_testpaper_questions', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
-        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $typeNames = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
         $types     = array();
 
         foreach ($typeNames as $type => $name) {
@@ -272,7 +272,7 @@ class TestpaperManageController extends BaseController
         $items     = $this->getTestpaperService()->getTestpaperItems($testpaper['id']);
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
 
-        $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
+        //$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
 
         $subItems   = array();
         $hasEssay   = false;
@@ -294,13 +294,13 @@ class TestpaperManageController extends BaseController
         }
 
         $passedScoreDefault = ceil($scoreTotal * 0.6);
-        return $this->render('WebBundle:TestpaperManage::question.html.twig', array(
+        return $this->render('WebBundle:TestpaperManage:question.html.twig', array(
             'course'             => $course,
             'testpaper'          => $testpaper,
             'items'              => ArrayToolkit::group($items, 'questionType'),
             'subItems'           => $subItems,
             'questions'          => $questions,
-            'targets'            => $targets,
+            //'targets'            => $targets,
             'hasEssay'           => $hasEssay,
             'passedScoreDefault' => $passedScoreDefault
         ));
@@ -455,7 +455,7 @@ class TestpaperManageController extends BaseController
 
         $items['material'] = $subItems[0];
 
-        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-get-table.html.twig', array(
+        return $this->render('WebBundle:TestpaperManage:item-get-table.html.twig', array(
             'items' => $items
         ));
     }

@@ -2,7 +2,6 @@
 
 namespace WebBundle\Controller;
 
-
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,7 +9,6 @@ class TextActivityController extends BaseController implements ActivityActionInt
 {
     public function showAction(Request $request, $id)
     {
-
     }
 
     public function editAction(Request $request, $id)
@@ -18,11 +16,11 @@ class TextActivityController extends BaseController implements ActivityActionInt
         $activity = $this->getActivityService()->getActivity($id);
 
         return $this->render('WebBundle:TextActivity:modal.html.twig', array(
-            'activity'    => $activity
+            'activity' => $activity
         ));
     }
 
-    public function createAction(Request $request)
+    public function createAction(Request $request, $courseId)
     {
         return $this->render('WebBundle:TextActivity:modal.html.twig');
     }

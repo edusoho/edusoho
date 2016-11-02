@@ -27,7 +27,7 @@
     {% if showTestpaperNavbar|default('on') == 'on' %}
       <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
         <ul class="nav nav-pills clearfix">
-          {% for type,count in paper.metas.counts %}{{dump(count)}}
+          {% for type,count in paper.metas.counts if count > 0 %}
             <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
           {% endfor %}
         </ul>
@@ -39,7 +39,7 @@
 <div class="row">
   <div class="col-md-9 prevent-copy">
     <div class="testpaper-body" >
-      {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
+      {% include 'WebBundle:Testpaper:do-test.html.twig' %}
     </div>
   </div>
   <div class="col-md-3">
@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <a href="{{ path('course_manage_test_results', {id:id} ) }}" id="show_testpaper_result" class="btn btn-info">{{'查看结果'|trans}}</a>
+              <a href="{{ path('course_manage_test_results', {id:paperResult.id|default(0)} ) }}" id="show_testpaper_result" class="btn btn-info">{{'查看结果'|trans}}</a>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
-              <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn" data-post-url="{{ path('course_manage_test_teacher_check', { id: id }) }}"
+              <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn" data-post-url="{{ path('course_manage_test_teacher_check', { id: paperResult.id|default(0) }) }}"
               {% if source|default('course') == 'classroom' %}
                 data-goto="{{ path('classroom_manage_testpaper',{id:targetId,status:'reviewing'}) }}"
               {% else %}

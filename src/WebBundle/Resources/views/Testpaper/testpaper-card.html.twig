@@ -8,7 +8,7 @@
 		  {% endif %}
 		{% else %}
 		  <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">{{'时间不限'|trans}}</small></span>
-			<button class="btn btn-sm btn-default pull-right"{% if id > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
+			<button class="btn btn-sm btn-default pull-right"{% if paperResult.testId > 0 %} id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paperResult.testId}) }}" data-goto="{{ path('my_quiz') }}"{% endif %}>{{'稍后再做'|trans}}</button>
 		{% endif %}
 		{% if target|default(null) and target.doTimes|default('0') %}
 			<div><span class="text-warning text-md">本次考试仅一次机会</span></div>
@@ -16,7 +16,7 @@
 	</div>
 	<div class="panel-body">
 
-		{% for type in paper.metas.question_type_seq %}
+		{% for type,count in paper.metas.counts if count > 0 %}
 
 			{% for item in items[type] %}
 				{% if item.questionType != 'material' %}
@@ -35,8 +35,8 @@
 
 	</div>
 	<div class="panel-footer">
-		{% if id > 0 %}
-		<button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('course_manage_submit_test', { id: id }) }}" data-url="{{ path('course_manage_finish_test', { id: id }) }}" data-goto="{{ path('course_manage_test_results', { id: id }) }}">{{'我要交卷'|trans}}</button>
+		{% if paperResult.id|default(0) > 0 %}
+		<button class="btn btn-success btn-block do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}" data-url="{{ path('testpaper_finish_test', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">{{'我要交卷'|trans}}</button>
 		{% else %}
 		<button class="btn btn-success btn-block" disabled="disabled">{{'我要交卷'|trans}}</button>
 		{% endif %}

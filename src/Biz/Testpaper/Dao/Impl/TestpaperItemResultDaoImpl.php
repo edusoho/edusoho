@@ -160,6 +160,10 @@ class TestpaperItemResultDaoImpl extends GeneralDaoImpl implements TestpaperItem
 
     public function declares()
     {
-        return array();
+        $declares['serializes'] = array(
+            'answer' => 'json'
+        );
+
+        return $declares;
     }
 }

@@ -17,7 +17,7 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
 
     public function getItemsCountByParams(array $conditions, $groupBy = '')
     {
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        $builder = $this->_createQueryBuilder($conditions)
             ->select('count(id) as num, sum(score) as score,questionType');
 
         if (!empty($groupBy)) {

@@ -2,11 +2,11 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\Exception\AccessDeniedException;
 
 class TaskServiceImpl extends BaseService implements TaskService
@@ -31,19 +31,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['createdUserId'] = $this->getCurrentUser()->getId();
         $fields['courseId']      = $activity['fromCourseId'];
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'preTaskId',
-            'courseChapterId',
-            'activityId',
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status',
-            'createdUserId'
-        ));
+        $fields = $this->filterFields($fields);
 
         return $this->getTaskDao()->create($fields);
     }
@@ -58,19 +46,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'courseId',
-            'preTaskId',
-            'courseChapterId',
-            'activityId',
-            'title',
-            'isFree',
-            'isOptional',
-            'startTime',
-            'endTime',
-            'status',
-            'createdUserId'
-        ));
+        $fields = $this->filterFields($fields);
 
         return $this->getTaskDao()->update($id, $fields);
     }
@@ -92,6 +68,33 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->findByCourseId($courseId);
+    }
+
+    protected function filterFields($fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'courseId',
+            'preTaskId',
+            'courseChapterId',
+            'activityId',
+            'title',
+            'isFree',
+            'isOptional',
+            'startTime',
+            'endTime',
+            'status',
+            'createdUserId'
+        ));
+
+        if (!empty($fields['startTime']) && $fields['startTime'] != 0) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+
+        if (!empty($fields['endTime']) && $fields['endTime'] != 0) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
+
+        return $fields;
     }
 
     /**
@@ -119,7 +122,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         return false;
     }
-
 
     /**
      * @return ActivityService

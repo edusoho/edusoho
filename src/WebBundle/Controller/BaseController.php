@@ -64,4 +64,9 @@ class BaseController extends Controller
         $biz = $this->getBiz();
         return $biz->service($alias);
     }
+
+    protected function setFlashMessage($level, $message)
+    {
+        $this->get('session')->getFlashBag()->add($level, $message);
+    }
 }

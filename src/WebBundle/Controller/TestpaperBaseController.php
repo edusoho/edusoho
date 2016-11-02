@@ -167,7 +167,7 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function doTestAction(Request $request, $testId)
+    public function showTestAction(Request $request, $testId)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($testId);
 
@@ -179,8 +179,13 @@ class TestpaperController extends BaseController
 
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
         $result           = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
-        $items            = $result['formatItems'];
-        $total            = $this->makeTestpaperTotal($testpaper, $items);
+
+        return $this->forward('WebBundle:'.ucfirst($testpaper['type']).':showTest', array()
+
+        );
+
+        $items = $result['formatItems'];
+        $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 

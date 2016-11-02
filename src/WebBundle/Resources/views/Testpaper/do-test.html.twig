@@ -10,8 +10,8 @@
   {# {% if showTestpaperNavbar|default('on') == 'off' %} #}
     <form id='teacherCheckForm' autocomplete="off">
     {# {% endif %} #}
-    {% for type in types|default(paper.metas.question_type_seq) %}
-      {% if type in types|keys and items[type] != [] %}
+    {% for type in types|default(paper.metas.counts|keys) %}
+      {% if type in items|keys and  items[type] != [] %}
         <div class="panel panel-default testpaper-question-block" id="testpaper-questions-{{ type }}">
           <div class="panel-heading"><strong class="">{{dict('questionType')[type]}}</strong>
             <small class="text-muted">

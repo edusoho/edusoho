@@ -63,7 +63,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function updateTestpaperItem($id, $fields)
     {
-        return $this->getTestpaperItemDao()->update($id);
+        return $this->getTestpaperItemDao()->update($id, $fields);
     }
 
     public function deleteTestpaperItem($id)
@@ -94,15 +94,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         if (!empty($fields['usedTime'])) {
             $testpaperResult    = $this->getTestpaperResult($id);
-            $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
+            $fields['usedTime'] = $fields['usedTime'] + $testpaperResult['usedTime'];
         }
 
         $fields['updateTime'] = time();
         $fields['endTime']    = time();
 
-        //$this->getTestpaperResultDao()->updateTestpaperResultActive($testpaperResult['testId'], $testpaperResult['userId']);
-
-        return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
+        return $this->getTestpaperResultDao()->update($id, $fields);
     }
 
     public function searchTestpaperResultsCount($conditions)
@@ -154,7 +152,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $argument  = $fields;
         $fields    = $this->filterTestpaperFields($fields, 'update');
-        $testpaper = $this->updateTestpaper($id, $fields);
+        $testpaper = $this->getTestpaperDao()->update($id, $fields);
         $this->dispatchEvent("testpaper.update", array('argument' => $argument, 'testpaper' => $testpaper));
         return $testpaper;
     }
@@ -371,7 +369,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getUserDoingResult($testId, $courseId, $lessonId, $type, $userId);
     }
 
-    public function startTestpaper($id, $type, $courseId, $lessonId)
+    public function startTestpaper($id, $lessonId)
     {
         $testpaper = $this->getTestpaper($id);
 
@@ -383,9 +381,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'beginTime'   => time(),
             'status'      => 'doing',
             'usedTime'    => 0,
-            'courseId'    => $courseId,
+            'courseId'    => $testpaper['courseId'],
             'lessonId'    => $lessonId,
-            'type'        => $type
+            'type'        => $testpaper['type']
         );
 
         return $this->addTestpaperResult($testpaperResult);
@@ -455,7 +453,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $formatItems = array();
 
         foreach ($items as $questionId => $item) {
-            if (array_key_exists($questionId, $itemResults)) {
+            if (!empty($itemResults[$questionId])) {
                 $questions[$questionId]['testResult'] = $itemResults[$questionId];
             }
 
@@ -590,6 +588,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         //得到当前用户答案
         $answers = $this->getTestpaperItemResultDao()->findTestResultsByTestpaperResultId($testpaperResult['id']);
+
         $answers = ArrayToolkit::index($answers, 'questionId');
 
         $answers = $this->formatAnswers($answers, $items);
@@ -604,10 +603,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'noAnswer') {
                 $answer['answer'] = array_pad(array(), count($questions[$questionId]['answer']), '');
 
-                $answer['testId']            = $testpaperResult['testId'];
-                $answer['testPaperResultId'] = $testpaperResult['id'];
-                $answer['userId']            = $userId;
-                $answer['questionId']        = $questionId;
+                $answer['testId']     = $testpaperResult['testId'];
+                $answer['resultId']   = $testpaperResult['id'];
+                $answer['userId']     = $userId;
+                $answer['questionId'] = $questionId;
                 $this->createItemResult($answer);
             }
         }
@@ -674,16 +673,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
+        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
 
         $fields['usedTime']    = $usedTime + $testpaperResult['usedTime'];
         $fields['endTime']     = time();
-        $fields['active']      = 1;
         $fields['checkedTime'] = time();
 
-        $this->getTestpaperResultDao()->updateTestpaperResultActive($testpaperResult['testId'], $testpaperResult['userId']);
-
-        $testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
+        $testpaperResult = $this->updateTestpaperResult($id, $fields);
 
         $this->dispatchEvent(
             'testpaper.finish',
@@ -772,7 +768,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        $testPaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        $testPaperResult = $this->updateTestpaperResult($id, array(
             'score'           => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status'          => 'finished',
@@ -867,25 +863,28 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $seq        = 1;
         $items      = ArrayToolkit::index($items, 'questionId');
 
-        foreach ($items as $questionId => $item) {
-            if ($questions[$questionId]['type'] == 'material') {
-                $items[$questionId]['score'] = 0;
-            }
+        /*foreach ($items as $questionId => $item) {
+        if ($questions[$questionId]['type'] == 'material') {
+        $items[$questionId]['score'] = 0;
         }
 
-        foreach ($items as $questionId => $item) {
-            if ($questions[$questionId]['parentId'] > 0) {
-                $items[$questions[$questionId]['parentId']]['score'] += $item['score'];
-            }
+        if ($questions[$questionId]['parentId'] > 0) {
+        $items[$questions[$questionId]['parentId']]['score'] += $item['score'];
         }
+        }*/
 
         foreach ($items as $item) {
-            $question    = $questions[$item['questionId']];
-            $item['seq'] = $seq;
+            $question      = $questions[$item['questionId']];
+            $item['seq']   = $seq;
+            $item['score'] = $question['type'] == 'material' ? 0 : $item['score'];
 
             if ($question['subCount'] == 0) {
                 $seq++;
                 $totalScore += $item['score'];
+            }
+
+            if ($question['parentId'] > 0) {
+                $items[$question['parentId']]['score'] += $item['score'];
             }
 
             if (empty($existItems[$item['questionId']])) {
@@ -1087,26 +1086,31 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->getKernel()->createService('Course.CourseService');
     }
 
     protected function getQuestionService()
     {
-        return ServiceKernel::instance()->createService('Question.QuestionService');
+        return $this->getKernel()->createService('Question.QuestionService');
     }
 
     protected function getMemberDao()
     {
-        return ServiceKernel::instance()->createDao('Course.CourseMemberDao');
+        return $this->getKernel()->createDao('Course.CourseMemberDao');
     }
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
+        return $this->getKernel()->createService('User.StatusService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

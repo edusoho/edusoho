@@ -64,27 +64,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['mediaId'] = $media['id'];
         }
 
-        $fields = ArrayToolkit::parts($fields, array(
-            'title',
-            'desc',
-            'mediaId',
-            'mediaType',
-            'content',
-            'length',
-            'fromCourseId',
-            'fromCourseSetId',
-            'fromUserId',
-            'startTime',
-            'endTime'
-        ));
-
-        $fields['fromUserId'] = $this->getCurrentUser()->getId();
-        if (isset($fields['startTime'])) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-        if (isset($fields['endTime'])) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
+        $fields = $this->filterFields($fields);
 
         $activity = $this->getActivityDao()->create($fields);
 
@@ -104,10 +84,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             throw new AccessDeniedException();
         }
 
+        $media          = array();
         $activityConfig = ActivityFactory::create($this->biz, $savedActivity['mediaType']);
         if (!empty($savedActivity['mediaId'])) {
-            $activityConfig->update($savedActivity['mediaId'], $fields);
+            $media = $activityConfig->update($savedActivity['mediaId'], $fields);
         }
+
+        if ($media) {
+            $fields['mediaId'] = $media['id'];
+        }
+
+        $fields = $this->filterFields($fields);
 
         return $this->getActivityDao()->update($id, $fields);
     }
@@ -130,6 +117,33 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityConfig->delete($activity['mediaId']);
 
         return $this->getActivityDao()->delete($id);
+    }
+
+    protected function filterFields($fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'desc',
+            'mediaId',
+            'mediaType',
+            'content',
+            'length',
+            'fromCourseId',
+            'fromCourseSetId',
+            'fromUserId',
+            'startTime',
+            'endTime'
+        ));
+
+        $fields['fromUserId'] = $this->getCurrentUser()->getId();
+        if (isset($fields['startTime']) && $fields['startTime'] != 0) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
+        if (isset($fields['endTime']) && $fields['startTime'] != 0) {
+            $fields['endTime'] = strtotime($fields['endTime']);
+        }
+
+        return $fields;
     }
 
     /**
