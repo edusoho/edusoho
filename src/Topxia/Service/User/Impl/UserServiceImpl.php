@@ -1101,7 +1101,7 @@ class UserServiceImpl extends BaseService implements UserService
             'loginTime' => time()
         ));
 
-        $this->getLogService()->info('user', 'login_success', '登录成功');
+        // $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
     public function markLoginFailed($userId, $ip)
