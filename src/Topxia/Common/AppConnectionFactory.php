@@ -3,7 +3,6 @@ namespace Topxia\Common;
 
 use Topxia\Service\Common\ConnectionFactory;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\SwooleConnection;
 
 class AppConnectionFactory implements ConnectionFactory
 {
@@ -29,10 +28,4 @@ class AppConnectionFactory implements ConnectionFactory
 
         return $this->connection;
     }
-
-    protected function createConnection()
-    {
-        return new SwooleConnection();
-    }
-
 }
