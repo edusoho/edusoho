@@ -5,9 +5,8 @@ var $parentiframe = $(window.parent.document).find('#task-manage-content-iframe'
 
 class CourseFileChoose {
 
-    constructor($container, mediaType) {
+    constructor($container) {
         this.container = $container;
-        this.mediaType = mediaType;
         this._init();
         this._initEvent();
     }
@@ -20,23 +19,19 @@ class CourseFileChoose {
         $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
         $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
 
-        $('.js-choose-trigger').on('click',this._open)
+        $('.js-choose-trigger').on('click', this._open)
     }
 
     _loadList() {
         let $containter = $('[data-role=course-file-browser]');
         let url = $containter.data('url');
-
-        $containter.load(url, function () {
-            console.log('page is on loading');
-        })
+        $.get(url, {'type': $("input[name=type]").val()}, function (html) {
+            $containter.html(html);
+        });
     }
 
     _paginationList(event) {
         event.stopImmediatePropagation();
-        let $that = $(event.currentTarget);
-        console.log('_paginationList');
-        $('input[name=page]').val($that.html());
         this._loadList();
     }
 
@@ -58,17 +53,23 @@ class CourseFileChoose {
         var file = $that.data();
         this._onChange(file);
         this._close();
-        console.log($that, $that.data())
     }
 
     _onChange(file) {
         var value = file ? JSON.stringify(file) : '';
         $('[name="media"]').val(value);
-        $('input[name=mediaId]').val(file.id);
         $('[data-role="placeholder"]').html(file.name);
+        this._fillMinuteAndSecond(file.length);
+    }
+
+    _fillMinuteAndSecond(fileLength) {
+        let minute = parseInt(fileLength / 60);
+        let second = Math.round(fileLength % 60);
+        $("#minute").val(minute);
+        $("#second").val(second)
     }
 
 }
 
 
-new CourseFileChoose($('#chooser-course-panel'), 'video');
+new CourseFileChoose($('#chooser-course-panel'));

@@ -21,17 +21,4 @@ class VideoActivityDaoImpl extends GeneralDaoImpl implements VideoActivityDao
             'serializes' => array('media' => 'json'),
         );
     }
-
-    public function updateByActivityId($activityId, $fields)
-    {
-        $this->db()->update($this->table, $fields, array('activityId' => $activityId));
-
-        return $this->getByActivityId($activityId);
-    }
-
-    public function getByActivityId($activityId)
-    {
-        $sql = "SELECT * FROM {$this->table()} WHERE activityId = ?";
-        return $this->db()->fetchAssoc($sql, array($activityId)) ?: null;
-    }
 }
