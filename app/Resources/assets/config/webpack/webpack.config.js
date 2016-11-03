@@ -87,7 +87,7 @@ let config = {
       manifestVariable: "webpackManifest"
     }),
 
-    new FixModuleIdAndChunkIdPlugin(),
+    // new FixModuleIdAndChunkIdPlugin(),
   ].concat(webpackPlugins),
 };
 

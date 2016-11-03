@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Activity\Dao\ActivityDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
 {
@@ -12,13 +12,16 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? LIMIT 1";
-        return $this->db()->fetchAll($sql, array($courseId)) ? : array();
+        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
     }
 
     public function declares()
     {
-
     }
-
 
 }
