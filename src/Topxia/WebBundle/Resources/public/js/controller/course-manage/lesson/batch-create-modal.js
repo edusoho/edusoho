@@ -54,7 +54,8 @@ define(function(require, exports, module) {
             } else if (fileStatus.successNum == 0) {
                 Notify.danger(Translator.trans('请选择至少一个文件并上传。'));
             } else {
-                var $bth = $(this);
+                var $btn = $(this);
+                $btn.button('loading');
                 $.each(files, function(index , file){
                     var isLast = index+1 == files.length;
                     createLessonByFile(file, isLast);
@@ -80,7 +81,7 @@ define(function(require, exports, module) {
             });
 
             if (isLast) {
-                    window.location.reload();
+                window.location.reload();
             }
         }
     };
