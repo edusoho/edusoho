@@ -23,6 +23,10 @@ class WarmupCommand extends BaseCommand
         $this->initServiceKernel();
         $output->writeln('<info>开始初始化系统</info>');
         $users = $this->getUserService()->searchUsers(array(), array(), 0, 100000);
+        $time = time();
+        ServiceKernel::instance()->getConnection()->update('user', array('updatedTime' => $time), array(1=>1));
+
+        $this->getUserDao()->updateUser(1, array('updatedTime'=>$time));
         foreach ($users as $user) {
 			$this->getUserService()->getUser($user['id']);
 			$this->getUserService()->getUserByNickname($user['nickname']);
@@ -33,5 +37,10 @@ class WarmupCommand extends BaseCommand
     protected function getUserService()
     {
     	return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getUserDao()
+    {
+        return ServiceKernel::instance()->createDao('User.UserDao');
     }
 }
