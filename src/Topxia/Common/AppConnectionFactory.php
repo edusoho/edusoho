@@ -20,7 +20,7 @@ class AppConnectionFactory implements ConnectionFactory
         if(empty($this->connection)){
 
             $connection = DriverManager::getConnection(array(
-                'wrapperClass' => 'Topxia\Service\Common\Connection',
+                'wrapperClass' => 'Topxia\\Service\\Common\\Connection',
                 'driver'       => ServiceKernel::instance()->getParameter('database_driver'),
                 'charset'      => 'utf8',
                 'host' => ServiceKernel::instance()->getParameter('database_host'),
