@@ -9,6 +9,18 @@ class EduSohoUpgrade extends AbstractUpdater
     public function update($index = 0)
     {
         try {
+            $result = $this->updateScheme();
+            $this->getConnection()->commit();
+
+            if (!empty($result)) {
+                return $result;
+            }
+        } catch (\Exception $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
+
+        try {
             if ($index >= 0 && $index <= 17) {
                 return $this->batchDownload($index);
             }
@@ -47,6 +59,15 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
         ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExcutedTime(time());
 
+    }
+
+    private function updateScheme()
+    {
+        $connection = $this->getConnection();
+
+        if (isFieldExist('user', 'registeredWay')) {
+            $connection->exec("ALTER TABLE `user` ADD `registeredWay` varchar(64) NOT NULL DEFAULT '' COMMENT '注册设备来源(web/ios/android)'");
+        }
     }
 
     private function checkBizInVendor()
