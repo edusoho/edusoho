@@ -1097,8 +1097,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->searchCourseCount($conditions);
 
         $sort    = $this->getParam("sort", "createdTimeByDesc");
+        if ($sort == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
 
-        $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+
+            if (($start + $limit) >= $recommendCount) {
+                $conditions['recommended'] = 0;
+                $filledUnRecommendCount = $limit - ($recommendCount - $start);
+                $filledUnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $filledUnRecommendCount);
+                $courses = array_merge($courses, $filledUnRecommendCourses);
+            }
+        } else {
+            $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
+        }
+        
         $result  = array(
             "start" => $start,
             "limit" => $limit,
