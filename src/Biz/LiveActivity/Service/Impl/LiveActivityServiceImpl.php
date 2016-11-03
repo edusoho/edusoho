@@ -9,6 +9,8 @@ use Biz\LiveActivity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
+    private $client;
+
     public function getLiveActivity($id)
     {
         return $this->getLiveActivityDao()->get($id);
@@ -17,7 +19,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function createLiveActivity($activity)
     {
         //创建直播室
-        $speaker = $this->getUserService()->getUser($this->getCurrentUser()->getId());
+        $speaker = $this->getUserService()->getUser($activity['fromUserId']);
         $speaker = $speaker ? $speaker['nickname'] : $this->getServiceKernel()->trans('老师');
 
         $liveLogo    = $this->getSettingService()->get('course');
@@ -27,8 +29,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
         }
 
-        $client = new EdusohoLiveClient();
-        $live   = $client->createLive(array(
+        $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary'     => $activity['remark'],
             'title'       => $activity['title'],
             'speaker'     => $speaker,
@@ -77,9 +78,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveParams['endTime'] = ($fields['startTime'] + $fields['length'] * 60).'';
         }
 
-        $client = new EdusohoLiveClient();
-        $live   = $client->updateLive($liveParams);
+        $this->getEdusohoLiveClient()->updateLive($liveParams);
         //live activity自身没有需要更新的信息
+        $fields['id'] = $id;
+        return $fields;
     }
 
     public function deleteLiveActivity($id)
@@ -89,8 +91,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return;
         }
-        $client = new EdusohoLiveClient();
-        $result = $client->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+
+        $result = $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
         $this->getLiveActivityDao()->delete($id);
     }
 
@@ -112,5 +114,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    public function getEdusohoLiveClient()
+    {
+        if ($this->client == null) {
+            $this->client = new EdusohoLiveClient();
+        }
+        return $this->client;
     }
 }
