@@ -46,6 +46,11 @@ define(function(require, exports, module) {
         });
 
         $('.js-batch-create-lesson-btn').on('click', function() {
+            var $btn = $(this);
+            if ($btn.hasClass('disabled')) {
+                return;
+            }
+
             var fileStatus = esuploader.uploader.getStats();
             var cancelledFiles = esuploader.uploader.getFiles('cancelled');
             
@@ -54,7 +59,6 @@ define(function(require, exports, module) {
             } else if (fileStatus.successNum == 0) {
                 Notify.danger(Translator.trans('请选择至少一个文件并上传。'));
             } else {
-                var $btn = $(this);
                 $btn.button('loading');
                 $.each(files, function(index , file){
                     var isLast = index+1 == files.length;
