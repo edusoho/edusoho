@@ -15,13 +15,14 @@ class WarmupCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('unit:redis-warmup');
+        $this->setName('util:redis-warmup');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->initServiceKernel();
         $output->writeln('<info>开始初始化系统</info>');
-        $users = $this->getUserService()->searchUsers(array(), null, 0, 100000);
+        $users = $this->getUserService()->searchUsers(array(), array(), 0, 100000);
         foreach ($users as $user) {
 			$this->getUserService()->getUser($user['id']);
 			$this->getUserService()->getUserByNickname($user['nickname']);

@@ -3,7 +3,9 @@ namespace Topxia\WebBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Common\AppConnectionFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
 
 abstract class BaseCommand extends ContainerAwareCommand
 {
@@ -17,7 +19,7 @@ abstract class BaseCommand extends ContainerAwareCommand
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
 
-        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $serviceKernel->setConnectionFactory(new AppConnectionFactory($this->getContainer()));
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(

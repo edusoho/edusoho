@@ -235,7 +235,9 @@ class ServiceKernel
 
     public function setConnectionFactory(ConnectionFactory $factory)
     {
-        $this->connectionFactory = $factory;
+        if(empty($this->connection)){
+            $this->connectionFactory = $factory;
+        }
     }
 
     public function createService($name)
