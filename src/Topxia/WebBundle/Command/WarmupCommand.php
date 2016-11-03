@@ -30,8 +30,28 @@ class WarmupCommand extends BaseCommand
         foreach ($users as $user) {
 			$this->getUserService()->getUser($user['id']);
 			$this->getUserService()->getUserByNickname($user['nickname']);
-			$this->getUserService()->getUserByEmail($user['email']);
+            $this->getUserService()->getUserByEmail($user['email']);
+
+            $this->getServiceKernel()->createDao('Course.CourseMemberDao')->getMemberByCourseIdAndUserId(1, $user['id']);
+
+            $this->getServiceKernel()->createDao('Course.LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
         }
+
+
+        $this->getCacheService()->get('settings');
+
+        $this->getServiceKernel()->createService('Content.NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
+
+        $this->getServiceKernel()->createService('Theme.ThemeService')->getCurrentThemeConfig();
+
+        $this->getServiceKernel()->createService('Block.BlockService')->getBlockByCode('jianmo:home_top_banner');
+
+        $this->$this->getServiceKernel()->createDao('Course.ClassroomCourseDao')->findClassroomByCourseId(1);
+    }
+
+    protected function getCacheService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     protected function getUserService()
