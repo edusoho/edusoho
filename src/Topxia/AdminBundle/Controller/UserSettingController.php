@@ -147,7 +147,6 @@ class UserSettingController extends BaseController
             $default["{$type}_secret"]           = '';
             $default["{$type}_set_fill_account"] = 0;
             if ($type == 'weixinmob') {
-                $default['weixinmob_mp_key']    = '';
                 $default['weixinmob_mp_secret'] = '';
             }
         }
@@ -161,7 +160,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
-            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_key'], $loginConnect['weixinmob_mp_secret']);
+            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
@@ -409,12 +408,12 @@ class UserSettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
     }
 
-    protected function updateWeixinMpFile($key, $val)
+    protected function updateWeixinMpFile($val)
     {
         $dir = realpath(__DIR__.'/../../../../web/');
         array_map('unlink', glob($dir.'/MP_verify_*.txt'));
-        if (!empty($key) && !empty($val)) {
-            file_put_contents($dir.'/MP_verify_'.$key.'.txt', $val);
+        if (!empty($val)) {
+            file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);
         }
     }
 

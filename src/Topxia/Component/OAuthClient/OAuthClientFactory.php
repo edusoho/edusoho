@@ -9,8 +9,8 @@ class OAuthClientFactory
     /**
      * 创建OAuthClient实例
      *
-     * @param  string                $type       Client的类型
-     * @param  array                 $config     必需包含key, secret两个参数
+     * @param  string                $type   Client的类型
+     * @param  array                 $config 必需包含key, secret两个参数
      * @return AbstractOauthClient
      */
     public static function create($type, array $config)
@@ -87,8 +87,7 @@ class OAuthClientFactory
                 'large_icon_img'          => '',
                 'key_setting_label'       => 'App ID',
                 'secret_setting_label'    => 'App Secret',
-                'mp_key_setting_label'    => '授权文件名称',
-                'mp_secret_setting_label' => '授权文件内容',
+                'mp_secret_setting_label' => 'MP文件验证码',
                 'apply_url'               => 'https://mp.weixin.qq.com/cgi-bin/readtemplate?t=register/step1_tmpl&lang=zh_CN'
             )
         );

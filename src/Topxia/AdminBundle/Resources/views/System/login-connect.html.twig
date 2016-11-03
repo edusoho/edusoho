@@ -123,18 +123,11 @@
       {% if type == 'weixinmob' %}
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="weixinmob_mp_key" >{{ client.mp_key_setting_label }}</label>
-        </div>
-        <div class="controls col-md-8">
-          <input type="text" id="weixinmob_mp_key" name="weixinmob_mp_key" class="form-control" value="{{loginConnect['weixinmob_mp_key']}}">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-3 control-label">
           <label for="weixinmob_mp_secret" >{{ client.mp_secret_setting_label }}</label>
         </div>
         <div class="controls col-md-8">
           <input type="text" id="weixinmob_mp_secret" name="weixinmob_mp_secret" class="form-control" value="{{loginConnect['weixinmob_mp_secret']}}">
+          <p class="help-block">{{'请填写微信提供的MP_verify文件中的内容'|trans}}</p>
         </div>
       </div>
       {% endif %}
