@@ -4,7 +4,7 @@ $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
   errorElement: 'p',
   highlight: function(element, errorClass, validClass) {
-    let $row = $(element).parents('.form-group');
+    let $row = $(element).closest('.form-group');
     $row.addClass('has-error');
     $row.find('.help-block').each(function() {
       let $this = $(this);
@@ -14,7 +14,7 @@ $.validator.setDefaults({
     });
   },
   unhighlight: function(element, errorClass, validClass) {
-    let $row = $(element).parents('.form-group');
+    let $row = $(element).closest('.form-group');
     $row.removeClass('has-error');
     $row.find('.help-block').each(function() {
       let $this = $(this);
@@ -29,7 +29,7 @@ $.validator.setDefaults({
     } else if (element.parent().is('label')) {
       element.parent().after(error);
     } else {
-      element.after(error);
+      element.parent().append(error);
     }
   },
   submitHandler: function(form) {

@@ -15,7 +15,7 @@
 {% block body %}
   <div class="task-manage-editor" id="task-manage-editor">
     <ul class="es-step es-step-3 clearfix" id="task-manage-step">
-        <li class="doing">
+        <li class="done">
           <span class="number">1</span>
           选择教学手段
         </li>
@@ -49,7 +49,7 @@
         {% endif %}
       </ul>
       <form class="form-horizontal" id="step1-form" >
-        <div class="row form-group">
+        <div class="form-group">
           <div class="col-xs-2 control-label">
           <label for="title">{{ '标题'|trans }}</label>
           </div>
@@ -57,11 +57,9 @@
             <input id="title" class="form-control" type="text" name="title" value={{ activity.title|default('') }} >
           </div>
         </div>
-        <div class="row form-group">
+        <div class="form-group">
           <div class="col-xs-9 col-xs-offset-2 controls">
-            <label>
-              <input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
-            </label>
+            <input type="checkbox" name="isOptional" value="1" {% if task is defined and task.isOptional %} checked {% endif %}>设为选修 
             <span class="color-gray mll">学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁</span>
           </div>
         </div>

@@ -1,6 +1,5 @@
 {% extends 'TopxiaWebBundle::blank-layout.html.twig' %}
 
-
 {% block content %} 
 	<div style="margin-left: 30px; margin-top: 30px;">
 		<span style="font-weight: bold; font-size:1.5em;">讨论主题：</span><br/>
@@ -10,6 +9,5 @@
 			<a href="{{path('course_thread_create', {id: activity.fromCourseId, type: 'discussion'})}}" style="text-decoration: none;">前往课程讨论区</a>发表或回复话题吧
 		</div>
 	</div>
-	
   {#<script>app.load('activitybundle/controller/activity-manage/text-activity-fields')</script>#}
 {% endblock %}

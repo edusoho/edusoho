@@ -16,7 +16,19 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 {
     public function getActivity($id)
     {
-        return $this->getActivityDao()->get($id);
+        $activity = $this->getActivityDao()->get($id);
+
+        if (!empty($activity['mediaId'])) {
+            $activityConfig  = ActivityFactory::create($this->biz, $activity['mediaType']);
+            $media           = $activityConfig->get($activity['mediaId']);
+            $activity['ext'] = $media;
+        }
+        return $activity;
+    }
+
+    public function getActivities($ids)
+    {
+        return $this->getActivityDao()->findByIds($ids);
     }
 
     public function trigger($id, $eventName, $data = array())
@@ -66,7 +78,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
-            'desc',
+            'remark',
             'mediaId',
             'mediaType',
             'content',
@@ -79,12 +91,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ));
 
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
-        if (isset($fields['startTime'])) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-        if (isset($fields['endTime'])) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
 
         $activity = $this->getActivityDao()->create($fields);
 
@@ -111,12 +117,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
+            'remark',
             'desc',
             'content',
             'length',
             'startTime',
             'endTime'
         ));
+
         return $this->getActivityDao()->update($id, $fields);
     }
 

@@ -19,6 +19,7 @@ const parameters = {
     "fix-ie": ['html5shiv', 'respond-js'],
     "jquery-validation": ['../libs/js/jquery-validation.js'],
     "jquery-form": ['jquery-form'],
+    'bootstrap-datetimepicker':['../libs/js/bootstrap-datetimepicker.js'],
     "perfect-scrollbar":['perfect-scrollbar'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
@@ -30,7 +31,9 @@ const parameters = {
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     // The `.` will auto be replaced to `-` for compatibility 
-    'respond.js/dest/respond.src.js', 
+    'respond.js/dest/respond.src.js',
+    'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
+    'moment/moment.js',
   ],
 }
 
