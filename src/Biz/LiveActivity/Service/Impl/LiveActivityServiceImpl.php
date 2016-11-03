@@ -118,7 +118,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function getEdusohoLiveClient()
     {
-        if ($this->client == null) {
+        if (empty($this->client)) {
             $this->client = new EdusohoLiveClient();
         }
         return $this->client;
