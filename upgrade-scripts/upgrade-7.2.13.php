@@ -98,7 +98,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $index++;
         return array(
             'index'    => $index,
-            'message'  => '下载文件' . intval($index / 9 * 100) . '%',
+            'message'  => '下载文件' . intval($index / 20 * 100) . '%',
             'progress' => 4.4
         );
     }
