@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class PluginCreateCommand extends GeneratorCommand
+class OldPluginCreateCommand extends GeneratorCommand
 {
     protected function configure()
     {
@@ -18,7 +18,7 @@ class PluginCreateCommand extends GeneratorCommand
                 InputArgument::OPTIONAL,
                 '插件名称?'
             )
-            ->setName('plugin:create')
+            ->setName('old-plugin:create')
             ->setDescription('创建插件模板')
         ;
     }

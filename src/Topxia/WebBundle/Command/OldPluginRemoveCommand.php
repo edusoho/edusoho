@@ -10,7 +10,7 @@ use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\PluginUtil;
 
-class PluginRemoveCommand extends BaseCommand
+class OldPluginRemoveCommand extends BaseCommand
 {
     protected function configure()
     {
@@ -20,7 +20,7 @@ class PluginRemoveCommand extends BaseCommand
                 InputArgument::OPTIONAL,
                 '插件名称?'
             )
-            ->setName('plugin:remove')
+            ->setName('old-plugin:remove')
             ->setDescription('移除插件模板')
         ;
     }
