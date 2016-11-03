@@ -9,6 +9,11 @@ use Biz\LiveActivity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 {
+    public function getLiveActivity($id)
+    {
+        return $this->getLiveActivityDao()->get($id);
+    }
+
     public function createLiveActivity($activity)
     {
         //创建直播室

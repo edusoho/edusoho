@@ -25,7 +25,9 @@ course_task_show:
 course_task_activity_show:
   path:  /course/{courseId}/task/{id}/activity_show
   defaults: { _controller: WebBundle:Task:taskActivity }
-
+task_live_entry:
+  path: /course/{courseId}/activity/{id}/live_entry
+  defaults: {_controller: WebBundle:LiveActivity:liveEntry}
 course_task_trigger:
   path:  /course/{courseId}/task/{id}/trigger/{eventName}
   defaults: { _controller: WebBundle:Task:trigger }
