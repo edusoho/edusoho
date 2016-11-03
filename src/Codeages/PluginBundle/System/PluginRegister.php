@@ -18,6 +18,12 @@ class PluginRegister
         $this->biz = $biz;
     }
 
+    public function isPluginRegisted($code)
+    {
+        $app = $this->biz->service('CodeagesPluginBundle:AppService')->getAppByCode($code);
+        return $app ? true : false;
+    }
+
     public function parseMetas($code)
     {
         $file = $this->getPluginMetasFile($code);

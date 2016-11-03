@@ -16,14 +16,16 @@ class PluginRegisterCommand extends ContainerAwareCommand
     {
         $this
             ->setName('plugin:register')
-            ->setDescription('Register plugin.')
-            ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.');
+            ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.')
+            ->addOption('without-database', null, InputOption::VALUE_NONE, 'create database?')
+            ->setDescription('Register plugin.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $code = $input->getArgument('code');
         $biz = $this->getContainer()->get('biz');
+        $code = $input->getArgument('code');
+        $withoutDatabase = $input->getOption('without-database');
 
         $output->writeln(sprintf('Register plugin <comment>%s</comment> :', $code));
 
@@ -34,13 +36,19 @@ class PluginRegisterCommand extends ContainerAwareCommand
 
         $installer = new PluginRegister($rootDir, 'plugins', $biz);
 
+        if ($installer->isPluginRegisted($code)) {
+            throw new \RuntimeException("Plugin is already registed.");
+        }
+
         $output->write("  - Parse meta file plugin.json");
         $metas = $installer->parseMetas($code);
         $output->writeln("  <info>[Ok]</info>");
 
-        $output->write("  - Execute create database scripts.");
-        $executed = $installer->executeDatabaseScript($code);
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        if (!$withoutDatabase) {
+            $output->write("  - Execute create database scripts.");
+            $executed = $installer->executeDatabaseScript($code);
+            $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        }
 
         $output->write("  - Execute install script.");
         $executed = $installer->executeScript($code);
@@ -64,7 +72,6 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
 
         $output->writeln("<info>Finished!</info>\n");
-
     }
 
 }
