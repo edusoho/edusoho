@@ -1115,7 +1115,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                     $fixedStart = $start - $recommendCount;
                     $fixedLimit = $limit;
                 }
-                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $fixedStart, $fixedLimit);
+                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, 'createdTime', $fixedStart, $fixedLimit);
                 $courses = array_merge($courses, $UnRecommendCourses);
             }
 
