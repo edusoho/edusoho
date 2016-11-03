@@ -1,6 +1,4 @@
-<?php
-
-return array(
-    'active_theme_name' => 'jianmo',
-
+<?php 
+ return array (
+  'active_theme_name' => 'jianmo',
 );

@@ -35,6 +35,7 @@ class PluginConfigurationManager
     public function setActiveThemeName($name)
     {
         $this->config['active_theme_name'] = $name;
+        return $this;
     }
 
     public function getInstalledPlugins()
@@ -45,6 +46,7 @@ class PluginConfigurationManager
     public function setInstalledPlugins($plugins)
     {
         $this->config['installed_plugins'] = $plugins;
+        return $this;
     }
 
     public function getInstalledPluginBundles()
@@ -63,8 +65,14 @@ class PluginConfigurationManager
 
     public function save()
     {
-        $content = "<?php \n return " . var_export($config, true) . ";";
-        file_put_contents($this->filepath, $content);
+        $content = "<?php \n return " . var_export($this->config, true) . ";";
+        $saved = file_put_contents($this->filepath, $content);
+
+        if ($saved === false) {
+            throw new \RuntimeException("Save plugin configuration ({$this->filepath}) failed, may be this file is not writeable.");
+        }
+
+        return $this;
     }
 
 }

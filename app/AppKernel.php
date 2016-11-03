@@ -7,8 +7,9 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 
-class AppKernel extends Kernel
+class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
 
@@ -108,6 +109,11 @@ class AppKernel extends Kernel
     public function getPlugins()
     {
         return $this->pluginConfigurationManager->getInstalledPlugins();
+    }
+
+    public function getPluginConfigurationManager()
+    {
+        return $this->pluginConfigurationManager;
     }
 
     public function setRequest(Request $request)
