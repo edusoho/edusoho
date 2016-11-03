@@ -126,8 +126,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
     {
         $biz = $this->getContainer()->get('biz');
         $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
-        $biz['migration.directories'][] = dirname(__DIR__) . '/src/Codeages/PluginBundle/Migrations';
-        $biz['autoload.aliases']['CodeagesPluginBundle'] = 'Codeages\PluginBundle\Biz';
         $biz->register(new \Codeages\Biz\Framework\Provider\DoctrineServiceProvider());
         $biz->boot();
     }

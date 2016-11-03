@@ -9,6 +9,8 @@ class CodeagesPluginBundle extends Bundle
 {
     public function boot()
     {
-        
+        $biz = $this->container->get('biz');
+        $biz['migration.directories'][] = __DIR__ . '/Migrations';
+        $biz['autoload.aliases']['CodeagesPluginBundle'] = 'Codeages\PluginBundle\Biz';
     }
 }
