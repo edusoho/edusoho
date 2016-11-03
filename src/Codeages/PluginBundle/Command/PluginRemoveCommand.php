@@ -14,7 +14,7 @@ class PluginRemoveCommand extends ContainerAwareCommand
     {
         $this
             ->setName('plugin:remove')
-            ->setDescription('...')
+            ->setDescription('Remove plugin.')
             ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.');
     }
 

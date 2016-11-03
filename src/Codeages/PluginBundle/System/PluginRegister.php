@@ -5,7 +5,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class PluginInstaller
+class PluginRegister
 {
     protected $pluginRootDir;
 
@@ -16,11 +16,6 @@ class PluginInstaller
         $this->rootDir = rtrim($rootDir, "\/");
         $this->pluginRootDir = $this->rootDir . "/{$pluginBaseDir}";
         $this->biz = $biz;
-    }
-
-    public function install($code)
-    {
-
     }
 
     public function parseMetas($code)

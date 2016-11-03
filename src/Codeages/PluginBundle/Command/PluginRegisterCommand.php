@@ -7,16 +7,16 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Codeages\PluginBundle\System\PluginInstaller;
+use Codeages\PluginBundle\System\PluginRegister;
 use Topxia\Common\BlockToolkit;
 
-class PluginInstallCommand extends ContainerAwareCommand
+class PluginRegisterCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('plugin:install')
-            ->setDescription('...')
+            ->setName('plugin:register')
+            ->setDescription('Register plugin.')
             ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.');
     }
 
@@ -25,14 +25,14 @@ class PluginInstallCommand extends ContainerAwareCommand
         $code = $input->getArgument('code');
         $biz = $this->getContainer()->get('biz');
 
-        $output->writeln(sprintf('Install plugin <comment>%s</comment> :', $code));
+        $output->writeln(sprintf('Register plugin <comment>%s</comment> :', $code));
 
         $rootDir = dirname($this->getContainer()->getParameter('kernel.root_dir'));
         if (empty($rootDir)) {
             throw new \RuntimeException('Plugin base directory is not exist.');
         }
 
-        $installer = new PluginInstaller($rootDir, 'plugins', $biz);
+        $installer = new PluginRegister($rootDir, 'plugins', $biz);
 
         $output->write("  - Parse meta file plugin.json");
         $metas = $installer->parseMetas($code);
@@ -63,7 +63,7 @@ class PluginInstallCommand extends ContainerAwareCommand
         $installer->refreshInstalledPluginConfiguration();
         $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
 
-        $output->writeln("<info>Install successed!</info>\n");
+        $output->writeln("<info>Finished!</info>\n");
 
     }
 
