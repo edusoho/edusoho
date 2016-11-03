@@ -52,8 +52,6 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         $this->getAppDao()->delete($app['id']);
-
-        $this->rebuildPlugins();
     }
 
     protected function getAppDao()

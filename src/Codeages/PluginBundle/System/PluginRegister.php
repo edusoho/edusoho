@@ -116,6 +116,11 @@ class PluginRegister
         $manager->setInstalledPlugins($installed)->save();
     }
 
+    public function removePlugin($code)
+    {
+        $this->biz->service('CodeagesPluginBundle:AppService')->removePlugin($code);
+    }
+
     protected function getPhp($includeArgs = true)
     {
         $phpFinder = new PhpExecutableFinder();

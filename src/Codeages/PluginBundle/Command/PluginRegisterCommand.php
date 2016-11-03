@@ -30,9 +30,6 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $output->writeln(sprintf('Register plugin <comment>%s</comment> :', $code));
 
         $rootDir = dirname($this->getContainer()->getParameter('kernel.root_dir'));
-        if (empty($rootDir)) {
-            throw new \RuntimeException('Plugin base directory is not exist.');
-        }
 
         $installer = new PluginRegister($rootDir, 'plugins', $biz);
 
