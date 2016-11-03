@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
@@ -16,6 +17,9 @@ use Topxia\Service\Util\HTMLPurifierFactory;
 
 class WebExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     protected $pageScripts;
@@ -1253,7 +1257,8 @@ class WebExtension extends \Twig_Extension
             if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
                 $default = '余额支付';
             } else {
-                $default = $this->getDictText('payment', $order['payment']);
+                $dictExtension = $this->container->get('codeages_plugin.dict_twig_extension');
+                $default = $dictExtension->getDictText('payment', $order['payment']);
             }
         }
 
