@@ -47,8 +47,10 @@ define(function(require, exports, module) {
 
         $('.js-batch-create-lesson-btn').on('click', function() {
             var fileStatus = esuploader.uploader.getStats();
-            if (fileStatus.progressNum > 0) {
-                Notify.danger(Translator.trans('还有文件未上传，请全部上传后再继续操作。'));
+            var cancelledFiles = esuploader.uploader.getFiles('cancelled');
+            
+            if (fileStatus.progressNum > 0 || cancelledFiles.length > 0) {
+                Notify.danger(Translator.trans('还有文件再上传,请等待所有文件上传完成'));
             } else if (fileStatus.successNum == 0) {
                 Notify.danger(Translator.trans('请选择至少一个文件并上传。'));
             } else {

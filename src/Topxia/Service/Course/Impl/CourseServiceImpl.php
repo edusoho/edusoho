@@ -1153,7 +1153,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $lessonFileds = array(
             'courseId'      => $courseId,
-            'title'         => $file['filename'],
+            'title'         => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
             'type'          => $file['type'],
             'media'         => array('source' => 'self', 'id' => $fileId, 'name' => $file['filename']),
             'mediaId'       => $fileId,

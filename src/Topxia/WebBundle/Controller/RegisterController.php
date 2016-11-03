@@ -56,6 +56,7 @@ class RegisterController extends BaseController
                 }
 
                 $registration['createdIp'] = $request->getClientIp();
+                $registration['registeredWay'] = 'web';
 
                 $user = $this->getAuthService()->register($registration);
 
