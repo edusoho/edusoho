@@ -3,10 +3,7 @@ class Live {
         this.init();
     }
     init(){
-        $('#startTime').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
-            language:"zh",
-        });
+        this._dateTimePicker();
     	this._initStep2Form();
     }
 
@@ -30,6 +27,15 @@ class Live {
                 },
             },
         });
+    }
+
+    _dateTimePicker() {
+        let $starttime = $('#startTime');
+        $starttime.datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            language:"zh",
+        });
+        $starttime.datetimepicker('setStartDate',new Date());
     }
 }
 
