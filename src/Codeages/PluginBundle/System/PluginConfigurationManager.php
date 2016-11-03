@@ -14,7 +14,12 @@ class PluginConfigurationManager
     {
         $this->rootDir = rtrim($rootDir, "\/");
         $this->filepath = $this->rootDir . '/config/plugin.php';
-        $this->config = require $this->filepath;
+        if (!file_exists($this->filepath)) {
+            $this->config = array();
+        } else {
+            $this->config = require $this->filepath;
+        }
+
     }
 
     public function getActiveThemeName()
