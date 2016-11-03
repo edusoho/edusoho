@@ -10,9 +10,3 @@ $.fn.datetimepicker.dates['zh'] = {
     suffix: [],
     meridiem: ["上午", "下午"]
 };
-
-
-
-
-
-
