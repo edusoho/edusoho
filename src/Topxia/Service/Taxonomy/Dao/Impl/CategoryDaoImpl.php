@@ -134,9 +134,13 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids) ?: array();
+        $idsKey = implode('-',$ids);
+        $that = $this;
+        return $this->fetchCached("ids:{$idsKey}", $ids, function ($ids) use ($that) {
+            $marks = str_repeat('?,', count($ids) - 1).'?';
+            $sql   = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+            return $that->getConnection()->fetchAll($sql, $ids) ?: array();
+        });
     }
 
     public function findAllCategories()
