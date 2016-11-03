@@ -34,11 +34,6 @@ class CodeagesPluginExtension extends Extension implements PrependExtensionInter
 
     }
 
-    public function prepend(ContainerBuilder $container)
-    {
-        // var_dump($container);exit();
-    }
-
     public function loadDicts($bundles, $container)
     {
         $files = array();
