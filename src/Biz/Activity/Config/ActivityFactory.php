@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Config;
 
+use Biz\FlashActivity\FlashActivity;
 use Biz\LiveActivity\LiveActivity;
 use Biz\PptActivity\PptActivity;
 use Biz\TextActivity\TextActivity;
@@ -29,7 +30,8 @@ class ActivityFactory
             'text'    => new TextActivity($biz),
             'live'  => new LiveActivity($biz),
             'discuss' => new DiscussActivity($biz),
-            'ppt' => new PptActivity($biz)
+            'ppt' => new PptActivity($biz),
+            'flash' => new FlashActivity($biz)
         );
     }
 }

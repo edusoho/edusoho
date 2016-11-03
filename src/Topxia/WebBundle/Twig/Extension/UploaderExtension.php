@@ -39,7 +39,8 @@ class UploaderExtension extends \Twig_Extension
         $modes = array(
             'courselesson'   => 'auto',
             'coursematerial' => 'none',
-            'materiallib'    => 'auto'
+            'materiallib'    => 'auto',
+            'courseactivity' => 'auto'
         );
 
         if (isset($modes[$targetType])) {

@@ -98,7 +98,7 @@ abstract class Activity
     /**
      * @return Biz
      */
-    protected function getBiz()
+    protected final function getBiz()
     {
         return $this->biz;
     }
