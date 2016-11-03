@@ -51,7 +51,7 @@ class WarmupCommand extends BaseCommand
 
     protected function getCacheService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('System.CacheService');
     }
 
     protected function getUserService()
