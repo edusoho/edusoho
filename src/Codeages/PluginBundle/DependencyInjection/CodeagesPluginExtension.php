@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class CodeagesPluginExtension extends Extension implements PrependExtensionInterface
+class CodeagesPluginExtension extends Extension
 {
     /**
      * {@inheritdoc}

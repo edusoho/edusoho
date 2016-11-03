@@ -61,7 +61,7 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $output->writeln("  <info>[Ok]</info>");
 
         $output->write("  - Create plugin installed record.");
-        $app = $installer->savePluginInstalledInfo($code);
+        $app = $installer->registerPlugin($code);
         $output->writeln($app ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
 
         $output->write("  - Refresh plugin cache.");

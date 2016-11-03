@@ -93,10 +93,10 @@ class PluginRegister
         return $process->getOutput();
     }
 
-    public function savePluginInstalledInfo($code)
+    public function registerPlugin($code)
     {
-        $metas = $this->parseMetas($code);
-        return $this->biz->service('CodeagesPluginBundle:AppService')->savePluginInstalledInfo($metas);
+        $plugin = $this->parseMetas($code);
+        return $this->biz->service('CodeagesPluginBundle:AppService')->registerPlugin($plugin);
     }
 
     public function refreshInstalledPluginConfiguration()

@@ -26,16 +26,16 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->findByType('plugin', 0, $total);
     }
 
-    public function savePluginInstalledInfo($metas)
+    public function registerPlugin($plugin)
     {
         $app = array();
 
         $app['type'] = 'plugin';
-        $app['code'] = $metas['code'];
-        $app['name'] = $metas['name'];
-        $app['description'] = $metas['description'];
-        $app['author'] = $metas['author'];
-        $app['version'] = $metas['version'];
+        $app['code'] = $plugin['code'];
+        $app['name'] = $plugin['name'];
+        $app['description'] = $plugin['description'];
+        $app['author'] = $plugin['author'];
+        $app['version'] = $plugin['version'];
 
         $app = $this->getAppDao()->create($app);
 
