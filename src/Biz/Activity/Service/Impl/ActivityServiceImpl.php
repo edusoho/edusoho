@@ -26,6 +26,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
+    public function getActivities($ids)
+    {
+        return $this->getActivityDao()->findByIds($ids);
+    }
+
     public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
@@ -70,7 +75,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
-
 
         $fields = ArrayToolkit::parts($fields, array(
             'title',
