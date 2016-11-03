@@ -3,26 +3,11 @@ class Live {
         this.init();
     }
     init(){
-
-        // $("#startTime").datepicker({
-        //     autoclose: true,
-        //     format: 'yyyy-mm-dd',
-        // });
-        $("#startTime").datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
+        
+        $('#startTime').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            language:"zh",
         });
-
-        // $('#datetimepicker').datetimepicker({
-        //     format: 'yyyy-mm-dd hh:ii'
-        // });
-        // $("#startTime").datetimepicker({
-		//     language: 'zh-CN',
-		//     autoclose: true,
-		//     format: 'yyyy-mm-dd',
-		//     minView: 'month'
-		// });
-		// $("#startTime").datetimepicker('setStartDate', new Date());
     	this._initStep2Form();
     }
 
@@ -33,7 +18,7 @@ class Live {
             rules: {
                 startTime: {
                 	required: true,
-                	dateISO: true
+                	date: true
                 },
                 length: {
                 	required: true,
