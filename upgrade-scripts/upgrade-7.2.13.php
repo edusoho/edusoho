@@ -8,17 +8,15 @@ class EduSohoUpgrade extends AbstractUpdater
 {
     public function update($index = 0)
     {
-        try {
-            $result = $this->updateScheme();
-            $this->getConnection()->commit();
+        $this->getConnection()->beginTransaction();
 
-            if (!empty($result)) {
-                return $result;
+        try {
+                $this->updateScheme();
+                $this->getConnection()->commit();
+            } catch (\Exception $e) {
+                $this->getConnection()->rollback();
+                throw $e;
             }
-        } catch (\Exception $e) {
-            $this->getConnection()->rollback();
-            throw $e;
-        }
 
         try {
             if ($index >= 0 && $index <= 17) {
