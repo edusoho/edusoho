@@ -17,20 +17,26 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
 
     public function canBuild($options)
     {
-        $questions      = $this->getQuestions($options);
-        $typedQuestions = ArrayToolkit::group($questions, 'type');
-        return $this->canBuildWithQuestions($options, $typedQuestions);
+        $questions     = $this->getQuestions($options);
+        $questionCount = count($questions);
+
+        if ($questionCount < $options['itemCount']) {
+            $lessNum = $options['itemCount'] - $questionCount;
+            return array('status' => 'no', 'lessNum' => $lessNum);
+        } else {
+            return array('status' => 'yes');
+        }
     }
 
-    protected function filterFields($fields)
+    public function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId'))) {
-            throw new \InvalidArgumentException('Testpaper field is invalid');
+            throw new \InvalidArgumentException('exercise field is invalid');
         }
 
         $filtedFields = array();
 
-        $filtedFields['itemCount'] = $fields['questionCount'];
+        $filtedFields['itemCount'] = $fields['itemCount'];
         $filtedFields['courseId']  = $fields['courseId'];
         $filtedFields['lessonId']  = $fields['lessonId'];
         $filtedFields['type']      = 'exercise';
@@ -38,50 +44,15 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
         $filtedFields['pattern']   = 'questionType';
         $filtedFields['copyId']    = empty($fields['copyId']) ? 0 : $fields['copyId'];
         $filtedFields['metas']     = empty($fields['metas']) ? array() : $fields['metas'];
+        $filtedFields['name']      = empty($fields['name']) ? '' : $fields['name'];
 
         $filtedFields['metas']['questionTypes'] = empty($fields['questionTypes']) ? array() : $fields['questionTypes'];
         $filtedFields['metas']['difficulty']    = empty($fields['difficulty']) ? '' : $fields['difficulty'];
-        $filtedFields['metas']['range']         = empty($fields['source']) ? 'course' : $fields['source'];
+        $filtedFields['metas']['range']         = empty($fields['range']) ? 'course' : $fields['range'];
+
+        $filtedFields['passedCondition'] = array(0);
 
         return $filtedFields;
-    }
-
-    protected function canBuildWithQuestions($options, $questions)
-    {
-        $missing = array();
-
-        /*foreach ($options['counts'] as $type => $needCount) {
-        $needCount = intval($needCount);
-        if ($needCount == 0) {
-        continue;
-        }
-
-        if (empty($questions[$type])) {
-        $missing[$type] = $needCount;
-        continue;
-        }
-        if ($type == "material") {
-        $validatedMaterialQuestionNum = 0;
-        foreach ($questions["material"] as $materialQuestion) {
-        if ($materialQuestion['subCount'] > 0) {
-        $validatedMaterialQuestionNum += 1;
-        }
-        }
-        if ($validatedMaterialQuestionNum < $needCount) {
-        $missing["material"] = $needCount - $validatedMaterialQuestionNum;
-        }
-        continue;
-        }
-        if (count($questions[$type]) < $needCount) {
-        $missing[$type] = $needCount - count($questions[$type]);
-        }
-        }*/
-
-        //if (empty($missing)) {
-        return array('status' => 'yes');
-        //}
-
-        //return array('status' => 'no', 'missing' => $missing);
     }
 
     protected function getQuestions($fields)
@@ -92,7 +63,7 @@ class ExerciseBuilder extends Factory implements TestpaperLibBuilder
             $conditions['difficulty'] = $fields['difficulty'];
         }
 
-        if ($fields['source'] == 'lesson') {
+        if ($fields['range'] == 'lesson') {
             $conditions['target'] = 'course-'.$fields['courseId'].'/lesson-'.$fields['lessonId'];
         } else {
             $conditions['targetPrefix'] = 'course-'.$fields['courseId'];

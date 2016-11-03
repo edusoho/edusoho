@@ -28,7 +28,7 @@ class HomeworkBuilder extends Factory implements TestpaperLibBuilder
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    protected function filterFields($fields)
+    public function filterFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('courseId', 'lessonId', 'excludeIds'))) {
             throw new \InvalidArgumentException('Testpaper field is invalid');

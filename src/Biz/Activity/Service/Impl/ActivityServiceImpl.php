@@ -64,7 +64,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['mediaId'] = $media['id'];
         }
 
-        $fields = $this->filterFields($fields);
+        $fields                = $this->filterFields($fields);
+        $fields['createdTime'] = time();
 
         $activity = $this->getActivityDao()->create($fields);
 
@@ -94,7 +95,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['mediaId'] = $media['id'];
         }
 
-        $fields = $this->filterFields($fields);
+        $fields                = $this->filterFields($fields);
+        $fields['updatedTime'] = time();
 
         return $this->getActivityDao()->update($id, $fields);
     }

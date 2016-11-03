@@ -2,7 +2,7 @@ import 'jquery-validation';
 
 $.validator.setDefaults({
   errorClass: 'help-block jq-validate-error',
-  errorElement: 'p',
+  errorElement: 'div',
   highlight: function(element, errorClass, validClass) {
     let $row = $(element).parents('.form-group');
     $row.addClass('has-error');
@@ -24,10 +24,12 @@ $.validator.setDefaults({
     });
   },
   errorPlacement: function(error, element) {
-    if (element.parent().hasClass('input-group')) {
+    if (element.parent().hasClass('controls')) {
+      element.parent('.controls').append(error);
+    } else if (element.parent().hasClass('input-group')) {
       element.parent().after(error);
     } else if (element.parent().is('label')) {
-      element.parent().after(error);
+      element.parent().parent().append(error);
     } else {
       element.after(error);
     }

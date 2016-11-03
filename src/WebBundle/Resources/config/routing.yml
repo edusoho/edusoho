@@ -93,8 +93,8 @@ course_manage_exercise_create:
   defaults: { _controller: WebBundle:ExerciseManage:create }
 
 #todo 与homework_check合并
-course_exercise_check:
-    pattern:  /course/{courseId}/lesson/{lessonId}/exercise/check
+course_manage_exercise_check:
+    pattern:  /course/{courseId}/manage/exercise/check
     defaults: { _controller: WebBundle:ExerciseManage:buildCheck }
 
 
