@@ -12,6 +12,10 @@ class Users extends BaseResource
     {
         $conditions = $request->query->all();
 
+        if (empty($conditions)) {
+            // return array();
+        }
+
         // @deprecated 兼容老接口，即将去除
         if (!empty($conditions['q'])) {
             return $this->matchUsers($conditions['q']);

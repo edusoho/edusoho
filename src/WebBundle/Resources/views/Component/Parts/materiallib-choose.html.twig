@@ -1,0 +1,36 @@
+{% do script(['web/component/chooser/materiallib-choose.js']) %}
+<div class="btn-group">
+  <a type="button" class="btn btn-default btn-sm js-material-type active"
+     data-type="my">{{ '来自上传'|trans }}</a>
+  <a type="button" class="btn btn-default btn-sm js-material-type" data-type="sharing" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">{{ '来自分享'|trans }}</a>
+  <a type="button" class="btn btn-default btn-sm js-material-type" data-type="public">{{ '公共资料'|trans }}</a>
+  <a type="button" class="btn btn-default btn-sm js-material-type" data-type="favorite">{{ '我的收藏'|trans }}</a>
+</div>
+
+<div class="row material-search-form">
+  <div class="col-xs-5 js-file-name-group">
+    <span class="input-group">
+      <input name="file-filter-by-name" class="form-control width-input-small js-file-name" type="text"
+             placeholder="输入视频标题关键字">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default js-browser-search"
+                data-url="{{ path('media_materiallib_choose') }}"
+                data-loading-text="正在加载，请稍等">搜索</button>
+      </span>
+    </span>
+  </div>
+  <div class="js-file-owner-group hidden">
+    <span class="file-filter-by-owner-container col-xs-5" style="">
+      <select name="file-filter-by-owner" class="js-file-owner form-control width-input-large">
+        <option value="">请选择老师</option>
+      </select>
+    </span>
+  </div>
+</div>
+<input type="hidden" name="sourceFrom" value="my">
+<input type="hidden" name="page" value="1">
+<input type="hidden" name="currentUserId" value="">
+<input type="hidden" name="type" value="{{ mediaType }}">
+<div class="js-material-list">
+  <div class="empty">资源加载中...</div>
+</div>

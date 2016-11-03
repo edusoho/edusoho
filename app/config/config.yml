@@ -8,7 +8,7 @@ imports:
 
 framework:
     # esi:             ~
-    # translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%", logging: false }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -18,14 +18,18 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        # assets_version: 7.2.9
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
         handler_id:  session.handler.factory
     fragments:       ~
     http_method_override: true
-    assets: "%assets%"
+    assets:
+        version: '7.2.12'
+        packages:
+            webpack:
+                base_urls:
+                    - "%webpack_base_url%"
 
 # Twig Configuration
 twig:

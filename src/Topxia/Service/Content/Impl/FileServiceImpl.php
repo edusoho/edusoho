@@ -196,32 +196,37 @@ class FileServiceImpl extends BaseService implements FileService
         }
         $directory .= '/'.$parsed['directory'];
 
-        //如果是图片，并且被旋转过了，把图片转正
-        if (in_array(strtolower($file->guessExtension()), array('jpeg', 'tiff'))) {
-            $exif = exif_read_data($file->getRealPath());
-            if (!empty($exif['Orientation'])) {
-                $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
-                switch ($exif['Orientation']) {
-                    case 8:
-                        $image = imagerotate($image, 90, 0);
-                        break;
-                    case 3:
-                        $image = imagerotate($image, 180, 0);
-                        break;
-                    case 6:
-                        $image = imagerotate($image, -90, 0);
-                        break;
+        $newFile = $file->move($directory, $parsed['name']);
+        
+        try {
+            //如果是图片，并且被旋转过了，把图片转正
+            if (in_array(strtolower($newFile->guessExtension()), array('jpeg', 'tiff'))) {
+                $exif = @exif_read_data($newFile->getRealPath());
+                if (!empty($exif['Orientation'])) {
+                    $image = imagecreatefromstring(file_get_contents($newFile->getRealPath()));
+                    switch ($exif['Orientation']) {
+                        case 8:
+                            $image = imagerotate($image, 90, 0);
+                            break;
+                        case 3:
+                            $image = imagerotate($image, 180, 0);
+                            break;
+                        case 6:
+                            $image = imagerotate($image, -90, 0);
+                            break;
+                    }
+
+                    $targetFile = $this->getTargetFile($directory, $parsed['name']);
+                    imagejpeg($image, $targetFile);
+                    imagedestroy($image);
+
+                    return new File($targetFile);
                 }
-
-                $targetFile = $this->getTargetFile($directory, $parsed['name']);
-                imagejpeg($image, $targetFile);
-                imagedestroy($image);
-
-                return new File($targetFile);
             }
+        } catch (\Exception $e) {
         }
 
-        return $file->move($directory, $parsed['name']);
+        return $newFile;
     }
 
     protected function getTargetFile($directory, $name = null)

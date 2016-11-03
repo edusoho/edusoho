@@ -1,0 +1,50 @@
+<script type="text/javascript">
+  "use strict";
+  var paths = [
+    {% for path in script() %}
+    {% if path starts with 'http://' %}
+    "{{ path }}",
+    {% else %}
+    "{{ asset('build/' ~ path, 'webpack') }}",
+    {% endif %}
+    {% endfor %}
+  ];
+
+  var Loader = (function () {
+    var loadScript = function (paths, index) {
+      var path = paths[index];
+      if(path === undefined){
+        return;
+      }
+      var script = document.createElement('script');
+      script.type = "text/javascript";
+
+      if (script.readyState) {  //IE
+        script.onreadystatechange = function () {
+          if (script.readyState == "loaded" || script.readyState == "complete") {
+            script.onreadystatechange = null;
+            loadScript(paths, index + 1);
+          }
+        };
+      } else {  //Others
+        script.onload = function () {
+          loadScript(paths, index + 1);
+        };
+      }
+
+      script.onerror = function (error) {
+        console.error("The script " + error.target.src + " is not accessible.");
+      };
+
+      script.src = path;
+      document.body.appendChild(script);
+    };
+
+    return {
+      load: loadScript,
+    };
+
+  })();
+
+  Loader.load(paths, 0);
+</script>

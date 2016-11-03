@@ -6,13 +6,26 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function updateAction(Request $request, $id)
+    public function showAction(Request $request, $id, $courseId)
+    {
+        $activity         = $this->getActivityService()->getActivity($id);
+        $config           = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $createController = $config->getAction('show');
+
+        return $this->forward($createController, array(
+            'courseId' => $courseId,
+            'id'       => $id
+        ));
+    }
+
+    public function updateAction(Request $request, $id, $courseId)
     {
         $activity       = $this->getActivityService()->getActivity($id);
         $config         = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $editController = $config->getAction('edit');
         return $this->forward($editController, array(
-            'id' => $activity['id']
+            'id'       => $activity['id'],
+            'courseId' => $courseId
         ));
     }
 
@@ -20,7 +33,10 @@ class ActivityController extends BaseController
     {
         $config           = $this->getActivityService()->getActivityConfig($type);
         $createController = $config->getAction('create');
-        return $this->forward($createController, array('courseId' => $courseId));
+
+        return $this->forward($createController, array(
+            'courseId' => $courseId
+        ));
     }
 
     public function triggerAction($id, $eventName, $data)

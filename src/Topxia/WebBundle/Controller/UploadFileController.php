@@ -12,6 +12,13 @@ class UploadFileController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        if($request->isMethod('OPTIONS')){
+            // SDK 跨域认证
+            $response = $this->createJsonResponse(true);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            return $response;
+        }
+
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('fileupload', $token);
 
@@ -33,7 +40,9 @@ class UploadFileController extends BaseController
 
         $this->getUploadFileService()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
-        return $this->createJsonResponse($token['data']);
+        $response = $this->createJsonResponse($token['data']);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     public function downloadAction(Request $request, $fileId)

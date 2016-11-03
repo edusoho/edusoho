@@ -1,0 +1,18 @@
+{% do script(['http://localhost:12345/sdk.js', 'web/component/chooser/file-upload.js']) %}
+{% set targetType = 'courseactivity' %}
+{% set token = uploader_token(targetType, courseId, 'private') %}
+{% set storageSetting = setting('storage') %}
+<div id="uploader-container"
+     data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+     data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
+     data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
+    {% if storageSetting.upload_mode == 'cloud' %}
+      data-uploader-mode="sdk"
+      data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
+    {% else %}
+      data-uploader-mode="local"
+      data-accept="{{ uploader_accept(targetType, 'local_video')|json_encode }}"
+    {% endif %}
+     data-process="{{ uploader_process(targetType) }}"
+>
+</div>

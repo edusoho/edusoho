@@ -26,7 +26,8 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw new AccessDeniedException();
         }
 
-        $activity                = $this->getActivityService()->createActivity($fields);
+        $activity = $this->getActivityService()->createActivity($fields);
+
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $this->getCurrentUser()->getId();
         $fields['courseId']      = $activity['fromCourseId'];
@@ -43,8 +44,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->canManageCourse($savedTask['courseId'])) {
             throw new AccessDeniedException();
         }
-
-        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
         $fields = $this->filterFields($fields);
 
@@ -97,12 +97,27 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $fields;
     }
 
+    public function findTaskResultsByCourseId($courseId, $userId)
+    {
+        return $this->getTaskResultDao()->findByCourseId($courseId, $userId);
+    }
+
+    public function findTaskResults($couseTaskId, $userId)
+    {
+        return $this->getTaskResultDao()->findByTaskId($courseTaskId, $userId);
+    }
+
     /**
      * @return TaskDao
      */
     protected function getTaskDao()
     {
         return $this->createDao('Task:TaskDao');
+    }
+
+    protected function getTaskResultDao()
+    {
+        return $this->createDao('Task:TaskResultDao');
     }
 
     protected function canManageCourse($courseId)
