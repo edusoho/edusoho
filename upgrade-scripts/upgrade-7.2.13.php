@@ -9,15 +9,6 @@ class EduSohoUpgrade extends AbstractUpdater
     public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
-
-        try {
-                $this->updateScheme();
-                $this->getConnection()->commit();
-            } catch (\Exception $e) {
-                $this->getConnection()->rollback();
-                throw $e;
-            }
-
         try {
             if ($index >= 0 && $index <= 17) {
                 return $this->batchDownload($index);
@@ -34,9 +25,21 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             if ($index == 19) {
-                return $this->checkBizInVendor();
+                $this->checkBizInVendor();
+                return array(
+                    'index'    => 20,
+                    'message'  => '正在执行升级脚本',
+                    'progress' => 4.4
+                );
             }
+
+            if($index == 20){
+                $this->updateScheme();
+                $this->getConnection()->commit();
+            }
+
         } catch (\Exception $e) {
+            $this->getConnection()->rollback();
             throw $e;
         }
 
