@@ -46,7 +46,7 @@ class WarmupCommand extends BaseCommand
 
         $this->getServiceKernel()->createService('Content.BlockService')->getBlockByCode('jianmo:home_top_banner');
 
-        $this->$this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->findClassroomByCourseId(1);
+        $this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->findClassroomByCourseId(1);
     }
 
     protected function getCacheService()
