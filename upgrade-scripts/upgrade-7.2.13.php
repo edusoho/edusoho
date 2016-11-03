@@ -66,7 +66,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        if ($this->isFieldExist('user', 'registeredWay')) {
+        if (!$this->isFieldExist('user', 'registeredWay')) {
             $connection->exec("ALTER TABLE `user` ADD `registeredWay` varchar(64) NOT NULL DEFAULT '' COMMENT '注册设备来源(web/ios/android)'");
         }
     }
