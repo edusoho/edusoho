@@ -78,9 +78,7 @@ define(function(require, exports, module) {
             });
 
             if (isLast) {
-                if (confirm(Translator.trans('批量创建课时成功，是否要刷新页面?'))) {
                     window.location.reload();
-                }
             }
         }
     };
