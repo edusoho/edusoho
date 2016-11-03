@@ -47,7 +47,8 @@ define(function(require, exports, module) {
 
         $('.js-batch-create-lesson-btn').on('click', function() {
             var fileStatus = esuploader.uploader.getStats();
-            if (fileStatus.progressNum > 0) {
+            var cancelledFiles = esuploader.uploader.getFiles('cancelled');
+            if (fileStatus.progressNum > 0 || cancelledFiles.length > 0) {
                 Notify.danger(Translator.trans('还有文件再上传,请等待所有文件上传完成'));
             } else if (fileStatus.successNum == 0) {
                 Notify.danger(Translator.trans('还没有上传成功的文件'));
