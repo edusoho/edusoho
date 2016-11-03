@@ -1097,18 +1097,28 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total = $this->controller->getCourseService()->searchCourseCount($conditions);
 
         $sort    = $this->getParam("sort", "createdTimeByDesc");
+
         if ($sort == 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
 
+            //先按推荐顺序展示推荐，再追加非推荐
             $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
 
-            if (($start + $limit) >= $recommendCount) {
+            if (($start + $limit) > $recommendCount) {
                 $conditions['recommended'] = 0;
-                $filledUnRecommendCount = $limit - ($recommendCount - $start);
-                $filledUnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $filledUnRecommendCount);
-                $courses = array_merge($courses, $filledUnRecommendCourses);
+                if ($start < $recommendCount) {
+                    //需要用非推荐课程补全limit
+                    $fixedStart = 0;
+                    $fixedLimit = $limit - ($recommendCount - $start);
+                } else {
+                    $fixedStart = $start - $recommendCount;
+                    $fixedLimit = $limit;
+                }
+                $UnRecommendCourses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $fixedStart, $fixedLimit);
+                $courses = array_merge($courses, $UnRecommendCourses);
             }
+
         } else {
             $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
         }
