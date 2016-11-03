@@ -45,6 +45,10 @@ class Users extends BaseResource
             return array('message' => '缺少必填字段');
         }
 
+        if (empty($fields['registeredWay']) || !in_array(strtolower($fields['registeredWay']), array('ios', 'android'))) {
+            $fields['registeredWay'] = $this->guessDeviceFromUserAgent($request->headers->get("user-agent"));
+        }
+
         $ip = $request->getClientIp();
         $fields['createdIp'] = $ip;
 
