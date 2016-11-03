@@ -5,7 +5,7 @@
 {% set script_controller = 'live-course/index' %}
 
   {% block top_content %}
-    {% cache 'live/top/banner' 600 %}
+    {% cache 'live/top/banner' 6000 %}
       {% if paginator.currentPage == 1 %}
           <section class="es-live-poster swiper-container">
             <div class="swiper-wrapper">
@@ -17,15 +17,15 @@
     {% endcache %}
   {% endblock %}
   {% block live_main %}
-  {% cache 'live/liveTab' 600 %}
+  {% cache 'live/liveTab' 6000 %}
     {{ render(controller('TopxiaWebBundle:LiveCourse:liveTab')) }}
   {% endcache %}
 
-  {% cache 'live/recommend/course/list' 600 %}
+  {% cache 'live/recommend/course/list' 6000 %}
     {% include 'TopxiaWebBundle:LiveCourse:recommend-course-list.html.twig' %}
   {% endcache %}
 
-  {% cache 'live/recommend/course/replay/list' 600 %}
+  {% cache 'live/recommend/course/replay/list' 6000 %}
     {{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}
   {% endcache %}
   {% endblock %}

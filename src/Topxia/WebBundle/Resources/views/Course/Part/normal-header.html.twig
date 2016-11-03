@@ -4,11 +4,11 @@
 {% do load_script('course/common') %}
 
 {% if member %}
-  {% cache 'course/' ~ course.id ~ 'normal/header/for/member' 600 %}
+  {% cache 'course/' ~ course.id ~ 'normal/header/for/member' 6000 %}
     {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
   {% endcache %}
 {% elseif course.parentId|default(false) %}
-  {% cache 'course/' ~ course.id ~ '/classroom/course/normal/header/for/guest' 600 %}
+  {% cache 'course/' ~ course.id ~ '/classroom/course/normal/header/for/guest' 6000 %}
     {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
   {% endcache %}
 {% else %}
